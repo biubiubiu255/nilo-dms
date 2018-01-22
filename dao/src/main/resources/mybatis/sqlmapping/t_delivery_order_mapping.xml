@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.DeliveryOrderDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="orderDO" type="com.nilo.dms.dao.dataobject.DeliveryOrderDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderType" column="order_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="referenceNo" column="reference_No" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderTime" column="order_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="country" column="country" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="totalPrice" column="total_price" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="serviceType" column="service_Type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderPlatform" column="order_platform" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="clientType" column="client_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DECIMAL"/>
+        <result property="goodsType" column="goods_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="fetchType" column="fetch_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="fetchTime" column="fetch_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="fetchAddress" column="fetch_address" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+        <result property="deliveryCategoryType" column="delivery_Category_Type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="customerType" column="customer_Type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="customerLevel" column="customer_Level" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="transportType" column="transport_Type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="productType" column="product_Type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="settleType" column="settle_Type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="networkId" column="network_Id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
+        <result property="userdefine01" column="userdefine01" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="userdefine02" column="userdefine02" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="userdefine03" column="userdefine03" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="userdefine04" column="userdefine04" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="userdefine05" column="userdefine05" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="version" column="version" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, merchant_id,network_Id,order_no ,order_type,service_Type, client_type,delivery_Category_Type,customer_Type,customer_Level,transport_Type,product_Type,settle_Type,fetch_type,fetch_time,fetch_address,reference_No , weight,goods_type, order_time,country ,total_price,order_platform,status,userdefine01,userdefine02,userdefine03,userdefine04,userdefine05, created_time , updated_time ,version
+    </sql>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderDO" statementType="PREPARED"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_waybill
+        ( merchant_id,network_Id,order_no ,order_type, service_type,client_type,delivery_Category_Type,customer_Type,customer_Level,transport_Type,product_Type,settle_Type,reference_No , weight,goods_type, fetch_type,fetch_time,fetch_address,order_time,country ,total_price,order_platform,status,userdefine01,userdefine02,userdefine03,userdefine04,userdefine05, created_time , updated_time ,version)
+        VALUES
+        ( #{merchantId},#{networkId},#{orderNo}, #{orderType},#{serviceType},#{clientType},#{deliveryCategoryType},#{customerType},#{customerLevel},#{transportType},#{productType},#{settleType}, #{referenceNo},#{weight},#{goodsType},#{fetchType},#{fetchTime},#{fetchAddress},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status},#{userdefine01},#{userdefine02},#{userdefine03},#{userdefine04},#{userdefine05} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+    </insert>
+
+
+    <select id="queryByOrderNo" resultMap="orderDO" statementType="PREPARED"  >
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill
+        WHERE merchant_id = #{merchantId} and order_no=#{orderNo}
+    </select>
+
+    <select id="queryByOrderNos" resultMap="orderDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill
+        WHERE merchant_id = #{merchantId}
+        <if test="orderNos !=null and orderNos.size() > 0">
+            and order_no in
+            <foreach collection="orderNos" item="orderNo" index="index"
+                     open="(" close=")" separator=",">
+                #{orderNo}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="queryByReferenceNo" resultMap="orderDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill
+        WHERE merchant_id=#{merchant_id} and reference_no = #{referenceNo}
+    </select>
+
+    <select id="queryDeliveryOrderListBy" resultMap="orderDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill
+        WHERE merchant_id=#{merchantId}
+        <if test="orderNo !=null and orderNo !='' ">
+            and order_no = #{orderNo}
+        </if>
+        <if test="referenceNo !=null and referenceNo !='' ">
+            and reference_no = #{referenceNo}
+        </if>
+        <if test="orderType !=null and orderType.size() > 0">
+            <foreach collection="orderType" item="item" index="index" open="and (" separator="or" close=")">
+                order_type=#{item}
+            </foreach>
+        </if>
+        <if test="fetchType !=null and fetchType !='' ">
+            and fetch_Type = #{fetchType}
+        </if>
+        <if test="fromCreatedTime !=null ">
+            and created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status !=null and status.size() > 0 ">
+            <foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">
+                status=#{item}
+            </foreach>
+        </if>
+        <if test="nextStation !=null and nextStation !='' ">
+            and nextStation = #{nextStation}
+        </if>
+        order by created_time desc
+        limit #{offset} , #{limit}
+
+    </select>
+
+
+    <select id="queryCountBy" resultType="java.lang.Long">
+        SELECT
+        count(1)
+        FROM t_waybill
+        WHERE merchant_id=#{merchantId}
+        <if test="orderNo !=null and orderNo !='' ">
+            and order_no = #{orderNo}
+        </if>
+        <if test="referenceNo !=null and referenceNo !='' ">
+            and reference_no = #{referenceNo}
+        </if>
+        <if test="orderType !=null and orderType.size() > 0">
+            <foreach collection="orderType" item="item" index="index" open="and (" separator="or" close=")">
+                order_type=#{item}
+            </foreach>
+        </if>
+        <if test="fetchType !=null and fetchType !='' ">
+            and fetch_Type = #{fetchType}
+        </if>
+        <if test="fromCreatedTime !=null ">
+            and created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status !=null and status.size() > 0 ">
+            <foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">
+                status=#{item}
+            </foreach>
+        </if>
+        <if test="nextStation !=null and nextStation !='' ">
+            and nextStation = #{nextStation}
+        </if>
+        order by null
+
+    </select>
+
+
+    <!-- 动态更新语句 -->
+    <update id="update" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderDO" statementType="PREPARED">
+        update t_waybill
+        <trim prefix="set" suffixOverrides="," suffix="where merchant_id=#{merchantId} and order_no=#{orderNo}">
+
+            <if test="status != null ">
+                status = #{status},
+            </if>
+            <if test="weight != null and weight !='' ">
+                weight = #{weight},
+            </if>
+            <if test="referenceNo != null and referenceNo !='' ">
+                reference_no = #{referenceNo},
+            </if>
+            <if test="country != null and country !='' ">
+                country = #{country},
+            </if>
+            <if test="orderPlatform != null and orderPlatform !='' ">
+                order_Platform = #{orderPlatform},
+            </if>
+            <if test="serviceType != null and serviceType !='' ">
+                service_Type = #{serviceType},
+            </if>
+            <if test="fetchType != null and fetchType !='' ">
+                fetch_Type = #{fetchType},
+            </if>
+            <if test="fetchAddress != null and fetchAddress !='' ">
+                fetch_Address = #{fetchAddress},
+            </if>
+            <if test="fetchTime != null and fetchTime !='' ">
+                fetch_Time = #{fetchTime},
+            </if>
+            <if test="totalPrice != null and totalPrice !='' ">
+                total_Price = #{totalPrice},
+            </if>
+            <if test="goodsType != null and goodsType !='' ">
+                goods_Type = #{goodsType},
+            </if>
+            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+        </trim>
+    </update>
+
+</mapper>

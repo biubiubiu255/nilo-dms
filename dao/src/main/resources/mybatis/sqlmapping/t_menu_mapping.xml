@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.MenuDao">
+
+    <resultMap id="menuDO" type="com.nilo.dms.dao.dataobject.MenuDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="text" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="url" column="url" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="parentId" column="pid" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,text,icon,url,target_type,is_header,parent_id
+    </sql>
+
+    <select id="queryBy" resultMap="menuDO" statementType="PREPARED">
+        SELECT
+        p.*
+        FROM
+        t_sys_role_permission rp
+        LEFT JOIN t_sys_user_role ur ON ur.role_id = rp.role_id
+        LEFT JOIN t_sys_role r ON r.id = ur.role_id
+        left join t_sys_permission p on rp.permission = p.value
+        WHERE
+        ur.user_id = #{userId} and p.is_menu=1 and r. STATUS = 1
+        order by show_order
+    </select>
+</mapper>

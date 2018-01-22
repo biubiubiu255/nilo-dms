@@ -1,0 +1,596 @@
+package com.nilo.dms.service.order.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.nilo.dms.common.Constant;
+import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.enums.*;
+import com.nilo.dms.common.exception.BizErrorCode;
+import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.common.exception.SysErrorCode;
+import com.nilo.dms.common.utils.AssertUtil;
+import com.nilo.dms.common.utils.DateUtil;
+import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.*;
+import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.service.order.DeliveryFeeDetailsService;
+import com.nilo.dms.service.system.RedisUtil;
+import com.nilo.dms.service.mq.producer.AbstractMQProducer;
+import com.nilo.dms.service.order.AbstractOrderOpt;
+import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.model.*;
+import com.nilo.dms.service.system.SystemConfig;
+import com.nilo.dms.service.system.model.*;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by ronny on 2017/9/15.
+ */
+@Service
+public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private TransactionTemplate transactionTemplate;
+
+    @Autowired
+    private DeliveryOrderGoodsDao deliveryOrderGoodsDao;
+
+    @Autowired
+    private DeliveryOrderDao deliveryOrderDao;
+
+    @Autowired
+    private DeliveryOrderReceiverDao deliveryOrderReceiverDao;
+
+    @Autowired
+    private DeliveryOrderSenderDao deliveryOrderSenderDao;
+
+    @Autowired
+    private CommonDao commonDao;
+
+    @Autowired
+    private DeliveryOrderRequestDao deliveryOrderRequestDao;
+
+    @Autowired
+    @Qualifier("notifyMerchantProducer")
+    private AbstractMQProducer notifyMerchantProducer;
+
+    @Autowired
+    @Qualifier("routeProducer")
+    private AbstractMQProducer routeProducer;
+
+    @Autowired
+    @Qualifier("phoneSMSProducer")
+    private AbstractMQProducer phoneSMSProducer;
+
+    @Autowired
+    @Qualifier("createDeliveryOrderProducer")
+    private AbstractMQProducer createDeliveryOrderProducer;
+
+    @Autowired
+    private DeliveryFeeDetailsService deliveryFeeDetailsService;
+
+    public String addCreateDeliveryOrderRequest(String merchantId, String data, String sign) {
+
+        String orderNo = SystemConfig.getNextSerialNo(merchantId, SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
+        try {
+
+            DeliveryOrder order = JSON.parseObject(data, DeliveryOrder.class);
+            //校验订单参数
+            verifyDeliveryOrderParam(order);
+
+            DeliveryOrderRequestDO requestDO = new DeliveryOrderRequestDO();
+            requestDO.setOrderNo(orderNo);
+            requestDO.setData(data);
+            requestDO.setMerchantId(Long.parseLong(merchantId));
+            requestDO.setStatus(CreateDeliveryRequestStatusEnum.CREATE.getCode());
+            requestDO.setSign(sign);
+
+            deliveryOrderRequestDao.insert(requestDO);
+            CreateDeliverOrderMessage message = new CreateDeliverOrderMessage();
+            message.setRequestId(requestDO.getId());
+            message.setOrderNo(orderNo);
+            message.setOptBy(merchantId);
+            message.setMerchantId(merchantId);
+            createDeliveryOrderProducer.sendMessage(message);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return orderNo;
+
+    }
+
+    private void verifyDeliveryOrderParam(DeliveryOrder data) {
+
+        AssertUtil.isNotNull(data, SysErrorCode.REQUEST_IS_NULL);
+
+        AssertUtil.isNotBlank(data.getMerchantId(), BizErrorCode.MERCHANT_ID_EMPTY);
+        AssertUtil.isNotBlank(data.getReferenceNo(), BizErrorCode.REFERENCE_NO_EMPTY);
+        AssertUtil.isNotBlank(data.getOrderType(), BizErrorCode.ORDER_TYPE_EMPTY);
+
+        AssertUtil.isNotBlank(data.getGoodsType(), BizErrorCode.GOODS_TYPE_EMPTY);
+
+        AssertUtil.isNotNull(data.getReceiverInfo(), BizErrorCode.RECEIVER_EMPTY);
+        AssertUtil.isNotNull(data.getGoodsInfoList(), BizErrorCode.GOODS_EMPTY);
+
+        AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverName(), BizErrorCode.RECEIVE_NAME_EMPTY);
+        AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverPhone(), BizErrorCode.RECEIVE_PHONE_EMPTY);
+        AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverAddress(), BizErrorCode.RECEIVE_ADDRESS_EMPTY);
+    }
+
+    @Override
+    public String createDeliveryOrder(final DeliveryOrder data) {
+        // 数据校验
+        verifyDeliveryOrderParam(data);
+
+        String orderNo = transactionTemplate.execute(new TransactionCallback<String>() {
+            @Override
+            public String doInTransaction(TransactionStatus transactionStatus) {
+                String orderNo = "";
+                Long merchant = Long.parseLong(data.getMerchantId());
+                try {
+                    //1、保存订单信息
+                    DeliveryOrderDO orderHeader = convert(data);
+                    //获取订单号
+                    orderNo = SystemConfig.getNextSerialNo(data.getMerchantId(), SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
+                    orderHeader.setOrderNo(orderNo);
+                    deliveryOrderDao.insert(orderHeader);
+
+                    //2、保存订单商品明细信息
+                    for (GoodsInfo g : data.getGoodsInfoList()) {
+                        DeliveryOrderGoodsDO goods = new DeliveryOrderGoodsDO();
+                        goods.setMerchantId(merchant);
+                        goods.setOrderNo(orderNo);
+                        goods.setGoodsDesc(g.getGoodsDesc());
+                        goods.setQty(g.getQty());
+                        goods.setUnitPrice(g.getUnitPrice());
+                        goods.setGoodsId(g.getGoodsId());
+                        goods.setQuality(g.getQuality());
+                        goods.setUserdefine01(g.getUserdefine01());
+                        goods.setUserdefine02(g.getUserdefine02());
+                        goods.setUserdefine03(g.getUserdefine03());
+                        goods.setUserdefine04(g.getUserdefine04());
+                        goods.setUserdefine05(g.getUserdefine05());
+                        deliveryOrderGoodsDao.insert(goods);
+                    }
+
+                    //3、保存收货人信息
+                    ReceiverInfo receiverInfo = data.getReceiverInfo();
+                    DeliveryOrderReceiverDO r = new DeliveryOrderReceiverDO();
+                    r.setOrderNo(orderNo);
+                    r.setMerchantId(merchant);
+                    r.setAddress(receiverInfo.getReceiverAddress());
+                    r.setArea(receiverInfo.getReceiverArea());
+                    r.setCity(receiverInfo.getReceiverCity());
+                    r.setContactNumber(receiverInfo.getReceiverPhone());
+                    r.setCountry(receiverInfo.getReceiverCountry());
+                    r.setName(receiverInfo.getReceiverName());
+                    r.setProvince(receiverInfo.getReceiverProvince());
+                    deliveryOrderReceiverDao.insert(r);
+
+                    //3、保存寄件人信息
+                    SenderInfo senderInfo = data.getSenderInfo();
+                    DeliveryOrderSenderDO s = new DeliveryOrderSenderDO();
+                    s.setMerchantId(merchant);
+                    s.setOrderNo(orderNo);
+                    s.setAddress(senderInfo.getSenderAddress());
+                    s.setArea(senderInfo.getSenderArea());
+                    s.setCity(senderInfo.getSenderCity());
+                    s.setContactNumber(senderInfo.getSenderPhone());
+                    s.setCountry(senderInfo.getSenderCountry());
+                    s.setName(senderInfo.getSenderName());
+                    s.setProvince(senderInfo.getSenderProvince());
+                    deliveryOrderSenderDao.insert(s);
+                } catch (Exception e) {
+                    logger.error("createDeliveryOrder Failed. Data:{}", data, e);
+                    transactionStatus.setRollbackOnly();
+                    throw e;
+                }
+                return orderNo;
+            }
+        });
+
+        return orderNo;
+    }
+
+    @Override
+    public DeliveryOrderStatusInfo queryStatus(String merchantId, String orderNo) {
+        return null;
+    }
+
+
+    @Override
+    public List<DeliveryOrder> queryDeliveryOrderBy(DeliveryOrderParameter parameter, Pagination pagination) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderNo", parameter.getOrderNo());
+        map.put("referenceNo", parameter.getReferenceNo());
+        map.put("merchantId", parameter.getMerchantId());
+        map.put("orderType", parameter.getOrderType());
+        map.put("status", parameter.getStatus());
+        map.put("fetchType", parameter.getFetchType());
+
+        if (StringUtil.isEmpty(parameter.getFromCreatedTime()) || StringUtil.isEmpty(parameter.getToCreatedTime())) {
+            if (StringUtil.isEmpty(parameter.getFromCreatedTime())) {
+                parameter.setFromCreatedTime(parameter.getToCreatedTime());
+            } else {
+                parameter.setToCreatedTime(parameter.getFromCreatedTime());
+            }
+        }
+        if (StringUtil.isNotEmpty(parameter.getFromCreatedTime())) {
+            Long fromTime = DateUtil.parse(parameter.getFromCreatedTime(), "yyyy-MM-dd");
+            map.put("fromCreatedTime", fromTime);
+        }
+        if (StringUtil.isNotEmpty(parameter.getToCreatedTime())) {
+            Long toTime = DateUtil.parse(parameter.getToCreatedTime(), "yyyy-MM-dd") + 24 * 60 * 60 - 1;
+            map.put("toCreatedTime", toTime);
+        }
+        map.put("nextStation", parameter.getNextStation());
+        map.put("offset", pagination.getOffset());
+        map.put("limit", pagination.getLimit());
+
+        //查询记录
+        List<DeliveryOrderDO> queryList = deliveryOrderDao.queryDeliveryOrderListBy(map);
+        Long count = deliveryOrderDao.queryCountBy(map);
+        pagination.setTotalCount(count == null ? 0 : count);
+
+        return batchQuery(queryList, Long.parseLong(parameter.getMerchantId()));
+    }
+
+    private List<DeliveryOrder> batchQuery(List<DeliveryOrderDO> deliveryOrderDOs, Long merchantId) {
+
+        List<DeliveryOrder> list = new ArrayList<>();
+        //构建订单号集合
+        List<String> orderNos = new ArrayList<>();
+        for (DeliveryOrderDO o : deliveryOrderDOs) {
+            orderNos.add(o.getOrderNo());
+        }
+        List<DeliveryOrderSenderDO> senderDO = deliveryOrderSenderDao.queryByOrderNos(merchantId, orderNos);
+        List<DeliveryOrderReceiverDO> receiverDO = deliveryOrderReceiverDao.queryByOrderNos(merchantId, orderNos);
+        for (DeliveryOrderDO o : deliveryOrderDOs) {
+            DeliveryOrder order = convert(o);
+            for (DeliveryOrderSenderDO s : senderDO) {
+                if (StringUtil.equals(o.getOrderNo(), s.getOrderNo())) {
+                    order.setSenderInfo(convert(s));
+                    break;
+                }
+            }
+            for (DeliveryOrderReceiverDO r : receiverDO) {
+                if (StringUtil.equals(o.getOrderNo(), r.getOrderNo())) {
+                    order.setReceiverInfo(convert(r));
+                    break;
+                }
+            }
+            list.add(order);
+        }
+        return list;
+    }
+
+    @Override
+    public DeliveryOrder queryByOrderNo(String merchantId, String orderNo) {
+        DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
+        if (orderDO == null) {
+            return null;
+        }
+        DeliveryOrder order = convert(orderDO);
+        Long merchantIdL = Long.parseLong(merchantId);
+        DeliveryOrderSenderDO senderDO = deliveryOrderSenderDao.queryByOrderNo(merchantIdL, order.getOrderNo());
+        DeliveryOrderReceiverDO receiverDO = deliveryOrderReceiverDao.queryByOrderNo(merchantIdL, order.getOrderNo());
+        List<DeliveryOrderGoodsDO> queryGoodsList = deliveryOrderGoodsDao.queryByOrderNo(merchantIdL, order.getOrderNo());
+        order.setGoodsInfoList(convert(queryGoodsList));
+        order.setSenderInfo(convert(senderDO));
+        order.setReceiverInfo(convert(receiverDO));
+        return order;
+    }
+
+    @Override
+    public List<DeliveryOrder> queryByOrderNos(String merchantId, List<String> orderNos) {
+        if (orderNos == null || orderNos.size() == 0) {
+            return null;
+        }
+        List<DeliveryOrderDO> orderDOs = deliveryOrderDao.queryByOrderNos(Long.parseLong(merchantId), orderNos);
+        if (orderDOs == null) {
+            return null;
+        }
+        return batchQuery(orderDOs, Long.parseLong(merchantId));
+    }
+
+    @Override
+    public void handleOpt(OrderOptRequest optRequest) {
+
+
+        //校验操作参数
+        checkOtpParam(optRequest);
+        //校验操作类型
+        checkOptType(optRequest);
+        transactionTemplate.execute(new TransactionCallback<Void>() {
+            @Override
+            public Void doInTransaction(TransactionStatus transactionStatus) {
+                try {
+
+                    OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(optRequest.getMerchantId(), optRequest.getOptType().getCode());
+
+                    for (String orderNo : optRequest.getOrderNo()) {
+                        DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(optRequest.getMerchantId()), orderNo);
+                        if (handleConfig.getUpdateStatus() != null) {
+                            //更新订单状态
+                            updateDeliveryOrderStatus(optRequest, orderNo, handleConfig);
+                            //添加费用明细
+                            deliveryFeeDetailsService.buildDeliveryFee(optRequest.getMerchantId(), orderNo, optRequest.getOptType().getCode());
+                            //通知商户订单状态变更
+                            notifyMerchantStatusUpdate(optRequest.getMerchantId(), orderNo, orderDO.getReferenceNo(), DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
+                            //记录物流轨迹
+                            routeRecord(optRequest.getMerchantId(), orderNo, optRequest.getOptType().getCode(), optRequest.getParams());
+                            //短信消息
+                            sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);
+                        }
+                        //记录操作日志
+                        addOptLog(optRequest, DeliveryOrderStatusEnum.getEnum(orderDO.getStatus()), DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
+
+
+                    }
+
+                } catch (Exception e) {
+                    logger.error("handleOpt Failed. Data:{}", optRequest, e);
+                    transactionStatus.setRollbackOnly();
+                    throw e;
+                }
+                return null;
+            }
+        });
+    }
+
+    private void updateDeliveryOrderStatus(OrderOptRequest optRequest, String orderNo, OrderHandleConfig handleConfig) {
+        long affected = 0;
+        //更新订单信息，循环10次，10次未更新成功，则跳出
+        for (int i = 0; i < 10; i++) {
+            DeliveryOrderDO query = deliveryOrderDao.queryByOrderNo(Long.parseLong(optRequest.getMerchantId()), orderNo);
+            DeliveryOrderDO update = new DeliveryOrderDO();
+            update.setMerchantId(query.getMerchantId());
+            update.setOrderNo(orderNo);
+            update.setStatus(handleConfig.getUpdateStatus());
+            update.setVersion(query.getVersion());
+            //更新订单信息
+            affected = deliveryOrderDao.update(update);
+            if (affected > 0) {
+                //记录操作日志
+                break;
+            }
+            Thread.yield();
+        }
+        //判断是否更新成功
+        if (affected == 0) {
+            throw new DMSException(SysErrorCode.DB_EXCEPTION);
+        }
+    }
+
+    private void sendPhoneSMS(String merchantId, String optType, DeliveryOrderDO query) {
+        try {
+            SMSConfig smsConfig = JSON.parseObject(RedisUtil.hget(Constant.SMS_CONF + merchantId, optType), SMSConfig.class);
+
+            if (smsConfig == null) {
+                return;
+            }
+
+            String content = smsConfig.getContent();
+            //查询手机号码
+            DeliveryOrderReceiverDO receiverDO = deliveryOrderReceiverDao.queryByOrderNo(query.getMerchantId(), query.getOrderNo());
+            PhoneMessage message = new PhoneMessage();
+            message.setPhoneNum(receiverDO.getContactNumber());
+            message.setContent(content);
+            message.setMerchantId(merchantId);
+            message.setMsgType(optType);
+            phoneSMSProducer.sendMessage(message);
+        } catch (Exception e) {
+            logger.error("Send Phone Message Failed.", e);
+        }
+
+    }
+
+    /**
+     * 通知商户运单状态变更
+     *
+     * @param merchantId
+     * @param orderNo
+     * @param referenceNo
+     * @param status
+     */
+    private void notifyMerchantStatusUpdate(String merchantId, String orderNo, String referenceNo, DeliveryOrderStatusEnum status) {
+        NotifyRequest notify = new NotifyRequest();
+        try {
+
+            MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + merchantId), MerchantConfig.class);
+            InterfaceConfig interfaceConfig = JSON.parseObject(RedisUtil.hget(Constant.INTERFACE_CONF + merchantId, "update_status"), InterfaceConfig.class);
+            if (interfaceConfig == null) {
+                return;
+            }
+            notify.setOrderNo(orderNo);
+            notify.setReferenceNo(referenceNo);
+            notify.setMerchantId(merchantId);
+            notify.setOp(interfaceConfig.getOp());
+            notify.setUrl(interfaceConfig.getUrl());
+            Map<String, Object> dataMap = new HashMap<>();
+            dataMap.put("orderNo", orderNo);
+            dataMap.put("status", status.getCode());
+            String data = JSON.toJSONString(dataMap);
+            notify.setData(data);
+            notify.setSign(createSign(merchantConfig.getKey(), data));
+            notifyMerchantProducer.sendMessage(notify);
+        } catch (Exception e) {
+            logger.error("Send Message Failed. notify:{}", notify, e);
+        }
+    }
+
+    /**
+     * 记录轨迹
+     */
+    private void routeRecord(String merchantId, String orderNos, String optType, Map<String, String> params) {
+
+        RouteConfig routeConfig = JSON.parseObject(RedisUtil.hget(Constant.ROUTE_CONF + merchantId, optType), RouteConfig.class);
+        if (routeConfig == null || StringUtil.isEmpty(routeConfig.getRouteDescC()) || StringUtil.isEmpty(routeConfig.getRouteDescE())) {
+            return;
+        }
+        DeliveryRoute route = new DeliveryRoute();
+        try {
+            route.setMerchantId(merchantId);
+            route.setOrderNo(orderNos);
+            String routeDesc = routeConfig.getRouteDescC();
+            String routeDescE = routeConfig.getRouteDescE();
+            route.setOpt(optType);
+            String[] args = new String[params.size()];
+            for (int i = 0; i < args.length; i++) {
+                args[i] = params.get("" + i);
+            }
+            route.setTraceCN(MessageFormat.format(routeDesc, args));
+            route.setTraceEN(MessageFormat.format(routeDescE, args));
+            routeProducer.sendMessage(route);
+        } catch (Exception e) {
+            logger.error("Send Message Failed. route:{}", route, e);
+        }
+    }
+
+    private String createSign(String key, String data) {
+        return new String(DigestUtils.md5Hex("key=" + key + "&data=" + data));
+    }
+
+    private DeliveryOrder convert(DeliveryOrderDO d) {
+        DeliveryOrder deliveryOrder = new DeliveryOrder();
+        deliveryOrder.setOrderNo(d.getOrderNo());
+        deliveryOrder.setReferenceNo(d.getReferenceNo());
+        deliveryOrder.setCreatedTime(d.getCreatedTime());
+        deliveryOrder.setUpdatedTime(d.getUpdatedTime());
+        deliveryOrder.setCountry(d.getCountry());
+        deliveryOrder.setMerchantId("" + d.getMerchantId());
+        deliveryOrder.setOrderTime(d.getOrderTime());
+        deliveryOrder.setOrderType(d.getOrderType());
+        deliveryOrder.setOrderPlatform(d.getOrderPlatform());
+        deliveryOrder.setTotalPrice(d.getTotalPrice());
+        deliveryOrder.setStatus(DeliveryOrderStatusEnum.getEnum(d.getStatus()));
+        deliveryOrder.setServiceType(ServiceTypeEnum.getEnum(d.getServiceType()));
+        deliveryOrder.setWeight(d.getWeight());
+        deliveryOrder.setGoodsType(d.getGoodsType());
+
+        deliveryOrder.setFetchType(d.getFetchType());
+        deliveryOrder.setFetchAddress(d.getFetchAddress());
+        deliveryOrder.setFetchTime(d.getFetchTime());
+
+        deliveryOrder.setClientType(ClientTypeEnum.getEnum(d.getClientType()));
+        deliveryOrder.setCategoryType(DeliveryCategoryTypeEnum.getEnum(d.getDeliveryCategoryType()));
+        deliveryOrder.setCustomerType(CustomerTypeEnum.getEnum(d.getCustomerType()));
+        deliveryOrder.setCustomerLevel(LevelEnum.getEnum(d.getCustomerLevel()));
+        deliveryOrder.setSettleType(SettleTypeEnum.getEnum(d.getSettleType()));
+        deliveryOrder.setTransportType(TransportTypeEnum.getEnum(d.getTransportType()));
+        deliveryOrder.setProductType(ProductTypeEnum.getEnum(d.getProductType()));
+
+        deliveryOrder.setUserdefine01(d.getUserdefine01());
+        deliveryOrder.setUserdefine02(d.getUserdefine02());
+        deliveryOrder.setUserdefine03(d.getUserdefine03());
+        deliveryOrder.setUserdefine04(d.getUserdefine04());
+        deliveryOrder.setUserdefine05(d.getUserdefine05());
+        return deliveryOrder;
+    }
+
+    private SenderInfo convert(DeliveryOrderSenderDO s) {
+        if (s == null) {
+            return null;
+        }
+        SenderInfo sender = new SenderInfo();
+        sender.setSenderAddress(s.getAddress());
+        sender.setSenderArea(s.getArea());
+        sender.setSenderCity(s.getCity());
+        sender.setSenderPhone(s.getContactNumber());
+        sender.setSenderCountry(s.getCountry());
+        sender.setSenderName(s.getName());
+        sender.setSenderProvince(s.getProvince());
+        return sender;
+    }
+
+    private ReceiverInfo convert(DeliveryOrderReceiverDO d) {
+        if (d == null) {
+            return null;
+        }
+        ReceiverInfo receiverInfo = new ReceiverInfo();
+        receiverInfo.setReceiverAddress(d.getAddress());
+        receiverInfo.setReceiverArea(d.getArea());
+        receiverInfo.setReceiverCity(d.getCity());
+        receiverInfo.setReceiverPhone(d.getContactNumber());
+        receiverInfo.setReceiverCountry(d.getCountry());
+        receiverInfo.setReceiverName(d.getName());
+        receiverInfo.setReceiverProvince(d.getProvince());
+        return receiverInfo;
+    }
+
+    private List<GoodsInfo> convert(List<DeliveryOrderGoodsDO> goodsList) {
+        if (goodsList == null) {
+            return null;
+        }
+        List<GoodsInfo> list = new ArrayList<>();
+
+        for (DeliveryOrderGoodsDO g : goodsList) {
+            GoodsInfo goods = new GoodsInfo();
+            goods.setGoodsDesc(g.getGoodsDesc());
+            goods.setGoodsId(g.getGoodsId());
+            goods.setQty(g.getQty());
+            goods.setQuality(g.getQuality());
+            goods.setUnitPrice(g.getUnitPrice());
+            goods.setUserdefine01(g.getUserdefine01());
+            goods.setUserdefine02(g.getUserdefine02());
+            goods.setUserdefine03(g.getUserdefine03());
+            goods.setUserdefine04(g.getUserdefine04());
+            goods.setUserdefine05(g.getUserdefine05());
+            list.add(goods);
+        }
+        return list;
+    }
+
+    private DeliveryOrderDO convert(DeliveryOrder data) {
+
+        DeliveryOrderDO orderHeader = new DeliveryOrderDO();
+        orderHeader.setCountry(data.getCountry());
+        orderHeader.setMerchantId(Long.parseLong(data.getMerchantId()));
+        orderHeader.setOrderPlatform(data.getOrderPlatform());
+        orderHeader.setOrderTime(data.getOrderTime());
+        orderHeader.setOrderType(data.getOrderType());
+        orderHeader.setReferenceNo(data.getReferenceNo());
+        orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
+        orderHeader.setWeight(data.getWeight());
+        orderHeader.setFetchType(data.getFetchType());
+        orderHeader.setFetchAddress(data.getFetchAddress());
+        orderHeader.setFetchTime(data.getFetchTime());
+        orderHeader.setGoodsType(data.getGoodsType());
+        orderHeader.setTotalPrice(data.getTotalPrice());
+
+        orderHeader.setServiceType(data.getServiceType().getCode());
+
+        orderHeader.setClientType(data.getClientType().getCode());
+        orderHeader.setCustomerType(data.getCustomerType().getCode());
+        orderHeader.setCustomerLevel(data.getCustomerLevel().getCode());
+        orderHeader.setSettleType(data.getSettleType().getCode());
+        orderHeader.setProductType(data.getProductType().getCode());
+        orderHeader.setTransportType(data.getTransportType().getCode());
+
+        orderHeader.setUserdefine01(data.getUserdefine01());
+        orderHeader.setUserdefine02(data.getUserdefine02());
+        orderHeader.setUserdefine03(data.getUserdefine03());
+        orderHeader.setUserdefine04(data.getUserdefine04());
+        orderHeader.setUserdefine05(data.getUserdefine05());
+        if (data.getClientType() != null) {
+            orderHeader.setClientType(data.getClientType().getCode());
+        }
+        return orderHeader;
+    }
+}

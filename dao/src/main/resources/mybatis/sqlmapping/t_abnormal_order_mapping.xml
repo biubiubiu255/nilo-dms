@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.AbnormalOrderDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="abnormalDO" type="com.nilo.dms.dao.dataobject.AbnormalOrderDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="abnormalType" column="abnormal_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="referenceNo" column="reference_No" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="abnormalNo" column="abnormal_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="createdBy" column="created_by" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+
+        <result property="handleType" column="handle_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleBy" column="handle_by" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleRemark" column="handle_remark" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleTime" column="handle_Time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="version" column="version" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, merchant_id,abnormal_no,order_no,reference_no,abnormal_type,status,handle_type,handle_by,handle_remark,handle_Time,remark,created_by ,created_time , updated_time ,version
+    </sql>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.AbnormalOrderDO" statementType="PREPARED"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_waybill_abnormal
+        ( merchant_id,abnormal_no,order_no,reference_no,abnormal_type,status,remark,created_by ,created_time , updated_time ,version)
+        VALUES
+        ( #{merchantId},#{abnormalNo},#{orderNo}, #{referenceNo},#{abnormalType}, #{status},#{remark},#{createdBy} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+    </insert>
+
+    <select id="queryByAbnormalNo" resultMap="abnormalDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill_abnormal
+        WHERE merchant_id = #{merchantId} and abnormal_no=#{abnormalNo}
+    </select>
+
+    <select id="queryByOrderNo" resultMap="abnormalDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill_abnormal
+        WHERE merchant_id = #{merchantId} and order_no=#{orderNo}
+    </select>
+
+    <select id="queryByReferenceNo" resultMap="abnormalDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill_abnormal
+        WHERE merchant_id=#{merchant_id} and reference_no = #{referenceNo}
+    </select>
+
+    <select id="queryAbnormalListBy" resultMap="abnormalDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill_abnormal
+        WHERE merchant_id=#{merchantId}
+        <if test="abnormalType !=null and abnormalType.size() > 0 ">
+            <foreach collection="orderType" item="item" index="index" open="and (" separator="or" close=")">
+                order_type=#{item}
+            </foreach>
+        </if>
+        <if test="fromCreatedTime !=null ">
+            and created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status !=null and status.size() > 0 ">
+            <foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">
+                status=#{item}
+            </foreach>
+        </if>
+        <if test="orderNo !=null and orderNo !='' ">
+            and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="referenceNo !=null and referenceNo !='' ">
+            and reference_no like CONCAT( CONCAT('%',#{referenceNo}),'%')
+        </if>
+        <if test="abnormalNo !=null and abnormalNo !='' ">
+            and abnormal_no like CONCAT( CONCAT('%',#{abnormalNo}),'%')
+        </if>
+        order by created_time desc
+        limit #{offset} , #{limit}
+
+    </select>
+
+    <select id="queryCountBy" resultType="java.lang.Long" >
+        SELECT count(1)
+        FROM t_waybill_abnormal
+        WHERE merchant_id=#{merchantId}
+        <if test="abnormalType !=null and abnormalType.size() > 0 ">
+            <foreach collection="orderType" item="item" index="index" open="and (" separator="or" close=")">
+                order_type=#{item}
+            </foreach>
+        </if>
+        <if test="fromCreatedTime !=null ">
+            and created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status !=null and status.size() > 0 ">
+            <foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">
+                status=#{item}
+            </foreach>
+        </if>
+        <if test="orderNo !=null and orderNo !='' ">
+            and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="referenceNo !=null and referenceNo !='' ">
+            and reference_no like CONCAT( CONCAT('%',#{referenceNo}),'%')
+        </if>
+        <if test="abnormalNo !=null and abnormalNo !='' ">
+            and abnormal_no like CONCAT( CONCAT('%',#{abnormalNo}),'%')
+        </if>
+        order by null
+    </select>
+
+    <!-- 动态更新语句 -->
+    <update id="update" parameterType="com.nilo.dms.dao.dataobject.AbnormalOrderDO" statementType="PREPARED">
+        update t_waybill_abnormal
+        <trim prefix="set" suffixOverrides="," suffix="where merchant_Id=#{merchantId} and abnormal_no=#{abnormalNo}">
+            <if test="status != null ">
+                status = #{status},
+            </if>
+            <if test="handleType != null and handleType !='' ">
+                handle_type = #{handleType},
+            </if>
+            <if test="handleBy != null and handleBy !='' ">
+                handle_By = #{handleBy},
+            </if>
+            <if test="handleRemark != null and handleRemark !='' ">
+                handle_remark = #{handleRemark},
+            </if>
+            <if test="handleTime != null ">
+                handle_Time = #{handleTime},
+            </if>
+            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+        </trim>
+    </update>
+
+</mapper>

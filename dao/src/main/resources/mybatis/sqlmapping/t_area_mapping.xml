@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.AreaDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="areaDO" type="com.nilo.dms.dao.dataobject.AreaDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="areaId" column="area_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="name" column="area_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="parentId" column="area_parent_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="sort" column="sort" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+
+    <select id="findAll" resultMap="areaDO" statementType="PREPARED">
+        SELECT
+        *
+        FROM t_area
+    </select>
+
+</mapper>

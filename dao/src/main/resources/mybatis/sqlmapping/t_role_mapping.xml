@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.RoleDao">
+
+    <resultMap id="roleDo" type="com.nilo.dms.dao.dataobject.RoleDO">
+
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="roleName" column="role_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="description" column="description" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, merchant_id,role_name , description, created_time , updated_time , status
+    </sql>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.RoleDO" statementType="PREPARED"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_sys_role
+        (merchant_id,role_name, description, created_time, updated_time, version, status)
+        VALUES
+        ( #{merchantId},#{roleName}, #{description}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID(), #{status})
+    </insert>
+
+    <!-- 动态更新语句 -->
+    <update id="update" parameterType="com.nilo.dms.dao.dataobject.RoleDO" statementType="PREPARED">
+        update t_sys_role
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+
+            <if test="status != null ">
+                status = #{status},
+            </if>
+            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+        </trim>
+    </update>
+
+
+
+
+    <select id="findAllRoles" resultMap="roleDo" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_role
+        WHERE merchant_id=#{merchantId}
+    </select>
+
+    <select id="queryById" resultMap="roleDo" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_role
+        WHERE id = #{id}
+    </select>
+
+    <!-- 通过用户id 查询用户 拥有的角色 -->
+    <select id="findRolesByUserId" resultMap="roleDo" statementType="PREPARED"
+            parameterType="java.lang.Long">
+        SELECT
+        r.id,
+        r.role_name,
+		r.created_time,
+		r.updated_time,
+		r.status
+        FROM t_sys_role r LEFT JOIN t_sys_user_role ur ON r.id = ur.role_id
+        WHERE ur.user_id = #{userId}
+        AND r.status = 1
+    </select>
+
+    <!-- 通过用户id 查询角色权限 -->
+    <select id="findPermissionsByUserId" resultType="String" parameterType="java.lang.Long" statementType="PREPARED">
+
+    	SELECT
+            rp.permission
+        FROM
+        t_sys_role_permission rp
+        LEFT JOIN t_sys_user_role ur ON ur.role_id = rp.role_id
+        LEFT JOIN t_sys_role r ON r.id = ur.role_id
+        WHERE
+            ur.user_id = #{userId}  and r. STATUS = 1
+
+    </select>
+
+    <!-- 通过角色id 查询角色权限集合 -->
+    <select id="findPermissionsByRoleId" resultType="String" parameterType="java.lang.Integer"
+            statementType="PREPARED">
+    	SELECT permission FROM t_sys_role_permission
+		WHERE role_id = #{roleId}
+    </select>
+
+    <delete id="deleteAll" parameterType="java.lang.Long" statementType="PREPARED">
+    	DELETE FROM t_sys_user_role
+    	WHERE user_id = #{userId}
+    </delete>
+    <!-- 批量插入语句 -->
+    <insert id="insertAll" statementType="PREPARED">
+        INSERT INTO t_sys_user_role(user_id,role_id)
+        VALUES
+        <foreach collection="roles" item="roleId" index="index" separator=",">
+            (#{userId}, #{roleId})
+        </foreach>
+    </insert>
+
+</mapper>

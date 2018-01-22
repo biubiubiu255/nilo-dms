@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.NotifyDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="notifyDO" type="com.nilo.dms.dao.dataobject.NotifyDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="merchantId" column="merchant_Id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="bizType" column="biz_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="notifyId" column="notify_id" javaType="java.lang.String"
+                 jdbcType="VARCHAR"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="referenceNo" column="reference_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="version" column="version" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id ,merchant_id,biz_type,notify_id,order_no,reference_no,url,param,result,sign,num,status,created_time , updated_time ,version
+    </sql>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.NotifyDO" statementType="PREPARED"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_sys_notify
+        ( merchant_id,biz_type,notify_id,order_no,reference_no,url,param,result,sign,num,status,created_time , updated_time ,version)
+        VALUES
+        (#{merchantId},#{bizType}, #{notifyId},#{orderNo},#{referenceNo},#{url},#{param},#{result},#{sign},#{num},#{status} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+    </insert>
+    <!-- 动态更新语句 -->
+    <update id="update" parameterType="com.nilo.dms.dao.dataobject.NotifyDO" statementType="PREPARED">
+        update t_sys_notify
+        <trim prefix="set" suffixOverrides="," suffix="where notify_id=#{notifyId}">
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="result != null and result != ''">
+                result = #{result},
+            </if>
+            <if test="num != null and num != ''">
+                num = #{num},
+            </if>
+            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+        </trim>
+    </update>
+
+
+    <select id="findBy" resultMap="notifyDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_notify where merchant_id = #{merchantId}
+        <if test="orderNo != null and orderNo != ''">
+            and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="bizType != null and bizType != ''">
+            and biz_type =  #{bizType}
+        </if>
+        <if test="status !=null">
+            and status =  #{status}
+        </if>
+
+        order by created_time desc
+        limit #{offset} , #{limit}
+    </select>
+
+    <select id="findCountBy" statementType="PREPARED" resultType="java.lang.Long">
+        SELECT count(1)
+        FROM t_sys_notify where merchant_id = #{merchantId}
+        <if test="orderNo != null and orderNo != ''">
+            and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="bizType != null and bizType != ''">
+            and biz_type =  #{bizType}
+        </if>
+        <if test="status !=null">
+            and status =  #{status}
+        </if>
+
+        order by null
+    </select>
+
+
+    <select id="findByNotifyId" resultMap="notifyDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_notify where merchant_id = #{merchantId} and notify_id=#{notifyId}
+    </select>
+
+    <select id="queryRetryList" resultMap="notifyDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_notify where status = #{status}
+
+    </select>
+</mapper>

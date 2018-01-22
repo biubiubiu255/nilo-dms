@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.DeliveryOrderDelayDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="delayDO" type="com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="merchantId" column="merchant_Id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="delayReason" column="delay_Reason" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+        <result property="allowTimes" column="allow_times" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="delayTimes" column="delay_times" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="version" column="version" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id ,merchant_id,order_no,delay_Reason,remark,allow_times,delay_times,status,created_time , updated_time ,version
+    </sql>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO" statementType="PREPARED"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_waybill_delay
+        ( merchant_id,order_no,delay_Reason,remark,allow_times,delay_times, status,created_time , updated_time ,version)
+        VALUES
+        (#{merchantId},#{orderNo},#{delayReason},#{remark}, #{allowTimes},#{delayTimes},#{status}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+    </insert>
+    <!-- 动态更新语句 -->
+    <update id="update" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO" statementType="PREPARED">
+        update t_waybill_delay
+        <trim prefix="set" suffixOverrides="," suffix="where merchant_id=#{merchantId} and order_no = #{orderNo}">
+            <if test="allowTimes != null ">
+                allow_times = #{allowTimes},
+            </if>
+            <if test="delayTimes != null">
+                delay_times = #{delayTimes},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+        </trim>
+    </update>
+
+    <select id="findByOrderNo" resultMap="delayDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill_delay where
+        merchant_id = #{merchantId} and order_no = #{orderNo}
+    </select>
+
+    <select id="queryBy" resultMap="delayDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill_delay where
+        merchant_id = #{merchantId}
+        <if test="orderNo != null and orderNo != '' ">
+            and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+
+        <if test="beginTime != null and endTime != null ">
+            and created_time >= #{beginTime} <![CDATA[and created_time <= #{endTime} ]]>
+        </if>
+        order by created_time desc
+        limit #{offset} , #{limit}
+    </select>
+
+    <select id="queryCountBy" resultType="java.lang.Long" statementType="PREPARED">
+        SELECT count(1)
+        FROM t_waybill_delay where
+        merchant_id = #{merchantId}
+        <if test="orderNo != null and orderNo != '' ">
+            and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="beginTime != null and endTime != null ">
+            and created_time >= #{beginTime} <![CDATA[and created_time <= #{endTime} ]]>
+        </if>
+        order by null
+    </select>
+</mapper>
