@@ -39,23 +39,8 @@
                 jdbcType="INTEGER"/>
         <result property="fetchAddress" column="fetch_address" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-
-        <result property="deliveryCategoryType" column="delivery_Category_Type" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="customerType" column="customer_Type" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="customerLevel" column="customer_Level" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="transportType" column="transport_Type" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="productType" column="product_Type" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="settleType" column="settle_Type" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
         <result property="networkId" column="network_Id" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-
-
         <result property="userdefine01" column="userdefine01" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="userdefine02" column="userdefine02" javaType="java.lang.String"
@@ -75,7 +60,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, merchant_id,network_Id,order_no ,order_type,service_Type, client_type,delivery_Category_Type,customer_Type,customer_Level,transport_Type,product_Type,settle_Type,fetch_type,fetch_time,fetch_address,reference_No , weight,goods_type, order_time,country ,total_price,order_platform,status,userdefine01,userdefine02,userdefine03,userdefine04,userdefine05, created_time , updated_time ,version
+        id, merchant_id,network_Id,order_no ,order_type,service_Type,fetch_type,fetch_time,fetch_address,reference_No , weight,goods_type, order_time,country ,total_price,order_platform,status,userdefine01,userdefine02,userdefine03,userdefine04,userdefine05, created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -83,9 +68,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_waybill
-        ( merchant_id,network_Id,order_no ,order_type, service_type,client_type,delivery_Category_Type,customer_Type,customer_Level,transport_Type,product_Type,settle_Type,reference_No , weight,goods_type, fetch_type,fetch_time,fetch_address,order_time,country ,total_price,order_platform,status,userdefine01,userdefine02,userdefine03,userdefine04,userdefine05, created_time , updated_time ,version)
+        ( merchant_id,network_Id,order_no ,order_type, service_type,reference_No , weight,goods_type, fetch_type,fetch_time,fetch_address,order_time,country ,total_price,order_platform,status,userdefine01,userdefine02,userdefine03,userdefine04,userdefine05, created_time , updated_time ,version)
         VALUES
-        ( #{merchantId},#{networkId},#{orderNo}, #{orderType},#{serviceType},#{clientType},#{deliveryCategoryType},#{customerType},#{customerLevel},#{transportType},#{productType},#{settleType}, #{referenceNo},#{weight},#{goodsType},#{fetchType},#{fetchTime},#{fetchAddress},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status},#{userdefine01},#{userdefine02},#{userdefine03},#{userdefine04},#{userdefine05} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        ( #{merchantId},#{networkId},#{orderNo}, #{orderType},#{serviceType}, #{referenceNo},#{weight},#{goodsType},#{fetchType},#{fetchTime},#{fetchAddress},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status},#{userdefine01},#{userdefine02},#{userdefine03},#{userdefine04},#{userdefine05} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
 
