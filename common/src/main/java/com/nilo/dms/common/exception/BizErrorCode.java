@@ -82,6 +82,7 @@ public enum BizErrorCode implements ErrorCode {
     CODE_EXIST("code:{0}  exist", "100057"),
     DELAY_TIMES_LIMIT("Delay Times is limit", "100058"),
     RIDER_IS_EMPTY("Rider is empty", "100059"),
+    USER_URL_NOT_ALLOWED("User Url Not Allowed.", "100060"),
     ;
 
     private final String description;

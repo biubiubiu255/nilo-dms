@@ -22,5 +22,7 @@ public class Constant {
     public static final String BIZ_FEE_CONF="System_biz_fee_config";
 
     public static final String ADDRESS="address";
+    
+    public static final String ALLOW_URL="/dashboard.html,/home.html";
 
 }

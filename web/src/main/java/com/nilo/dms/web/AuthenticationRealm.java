@@ -6,6 +6,7 @@
 package com.nilo.dms.web;
 
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dao.dataobject.MenuDO;
 import com.nilo.dms.service.RoleService;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.Role;
@@ -71,7 +72,9 @@ public class AuthenticationRealm extends AuthorizingRealm {
                     case FROZEN:
                         throw new LockedAccountException();
                 }
-
+                
+                List<String> urlAuthorities = roleService.findUrlPermissionsByUserId(user.getUserId());
+                
 
                 List<String> authorities = roleService.findPermissionsByUserId(user.getUserId());
                 List<String> roles = new ArrayList<>();
@@ -90,6 +93,7 @@ public class AuthenticationRealm extends AuthorizingRealm {
                 principal.setRoles(roles);
                 principal.setAuthorities(authorities);
                 principal.setCompanyId(company.getCompanyId());
+                principal.setUrlAuthorities(urlAuthorities);
 
                 return new SimpleAuthenticationInfo(principal, user.getLoginInfo().getPassword(), getName());
             }

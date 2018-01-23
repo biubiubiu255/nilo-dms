@@ -47,6 +47,12 @@ public interface RoleService {
      */
     List<String> findPermissionsByUserId(String userId);
 
+    /**
+     * 通过用户id 查询用户url权限集合
+     * @param userId
+     * @return
+     */
+    List<String> findUrlPermissionsByUserId(String userId);
 
     /**
      * 获取所有角色列表

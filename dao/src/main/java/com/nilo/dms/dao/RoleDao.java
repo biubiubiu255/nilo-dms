@@ -55,6 +55,14 @@ public interface RoleDao extends BaseDao<Long, RoleDO> {
      * @return
      */
     List<String> findPermissionsByUserId(Long userId);
+    
+    /**
+     * 通过用户id 查询用户Url权限集合
+     *
+     * @param userId
+     * @return
+     */
+    List<String> findUrlPermissionsByUserId(Long userId);
 
     /**
      * 通过角色id 查询角色权限集合

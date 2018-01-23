@@ -39,8 +39,19 @@ public class Principal implements Serializable {
     private List<String> networks;
     private List<String> authorities;
     private List<String> roles;
+    private List<String> urlAuthorities;
+    
+    
 
-    public List<String> getNetworks() {
+    public List<String> getUrlAuthorities() {
+		return urlAuthorities;
+	}
+
+	public void setUrlAuthorities(List<String> urlAuthorities) {
+		this.urlAuthorities = urlAuthorities;
+	}
+
+	public List<String> getNetworks() {
         return networks;
     }
 

@@ -21,6 +21,7 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -75,6 +76,17 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<String> findPermissionsByUserId(String userId) {
         return roleDao.findPermissionsByUserId(Long.parseLong(userId));
+    }
+    
+    @Override
+    public List<String> findUrlPermissionsByUserId(String userId) {
+    	List<String> urlAuthorities = new ArrayList<String>();
+    	List<String> oldUrlAuthorities = roleDao.findUrlPermissionsByUserId(Long.parseLong(userId));
+        for (String url : oldUrlAuthorities) {
+        	String[] urlAuthoritiesString =  url.split(",");
+        	urlAuthorities.addAll(Arrays.asList(urlAuthoritiesString));
+		}
+        return urlAuthorities;
     }
 
     @Override

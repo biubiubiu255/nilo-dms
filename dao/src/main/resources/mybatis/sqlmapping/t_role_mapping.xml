@@ -95,6 +95,21 @@
             ur.user_id = #{userId}  and r. STATUS = 1
 
     </select>
+    
+     <!-- 通过用户id 查询角色url权限 -->
+    <select id="findUrlPermissionsByUserId" resultType="String" parameterType="java.lang.Long" statementType="PREPARED">
+
+    	SELECT
+            p.url
+        FROM
+				t_sys_permission p JOIN
+        t_sys_role_permission rp on p.`value` = rp.permission
+        JOIN t_sys_user_role ur ON ur.role_id = rp.role_id
+        JOIN t_sys_role r ON r.id = ur.role_id
+        WHERE
+            ur.user_id = #{userId}   and r. STATUS = 1 and p.url!=''
+
+    </select>
 
     <!-- 通过角色id 查询角色权限集合 -->
     <select id="findPermissionsByRoleId" resultType="String" parameterType="java.lang.Integer"
