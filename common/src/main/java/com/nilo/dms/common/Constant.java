@@ -23,6 +23,6 @@ public class Constant {
 
     public static final String ADDRESS="address";
     
-    public static final String ALLOW_URL="/dashboard.html,/home.html";
+    public static final String ALLOW_URL="/dashboard.html,/home.html,/account/logout.html";
 
 }

@@ -55,7 +55,7 @@ public class AuthenticationFilter extends FormAuthenticationFilter {
         	List<String> urlAuthorities = me.getUrlAuthorities();
             if(Constant.ALLOW_URL.indexOf(uri)==-1&&urlAuthorities.indexOf(uri)==-1&&urlAuthorities.indexOf(uri2)==-1) {
             	//ErrorCode resutlCode = DEFAULT_ERROR_KEY_ATTRIBUTE_NAME
-            	throw new DMSException(BizErrorCode.USER_NAME_EXIST);
+            	throw new DMSException(BizErrorCode.USER_URL_NOT_ALLOWED);
             }
         }
         
