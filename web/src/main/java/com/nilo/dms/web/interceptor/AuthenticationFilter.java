@@ -47,13 +47,13 @@ public class AuthenticationFilter extends FormAuthenticationFilter {
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         String clientHost = request.getRemoteHost();
         String uri = WebUtils.getPathWithinApplication(WebUtils.toHttp(request));
-        uri = uri.substring(1, uri.length());//去掉uri前面的‘/’
+        String uri2 = uri.substring(1, uri.length());//去掉uri前面的‘/’
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         
         //通过当前uri和Principal中授权的url比较，判断是否有权限
         if(me!=null) {
         	List<String> urlAuthorities = me.getUrlAuthorities();
-            if(Constant.ALLOW_URL.indexOf(uri)==-1&&urlAuthorities.indexOf(uri)==-1) {
+            if(Constant.ALLOW_URL.indexOf(uri)==-1&&urlAuthorities.indexOf(uri)==-1&&urlAuthorities.indexOf(uri2)==-1) {
             	//ErrorCode resutlCode = DEFAULT_ERROR_KEY_ATTRIBUTE_NAME
             	throw new DMSException(BizErrorCode.USER_NAME_EXIST);
             }
