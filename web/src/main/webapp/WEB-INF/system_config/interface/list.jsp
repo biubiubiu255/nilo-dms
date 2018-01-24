@@ -17,7 +17,9 @@
             </div>
         </div>
         <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal search">Search</button>
+            <shiro:hasPermission name="800022">
+                <button class="layui-btn layui-btn-normal search">Search</button>
+            </shiro:hasPermission>
         </div>
     </div>
     <hr>
@@ -38,7 +40,7 @@
     </table>
 
     <script type="text/html" id="barDemo">
-        <shiro:hasPermission name="300012">
+        <shiro:hasPermission name="800021">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
         </shiro:hasPermission>
     </script>

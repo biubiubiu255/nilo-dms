@@ -28,8 +28,10 @@
                                                                          aria-hidden="true"></i>Template
                 </button>
             </shiro:hasPermission>
+            <shiro:hasPermission name="400016">
             <button class="layui-btn btn-search">Search
                 </button>
+            </shiro:hasPermission>
         </div>
     </div>
 <div class="layui-collapse" >
@@ -79,6 +81,7 @@
                 <lp:deliveryStatus selectId="orderStatus" selectName="orderStatus" multiple="true"/>
             </div>
         </div>
+
         <div class="layui-col-md1">
             <button class="layui-btn layui-btn-normal search">Search</button>
         </div>
@@ -129,8 +132,12 @@
     </table>
 
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">Detail</a>
-        <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
+        <shiro:hasPermission name="400014">
+            <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">Detail</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="400015">
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
+        </shiro:hasPermission>
     </script>
 </div>
 <%@ include file="../common/footer.jsp" %>

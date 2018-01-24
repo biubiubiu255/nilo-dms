@@ -30,14 +30,18 @@
             </div>
         </div>
         <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal search">Search</button>
+            <shiro:hasPermission name="800036">
+                <button class="layui-btn layui-btn-normal search">Search</button>
+            </shiro:hasPermission>
         </div>
     </div>
 
     <hr>
     <div class="layui-row">
         <div class="layui-col-md1">
+            <shiro:hasPermission name="800031">
             <button class="layui-btn layui-btn-normal add"><spring:message code="add_delivery_fee_template"/></button>
+            </shiro:hasPermission>
         </div>
     </div>
     <table class="layui-table"
@@ -66,14 +70,16 @@
 
 
     <script type="text/html" id="barDemo">
+        <shiro:hasPermission name="800032">
         <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="details">Details</a>
-        <shiro:hasPermission name="100041">
+        </shiro:hasPermission>
+        <shiro:hasPermission name="800033">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
         </shiro:hasPermission>
-        <shiro:hasPermission name="100041">
+        <shiro:hasPermission name="800034">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="active">Active</a>
         </shiro:hasPermission>
-        <shiro:hasPermission name="100041">
+        <shiro:hasPermission name="800035">
             <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">Delete</a>
         </shiro:hasPermission>
     </script>

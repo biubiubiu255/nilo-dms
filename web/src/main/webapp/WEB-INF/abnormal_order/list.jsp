@@ -59,7 +59,9 @@
             </div>
 
             <div class="layui-col-md1">
-                <button class="layui-btn layui-btn-normal search">Search</button>
+                <shiro:hasPermission name="400021">
+                    <button class="layui-btn layui-btn-normal search">Search</button>
+                </shiro:hasPermission>
             </div>
         </div>
         <hr>
@@ -90,8 +92,12 @@
         </table>
 
         <script type="text/html" id="barDemo">
-            <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">Detail</a>
-            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="handle">Handle</a>
+            <shiro:hasPermission name="400022">
+                <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">Detail</a>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="400023">
+                <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="handle">Handle</a>
+            </shiro:hasPermission>
         </script>
 </div>
 <%@ include file="../common/footer.jsp" %>

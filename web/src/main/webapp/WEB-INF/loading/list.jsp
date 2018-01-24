@@ -35,7 +35,9 @@
     <hr>
     <!-- /.box-header -->
     <div class="layui-btn-group">
-        <button class="layui-btn layui-btn-normal loading-scan">Loading Scan</button>
+        <shiro:hasPermission name="400061">
+            <button class="layui-btn layui-btn-normal loading-scan">Loading Scan</button>
+        </shiro:hasPermission>
     </div>
 
     <table class="layui-table" lay-data="{ url:'/order/loading/list.html', page:true,limit:10, id:'${id0}'}"
@@ -73,9 +75,15 @@
     </table>
 
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail-loading">Detail</a>
-        <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="ship-loading">Ship</a>
-        <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete-loading">Delete</a>
+        <shiro:hasPermission name="400062">
+            <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail-loading">Detail</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="400063">
+            <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="ship-loading">Ship</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="400064">
+            <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete-loading">Delete</a>
+        </shiro:hasPermission>
     </script>
 </div>
 <%@ include file="../common/footer.jsp" %>

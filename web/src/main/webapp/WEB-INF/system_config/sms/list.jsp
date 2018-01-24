@@ -17,13 +17,17 @@
                             code="" disabled="false" />            </div>
         </div>
         <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal search">Search</button>
+            <shiro:hasPermission name="800055">
+                <button class="layui-btn layui-btn-normal search">Search</button>
+            </shiro:hasPermission>
         </div>
     </div>
     <hr>
     <div class="layui-row">
         <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal add">Add</button>
+            <shiro:hasPermission name="800051">
+                <button class="layui-btn layui-btn-normal add">Add</button>
+            </shiro:hasPermission>
         </div>
     </div>
     <table class="layui-table"
@@ -42,13 +46,13 @@
 
 
     <script type="text/html" id="barDemo">
-        <shiro:hasPermission name="100041">
+        <shiro:hasPermission name="800052">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
         </shiro:hasPermission>
-        <shiro:hasPermission name="100041">
+        <shiro:hasPermission name="800054">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="active">Active</a>
         </shiro:hasPermission>
-        <shiro:hasPermission name="100041">
+        <shiro:hasPermission name="800053">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="delete">Delete</a>
         </shiro:hasPermission>
     </script>

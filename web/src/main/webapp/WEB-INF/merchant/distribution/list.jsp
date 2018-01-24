@@ -15,15 +15,19 @@
             </div>
         </div>
         <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal search">Search</button>
+            <shiro:hasPermission name="200022">
+                <button class="layui-btn layui-btn-normal search">Search</button>
+            </shiro:hasPermission>
         </div>
 
     </div>
     <hr>
     <div class="layui-row">
-        <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal add">Add</button>
-        </div>
+        <shiro:hasPermission name="200021">
+            <div class="layui-col-md1">
+                <button class="layui-btn layui-btn-normal add">Add</button>
+            </div>
+        </shiro:hasPermission>
     </div>
     <table class="layui-table"
            lay-data="{ url:'/admin/distribution/getList.html',method:'post', page:true,limit:10, id:'${id0}'}"
@@ -45,9 +49,15 @@
 
 
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
-        <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">Delete</a>
-        <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="active">Active</a>
+        <shiro:hasPermission name="200023">
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="200024">
+            <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">Delete</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="200025">
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="active">Active</a>
+        </shiro:hasPermission>
     </script>
 </div>
 

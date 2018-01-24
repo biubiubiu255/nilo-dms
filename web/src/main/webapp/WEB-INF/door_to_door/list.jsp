@@ -48,13 +48,17 @@
         </div>
 
         <div class="layui-col-md1">
+            <shiro:hasPermission name="400043">
             <button class="layui-btn layui-btn-normal search">Search</button>
+            </shiro:hasPermission>
         </div>
     </div>
     <hr>
     <!-- /.box-header -->
     <div class="layui-btn-group demoTable">
-        <button class="layui-btn layui-btn-normal batchAllocate">Batch Allocate</button>
+        <shiro:hasPermission name="400041">
+            <button class="layui-btn layui-btn-normal batchAllocate">Batch Allocate</button>
+        </shiro:hasPermission>
     </div>
 
     <table class="layui-table" lay-data="{ url:'/order/doorToDoor/list.html', page:true,limit:10, id:'${id0}'}"
@@ -99,7 +103,9 @@
     </table>
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">Detail</a>
-        <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="allocate">Allocate</a>
+        <shiro:hasPermission name="400042">
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="allocate">Allocate</a>
+        </shiro:hasPermission>
     </script>
 </div>
 <%@ include file="../common/footer.jsp" %>

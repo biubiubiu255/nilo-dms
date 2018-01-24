@@ -30,13 +30,17 @@
             </div>
         </div>
         <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal search">Search</button>
+            <shiro:hasPermission name="400031">
+                <button class="layui-btn layui-btn-normal search">Search</button>
+            </shiro:hasPermission>
         </div>
     </div>
     <hr>
     <!-- /.box-header -->
     <div class="layui-btn-group demoTable">
-        <button class="layui-btn layui-btn-normal arrive-scan">Arrive Scan</button>
+        <shiro:hasPermission name="400032">
+            <button class="layui-btn layui-btn-normal arrive-scan">Arrive Scan</button>
+        </shiro:hasPermission>
     </div>
 
     <table class="layui-table"

@@ -17,13 +17,17 @@
             </div>
         </div>
         <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal search">Search</button>
+            <shiro:hasPermission name="800013">
+                <button class="layui-btn layui-btn-normal search">Search</button>
+            </shiro:hasPermission>
         </div>
     </div>
     <hr>
     <div class="layui-row">
         <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal add">Add</button>
+            <shiro:hasPermission name="800011">
+                <button class="layui-btn layui-btn-normal add">Add</button>
+            </shiro:hasPermission>
         </div>
     </div>
     <table class="layui-table"
@@ -47,7 +51,7 @@
 
 
     <script type="text/html" id="barDemo">
-        <shiro:hasPermission name="100041">
+        <shiro:hasPermission name="800012">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
         </shiro:hasPermission>
     </script>
