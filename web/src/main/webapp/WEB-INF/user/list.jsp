@@ -16,13 +16,15 @@
             </div>
         </div>
         <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal search">Search</button>
+            <shiro:hasPermission name="300021">
+                <button class="layui-btn layui-btn-normal search">Search</button>
+            </shiro:hasPermission>
         </div>
     </div>
     <hr>
     <div class="layui-row">
         <div class="layui-col-md3">
-            <shiro:hasPermission name="100011">
+            <shiro:hasPermission name="300022">
                 <button class="layui-btn layui-btn-normal add-user" id="10001">Add</button>
             </shiro:hasPermission>
         </div>
@@ -50,16 +52,16 @@
     </table>
 
     <script type="text/html" id="barDemo">
-        <shiro:hasPermission name="100012">
+        <shiro:hasPermission name="300023">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
         </shiro:hasPermission>
-        <shiro:hasPermission name="100013">
+        <shiro:hasPermission name="300024">
             <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">Delete</a>
         </shiro:hasPermission>
-        <shiro:hasPermission name="100014">
+        <shiro:hasPermission name="300025">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="reset">Reset Password</a>
         </shiro:hasPermission>
-        <shiro:hasPermission name="100013">
+        <shiro:hasPermission name="300026">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="active">Active</a>
         </shiro:hasPermission>
     </script>
