@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+<meta content="telephone=no" name="format-detection" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=2.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+<meta name="keywords" content="#" />
+<meta name="description" content="#" />
+<!--<link rel="apple-touch-icon-precomposed" sizes="114x114" href="">
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="">-->
+<title>工程管理</title>
+<link href="css/ionic.css" rel="stylesheet" type="text/css"/>
+<link href="css/mp.css" type="text/css" rel="stylesheet" />
+<script src="js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/functions.js"></script>
+<script type="text/javascript" src="js/mobile.js"></script>
+<script type="text/template" id="project_tmp1">
+	<li>
+	<a href="javascript:void(0);">
+		<div class="banner_center">
+			<h2>{project_name}</h2>
+			<p>
+				简称：{short_project_name} <span style=" float:right;">{creator}/{write_time}</span>
+			</p>
+			<p>
+				客户名称：{customers_name} 
+			</p>
+			<p>
+				联系人：{contact_man}
+				<span style=" float:right;">联系电话：{contact_phone}</span>
+			</p>
+		</div>
+	</a>
+	<div class="banner_bottom">
+		<p><span style=" float:right;">运距：<i style=" color:#2fb3e3">{project_distance}km</i></span>
+		<a href="javascript:void(0);" id="project_id_edit_{id}" class="ckh_edit">修改</a> 
+		<a href="javascript:void(0);" id="project_id_delete_{id}" class="ckh_delete">删除</a> 
+		</p>
+	</div>
+	</li>
+</script>
+
+<script type="text/template" id="project_tmp2">
+	<li>
+	<a href="javascript:void(0);">
+		<div class="banner_center">
+			<h2>{project_name}</h2>
+			<p>
+				简称：{short_project_name} <span style=" float:right;">{creator}/{write_time}</span>
+			</p>
+		</div>
+	</a>
+	<div class="banner_bottom">
+		<p><span style=" float:right;">运距：<i style=" color:#2fb3e3">{project_distance}km</i></span>
+		<a href="javascript:void(0);" id="project_id_edit_{id}" class="ckh_edit">修改</a> 
+		<a href="javascript:void(0);" id="project_id_delete_{id}" class="ckh_delete">删除</a> 
+		</p>
+	</div>
+	</li>
+</script>
+
+
+<script type="text/javascript">
+	$(function(){
+		
+		function formatTemplate(dta, tmpl) {  
+			var format = {  
+				name: function(x) {  
+					return x  
+				}  
+			};  
+			return tmpl.replace(/{(\w+)}/g, function(m1, m2) {  
+				if (!m2)  
+					return ""; 
+				var data = isEmpty(dta[m2]) ? "":dta[m2];
+				return (format && format[m2]) ? format[m2](dta[m2]) : data;  
+			});  
+		}
+		
+		function projectFormart(response){
+			var rows = response.rows;
+			var html = $('script[type="text/template"]').html();
+			var arr = [];  
+			var ids = [];
+			$.each(rows, function(i, o){ 
+				var gethtml = formatTemplate(o, html);
+				arr.push(gethtml);  
+				var id = o.id;
+				ids.push(id);
+			});   
+			$('#append_project_id').append(arr.join(''));
+			
+			//权限控制
+			$.each(ids, function(n, id){ 
+				$("#project_id_delete_"+id).unbind("click").bind("click",id,deleteProject);	
+			});
+			//如果没有任何权限
+			//$('#append_project_id').find('.banner_bottom').css('display','none'); 
+			
+		}
+		function deleteProject(e){
+			var id = e.data;
+			if(confirm('确定要删除'+id+' ？')){
+				//$('#customers_id_'+id).remove();	
+			}
+		}
+		
+		var mobile = new MobileData({
+			model : 'project'
+			,viewModel:'view_project'
+			,templateId:'project_tmp1'
+			,appendId:'append_project_id'
+		});	
+		
+		mobile.paginate({
+			clearHtml:true
+			,callback:projectFormart
+		});
+		
+		$('a.ckh_delete').click(function() {
+			mobile.removeData(); 
+		});
+		
+	});
+	
+</script>
+</head>
+<body>
+<div class="wap_content"> 
+   <div class="wap_top"><a href="user_center.php" title="返回" class="wap_top_back"></a>
+   <h2>工程明细</h2>
+   <a href="index.php" title="添加" class="top_button_add"></a></div>
+   <div class="search_banner">
+        <div class="search_content">
+            <div class="search_input">
+                <i></i>
+                <input type="text" placeholder="输入工程名称关键字" class="search_input_field keywords"/>
+            </div>
+            <div class="search_button"><input type="button" value="搜索" class="search_input_button submit"/></div>
+        </div>
+   </div>     
+   <div class="banner_content">
+        <ul id = 'append_project_id'>
+        <li>
+          <a href="javascript:void(0);">
+          <div class="banner_center">
+            <i>李政权/2016-09-06</i>
+            <h2>长沙市创新中心</h2>
+            <p>
+            简称：创新中心  &nbsp;&nbsp; 客户名称：湖南省长沙市岳麓区测试
+            </p>
+            <p>
+            联系人：李政权  &nbsp;&nbsp; 联系电话：15211013425
+            </p>
+          </div>
+          </a>
+          <div class="banner_bottom">
+          <p><span style=" float:right;">运距：<i style=" color:#2fb3e3">30km</i></span>
+          <a href="javascript:void(0);" class="ckh_edit">修改</a> 
+          <a href="javascript:void(0);" class="ckh_delete">删除</a> 
+          </p>
+          </div>
+         </li>
+        </ul>
+         
+   </div>
+</div>   
+</body>
+</html>
