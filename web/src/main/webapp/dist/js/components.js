@@ -103,11 +103,9 @@ function showGatewayType(value) {
 }
 
 function showImageView(orderNo, imageType) {
-
     if (imageType) {
         imageType = "";
     }
-
     return '<a href="#" onclick="openImage(\'' + orderNo + '\',' + imageType + ')">View</a>';
 }
 
@@ -124,7 +122,7 @@ function openImage(orderNo, imageType) {
             layer.open({
                 type: 1,
                 title: "Image",
-                area: ['680px', '680px'],
+                area: ['480px', '480px'],
                 content: data,
                 end: function () {
                 }

@@ -7,46 +7,52 @@
 %>
 <body>
 <div class="box-body">
-    <div class="layui-form layui-row">
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">OrderNo:</label>
-            <div class="layui-inline">
-                <input class="layui-input" name="orderNo" autocomplete="off">
-            </div>
-        </div>
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">Status:</label>
-            <div class="layui-form-item layui-inline">
-                <select lay-filter="taskStatus" multiple name="taskStatus">
-                    <option value="">Pls select Status...</option>
-                    <option value=0>Create</option>
-                    <option value=10>Process</option>
-                    <option value=20>Complete</option>
-                </select>
-            </div>
-        </div>
-        <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal search">Search</button>
-        </div>
-    </div>
-    <hr>
-    <div class="layui-row">
+	<div class="layui-row">
         <div class="layui-col-md3">
-            <button class="layui-btn layui-btn-normal print"><i class="fa fa-print" aria-hidden="true"> </i>Print
-            </button>
+            
             <button type="button" class="layui-btn" id="importSignData">
                 <i class="layui-icon">&#xe67c;</i>Import
             </button>
+            <button class="layui-btn btn-search">Search</button>
         </div>
     </div>
+	<div class="layui-collapse" >
+	  <div class="layui-colla-item">
+	    <div class="layui-colla-content ">
+	    <div class="layui-form layui-row">
+	        <div class="layui-col-md4 layui-col-lg3">
+	            <label class="layui-form-label">OrderNo:</label>
+	            <div class="layui-inline">
+	                <input class="layui-input" name="orderNo" autocomplete="off">
+	            </div>
+	        </div>
+	        <div class="layui-col-md4 layui-col-lg3">
+	            <label class="layui-form-label">Status:</label>
+	            <div class="layui-form-item layui-inline">
+	                <select lay-filter="taskStatus" multiple name="taskStatus">
+	                    <option value="">Pls select Status...</option>
+	                    <option value=1>Create</option>
+	                    <option value=2>Process</option>
+	                    <option value=3>Complete</option>
+	                </select>
+	            </div>
+	        </div>
+	        <div class="layui-col-md1">
+	            <button class="layui-btn layui-btn-normal search">Search</button>
+	        </div>
+	    </div>
+	    </div>
+  </div>
+ </div>
+    
 
     <table class="layui-table" lay-data="{ url:'/task/dispatch/list.html', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
             <th lay-data="{checkbox:true, fixed: true}"></th>
-            <th lay-data="{fixed:'left',field:'orderNo', width:250}">OrderNo</th>
-            <th lay-data="{fixed:'left',field:'referenceNo', width:200,templet: '<div>{{d.deliveryOrder.referenceNo}}</div>'}">
+            <th lay-data="{fixed:'left',field:'orderNo', width:180}">OrderNo</th>
+            <th lay-data="{field:'referenceNo', width:200,templet: '<div>{{d.deliveryOrder.referenceNo}}</div>'}">
                 ReferenceNo
             </th>
             <th lay-data="{field:'statusDesc', width:150}">Task Status</th>
@@ -58,33 +64,26 @@
             <th lay-data="{field:'goodsType', width:120,templet: '<div>{{d.deliveryOrder.goodsType}}</div>'}">
                 GoodsType
             </th>
-            <th lay-data="{field:'remark', width:100}">Remark</th>
-            <th lay-data="{field:'name', width:150,templet: '<div>{{d.deliveryOrder.receiverInfo.name}}</div>' }">
+            <th lay-data="{field:'name', width:150,templet: '<div>{{d.deliveryOrder.receiverInfo.receiverName}}</div>' }">
                 Receiver
                 Name
             </th>
-            <th lay-data="{field:'contactNumber', width:150,templet: '<div>{{d.deliveryOrder.receiverInfo.contactNumber}}</div>' }">
+            <th lay-data="{field:'contactNumber', width:150,templet: '<div>{{d.deliveryOrder.receiverInfo.receiverPhone}}</div>' }">
                 Receiver Phone
             </th>
-            <th lay-data="{field:'address', width:150,templet: '<div>{{d.deliveryOrder.receiverInfo.address}}</div>' }">
+            <th lay-data="{field:'address', width:150,templet: '<div>{{d.deliveryOrder.receiverInfo.receiverAddress}}</div>' }">
                 Receiver
                 Address
             </th>
             <th lay-data="{title:'Image', width:100,templet:'<div>{{ showImageView(d.orderNo) }}</div>'}">Image</th>
-            <th lay-data="{field:'userdefine01', width:150}">UserDefine01</th>
-            <th lay-data="{field:'userdefine02', width:150}">UserDefine02</th>
-            <th lay-data="{field:'userdefine03', width:150}">UserDefine03</th>
-            <th lay-data="{field:'userdefine04', width:150}">UserDefine04</th>
-            <th lay-data="{field:'userdefine05', width:150}">UserDefine05</th>
 
-            <th lay-data="{title:'Opt',fixed: 'right', width:300, align:'center', toolbar: '#barDemo'}"></th>
+            <th lay-data="{title:'Opt',fixed: 'right', width:230, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
         </thead>
     </table>
 </div>
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="transfer">Transfer</a>
     <a class="layui-btn layui-btn-warm layui-btn-mini" lay-event="delay">Delay</a>
     <a class="layui-btn layui-btn-warm layui-btn-mini" lay-event="receive">Receive</a>
     <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="abnormal">Abnormal</a>
@@ -108,7 +107,8 @@
     }
 
     $(function () {
-
+    	 layui.use(['element'], function () {
+         });
         layui.use('upload', function () {
             var upload = layui.upload;
             var load;
@@ -122,8 +122,21 @@
                 }
                 , done: function (res) {
                     layer.close(load);
+                    console.log(res.data[0].message)
+                    
                     if (res.result) {
-                        layer.msg('SUCCESS', {icon: 1, time: 2000});
+                    	var message = "";
+                    	for(j = 0,len=res.data.length; j < len;j++) {
+                    		message = message + res.data[j].message +"</br>";
+                    	};
+                    	var index = layer.open({
+                    		  title:"Result",
+                    		  type: 1,
+                    		  maxmin: true,
+                    		  content: "<div >"+message+" </div>"
+                    		 });
+                    	layer.full(index);
+                        //layer.msg('SUCCESS', {icon: 1, time: 2000});
                     } else {
                         layer.msg(res.msg, {icon: 2, time: 2000});
                     }
@@ -165,6 +178,10 @@
             $('.search').on('click', function () {
                 reloadTable();
             });
+            $(".btn-search").on("click", function () {
+            	$(".layui-colla-content").toggleClass("layui-show");
+            	$(".btn-search").toggleClass("layui-btn-warm");
+            })
 
         });
         function reloadTable(item) {
@@ -206,6 +223,7 @@
                     //弹出即全屏
                     var index = layer.open({
                         type: 1,
+                        title:"Details",
                         content: data,
                         area: ['800px', '600px'],
                         maxmin: true,
@@ -228,6 +246,7 @@
                 success: function (data) {
                     //弹出即全屏
                     var index = layer.open({
+                    	title:"Receive",
                         type: 1,
                         content: data,
                         area: ['700px', '500px'],
@@ -251,6 +270,7 @@
                 success: function (data) {
                     //弹出即全屏
                     var index = layer.open({
+                    	title:"Abnormal",
                         type: 1,
                         content: data,
                         area: ['700px', '500px'],
@@ -277,11 +297,12 @@
                         title:"Delay",
                         content: data,
                         area: ['700px', '500px'],
-                        offset:['150px','300px'],
+                        maxmin: true,
                         end: function () {
                             reloadCurrentPage();
                         }
                     });
+                    layer.full(index);
                 }
             });
         }

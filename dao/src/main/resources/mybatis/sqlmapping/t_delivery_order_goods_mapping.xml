@@ -17,26 +17,12 @@
                 jdbcType="VARCHAR"/>
         <result property="qty" column="qty" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
-
-        <result property="unitPrice" column="unit_price" javaType="java.lang.Long"
-                jdbcType="INTEGER"/>
-        <result property="totalPrice" column="total_price" javaType="java.lang.Long"
-                jdbcType="INTEGER"/>
         <result property="quality" column="quality" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
 
         <result property="status" column="status" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
-        <result property="userdefine01" column="userdefine01" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="userdefine02" column="userdefine02" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="userdefine03" column="userdefine03" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="userdefine04" column="userdefine04" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="userdefine05" column="userdefine05" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
+        
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
@@ -46,7 +32,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, merchant_id, order_no ,goods_id, goods_desc ,  qty,unit_price,total_price ,quality,status,userdefine01,userdefine02,userdefine03,userdefine04,userdefine05, created_time , updated_time ,version
+        id, merchant_id, order_no ,goods_id, goods_desc ,  qty ,quality,status, created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -54,9 +40,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_waybill_goods
-        ( merchant_id,order_no ,goods_id, goods_desc ,  qty,unit_price,total_price ,quality,status,userdefine01,userdefine02,userdefine03,userdefine04,userdefine05, created_time , updated_time ,version)
+        ( merchant_id,order_no ,goods_id, goods_desc ,  qty ,quality,status,created_time , updated_time ,version)
         VALUES
-        ( #{merchantId},#{orderNo}, #{goodsId}, #{goodsDesc},#{qty},#{unitPrice},#{totalPrice},#{quality},#{status},#{userdefine01},#{userdefine02},#{userdefine03},#{userdefine04},#{userdefine05} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        ( #{merchantId},#{orderNo}, #{goodsId}, #{goodsDesc},#{qty},#{quality},#{status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
 
@@ -99,9 +85,7 @@
             <if test="quality != null and quality != ''">
                 quality = #{quality},
             </if>
-            <if test="unitPrice != null and unitPrice != ''">
-                unit_price = #{unitPrice},
-            </if>
+            
             updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
         </trim>
     </update>
