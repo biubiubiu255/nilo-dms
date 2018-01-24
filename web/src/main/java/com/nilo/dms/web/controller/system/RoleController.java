@@ -53,12 +53,12 @@ public class RoleController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-    public String getRoleList() {
+    public String getRoleList(String roleName) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<Role> list = roleService.findAllRoles(merchantId);
+        List<Role> list = roleService.findBy(merchantId,roleName,null);
         Pagination page = new Pagination(0, list.size());
         return toPaginationLayUIData(page, list);
     }

@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by ronny on 2017/8/22.
  */
-public enum StaffStatusEnum {
+public enum StaffStatusEnum implements EnumMessage{
     TRAINEE(1,"Trainee"),
     REGULAR (2, "Regular"),
     RESIGNED(3, "Resigned");
@@ -20,6 +20,8 @@ public enum StaffStatusEnum {
         for (StaffStatusEnum e : enums) {
             map.put(e.getCode(), e);
         }
+
+        enumMaps.put("StaffStatusEnum", map);
     }
 
     private StaffStatusEnum(Integer code, String desc) {

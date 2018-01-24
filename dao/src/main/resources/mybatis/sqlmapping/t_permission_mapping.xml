@@ -19,7 +19,7 @@
     <select id="findAll" resultMap="permissionDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_sys_permission
+        FROM t_sys_permission where status = 1
     </select>
 
 

@@ -77,25 +77,27 @@ public class RoleServiceImpl implements RoleService {
     public List<String> findPermissionsByUserId(String userId) {
         return roleDao.findPermissionsByUserId(Long.parseLong(userId));
     }
-    
+
     @Override
     public List<String> findUrlPermissionsByUserId(String userId) {
-    	List<String> urlAuthorities = new ArrayList<String>();
-    	List<String> oldUrlAuthorities = roleDao.findUrlPermissionsByUserId(Long.parseLong(userId));
+        List<String> urlAuthorities = new ArrayList<String>();
+        List<String> oldUrlAuthorities = roleDao.findUrlPermissionsByUserId(Long.parseLong(userId));
         for (String url : oldUrlAuthorities) {
-        	String[] urlAuthoritiesString =  url.split(",");
-        	urlAuthorities.addAll(Arrays.asList(urlAuthoritiesString));
-		}
+            String[] urlAuthoritiesString = url.split(",");
+            urlAuthorities.addAll(Arrays.asList(urlAuthoritiesString));
+        }
         return urlAuthorities;
     }
 
     @Override
-    public List<Role> findAllRoles(String merchantId) {
-        List<RoleDO> roleDOList = roleDao.findAllRoles(Long.parseLong(merchantId));
+    public List<Role> findBy(String merchantId, String roleName, RoleStatusEnum status) {
+
+        List<RoleDO> roleDOList = roleDao.findBy(Long.parseLong(merchantId), roleName, status == null ? null : status.getCode());
         List<Role> list = new ArrayList<>();
         for (RoleDO r : roleDOList) {
             list.add(convertToRole(r));
         }
+
         return list;
     }
 

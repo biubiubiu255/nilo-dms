@@ -1,6 +1,8 @@
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
+
 <%
     request.setAttribute("jobList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "job"));
 %>
@@ -12,13 +14,8 @@
             <div class="layui-inline">
                 <label class="layui-form-label">Status:</label>
                 <div class="layui-input-inline">
-                    <select lay-filter="staffStatus" name="staffStatus">
-                        <option value="">Pls select status...</option>
-                        <option value=1 >Trainee</option>
-                        <option value=2 >Regular</option>
-                        <option value=3 >Resigned</option>
-
-                    </select>
+                    <lp:enumTag selectId="staffStatus" selectName="staffStatus" className="StaffStatusEnum"
+                                code="${staff.statusCode}" disabled="false"/>
                 </div>
             </div>
             <div class="layui-inline">
@@ -31,13 +28,17 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">Department:</label>
-            <div class="layui-form-item layui-inline" style="margin: 0px">
+            <div class="layui-input-inline">
                 <select lay-filter="departmentId" name="departmentId">
                     <option value="">Pls select order type...</option>
                     <c:forEach items="${departmentList}" var="r">
                         <option value=${r.departmentId} <c:if test="${r.departmentId == staff.departmentId}">selected</c:if> >${r.departmentName}</option>
                     </c:forEach>
                 </select>
+            </div>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="rider" title="Rider" value="1"
+                       lay-skin="primary">
             </div>
         </div>
 
@@ -133,8 +134,10 @@
         layui.use('laydate', function () {
             var layDate = layui.laydate;
             layDate.render({
-                elem: '#employTime'
-                , lang: 'en'
+                elem: '#employTime', lang: 'en', value: formatDate('${staff.employTime}','YYYY-MM-DD')
+            });
+            layDate.render({
+                elem: '#birthday', lang: 'en', value: '${staff.birthday}'
             });
         });
         layui.use('form', function () {
