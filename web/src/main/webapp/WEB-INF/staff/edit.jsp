@@ -7,16 +7,7 @@
 <div class="box-body">
     <form id="myForm" class="layui-form" action="">
 
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">Staff ID:</label>
-                <div class="layui-input-inline">
-                    <input type="text" value="${staff.staffId}" name="staffId" autocomplete="off"
-                           class="layui-input layui-disabled" disabled>
-                </div>
-            </div>
-
-        </div>
+        <input type="text" value="${staff.staffId}" name="staffId" hidden="true">
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">Status:</label>
@@ -129,7 +120,7 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="add-staff">Submit</button>
+                <button class="layui-btn" lay-submit lay-filter="edit-staff">Submit</button>
                 <button type="reset" class="layui-btn layui-btn-primary reset">Reset</button>
             </div>
         </div>
@@ -150,10 +141,10 @@
             var form = layui.form;
             form.render();
             //监听提交
-            form.on('submit(add-staff)', function (data) {
+            form.on('submit(edit-staff)', function (data) {
                 var load = layer.load(2);
                 $.ajax({
-                    url: "/staff/addStaff.html",
+                    url: "/staff/editStaff.html",
                     data: $("#myForm").serialize(),
                     type: "POST",
                     dataType: "json",
