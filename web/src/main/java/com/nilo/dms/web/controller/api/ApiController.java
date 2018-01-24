@@ -1,32 +1,23 @@
 package com.nilo.dms.web.controller.api;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.ctc.wstx.util.DataUtil;
-import com.nilo.dms.common.exception.BizErrorCode;
-import com.nilo.dms.common.utils.AssertUtil;
-import com.nilo.dms.common.utils.DateUtil;
-import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.service.order.OrderService;
-import com.nilo.dms.service.order.RiderOptService;
-import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.*;
-import com.nilo.dms.service.system.SystemConfig;
-import com.nilo.dms.service.system.model.MerchantConfig;
-import com.nilo.dms.web.controller.BaseController;
-import com.nilo.dms.web.controller.api.model.OPEnum;
-import com.nilo.dms.web.controller.api.model.RequestParam;
-import org.apache.commons.codec.digest.DigestUtils;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.alibaba.fastjson.JSON;
+import com.nilo.dms.service.model.LoginInfo;
+import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.RiderOptService;
+import com.nilo.dms.service.order.model.AbnormalParam;
+import com.nilo.dms.service.order.model.SignForOrderParam;
+import com.nilo.dms.web.controller.BaseController;
+import com.nilo.dms.web.controller.api.model.OPEnum;
+import com.nilo.dms.web.controller.api.model.RequestParam;
 
 /**
  * Created by ronny on 2017/8/30.
@@ -86,4 +77,14 @@ public class ApiController extends BaseController {
     }
 
 
+    @RequestMapping(value = "api/login.html", method = RequestMethod.POST)
+    @ResponseBody
+    public String login( LoginInfo loginInfo) {
+
+    	Map<String, String> resultData = new HashMap<>();
+    	resultData.put("userName", loginInfo.getUserName());
+    	
+        return toJsonTrueData(resultData);
+    }
+    
 }
