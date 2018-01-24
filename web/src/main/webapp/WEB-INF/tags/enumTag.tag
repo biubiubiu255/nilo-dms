@@ -47,10 +47,8 @@
             continue;
         }
 
-        if (StringUtil.isNotEmpty(code)) {
-            if (StringUtil.equals(k, code)) {
-                out.print("<option value='" + k + "' selected >" + enumMessageMap.get(key).getDesc() + "</option>");
-            }
+        if (StringUtil.equals(k, code)) {
+            out.print("<option value='" + k + "' selected >" + enumMessageMap.get(key).getDesc() + "</option>");
         } else {
             out.print("<option value='" + k + "'>" + enumMessageMap.get(key).getDesc() + "</option>");
         }

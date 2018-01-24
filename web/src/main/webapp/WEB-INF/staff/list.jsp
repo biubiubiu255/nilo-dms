@@ -66,7 +66,6 @@
     </table>
 
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">Detail</a>
         <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
         <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="regular">Regular</a>
         <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="resigned">Resigned</a>
@@ -134,7 +133,8 @@
                     var index = parent.layer.open({
                         type: 1,
                         content: data,
-                        area: ['800px', '600px'],
+                        area: ['800px'],
+                        offset: ['100px', '250px'],
                         maxmin: true,
                         end: function () {
                             reloadCurrentPage();

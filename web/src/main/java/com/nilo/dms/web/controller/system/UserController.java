@@ -76,15 +76,8 @@ public class UserController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<Role> roleList = roleService.findAllRoles(merchantId);
-        //去掉不可用的角色
-        Iterator<Role> it = roleList.iterator();
-        while (it.hasNext()) {
-            Role x = it.next();
-            if (RoleStatusEnum.DISABLED.getCode() == x.getStatus().getCode()) {
-                it.remove();
-            }
-        }
+        List<Role> roleList = roleService.findBy(merchantId,"",RoleStatusEnum.NORMAL);
+
 
         Pagination page = new Pagination(0, 100);
         List<DistributionNetwork> distributionList = distributionNetworkService.queryBy(merchantId, null, page);
@@ -142,7 +135,7 @@ public class UserController extends BaseController {
         List<DistributionNetwork> distributionList = distributionNetworkService.queryBy(user.getMerchantId(),null, page);
         model.addAttribute("distributionList", distributionList);
 
-        List<Role> roleList = roleService.findAllRoles(merchantId);
+        List<Role> roleList = roleService.findBy(merchantId,"",RoleStatusEnum.NORMAL);
         //去掉不可用的角色
         Iterator<Role> it = roleList.iterator();
         while (it.hasNext()) {

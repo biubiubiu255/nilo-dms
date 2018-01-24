@@ -223,11 +223,15 @@ public class Staff {
     }
 
     public String getJobDesc() {
-    	return "需要修改";
+        return "需要修改";
         //return SystemCodeUtil.getCodeVal(this.merchantId, "job", this.job);
     }
 
     public String getStatusDesc() {
         return this.status.getDesc();
+    }
+
+    public Integer getStatusCode() {
+        return this.status.getCode();
     }
 }

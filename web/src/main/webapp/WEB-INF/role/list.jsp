@@ -36,7 +36,7 @@
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed: 'left',field:'roleId', width:100}">ID</th>
+            <th lay-data="{fixed: 'left',field:'roleId', width:60}">ID</th>
             <th lay-data="{field:'roleName', width:200}">RoleName</th>
             <th lay-data="{field:'description', width:200}">Description</th>
             <th lay-data="{field:'statusCode', width:100,templet:'<div>{{ formatRoleStatus(d.statusCode) }}</div>'}">
