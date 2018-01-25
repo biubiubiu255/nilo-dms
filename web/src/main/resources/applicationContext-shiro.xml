@@ -19,6 +19,7 @@
         <property name="filterChainDefinitions">
             <value>
                 /DemoController/toLoginPage.html = anon
+                /DemoController/toIndexPage.html = anon
                 /captcha/image.html = anon
                 /account/login.html = anon
                 /api.html = anon

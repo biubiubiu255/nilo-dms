@@ -63,6 +63,7 @@ public class AccountController extends BaseController {
             return toJsonErrorMsg(BizErrorCode.LOGIN_FAILED.getDescription());
         }
         return toJsonTrueMsg();
+
     }
 
     @RequestMapping(value = "/logout.html", method = RequestMethod.GET)

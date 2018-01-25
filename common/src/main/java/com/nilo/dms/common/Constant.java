@@ -22,7 +22,13 @@ public class Constant {
     public static final String BIZ_FEE_CONF="System_biz_fee_config";
 
     public static final String ADDRESS="address";
-    
-    public static final String ALLOW_URL="/dashboard.html,/home.html,/account/logout.html,/DemoController/toLoginPage.html";
+
+    public static final String ALLOW_URL="/dashboard.html,/home.html,/account/logout.html," +
+            "/DemoController/toLoginPage.html,/DemoController/toIndexPage.html,/DemoController/test.html," +
+            "/tiaozhuangController/customers.html,/tiaozhuangController/dshkqs.html,/tiaozhuangController/wtjlr.html," +
+            "/tiaozhuangController/zlj.html,/tiaozhuangController/pjqr.html,/tiaozhuangController/plzz.html," +
+            "/tiaozhuangController/djsm.html,/tiaozhuangController/pjsm.html,/tiaozhuangController/fjsm.html," +
+            "/tiaozhuangController/pc.html,/tiaozhuangController/zljpc.html,/tiaozhuangController/zlj2.html," +
+            "/tiaozhuangController/xgmm.html,/tiaozhuangController/wtjlr2.html";
 
 }

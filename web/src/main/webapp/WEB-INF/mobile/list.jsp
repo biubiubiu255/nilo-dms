@@ -1,4 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%
+    if (session.getAttribute("userId") != null) {
+        //  已登陆用户回主面板
+        response.sendRedirect("/dashboard.html");
+        return;
+    }
+%>
 <html>
 <head>
     <meta charset="UTF-8"/>
@@ -11,25 +18,57 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="">
     <link rel="apple-touch-icon-precomposed" sizes="57x57" href="">
     <title>登录</title>
-    <link href="css/cssdemo.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript">
-        function  btn() {
-            this.location.href="index.html";
-        }
-    </script>
+    <link href="../mobile/css/cssdemo.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
 <div class="j_wap">
     <div class="j_dly">
-        <div class="j_dly_logo"><img src="images/logo.png"><br/><!--砼友管理登录--></div>
-        <!--<div class="j_dly_1"><i class="j_dly_1i3"></i><div class="j_dly_2"><input type="text" placeholder="企业号"/></div></div>-->
-        <div class="j_dly_1"><i class="j_dly_1i1"></i><div class="j_dly_2"><input type="text" placeholder="username"/></div></div>
-        <div class="j_dly_1"><i class="j_dly_1i2"></i><div class="j_dly_2"><input type="text" placeholder="password"/></div></div>
-        <div class="j_dly_5"><a href="" title="forget password?">forget password?</a></div>
-        <div class="j_dly_33"><input onclick="btn()" type="button" value="log in" /></div>
+        <div class="j_dly_logo"><img src="../mobile/images/logo.png"><br/></div>
 
+        <form id="login-form" method="post">
+            <%--<p class="login-box-msg">Sign in to start your session</p>--%>
+            <div class="j_dly_1">
+                <i class="j_dly_1i1"></i>
+                <div class="j_dly_2">
+                    <input type="text" name="username" placeholder="username"/>
+                </div>
+            </div>
+            <div class="j_dly_1">
+                <i class="j_dly_1i2"></i>
+                <div class="j_dly_2">
+                    <input type="password" name="password" placeholder="password"/>
+                </div>
+            </div>
+            <div class="j_dly_5">
+                <a href="" title="forget password?">forget password?</a>
+            </div>
+            <div class="j_dly_33">
+                <input type="submit" value="log in" />
+            </div>
+        </form>
+        </div>
     </div>
+<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<!-- iCheck -->
+<script src="../plugins/iCheck/icheck.min.js"></script>
+<script>
+    $('#login-form').submit(function () {
+        $('.login-box-msg').html("Waiting...");
+        var params = $(this).serialize();
+        $.post('/DemoController/test.html', params, function (resp) {
+            if (resp.result) {
 
-</div>
+                // location.href = 'dashboard.html';
+                location.href = '/DemoController/toIndexPage.html';
+            } else {
+                $('.login-box-msg').html(resp.msg);
+            }
+        }, "json");
+        return false;
+    });
+</script>
 </body>
+
 </html>

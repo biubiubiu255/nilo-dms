@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -14,7 +15,7 @@
     <link href="css/cssdemo.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript">
         function  btn() {
-            this.location.href="index.html";
+            this.location.href="sindex.jsp";
         }
     </script>
 </head>
