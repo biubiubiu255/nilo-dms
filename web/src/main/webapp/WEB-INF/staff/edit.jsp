@@ -37,8 +37,8 @@
                 </select>
             </div>
             <div class="layui-input-inline">
-                <input type="checkbox" name="rider" title="Rider" value="1"
-                       lay-skin="primary">
+                <input type="checkbox" name="isRiderCode" title="Rider" value="1"
+                       lay-skin="primary" <c:if test="${staff.isRiderCode =='1'}">checked</c:if>>
             </div>
         </div>
 

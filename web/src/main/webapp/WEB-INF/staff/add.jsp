@@ -36,7 +36,7 @@
                 </select>
             </div>
             <div class="layui-input-inline">
-                <input type="checkbox" name="rider" title="Rider" value="1"
+                <input type="checkbox" name="isRiderCode" title="Rider" value="1"
                        lay-skin="primary" >
             </div>
         </div>

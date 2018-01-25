@@ -96,11 +96,11 @@ public class StaffServiceImpl implements StaffService {
                     user.setMerchantId(merchantId);
                     user.setLoginInfo(loginInfo);
                     user.setUserInfo(userInfo);
-
                     userService.addUser(user);
 
                     //添加员工信息
                     StaffDO staffDO = convert(staff);
+                    staffDO.setUserId(Long.parseLong(user.getUserId()));
                     staffDao.insert(staffDO);
 
                 } catch (Exception e) {
@@ -181,6 +181,7 @@ public class StaffServiceImpl implements StaffService {
         staff.setTitleLevel(staffDO.getTitleLevel());
         staff.setTitleTime(staffDO.getTitleTime());
 
+        staff.setIsRider(staffDO.getIsRider() == 1);
         staff.setStatus(StaffStatusEnum.getEnum(staffDO.getStatus()));
 
         staff.setRegularTime(staffDO.getRegularTime());
@@ -196,6 +197,9 @@ public class StaffServiceImpl implements StaffService {
         if (StringUtil.isNotEmpty(staff.getCompanyId())) {
             staffDO.setCompanyId(Long.parseLong(staff.getCompanyId()));
         }
+
+        staffDO.setIsRider(staff.getIsRiderCode());
+
         staffDO.setBirthday(staff.getBirthday());
         staffDO.setEmail(staff.getEmail());
         staffDO.setEmployTime(staff.getEmployTime());

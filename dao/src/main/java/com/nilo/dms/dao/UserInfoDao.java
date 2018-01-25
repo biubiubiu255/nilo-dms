@@ -16,5 +16,4 @@ public interface UserInfoDao extends BaseDao<Long, UserInfoDO> {
 
     List<UserInfoDO> queryByUserIds(@Param("merchantId") Long merchantId, @Param("userIds")List<Long> userIds);
 
-    List<UserInfoDO> findUserByRoleName(@Param("merchantId") Long merchantId, @Param("roleName")String roleName);
 }

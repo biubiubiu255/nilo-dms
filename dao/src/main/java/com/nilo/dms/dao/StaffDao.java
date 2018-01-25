@@ -17,4 +17,5 @@ public interface StaffDao extends BaseDao<Long, StaffDO> {
 
     List<StaffDO> queryAllBy(@Param("companyId") Long companyId, @Param("departmentId") String departmentId );
 
+    List<StaffDO> queryAllRider(@Param("companyId") Long companyId);
 }

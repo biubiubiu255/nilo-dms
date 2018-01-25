@@ -48,7 +48,7 @@
                         <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
                     <option value="">choose or search....</option>
                     <c:forEach items="${riderList}" var="rider">
-                        <option value="${rider.userId}"> ${rider.name}</option>
+                        <option value="${rider.userId}"> ${rider.staffId}</option>
                     </c:forEach>
                 </select></div>
 

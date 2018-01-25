@@ -149,8 +149,6 @@ public class PickUpTaskController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<UserInfoDO> userList = userInfoDao.findUserByRoleName(Long.parseLong(merchantId), "Rider");
-
         //快递员
         model.addAttribute("list", getRiderList(merchantId));
         model.addAttribute("taskId", taskId);

@@ -116,8 +116,6 @@ public class AbnormalOrderController extends BaseController {
         if (task != null) {
             model.addAttribute("rider", task.getHandledBy());
         }
-        //查询rider列表
-        model.addAttribute("list", getRiderList(merchantId));
         return "abnormal_order/handle";
     }
 
