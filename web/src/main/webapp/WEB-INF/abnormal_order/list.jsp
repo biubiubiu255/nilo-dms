@@ -42,7 +42,7 @@
                     <select name="type">
                         <option value="">Pls select type...</option>
                         <c:forEach items="${abnormalType}" var="r">
-                            <option value=${r.code}>${r.code}</option>
+                            <option value=${r.code}>${r.value}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -71,7 +71,7 @@
                 <th lay-data="{fixed: 'left',field:'abnormalNo', width:200}">AbnormalNo</th>
                 <th lay-data="{field:'orderNo', width:250}">OrderNo</th>
                 <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
-                <th lay-data="{field:'abnormalType', width:150}">Abnormal Type</th>
+                <th lay-data="{field:'abnormalTypeDesc', width:150}">Abnormal Type</th>
                 <th lay-data="{field:'statusDesc', width:100}">Status</th>
                 <th lay-data="{field:'handleTypeDesc', width:150}">Handle Type</th>
                 <th lay-data="{field:'handleTime', width:170, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">

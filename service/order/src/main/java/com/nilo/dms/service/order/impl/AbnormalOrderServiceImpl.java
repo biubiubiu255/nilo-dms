@@ -1,5 +1,6 @@
 package com.nilo.dms.service.order.impl;
 
+import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.*;
 import com.nilo.dms.common.exception.BizErrorCode;
@@ -13,6 +14,7 @@ import com.nilo.dms.service.order.AbnormalOrderService;
 import com.nilo.dms.service.order.DeliveryFeeDetailsService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.model.*;
+import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.service.system.model.MerchantInfo;
 import org.slf4j.Logger;
@@ -244,6 +246,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         abnormalOrder.setMerchantId("" + abnormalOrderDO.getMerchantId());
         abnormalOrder.setAbnormalNo(abnormalOrderDO.getAbnormalNo());
         abnormalOrder.setAbnormalType(abnormalOrderDO.getAbnormalType());
+        abnormalOrder.setAbnormalTypeDesc(SystemCodeUtil.getCodeVal(""+abnormalOrderDO.getMerchantId(), "abnormal_order_type",abnormalOrderDO.getAbnormalType()));
         abnormalOrder.setRemark(abnormalOrderDO.getRemark());
         abnormalOrder.setOrderNo(abnormalOrderDO.getOrderNo());
 
