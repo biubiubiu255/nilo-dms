@@ -98,7 +98,6 @@ public class DeliveryOrderController extends BaseController {
 
                 //订单头信息
                 DeliveryOrder deliveryOrder = new DeliveryOrder();
-                deliveryOrder.setClientType(ClientTypeEnum.DMS_IMPORT);
                 deliveryOrder.setMerchantId(merchantId);
                 Field[] deliveryOrderFields = deliveryOrder.getClass().getDeclaredFields();
                 for (Field f1 : deliveryOrderFields) {

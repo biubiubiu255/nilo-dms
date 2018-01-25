@@ -55,7 +55,6 @@ public class DoorToDoorController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
-        parameter.setFetchType(FetchTypeEnum.DOOR_PICK_UP.getCode());
         if (orderTypes != null && orderTypes.length > 0) {
             parameter.setOrderType(Arrays.asList(orderTypes));
         }

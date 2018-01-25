@@ -47,23 +47,10 @@ public class TestController {
             data.setTotalPrice((long) i);
             data.setWeight(i+12.2d);
             data.setCountry("CN");
-            data.setFetchType(FetchTypeEnum.DOOR_PICK_UP.getCode());
-            data.setFetchTime(DateUtil.getSysTimeStamp());
-            data.setFetchAddress("取货地址");
             data.setOrderPlatform("Test");
 
             data.setOrderType("FBK");
-            data.setUserdefine01("user define 01");
-            data.setUserdefine02("user define 02");
-
-            data.setClientType(ClientTypeEnum.API);
-            data.setCustomerType(CustomerTypeEnum.PERSON);
-            data.setCustomerLevel(LevelEnum.BRONZE);
-            data.setProductType(ProductTypeEnum.ARRIVE_TODAY);
             data.setServiceType(ServiceTypeEnum.ARRIVE_TODAY);
-            data.setSettleType(SettleTypeEnum.XIANJIE);
-            data.setTransportType(TransportTypeEnum.MOTORCYCLE);
-            data.setDeliveryCategoryType(DeliveryCategoryTypeEnum.PACKAGE);
             data.setGoodsType("3C");
 
             ReceiverInfo receiverInfo = new ReceiverInfo();

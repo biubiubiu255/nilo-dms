@@ -28,14 +28,6 @@ public class DeliveryOrder {
 
     private ServiceTypeEnum serviceType;
 
-    private DeliveryCategoryTypeEnum categoryType;
-
-    private String fetchType;
-
-    private Long fetchTime;
-
-    private String fetchAddress;
-
     private String orderPlatform;
 
     private Long totalPrice;
@@ -52,34 +44,7 @@ public class DeliveryOrder {
 
     private String goodsType;
 
-    private DeliveryCategoryTypeEnum deliveryCategoryType;
 
-    private CustomerTypeEnum customerType;
-
-    private LevelEnum customerLevel;
-
-    private TransportTypeEnum transportType;
-
-    private ProductTypeEnum productType;
-
-    private SettleTypeEnum settleType;
-
-    //扩展字段
-    private String userdefine01;
-    private String userdefine02;
-    private String userdefine03;
-    private String userdefine04;
-    private String userdefine05;
-
-    private ClientTypeEnum clientType;
-
-    public Long getFetchTime() {
-        return fetchTime;
-    }
-
-    public void setFetchTime(Long fetchTime) {
-        this.fetchTime = fetchTime;
-    }
 
     public ServiceTypeEnum getServiceType() {
         return serviceType;
@@ -87,22 +52,6 @@ public class DeliveryOrder {
 
     public void setServiceType(ServiceTypeEnum serviceType) {
         this.serviceType = serviceType;
-    }
-
-    public String getFetchType() {
-        return fetchType;
-    }
-
-    public void setFetchType(String fetchType) {
-        this.fetchType = fetchType;
-    }
-
-    public String getFetchAddress() {
-        return fetchAddress;
-    }
-
-    public void setFetchAddress(String fetchAddress) {
-        this.fetchAddress = fetchAddress;
     }
 
     public Double getWeight() {
@@ -225,116 +174,12 @@ public class DeliveryOrder {
         this.goodsInfoList = goodsInfoList;
     }
 
-    public String getUserdefine01() {
-        return userdefine01;
-    }
-
-    public void setUserdefine01(String userdefine01) {
-        this.userdefine01 = userdefine01;
-    }
-
-    public String getUserdefine02() {
-        return userdefine02;
-    }
-
-    public void setUserdefine02(String userdefine02) {
-        this.userdefine02 = userdefine02;
-    }
-
-    public String getUserdefine03() {
-        return userdefine03;
-    }
-
-    public void setUserdefine03(String userdefine03) {
-        this.userdefine03 = userdefine03;
-    }
-
-    public String getUserdefine04() {
-        return userdefine04;
-    }
-
-    public void setUserdefine04(String userdefine04) {
-        this.userdefine04 = userdefine04;
-    }
-
-    public String getUserdefine05() {
-        return userdefine05;
-    }
-
-    public void setUserdefine05(String userdefine05) {
-        this.userdefine05 = userdefine05;
-    }
-
     public Long getUpdatedTime() {
         return updatedTime;
     }
 
     public void setUpdatedTime(Long updatedTime) {
         this.updatedTime = updatedTime;
-    }
-
-    public ClientTypeEnum getClientType() {
-        return clientType;
-    }
-
-    public void setClientType(ClientTypeEnum clientType) {
-        this.clientType = clientType;
-    }
-
-    public DeliveryCategoryTypeEnum getCategoryType() {
-        return categoryType;
-    }
-
-    public void setCategoryType(DeliveryCategoryTypeEnum categoryType) {
-        this.categoryType = categoryType;
-    }
-
-    public DeliveryCategoryTypeEnum getDeliveryCategoryType() {
-        return deliveryCategoryType;
-    }
-
-    public void setDeliveryCategoryType(DeliveryCategoryTypeEnum deliveryCategoryType) {
-        this.deliveryCategoryType = deliveryCategoryType;
-    }
-
-    public CustomerTypeEnum getCustomerType() {
-        return customerType;
-    }
-
-    public void setCustomerType(CustomerTypeEnum customerType) {
-        this.customerType = customerType;
-    }
-
-    public LevelEnum getCustomerLevel() {
-        return customerLevel;
-    }
-
-    public void setCustomerLevel(LevelEnum customerLevel) {
-        this.customerLevel = customerLevel;
-    }
-
-    public TransportTypeEnum getTransportType() {
-        return transportType;
-    }
-
-    public void setTransportType(TransportTypeEnum transportType) {
-        this.transportType = transportType;
-    }
-
-    public ProductTypeEnum getProductType() {
-        return productType;
-    }
-
-    public void setProductType(ProductTypeEnum productType) {
-        this.productType = productType;
-    }
-
-    public SettleTypeEnum getSettleType() {
-        return settleType;
-    }
-
-    public void setSettleType(SettleTypeEnum settleType) {
-        this.settleType = settleType;
     }
 
     public String getStatusDesc() {

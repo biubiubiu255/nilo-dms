@@ -188,7 +188,6 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
 
         DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
         deliveryOrder.setServiceType(ServiceTypeEnum.NORMAL);
-        deliveryOrder.setFetchType(FetchTypeEnum.SEND_BY_SELF.getCode());
         deliveryOrder.setStatus(DeliveryOrderStatusEnum.CREATE);
         deliveryOrder.setReferenceNo(deliveryOrder.getOrderNo());
         deliveryOrder.setOrderType("RM");

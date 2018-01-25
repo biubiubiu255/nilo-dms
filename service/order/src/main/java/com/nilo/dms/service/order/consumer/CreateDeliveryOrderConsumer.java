@@ -103,25 +103,11 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
                     orderHeader.setTotalPrice(data.getTotalPrice());
                     orderHeader.setWeight(data.getWeight());
-                    orderHeader.setFetchType(data.getFetchType());
-                    orderHeader.setFetchAddress(data.getFetchAddress());
-                    orderHeader.setFetchTime(data.getFetchTime());
 
-                    orderHeader.setClientType(data.getClientType().getCode());
-                    orderHeader.setCustomerType(data.getCustomerType().getCode());
-                    orderHeader.setCustomerLevel(data.getCustomerLevel().getCode());
-                    orderHeader.setSettleType(data.getSettleType().getCode());
-                    orderHeader.setProductType(data.getProductType().getCode());
+
                     orderHeader.setServiceType(data.getServiceType().getCode());
-                    orderHeader.setTransportType(data.getTransportType().getCode());
                     orderHeader.setGoodsType(data.getGoodsType());
-                    orderHeader.setDeliveryCategoryType(data.getDeliveryCategoryType().getCode());
 
-                    orderHeader.setUserdefine01(data.getUserdefine01());
-                    orderHeader.setUserdefine02(data.getUserdefine02());
-                    orderHeader.setUserdefine03(data.getUserdefine03());
-                    orderHeader.setUserdefine04(data.getUserdefine04());
-                    orderHeader.setUserdefine05(data.getUserdefine05());
                     orderHeader.setOrderNo(orderNo);
                     deliveryOrderDao.insert(orderHeader);
 
@@ -136,11 +122,6 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                             goods.setUnitPrice(g.getUnitPrice());
                             goods.setGoodsId(g.getGoodsId());
                             goods.setQuality(g.getQuality());
-                            goods.setUserdefine01(g.getUserdefine01());
-                            goods.setUserdefine02(g.getUserdefine02());
-                            goods.setUserdefine03(g.getUserdefine03());
-                            goods.setUserdefine04(g.getUserdefine04());
-                            goods.setUserdefine05(g.getUserdefine05());
                             deliveryOrderGoodsDao.insert(goods);
                         }
                     }
