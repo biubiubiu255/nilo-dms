@@ -26,7 +26,7 @@ import java.util.Map;
  * Created by Administrator on 2017/6/7.
  */
 @Controller
-public class TestController {
+public class TestController extends BaseController{
 
     @Autowired
     @Qualifier("messageProducer")
@@ -38,33 +38,31 @@ public class TestController {
     @RequestMapping(value = "/test2.html")
     public String test1(String content) {
 
-        for (int i = 1; i < 50; i++) {
+        for (int i = 1; i < 30; i++) {
 
             DeliveryOrder data = new DeliveryOrder();
-            data.setReferenceNo("Test1_" + i);
+            data.setReferenceNo("90000000" + i);
             data.setMerchantId("1");
             data.setOrderTime(DateUtil.getSysTimeStamp());
             data.setTotalPrice((long) i);
             data.setWeight(i+12.2d);
             data.setCountry("CN");
-            data.setFetchType(FetchTypeEnum.DOOR_PICK_UP.getCode());
-            data.setFetchTime(DateUtil.getSysTimeStamp());
-            data.setFetchAddress("取货地址");
             data.setOrderPlatform("Test");
-
             data.setOrderType("FBK");
-            data.setUserdefine01("user define 01");
-            data.setUserdefine02("user define 02");
-
-            data.setClientType(ClientTypeEnum.API);
-            data.setCustomerType(CustomerTypeEnum.PERSON);
-            data.setCustomerLevel(LevelEnum.BRONZE);
-            data.setProductType(ProductTypeEnum.ARRIVE_TODAY);
+            data.setOrderCategory("FBK");
             data.setServiceType(ServiceTypeEnum.ARRIVE_TODAY);
-            data.setSettleType(SettleTypeEnum.XIANJIE);
-            data.setTransportType(TransportTypeEnum.MOTORCYCLE);
-            data.setDeliveryCategoryType(DeliveryCategoryTypeEnum.PACKAGE);
             data.setGoodsType("3C");
+            data.setCarrierName("G4S");
+            data.setCarrierId("111");
+            data.setChannel("1");
+            data.setChannelStation("Kenya *** Shop");
+            data.setIsCod("0");
+            data.setNotes("notes notes");
+            data.setRemark("remark remark");
+            data.setDeliveryFee(200.0);
+            data.setWarehouseId("KE01");
+            data.setStop("G4S");
+            data.setStopId("222");
 
             ReceiverInfo receiverInfo = new ReceiverInfo();
             receiverInfo.setReceiverCountry("CN");
@@ -118,18 +116,9 @@ public class TestController {
         return "index";
     }
 
-    @RequestMapping(value = "/test.html")
+    @RequestMapping(value = "/notify.html")
     @ResponseBody
-    public String test(String content) {
-
-        try {
-            Thread.sleep(70000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Map<Object, Object> map = new HashMap<>();
-        map.put("result", true);
-        map.put("data", "");
-        return JSON.toJSONString(map);
+    public String notify(String content) {
+        return toJsonTrueMsg();
     }
 }

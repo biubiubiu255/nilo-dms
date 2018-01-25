@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
+<%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
 <%
     request.setAttribute("abnormalTypeList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "abnormal_order_type"));
@@ -25,13 +25,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label layui-form-text">Type:</label>
             <div class="layui-input-inline">
-                <select name="handleType" lay-filter="typeSelect" lay-verify="required" lay-search=""
-                        style="display: none">
-                    <option value="">Select type....</option>
-                    <c:forEach items="${abnormalTypeList}" var="r">
-                        <option value=${r.code}>${r.value}</option>
-                    </c:forEach>
-                </select>
+                <lp:enumTag selectId="handleTypeCode" selectName="handleTypeCode" className="AbnormalHandleTypeEnum"
+                            code="" disabled="false" />
             </div>
         </div>
 
@@ -42,11 +37,11 @@
 
             </div>
         </div>
-        <div class="layui-form-item">
+        <%--<div class="layui-form-item">
             <label class="layui-form-label"></label>
             <input type="checkbox" name="returnToMerchantFlag" title="Return To Merchant" value="Y"
                    lay-skin="primary">
-        </div>
+        </div>--%>
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="submit">Submit</button>

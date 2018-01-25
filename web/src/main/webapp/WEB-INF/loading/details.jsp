@@ -87,6 +87,7 @@
             <c:if test="${loading.statusDesc != 'Ship'}">
                 <button class="layui-btn ship">Ship</button>
             </c:if>
+            <button class="layui-btn layui-btn-normal print">Print</button>
         </div>
     </div>
 
@@ -229,6 +230,10 @@
                 }
             });
 
+        });
+        
+        $('.print').on('click', function () {
+        	window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
         });
     });
 </script>

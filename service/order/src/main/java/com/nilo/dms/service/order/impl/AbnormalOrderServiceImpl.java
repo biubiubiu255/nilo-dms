@@ -1,5 +1,6 @@
 package com.nilo.dms.service.order.impl;
 
+import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.*;
 import com.nilo.dms.common.exception.BizErrorCode;
@@ -13,6 +14,7 @@ import com.nilo.dms.service.order.AbnormalOrderService;
 import com.nilo.dms.service.order.DeliveryFeeDetailsService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.model.*;
+import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.service.system.model.MerchantInfo;
 import org.slf4j.Logger;
@@ -126,13 +128,23 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
             @Override
             public Void doInTransaction(TransactionStatus transactionStatus) {
                 try {
-                    handlerAbnormalOpt(request, orderNo);
-                    //添加费用明细
+                    switch (request.getHandleType()) {
+                        case RESEND: {
+                            handlerAbnormalOpt(request, orderNo);
+                            break;
+                        }
+                        case RETURN: {
+                            handlerAbnormalOpt(request, orderNo);
+                            break;
+                        }
+                    }
+
+                    /*//添加费用明细
                     deliveryFeeDetailsService.buildDeliveryFee(request.getMerchantId(), orderNo, request.getHandleType());
                     //是否退回商家
                     if (request.isReturnToMerchant()) {
                         returnToMerchant(request.getMerchantId(), orderNo);
-                    }
+                    }*/
                 } catch (Exception e) {
                     logger.error("handleAbnormal Failed. abnormalOrder:{}", request.getAbnormalNo(), e);
                     transactionStatus.setRollbackOnly();
@@ -146,16 +158,18 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
 
     private void handlerAbnormalOpt(AbnormalOptRequest request, String orderNo) {
 
-        //处理订单状态
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setOptType(OptTypeEnum.PROBLEM);
-        optRequest.setOptBy(request.getOptBy());
-        optRequest.setMerchantId(request.getMerchantId());
-        List<String> orderList = new ArrayList<>();
-        orderList.add(orderNo);
-        optRequest.setOrderNo(orderList);
-        optRequest.setRemark(request.getRemark());
-        orderService.handleOpt(optRequest);
+        if (request.getHandleType() == AbnormalHandleTypeEnum.RETURN) {
+            //处理订单状态
+            OrderOptRequest optRequest = new OrderOptRequest();
+            optRequest.setOptType(OptTypeEnum.PROBLEM);
+            optRequest.setOptBy(request.getOptBy());
+            optRequest.setMerchantId(request.getMerchantId());
+            List<String> orderList = new ArrayList<>();
+            orderList.add(orderNo);
+            optRequest.setOrderNo(orderList);
+            optRequest.setRemark(request.getRemark());
+            orderService.handleOpt(optRequest);
+        }
 
         //修改异常件状态及处理结果
         AbnormalOrderDO abnormalOrderDO = new AbnormalOrderDO();
@@ -164,7 +178,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         abnormalOrderDO.setStatus(AbnormalOrderStatusEnum.COMPLETE.getCode());
         abnormalOrderDO.setHandleBy(request.getOptBy());
         abnormalOrderDO.setHandleRemark(request.getRemark());
-        abnormalOrderDO.setHandleType(request.getHandleType());
+        abnormalOrderDO.setHandleType(request.getHandleType().getCode());
         abnormalOrderDO.setHandleTime(DateUtil.getSysTimeStamp());
         abnormalOrderDao.update(abnormalOrderDO);
     }
@@ -174,7 +188,6 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
 
         DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
         deliveryOrder.setServiceType(ServiceTypeEnum.NORMAL);
-        deliveryOrder.setFetchType(FetchTypeEnum.SEND_BY_SELF.getCode());
         deliveryOrder.setStatus(DeliveryOrderStatusEnum.CREATE);
         deliveryOrder.setReferenceNo(deliveryOrder.getOrderNo());
         deliveryOrder.setOrderType("RM");
@@ -212,6 +225,9 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         abnormalOrderDO.setMerchantId(Long.parseLong(abnormalOrder.getMerchantId()));
         abnormalOrderDO.setAbnormalNo(abnormalOrder.getAbnormalNo());
         abnormalOrderDO.setAbnormalType(abnormalOrder.getAbnormalType());
+        if (abnormalOrder.getHandleType() != null) {
+            abnormalOrderDO.setHandleType(abnormalOrder.getHandleType().getCode());
+        }
         abnormalOrderDO.setRemark(abnormalOrder.getRemark());
         abnormalOrderDO.setOrderNo(abnormalOrder.getOrderNo());
 
@@ -229,13 +245,16 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         abnormalOrder.setMerchantId("" + abnormalOrderDO.getMerchantId());
         abnormalOrder.setAbnormalNo(abnormalOrderDO.getAbnormalNo());
         abnormalOrder.setAbnormalType(abnormalOrderDO.getAbnormalType());
+        abnormalOrder.setAbnormalTypeDesc(SystemCodeUtil.getCodeVal(""+abnormalOrderDO.getMerchantId(), "abnormal_order_type",abnormalOrderDO.getAbnormalType()));
         abnormalOrder.setRemark(abnormalOrderDO.getRemark());
         abnormalOrder.setOrderNo(abnormalOrderDO.getOrderNo());
 
         abnormalOrder.setCreatedTime(abnormalOrderDO.getCreatedTime());
         abnormalOrder.setUpdatedTime(abnormalOrderDO.getUpdatedTime());
 
-        abnormalOrder.setHandleType(abnormalOrderDO.getHandleType());
+        if (StringUtil.isNotEmpty(abnormalOrderDO.getHandleType())) {
+            abnormalOrder.setHandleType(AbnormalHandleTypeEnum.getEnum(abnormalOrderDO.getHandleType()));
+        }
         abnormalOrder.setHandleBy(abnormalOrderDO.getHandleBy());
         abnormalOrder.setHandleRemark(abnormalOrderDO.getHandleRemark());
         abnormalOrder.setHandleTime(abnormalOrderDO.getHandleTime());

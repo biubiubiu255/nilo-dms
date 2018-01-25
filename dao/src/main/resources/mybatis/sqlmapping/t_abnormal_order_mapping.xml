@@ -79,8 +79,8 @@
         FROM t_waybill_abnormal
         WHERE merchant_id=#{merchantId}
         <if test="abnormalType !=null and abnormalType.size() > 0 ">
-            <foreach collection="orderType" item="item" index="index" open="and (" separator="or" close=")">
-                order_type=#{item}
+            <foreach collection="abnormalType" item="item" index="index" open="and (" separator="or" close=")">
+                abnormal_Type=#{item}
             </foreach>
         </if>
         <if test="fromCreatedTime !=null ">
@@ -113,8 +113,8 @@
         FROM t_waybill_abnormal
         WHERE merchant_id=#{merchantId}
         <if test="abnormalType !=null and abnormalType.size() > 0 ">
-            <foreach collection="orderType" item="item" index="index" open="and (" separator="or" close=")">
-                order_type=#{item}
+            <foreach collection="abnormalType" item="item" index="index" open="and (" separator="or" close=")">
+                abnormal_Type=#{item}
             </foreach>
         </if>
         <if test="fromCreatedTime !=null ">

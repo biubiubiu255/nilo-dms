@@ -9,6 +9,7 @@ import com.nilo.dms.common.enums.*;
 public class DeliveryOrderDO extends BaseDo<Long> {
 
     private String orderNo;
+
     private String orderType;
 
     private String referenceNo;
@@ -23,12 +24,6 @@ public class DeliveryOrderDO extends BaseDo<Long> {
 
     private String serviceType;
 
-    private String fetchType;
-
-    private String fetchAddress;
-
-    private Long fetchTime;
-
     private Long totalPrice;
 
     private Double weight;
@@ -37,21 +32,125 @@ public class DeliveryOrderDO extends BaseDo<Long> {
 
     private Integer status;
 
-    private String userdefine01;
-    private String userdefine02;
-    private String userdefine03;
-    private String userdefine04;
-    private String userdefine05;
-
-    private String clientType;
-    private String deliveryCategoryType;
-    private String customerType;
-    private String customerLevel;
-    private String transportType;
-    private String productType;
-    private String settleType;
-
     private Integer networkId;
+
+    private String warehouseId;
+    private String stopId;
+    private String stop;
+    private String channel;
+    private String channelStation;
+    private String orderCategory;
+    private String carrierId;
+    private String carrierName;
+    private String relationOrderNo;
+    private Double deliveryFee;
+    private String isCod;
+    private String notes;
+    private String remark;
+
+    public String getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(String warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
+    public String getStopId() {
+        return stopId;
+    }
+
+    public void setStopId(String stopId) {
+        this.stopId = stopId;
+    }
+
+    public String getStop() {
+        return stop;
+    }
+
+    public void setStop(String stop) {
+        this.stop = stop;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public String getChannelStation() {
+        return channelStation;
+    }
+
+    public void setChannelStation(String channelStation) {
+        this.channelStation = channelStation;
+    }
+
+    public String getOrderCategory() {
+        return orderCategory;
+    }
+
+    public void setOrderCategory(String orderCategory) {
+        this.orderCategory = orderCategory;
+    }
+
+    public String getCarrierId() {
+        return carrierId;
+    }
+
+    public void setCarrierId(String carrierId) {
+        this.carrierId = carrierId;
+    }
+
+    public String getCarrierName() {
+        return carrierName;
+    }
+
+    public void setCarrierName(String carrierName) {
+        this.carrierName = carrierName;
+    }
+
+    public String getRelationOrderNo() {
+        return relationOrderNo;
+    }
+
+    public void setRelationOrderNo(String relationOrderNo) {
+        this.relationOrderNo = relationOrderNo;
+    }
+
+    public Double getDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public void setDeliveryFee(Double deliveryFee) {
+        this.deliveryFee = deliveryFee;
+    }
+
+    public String getIsCod() {
+        return isCod;
+    }
+
+    public void setIsCod(String isCod) {
+        this.isCod = isCod;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public Integer getNetworkId() {
         return networkId;
@@ -61,92 +160,12 @@ public class DeliveryOrderDO extends BaseDo<Long> {
         this.networkId = networkId;
     }
 
-    public String getDeliveryCategoryType() {
-        return deliveryCategoryType;
-    }
-
-    public void setDeliveryCategoryType(String deliveryCategoryType) {
-        this.deliveryCategoryType = deliveryCategoryType;
-    }
-
-    public String getCustomerType() {
-        return customerType;
-    }
-
-    public void setCustomerType(String customerType) {
-        this.customerType = customerType;
-    }
-
-    public String getCustomerLevel() {
-        return customerLevel;
-    }
-
-    public void setCustomerLevel(String customerLevel) {
-        this.customerLevel = customerLevel;
-    }
-
-    public String getTransportType() {
-        return transportType;
-    }
-
-    public void setTransportType(String transportType) {
-        this.transportType = transportType;
-    }
-
-    public String getProductType() {
-        return productType;
-    }
-
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
-
-    public String getSettleType() {
-        return settleType;
-    }
-
-    public void setSettleType(String settleType) {
-        this.settleType = settleType;
-    }
-
-    public String getClientType() {
-        return clientType;
-    }
-
-    public void setClientType(String clientType) {
-        this.clientType = clientType;
-    }
-
     public String getServiceType() {
         return serviceType;
     }
 
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
-    }
-
-    public String getFetchType() {
-        return fetchType;
-    }
-
-    public void setFetchType(String fetchType) {
-        this.fetchType = fetchType;
-    }
-
-    public String getFetchAddress() {
-        return fetchAddress;
-    }
-
-    public void setFetchAddress(String fetchAddress) {
-        this.fetchAddress = fetchAddress;
-    }
-
-    public Long getFetchTime() {
-        return fetchTime;
-    }
-
-    public void setFetchTime(Long fetchTime) {
-        this.fetchTime = fetchTime;
     }
 
     public Double getWeight() {
@@ -237,44 +256,4 @@ public class DeliveryOrderDO extends BaseDo<Long> {
         this.status = status;
     }
 
-
-    public String getUserdefine01() {
-        return userdefine01;
-    }
-
-    public void setUserdefine01(String userdefine01) {
-        this.userdefine01 = userdefine01;
-    }
-
-    public String getUserdefine02() {
-        return userdefine02;
-    }
-
-    public void setUserdefine02(String userdefine02) {
-        this.userdefine02 = userdefine02;
-    }
-
-    public String getUserdefine03() {
-        return userdefine03;
-    }
-
-    public void setUserdefine03(String userdefine03) {
-        this.userdefine03 = userdefine03;
-    }
-
-    public String getUserdefine04() {
-        return userdefine04;
-    }
-
-    public void setUserdefine04(String userdefine04) {
-        this.userdefine04 = userdefine04;
-    }
-
-    public String getUserdefine05() {
-        return userdefine05;
-    }
-
-    public void setUserdefine05(String userdefine05) {
-        this.userdefine05 = userdefine05;
-    }
 }

@@ -33,15 +33,37 @@
                 jdbcType="DECIMAL"/>
         <result property="goodsType" column="goods_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="fetchType" column="fetch_type" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="fetchTime" column="fetch_time" javaType="java.lang.Long"
-                jdbcType="INTEGER"/>
-        <result property="fetchAddress" column="fetch_address" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
         <result property="networkId" column="network_Id" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-       <result property="createdTime" column="created_time" javaType="java.lang.Long"
+
+        <result property="warehouseId" column="warehouse_Id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="stopId" column="stop_Id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="stop" column="stop" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="channel" column="channel" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="channelStation" column="channel_Station" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderCategory" column="order_Category" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="carrierId" column="carrier_Id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="carrierName" column="carrier_Name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="relationOrderNo" column="relation_Order_No" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="deliveryFee" column="delivery_Fee" javaType="java.lang.Double"
+                jdbcType="DECIMAL"/>
+        <result property="isCod" column="is_Cod" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="notes" column="notes" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
@@ -50,7 +72,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, merchant_id,network_Id,order_no ,order_type,service_Type,fetch_type,fetch_time,fetch_address,reference_No , weight,goods_type, order_time,country ,total_price,order_platform,status, created_time , updated_time ,version
+        id, merchant_id,network_Id,order_no,order_type,service_Type,reference_No,weight,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,delivery_Fee,is_Cod,notes,remark,created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -58,13 +80,13 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_waybill
-        ( merchant_id,network_Id,order_no ,order_type, service_type,reference_No , weight,goods_type, fetch_type,fetch_time,fetch_address,order_time,country ,total_price,order_platform,status, created_time , updated_time ,version)
+        ( merchant_id,network_Id,order_no ,order_type, service_type,reference_No , weight,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,delivery_Fee,is_Cod,notes,remark, created_time , updated_time ,version)
         VALUES
-        ( #{merchantId},#{networkId},#{orderNo}, #{orderType},#{serviceType}, #{referenceNo},#{weight},#{goodsType},#{fetchType},#{fetchTime},#{fetchAddress},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        ( #{merchantId},#{networkId},#{orderNo}, #{orderType},#{serviceType}, #{referenceNo},#{weight},#{goodsType},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status},#{warehouseId},#{stopId},#{stop},#{channel},#{channelStation},#{orderCategory},#{carrierId},#{carrierName},#{relationOrderNo},#{deliveryFee},#{isCod},#{notes},#{remark} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
 
-    <select id="queryByOrderNo" resultMap="orderDO" statementType="PREPARED"  >
+    <select id="queryByOrderNo" resultMap="orderDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_waybill
@@ -108,9 +130,7 @@
                 order_type=#{item}
             </foreach>
         </if>
-        <if test="fetchType !=null and fetchType !='' ">
-            and fetch_Type = #{fetchType}
-        </if>
+
         <if test="fromCreatedTime !=null ">
             and created_time >= #{fromCreatedTime}
         </if>
@@ -147,9 +167,7 @@
                 order_type=#{item}
             </foreach>
         </if>
-        <if test="fetchType !=null and fetchType !='' ">
-            and fetch_Type = #{fetchType}
-        </if>
+
         <if test="fromCreatedTime !=null ">
             and created_time >= #{fromCreatedTime}
         </if>
@@ -191,15 +209,6 @@
             </if>
             <if test="serviceType != null and serviceType !='' ">
                 service_Type = #{serviceType},
-            </if>
-            <if test="fetchType != null and fetchType !='' ">
-                fetch_Type = #{fetchType},
-            </if>
-            <if test="fetchAddress != null and fetchAddress !='' ">
-                fetch_Address = #{fetchAddress},
-            </if>
-            <if test="fetchTime != null and fetchTime !='' ">
-                fetch_Time = #{fetchTime},
             </if>
             <if test="totalPrice != null and totalPrice !='' ">
                 total_Price = #{totalPrice},

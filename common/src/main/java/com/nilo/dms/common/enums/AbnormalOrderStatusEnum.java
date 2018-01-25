@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public enum AbnormalOrderStatusEnum implements EnumMessage{
 
-    CREATE(1, "Create"),
+    CREATE(1, "Pending"),
     CANCELED(2, "Canceled"),
     COMPLETE(3, "Complete"),
     ;

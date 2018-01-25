@@ -1,5 +1,6 @@
 package com.nilo.dms.service.order.model;
 
+import com.nilo.dms.common.enums.AbnormalHandleTypeEnum;
 import com.nilo.dms.common.enums.AbnormalOrderStatusEnum;
 
 /**
@@ -23,13 +24,15 @@ public class AbnormalOrder {
 
     private String abnormalType;
 
+    private String abnormalTypeDesc;
+
+    private AbnormalHandleTypeEnum handleType;
+
     private AbnormalOrderStatusEnum status;
 
     private Long createdTime;
 
     private Long updatedTime;
-
-    private String handleType;
 
     private String handleBy;
 
@@ -43,14 +46,6 @@ public class AbnormalOrder {
 
     public void setHandleTime(Long handleTime) {
         this.handleTime = handleTime;
-    }
-
-    public String getHandleType() {
-        return handleType;
-    }
-
-    public void setHandleType(String handleType) {
-        this.handleType = handleType;
     }
 
     public String getHandleBy() {
@@ -157,7 +152,27 @@ public class AbnormalOrder {
         this.abnormalType = abnormalType;
     }
 
-    public String getStatusDesc(){
+    public AbnormalHandleTypeEnum getHandleType() {
+        return handleType;
+    }
+
+    public void setHandleType(AbnormalHandleTypeEnum handleType) {
+        this.handleType = handleType;
+    }
+
+    public String getHandleTypeDesc() {
+        return this.handleType== null?"":this.handleType.getDesc();
+    }
+
+    public String getStatusDesc() {
         return this.status.getDesc();
+    }
+
+    public String getAbnormalTypeDesc() {
+        return abnormalTypeDesc;
+    }
+
+    public void setAbnormalTypeDesc(String abnormalTypeDesc) {
+        this.abnormalTypeDesc = abnormalTypeDesc;
     }
 }

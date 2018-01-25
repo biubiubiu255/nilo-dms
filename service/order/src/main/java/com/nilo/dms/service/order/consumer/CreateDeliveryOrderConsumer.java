@@ -94,6 +94,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     Long merchantId = Long.parseLong(data.getMerchantId());
                     //1、保存订单信息
                     DeliveryOrderDO orderHeader = new DeliveryOrderDO();
+                    orderHeader.setOrderNo(orderNo);
                     orderHeader.setCountry(data.getCountry());
                     orderHeader.setMerchantId(merchantId);
                     orderHeader.setOrderPlatform(data.getOrderPlatform());
@@ -103,26 +104,25 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
                     orderHeader.setTotalPrice(data.getTotalPrice());
                     orderHeader.setWeight(data.getWeight());
-                    orderHeader.setFetchType(data.getFetchType());
-                    orderHeader.setFetchAddress(data.getFetchAddress());
-                    orderHeader.setFetchTime(data.getFetchTime());
 
-                    orderHeader.setClientType(data.getClientType().getCode());
-                    orderHeader.setCustomerType(data.getCustomerType().getCode());
-                    orderHeader.setCustomerLevel(data.getCustomerLevel().getCode());
-                    orderHeader.setSettleType(data.getSettleType().getCode());
-                    orderHeader.setProductType(data.getProductType().getCode());
                     orderHeader.setServiceType(data.getServiceType().getCode());
-                    orderHeader.setTransportType(data.getTransportType().getCode());
                     orderHeader.setGoodsType(data.getGoodsType());
-                    orderHeader.setDeliveryCategoryType(data.getDeliveryCategoryType().getCode());
 
-                    orderHeader.setUserdefine01(data.getUserdefine01());
-                    orderHeader.setUserdefine02(data.getUserdefine02());
-                    orderHeader.setUserdefine03(data.getUserdefine03());
-                    orderHeader.setUserdefine04(data.getUserdefine04());
-                    orderHeader.setUserdefine05(data.getUserdefine05());
-                    orderHeader.setOrderNo(orderNo);
+
+                    orderHeader.setWarehouseId(data.getWarehouseId());
+                    orderHeader.setStop(data.getStop());
+                    orderHeader.setStopId(data.getStopId());
+                    orderHeader.setChannel(data.getChannel());
+                    orderHeader.setChannelStation(data.getChannelStation());
+                    orderHeader.setOrderCategory(data.getOrderCategory());
+                    orderHeader.setCarrierId(data.getCarrierId());
+                    orderHeader.setCarrierName(data.getCarrierName());
+                    orderHeader.setRelationOrderNo(data.getRelationOrderNo());
+                    orderHeader.setDeliveryFee(data.getDeliveryFee());
+                    orderHeader.setIsCod(data.getIsCod());
+                    orderHeader.setNotes(data.getNotes());
+                    orderHeader.setRemark(data.getRemark());
+
                     deliveryOrderDao.insert(orderHeader);
 
                     //2、保存订单商品明细信息
@@ -136,11 +136,6 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                             goods.setUnitPrice(g.getUnitPrice());
                             goods.setGoodsId(g.getGoodsId());
                             goods.setQuality(g.getQuality());
-                            goods.setUserdefine01(g.getUserdefine01());
-                            goods.setUserdefine02(g.getUserdefine02());
-                            goods.setUserdefine03(g.getUserdefine03());
-                            goods.setUserdefine04(g.getUserdefine04());
-                            goods.setUserdefine05(g.getUserdefine05());
                             deliveryOrderGoodsDao.insert(goods);
                         }
                     }

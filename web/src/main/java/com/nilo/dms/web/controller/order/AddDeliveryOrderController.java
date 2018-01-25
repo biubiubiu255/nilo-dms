@@ -78,7 +78,6 @@ public class AddDeliveryOrderController extends BaseController {
             Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
-            orderHeader.setClientType(ClientTypeEnum.DMS_ADD.getCode());
             orderHeader.setMerchantId(Long.parseLong(merchantId));
             orderHeader.setOrderTime(DateUtil.parse(orderDateTime, DateUtil.LONG_WEB_FORMAT));
             orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
@@ -115,11 +114,7 @@ public class AddDeliveryOrderController extends BaseController {
             orderHeader.setReferenceNo(order.getReferenceNo());
             orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
             orderHeader.setTotalPrice(order.getTotalPrice());
-            orderHeader.setUserdefine01(order.getUserdefine01());
-            orderHeader.setUserdefine02(order.getUserdefine02());
-            orderHeader.setUserdefine03(order.getUserdefine03());
-            orderHeader.setUserdefine04(order.getUserdefine04());
-            orderHeader.setUserdefine05(order.getUserdefine05());
+
             //获取订单号
             orderHeader.setOrderNo(order.getOrderNo());
             deliveryOrderDao.update(orderHeader);

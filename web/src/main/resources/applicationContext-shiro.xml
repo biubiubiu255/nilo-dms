@@ -25,7 +25,7 @@
                 /api.html = anon
                 /api/login.html = anon
                 /websocket.html = anon
-                /test.html = anon
+                /notify.html = anon
                 <!--/servlet/account/logout = logout-->
                 /** = auth
                 /admin/user/** = perms["10001"]

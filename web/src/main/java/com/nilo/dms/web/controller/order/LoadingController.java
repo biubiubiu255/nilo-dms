@@ -1,13 +1,11 @@
 package com.nilo.dms.web.controller.order;
 
-import com.nilo.dms.common.Pagination;
-import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.UserInfoDao;
-import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.OrderService;
-import com.nilo.dms.service.order.model.*;
-import com.nilo.dms.common.Principal;
-import com.nilo.dms.web.controller.BaseController;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.UserInfoDao;
+import com.nilo.dms.service.order.LoadingService;
+import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Loading;
+import com.nilo.dms.web.controller.BaseController;
 
 /**
  * Created by ronny on 2017/9/15.
@@ -38,6 +43,27 @@ public class LoadingController extends BaseController {
     @Autowired
     private UserInfoDao userInfoDao;
 
+    @RequestMapping(value = "/print.html")
+    public String print(Model model, HttpServletRequest request) {
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        String loadingNo = request.getParameter("loadingNo");
+        //查询详情
+        Loading loading = loadingService.queryByLoadingNo(merchantId, loadingNo);
+        
+        String temp_str="";     
+        Date dt = new Date();     
+        //最后的aa表示“上午”或“下午”    HH表示24小时制    如果换成hh表示12小时制     
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");     
+        temp_str=sdf.format(dt); 
+        
+        model.addAttribute("date_str",temp_str);
+        model.addAttribute("loading", loading);
+        
+        return "loading/print";
+    }
+    
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model, HttpServletRequest request) {
         return "loading/list";
@@ -111,7 +137,7 @@ public class LoadingController extends BaseController {
             loadingService.loadingScan(merchantId, loadingNo, orderNo, me.getUserId());
             order = orderService.queryByOrderNo(merchantId, orderNo);
         } catch (Exception e) {
-            log.error("arrive failed. orderNo:{}", orderNo, e);
+            log.error("loadingScan failed. orderNo:{}", orderNo, e);
             return toJsonErrorMsg(e.getMessage());
         }
         return toJsonTrueData(order);

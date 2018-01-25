@@ -32,18 +32,18 @@
     <select id="queryByMerchantId" resultMap="interfaceConfigDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_sys_interface_config where merchant_id = #{merchantId}
+        FROM t_sys_config_interface where merchant_id = #{merchantId}
     </select>
 
     <select id="queryByMethod" resultMap="interfaceConfigDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_sys_interface_config where merchant_id = #{merchantId} and method=#{method}
+        FROM t_sys_config_interface where merchant_id = #{merchantId} and method=#{method}
     </select>
 
     <!-- 动态更新语句 -->
     <update id="update" parameterType="com.nilo.dms.dao.dataobject.InterfaceConfigDO" statementType="PREPARED">
-        update t_sys_interface_config
+        update t_sys_config_interface
         <trim prefix="set" suffixOverrides="," suffix="where merchant_id=#{merchantId} and method = #{method}">
             <if test="op != null and op != ''">
                 op = #{op},

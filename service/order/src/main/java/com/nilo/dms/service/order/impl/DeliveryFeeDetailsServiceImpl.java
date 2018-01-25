@@ -63,11 +63,7 @@ public class DeliveryFeeDetailsServiceImpl implements DeliveryFeeDetailsService 
         DeliveryFeeTemplateDO param = new DeliveryFeeTemplateDO();
         param.setMerchantId(Long.parseLong(order.getMerchantId()));
         param.setCountry(order.getCountry());
-        param.setCustomerType(order.getCustomerType().getCode());
-        param.setCustomerLevel(order.getCustomerLevel().getCode());
-        param.setSettleType(order.getSettleType().getCode());
         param.setServiceProduct(order.getServiceType().getCode());
-        param.setTransportType(order.getTransportType().getCode());
         param.setOrigin(order.getSenderInfo().getSenderCity());
         param.setDestination(order.getReceiverInfo().getReceiverCity());
 
@@ -87,7 +83,6 @@ public class DeliveryFeeDetailsServiceImpl implements DeliveryFeeDetailsService 
         IDeliveryFee deliveryFee = new BasicFee(templateDO.getBasicFee());
         deliveryFee = new FirstWeightFee(deliveryFee,templateDO.getFirstFee());
         deliveryFee = new SecondWeightFeeI(deliveryFee, order.getWeight(), templateDO.getFirstRegion(), templateDO.getSecondRegion(), templateDO.getSecondFee());
-        deliveryFee = new DeliveryCategoryTypeFee(deliveryFee, order.getCategoryType(), factorDOList);
         deliveryFee = new GoodsTypeFee(deliveryFee, order.getGoodsType(), factorDOList);
 
         DeliveryFeeDetailsDO detailsDO = new DeliveryFeeDetailsDO();

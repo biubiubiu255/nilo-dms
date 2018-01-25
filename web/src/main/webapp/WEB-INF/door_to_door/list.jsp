@@ -11,32 +11,19 @@
 <body>
 <div class="box-body">
     <div class="layui-form layui-row">
-        <div class="layui-col-md4">
+        <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">OrderNo:</label>
             <div class="layui-inline">
                 <input class="layui-input" name="orderNo" autocomplete="off">
             </div>
         </div>
-        <div class="layui-col-md4">
+        <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">ReferenceNo:</label>
             <div class="layui-input-inline">
                 <input type="text" name="referenceNo" autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-col-md4">
-            <label class="layui-form-label">OrderType:</label>
-            <div class="layui-form-item layui-inline" style="margin: 0px">
-                <select lay-filter="aaa" multiple name="aaa" lay-verify="required">
-                    <option value="">Pls select order type...</option>
-                    <c:forEach items="${orderTypeList}" var="r">
-                        <option value=${r.code}>${r.code}</option>
-                    </c:forEach>
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="layui-row">
-        <div class="layui-col-md8">
+        <div class="layui-col-md8 layui-col-lg5">
             <label class="layui-form-label">CreateTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
@@ -47,9 +34,9 @@
             </div>
         </div>
 
-        <div class="layui-col-md1">
+        <div class="layui-col-md1 layui-col-lg1">
             <shiro:hasPermission name="400043">
-            <button class="layui-btn layui-btn-normal search">Search</button>
+                <button class="layui-btn layui-btn-normal search">Search</button>
             </shiro:hasPermission>
         </div>
     </div>
@@ -67,36 +54,22 @@
         <tr>
             <th lay-data="{checkbox:true, fixed: true}"></th>
             <th lay-data="{fixed: 'left',field:'orderNo', width:200}">OrderNo</th>
-            <th lay-data="{field:'orderType', width:100}">OrderType</th>
             <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
             <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.orderTime) }}</div>'}">
                 OrderTime
             </th>
-            <th lay-data="{field:'fetchTime', width:200,templet:'<div>{{ getDiffTime(d.fetchTime) }}</div>'}">Fetch
-                Time
-            </th>
+            <th lay-data="{field:'fetchAddress', width:200}">Name</th>
+            <th lay-data="{field:'fetchAddress', width:200}">Phone</th>
             <th lay-data="{field:'fetchAddress', width:200}">Fetch Address</th>
             <th lay-data="{field:'weight', width:100}">Weight</th>
             <th lay-data="{field:'goodsType', width:120}">GoodsType</th>
             <th lay-data="{field:'statusDesc', width:100}">Status</th>
-            <th lay-data="{field:'receiverInfo', width:150,templet: '<div>{{d.receiverInfo.receiverName}}</div>' }">
-                Receiver
-                Name
+            <th lay-data="{field:'createdTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
+                CreatedTime
             </th>
-            <th lay-data="{field:'receiverInfo', width:150,templet: '<div>{{d.receiverInfo.receiverPhone}}</div>' }">
-                Receiver Phone
+            <th lay-data="{field:'updatedTime', width:170, templet:'<div>{{ formatDate(d.updatedTime) }}</div>'}">
+                UpdatedTime
             </th>
-            <th lay-data="{field:'receiverInfo', width:150,templet: '<div>{{d.receiverInfo.receiverAddress}}</div>' }">
-                Receiver
-                Address
-            </th>
-
-            <th lay-data="{field:'userdefine01', width:150}">UserDefine01</th>
-            <th lay-data="{field:'userdefine02', width:150}">UserDefine02</th>
-            <th lay-data="{field:'userdefine03', width:150}">UserDefine03</th>
-            <th lay-data="{field:'userdefine04', width:150}">UserDefine04</th>
-            <th lay-data="{field:'userdefine05', width:150}">UserDefine05</th>
-
             <th lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
         </thead>
@@ -184,7 +157,7 @@
                     layer.open({
                         type: 1,
                         title: "Allocate Rider",
-                        area: ['600px','300px'],
+                        area: ['600px', '300px'],
                         content: data,
                         end: function () {
                             reloadCurrentPage();
