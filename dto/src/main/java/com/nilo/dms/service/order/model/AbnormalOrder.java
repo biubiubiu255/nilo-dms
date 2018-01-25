@@ -159,7 +159,7 @@ public class AbnormalOrder {
     }
 
     public String getHandleTypeDesc() {
-        return this.handleType.getDesc();
+        return this.handleType== null?"":this.handleType.getDesc();
     }
 
     public String getStatusDesc() {

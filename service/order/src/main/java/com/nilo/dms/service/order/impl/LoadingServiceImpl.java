@@ -204,7 +204,8 @@ public class LoadingServiceImpl implements LoadingService {
                     Map<String, String> args = new HashMap<>();
                     args.put("0", optUser.getUserInfo().getName());
                     optRequest.setParams(args);
-                    orderService.handleOpt(optRequest);
+                    //loading不更新订单状态
+                    //orderService.handleOpt(optRequest);
 
                     //添加订单到发运明细中
                     LoadingDetailsDO detailsDO = new LoadingDetailsDO();
@@ -242,7 +243,7 @@ public class LoadingServiceImpl implements LoadingService {
         if (loadingDO == null) {
             throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
         }
-        if (loadingDO.getStatus() != LoadingStatusEnum.CREATE.getCode()) {
+        if (!(loadingDO.getStatus() == LoadingStatusEnum.CREATE.getCode()||loadingDO.getStatus() == LoadingStatusEnum.LOADING.getCode())) {
             throw new DMSException(BizErrorCode.LOADING_STATUS_LIMITED, loadingNo);
         }
 
@@ -279,7 +280,9 @@ public class LoadingServiceImpl implements LoadingService {
                     Map<String, String> args = new HashMap<>();
                     args.put("0", optUser.getUserInfo().getName());
                     optRequest.setParams(args);
-                    orderService.handleOpt(optRequest);
+                    
+                    //loading 不更新状态
+                    //orderService.handleOpt(optRequest);
 
                     loadingDetailsDao.deleteBy(loadingNo, orderNo);
 
@@ -297,13 +300,16 @@ public class LoadingServiceImpl implements LoadingService {
     @Override
     public void ship(String merchantId, String loadingNo, String optBy) {
 
-        LoadingDO query = loadingDao.queryByLoadingNo(Long.parseLong(merchantId), loadingNo);
+        LoadingDO loadingDO = loadingDao.queryByLoadingNo(Long.parseLong(merchantId), loadingNo);
 
         //快递员信息
-        User rider = userService.findByUserId(merchantId, query.getRider());
+        User rider = userService.findByUserId(merchantId, loadingDO.getRider());
 
-        if (query == null) {
+        if (loadingDO == null) {
             throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
+        }
+        if (loadingDO.getStatus() != LoadingStatusEnum.LOADING.getCode()) {
+            throw new DMSException(BizErrorCode.LOADING_STATUS_LIMITED, loadingNo);
         }
         List<LoadingDetailsDO> detailsDO = loadingDetailsDao.queryByLoadingNo(loadingNo);
         if (detailsDO == null || detailsDO.size() == 0) {
@@ -339,15 +345,15 @@ public class LoadingServiceImpl implements LoadingService {
                         task.setStatus(TaskStatusEnum.CREATE);
                         task.setCreatedBy(optBy);
                         task.setOrderNo(details.getOrderNo());
-                        task.setHandledBy(query.getRider());
+                        task.setHandledBy(loadingDO.getRider());
                         task.setTaskType(TaskTypeEnum.DISPATCH);
                         taskService.addTask(task);
                     }
                     // 更新发运状态
                     LoadingDO update = new LoadingDO();
-                    update.setId(query.getId());
-                    update.setLoadingNo(query.getLoadingNo());
-                    update.setVersion(query.getVersion());
+                    update.setId(loadingDO.getId());
+                    update.setLoadingNo(loadingDO.getLoadingNo());
+                    update.setVersion(loadingDO.getVersion());
                     update.setStatus(LoadingStatusEnum.SHIP.getCode());
                     update.setLoadingToTime(DateUtil.getSysTimeStamp());
                     loadingDao.update(update);
@@ -368,7 +374,7 @@ public class LoadingServiceImpl implements LoadingService {
         if (loadingDO == null) {
             throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
         }
-        if (loadingDO.getStatus() != LoadingStatusEnum.CREATE.getCode()) {
+        if (!(loadingDO.getStatus() == LoadingStatusEnum.CREATE.getCode()||loadingDO.getStatus() == LoadingStatusEnum.LOADING.getCode())) {
             throw new DMSException(BizErrorCode.LOADING_STATUS_LIMITED, loadingNo);
         }
         // 更新发运状态

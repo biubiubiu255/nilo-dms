@@ -100,10 +100,8 @@
     <div class="layui-form-item">
         <div class="layui-input-block" style="margin-left:120px;">
             <button class="layui-btn ship">Ship</button>
-            <button class="layui-btn layui-btn-normal print"><i class="fa fa-print" aria-hidden="true"> </i>Print
-            </button>
+            <button class="layui-btn layui-btn-normal print">Print</button>
         </div>
-
     </div>
 
 </div>
@@ -257,6 +255,10 @@
                 }
             });
 
+        });
+        
+        $('.print').on('click', function () {
+        	window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
         });
     });
 </script>

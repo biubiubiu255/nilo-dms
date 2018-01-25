@@ -10,6 +10,20 @@
 %>
 <body>
 <div class="box-body">
+<!-- /.box-header -->
+<div class="layui-row">
+
+    <div class="layui-col-md5">
+        <shiro:hasPermission name="400061">
+            <button class="layui-btn layui-btn-normal loading-scan">Loading Scan</button>
+        </shiro:hasPermission>
+        <button class="layui-btn btn-search">Search</button>
+    </div>
+    
+ </div>
+    <div class="layui-collapse" >
+	<div class="layui-colla-item">
+    <div class="layui-colla-content ">
     <div class="layui-form layui-row">
         <div class="layui-col-md4 layui-col-lg3">
             LoadingNo：
@@ -32,13 +46,10 @@
             <button class="layui-btn layui-btn-normal search">Search</button>
         </div>
     </div>
-    <hr>
-    <!-- /.box-header -->
-    <div class="layui-btn-group">
-        <shiro:hasPermission name="400061">
-            <button class="layui-btn layui-btn-normal loading-scan">Loading Scan</button>
-        </shiro:hasPermission>
     </div>
+    </div>
+    </div>
+    
 
     <table class="layui-table" lay-data="{ url:'/order/loading/list.html', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
@@ -93,6 +104,8 @@
             var form = layui.form;
             form.render();
         })
+        layui.use(['element'], function () {
+        });
         layui.use('laydate', function () {
             var layDate = layui.laydate;
             layDate.render({
@@ -124,6 +137,11 @@
             $(".search").on("click", function () {
                 reloadTable();
             })
+            $(".btn-search").on("click", function () {
+            	$(".layui-colla-content").toggleClass("layui-show");
+            	$(".btn-search").toggleClass("layui-btn-warm");
+            })
+
 
         });
 

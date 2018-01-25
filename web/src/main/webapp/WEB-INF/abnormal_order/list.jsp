@@ -68,8 +68,7 @@
                lay-filter="demo">
             <thead>
             <tr>
-                <th lay-data="{fixed: 'left',field:'abnormalNo', width:200}">AbnormalNo</th>
-                <th lay-data="{field:'orderNo', width:250}">OrderNo</th>
+                <th lay-data="{fixed: 'left',field:'orderNo', width:250}">OrderNo</th>
                 <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
                 <th lay-data="{field:'abnormalType', width:150}">Abnormal Type</th>
                 <th lay-data="{field:'statusDesc', width:100}">Status</th>
