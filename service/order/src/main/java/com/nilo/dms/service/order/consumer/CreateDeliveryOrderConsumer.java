@@ -94,6 +94,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     Long merchantId = Long.parseLong(data.getMerchantId());
                     //1、保存订单信息
                     DeliveryOrderDO orderHeader = new DeliveryOrderDO();
+                    orderHeader.setOrderNo(orderNo);
                     orderHeader.setCountry(data.getCountry());
                     orderHeader.setMerchantId(merchantId);
                     orderHeader.setOrderPlatform(data.getOrderPlatform());
@@ -104,11 +105,24 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setTotalPrice(data.getTotalPrice());
                     orderHeader.setWeight(data.getWeight());
 
-
                     orderHeader.setServiceType(data.getServiceType().getCode());
                     orderHeader.setGoodsType(data.getGoodsType());
 
-                    orderHeader.setOrderNo(orderNo);
+
+                    orderHeader.setWarehouseId(data.getWarehouseId());
+                    orderHeader.setStop(data.getStop());
+                    orderHeader.setStopId(data.getStopId());
+                    orderHeader.setChannel(data.getChannel());
+                    orderHeader.setChannelStation(data.getChannelStation());
+                    orderHeader.setOrderCategory(data.getOrderCategory());
+                    orderHeader.setCarrierId(data.getCarrierId());
+                    orderHeader.setCarrierName(data.getCarrierName());
+                    orderHeader.setRelationOrderNo(data.getRelationOrderNo());
+                    orderHeader.setDeliveryFee(data.getDeliveryFee());
+                    orderHeader.setIsCod(data.getIsCod());
+                    orderHeader.setNotes(data.getNotes());
+                    orderHeader.setRemark(data.getRemark());
+
                     deliveryOrderDao.insert(orderHeader);
 
                     //2、保存订单商品明细信息

@@ -45,6 +45,123 @@ public class DeliveryOrder {
     private String goodsType;
 
 
+    private String warehouseId;
+    private String stopId;
+    private String stop;
+    private String channel;
+    private String channelStation;
+    private String orderCategory;
+    private String carrierId;
+    private String carrierName;
+    private String relationOrderNo;
+    private Double deliveryFee;
+    private String isCod;
+    private String notes;
+    private String remark;
+
+    public String getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(String warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
+    public String getStopId() {
+        return stopId;
+    }
+
+    public void setStopId(String stopId) {
+        this.stopId = stopId;
+    }
+
+    public String getStop() {
+        return stop;
+    }
+
+    public void setStop(String stop) {
+        this.stop = stop;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public String getChannelStation() {
+        return channelStation;
+    }
+
+    public void setChannelStation(String channelStation) {
+        this.channelStation = channelStation;
+    }
+
+    public String getOrderCategory() {
+        return orderCategory;
+    }
+
+    public void setOrderCategory(String orderCategory) {
+        this.orderCategory = orderCategory;
+    }
+
+    public String getCarrierId() {
+        return carrierId;
+    }
+
+    public void setCarrierId(String carrierId) {
+        this.carrierId = carrierId;
+    }
+
+    public String getCarrierName() {
+        return carrierName;
+    }
+
+    public void setCarrierName(String carrierName) {
+        this.carrierName = carrierName;
+    }
+
+    public String getRelationOrderNo() {
+        return relationOrderNo;
+    }
+
+    public void setRelationOrderNo(String relationOrderNo) {
+        this.relationOrderNo = relationOrderNo;
+    }
+
+    public Double getDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public void setDeliveryFee(Double deliveryFee) {
+        this.deliveryFee = deliveryFee;
+    }
+
+    public String getIsCod() {
+        return isCod;
+    }
+
+    public void setIsCod(String isCod) {
+        this.isCod = isCod;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public ServiceTypeEnum getServiceType() {
         return serviceType;

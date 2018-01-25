@@ -114,23 +114,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     }
 
-    private void verifyDeliveryOrderParam(DeliveryOrder data) {
 
-        AssertUtil.isNotNull(data, SysErrorCode.REQUEST_IS_NULL);
-
-        AssertUtil.isNotBlank(data.getMerchantId(), BizErrorCode.MERCHANT_ID_EMPTY);
-        AssertUtil.isNotBlank(data.getReferenceNo(), BizErrorCode.REFERENCE_NO_EMPTY);
-        AssertUtil.isNotBlank(data.getOrderType(), BizErrorCode.ORDER_TYPE_EMPTY);
-
-        AssertUtil.isNotBlank(data.getGoodsType(), BizErrorCode.GOODS_TYPE_EMPTY);
-
-        AssertUtil.isNotNull(data.getReceiverInfo(), BizErrorCode.RECEIVER_EMPTY);
-        AssertUtil.isNotNull(data.getGoodsInfoList(), BizErrorCode.GOODS_EMPTY);
-
-        AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverName(), BizErrorCode.RECEIVE_NAME_EMPTY);
-        AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverPhone(), BizErrorCode.RECEIVE_PHONE_EMPTY);
-        AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverAddress(), BizErrorCode.RECEIVE_ADDRESS_EMPTY);
-    }
 
     @Override
     public String createDeliveryOrder(final DeliveryOrder data) {
@@ -144,6 +128,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                 Long merchant = Long.parseLong(data.getMerchantId());
                 try {
                     //1、保存订单信息
+                    data.setStatus(DeliveryOrderStatusEnum.CREATE);
                     DeliveryOrderDO orderHeader = convert(data);
                     //获取订单号
                     orderNo = SystemConfig.getNextSerialNo(data.getMerchantId(), SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
@@ -160,7 +145,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                         goods.setUnitPrice(g.getUnitPrice());
                         goods.setGoodsId(g.getGoodsId());
                         goods.setQuality(g.getQuality());
-
                         deliveryOrderGoodsDao.insert(goods);
                     }
 
@@ -351,7 +335,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     @Override
     public void arrive(String merchantId, String scanNo, String arriveBy) {
-        List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo( scanNo);
+        List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
 
         transactionTemplate.execute(new TransactionCallback<Void>() {
             @Override
@@ -518,6 +502,20 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setWeight(d.getWeight());
         deliveryOrder.setGoodsType(d.getGoodsType());
 
+        deliveryOrder.setWarehouseId(d.getWarehouseId());
+        deliveryOrder.setStop(d.getStop());
+        deliveryOrder.setStopId(d.getStopId());
+        deliveryOrder.setChannel(d.getChannel());
+        deliveryOrder.setChannelStation(d.getChannelStation());
+        deliveryOrder.setOrderCategory(d.getOrderCategory());
+        deliveryOrder.setCarrierId(d.getCarrierId());
+        deliveryOrder.setCarrierName(d.getCarrierName());
+        deliveryOrder.setRelationOrderNo(d.getRelationOrderNo());
+        deliveryOrder.setDeliveryFee(d.getDeliveryFee());
+        deliveryOrder.setIsCod(d.getIsCod());
+        deliveryOrder.setNotes(d.getNotes());
+        deliveryOrder.setRemark(d.getRemark());
+
         return deliveryOrder;
     }
 
@@ -569,22 +567,53 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         return list;
     }
 
-    private DeliveryOrderDO convert(DeliveryOrder data) {
+    private DeliveryOrderDO convert(DeliveryOrder d) {
 
         DeliveryOrderDO orderHeader = new DeliveryOrderDO();
-        orderHeader.setCountry(data.getCountry());
-        orderHeader.setMerchantId(Long.parseLong(data.getMerchantId()));
-        orderHeader.setOrderPlatform(data.getOrderPlatform());
-        orderHeader.setOrderTime(data.getOrderTime());
-        orderHeader.setOrderType(data.getOrderType());
-        orderHeader.setReferenceNo(data.getReferenceNo());
-        orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
-        orderHeader.setWeight(data.getWeight());
-        orderHeader.setGoodsType(data.getGoodsType());
-        orderHeader.setTotalPrice(data.getTotalPrice());
+        orderHeader.setCountry(d.getCountry());
+        orderHeader.setMerchantId(Long.parseLong(d.getMerchantId()));
+        orderHeader.setOrderPlatform(d.getOrderPlatform());
+        orderHeader.setOrderTime(d.getOrderTime());
+        orderHeader.setOrderType(d.getOrderType());
+        orderHeader.setReferenceNo(d.getReferenceNo());
+        orderHeader.setStatus(d.getStatus().getCode());
+        orderHeader.setWeight(d.getWeight());
+        orderHeader.setGoodsType(d.getGoodsType());
+        orderHeader.setTotalPrice(d.getTotalPrice());
 
-        orderHeader.setServiceType(data.getServiceType().getCode());
+        orderHeader.setServiceType(d.getServiceType().getCode());
 
+        orderHeader.setWarehouseId(d.getWarehouseId());
+        orderHeader.setStop(d.getStop());
+        orderHeader.setStopId(d.getStopId());
+        orderHeader.setChannel(d.getChannel());
+        orderHeader.setChannelStation(d.getChannelStation());
+        orderHeader.setOrderCategory(d.getOrderCategory());
+        orderHeader.setCarrierId(d.getCarrierId());
+        orderHeader.setCarrierName(d.getCarrierName());
+        orderHeader.setRelationOrderNo(d.getRelationOrderNo());
+        orderHeader.setDeliveryFee(d.getDeliveryFee());
+        orderHeader.setIsCod(d.getIsCod());
+        orderHeader.setNotes(d.getNotes());
+        orderHeader.setRemark(d.getRemark());
         return orderHeader;
+    }
+
+    private void verifyDeliveryOrderParam(DeliveryOrder data) {
+
+        AssertUtil.isNotNull(data, SysErrorCode.REQUEST_IS_NULL);
+
+        AssertUtil.isNotBlank(data.getMerchantId(), BizErrorCode.MERCHANT_ID_EMPTY);
+        AssertUtil.isNotBlank(data.getReferenceNo(), BizErrorCode.REFERENCE_NO_EMPTY);
+        AssertUtil.isNotBlank(data.getOrderType(), BizErrorCode.ORDER_TYPE_EMPTY);
+
+        AssertUtil.isNotBlank(data.getGoodsType(), BizErrorCode.GOODS_TYPE_EMPTY);
+
+        AssertUtil.isNotNull(data.getReceiverInfo(), BizErrorCode.RECEIVER_EMPTY);
+        AssertUtil.isNotNull(data.getGoodsInfoList(), BizErrorCode.GOODS_EMPTY);
+
+        AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverName(), BizErrorCode.RECEIVE_NAME_EMPTY);
+        AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverPhone(), BizErrorCode.RECEIVE_PHONE_EMPTY);
+        AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverAddress(), BizErrorCode.RECEIVE_ADDRESS_EMPTY);
     }
 }

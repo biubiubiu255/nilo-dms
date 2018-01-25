@@ -26,7 +26,7 @@ import java.util.Map;
  * Created by Administrator on 2017/6/7.
  */
 @Controller
-public class TestController {
+public class TestController extends BaseController{
 
     @Autowired
     @Qualifier("messageProducer")
@@ -38,10 +38,10 @@ public class TestController {
     @RequestMapping(value = "/test2.html")
     public String test1(String content) {
 
-        for (int i = 1; i < 50; i++) {
+        for (int i = 1; i < 30; i++) {
 
             DeliveryOrder data = new DeliveryOrder();
-            data.setReferenceNo("Test1_" + i);
+            data.setReferenceNo("Kili_4" + i);
             data.setMerchantId("1");
             data.setOrderTime(DateUtil.getSysTimeStamp());
             data.setTotalPrice((long) i);
@@ -49,7 +49,7 @@ public class TestController {
             data.setCountry("CN");
             data.setOrderPlatform("Test");
 
-            data.setOrderType("FBK");
+            data.setOrderType("DS");
             data.setServiceType(ServiceTypeEnum.ARRIVE_TODAY);
             data.setGoodsType("3C");
 
@@ -105,18 +105,9 @@ public class TestController {
         return "index";
     }
 
-    @RequestMapping(value = "/test.html")
+    @RequestMapping(value = "/notify.html")
     @ResponseBody
-    public String test(String content) {
-
-        try {
-            Thread.sleep(70000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Map<Object, Object> map = new HashMap<>();
-        map.put("result", true);
-        map.put("data", "");
-        return JSON.toJSONString(map);
+    public String notify(String content) {
+        return toJsonTrueMsg();
     }
 }
