@@ -41,17 +41,28 @@ public class TestController extends BaseController{
         for (int i = 1; i < 30; i++) {
 
             DeliveryOrder data = new DeliveryOrder();
-            data.setReferenceNo("Kili_4" + i);
+            data.setReferenceNo("90000000" + i);
             data.setMerchantId("1");
             data.setOrderTime(DateUtil.getSysTimeStamp());
             data.setTotalPrice((long) i);
             data.setWeight(i+12.2d);
             data.setCountry("CN");
             data.setOrderPlatform("Test");
-
-            data.setOrderType("DS");
+            data.setOrderType("FBK");
+            data.setOrderCategory("FBK");
             data.setServiceType(ServiceTypeEnum.ARRIVE_TODAY);
             data.setGoodsType("3C");
+            data.setCarrierName("G4S");
+            data.setCarrierId("111");
+            data.setChannel("1");
+            data.setChannelStation("Kenya *** Shop");
+            data.setIsCod("0");
+            data.setNotes("notes notes");
+            data.setRemark("remark remark");
+            data.setDeliveryFee(200.0);
+            data.setWarehouseId("KE01");
+            data.setStop("G4S");
+            data.setStopId("222");
 
             ReceiverInfo receiverInfo = new ReceiverInfo();
             receiverInfo.setReceiverCountry("CN");

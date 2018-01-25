@@ -54,8 +54,8 @@
                 jdbcType="VARCHAR"/>
         <result property="relationOrderNo" column="relation_Order_No" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="deliveryFee" column="delivery_Fee" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
+        <result property="deliveryFee" column="delivery_Fee" javaType="java.lang.Double"
+                jdbcType="DECIMAL"/>
         <result property="isCod" column="is_Cod" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="notes" column="notes" javaType="java.lang.String"
