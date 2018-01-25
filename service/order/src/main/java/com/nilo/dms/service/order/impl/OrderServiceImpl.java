@@ -43,6 +43,7 @@ import java.util.Map;
 public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private TransactionTemplate transactionTemplate;
 
@@ -159,11 +160,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                         goods.setUnitPrice(g.getUnitPrice());
                         goods.setGoodsId(g.getGoodsId());
                         goods.setQuality(g.getQuality());
-                        goods.setUserdefine01(g.getUserdefine01());
-                        goods.setUserdefine02(g.getUserdefine02());
-                        goods.setUserdefine03(g.getUserdefine03());
-                        goods.setUserdefine04(g.getUserdefine04());
-                        goods.setUserdefine05(g.getUserdefine05());
+
                         deliveryOrderGoodsDao.insert(goods);
                     }
 
@@ -221,7 +218,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         map.put("merchantId", parameter.getMerchantId());
         map.put("orderType", parameter.getOrderType());
         map.put("status", parameter.getStatus());
-        map.put("fetchType", parameter.getFetchType());
 
         if (StringUtil.isEmpty(parameter.getFromCreatedTime()) || StringUtil.isEmpty(parameter.getToCreatedTime())) {
             if (StringUtil.isEmpty(parameter.getFromCreatedTime())) {
@@ -522,23 +518,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setWeight(d.getWeight());
         deliveryOrder.setGoodsType(d.getGoodsType());
 
-        deliveryOrder.setFetchType(d.getFetchType());
-        deliveryOrder.setFetchAddress(d.getFetchAddress());
-        deliveryOrder.setFetchTime(d.getFetchTime());
-
-        deliveryOrder.setClientType(ClientTypeEnum.getEnum(d.getClientType()));
-        deliveryOrder.setCategoryType(DeliveryCategoryTypeEnum.getEnum(d.getDeliveryCategoryType()));
-        deliveryOrder.setCustomerType(CustomerTypeEnum.getEnum(d.getCustomerType()));
-        deliveryOrder.setCustomerLevel(LevelEnum.getEnum(d.getCustomerLevel()));
-        deliveryOrder.setSettleType(SettleTypeEnum.getEnum(d.getSettleType()));
-        deliveryOrder.setTransportType(TransportTypeEnum.getEnum(d.getTransportType()));
-        deliveryOrder.setProductType(ProductTypeEnum.getEnum(d.getProductType()));
-
-        deliveryOrder.setUserdefine01(d.getUserdefine01());
-        deliveryOrder.setUserdefine02(d.getUserdefine02());
-        deliveryOrder.setUserdefine03(d.getUserdefine03());
-        deliveryOrder.setUserdefine04(d.getUserdefine04());
-        deliveryOrder.setUserdefine05(d.getUserdefine05());
         return deliveryOrder;
     }
 
@@ -585,11 +564,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             goods.setQty(g.getQty());
             goods.setQuality(g.getQuality());
             goods.setUnitPrice(g.getUnitPrice());
-            goods.setUserdefine01(g.getUserdefine01());
-            goods.setUserdefine02(g.getUserdefine02());
-            goods.setUserdefine03(g.getUserdefine03());
-            goods.setUserdefine04(g.getUserdefine04());
-            goods.setUserdefine05(g.getUserdefine05());
             list.add(goods);
         }
         return list;
@@ -606,29 +580,11 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         orderHeader.setReferenceNo(data.getReferenceNo());
         orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
         orderHeader.setWeight(data.getWeight());
-        orderHeader.setFetchType(data.getFetchType());
-        orderHeader.setFetchAddress(data.getFetchAddress());
-        orderHeader.setFetchTime(data.getFetchTime());
         orderHeader.setGoodsType(data.getGoodsType());
         orderHeader.setTotalPrice(data.getTotalPrice());
 
         orderHeader.setServiceType(data.getServiceType().getCode());
 
-        orderHeader.setClientType(data.getClientType().getCode());
-        orderHeader.setCustomerType(data.getCustomerType().getCode());
-        orderHeader.setCustomerLevel(data.getCustomerLevel().getCode());
-        orderHeader.setSettleType(data.getSettleType().getCode());
-        orderHeader.setProductType(data.getProductType().getCode());
-        orderHeader.setTransportType(data.getTransportType().getCode());
-
-        orderHeader.setUserdefine01(data.getUserdefine01());
-        orderHeader.setUserdefine02(data.getUserdefine02());
-        orderHeader.setUserdefine03(data.getUserdefine03());
-        orderHeader.setUserdefine04(data.getUserdefine04());
-        orderHeader.setUserdefine05(data.getUserdefine05());
-        if (data.getClientType() != null) {
-            orderHeader.setClientType(data.getClientType().getCode());
-        }
         return orderHeader;
     }
 }

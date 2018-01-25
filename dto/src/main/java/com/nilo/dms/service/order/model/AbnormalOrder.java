@@ -24,6 +24,8 @@ public class AbnormalOrder {
 
     private String abnormalType;
 
+    private String abnormalTypeDesc;
+
     private AbnormalHandleTypeEnum handleType;
 
     private AbnormalOrderStatusEnum status;
@@ -164,5 +166,13 @@ public class AbnormalOrder {
 
     public String getStatusDesc() {
         return this.status.getDesc();
+    }
+
+    public String getAbnormalTypeDesc() {
+        return abnormalTypeDesc;
+    }
+
+    public void setAbnormalTypeDesc(String abnormalTypeDesc) {
+        this.abnormalTypeDesc = abnormalTypeDesc;
     }
 }
