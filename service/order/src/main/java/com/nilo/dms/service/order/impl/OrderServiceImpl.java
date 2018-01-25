@@ -51,15 +51,14 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     @Autowired
     private DeliveryOrderDao deliveryOrderDao;
-
     @Autowired
     private DeliveryOrderReceiverDao deliveryOrderReceiverDao;
-
     @Autowired
     private DeliveryOrderSenderDao deliveryOrderSenderDao;
-
     @Autowired
-    private CommonDao commonDao;
+    private WaybillScanDao waybillScanDao;
+    @Autowired
+    private WaybillScanDetailsDao waybillScanDetailsDao;
 
     @Autowired
     private DeliveryOrderRequestDao deliveryOrderRequestDao;
@@ -329,14 +328,14 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                         if (handleConfig.getUpdateStatus() != null) {
                             //更新订单状态
                             updateDeliveryOrderStatus(optRequest, orderNo, handleConfig);
-                            //添加费用明细
+                            /*//添加费用明细
                             deliveryFeeDetailsService.buildDeliveryFee(optRequest.getMerchantId(), orderNo, optRequest.getOptType().getCode());
                             //通知商户订单状态变更
                             notifyMerchantStatusUpdate(optRequest.getMerchantId(), orderNo, orderDO.getReferenceNo(), DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
                             //记录物流轨迹
                             routeRecord(optRequest.getMerchantId(), orderNo, optRequest.getOptType().getCode(), optRequest.getParams());
                             //短信消息
-                            sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);
+                            sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);*/
                         }
                         //记录操作日志
                         addOptLog(optRequest, DeliveryOrderStatusEnum.getEnum(orderDO.getStatus()), DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
@@ -346,6 +345,45 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
                 } catch (Exception e) {
                     logger.error("handleOpt Failed. Data:{}", optRequest, e);
+                    transactionStatus.setRollbackOnly();
+                    throw e;
+                }
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void arrive(String merchantId, String scanNo, String arriveBy) {
+        List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo( scanNo);
+
+        transactionTemplate.execute(new TransactionCallback<Void>() {
+            @Override
+            public Void doInTransaction(TransactionStatus transactionStatus) {
+                try {
+                    List<String> orderNos = new ArrayList<>();
+                    for (WaybillScanDetailsDO details : scanDetailList) {
+                        orderNos.add(details.getOrderNo());
+                    }
+                    OrderOptRequest optRequest = new OrderOptRequest();
+                    optRequest.setMerchantId(merchantId);
+                    optRequest.setOptBy(arriveBy);
+                    optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
+                    optRequest.setOrderNo(orderNos);
+                    handleOpt(optRequest);
+
+                    // 更新重量
+                    for (WaybillScanDetailsDO details : scanDetailList) {
+                        if (details.getWeight() == null) continue;
+                        DeliveryOrderDO orderDO = new DeliveryOrderDO();
+                        orderDO.setOrderNo(details.getOrderNo());
+                        orderDO.setWeight(details.getWeight());
+                        orderDO.setMerchantId(Long.parseLong(merchantId));
+                        deliveryOrderDao.update(orderDO);
+                    }
+
+                } catch (Exception e) {
+                    logger.error("arrive Failed. Data:{}", scanNo, e);
                     transactionStatus.setRollbackOnly();
                     throw e;
                 }

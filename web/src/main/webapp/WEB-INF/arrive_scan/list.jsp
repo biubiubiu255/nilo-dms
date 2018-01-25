@@ -12,14 +12,14 @@
 <body>
 <div class="box-body">
     <div class="layui-form layui-row">
-        <div class="layui-col-md4">
+        <div class="layui-col-md3 layui-col-lg2">
             OrderNo：
             <div class="layui-inline">
                 <input class="layui-input" name="orderNo" autocomplete="off">
             </div>
         </div>
 
-        <div class="layui-col-md7">
+        <div class="layui-col-md5 layui-col-lg4">
             ArrivedTime：
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromTime" placeholder="From">
@@ -29,7 +29,7 @@
                 <input type="text" class="layui-input" id="toTime" placeholder="To">
             </div>
         </div>
-        <div class="layui-col-md1">
+        <div class="layui-col-md1 layui-col-lg1">
             <shiro:hasPermission name="400031">
                 <button class="layui-btn layui-btn-normal search">Search</button>
             </shiro:hasPermission>
