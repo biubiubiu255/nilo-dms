@@ -7,6 +7,8 @@
     <resultMap id="staffDO" type="com.nilo.dms.dao.dataobject.StaffDO">
         <result property="id" column="id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
         <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="companyId" column="company_id" javaType="java.lang.Long"
@@ -39,7 +41,8 @@
                 jdbcType="VARCHAR"/>
         <result property="idCard" column="id_card" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-
+        <result property="isRider" column="is_rider" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
         <result property="status" column="status" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
@@ -51,7 +54,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id ,staff_id,company_id,merchant_id,department_id,real_name,nick_name,job,title,title_time,title_level,employ_time,resigned_time,regular_time,sex,birthday,id_card,status,created_time , updated_time ,version
+        id ,user_id,staff_id,company_id,merchant_id,department_id,is_rider,real_name,nick_name,job,title,title_time,title_level,employ_time,resigned_time,regular_time,sex,birthday,id_card,status,created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -59,9 +62,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_bas_staff
-        (staff_id,company_id,merchant_id,department_id,real_name,nick_name,job,title,title_time,title_level,employ_time,resigned_time,regular_time,sex,birthday,id_card,status,created_time , updated_time ,version)
+        (user_id,staff_id,company_id,merchant_id,department_id,is_rider,real_name,nick_name,job,title,title_time,title_level,employ_time,resigned_time,regular_time,sex,birthday,id_card,status,created_time , updated_time ,version)
         VALUES
-        (#{staffId},#{companyId},#{merchantId}, #{departmentId},#{realName},#{nickName},#{job},#{title},#{titleTime},#{titleLevel},#{employTime},#{resignedTime},#{regularTime},#{sex},#{birthday},#{idCard},#{status}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{userId},#{staffId},#{companyId},#{merchantId}, #{departmentId},#{isRider},#{realName},#{nickName},#{job},#{title},#{titleTime},#{titleLevel},#{employTime},#{resignedTime},#{regularTime},#{sex},#{birthday},#{idCard},#{status}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
     <!-- 动态更新语句 -->
     <update id="update" parameterType="com.nilo.dms.dao.dataobject.StaffDO" statementType="PREPARED">
@@ -78,6 +81,9 @@
             </if>
             <if test="job != null and job != ''">
                 job = #{job},
+            </if>
+            <if test="isRider != null">
+                is_rider = #{isRider},
             </if>
             <if test="title != null and title != ''">
                 title = #{title},
@@ -127,13 +133,13 @@
         </if>
         order by created_time desc
         limit #{offset} , #{limit}
-     </select>
+    </select>
 
 
     <select id="queryByStaffId" resultMap="staffDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_bas_staff where company_id =#{companyId} and  staff_id = #{staffId}
+        FROM t_bas_staff where company_id =#{companyId} and staff_id = #{staffId}
     </select>
 
     <select id="queryAllBy" resultMap="staffDO" statementType="PREPARED">
@@ -143,5 +149,11 @@
         <if test="departmentId != null and departmentId != ''">
             and department_id = #{departmentId}
         </if>
+    </select>
+
+    <select id="queryAllRider" resultMap="staffDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_bas_staff where company_id =#{companyId} and is_rider = 1 and status in (1,2)
     </select>
 </mapper>

@@ -1,14 +1,10 @@
 package com.nilo.dms.web.controller.task;
 
-import com.nilo.dms.common.enums.TaskTypeEnum;
-import com.nilo.dms.common.utils.*;
-import com.nilo.dms.common.utils.model.CellData;
-import com.nilo.dms.common.utils.model.ExcelData;
-import com.nilo.dms.service.order.RiderOptService;
-import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.*;
-import com.nilo.dms.common.Principal;
-import com.nilo.dms.web.controller.BaseController;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -23,10 +19,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.enums.TaskTypeEnum;
+import com.nilo.dms.common.utils.FileUtil;
+import com.nilo.dms.common.utils.IdWorker;
+import com.nilo.dms.common.utils.ReadExcel;
+import com.nilo.dms.common.utils.model.CellData;
+import com.nilo.dms.common.utils.model.ExcelData;
+import com.nilo.dms.service.model.ReceiverData;
+import com.nilo.dms.service.order.RiderOptService;
+import com.nilo.dms.service.order.TaskService;
+import com.nilo.dms.service.order.model.SignForOrderParam;
+import com.nilo.dms.service.order.model.Task;
+import com.nilo.dms.web.controller.BaseController;
 
 /**
  * Created by admin on 2017/11/2.
@@ -77,9 +82,8 @@ public class ReceiveOrderController extends BaseController {
     @RequestMapping(value = "/importSignData.html", method = RequestMethod.POST)
     @ResponseBody
     public String importSignData(Model model, @RequestParam("file") CommonsMultipartFile file) {
+    	List<Map<String, String>> resultList = new ArrayList<>();
         try {
-            List<Map<String, String>> resultList = new ArrayList<>();
-
             //保存上传的问题件
             Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
             //获取merchantId
@@ -101,7 +105,7 @@ public class ReceiveOrderController extends BaseController {
                 Task task = taskService.queryTaskByTypeAndOrderNo(merchantId, TaskTypeEnum.DISPATCH.getCode(), receiverData.getOrderNo());
                 if (task == null) {
                     Map<String, String> map = new HashMap<>();
-                    map.put(receiverData.getOrderNo(), "No Dispatch Task for orderNo:" + receiverData.getOrderNo());
+                    map.put("message", receiverData.getOrderNo()+":No Dispatch Task for this orderNo" );
                     resultList.add(map);
                     continue;
                 }
@@ -121,20 +125,19 @@ public class ReceiveOrderController extends BaseController {
                     riderOptService.signForOrder(param);
                 } catch (Exception e) {
                     Map<String, String> map = new HashMap<>();
-                    map.put(data.getOrderNo(), e.getMessage());
+                    map.put("message", data.getOrderNo()+":"+e.getMessage());
                     resultList.add(map);
                 }
             }
-
 
         } catch (Exception e) {
             log.error("importSignData failed.", e);
             return toJsonErrorMsg(e.getMessage());
         }
-        return toJsonTrueMsg();
+        return toJsonTrueData(resultList);
     }
 
-    private static class ReceiverData {
+    /*private static class ReceiverData {
         private String orderNo;
         private String carrier;
         private String taskId;
@@ -162,5 +165,5 @@ public class ReceiveOrderController extends BaseController {
         public void setTaskId(String taskId) {
             this.taskId = taskId;
         }
-    }
+    }*/
 }

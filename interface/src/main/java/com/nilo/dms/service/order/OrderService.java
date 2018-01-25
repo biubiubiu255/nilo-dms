@@ -27,4 +27,6 @@ public interface OrderService {
 
     void handleOpt(OrderOptRequest optRequest);
 
+    void arrive(String merchantId,String scanNo,String arriveBy);
+
 }

@@ -49,20 +49,18 @@ public interface RoleService {
 
     /**
      * 通过用户id 查询用户url权限集合
+     *
      * @param userId
      * @return
      */
     List<String> findUrlPermissionsByUserId(String userId);
 
-    /**
-     * 获取所有角色列表
-     *
-     * @return
-     */
-    List<Role> findAllRoles(String merchantId);
+
+    List<Role> findBy(String merchantId, String roleName, RoleStatusEnum status);
 
     /**
      * 保存角色权限项
+     *
      * @param roleId
      */
     void saveRolePermission(String roleId, List<String> permission);

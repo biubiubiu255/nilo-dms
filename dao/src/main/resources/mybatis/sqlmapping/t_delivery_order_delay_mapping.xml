@@ -71,7 +71,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_waybill_delay where
-        merchant_id = #{merchantId}
+        merchant_id = #{merchantId} and status = 1
         <if test="orderNo != null and orderNo != '' ">
             and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>
@@ -86,7 +86,7 @@
     <select id="queryCountBy" resultType="java.lang.Long" statementType="PREPARED">
         SELECT count(1)
         FROM t_waybill_delay where
-        merchant_id = #{merchantId}
+        merchant_id = #{merchantId} and status = 1
         <if test="orderNo != null and orderNo != '' ">
             and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>

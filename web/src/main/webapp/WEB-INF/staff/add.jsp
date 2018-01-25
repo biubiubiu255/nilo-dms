@@ -1,8 +1,9 @@
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<%
+<%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
 
+<%
     request.setAttribute("jobList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "job"));
 %>
 <div class="box-body">
@@ -12,13 +13,8 @@
             <div class="layui-inline">
                 <label class="layui-form-label">Status:</label>
                 <div class="layui-input-inline">
-                    <select lay-filter="staffStatus" name="staffStatus">
-                        <option value="">Pls select status...</option>
-                        <option value=1>Trainee</option>
-                        <option value=2>Regular</option>
-                        <option value=3>Resigned</option>
-
-                    </select>
+                    <lp:enumTag selectId="staffStatus" selectName="staffStatus" className="StaffStatusEnum"
+                                code="" disabled="false"/>
                 </div>
             </div>
             <div class="layui-inline">
@@ -38,6 +34,10 @@
                         <option value=${r.departmentId}>${r.departmentName}</option>
                     </c:forEach>
                 </select>
+            </div>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="isRiderCode" title="Rider" value="1"
+                       lay-skin="primary" >
             </div>
         </div>
 

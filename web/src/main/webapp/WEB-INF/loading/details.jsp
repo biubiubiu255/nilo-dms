@@ -46,7 +46,7 @@
                     <option value="">choose or search....</option>
                     <c:forEach items="${riderList}" var="rider">
                         <option value="${rider.userId}"
-                                <c:if test="${rider.userId == loading.rider}">selected</c:if>> ${rider.name}</option>
+                                <c:if test="${rider.userId == loading.rider}">selected</c:if>> ${rider.staffId}</option>
                     </c:forEach>
                 </select></div>
 

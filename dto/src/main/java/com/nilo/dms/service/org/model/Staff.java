@@ -50,6 +50,20 @@ public class Staff {
 
     private String address;
 
+    private Boolean isRider;
+
+    public Boolean isRider() {
+        return isRider;
+    }
+
+    public void setIsRider(Boolean rider) {
+        isRider = rider;
+    }
+
+    public Integer getIsRiderCode() {
+        return isRider == true ? 1 : 0;
+    }
+
     public Long getRegularTime() {
         return regularTime;
     }
@@ -223,11 +237,15 @@ public class Staff {
     }
 
     public String getJobDesc() {
-    	return "需要修改";
+        return "需要修改";
         //return SystemCodeUtil.getCodeVal(this.merchantId, "job", this.job);
     }
 
     public String getStatusDesc() {
         return this.status.getDesc();
+    }
+
+    public Integer getStatusCode() {
+        return this.status.getCode();
     }
 }

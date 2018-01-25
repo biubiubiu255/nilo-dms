@@ -21,7 +21,7 @@ public interface RoleDao extends BaseDao<Long, RoleDO> {
      *
      * @return
      */
-    List<RoleDO> findAllRoles(Long merchantId);
+    List<RoleDO> findBy(@Param("merchantId")Long merchantId,@Param("roleName")String roleName,@Param("status") Integer status);
 
 
     /**

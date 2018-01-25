@@ -68,7 +68,7 @@ public class StaffController extends BaseController {
 
     @RequestMapping(value = "/editStaff.html", method = RequestMethod.POST)
     @ResponseBody
-    public String editStaff(Model model, Staff staff, String employTimeDate, Integer staffStatus) {
+    public String editStaff(Model model, Staff staff, String employTimeDate, Integer staffStatus, Integer isRiderCode) {
         try {
             Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 
@@ -79,7 +79,7 @@ public class StaffController extends BaseController {
             staff.setEmployTime(employTime);
             StaffStatusEnum statusEnum = StaffStatusEnum.getEnum(staffStatus);
             staff.setStatus(statusEnum);
-
+            staff.setIsRider(isRiderCode != null);
             staffService.updateStaff(me.getMerchantId(), staff);
         } catch (Exception e) {
             logger.error("editStaff Failed. ", e);
@@ -91,7 +91,7 @@ public class StaffController extends BaseController {
 
     @RequestMapping(value = "/addStaff.html", method = RequestMethod.POST)
     @ResponseBody
-    public String addStaff(Model model, Staff staff, String employTimeDate, Integer staffStatus) {
+    public String addStaff(Model model, Staff staff, String employTimeDate, Integer staffStatus, Integer isRiderCode) {
         try {
             Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
             staff.setCompanyId(me.getCompanyId());
@@ -100,7 +100,7 @@ public class StaffController extends BaseController {
             staff.setEmployTime(employTime);
             StaffStatusEnum statusEnum = StaffStatusEnum.getEnum(staffStatus);
             staff.setStatus(statusEnum);
-
+            staff.setIsRider(isRiderCode != null);
             staffService.addStaff(me.getMerchantId(), staff);
         } catch (Exception e) {
             logger.error("editStaff Failed. ", e);

@@ -51,7 +51,7 @@ public class AuthenticationFilter extends FormAuthenticationFilter {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         
         //通过当前uri和Principal中授权的url比较，判断是否有权限
-        if(me!=null) {
+        if(me!=null && uri.indexOf("api")!=-1) {
         	List<String> urlAuthorities = me.getUrlAuthorities();
             if(Constant.ALLOW_URL.indexOf(uri)==-1&&urlAuthorities.indexOf(uri)==-1&&urlAuthorities.indexOf(uri2)==-1) {
             	//ErrorCode resutlCode = DEFAULT_ERROR_KEY_ATTRIBUTE_NAME

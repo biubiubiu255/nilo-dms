@@ -13,7 +13,7 @@
 <div class="layui-row">
 <div class="layui-row">
         <div class="layui-col-md5">
-            <shiro:hasPermission name="400011">
+            <%-- <shiro:hasPermission name="400011">
                 <button class="layui-btn layui-btn-normal btn-add">Add</button>
             </shiro:hasPermission>
             <shiro:hasPermission name="400012">
@@ -27,7 +27,7 @@
                 <button class="layui-btn layui-btn-normal btn-export"><i class="fa fa-cloud-download"
                                                                          aria-hidden="true"></i>Template
                 </button>
-            </shiro:hasPermission>
+            </shiro:hasPermission> --%>
             <shiro:hasPermission name="400016">
             <button class="layui-btn btn-search">Search
                 </button>
@@ -99,13 +99,13 @@
             <th lay-data="{fixed: 'left',field:'orderNo', width:250}">OrderNo</th>
             <th lay-data="{field:'orderType', width:100}">OrderType</th>
             <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
+            <th lay-data="{field:'statusDesc', width:100}">Status</th>
             <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.orderTime) }}</div>'}">
                 OrderTime
             </th>
             <th lay-data="{field:'country', width:100}">Country</th>
             <th lay-data="{field:'weight', width:100}">Weight</th>
             <th lay-data="{field:'goodsType', width:120}">GoodsType</th>
-            <th lay-data="{field:'statusDesc', width:100}">Status</th>
             <th lay-data="{field:'receiverInfo', width:150,templet: '<div>{{d.receiverInfo.receiverName}}</div>' }">
                 Receiver
                 Name
@@ -120,11 +120,7 @@
             <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
                 Create Time
             </th>
-            <th lay-data="{field:'userdefine01', width:150}">UserDefine01</th>
-            <th lay-data="{field:'userdefine02', width:150}">UserDefine02</th>
-            <th lay-data="{field:'userdefine03', width:150}">UserDefine03</th>
-            <th lay-data="{field:'userdefine04', width:150}">UserDefine04</th>
-            <th lay-data="{field:'userdefine05', width:150}">UserDefine05</th>
+            
             <th lay-data="{title:'Image', width:100,templet:'<div>{{ showImageView(d.orderNo) }}</div>'}">Image</th>
             <th lay-data="{title:'Opt',fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
         </tr>

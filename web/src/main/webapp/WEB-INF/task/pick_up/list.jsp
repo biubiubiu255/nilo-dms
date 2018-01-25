@@ -7,6 +7,17 @@
 %>
 <body>
 <div class="box-body">
+    <div class="layui-row">
+        <div class="layui-col-md3">
+            <!-- <button class="layui-btn layui-btn-normal print"><i class="fa fa-print" aria-hidden="true"> </i>Print
+            </button> -->
+            <button class="layui-btn btn-search">Search</button>
+        </div>
+    </div>
+    
+<div class="layui-collapse" >
+<div class="layui-colla-item">
+    <div class="layui-colla-content ">
     <div class="layui-form layui-row">
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">OrderNo:</label>
@@ -19,33 +30,29 @@
             <div class="layui-form-item layui-inline" style="margin: 0px">
                 <select lay-filter="taskStatus" multiple name="taskStatus">
                     <option value="">Pls select Status...</option>
-                    <option value=0>Create</option>
-                    <option value=10>Process</option>
-                    <option value=20>Complete</option>
+                    <option value=1>Create</option>
+                    <option value=2>Process</option>
+                    <option value=3>Complete</option>
                 </select>
             </div>
         </div>
         <div class="layui-col-md1">
-            <%--<shiro:hasPermission name="600031">--%>
-                <button class="layui-btn layui-btn-normal search">Search</button>
-            <%--</shiro:hasPermission>--%>
+             <button class="layui-btn layui-btn-normal search">Search</button>
         </div>
     </div>
-    <hr>
-    <div class="layui-row">
-        <div class="layui-col-md3">
-            <button class="layui-btn layui-btn-normal print"><i class="fa fa-print" aria-hidden="true"> </i>Print
-            </button>
         </div>
     </div>
+    
+</div>
+
 
     <table class="layui-table" lay-data="{ url:'/task/pickup/list.html', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
             <th lay-data="{checkbox:true, fixed: true}"></th>
-            <th lay-data="{fixed:'left',field:'orderNo', width:250}">OrderNo</th>
-            <th lay-data="{fixed:'left',field:'referenceNo', width:200,templet: '<div>{{d.deliveryOrder.referenceNo}}</div>'}">
+            <th lay-data="{fixed:'left',field:'orderNo', width:200}">OrderNo</th>
+            <th lay-data="{field:'referenceNo', width:200,templet: '<div>{{d.deliveryOrder.referenceNo}}</div>'}">
                 ReferenceNo
             </th>
             <th lay-data="{field:'statusDesc', width:150}">Task Status</th>
@@ -57,36 +64,29 @@
             <th lay-data="{field:'goodsType', width:120,templet: '<div>{{d.deliveryOrder.goodsType}}</div>'}">
                 GoodsType
             </th>
-            <th lay-data="{field:'remark', width:100}">Remark</th>
-            <th lay-data="{field:'name', width:150,templet: '<div>{{d.deliveryOrder.receiverInfo.name}}</div>' }">
+            
+            <th lay-data="{field:'name', width:150,templet: '<div>{{d.deliveryOrder.receiverInfo.receiverName}}</div>' }">
                 Receiver
                 Name
             </th>
-            <th lay-data="{field:'contactNumber', width:150,templet: '<div>{{d.deliveryOrder.receiverInfo.contactNumber}}</div>' }">
+            <th lay-data="{field:'contactNumber', width:150,templet: '<div>{{d.deliveryOrder.receiverInfo.receiverPhone}}</div>' }">
                 Receiver Phone
             </th>
-            <th lay-data="{field:'address', width:150,templet: '<div>{{d.deliveryOrder.receiverInfo.address}}</div>' }">
+            <th lay-data="{field:'address', width:150,templet: '<div>{{d.deliveryOrder.receiverInfo.receiverAddress}}</div>' }">
                 Receiver
                 Address
             </th>
 
-            <th lay-data="{field:'userdefine01', width:150}">UserDefine01</th>
-            <th lay-data="{field:'userdefine02', width:150}">UserDefine02</th>
-            <th lay-data="{field:'userdefine03', width:150}">UserDefine03</th>
-            <th lay-data="{field:'userdefine04', width:150}">UserDefine04</th>
-            <th lay-data="{field:'userdefine05', width:150}">UserDefine05</th>
-
-            <th lay-data="{title:'opt',fixed: 'right', width:350, align:'center', toolbar: '#barDemo'}"></th>
+            <th lay-data="{title:'opt',fixed: 'right', width:220, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
         </thead>
     </table>
 </div>
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="transfer">Transfer</a>
-    <a class="layui-btn layui-btn-normal layui-btn-mini  " lay-event="goToPickup">Go to Pickup</a>
-    <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="pickup">Pickup</a>
-    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="pickupFailed">Pickup Failed</a>
+    
+    <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="pickup">Success</a>
+    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="pickupFailed">Failed</a>
 
 </script>
 
@@ -130,6 +130,12 @@
 
             $('.search').on('click', function () {
                 reloadTable();
+            });
+            $(".btn-search").on("click", function () {
+            	$(".layui-colla-content").toggleClass("layui-show");
+            	$(".btn-search").toggleClass("layui-btn-warm");
+            })
+            layui.use(['element'], function () {
             });
 
         });

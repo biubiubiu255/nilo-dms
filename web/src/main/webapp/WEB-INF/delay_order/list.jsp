@@ -24,24 +24,13 @@
                 <input type="text" class="layui-input" id="toCreatedTime" placeholder="To">
             </div>
         </div>
-    </div>
-    <div class="layui-row">
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label" style="width:110px">Status:</label>
-            <div class="layui-form layui-inline" style="margin: 0px">
-                <select lay-filter="abnormalStatus" name="abnormalStatus">
-                    <option value="">Pls select Status...</option>
-                    <option value=0>Create</option>
-                    <option value=90>Complete</option>
-                </select>
-            </div>
-        </div>
-        <div class="layui-col-md1">
+        <div class="layui-col-md1 layui-col-lg1">
             <shiro:hasPermission name="400022">
                 <button class="layui-btn layui-btn-normal search">Search</button>
             </shiro:hasPermission>
         </div>
     </div>
+
     <hr>
 
     <table class="layui-table"

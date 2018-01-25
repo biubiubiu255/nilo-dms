@@ -35,11 +35,10 @@
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed: 'left',field:'userId', width:200}">ID</th>
-            <th lay-data="{field:'userName', width:200,templet: '<div>{{d.loginInfo.userName}}</div>'}">UserName</th>
-            <th lay-data="{field:'name', width:200,templet: '<div>{{d.userInfo.name}}</div>'}">Name</th>
-            <th lay-data="{field:'email', width:200,templet: '<div>{{d.userInfo.email}}</div>'}">Email</th>
-            <th lay-data="{field:'phone', width:200,templet: '<div>{{d.userInfo.phone}}</div>'}">phone</th>
+            <th lay-data="{fixed: 'left',field:'userName', width:100,templet: '<div>{{d.loginInfo.userName}}</div>'}">UserName</th>
+            <th lay-data="{field:'name', width:150,templet: '<div>{{d.userInfo.name}}</div>'}">Name</th>
+            <th lay-data="{field:'email', width:150,templet: '<div>{{d.userInfo.email}}</div>'}">Email</th>
+            <th lay-data="{field:'phone', width:150,templet: '<div>{{d.userInfo.phone}}</div>'}">phone</th>
             <th lay-data="{field:'statusCode', width:100,templet:'<div>{{ formatUserStatus(d.loginInfo.statusCode) }}</div>'}">
                 Status
             </th>
@@ -212,6 +211,7 @@
                         type: 1,
                         title: title,
                         area: ['800px'],
+                        offset: ['100px', '250px'],
                         content: data
                     });
                 }
@@ -231,6 +231,7 @@
                         type: 1,
                         title: title,
                         area: ['800px'],
+                        offset: ['100px', '250px'],
                         content: data
                     });
                 }

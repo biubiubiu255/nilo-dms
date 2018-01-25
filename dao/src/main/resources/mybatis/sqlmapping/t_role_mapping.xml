@@ -54,11 +54,17 @@
 
 
 
-    <select id="findAllRoles" resultMap="roleDo" statementType="PREPARED">
+    <select id="findBy" resultMap="roleDo" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_sys_role
         WHERE merchant_id=#{merchantId}
+        <if test="roleName != null and roleName != ''">
+            and role_Name like CONCAT( CONCAT('%',#{roleName}),'%')
+        </if>
+        <if test="status != null ">
+            and status = #{status}
+        </if>
     </select>
 
     <select id="queryById" resultMap="roleDo" statementType="PREPARED">

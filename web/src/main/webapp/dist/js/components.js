@@ -4,19 +4,22 @@
  * with event handling
  */
 
-function reloadCurrentPage(){
+function reloadCurrentPage() {
     $(".layui-laypage-btn")[0].click();
 }
 /*日期格式*/
 function formatSex(sex) {
     if (!sex) return '';
-    return sex =='1'?'Male':'Female';
+    return sex == '1' ? 'Male' : 'Female';
 }
 
 /*日期格式*/
-function formatDate(time) {
+function formatDate(time, format) {
     if (!time) return '';
-    return (new Date(time * 1000)).format("YYYY-MM-DD HH:mm:ss");
+    if (!format) {
+        format = "YYYY-MM-DD HH:mm:ss"
+    }
+    return (new Date(time * 1000)).format(format);
 }
 
 function getDiffTime(time) {
@@ -103,11 +106,9 @@ function showGatewayType(value) {
 }
 
 function showImageView(orderNo, imageType) {
-
     if (imageType) {
         imageType = "";
     }
-
     return '<a href="#" onclick="openImage(\'' + orderNo + '\',' + imageType + ')">View</a>';
 }
 
@@ -124,7 +125,7 @@ function openImage(orderNo, imageType) {
             layer.open({
                 type: 1,
                 title: "Image",
-                area: ['680px', '680px'],
+                area: ['480px', '480px'],
                 content: data,
                 end: function () {
                 }

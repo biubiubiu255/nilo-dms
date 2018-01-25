@@ -4,6 +4,7 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.TaskStatusEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.TaskService;
@@ -95,10 +96,10 @@ public class DispatchTaskController extends BaseController {
         String merchantId = me.getMerchantId();
 
         //获取快递员列表，排除自己
-        List<UserInfo> list = getRiderList(merchantId);
-        Iterator<UserInfo> iterator = list.iterator();
+        List<StaffDO> list = getRiderList(me.getCompanyId());
+        Iterator<StaffDO> iterator = list.iterator();
         while (iterator.hasNext()) {
-            if (StringUtil.equals(me.getUserId(), iterator.next().getUserId())) {
+            if (StringUtil.equals(me.getUserId(), "" + iterator.next().getUserId())) {
                 iterator.remove();
             }
         }

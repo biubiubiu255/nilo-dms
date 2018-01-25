@@ -15,6 +15,9 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import com.nilo.dms.dao.StaffDao;
+import com.nilo.dms.dao.dataobject.StaffDO;
+import com.nilo.dms.service.org.model.Staff;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
@@ -45,12 +48,8 @@ public class BaseController {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private UserInfoDao userInfoDao;
+    private StaffDao staffDao;
 
-    
-    
-   
-    
     protected boolean isMobile(HttpServletRequest request) {
         String userAgentStr = request.getHeader("user-agent");
         UserAgent ua = UserAgent.parseUserAgentString(userAgentStr);
@@ -141,16 +140,9 @@ public class BaseController {
         return new Pagination(offset, limit);
     }
 
-    protected List<UserInfo> getRiderList(String merchantId) {
-        List<UserInfoDO> userList = userInfoDao.findUserByRoleName(Long.parseLong(merchantId), "Rider");
-        List<UserInfo> list = new ArrayList<>();
-        for (UserInfoDO d : userList) {
-            UserInfo userInfo = new UserInfo();
-            userInfo.setUserId("" + d.getId());
-            userInfo.setName(d.getName());
-            list.add(userInfo);
-        }
-        return list;
+    protected List<StaffDO> getRiderList(String companyId) {
+        List<StaffDO> riderList = staffDao.queryAllRider(Long.parseLong(companyId));
+        return riderList;
     }
 
     protected void setProperty(Field field, String value, Object obj) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
