@@ -41,16 +41,7 @@
                 jdbcType="VARCHAR"/>
         <result property="networkId" column="network_Id" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="userdefine01" column="userdefine01" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="userdefine02" column="userdefine02" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="userdefine03" column="userdefine03" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="userdefine04" column="userdefine04" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="userdefine05" column="userdefine05" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
+
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
@@ -60,7 +51,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, merchant_id,network_Id,order_no ,order_type,service_Type,fetch_type,fetch_time,fetch_address,reference_No , weight,goods_type, order_time,country ,total_price,order_platform,status,userdefine01,userdefine02,userdefine03,userdefine04,userdefine05, created_time , updated_time ,version
+        id, merchant_id,network_Id,order_no ,order_type,service_Type,fetch_type,fetch_time,fetch_address,reference_No , weight,goods_type, order_time,country ,total_price,order_platform,status, created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -68,9 +59,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_waybill
-        ( merchant_id,network_Id,order_no ,order_type, service_type,reference_No , weight,goods_type, fetch_type,fetch_time,fetch_address,order_time,country ,total_price,order_platform,status,userdefine01,userdefine02,userdefine03,userdefine04,userdefine05, created_time , updated_time ,version)
+        ( merchant_id,network_Id,order_no ,order_type, service_type,reference_No , weight,goods_type, fetch_type,fetch_time,fetch_address,order_time,country ,total_price,order_platform,status, created_time , updated_time ,version)
         VALUES
-        ( #{merchantId},#{networkId},#{orderNo}, #{orderType},#{serviceType}, #{referenceNo},#{weight},#{goodsType},#{fetchType},#{fetchTime},#{fetchAddress},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status},#{userdefine01},#{userdefine02},#{userdefine03},#{userdefine04},#{userdefine05} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        ( #{merchantId},#{networkId},#{orderNo}, #{orderType},#{serviceType}, #{referenceNo},#{weight},#{goodsType},#{fetchType},#{fetchTime},#{fetchAddress},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
 

@@ -60,12 +60,6 @@
         </if>
     </select>
 
-    <select id="findUserByRoleName" resultMap="userInfoDO" statementType="PREPARED"
-            parameterType="map">
-        select u.id,u.`name` from t_sys_user_role r left join t_sys_role  r1 on r.role_id = r1.id
-        left join t_sys_user_info u on r.user_id = u.id
-        where u.merchant_id= #{merchantId} and r1.role_name = #{roleName}
-    </select>
 
     <update id="update" parameterType="com.nilo.dms.dao.dataobject.UserInfoDO" statementType="PREPARED">
         update t_sys_user_info

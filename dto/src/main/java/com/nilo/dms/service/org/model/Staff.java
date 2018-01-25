@@ -50,6 +50,20 @@ public class Staff {
 
     private String address;
 
+    private Boolean isRider;
+
+    public Boolean isRider() {
+        return isRider;
+    }
+
+    public void setIsRider(Boolean rider) {
+        isRider = rider;
+    }
+
+    public Integer getIsRiderCode() {
+        return isRider == true ? 1 : 0;
+    }
+
     public Long getRegularTime() {
         return regularTime;
     }
