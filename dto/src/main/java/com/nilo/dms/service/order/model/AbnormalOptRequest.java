@@ -11,7 +11,7 @@ public class AbnormalOptRequest {
 
     private String abnormalNo;
 
-    private String handleType;
+    private AbnormalHandleTypeEnum handleType;
 
     private String remark;
 
@@ -43,11 +43,11 @@ public class AbnormalOptRequest {
         this.abnormalNo = abnormalNo;
     }
 
-    public String getHandleType() {
+    public AbnormalHandleTypeEnum getHandleType() {
         return handleType;
     }
 
-    public void setHandleType(String handleType) {
+    public void setHandleType(AbnormalHandleTypeEnum handleType) {
         this.handleType = handleType;
     }
 

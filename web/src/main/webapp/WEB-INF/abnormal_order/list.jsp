@@ -48,13 +48,10 @@
                 </div>
             </div>
             <div class="layui-col-md4 layui-col-lg3">
-                <label class="layui-form-label" >Status:</label>
+                <label class="layui-form-label" >Select All:</label>
                 <div class="layui-form-item layui-inline" style="margin: 0px">
-                    <select lay-filter="abnormalStatus" multiple name="abnormalStatus">
-                        <option value="">Pls select Status...</option>
-                        <option value=0>Create</option>
-                        <option value=90>Complete</option>
-                    </select>
+                    <input type="checkbox" name="all" title="" value="1"
+                           lay-skin="primary" >
                 </div>
             </div>
 
@@ -76,7 +73,7 @@
                 <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
                 <th lay-data="{field:'abnormalType', width:150}">Abnormal Type</th>
                 <th lay-data="{field:'statusDesc', width:100}">Status</th>
-                <th lay-data="{field:'handleType', width:150}">Handle Type</th>
+                <th lay-data="{field:'handleTypeDesc', width:150}">Handle Type</th>
                 <th lay-data="{field:'handleTime', width:170, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">
                     Handled Time
                 </th>
@@ -92,9 +89,6 @@
         </table>
 
         <script type="text/html" id="barDemo">
-            <shiro:hasPermission name="400022">
-                <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">Detail</a>
-            </shiro:hasPermission>
             <shiro:hasPermission name="400023">
                 <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="handle">Handle</a>
             </shiro:hasPermission>
@@ -147,7 +141,7 @@
                     orderNo: $("input[name='orderNo']").val(),
                     referenceNo: $("input[name='referenceNo']").val(),
                     type: $("select[name='type']").val(),
-                    abnormalStatus: $("select[name='abnormalStatus']").val(),
+                    all: $("input[name='all']:checked").val(),
                     fromCreatedTime: $("#fromCreatedTime").val(),
                     toCreatedTime: $("#toCreatedTime").val(),
                 }
@@ -164,8 +158,8 @@
                     parent.layer.open({
                         type: 1,
                         content: data,
-                        area: ['700px', '500px'],
-                        offset: ['100px', '200px'],
+                        area: ['800px','500px'],
+                        offset: ['100px', '250px'],
                         end: function () {
                             reloadCurrentPage();
                         }

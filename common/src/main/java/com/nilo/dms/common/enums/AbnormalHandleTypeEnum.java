@@ -7,8 +7,8 @@ import java.util.Map;
  * Created by ronny on 2017/8/22.
  */
 public enum AbnormalHandleTypeEnum implements EnumMessage {
-    RETURN("RT", "return"),
-    RESEND("RS", "resend"),;
+    RETURN("RT", "Return"),
+    RESEND("RS", "Continue shipping"),;
     private String code;
     private String desc;
 

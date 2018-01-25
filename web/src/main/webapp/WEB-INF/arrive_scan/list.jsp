@@ -12,14 +12,14 @@
 <body>
 <div class="box-body">
     <div class="layui-form layui-row">
-        <div class="layui-col-md3 layui-col-lg2">
+        <div class="layui-col-md4 layui-col-lg2">
             OrderNo：
             <div class="layui-inline">
                 <input class="layui-input" name="orderNo" autocomplete="off">
             </div>
         </div>
 
-        <div class="layui-col-md5 layui-col-lg4">
+        <div class="layui-col-md7 layui-col-lg4">
             ArrivedTime：
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromTime" placeholder="From">
@@ -52,7 +52,7 @@
             <th lay-data="{field:'orderType', width:100,templet: '<div>{{d.deliveryOrder.orderType}}</div>' }">
                 OrderType
             </th>
-            <th lay-data="{field:'referenceNo', width:100,templet: '<div>{{d.deliveryOrder.referenceNo}}</div>' }">
+            <th lay-data="{field:'referenceNo', width:250,templet: '<div>{{d.deliveryOrder.referenceNo}}</div>' }">
                 ReferenceNo
             </th>
             <th lay-data="{field:'country', width:100,templet: '<div>{{d.deliveryOrder.country}}</div>' }">
@@ -61,8 +61,8 @@
             <th lay-data="{field:'weight', width:100,templet: '<div>{{d.deliveryOrder.weight}}</div>' }">
                 Weight
             </th>
-            <th lay-data="{field:'goodsType', width:100,templet: '<div>{{d.deliveryOrder.goodsType}}</div>' }">
-                Weight
+            <th lay-data="{field:'goodsType', width:130,templet: '<div>{{d.deliveryOrder.goodsType}}</div>' }">
+                GoodsType
             </th>
             <th lay-data="{field:'createdTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
                 Arrive Time
