@@ -242,6 +242,9 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
                         update.setMerchantId(Long.parseLong(param.getMerchantId()));
                         update.setDelayTimes(delayDO.getDelayTimes() + 1);
                         deliveryOrderDelayDao.update(update);
+                        if(update.getDelayTimes()==MAX_DELAY_TIMES) {
+                        	//abnormalOrderService.addAbnormalOrder(abnormalOrder);
+                        }
                     }
 
                     //修改任务状态

@@ -41,7 +41,7 @@
     <div class="row">
         <div class="center-block" style="width:400px;">
 
-            <h1>Shipment List</h1>
+            <h4>Shipment List</h4>
 
             <h5 style="position:absolute;right: 10px;top: 20px;"> Date ${date_str}</h5>
         </div>
@@ -86,7 +86,7 @@
 	                        <td>${item.deliveryOrder.receiverInfo.receiverName}</td>
 	                        <td>${item.deliveryOrder.receiverInfo.receiverPhone}</td>
 	                        <td>${item.deliveryOrder.receiverInfo.receiverAddress}</td>
-	                        <td>${item.deliveryOrder.totalPrice}</td>
+	                        <td>0</td>
 	                   </tr>
                    </c:forEach> 
                 </tbody>
