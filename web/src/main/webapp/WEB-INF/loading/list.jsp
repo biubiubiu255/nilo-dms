@@ -65,7 +65,6 @@
             <%--
                         <th lay-data="{field:'truckType', width:150}">TruckType</th>
             --%>
-            <th lay-data="{field:'truckNo', width:150}">TruckNo</th>
             <th lay-data="{field:'loadingName', width:150,templet: '<div>{{d.loadingName}}</div>'}">LoadingBy</th>
             <th lay-data="{field:'loadingFromTime', width:170, templet:'<div>{{ formatDate(d.loadingFromTime) }}</div>'}">
                 LoadingFromTime

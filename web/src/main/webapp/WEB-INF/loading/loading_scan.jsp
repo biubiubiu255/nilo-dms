@@ -6,7 +6,6 @@
 <%@ include file="../common/header.jsp" %>
 <%
     request.setAttribute("id0", RandomStringUtils.randomAlphabetic(8));
-    request.setAttribute("nextStation", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "next_station"));
 %>
 <body>
 
@@ -23,38 +22,54 @@
         </div>
 
         <div class="layui-form-item">
+
+            <label class="layui-form-label" style="width:120px">Biz Type</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="bizType" value="1" title="Delivery" checked lay-filter="filter">
+                <input type="radio" name="bizType" value="2" title="Send" lay-filter="filter">
+            </div>
+
             <label class="layui-form-label" style="width:120px">Loading By</label>
             <div class="layui-input-inline">
                 <input type="text" name="loadingBy" value="${sessionScope.userName}" autocomplete="off"
                        class="layui-input layui-disabled" disabled>
             </div>
 
-            <label class="layui-form-label" style="width:120px">Next Station</label>
-            <div class="layui-input-inline">
-                <select name="nextStation" lay-verify="required" lay-search="" style="display: none">
-                    <option value="">choose or search....</option>
-                    <c:forEach items="${nextStation}" var="station">
-                        <option value="${station.code}">${station.value}</option>
-                    </c:forEach>
-                </select>
-            </div>
+
         </div>
 
         <div class="layui-form-item">
 
-            <label class="layui-form-label" style="width:120px">Rider</label>
-            <div class="layui-input-inline">
-                <select name="rider" id="rider" lay-verify="required" lay-search=""
-                        <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
-                    <option value="">choose or search....</option>
-                    <c:forEach items="${riderList}" var="rider">
-                        <option value="${rider.userId}"> ${rider.staffId}</option>
-                    </c:forEach>
-                </select></div>
+            <div class="deliveryDiv">
+                <label class="layui-form-label" style="width:120px">Rider</label>
+                <div class="layui-input-inline">
+                    <select name="deliveryRider" id="deliveryRider"  lay-search=""
+                            <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
+                        <option value="">choose or search....</option>
+                        <c:forEach items="${riderList}" var="rider">
+                            <option value="${rider.userId}"> ${rider.staffId}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
 
-            <label class="layui-form-label" style="width:120px">TruckNo</label>
-            <div class="layui-input-inline">
-                <input type="text" name="truckNo" value="" autocomplete="off" class="layui-input">
+            <div class="sendDiv" style="display: none">
+                <label class="layui-form-label" style="width:120px">Next Station</label>
+                <div class="layui-input-inline">
+                    <select name="nextStation"  lay-search="" lay-filter="nextStation" >
+                        <option value="">choose or search....</option>
+                        <c:forEach items="${nextStation}" var="station">
+                            <option value="${station.code}" type="${station.type}">${station.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+
+                <label class="layui-form-label" style="width:120px">Driver</label>
+                <div class="layui-input-inline">
+                    <select name="sendDriver" id="sendDriver"  lay-search="">
+                        <option value="">choose or search....</option>
+                    </select>
+                </div>
             </div>
 
             <label class="layui-form-label" style="width:120px">Quantity</label>
@@ -141,6 +156,20 @@
                     }
                 });
                 return false;
+            });
+
+            form.on('radio(filter)', function(data){
+                if(data.value=='1'){
+                    $(".deliveryDiv").show();
+                    $(".sendDiv").hide();
+                }else{
+                    $(".sendDiv").show();
+                    $(".deliveryDiv").hide();
+                }
+            });
+
+            form.on('select(nextStation)', function(data){
+                getNextStationDriver(data.value);
             });
 
         });
@@ -260,6 +289,26 @@
         $('.print').on('click', function () {
         	window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
         });
+
+        function getNextStationDriver(code) {
+            $.ajax({
+                type: "POST",
+                url: "/order/loading/getNextStationDriver.html",
+                dataType: "json",
+                data: { code: code },
+                success: function (data) {
+                    if (data.result) {
+                        $("#sendDriver").empty();
+                        $("#sendDriver").prepend("<option value='0'>choose or search....</option>");
+                        var driver = data.data;
+                        for (var i = 0; i < driver.length; i++) {
+                            $("#sendDriver").append("<option value='"+driver[i].code+"'>"+driver[i].name+"</option>");
+                        }
+                        form.render();
+                    }
+                }
+            });
+        }
     });
 </script>
 </body>

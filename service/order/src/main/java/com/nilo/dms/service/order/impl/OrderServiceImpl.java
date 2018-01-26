@@ -318,9 +318,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                             sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);*/
                         }
                         //记录操作日志
-                        addOptLog(optRequest, DeliveryOrderStatusEnum.getEnum(orderDO.getStatus()), DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
-
-
+                        addOptLog(optRequest,orderNo, DeliveryOrderStatusEnum.getEnum(orderDO.getStatus()), DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
                     }
 
                 } catch (Exception e) {
