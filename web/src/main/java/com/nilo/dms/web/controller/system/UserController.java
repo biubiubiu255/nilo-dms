@@ -9,24 +9,29 @@ import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.exception.SysErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.dao.UserNetworkDao;
+import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.RoleService;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.LoginInfo;
 import com.nilo.dms.service.model.Role;
 import com.nilo.dms.service.model.User;
 import com.nilo.dms.service.model.UserInfo;
+import com.nilo.dms.service.model.test.Express;
 import com.nilo.dms.service.system.DistributionNetworkService;
 import com.nilo.dms.service.system.model.DistributionNetwork;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Iterator;
@@ -48,11 +53,67 @@ public class UserController extends BaseController {
     @Autowired
     private DistributionNetworkService distributionNetworkService;
 
+    
+    
+    @ResponseBody
+    @RequestMapping(value = "/Test_ExpressList.html", method = RequestMethod.POST)
+    public String Test_getExpressList(String username) {
+
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();  //主要的，主体
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        Pagination page = getPage();
+        List<ThirdExpressDO> list = userService.findUserPageByExpresses(merchantId, 1L, page);
+        return toPaginationLayUIData(page, list);  //Pagination 页码
+    }
+    
+
+    
+    
+    @RequestMapping(value = "/Test_ExpressList.html", method = RequestMethod.GET)
+    public String Test_ExpressList(Model model) {
+        return "user/expressList";
+    }
+    
+    /*    二级分割线        */
+    
+    @RequestMapping(value = "/Test_addExpressPage.html", method = RequestMethod.GET)
+    public String Test_addExpressPage(Model model) {
+
+        return "user/addExpress";
+    }
+    
+    
+    //添加用户参数，以及写入
+    @ResponseBody
+    @RequestMapping(value = "/Test_addExpressInfo.html", method = RequestMethod.POST)
+    public void Test_addExpressInfo(@RequestParam("express_name") String eName, @RequestParam("express_code") String eCode) {
+    	ThirdExpressDO express = new ThirdExpressDO();
+    	
+    	express.setExpressCode(eCode);
+    	
+    	express.setExpressName(eName);
+    	
+    	express.setCreatedTime(Long.valueOf(System.currentTimeMillis()));
+    	
+    	
+ 
+        //System.out.println(express.getExpressName());
+        
+    }
+
+
+    
+    /*  ===========    Test 2018.01.29    ===============  */
+    
+    
+    
     @RequestMapping(value = "/list.html", method = RequestMethod.GET)
     public String list(Model model) {
         return "user/list";
     }
 
+    
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
     public String getUserList(String username) {
@@ -65,11 +126,16 @@ public class UserController extends BaseController {
         return toPaginationLayUIData(page, list);
     }
 
+    
+    
+    //修改密码
     @RequestMapping("/passwordView.html")
     public String passwordView(Model model) {
         return "user/passwordView";
     }
-
+    
+    
+    //添加字段页面
     @RequestMapping(value = "/addPage.html", method = RequestMethod.GET)
     public String addPage(Model model) {
 
@@ -86,6 +152,7 @@ public class UserController extends BaseController {
         return "user/add";
     }
 
+    //添加用户参数，以及写入
     @ResponseBody
     @RequestMapping(value = "/addUserInfo.html", method = RequestMethod.POST)
     public String addUserInfo(UserInfo userInfo, String userName, Long[] roleIds, Long[] networks) {

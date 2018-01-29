@@ -13,12 +13,14 @@ import com.nilo.dms.dao.RoleDao;
 import com.nilo.dms.dao.UserInfoDao;
 import com.nilo.dms.dao.UserLoginDao;
 import com.nilo.dms.dao.UserNetworkDao;
+import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.dao.dataobject.UserInfoDO;
 import com.nilo.dms.dao.dataobject.UserLoginDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.LoginInfo;
 import com.nilo.dms.service.model.User;
 import com.nilo.dms.service.model.UserInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
+import com.nilo.dms.dao.ThirdExpressDao;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +49,11 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TransactionTemplate transactionTemplate;
+    
+    @Autowired
+    private ThirdExpressDao ThirdExpressDao;
+    
+    
 
     @Override
     public void updateUserInfo(UserInfo userInfo) {
@@ -257,6 +266,9 @@ public class UserServiceImpl implements UserService {
         user.setLoginInfo(convert(loginDO));
         return user;
     }
+    
+    
+    
 
     @Override
     public UserInfo findUserInfoByUserId(String merchantId, String userId) {
@@ -375,4 +387,25 @@ public class UserServiceImpl implements UserService {
         }
         return loginDO;
     }
+
+	@Override
+	public List<ThirdExpressDO> findUserPageByExpresses(String merchantId,
+			Long id, Pagination pagination) {
+		
+        List<ThirdExpressDO> express = new ArrayList<ThirdExpressDO>();
+        
+        express = ThirdExpressDao.findByMerchantId(id);
+        
+        pagination.setTotalCount(express.size());
+        
+        return express;
+	}
+
+	@Override
+	public void addExpress(ThirdExpressDO express) {
+		
+		//ThirdExpressDao.
+	}
+
+
 }
