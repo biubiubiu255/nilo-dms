@@ -20,12 +20,6 @@
             </div>
         </div>
 
-        <div class="layui-form-item">
-            <label class="layui-form-label">merchantId</label>
-            <div class="layui-input-block">
-                <input type="text" name="merchantId" value="${resultDate.merchantId}" autocomplete="off" class="layui-input">
-            </div>
-        </div>
 
         <div class="layui-form-item">
             <div class="layui-input-block">
@@ -59,6 +53,7 @@
                             //失败，提交表单成功后，释放hold，如果不释放hold，就变成了只能提交一次的表单
                             layer.msg(data.msg, {icon: 2, time: 2000});
                         }
+                        reloadCurrentPage();
                     },
                     complete: function () {
                         layer.close(load);

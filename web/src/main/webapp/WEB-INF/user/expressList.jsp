@@ -35,12 +35,11 @@
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed: 'left',field:'id', width:100,templet: '<div>{{d.id}}</div>'}">No</th>
-            <th lay-data="{field:'expressName', width:150,templet: '<div>{{d.expressName}}</div>'}">expressName</th>
-            <th lay-data="{field:'expressCode', width:150,templet: '<div>{{d.expressCode}}</div>'}">expressCode</th>
-            <th lay-data="{field:'merchantId', width:150,templet: '<div>{{d.merchantId}}</div>'}">merchantId</th>
+            <th lay-data="{fixed: 'left',field:'id', width:100, align:'center', templet: '<div>{{d.id}}</div>'}">No</th>
+            <th lay-data="{field:'expressName', width:150, align:'center', templet: '<div>{{d.expressName}}</div>'}">expressName</th>
+            <th lay-data="{field:'expressCode', width:150, align:'center',templet: '<div>{{d.expressCode}}</div>'}">expressCode</th>
             <th lay-data="{field:'CreatedTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
-            <th lay-data="{title:'Opt',fixed: 'right', width:300, align:'center', toolbar: '#barDemo'}"></th>
+            <th lay-data="{title:'Opt',fixed: 'right', width:172, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
         </thead>
     </table>
@@ -51,12 +50,6 @@
         </shiro:hasPermission>
         <shiro:hasPermission name="300024">
             <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">Delete</a>
-        </shiro:hasPermission>
-        <shiro:hasPermission name="300025">
-            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="reset">Reset Password</a>
-        </shiro:hasPermission>
-        <shiro:hasPermission name="300026">
-            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="active">Active</a>
         </shiro:hasPermission>
     </script>
 </div>
@@ -230,7 +223,6 @@
                         offset: ['100px', '250px'],
                         content: data
                     });
-                    reloadCurrentPage();
                 }
             });
 

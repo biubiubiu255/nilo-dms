@@ -20,13 +20,6 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">merchantId</label>
-            <div class="layui-input-block">
-                <input type="text" name="merchantId" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="add-user">Submit</button>
                 <button type="reset" class="layui-btn layui-btn-primary reset">Reset</button>
