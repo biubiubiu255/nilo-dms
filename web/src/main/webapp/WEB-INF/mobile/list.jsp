@@ -18,15 +18,15 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="">
     <link rel="apple-touch-icon-precomposed" sizes="57x57" href="">
     <title>登录</title>
-    <link href="../mobile/css/cssdemo.css" type="text/css" rel="stylesheet" />
+    <link href="/mobile/css/cssdemo.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
 <div class="j_wap">
     <div class="j_dly">
-        <div class="j_dly_logo"><img src="../mobile/images/logo.png"><br/></div>
+        <div class="j_dly_logo"><img src="/mobile/images/logo.png"><br/></div>
 
         <form id="login-form" method="post">
-            <%--<p class="login-box-msg">Sign in to start your session</p>--%>
+
             <div class="j_dly_1">
                 <i class="j_dly_1i1"></i>
                 <div class="j_dly_2">
@@ -42,26 +42,27 @@
             <div class="j_dly_5">
                 <a href="" title="forget password?">forget password?</a>
             </div>
+            <p class="login-box-msg">Sign in to start your session</p>
             <div class="j_dly_33">
                 <input type="submit" value="log in" />
             </div>
         </form>
         </div>
     </div>
-<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
-<script src="../bootstrap/js/bootstrap.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
 <!-- iCheck -->
-<script src="../plugins/iCheck/icheck.min.js"></script>
+<script src="/plugins/iCheck/icheck.min.js"></script>
 <script>
     $('#login-form').submit(function () {
         $('.login-box-msg').html("Waiting...");
         var params = $(this).serialize();
-        $.post('/DemoController/test.html', params, function (resp) {
+        $.post('/mobile/DemoController/test.html', params, function (resp) {
             if (resp.result) {
 
                 // location.href = 'dashboard.html';
-                location.href = '/DemoController/toIndexPage.html';
+                location.href = '/mobile/DemoController/toIndexPage.html';
             } else {
                 $('.login-box-msg').html(resp.msg);
             }

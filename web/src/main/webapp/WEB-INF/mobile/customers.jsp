@@ -12,125 +12,90 @@
 <title></title>
 
 
-<link href="../mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
-<link href="../mobile/css/mp.css" type="text/css" rel="stylesheet" />
-<link href="../mobile/css/mps.css" type="text/css" rel="stylesheet" />
-<script src="../mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="../mobile/js/functions.js"></script>
-<script type="text/javascript" src="../mobile/js/mobile_valid.js"></script>
-<script type="text/javascript" src="../mobile/js/mobile.js"></script>
-
-<script type="text/javascript">
-	$(function(){
-		var mobile = new MobileData({
-			model : 'customers'
-			//,viewModel:'view_customers'
-			,templateId:'customers_tmplate'
-			,appendId:'append_customers_id'
-			//,controller:'../controller/customer.php'
-			,formId:'customers-form'
-			,autoLoad:false
-			,searchId:'customers-search'
-		});
-	});
-</script>
+<link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
+<link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
+<link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
+<script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/mobile/js/functions.js"></script>
+<script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
+<script type="text/javascript" src="/mobile/js/mobile.js"></script>
 </head>
 <body>
 
-<div class="wap_content"> 
-   <div class="wap_top"><a href="/DemoController/toIndexPage.html" title="返回" class="wap_top_back"></a>
-   <h2>Sign in</h2>
-   <a href="javascript:void(0)" class="top_button_add" id="customers-add-button"></a>   </div>
-   <div class="search_banner">
-        <div class="search_content" id="customers-search">
-            <div class="search_input">
-                <i></i>
-                <input type="text" class="search_input_field"/>
+<div class="wap_content">
+
+    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
+        <h2>Stranded Parcel</h2>
+    </div>
+
+    <div class="formula_modify">
+        <form id="myForm" class="layui-form" action="">
+            <div class="banner_content">
+                <ul class="one_banner">
+                    <li>
+                        <label>Logistics No</label>
+                        <input type="tel" id="waybillNumber" name="waybillNumber" class="input_value" />
+                        <span>scan</span>
+                    </li>
+                    <li><label>Signer</label><input type='text' id="recipient" class='input_value' name='recipient' /><span>Aquire</span></li>
+                    <li><label>ID No</label><input type='text' class='input_value' name='idNumber' /></li>
+                    <li>
+                        <label>Take a picture</label>
+                        <div class="xq input_value"><img src="/mobile/images/2300.jpg" /></div>
+                    </li>
+                </ul>
+                <div class="bottom_a_button"><a onclick="doFind()">submit</a></div>
             </div>
-            <div class="search_button"><input type="button" value="scanning" class="search_input_button submit"/></div>
-        </div>
-   </div>
-   <div class="banner_content">
-        <ul id = 'append_customers_id'>
-		
-		<li>
-          <!--<em></em> -->
-          <a href="javascript:void(0);">
-          <div class="banner_center">
-          	 <i>Recipient</i>
-            <h2>Order number</h2>
-            
-            <i>凌红/2016-09-06</i>
-            <a href="xq.xq.jsp">46284589115715841288</a>
-          </div>
-          </a>
-          <div class="banner_bottom">
-          <p><span style=" float:right;">state：<i style=" color:#2fb3e3">Have signed in</i></span>
-         <a href="javascript:void(0);" class="ckh_delete">delete</a> 
-          </p>
-          </div>
-         </li>
-		
-		</ul>
-        <div class="append_more"></div> 
-   </div>
-   
-   <div class="banner_content">
-        <ul id = 'append_customers_id'>
-		
-		<li>
-          <!--<em></em> -->
-          <a href="javascript:void(0);">
-          <div class="banner_center">
-          	 <i>Recipient</i>
-            <h2>Order number</h2>
-            
-            <i>梁辉棋/2016-09-06</i>
-            <a href="xq.xq.jsp">46284589115715841288</a>
-          </div>
-          </a>
-          <div class="banner_bottom">
-          <p><span style=" float:right;">state：<i style=" color:#2fb3e3">Have signed in</i></span>
-         <a href="javascript:void(0);" class="ckh_delete">delete</a>  
-          </p>
-          </div>
-         </li>
-		
-		</ul>
-        <div class="append_more"></div> 
-   </div>
-   
-   
-</div>   
-
- 
- 
-<form class="form_window" id="customers-form">
-<div class="form_content">
-		<div class="wap_top"><a href="javascript:void(0);"  onclick="$('#customers-form').hide();" class="wap_top_back"></a>
-	   <h2>New signing information</h2>
-	   </div>
-		<div class="banner_content">
-		<input type="hidden" name="id" />
-		<ul class="one_banner">
-		
-		<li><label>Waybill number</label><input type='text' maxlength='100' class='input_value' name='customers_address' /><span>scanning</span></li>
-		
-		<li><label>Recipient</label><input type='text' maxlength='13' class='input_value' name='customers_phone' /><span>Obtain</span></li>
-		<li><label>ID number</label><input type='text' maxlength='13' class='input_value' name='customers_fax' /></li>
-		
-		
-		<li>
-        		<label>Photograph</label>
-                <div class="xq input_value"><img src="../mobile/images/2300.jpg" /></div>
-        	</li>
-		
-		</ul> 
-		<div class="clear"></div>
-		</div>
-		<div class="bottom_a_button"><a href="javascript:void(0);" class="submit">submit</a></div>
+        </form>
+    </div>
+    <div>
+        <table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
+            <tr>
+                <td>Logistics No</td>
+                <td>Signer</td>
+                <td><input type="checkbox"></td>
+            </tr>
+        </table>
+    </div>
 </div>
-</form>  
 
+
+<script type="text/javascript">
+    function doFind() {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/mobile/SignScanController/test.html",
+            data: $('#myForm').serialize(),
+            async: false,
+            error: function () {
+                alert("发送请求失败！");
+            },
+            success: function () {
+                addTr2('tab', -1);
+            }
+        });
+    }
+
+    function addTr2(tab, row) {
+        var kuang1 = document.getElementById("waybillNumber")
+        var kuang2 = document.getElementById("recipient")
+        var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang2.value+ "</td><td><input type=\"checkbox\"></td></tr>";
+        addTr(tab, row, trHtml);
+    }
+
+
+    function addTr(tab, row, trHtml){
+        //获取table最后一行 $("#tab tr:last")
+        //获取table第一行 $("#tab tr").eq(0)
+        //获取table倒数第二行 $("#tab tr").eq(-2)
+        var $tr=$("#"+tab+" tr").eq(row);
+        if($tr.size()==0){
+            alert("指定的table id或行数不存在！");
+            return;
+        }
+        $tr.after(trHtml);
+    }
+</script>
 </body>
 </html>

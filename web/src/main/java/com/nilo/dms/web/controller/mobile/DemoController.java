@@ -1,4 +1,4 @@
-package com.nilo.dms.web.controller;
+package com.nilo.dms.web.controller.mobile;
 
 import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Principal;
@@ -8,6 +8,7 @@ import com.nilo.dms.common.utils.FileUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AreaDao;
 import com.nilo.dms.dao.dataobject.AreaDO;
+import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -29,7 +30,7 @@ import java.util.List;
  * Created by admin on 2017/11/22.
  */
 @Controller
-@RequestMapping("/DemoController")
+@RequestMapping("/mobile/DemoController")
 public class DemoController  extends BaseController {
 //    @Autowired
 //    private AreaDao areaDao;
@@ -65,10 +66,10 @@ private final Logger log = LoggerFactory.getLogger(getClass());
             log.error("Login Failed.account={}", token.getUsername());
             return toJsonErrorMsg(BizErrorCode.DISABLED_ACCOUNT.getDescription());
         }
-//        catch (Exception e) {
-//            log.error("Login Failed.account={}", token.getUsername());
-//            return toJsonErrorMsg(BizErrorCode.LOGIN_FAILED.getDescription());
-//        }
+        catch (Exception e) {
+            log.error("Login Failed.account={}", token.getUsername());
+            return toJsonErrorMsg(BizErrorCode.LOGIN_FAILED.getDescription());
+        }
         return toJsonTrueMsg();
     }
 
