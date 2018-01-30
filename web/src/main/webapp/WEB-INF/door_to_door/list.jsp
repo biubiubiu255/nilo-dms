@@ -58,9 +58,9 @@
             <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.orderTime) }}</div>'}">
                 OrderTime
             </th>
-            <th lay-data="{field:'fetchAddress', width:200}">Name</th>
-            <th lay-data="{field:'fetchAddress', width:200}">Phone</th>
-            <th lay-data="{field:'fetchAddress', width:200}">Fetch Address</th>
+            <th lay-data="{field:'fetchAddress', width:200,templet: '<div>{{d.senderInfo.senderName}}</div>'}">Name</th>
+            <th lay-data="{field:'fetchAddress', width:200,templet: '<div>{{d.senderInfo.senderPhone}}</div>'}">Phone</th>
+            <th lay-data="{field:'fetchAddress', width:200,templet: '<div>{{d.senderInfo.senderAddress}}</div>'}">Fetch Address</th>
             <th lay-data="{field:'weight', width:100}">Weight</th>
             <th lay-data="{field:'goodsType', width:120}">GoodsType</th>
             <th lay-data="{field:'statusDesc', width:100}">Status</th>
@@ -75,7 +75,6 @@
         </thead>
     </table>
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">Detail</a>
         <shiro:hasPermission name="400042">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="allocate">Allocate</a>
         </shiro:hasPermission>
@@ -154,10 +153,11 @@
                 data: {"orderNos": orderNos},
                 dataType: 'text',
                 success: function (data) {
-                    layer.open({
+                    parent.layer.open({
                         type: 1,
                         title: "Allocate Rider",
-                        area: ['600px', '300px'],
+                        area: ['800px','600px'],
+                        offset: ['100px', '250px'],
                         content: data,
                         end: function () {
                             reloadCurrentPage();

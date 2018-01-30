@@ -346,7 +346,11 @@ public class LoadingServiceImpl implements LoadingService {
                         task.setCreatedBy(optBy);
                         task.setOrderNo(details.getOrderNo());
                         task.setHandledBy(loadingDO.getRider());
-                        task.setTaskType(TaskTypeEnum.DISPATCH);
+                        if(StringUtil.isNotEmpty(loadingDO.getNextStation())) {
+                            task.setTaskType(TaskTypeEnum.SEND);
+                        }else{
+                            task.setTaskType(TaskTypeEnum.DISPATCH);
+                        }
                         taskService.addTask(task);
                     }
                     // 更新发运状态

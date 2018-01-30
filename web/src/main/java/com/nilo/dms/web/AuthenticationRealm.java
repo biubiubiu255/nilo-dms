@@ -6,7 +6,9 @@
 package com.nilo.dms.web;
 
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dao.UserNetworkDao;
 import com.nilo.dms.dao.dataobject.MenuDO;
+import com.nilo.dms.dao.dataobject.UserNetworkDO;
 import com.nilo.dms.service.RoleService;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.Role;
@@ -43,6 +45,8 @@ public class AuthenticationRealm extends AuthorizingRealm {
     private RoleService roleService;
     @Autowired
     private CompanyService companyService;
+    @Autowired
+    private UserNetworkDao userNetworkDao;
     @Override
     protected void onInit() {
         super.onInit();
@@ -74,8 +78,6 @@ public class AuthenticationRealm extends AuthorizingRealm {
                 }
                 
                 List<String> urlAuthorities = roleService.findUrlPermissionsByUserId(user.getUserId());
-                
-
                 List<String> authorities = roleService.findPermissionsByUserId(user.getUserId());
                 List<String> roles = new ArrayList<>();
                 List<Role> roleList = roleService.findRolesByUserId(user.getUserId());
@@ -86,6 +88,8 @@ public class AuthenticationRealm extends AuthorizingRealm {
                 }
                 Company company = companyService.findByMerchantId(user.getMerchantId());
 
+                List<UserNetworkDO> userNetworkDOList = userNetworkDao.queryByUserId(Long.parseLong(user.getUserId()));
+
                 Principal principal = new Principal();
                 principal.setUserId(user.getUserId());
                 principal.setUserName(user.getLoginInfo().getUserName());
@@ -94,6 +98,7 @@ public class AuthenticationRealm extends AuthorizingRealm {
                 principal.setAuthorities(authorities);
                 principal.setCompanyId(company.getCompanyId());
                 principal.setUrlAuthorities(urlAuthorities);
+                principal.setNetworks(getUserNetwork(userNetworkDOList));
 
                 return new SimpleAuthenticationInfo(principal, user.getLoginInfo().getPassword(), getName());
             }
@@ -119,6 +124,16 @@ public class AuthenticationRealm extends AuthorizingRealm {
             return info;
         }
         return info;
+    }
+
+    private List<String> getUserNetwork(List<UserNetworkDO> networkDOList){
+
+        if (networkDOList == null) return null;
+        List<String> list = new ArrayList<>();
+        for(UserNetworkDO networkDO : networkDOList){
+            list.add(""+networkDO.getDistributionNetworkId());
+        }
+        return list;
     }
 
 }

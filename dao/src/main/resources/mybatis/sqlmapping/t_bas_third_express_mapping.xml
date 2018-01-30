@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.ThirdExpressDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="expressDO" type="com.nilo.dms.dao.dataobject.ThirdExpressDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="expressCode" column="express_Code" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="expressName" column="express_Name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="merchantId" column="merchant_Id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="version" column="version" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="findByMerchantId" resultMap="expressDO" statementType="PREPARED">
+        SELECT
+        *
+        FROM t_bas_third_express where merchant_id=#{merchantId}
+    </select>
+
+</mapper>

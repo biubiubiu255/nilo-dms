@@ -48,6 +48,7 @@ public class ArriveScanController extends BaseController {
     @RequestMapping(value = "/arriveScanPage.html", method = RequestMethod.GET)
     public String arriveScanPage(Model model) {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+
         //获取merchantId
         String merchantId = me.getMerchantId();
         WaybillScanDO scanDO = new WaybillScanDO();

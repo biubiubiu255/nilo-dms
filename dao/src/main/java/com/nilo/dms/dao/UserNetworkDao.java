@@ -13,6 +13,8 @@ public interface UserNetworkDao extends BaseDao<Long, UserNetworkDO> {
 
     List<UserNetworkDO> queryByUserId(Long userId);
 
+    List<UserNetworkDO> queryByNetworkId(Long networkId);
+
     Integer deleteAll(Long userId);
 
     Integer insertAll(@Param("userId") Long userId, @Param("networks") Long[] networks);

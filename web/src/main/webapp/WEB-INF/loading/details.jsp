@@ -48,11 +48,7 @@
                         <option value="${rider.userId}"
                                 <c:if test="${rider.userId == loading.rider}">selected</c:if>> ${rider.staffId}</option>
                     </c:forEach>
-                </select></div>
-
-            <label class="layui-form-label" style="width:120px">TruckNo</label>
-            <div class="layui-input-inline">
-                <input type="text" name="truckNo" value="${loading.truckNo}" autocomplete="off" class="layui-input">
+                </select>
             </div>
 
             <label class="layui-form-label" style="width:120px">Quantity</label>

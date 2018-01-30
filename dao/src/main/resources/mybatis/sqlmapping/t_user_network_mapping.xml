@@ -35,6 +35,15 @@
         WHERE user_id=#{userId}
     </select>
 
+
+    <select id="queryByNetworkId" resultMap="UserNetworkDO" statementType="PREPARED"
+            parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_user_network
+        WHERE distribution_network_id=#{networkId}
+    </select>
+
     <delete id="deleteAll" parameterType="java.lang.Long" statementType="PREPARED">
         DELETE
          FROM t_sys_user_network

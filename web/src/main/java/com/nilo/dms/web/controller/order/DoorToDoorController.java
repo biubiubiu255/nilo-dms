@@ -49,15 +49,13 @@ public class DoorToDoorController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html")
-    public String getOrderList(DeliveryOrderParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes) {
+    public String getOrderList(DeliveryOrderParameter parameter) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
-        if (orderTypes != null && orderTypes.length > 0) {
-            parameter.setOrderType(Arrays.asList(orderTypes));
-        }
+        parameter.setOrderType(Arrays.asList(new String[]{"DS"}));
         Pagination page = getPage();
         List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
 

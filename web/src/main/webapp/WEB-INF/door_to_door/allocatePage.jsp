@@ -11,7 +11,7 @@
                 <select name="userId" lay-verify="required" lay-search="" style="display: none">
                     <option value="">choose or search....</option>
                     <c:forEach items="${list}" var="rider">
-                        <option value="${rider.userId}">${rider.staffId}</option>
+                        <option value="${rider.userId}">${rider.staffId}-${rider.nickName}</option>
                     </c:forEach>
                 </select>
 

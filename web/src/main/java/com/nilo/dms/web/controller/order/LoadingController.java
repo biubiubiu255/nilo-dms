@@ -1,11 +1,18 @@
 package com.nilo.dms.web.controller.order;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.nilo.dms.dao.*;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.StaffDO;
+import com.nilo.dms.dao.dataobject.ThirdDriverDO;
+import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.UserInfoDao;
 import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
@@ -37,11 +43,16 @@ public class LoadingController extends BaseController {
 
     @Autowired
     private LoadingService loadingService;
-
     @Autowired
     private OrderService orderService;
     @Autowired
-    private UserInfoDao userInfoDao;
+    private DistributionNetworkDao distributionNetworkDao;
+    @Autowired
+    private ThirdExpressDao thirdExpressDao;
+    @Autowired
+    private ThirdDriverDao thirdDriverDao;
+    @Autowired
+    private StaffDao staffDao;
 
     @RequestMapping(value = "/print.html")
     public String print(Model model, HttpServletRequest request) {
@@ -54,8 +65,7 @@ public class LoadingController extends BaseController {
         
         String temp_str="";     
         Date dt = new Date();     
-        //最后的aa表示“上午”或“下午”    HH表示24小时制    如果换成hh表示12小时制     
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");     
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         temp_str=sdf.format(dt); 
         
         model.addAttribute("date_str",temp_str);
@@ -87,6 +97,28 @@ public class LoadingController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         model.addAttribute("riderList", getRiderList(merchantId));
+
+        //第三方快递公司及自提点
+        List<ThirdExpressDO> expressDOList = thirdExpressDao.findByMerchantId(Long.parseLong(merchantId));
+        List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
+
+        List<NextStation> list = new ArrayList<>();
+        for(ThirdExpressDO e : expressDOList){
+            NextStation s = new NextStation();
+            s.setCode(e.getExpressCode());
+            s.setName(e.getExpressName());
+            s.setType("T");
+            list.add(s);
+        }
+        for(DistributionNetworkDO n:networkDOList){
+            NextStation s = new NextStation();
+            s.setCode(""+n.getId());
+            s.setName(n.getName());
+            s.setType("N");
+            list.add(s);
+        }
+        model.addAttribute("nextStation",list);
+
         return "loading/loading_scan";
     }
 
@@ -107,15 +139,25 @@ public class LoadingController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/addLoading.html")
-    public String addLoading(Loading loading) {
+    public String addLoading(Loading loading,String deliveryRider,String sendDriver) {
+
+
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         String loadingNo = "";
         try {
+            if(StringUtil.isEmpty(deliveryRider) && StringUtil.isEmpty(sendDriver)){
+                throw new IllegalArgumentException("Rider or Driver is empty.");
+            }
             loading.setMerchantId(merchantId);
             loading.setLoadingBy(me.getUserId());
+            if(StringUtil.isNotEmpty(deliveryRider)) {
+                loading.setRider(deliveryRider);
+            }else{
+                loading.setRider(sendDriver);
+            }
             loadingNo = loadingService.addLoading(loading);
         } catch (Exception e) {
             log.error("addLoading failed. loading:{}", loading, e);
@@ -204,5 +246,80 @@ public class LoadingController extends BaseController {
             return toJsonErrorMsg(e.getMessage());
         }
         return toJsonTrueMsg();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getNextStationDriver.html")
+    public String getNextStationDriver(String code) {
+
+        List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(code);
+        List<Driver> list = new ArrayList<>();
+        for(ThirdDriverDO d : thirdDriver){
+            Driver driver = new Driver();
+            driver.setCode(d.getDriverId());
+            driver.setName(d.getDriverName());
+            list.add(driver);
+        }
+        if(isInteger(code)) {
+            List<StaffDO> staffList = staffDao.queryNetworkStaff(Long.parseLong(code));
+            for(StaffDO s : staffList){
+                Driver driver = new Driver();
+                driver.setCode(""+s.getUserId());
+                driver.setName(s.getStaffId());
+                list.add(driver);
+            }
+        }
+        return toJsonTrueData(list);
+    }
+    private  boolean isInteger(String str) {
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        return pattern.matcher(str).matches();
+    }
+    public static class Driver{
+        private String code;
+        private String name;
+
+        public String getCode() {
+            return code;
+        }
+        public void setCode(String code) {
+            this.code = code;
+        }
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+    public static class NextStation{
+        private String code;
+        private String name;
+        private String type;
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
     }
 }
