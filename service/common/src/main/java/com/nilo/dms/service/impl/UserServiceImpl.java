@@ -394,7 +394,7 @@ public class UserServiceImpl implements UserService {
 		
         List<ThirdExpressDO> list = new ArrayList<ThirdExpressDO>();
         
-        list = ThirdExpressDao.findByMerchantId(express);
+        list = ThirdExpressDao.findByExpress(express);
         
         pagination.setTotalCount(list.size());
         

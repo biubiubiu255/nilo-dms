@@ -24,11 +24,12 @@ public class Constant {
     public static final String ADDRESS="address";
 
     public static final String ALLOW_URL="/dashboard.html,/home.html,/account/logout.html," +
-            "/DemoController/toLoginPage.html,/DemoController/toIndexPage.html,/DemoController/test.html," +
-            "/tiaozhuangController/customers.html,/tiaozhuangController/dshkqs.html,/tiaozhuangController/wtjlr.html," +
-            "/tiaozhuangController/zlj.html,/tiaozhuangController/pjqr.html,/tiaozhuangController/plzz.html," +
-            "/tiaozhuangController/djsm.html,/tiaozhuangController/pjsm.html,/tiaozhuangController/fjsm.html," +
-            "/tiaozhuangController/pc.html,/tiaozhuangController/zljpc.html,/tiaozhuangController/zlj2.html," +
-            "/tiaozhuangController/xgmm.html,/tiaozhuangController/wtjlr2.html";
+            "/mobile/DemoController/toLoginPage.html,/mobile/DemoController/toIndexPage.html,/mobile/DemoController/test.html," +
+            "/mobile/tiaozhuangController/customers.html,/mobile/tiaozhuangController/dshkqs.html,/mobile/tiaozhuangController/wtjlr.html," +
+            "/mobile/tiaozhuangController/zlj.html,/mobile/tiaozhuangController/pjqr.html,/mobile/tiaozhuangController/plzz.html," +
+            "/mobile/tiaozhuangController/djsm.html,/mobile/tiaozhuangController/pjsm.html,/mobile/tiaozhuangController/fjsm.html," +
+            "/mobile/tiaozhuangController/pc.html,/mobile/tiaozhuangController/zljpc.html,/mobile/tiaozhuangController/zlj2.html," +
+            "/mobile/tiaozhuangController/xgmm.html,/mobile/tiaozhuangController/wtjlr2.html,/mobile/DemoController/user.html," +
+            "/mobile/StrandedParcelController/test.html,/mobile/SignScanController/test.html";
 
 }

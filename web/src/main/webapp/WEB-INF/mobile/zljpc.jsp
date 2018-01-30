@@ -10,42 +10,34 @@
     <meta name="keywords" content="#" />
     <meta name="description" content="#" />
     <title></title>
-    <link href="../mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
-    <link href="../mobile/css/mp.css" type="text/css" rel="stylesheet" />
-    <link href="../mobile/css/mps.css" type="text/css" rel="stylesheet" />
-    <script src="../mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../mobile/js/functions.js"></script>
+    <link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
+    <link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
+    <link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
+    <script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/mobile/js/functions.js"></script>
 </head>
 <body>
+
 <div class="wap_content">
-    <div class="wap_top"><a href="/DemoController/toIndexPage.html" title="返回" class="wap_top_back"></a>
-        <h2>Detained piece inventory</h2>
-        <a href="index.php" title="审核全部" class="top_a_list_check"></a></div>
-     <div class="search_banner">
+    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="返回" class="wap_top_back"></a>
+        <h2>Stocktaking of Stranded Parcels</h2>
+    </div>
+    <div class="search_banner">
         <div class="search_content" id="customers-search">
             <div class="search_input">
                 <i></i>
-                <input type="text" placeholder="Please enter the name key of the detained piece" searchParam="customers_name like '%{keywords}%'" 
-					class="search_input_field keywords"/>
+                <input type="text" placeholder="Logistics No" class="search_input_field keywords"/>
             </div>
-            <div class="search_button"><input type="button" value="search" class="search_input_button submit"/></div>
+            <div class="search_button"><input type="button" value="submit" class="search_input_button submit"/></div>
         </div>
-   </div>
-    <div class="wap_tab_banner">
-        <span class="trun_left"><i></i></span>
-        <nav>
-            <div class="wap_tab_content" data-role="scroller">
-                <a title="6月19日" href="#">6月19日</a>
-                <a title="6月19日" href="#">6月19日</a>
-                <a title="6月19日" href="#">6月19日</a>
-                <a title="6月19日" href="#">6月19日</a>
-                <a title="6月19日" href="#">6月19日</a>
-                <a title="6月19日" href="#">6月19日</a>
-            </div>
-        </nav>
-        <span class="trun_right"><i></i></span>
     </div>
-
+</div>
+<div>
+    <table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
+        <tr>
+            <td>Logistics No</td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

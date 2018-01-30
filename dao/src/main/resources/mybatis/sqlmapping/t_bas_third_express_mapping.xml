@@ -30,12 +30,21 @@
 
     <select id="findByMerchantId" resultMap="expressDO" statementType="PREPARED">
 
+            SELECT
+	        *
+	        FROM t_bas_third_express where merchant_id = #{merchantId}
+    </select>
+    
+    <select id="findByExpress" resultMap="expressDO" statementType="PREPARED">
         <if test="expressName !=null and expressName !='' ">
 	        SELECT
 	        *
 	        FROM t_bas_third_express where express_name like CONCAT( CONCAT('%',#{expressName}),'%')
         </if> 
+
     </select>
+
+
 
 <!--     <select id="findBy" resultMap="userDO">
         SELECT

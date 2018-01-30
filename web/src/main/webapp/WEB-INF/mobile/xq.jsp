@@ -4,18 +4,18 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-	<link href="../mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
-	<link href="../mobile/css/mp.css" type="text/css" rel="stylesheet" />
-	<link href="../mobile/css/mps.css" type="text/css" rel="stylesheet" />
-	<script src="../mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-	<script type="text/javascript" src="../mobile/js/functions.js"></script>
-	<script type="text/javascript" src="../mobile/js/mobile_valid.js"></script>
-	<script type="text/javascript" src="../mobile/js/mobile.js"></script>
+	<link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
+	<link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
+	<link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
+	<script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/mobile/js/functions.js"></script>
+	<script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
+	<script type="text/javascript" src="/mobile/js/mobile.js"></script>
 	</head>
 	
 	<body>
 		<div class="wap_content">
-    <div class="wap_top"><a href="/DemoController/toIndexPage.html" title="返回" class="wap_top_back"></a>
+    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="返回" class="wap_top_back"></a>
         <h2></h2>
     </div>
     <div class="formula_modify">

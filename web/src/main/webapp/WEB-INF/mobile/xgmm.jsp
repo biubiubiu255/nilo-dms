@@ -12,15 +12,15 @@
     <!--<link rel="apple-touch-icon-precomposed" sizes="114x114" href="">
     <link rel="apple-touch-icon-precomposed" sizes="57x57" href="">-->
     <title></title>
-    <link href="../mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
-    <link href="../mobile/css/mp.css" type="text/css" rel="stylesheet" />
-    <link href="../mobile/css/mps.css" type="text/css" rel="stylesheet" />
-    <script src="../mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../mobile/js/functions.js"></script>
+    <link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
+    <link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
+    <link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
+    <script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/mobile/js/functions.js"></script>
 </head>
 <body>
 <div class="wap_content">
-    <div class="wap_top"><a href="/DemoController/toIndexPage.html" title="返回" class="wap_top_back"></a>
+    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="返回" class="wap_top_back"></a>
         <h2>Modify the password</h2>
 
     </div>
