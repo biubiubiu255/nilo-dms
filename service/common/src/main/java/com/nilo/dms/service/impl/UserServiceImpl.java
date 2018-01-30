@@ -390,21 +390,45 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<ThirdExpressDO> findUserPageByExpresses(String merchantId,
-			Long id, Pagination pagination) {
+			ThirdExpressDO express, Pagination pagination) {
 		
-        List<ThirdExpressDO> express = new ArrayList<ThirdExpressDO>();
+        List<ThirdExpressDO> list = new ArrayList<ThirdExpressDO>();
         
-        express = ThirdExpressDao.findByMerchantId(id);
+        list = ThirdExpressDao.findByMerchantId(express);
         
-        pagination.setTotalCount(express.size());
+        pagination.setTotalCount(list.size());
         
-        return express;
+        return list;
 	}
 
 	@Override
 	public void addExpress(ThirdExpressDO express) {
 		
-		//ThirdExpressDao.
+		ThirdExpressDao.addExpress(express);
+	}
+
+	@Override
+	public void updateExpress(ThirdExpressDO express) {
+		ThirdExpressDao.updateExpress(express);
+		
+	}
+
+	@Override
+	public void deleteExpress(ThirdExpressDO express) {
+		ThirdExpressDao.deleteExpress(express);
+		
+	}
+
+	@Override
+	public List<ThirdExpressDO> findExpressesAll(Pagination page) {
+		
+        List<ThirdExpressDO> list = new ArrayList<ThirdExpressDO>();
+        
+        list = ThirdExpressDao.findByMerchantIdAll();
+        
+        page.setTotalCount(list.size());
+	
+		return list;
 	}
 
 

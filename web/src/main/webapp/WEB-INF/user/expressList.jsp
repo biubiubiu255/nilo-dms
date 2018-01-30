@@ -10,9 +10,9 @@
 
     <div class="layui-form layui-row">
         <div class="layui-col-md4 layui-col-lg3">
-            UserName：
+            expressName：
             <div class="layui-inline">
-                <input class="layui-input" id="username" autocomplete="off">
+                <input class="layui-input" id="searchVal" autocomplete="off">
             </div>
         </div>
         <div class="layui-col-md1">
@@ -31,14 +31,15 @@
     </div>
 
     <table class="layui-table"
-           lay-data="{ url:'/admin/user/Test_ExpressList.html',method:'post', page:true,limit:10, id:'${id0}'}"
+           lay-data="{ url:'/admin/express/expressList.html',method:'post', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed: 'left',field:'userName', width:100,templet: '<div>{{d.expressName}}</div>'}">expressName</th>
-            <th lay-data="{field:'name', width:150,templet: '<div>{{d.expressCode}}</div>'}">expressCode</th>
-            <th lay-data="{field:'email', width:150,templet: '<div>{{d.merchantId}}</div>'}">merchantId</th>
-            <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
+            <th lay-data="{fixed: 'left',field:'id', width:100,templet: '<div>{{d.id}}</div>'}">No</th>
+            <th lay-data="{field:'expressName', width:150,templet: '<div>{{d.expressName}}</div>'}">expressName</th>
+            <th lay-data="{field:'expressCode', width:150,templet: '<div>{{d.expressCode}}</div>'}">expressCode</th>
+            <th lay-data="{field:'merchantId', width:150,templet: '<div>{{d.merchantId}}</div>'}">merchantId</th>
+            <th lay-data="{field:'CreatedTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
             <th lay-data="{title:'Opt',fixed: 'right', width:300, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
         </thead>
@@ -82,18 +83,18 @@
             //监听工具条
             table.on('tool(demo)', function (obj) {
                 var data = obj.data;
-                var userId = data.userId;
+
                 if (obj.event === 'edit') {
-                    editUser(userId);
+                    editUser(data);
                 }
                 if (obj.event === 'delete') {
-                    delUser(userId);
+                    delUser(data);
                 }
                 if (obj.event === 'active') {
-                    activeUser(userId);
+                    activeUser(data);
                 }
                 if (obj.event === 'reset') {
-                    resetPassword(userId);
+                    resetPassword(data);
                 }
             });
 
@@ -107,13 +108,13 @@
         var reloadTable = function (item) {
             table.reload("${id0}", {
                 where: {
-                    username: $("#username").val()
+                	expressName: $("#searchVal").val()
                 }
             });
         };
 
         $("button.add-user").on("click", function () {
-            addUser();
+        	addExpress();
         });
 
         function resetPassword(userId) {
@@ -141,7 +142,7 @@
             });
         }
 
-        function delUser(userId) {
+        function delUser(d) {
             //询问框
             layer.confirm('Confirm to delete?', {
                 btn: ['OK', 'Cancel']
@@ -149,10 +150,10 @@
             }, function () {
                 $.ajax({
                     type: "POST",
-                    url: "/admin/user/delUser.html",
+                    url: "/admin/express/deleExpressInfo.html",
                     dataType: "json",
                     data: {
-                        userId: userId
+                    	id: d.id
                     },
                     success: function (data) {
                         if (data.result) {
@@ -175,7 +176,7 @@
             }, function () {
                 $.ajax({
                     type: "POST",
-                    url: "/admin/user/activeUser.html",
+                    url: "/admin/express/activeUser.html",
                     dataType: "json",
                     data: {
                         userId: userId
@@ -193,9 +194,10 @@
             });
         }
 
-        function editUser(userId) {
-            var url = "/admin/user/editPage.html?userId=" + userId;
-            var title = "Edit User";
+        function editUser(d) {
+        	
+            var url = "/admin/express/editExpressInfoPage.html?id=" + d.id + "&expressCode=" + d.expressCode + "&expressName=" + d.expressName;
+            var title = "Edit Express";
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -213,9 +215,9 @@
 
         }
 
-        function addUser() {
-            var url = "/admin/user/Test_addExpressPage.html";
-            var title = "Add User";
+        function addExpress() {
+            var url = "/admin/express/addExpressPage.html";
+            var title = "Add Express";
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -228,6 +230,7 @@
                         offset: ['100px', '250px'],
                         content: data
                     });
+                    reloadCurrentPage();
                 }
             });
 

@@ -47,8 +47,14 @@ public interface UserService {
 
 	List<User> findByUserIds(String merchantId, List<String> userId);
 	
-	List<ThirdExpressDO> findUserPageByExpresses(String merchantId, Long id, Pagination pagination);
+	List<ThirdExpressDO> findUserPageByExpresses(String merchantId, ThirdExpressDO express, Pagination pagination);
+	
+	List<ThirdExpressDO> findExpressesAll(Pagination page);
 	
 	void addExpress(ThirdExpressDO express);
+	
+    void updateExpress(ThirdExpressDO express);
+    
+    void deleteExpress(ThirdExpressDO express);
 
 }

@@ -52,60 +52,6 @@ public class UserController extends BaseController {
 
     @Autowired
     private DistributionNetworkService distributionNetworkService;
-
-    
-    
-    @ResponseBody
-    @RequestMapping(value = "/Test_ExpressList.html", method = RequestMethod.POST)
-    public String Test_getExpressList(String username) {
-
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();  //主要的，主体
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        Pagination page = getPage();
-        List<ThirdExpressDO> list = userService.findUserPageByExpresses(merchantId, 1L, page);
-        return toPaginationLayUIData(page, list);  //Pagination 页码
-    }
-    
-
-    
-    
-    @RequestMapping(value = "/Test_ExpressList.html", method = RequestMethod.GET)
-    public String Test_ExpressList(Model model) {
-        return "user/expressList";
-    }
-    
-    /*    二级分割线        */
-    
-    @RequestMapping(value = "/Test_addExpressPage.html", method = RequestMethod.GET)
-    public String Test_addExpressPage(Model model) {
-
-        return "user/addExpress";
-    }
-    
-    
-    //添加用户参数，以及写入
-    @ResponseBody
-    @RequestMapping(value = "/Test_addExpressInfo.html", method = RequestMethod.POST)
-    public void Test_addExpressInfo(@RequestParam("express_name") String eName, @RequestParam("express_code") String eCode) {
-    	ThirdExpressDO express = new ThirdExpressDO();
-    	
-    	express.setExpressCode(eCode);
-    	
-    	express.setExpressName(eName);
-    	
-    	express.setCreatedTime(Long.valueOf(System.currentTimeMillis()));
-    	
-    	
- 
-        //System.out.println(express.getExpressName());
-        
-    }
-
-
-    
-    /*  ===========    Test 2018.01.29    ===============  */
-    
     
     
     @RequestMapping(value = "/list.html", method = RequestMethod.GET)

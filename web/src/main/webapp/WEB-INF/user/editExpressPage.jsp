@@ -3,32 +3,33 @@
 
 <div class="box-body">
     <form id="myForm" class="layui-form" action="">
-        <!-- <input type="hidden" name="merchantId" value="0"> -->
+    
+        <input type="hidden" name="id" value="${resultDate.id}">
 
         <div class="layui-form-item">
             <label class="layui-form-label">expressName</label>
             <div class="layui-input-block">
-                <input type="text" name="expressName" autocomplete="off" class="layui-input">
+                <input type="text" name="expressName" value="${resultDate.expressName}" autocomplete="off" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">expressCode</label>
             <div class="layui-input-block">
-                <input type="text" name="expressCode" autocomplete="off" class="layui-input">
+                <input type="text" name="expressCode" value="${resultDate.expressCode}" autocomplete="off" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">merchantId</label>
             <div class="layui-input-block">
-                <input type="text" name="merchantId" autocomplete="off" class="layui-input">
+                <input type="text" name="merchantId" value="${resultDate.merchantId}" autocomplete="off" class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="add-user">Submit</button>
+                <button class="layui-btn" lay-submit lay-filter="add-express">Submit</button>
                 <button type="reset" class="layui-btn layui-btn-primary reset">Reset</button>
             </div>
         </div>
@@ -41,10 +42,10 @@
             var form = layui.form;
             form.render();
             //监听提交
-            form.on('submit(add-user)', function (data) {
+            form.on('submit(add-express)', function (data) {
                 var load = layer.load(2);
                 $.ajax({
-                    url: "/admin/express/addExpressInfo.html",
+                    url: "/admin/express/editExpressInfo.html",
                     data: $("#myForm").serialize(),
                     type: "POST",
                     dataType: "json",
