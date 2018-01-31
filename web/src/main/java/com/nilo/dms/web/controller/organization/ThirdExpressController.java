@@ -1,4 +1,4 @@
-package com.nilo.dms.web.controller.system;
+package com.nilo.dms.web.controller.organization;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.RoleStatusEnum;
@@ -42,7 +42,7 @@ import static org.apache.shiro.web.filter.mgt.DefaultFilter.user;
 
 @Controller
 @RequestMapping("/admin/express")
-public class MeanExpressController extends BaseController {
+public class ThirdExpressController extends BaseController {
 
     @Autowired
     private UserService userService;
@@ -79,7 +79,7 @@ public class MeanExpressController extends BaseController {
     
     @RequestMapping(value = "/expressList.html", method = RequestMethod.GET)
     public String expressList(Model model) {
-        return "user/expressList";
+        return "express/expressList";
     }
     
     /*    二级分割线        */
@@ -87,7 +87,7 @@ public class MeanExpressController extends BaseController {
     @RequestMapping(value = "/addExpressPage.html", method = RequestMethod.GET)
     public String addExpressPage(Model model) {
 
-        return "user/addExpress";
+        return "express/addExpress";
     }
     
     
@@ -121,7 +121,7 @@ public class MeanExpressController extends BaseController {
     	
     	//model.addAttribute("nowDate", list);
     	
-    	return "user/editExpressPage";
+    	return "express/editExpressPage";
     }
     
     @ResponseBody
