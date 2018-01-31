@@ -12,140 +12,73 @@
 <title>业务员功能</title>
 
 
-<link href="../mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
-<link href="../mobile/css/mp.css" type="text/css" rel="stylesheet" />
-<link href=../mobile/"css/mps.css" type="text/css" rel="stylesheet" />
-<script src="../mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="../mobile/js/functions.js"></script>
-<script type="text/javascript" src="../mobile/js/mobile_valid.js"></script>
-<script type="text/javascript" src="../mobile/js/mobile.js"></script>
-<script type="text/javascript">
-	$(function(){
-		var mobile = new MobileData({
-			model : 'customers'
-			//,viewModel:'view_customers'
-			,templateId:'customers_tmplate'
-			,appendId:'append_customers_id'
-			,controller:'../controller/customer.php'
-			,formId:'customers-form'
-			,autoLoad:false
-			,searchId:'customers-search'
-		});
-	});
-</script>
+<link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
+<link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
+<link href=/mobile/"css/mps.css" type="text/css" rel="stylesheet" />
+<script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/mobile/js/functions.js"></script>
+<script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
+<script type="text/javascript" src="/mobile/js/mobile.js"></script>
 </head>
 <body>
 
-<div class="wap_content"> 
-   <div class="wap_top"><a href="/DemoController/toIndexPage.html" title="返回" class="wap_top_back"></a>
-   <h2>Detained piece</h2>
-   <a href="javascript:void(0)" class="top_button_add" id="customers-add-button"></a>   </div>
-   <div class="search_banner">
-        <div class="search_content" id="customers-search">
-            <div class="search_input">
-                <i></i>
-                <input type="text" class="search_input_field keywords"/>
-            </div>
-            <div class="search_button"><input type="button" value="scanning" class="search_input_button submit"/></div>
-        </div>
-   </div>
-   <div class="banner_content">
-        <ul id = 'append_customers_id'>
-		
-		<li>
-          <!--<em></em> -->
-          <a href="javascript:void(0);">
-          <div class="banner_center">
-          	 <i>Detained type</i>
-            <h2>Waybill number</h2>
-            
-            <i>Other reasons</i>
-            <h2>46284589115715841288</h2>
-          </div>
-          </a>
-          <div class="banner_bottom">
-          <p><span style=" float:right;"></span>
-          <a href="javascript:void(0);" class="ckh_edit">modify</a> 
-          <a href="javascript:void(0);" class="ckh_delete">delete</a> 
-          </p>
-          </div>
-         </li>
-		
-		</ul>
-        <div class="append_more"></div> 
-   </div>
-   
-   <div class="banner_content">
-        <ul id = 'append_customers_id'>
-		
-		<li>
-          <!--<em></em> -->
-          <a href="javascript:void(0);">
-          <div class="banner_center">
-          	<i>Detained type</i>
-            <h2>Waybill number</h2>
-            
-            <i>Address error</i>
-            <h2>46284589115715841288</h2>
-          </div>
-          </a>
-          <div class="banner_bottom">
-          <p><span style=" float:right;"></span>
-          <a href="javascript:void(0);" class="ckh_edit">modify</a> 
-          <a href="javascript:void(0);" class="ckh_delete">delete</a> 
-          </p>
-          </div>
-         </li>
-		
-		</ul>
-        <div class="append_more"></div> 
-   </div>
-   
-   
-</div>   
+<div class="wap_content">
 
- 
- 
-<form class="form_window" id="customers-form">
-<div class="form_content">
-		<div class="wap_top"><a href="javascript:void(0);"  onclick="$('#customers-form').hide();" class="wap_top_back"></a>
-	   <h2>Newly added detained pieces</h2>
-	   </div>
-		<div class="banner_content">
-		<input type="hidden" name="id" />
-		<ul class="one_banner">
-		
-		<li><label>Waybill number</label><input type='text' maxlength='100' class='input_value' name='customers_address' /><span>scanning</span></li>
-		<li>
-            <label>Carrier site</label>
-            <select required="required" class='input_value required' name='allow_exceed'>
-				<option value="1">test1</option>
-				<option value="2">test2</option>
-				<option value="3">test3</option>
-				<option value="4">test4</option>
-				<option value="5">test5</option>
-				<option value="6">test6</option>
-			</select>
-        </li>
-        <li>
-            <label>Detained type</label>
-            <select required="required" class='input_value required' name='allow_exceed'>
-				<option value="1">test1</option>
-				<option value="2">test2</option>
-				<option value="3">Address error</option>
-				<option value="4">Other reasons</option>
-				<option value="5">test5</option>
-				<option value="6">test6</option>
-			</select>
-        </li>
-		<li><label>Remarks</label><input type='text' maxlength='100' class='input_value' name='customers_fax' /></li>
-		
-		</ul> 
-		<div class="clear"></div>
-		</div>
-		<div class="bottom_a_button"><a href="javascript:void(0);" class="submit">submit</a></div>
+    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="返回" class="wap_top_back"></a>
+        <h2>Stranded Parcel</h2>
+    </div>
+
+    <div class="formula_modify">
+        <form id="myForm" class="layui-form" action="">
+            <div class="banner_content">
+                <ul class="one_banner">
+                    <li>
+                        <label>Waybill number</label>
+                        <input type="tel" id="waybillNumber" name="waybillNumber" class="input_value" />
+                        <span>scan</span>
+                    </li>
+                    <li>
+                        <label style="float: left;">Carrier site</label>
+                        <select required="required" class='input_value' name='carrierSite'>
+                            <option value="test1">test1</option>
+                            <option value="test2">test2</option>
+                            <option value="test3">test3</option>
+                            <option value="test4">test4</option>
+                            <option value="test5">test5</option>
+                            <option value="test6">test6</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label>Detained type</label>
+                        <select required="required" id="detainedType" class='input_value' name='detainedType'>
+                            <option value="test1">test1</option>
+                            <option value="test2">test2</option>
+                            <option value="Address error">Address error</option>
+                            <option value="Other reasons">Other reasons</option>
+                            <option value="test5">test5</option>
+                            <option value="test6">test6</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label>Remarks</label>
+                        <input type="tel" name="remarks" class="input_value" /><br/>
+                    </li>
+                </ul>
+                <div class="bottom_a_button"><a onclick="addTr2('tab', -1)">submit</a></div>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
+            <tr>
+                <td>Order number</td>
+                <td>Detained type</td>
+                <td><input type="checkbox"></td>
+            </tr>
+        </table>
+    </div>
+
 </div>
-</form>  
 
 </body>
 </html>

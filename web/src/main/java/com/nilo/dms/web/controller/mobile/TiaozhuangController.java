@@ -1,11 +1,11 @@
-package com.nilo.dms.web.controller;
+package com.nilo.dms.web.controller.mobile;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/tiaozhuangController")
-public class tiaozhuangController {
+@RequestMapping("/mobile/tiaozhuangController")
+public class TiaozhuangController {
     @RequestMapping(value = "/customers.html")
     public String customers() {
         return "mobile/customers";
@@ -16,6 +16,11 @@ public class tiaozhuangController {
         return "mobile/dshkqs";
     }
 
+    @RequestMapping(value = "/ztqs.html")
+    public String ztqs() {
+        return "mobile/ztqs";
+    }
+
     @RequestMapping(value = "/wtjlr.html")
     public String wtjlr() {
         return "mobile/wtjlr";
@@ -24,7 +29,7 @@ public class tiaozhuangController {
     @RequestMapping(value = "/zlj.html")
     public String zlj() {
         return "mobile/zlj";
-    }
+}
 
     @RequestMapping(value = "/pjqr.html")
     public String pjqr() {
@@ -74,5 +79,10 @@ public class tiaozhuangController {
     @RequestMapping(value = "/xgmm.html")
     public String xgmm() {
         return "mobile/xgmm";
+    }
+
+    @RequestMapping(value = "/user.html")
+    public String user() {
+        return "mobile/user";
     }
 }

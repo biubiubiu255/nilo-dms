@@ -22,10 +22,62 @@
     </resultMap>
 
 
-    <select id="findByMerchantId" resultMap="expressDO" statementType="PREPARED">
+    <select id="findByMerchantIdAll" resultMap="expressDO" statementType="PREPARED">
         SELECT
         *
-        FROM t_bas_third_express where merchant_id=#{merchantId}
+        FROM t_bas_third_express;
     </select>
 
+    <select id="findByMerchantId" resultMap="expressDO" statementType="PREPARED">
+
+            SELECT
+	        *
+	        FROM t_bas_third_express where merchant_id = #{merchantId}
+    </select>
+    
+    <select id="findByExpress" resultMap="expressDO" statementType="PREPARED">
+        <if test="expressName !=null and expressName !='' ">
+	        SELECT
+	        *
+	        FROM t_bas_third_express where express_name like CONCAT( CONCAT('%',#{expressName}),'%')
+        </if> 
+
+    </select>
+
+
+
+<!--     <select id="findBy" resultMap="userDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_user_login
+        WHERE merchant_id=#{merchantId}
+        <if test="userName !=null and userName !='' ">
+            and user_name like CONCAT( CONCAT('%',#{userName}),'%')
+        </if>
+        order by created_time desc
+        limit #{offset} , #{limit}
+    </select> -->
+
+
+
+    <insert id="addExpress" statementType="PREPARED" parameterType="com.nilo.dms.dao.dataobject.ThirdExpressDO">
+        INSERT INTO t_bas_third_express
+        ( express_code,express_name,merchant_id,created_time,updated_time,version )
+        VALUES
+        (#{expressCode},#{expressName}, #{merchantId}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+    </insert>
+    
+    <!-- 动态更新语句 -->
+    <update id="updateExpress" parameterType="com.nilo.dms.dao.dataobject.ThirdExpressDO" statementType="PREPARED">
+        update t_bas_third_express set express_code = #{expressCode},
+        express_name = #{expressName}, merchant_id = #{merchantId},
+        updated_time = UNIX_TIMESTAMP(NOW()) 
+        where id = #{id}
+    </update>
+    
+    <!-- 删除语句 -->
+    <delete id="deleteExpress" statementType="PREPARED"  parameterType="com.nilo.dms.dao.dataobject.ThirdExpressDO">
+        delete from  t_bas_third_express where id = #{id}
+    </delete>
+ 
 </mapper>
