@@ -126,12 +126,12 @@ public class AuthenticationRealm extends AuthorizingRealm {
         return info;
     }
 
-    private List<String> getUserNetwork(List<UserNetworkDO> networkDOList){
+    private List<Integer> getUserNetwork(List<UserNetworkDO> networkDOList){
 
         if (networkDOList == null) return null;
-        List<String> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         for(UserNetworkDO networkDO : networkDOList){
-            list.add(""+networkDO.getDistributionNetworkId());
+            list.add(networkDO.getDistributionNetworkId().intValue());
         }
         return list;
     }

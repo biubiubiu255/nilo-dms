@@ -56,6 +56,7 @@ public class DoorToDoorController extends BaseController {
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
         parameter.setOrderType(Arrays.asList(new String[]{"DS"}));
+        parameter.setStatus(Arrays.asList(new Integer[]{DeliveryOrderStatusEnum.CREATE.getCode(),DeliveryOrderStatusEnum.ALLOCATED.getCode()}));
         Pagination page = getPage();
         List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
 

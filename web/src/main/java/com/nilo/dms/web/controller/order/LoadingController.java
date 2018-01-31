@@ -118,6 +118,7 @@ public class LoadingController extends BaseController {
             list.add(s);
         }
         model.addAttribute("nextStation",list);
+        model.addAttribute("thirdCarrier",expressDOList);
 
         return "loading/loading_scan";
     }

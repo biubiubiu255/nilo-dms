@@ -407,12 +407,6 @@ public class LoadingServiceImpl implements LoadingService {
 
         loading.setNextStation(l.getNextStation());
 
-        loading.setUserdefine01(l.getUserdefine01());
-        loading.setUserdefine02(l.getUserdefine02());
-        loading.setUserdefine03(l.getUserdefine03());
-        loading.setUserdefine04(l.getUserdefine04());
-        loading.setUserdefine05(l.getUserdefine05());
-
         return loading;
     }
 
@@ -432,12 +426,6 @@ public class LoadingServiceImpl implements LoadingService {
         loading.setRemark(l.getRemark());
         loading.setTruckNo(l.getTruckNo());
         loading.setTruckType(l.getTruckType());
-        loading.setUserdefine01(l.getUserdefine01());
-        loading.setUserdefine02(l.getUserdefine02());
-        loading.setUserdefine03(l.getUserdefine03());
-        loading.setUserdefine04(l.getUserdefine04());
-        loading.setUserdefine05(l.getUserdefine05());
-
         loading.setNextStation(l.getNextStation());
 
         return loading;

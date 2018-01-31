@@ -40,13 +40,13 @@
         <tr>
             <th lay-data="{fixed: 'left',field:'orderNo', width:250}">OrderNo</th>
             <th lay-data="{field:'delayReason', width:150}">Reason Type</th>
-            <th lay-data="{field:'statusDesc', width:100}">Status</th>
-            <th lay-data="{field:'allowTimes', width:200}">AllowTimes</th>
-            <th lay-data="{field:'delayTimes', width:200}">DelayTimes</th>
+            <th lay-data="{field:'statusDesc', width:150}">Status</th>
+            <th lay-data="{field:'allowTimes', width:150}">AllowTimes</th>
+            <th lay-data="{field:'delayTimes', width:150}">DelayTimes</th>
             <th lay-data="{field:'createdTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
                 CreatedTime
             </th>
-            <th lay-data="{field:'remark', width:150}">Remark</th>
+            <th lay-data="{field:'remark', width:200}">Remark</th>
             <th lay-data="{title:'Opt',fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
         </thead>
@@ -54,7 +54,7 @@
 
     <script type="text/html" id="barDemo">
         <shiro:hasPermission name="400072">
-            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="handle">Detain</a>
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="handle">Handle</a>
         </shiro:hasPermission>
     </script>
 </div>
@@ -116,11 +116,11 @@
                 data: {"orderNo": orderNo},
                 dataType: 'text',
                 success: function (data) {
-                    layer.open({
+                    parent.layer.open({
                         type: 1,
                         content: data,
-                        area: ['800px', '500px'],
-                        offset: ['100px', '200px'],
+                        area: ['800px','600px'],
+                        offset: ['100px', '250px'],
                         end: function () {
                             reloadCurrentPage();
                         }
