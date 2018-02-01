@@ -71,7 +71,7 @@ public class ThirdDriverController extends BaseController {
         if (driver.getDriverName()==null || driver.getDriverName().equals("")) {
         	list = thirdDriverService.findDriverAll(page, driver);
 		}else {
-			thirdDriverService.findByDriverCode(driver.getThirdExpressCode(), page);
+			list = thirdDriverService.findDriverAll(page, driver);
 		}
         return toPaginationLayUIData(page, list);  //Pagination 页码
     }

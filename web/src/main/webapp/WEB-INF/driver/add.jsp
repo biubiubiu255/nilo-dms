@@ -27,7 +27,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">Format:</label>
+            <label class="layui-form-label">expressName:</label>
             <div class="layui-input-block">
                 <select name="expressCode" lay-search="">
                    <c:forEach var="values" items="${expressList}" varStatus="status">
@@ -63,7 +63,6 @@
                         if (data.result) {
                             layer.msg('SUCCESS!', {icon: 1, time: 1000}, function () {
                                 layer.closeAll();
-                                reloadCurrentPage();
                             });
                         } else {
                             //失败，提交表单成功后，释放hold，如果不释放hold，就变成了只能提交一次的表单

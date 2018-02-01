@@ -9,6 +9,8 @@
                 jdbcType="INTEGER"/>
         <result property="thirdExpressCode" column="third_Express_Code" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+        <result property="expressName" column="express_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
         <result property="driverId" column="driver_Id" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="driverName" column="driver_Name" javaType="java.lang.String"
@@ -27,25 +29,39 @@
     <select id="findByExpressCode" resultMap="thirdRider" statementType="PREPARED">
         SELECT
         *
-        FROM t_bas_third_driver where third_express_code = #{thirdExpressCode}
+        FROM t_bas_third_driver where third_express_code = #{thirdExpressCode} and valid = 0
     </select>
 
     <!-- 为空时查询所有，其他则模糊查询，注意只支持查询全部和模糊查询 -->
     <select id="findByExpressMultiple" resultMap="thirdRider" statementType="PREPARED">
+    
+        <!--     
         SELECT
         *
-        FROM t_bas_third_driver 
-        <if test="thirdExpressCode !=null and thirdExpressCode !='' ">
-	        where third_express_code like CONCAT( CONCAT('%',#{thirdExpressCode}),'%')
+        FROM t_bas_third_driver  where valid = 0
+        <if test="driverName !=null and driverName !='' ">
+	        and driver_name like CONCAT( CONCAT('%',#{driverName}),'%')
         </if>
+         -->
+         
+         SELECT 
+         t_bas_third_driver.*, t_bas_third_express.express_name 
+         AS express_name
+         FROM t_bas_third_driver 
+         INNER JOIN t_bas_third_express 
+         ON t_bas_third_driver.third_express_code = t_bas_third_express.express_code
+         where t_bas_third_driver.valid = 0
+         <if test="driverName !=null and driverName !='' ">
+	         and t_bas_third_driver.driver_name like CONCAT( CONCAT('%',#{driverName}),'%')
+         </if>
     </select>
     
     <!-- 增加一条记录 -->
     <insert id="add" statementType="PREPARED" parameterType="com.nilo.dms.dao.dataobject.ThirdDriverDO">
         INSERT INTO t_bas_third_driver
-        ( third_express_code,driver_id,driver_name,phone,created_time,updated_time,version )
+        ( third_express_code,driver_id,driver_name,phone,created_time,updated_time,version,valid )
         VALUES
-        (#{thirdExpressCode},#{driverId}, #{driverName}, #{phone}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{thirdExpressCode},#{driverId}, #{driverName}, #{phone}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID(),0)
     </insert>
     
     <!-- 动态更新语句 -->
@@ -58,10 +74,18 @@
         where id = #{id}
     </update>
     
-    <!-- 删除语句 -->
+    
+    <!-- 删除语句-->
+    <update id="del" statementType="PREPARED" parameterType="com.nilo.dms.dao.dataobject.ThirdDriverDO">
+        update t_bas_third_driver set valid = -1,
+        updated_time = UNIX_TIMESTAMP(NOW()) 
+        where id = #{id}
+    </update>
+<!--     
+    删除语句
     <delete id="del" statementType="PREPARED" parameterType="com.nilo.dms.dao.dataobject.ThirdDriverDO">
         delete from  t_bas_third_driver where id = #{id}
     </delete>
 
-
+ -->
 </mapper>

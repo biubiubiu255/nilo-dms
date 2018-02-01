@@ -30,7 +30,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">Format:</label>
+            <label class="layui-form-label">expressName:</label>
             <div class="layui-input-block">
                 <select name="thirdExpressCode" lay-search="">
                    <c:forEach var="values" items="${expressList}" varStatus="status">
@@ -41,7 +41,7 @@
         
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="add-user">Submit</button>
+                <button class="layui-btn" lay-submit lay-filter="add-driver">Submit</button>
                 <button type="reset" class="layui-btn layui-btn-primary reset">Reset</button>
             </div>
         </div>
@@ -55,7 +55,7 @@
             var form = layui.form;
             form.render();
             //监听提交
-            form.on('submit(add-express)', function (data) {
+            form.on('submit(add-driver)', function (data) {
                 var load = layer.load(2);
                 $.ajax({
                     url: "/admin/driver/edit.html",
@@ -66,13 +66,20 @@
                         if (data.result) {
                             layer.msg('SUCCESS!', {icon: 1, time: 1000}, function () {
                                 layer.closeAll();
-                                reloadCurrentPage();
+                                //reloadCurrentPage();
+                                //$(".layui-table").first().t.pt.render({});
+                                //$(".layui-laypage-btn")[0].click();
+/*                                 $(".search").on("click", function () {
+					                reloadTable();
+					            }) */
+					            
+                                table.layui-table.render();
                             });
                         } else {
                             //失败，提交表单成功后，释放hold，如果不释放hold，就变成了只能提交一次的表单
                             layer.msg(data.msg, {icon: 2, time: 2000});
                         }
-                        reloadCurrentPage();
+                        //reloadCurrentPage();
                     },
                     complete: function () {
                         layer.close(load);

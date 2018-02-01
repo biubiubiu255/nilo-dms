@@ -37,7 +37,7 @@
         <tr>
             <th lay-data="{fixed: 'left',field:'id', width:100, align:'center', templet: '<div>{{d.id}}</div>'}">No</th>
             <th lay-data="{field:'driverName', width:150, align:'center', templet: '<div>{{d.driverName}}</div>'}">driverName</th>
-            <th lay-data="{field:'thirdExpressCode', width:150, align:'center',templet: '<div>{{d.thirdExpressCode}}</div>'}">thirdExpressCode</th>
+            <th lay-data="{field:'expressName', width:150, align:'center',templet: '<div>{{d.expressName}}</div>'}">expressName</th>
             <th lay-data="{field:'driverId', width:150, align:'center',templet: '<div>{{d.driverId}}</div>'}">driverId</th>
             <th lay-data="{field:'phone', width:150, align:'center',templet: '<div>{{d.phone}}</div>'}">phone</th>
             <th lay-data="{field:'CreatedTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
@@ -200,11 +200,11 @@
 		}
 
 		function edit(d) {
-
+			var load = layer.load(2);
 			var url = "/admin/driver/edit.html?id=" + d.id
 					+ "&driverId=" + d.driverId + "&driverName="
 					+ d.driverName + "&phone="  + d.phone;
-			var title = "Edit Express";
+			var title = "Edit Driver";
 			$.ajax({
 				url : url,
 				type : 'GET',
@@ -213,11 +213,17 @@
 					parent.layer.open({
 						type : 1,
 						title : title,
-						area : [ '800px' ],
+						area : [ '1000px', '500' ],
 						offset : [ '100px', '250px' ],
-						content : data
+						content : data ,
+						end : function () {
+                            reloadTable();
+						}
 					});
-				}
+				},
+				complete: function () {
+                    layer.close(load);
+                }
 			});
 
 		}
@@ -235,7 +241,10 @@
 						title : title,
 						area : [ '800px' ],
 						offset : [ '100px', '250px' ],
-						content : data
+						content : data,
+						end : function () {
+                            reloadTable();
+						}
 					});
 				}
 			});
