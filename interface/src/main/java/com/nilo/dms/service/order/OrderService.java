@@ -1,10 +1,7 @@
 package com.nilo.dms.service.order;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.order.model.DeliveryOrder;
-import com.nilo.dms.service.order.model.DeliveryOrderParameter;
-import com.nilo.dms.service.order.model.DeliveryOrderStatusInfo;
-import com.nilo.dms.service.order.model.OrderOptRequest;
+import com.nilo.dms.service.order.model.*;
 
 import java.util.List;
 
@@ -28,5 +25,9 @@ public interface OrderService {
     void handleOpt(OrderOptRequest optRequest);
 
     void arrive(String merchantId,String scanNo,String arriveBy);
+
+    String addPackage(PackageRequest packageRequest);
+
+    List<DeliveryOrder> queryByPackageNo(String merchantNo,String packageNo);
 
 }

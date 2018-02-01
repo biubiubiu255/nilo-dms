@@ -9,6 +9,8 @@ public class DelayParam {
 
     private String orderNo;
 
+    private String abnormalType;
+
     private String reason;
 
     private String remark;
@@ -16,6 +18,14 @@ public class DelayParam {
     private String optBy;
 
     private String taskId;
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
     public String getMerchantId() {
         return merchantId;
@@ -33,12 +43,12 @@ public class DelayParam {
         this.orderNo = orderNo;
     }
 
-    public String getReason() {
-        return reason;
+    public String getAbnormalType() {
+        return abnormalType;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setAbnormalType(String abnormalType) {
+        this.abnormalType = abnormalType;
     }
 
     public String getRemark() {

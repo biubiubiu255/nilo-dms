@@ -18,6 +18,7 @@ import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.AbstractOrderOpt;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.model.*;
+import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.service.system.model.*;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -36,6 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.nilo.dms.common.Constant.IS_PACKAGE;
+
 /**
  * Created by ronny on 2017/9/15.
  */
@@ -49,7 +52,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     @Autowired
     private DeliveryOrderGoodsDao deliveryOrderGoodsDao;
-
     @Autowired
     private DeliveryOrderDao deliveryOrderDao;
     @Autowired
@@ -57,10 +59,9 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     @Autowired
     private DeliveryOrderSenderDao deliveryOrderSenderDao;
     @Autowired
-    private WaybillScanDao waybillScanDao;
-    @Autowired
     private WaybillScanDetailsDao waybillScanDetailsDao;
-
+    @Autowired
+    private DistributionNetworkDao distributionNetworkDao;
     @Autowired
     private DeliveryOrderRequestDao deliveryOrderRequestDao;
 
@@ -113,7 +114,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         return orderNo;
 
     }
-
 
 
     @Override
@@ -202,6 +202,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         map.put("merchantId", parameter.getMerchantId());
         map.put("orderType", parameter.getOrderType());
         map.put("status", parameter.getStatus());
+        map.put("isPackage", parameter.getIsPackage());
 
         if (StringUtil.isEmpty(parameter.getFromCreatedTime()) || StringUtil.isEmpty(parameter.getToCreatedTime())) {
             if (StringUtil.isEmpty(parameter.getFromCreatedTime())) {
@@ -308,17 +309,15 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                         if (handleConfig.getUpdateStatus() != null) {
                             //更新订单状态
                             updateDeliveryOrderStatus(optRequest, orderNo, handleConfig);
-                            /*//添加费用明细
-                            deliveryFeeDetailsService.buildDeliveryFee(optRequest.getMerchantId(), orderNo, optRequest.getOptType().getCode());
                             //通知商户订单状态变更
                             notifyMerchantStatusUpdate(optRequest.getMerchantId(), orderNo, orderDO.getReferenceNo(), DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
                             //记录物流轨迹
                             routeRecord(optRequest.getMerchantId(), orderNo, optRequest.getOptType().getCode(), optRequest.getParams());
                             //短信消息
-                            sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);*/
+                            sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);
                         }
                         //记录操作日志
-                        addOptLog(optRequest,orderNo, DeliveryOrderStatusEnum.getEnum(orderDO.getStatus()), DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
+                        addOptLog(optRequest, orderNo, DeliveryOrderStatusEnum.getEnum(orderDO.getStatus()), DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
                     }
 
                 } catch (Exception e) {
@@ -368,6 +367,94 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                 return null;
             }
         });
+    }
+
+    @Override
+    public String addPackage(PackageRequest packageRequest) {
+
+
+        String orderNo = transactionTemplate.execute(new TransactionCallback<String>() {
+            @Override
+            public String doInTransaction(TransactionStatus transactionStatus) {
+                String orderNo = "";
+                Long merchant = Long.parseLong(packageRequest.getMerchantId());
+                try {
+                    //1、保存订单信息
+                    DeliveryOrderDO orderHeader = new DeliveryOrderDO();
+                    orderHeader.setMerchantId(merchant);
+                    orderHeader.setHigh(packageRequest.getHigh());
+                    orderHeader.setWidth(packageRequest.getWidth());
+                    orderHeader.setWeight(packageRequest.getWeight());
+                    orderHeader.setLength(packageRequest.getLength());
+                    orderHeader.setIsPackage(IS_PACKAGE);
+                    orderHeader.setOrderType("PG");
+                    orderHeader.setStatus(DeliveryOrderStatusEnum.ARRIVED.getCode());
+                    orderHeader.setNextNetworkId(packageRequest.getNextNetworkId());
+                    orderHeader.setNetworkId(packageRequest.getNetworkId());
+                    //获取订单号
+                    orderNo = SystemConfig.getNextSerialNo(packageRequest.getMerchantId(), SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
+                    orderHeader.setOrderNo(orderNo);
+                    deliveryOrderDao.insert(orderHeader);
+
+
+                    //发件网点信息
+                    DistributionNetworkDO networkDO = distributionNetworkDao.queryById(new Long(packageRequest.getNetworkId()));
+                    DeliveryOrderReceiverDO r = new DeliveryOrderReceiverDO();
+                    r.setOrderNo(orderNo);
+                    r.setMerchantId(merchant);
+                    r.setAddress(networkDO.getAddress());
+                    r.setArea(networkDO.getArea());
+                    r.setCity(networkDO.getCity());
+                    r.setContactNumber(networkDO.getContactName());
+                    r.setCountry(networkDO.getCountry());
+                    r.setName(networkDO.getContactName());
+                    r.setProvince(networkDO.getProvince());
+                    deliveryOrderReceiverDao.insert(r);
+
+                    //3、保存收件网点信息
+                    DistributionNetworkDO receiverNetwork = distributionNetworkDao.queryById(new Long(packageRequest.getNextNetworkId()));
+                    DeliveryOrderSenderDO s = new DeliveryOrderSenderDO();
+                    s.setMerchantId(merchant);
+                    s.setOrderNo(orderNo);
+                    s.setAddress(receiverNetwork.getAddress());
+                    s.setArea(receiverNetwork.getArea());
+                    s.setCity(receiverNetwork.getCity());
+                    s.setContactNumber(receiverNetwork.getContactName());
+                    s.setCountry(receiverNetwork.getCountry());
+                    s.setName(receiverNetwork.getContactName());
+                    s.setProvince(receiverNetwork.getProvince());
+                    deliveryOrderSenderDao.insert(s);
+
+                    //关联包裹与子运单
+                    for (String o : packageRequest.getOrderNos()) {
+                        DeliveryOrderDO update = new DeliveryOrderDO();
+                        update.setMerchantId(merchant);
+                        update.setOrderNo(o);
+                        update.setParentNo(orderNo);
+                        deliveryOrderDao.update(update);
+                    }
+                } catch (Exception e) {
+                    logger.error("addPackage Failed. Data:{}", packageRequest, e);
+                    transactionStatus.setRollbackOnly();
+                    throw e;
+                }
+                return orderNo;
+            }
+        });
+
+        return orderNo;
+    }
+
+    @Override
+    public List<DeliveryOrder> queryByPackageNo(String merchantNo, String packageNo) {
+        List<DeliveryOrderDO> queryList = deliveryOrderDao.queryByPackageNo(Long.parseLong(merchantNo),packageNo);
+
+        List<DeliveryOrder> list = new ArrayList<>();
+        if(queryList== null) return list;
+        for(DeliveryOrderDO d : queryList){
+            list.add(convert(d));
+        }
+        return list;
     }
 
     private void updateDeliveryOrderStatus(OrderOptRequest optRequest, String orderNo, OrderHandleConfig handleConfig) {
@@ -499,6 +586,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setServiceType(ServiceTypeEnum.getEnum(d.getServiceType()));
         deliveryOrder.setWeight(d.getWeight());
         deliveryOrder.setGoodsType(d.getGoodsType());
+        String orderTypeDesc = SystemCodeUtil.getCodeVal("" + d.getMerchantId(), Constant.DELIVERY_ORDER_TYPE, d.getOrderType());
+        deliveryOrder.setOrderTypeDesc(orderTypeDesc);
 
         deliveryOrder.setWarehouseId(d.getWarehouseId());
         deliveryOrder.setStop(d.getStop());
@@ -513,6 +602,15 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setIsCod(d.getIsCod());
         deliveryOrder.setNotes(d.getNotes());
         deliveryOrder.setRemark(d.getRemark());
+
+        deliveryOrder.setParentNo(d.getParentNo());
+        deliveryOrder.setLength(d.getLength());
+        deliveryOrder.setWidth(d.getWidth());
+        deliveryOrder.setHigh(d.getHigh());
+        deliveryOrder.setNetworkId(d.getNetworkId());
+        deliveryOrder.setNextNetworkId(d.getNextNetworkId());
+
+        deliveryOrder.setPackage(d.getIsPackage()==1);
 
         return deliveryOrder;
     }
@@ -578,9 +676,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         orderHeader.setWeight(d.getWeight());
         orderHeader.setGoodsType(d.getGoodsType());
         orderHeader.setTotalPrice(d.getTotalPrice());
-
         orderHeader.setServiceType(d.getServiceType().getCode());
-
         orderHeader.setWarehouseId(d.getWarehouseId());
         orderHeader.setStop(d.getStop());
         orderHeader.setStopId(d.getStopId());
@@ -594,6 +690,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         orderHeader.setIsCod(d.getIsCod());
         orderHeader.setNotes(d.getNotes());
         orderHeader.setRemark(d.getRemark());
+
+        orderHeader.setIsPackage(d.isPackage() ? 1 : 0);
         return orderHeader;
     }
 
@@ -608,7 +706,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         AssertUtil.isNotBlank(data.getGoodsType(), BizErrorCode.GOODS_TYPE_EMPTY);
 
         AssertUtil.isNotNull(data.getReceiverInfo(), BizErrorCode.RECEIVER_EMPTY);
-        AssertUtil.isNotNull(data.getGoodsInfoList(), BizErrorCode.GOODS_EMPTY);
 
         AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverName(), BizErrorCode.RECEIVE_NAME_EMPTY);
         AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverPhone(), BizErrorCode.RECEIVE_PHONE_EMPTY);

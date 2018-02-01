@@ -2,6 +2,8 @@ package com.nilo.dms.web.controller.order;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.OptTypeEnum;
+import com.nilo.dms.common.exception.BizErrorCode;
+import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.common.utils.StringUtil;
@@ -115,6 +117,12 @@ public class ArriveScanController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/scan.html")
     public String scan(String orderNo, String scanNo) {
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+
+        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId,orderNo);
+        if(deliveryOrder == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST,orderNo);
 
         WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
         scanDetailsDO.setScanNo(scanNo);

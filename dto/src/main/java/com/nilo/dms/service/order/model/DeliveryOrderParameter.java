@@ -14,9 +14,9 @@ public class DeliveryOrderParameter {
 
     private String referenceNo;
 
-    private List<String> orderType;
+    private Integer isPackage;
 
-    private String fetchType;
+    private List<String> orderType;
 
     private String fromCreatedTime;
 
@@ -26,20 +26,20 @@ public class DeliveryOrderParameter {
 
     private String nextStation;
 
+    public Integer getIsPackage() {
+        return isPackage;
+    }
+
+    public void setIsPackage(Integer isPackage) {
+        this.isPackage = isPackage;
+    }
+
     public String getReferenceNo() {
         return referenceNo;
     }
 
     public void setReferenceNo(String referenceNo) {
         this.referenceNo = referenceNo;
-    }
-
-    public void setFetchType(String fetchType) {
-        this.fetchType = fetchType;
-    }
-
-    public String getFetchType() {
-        return fetchType;
     }
 
     public String getNextStation() {

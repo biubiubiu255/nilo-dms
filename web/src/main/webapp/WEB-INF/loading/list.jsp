@@ -73,11 +73,6 @@
                 LoadingToTime
             </th>
             <th lay-data="{field:'remark', width:120}">Remark</th>
-            <th lay-data="{field:'userdefine01', width:150}">UserDefine01</th>
-            <th lay-data="{field:'userdefine02', width:150}">UserDefine02</th>
-            <th lay-data="{field:'userdefine03', width:150}">UserDefine03</th>
-            <th lay-data="{field:'userdefine04', width:150}">UserDefine04</th>
-            <th lay-data="{field:'userdefine05', width:150}">UserDefine05</th>
 
             <th lay-data="{fixed: 'right', width:200, align:'center', toolbar: '#barDemo'}"></th>
         </tr>

@@ -32,8 +32,6 @@ public class DeliveryOrderDO extends BaseDo<Long> {
 
     private Integer status;
 
-    private Integer networkId;
-
     private String warehouseId;
     private String stopId;
     private String stop;
@@ -47,6 +45,62 @@ public class DeliveryOrderDO extends BaseDo<Long> {
     private String isCod;
     private String notes;
     private String remark;
+
+    private Double high;
+    private Double length;
+    private Double width;
+    private Integer isPackage;
+    private Integer networkId;
+    private Integer nextNetworkId;
+    private String parentNo;
+
+    public String getParentNo() {
+        return parentNo;
+    }
+
+    public void setParentNo(String parentNo) {
+        this.parentNo = parentNo;
+    }
+
+    public Integer getNextNetworkId() {
+        return nextNetworkId;
+    }
+
+    public void setNextNetworkId(Integer nextNetworkId) {
+        this.nextNetworkId = nextNetworkId;
+    }
+
+    public Double getHigh() {
+        return high;
+    }
+
+    public void setHigh(Double high) {
+        this.high = high;
+    }
+
+    public Double getLength() {
+        return length;
+    }
+
+    public void setLength(Double length) {
+        this.length = length;
+    }
+
+    public Double getWidth() {
+        return width;
+    }
+
+    public void setWidth(Double width) {
+        this.width = width;
+    }
+
+    public Integer getIsPackage() {
+        return isPackage;
+    }
+
+    public void setIsPackage(Integer isPackage) {
+        this.isPackage = isPackage;
+    }
 
     public String getWarehouseId() {
         return warehouseId;

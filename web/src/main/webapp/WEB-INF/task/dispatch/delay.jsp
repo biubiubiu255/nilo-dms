@@ -26,7 +26,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label layui-form-text">Reason:</label>
             <div class="layui-input-block">
-                <select name="delayReason" lay-verify="required" lay-search="" style="display: none">
+                <select name="reason" lay-verify="required" lay-search="" style="display: none">
                     <option value="">choose or search....</option>
                     <c:forEach items="${delayReasonList}" var="r">
                         <option value="${r.code}">${r.value}</option>

@@ -140,4 +140,10 @@
         <include refid="Base_Column_List"/>
         FROM t_bas_network where merchant_id = #{merchantId} and code =#{code}
     </select>
+
+    <select id="queryById" resultMap="distribution" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_bas_network where id =#{id}
+    </select>
 </mapper>

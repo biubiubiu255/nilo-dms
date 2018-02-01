@@ -36,7 +36,7 @@ public class Principal implements Serializable {
 
     private String departmentName;
 
-    private List<String> networks;
+    private List<Integer> networks;
     private List<String> authorities;
     private List<String> roles;
     private List<String> urlAuthorities;
@@ -51,11 +51,11 @@ public class Principal implements Serializable {
 		this.urlAuthorities = urlAuthorities;
 	}
 
-	public List<String> getNetworks() {
+	public List<Integer> getNetworks() {
         return networks;
     }
 
-    public void setNetworks(List<String> networks) {
+    public void setNetworks(List<Integer> networks) {
         this.networks = networks;
     }
 

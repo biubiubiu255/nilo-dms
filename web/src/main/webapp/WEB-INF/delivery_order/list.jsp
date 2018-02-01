@@ -97,7 +97,7 @@
         <thead>
         <tr>
             <th lay-data="{fixed: 'left',field:'orderNo', width:250}">OrderNo</th>
-            <th lay-data="{field:'orderType', width:100}">OrderType</th>
+            <th lay-data="{field:'orderTypeDesc', width:100}">OrderType</th>
             <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
             <th lay-data="{field:'statusDesc', width:100}">Status</th>
             <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.orderTime) }}</div>'}">

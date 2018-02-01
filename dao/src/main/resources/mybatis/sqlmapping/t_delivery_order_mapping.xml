@@ -33,8 +33,6 @@
                 jdbcType="DECIMAL"/>
         <result property="goodsType" column="goods_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="networkId" column="network_Id" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
 
         <result property="warehouseId" column="warehouse_Id" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
@@ -63,6 +61,22 @@
         <result property="remark" column="remark" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
 
+
+        <result property="length" column="length" javaType="java.lang.Double"
+                jdbcType="DECIMAL"/>
+        <result property="width" column="width" javaType="java.lang.Double"
+                jdbcType="DECIMAL"/>
+        <result property="high" column="high" javaType="java.lang.Double"
+                jdbcType="DECIMAL"/>
+        <result property="isPackage" column="is_Package" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="networkId" column="network_id" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="nextNetworkId" column="next_network_id" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="parentNo" column="parent_No" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
@@ -72,7 +86,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, merchant_id,network_Id,order_no,order_type,service_Type,reference_No,weight,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,delivery_Fee,is_Cod,notes,remark,created_time , updated_time ,version
+        id, merchant_id,network_Id,order_no,parent_No,order_type,service_Type,reference_No,weight,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,delivery_Fee,is_Cod,notes,remark,width,length,high,network_id,next_network_id,is_Package,created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -80,9 +94,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_waybill
-        ( merchant_id,network_Id,order_no ,order_type, service_type,reference_No , weight,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,delivery_Fee,is_Cod,notes,remark, created_time , updated_time ,version)
+        ( merchant_id,order_no,parent_No ,order_type, service_type,reference_No , weight,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,delivery_Fee,is_Cod,notes,remark, width,length,high,network_id,next_network_id ,is_Package,created_time , updated_time ,version)
         VALUES
-        ( #{merchantId},#{networkId},#{orderNo}, #{orderType},#{serviceType}, #{referenceNo},#{weight},#{goodsType},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status},#{warehouseId},#{stopId},#{stop},#{channel},#{channelStation},#{orderCategory},#{carrierId},#{carrierName},#{relationOrderNo},#{deliveryFee},#{isCod},#{notes},#{remark} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        ( #{merchantId},#{orderNo}, #{parentNo},#{orderType},#{serviceType}, #{referenceNo},#{weight},#{goodsType},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status},#{warehouseId},#{stopId},#{stop},#{channel},#{channelStation},#{orderCategory},#{carrierId},#{carrierName},#{relationOrderNo},#{deliveryFee},#{isCod},#{notes},#{remark},#{width},#{length},#{high},#{networkId},#{nextNetworkId},#{isPackage},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
 
@@ -130,7 +144,9 @@
                 order_type=#{item}
             </foreach>
         </if>
-
+        <if test="isPackage !=null ">
+            and is_package = #{isPackage}
+        </if>
         <if test="fromCreatedTime !=null ">
             and created_time >= #{fromCreatedTime}
         </if>
@@ -167,7 +183,9 @@
                 order_type=#{item}
             </foreach>
         </if>
-
+        <if test="isPackage !=null ">
+            and is_package = #{isPackage}
+        </if>
         <if test="fromCreatedTime !=null ">
             and created_time >= #{fromCreatedTime}
         </if>
@@ -216,8 +234,18 @@
             <if test="goodsType != null and goodsType !='' ">
                 goods_Type = #{goodsType},
             </if>
+            <if test="parentNo != null and parentNo !='' ">
+                parent_No = #{parentNo},
+            </if>
             updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
         </trim>
     </update>
 
+    <select id="queryByPackageNo" resultMap="orderDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill
+        WHERE merchant_id=#{merchantId} and parent_no = #{packageNo}
+
+    </select>
 </mapper>

@@ -13,5 +13,11 @@
 	  	<artifactId>dms-dto</artifactId>
 	  	<version>1.0.0</version>
 	  </dependency>
+	  
+		<dependency>
+            <groupId>com.nilo.dms</groupId>
+            <artifactId>dms-dao</artifactId>
+            <version>1.0.0</version>
+        </dependency>
   </dependencies>
 </project>

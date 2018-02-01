@@ -11,4 +11,15 @@ import java.util.List;
 public interface ThirdExpressDao extends BaseDao<Long, ThirdExpressDO> {
 
     List<ThirdExpressDO> findByMerchantId(Long merchantId);
+    
+    List<ThirdExpressDO> findByExpress(ThirdExpressDO express);
+    
+    List<ThirdExpressDO> findByMerchantIdAll();
+    
+    void addExpress(ThirdExpressDO express);
+    
+    void updateExpress(ThirdExpressDO express);
+    
+    void deleteExpress(ThirdExpressDO express);
+
 }

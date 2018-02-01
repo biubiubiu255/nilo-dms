@@ -34,8 +34,12 @@
                 <input type="text" name="loadingBy" value="${sessionScope.userName}" autocomplete="off"
                        class="layui-input layui-disabled" disabled>
             </div>
-
-
+            <label class="layui-form-label" style="width:120px">Quantity</label>
+            <div class="layui-input-inline">
+                <input type="text" name="quantity" value="${loading.detailsList.size()}" autocomplete="off"
+                       class="layui-input layui-disabled"
+                       disabled>
+            </div>
         </div>
 
         <div class="layui-form-item">
@@ -43,7 +47,7 @@
             <div class="deliveryDiv">
                 <label class="layui-form-label" style="width:120px">Rider</label>
                 <div class="layui-input-inline">
-                    <select name="deliveryRider" id="deliveryRider"  lay-search=""
+                    <select name="deliveryRider" id="deliveryRider" lay-search=""
                             <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
                         <option value="">choose or search....</option>
                         <c:forEach items="${riderList}" var="rider">
@@ -56,7 +60,7 @@
             <div class="sendDiv" style="display: none">
                 <label class="layui-form-label" style="width:120px">Next Station</label>
                 <div class="layui-input-inline">
-                    <select name="nextStation"  lay-search="" lay-filter="nextStation" >
+                    <select name="nextStation" lay-search="" lay-filter="nextStation">
                         <option value="">choose or search....</option>
                         <c:forEach items="${nextStation}" var="station">
                             <option value="${station.code}" type="${station.type}">${station.name}</option>
@@ -64,20 +68,23 @@
                     </select>
                 </div>
 
+                <label class="layui-form-label" style="width:120px">Carrier</label>
+                <div class="layui-input-inline">
+                    <select name="carrier" lay-search="" lay-filter="carrier">
+                        <option value="">choose or search....</option>
+                        <c:forEach items="${thirdCarrier}" var="carrier">
+                            <option value="${carrier.expressCode}" >${carrier.expressName}</option>
+                        </c:forEach>
+                    </select>
+                </div>
                 <label class="layui-form-label" style="width:120px">Driver</label>
                 <div class="layui-input-inline">
-                    <select name="sendDriver" id="sendDriver"  lay-search="">
+                    <select name="sendDriver" id="sendDriver" lay-search="">
                         <option value="">choose or search....</option>
                     </select>
                 </div>
             </div>
 
-            <label class="layui-form-label" style="width:120px">Quantity</label>
-            <div class="layui-input-inline">
-                <input type="text" name="quantity" value="${loading.detailsList.size()}" autocomplete="off"
-                       class="layui-input layui-disabled"
-                       disabled>
-            </div>
         </div>
     </form>
     <hr>
@@ -99,7 +106,7 @@
             <tr>
                 <th lay-data="{fixed: 'left',field:'num', width:100}">ID</th>
                 <th lay-data="{field:'orderNo', width:250}">OrderNo</th>
-                <th lay-data="{field:'orderType', width:100,templet: '<div>{{d.deliveryOrder.orderType}}</div>'}">
+                <th lay-data="{field:'orderTypeDesc', width:100,templet: '<div>{{d.deliveryOrder.orderTypeDesc}}</div>'}">
                     OrderTyp
                 </th>
                 <th lay-data="{field:'weight', width:200,templet: '<div>{{d.deliveryOrder.weight}}</div>'}">Weight</th>
@@ -158,17 +165,17 @@
                 return false;
             });
 
-            form.on('radio(filter)', function(data){
-                if(data.value=='1'){
+            form.on('radio(filter)', function (data) {
+                if (data.value == '1') {
                     $(".deliveryDiv").show();
                     $(".sendDiv").hide();
-                }else{
+                } else {
                     $(".sendDiv").show();
                     $(".deliveryDiv").hide();
                 }
             });
 
-            form.on('select(nextStation)', function(data){
+            form.on('select(nextStation)', function (data) {
                 getNextStationDriver(data.value);
             });
 
@@ -204,12 +211,10 @@
                     },
                     success: function (data) {
                         if (data.result) {
-                            layer.msg("SUCCESS", {icon: 1, time: 1000}, function () {
-                                $("#orderNo").focus();
-                                $("#orderNo").val('');
-                                //刷新数据
-                                reloadTable();
-                            });
+                            $("#orderNo").focus();
+                            $("#orderNo").val('');
+                            //刷新数据
+                            reloadTable();
                         } else {
                             layer.msg(data.msg, {icon: 2, time: 2000});
                         }
@@ -285,9 +290,9 @@
             });
 
         });
-        
+
         $('.print').on('click', function () {
-        	window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
+            window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
         });
 
         function getNextStationDriver(code) {
@@ -295,14 +300,14 @@
                 type: "POST",
                 url: "/order/loading/getNextStationDriver.html",
                 dataType: "json",
-                data: { code: code },
+                data: {code: code},
                 success: function (data) {
                     if (data.result) {
                         $("#sendDriver").empty();
                         $("#sendDriver").prepend("<option value='0'>choose or search....</option>");
                         var driver = data.data;
                         for (var i = 0; i < driver.length; i++) {
-                            $("#sendDriver").append("<option value='"+driver[i].code+"'>"+driver[i].name+"</option>");
+                            $("#sendDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
                         }
                         form.render();
                     }
