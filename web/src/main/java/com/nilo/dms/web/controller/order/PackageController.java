@@ -30,6 +30,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.nilo.dms.common.Constant.IS_PACKAGE;
+
 /**
  * Created by ronny on 2017/9/15.
  */
@@ -47,7 +49,6 @@ public class PackageController extends BaseController {
     private WaybillScanDao waybillScanDao;
     @Autowired
     private WaybillScanDetailsDao waybillScanDetailsDao;
-    private static final Integer IS_PACKAGE = 1;
 
     
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)

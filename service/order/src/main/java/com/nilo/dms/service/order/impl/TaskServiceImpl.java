@@ -67,19 +67,6 @@ public class TaskServiceImpl implements TaskService {
         taskDO.setTaskType(task.getTaskType().getCode());
         taskDao.insert(taskDO);
 
-        //发送消息给Rider
-        TaskMessage message = new TaskMessage();
-        message.setMessageId("" + IdWorker.getInstance().nextId());
-        message.setContent("You have a new task :" + taskId);
-        message.setSenderId(task.getCreatedBy());
-        message.setReceiverId(task.getHandledBy());
-        try {
-            messageProducer.sendMessage(message);
-        } catch (Exception e) {
-            //
-            logger.error("sendMessage Failed. message:{}", message, e);
-        }
-
         return "" + taskId;
     }
 

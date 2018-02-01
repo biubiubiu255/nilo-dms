@@ -49,7 +49,7 @@ public class DeliveryOrderDO extends BaseDo<Long> {
     private Double high;
     private Double length;
     private Double width;
-    private Integer isPackage;
+    private String isPackage;
     private Integer networkId;
     private Integer nextNetworkId;
     private String parentNo;
@@ -94,11 +94,11 @@ public class DeliveryOrderDO extends BaseDo<Long> {
         this.width = width;
     }
 
-    public Integer getIsPackage() {
+    public String getIsPackage() {
         return isPackage;
     }
 
-    public void setIsPackage(Integer isPackage) {
+    public void setIsPackage(String isPackage) {
         this.isPackage = isPackage;
     }
 

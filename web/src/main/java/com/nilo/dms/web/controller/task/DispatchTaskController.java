@@ -60,8 +60,14 @@ public class DispatchTaskController extends BaseController {
         TaskParameter parameter = new TaskParameter();
         parameter.setOrderNo(orderNo);
         parameter.setMerchantId(merchantId);
-        parameter.setTaskType(TaskTypeEnum.DISPATCH.getCode());
-        parameter.setHandledBy(me.getUserId());
+        //如果当前用户不是快递员查询条件
+        if (me.isRider()) {
+            parameter.setTaskType(TaskTypeEnum.DISPATCH.getCode());
+            parameter.setHandledBy(me.getUserId());
+        } else {
+            parameter.setTaskType(TaskTypeEnum.SELF_DELIVERY.getCode());
+            parameter.setHandledBy("" + me.getNetworks().get(0));
+        }
         if (taskStatus != null) {
             parameter.setStatus(Arrays.asList(taskStatus));
         } else {

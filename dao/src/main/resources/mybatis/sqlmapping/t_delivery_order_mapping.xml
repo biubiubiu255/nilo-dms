@@ -68,8 +68,8 @@
                 jdbcType="DECIMAL"/>
         <result property="high" column="high" javaType="java.lang.Double"
                 jdbcType="DECIMAL"/>
-        <result property="isPackage" column="is_Package" javaType="java.lang.Integer"
-                jdbcType="INTEGER"/>
+        <result property="isPackage" column="is_Package" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
         <result property="networkId" column="network_id" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
         <result property="nextNetworkId" column="next_network_id" javaType="java.lang.Integer"

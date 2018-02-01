@@ -36,12 +36,20 @@ public class Principal implements Serializable {
 
     private String departmentName;
 
+    private boolean isRider;
+
     private List<Integer> networks;
     private List<String> authorities;
     private List<String> roles;
     private List<String> urlAuthorities;
-    
-    
+
+    public boolean isRider() {
+        return isRider;
+    }
+
+    public void setRider(boolean rider) {
+        isRider = rider;
+    }
 
     public List<String> getUrlAuthorities() {
 		return urlAuthorities;

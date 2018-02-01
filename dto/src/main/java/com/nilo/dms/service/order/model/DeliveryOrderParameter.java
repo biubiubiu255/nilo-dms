@@ -14,7 +14,7 @@ public class DeliveryOrderParameter {
 
     private String referenceNo;
 
-    private Integer isPackage;
+    private String isPackage;
 
     private List<String> orderType;
 
@@ -26,11 +26,11 @@ public class DeliveryOrderParameter {
 
     private String nextStation;
 
-    public Integer getIsPackage() {
+    public String getIsPackage() {
         return isPackage;
     }
 
-    public void setIsPackage(Integer isPackage) {
+    public void setIsPackage(String isPackage) {
         this.isPackage = isPackage;
     }
 

@@ -13,6 +13,7 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.service.order.DeliveryFeeDetailsService;
+import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.AbstractOrderOpt;
@@ -64,7 +65,10 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     private DistributionNetworkDao distributionNetworkDao;
     @Autowired
     private DeliveryOrderRequestDao deliveryOrderRequestDao;
-
+    @Autowired
+    private TaskService taskService;
+    @Autowired
+    private UserNetworkDao userNetworkDao;
     @Autowired
     @Qualifier("notifyMerchantProducer")
     private AbstractMQProducer notifyMerchantProducer;
@@ -359,6 +363,22 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                         deliveryOrderDao.update(orderDO);
                     }
 
+                    List<UserNetworkDO> userNetworkDOList = userNetworkDao.queryByUserId(Long.parseLong(arriveBy));
+                    //网点到件的运单为自提，添加网点任务
+                    for (WaybillScanDetailsDO details : scanDetailList) {
+                        DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), details.getOrderNo());
+                        if (StringUtil.equalsIgnoreCase(orderDO.getChannel(), "Y") && !StringUtil.equalsIgnoreCase(orderDO.getIsPackage(), "Y")) {
+                            Task task = new Task();
+                            task.setMerchantId(merchantId);
+                            task.setStatus(TaskStatusEnum.CREATE);
+                            task.setCreatedBy(arriveBy);
+                            task.setOrderNo(details.getOrderNo());
+                            task.setHandledBy("" + userNetworkDOList.get(0).getDistributionNetworkId());
+                            task.setTaskType(TaskTypeEnum.SELF_DELIVERY);
+                            taskService.addTask(task);
+                        }
+                    }
+
                 } catch (Exception e) {
                     logger.error("arrive Failed. Data:{}", scanNo, e);
                     transactionStatus.setRollbackOnly();
@@ -447,11 +467,11 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     @Override
     public List<DeliveryOrder> queryByPackageNo(String merchantNo, String packageNo) {
-        List<DeliveryOrderDO> queryList = deliveryOrderDao.queryByPackageNo(Long.parseLong(merchantNo),packageNo);
+        List<DeliveryOrderDO> queryList = deliveryOrderDao.queryByPackageNo(Long.parseLong(merchantNo), packageNo);
 
         List<DeliveryOrder> list = new ArrayList<>();
-        if(queryList== null) return list;
-        for(DeliveryOrderDO d : queryList){
+        if (queryList == null) return list;
+        for (DeliveryOrderDO d : queryList) {
             list.add(convert(d));
         }
         return list;
@@ -610,7 +630,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setNetworkId(d.getNetworkId());
         deliveryOrder.setNextNetworkId(d.getNextNetworkId());
 
-        deliveryOrder.setPackage(d.getIsPackage()==1);
+        deliveryOrder.setPackage(StringUtil.equalsIgnoreCase(d.getIsPackage(),Constant.IS_PACKAGE));
 
         return deliveryOrder;
     }
@@ -691,7 +711,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         orderHeader.setNotes(d.getNotes());
         orderHeader.setRemark(d.getRemark());
 
-        orderHeader.setIsPackage(d.isPackage() ? 1 : 0);
+        orderHeader.setIsPackage(d.isPackage() ? Constant.IS_PACKAGE : "");
         return orderHeader;
     }
 

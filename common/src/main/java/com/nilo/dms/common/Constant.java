@@ -25,7 +25,7 @@ public class Constant {
 
     public static final String DELIVERY_ORDER_TYPE = "delivery_order_type";
 
-    public static final Integer IS_PACKAGE=1;
+    public static final String IS_PACKAGE="Y";
 
     public static final String ALLOW_URL="/dashboard.html,/home.html,/account/logout.html," +
             "/mobile/DemoController/toLoginPage.html,/mobile/DemoController/toIndexPage.html,/mobile/DemoController/test.html," +

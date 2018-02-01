@@ -14,7 +14,9 @@ import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.Role;
 import com.nilo.dms.service.model.User;
 import com.nilo.dms.service.org.CompanyService;
+import com.nilo.dms.service.org.StaffService;
 import com.nilo.dms.service.org.model.Company;
+import com.nilo.dms.service.org.model.Staff;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -47,6 +49,9 @@ public class AuthenticationRealm extends AuthorizingRealm {
     private CompanyService companyService;
     @Autowired
     private UserNetworkDao userNetworkDao;
+    @Autowired
+    private StaffService staffService;
+
     @Override
     protected void onInit() {
         super.onInit();
@@ -76,7 +81,7 @@ public class AuthenticationRealm extends AuthorizingRealm {
                     case FROZEN:
                         throw new LockedAccountException();
                 }
-                
+
                 List<String> urlAuthorities = roleService.findUrlPermissionsByUserId(user.getUserId());
                 List<String> authorities = roleService.findPermissionsByUserId(user.getUserId());
                 List<String> roles = new ArrayList<>();
@@ -99,7 +104,10 @@ public class AuthenticationRealm extends AuthorizingRealm {
                 principal.setCompanyId(company.getCompanyId());
                 principal.setUrlAuthorities(urlAuthorities);
                 principal.setNetworks(getUserNetwork(userNetworkDOList));
-
+                Staff staff = staffService.findByStaffId(company.getCompanyId(), user.getLoginInfo().getUserName());
+                if (staff != null) {
+                    principal.setRider(staff.isRider());
+                }
                 return new SimpleAuthenticationInfo(principal, user.getLoginInfo().getPassword(), getName());
             }
         }
@@ -115,7 +123,7 @@ public class AuthenticationRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 
-        SimpleAuthorizationInfo info =  new SimpleAuthorizationInfo();
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
         Principal principal = ((Principal) principals.getPrimaryPrincipal());
         if (principal != null) {
@@ -126,11 +134,11 @@ public class AuthenticationRealm extends AuthorizingRealm {
         return info;
     }
 
-    private List<Integer> getUserNetwork(List<UserNetworkDO> networkDOList){
+    private List<Integer> getUserNetwork(List<UserNetworkDO> networkDOList) {
 
         if (networkDOList == null) return null;
         List<Integer> list = new ArrayList<>();
-        for(UserNetworkDO networkDO : networkDOList){
+        for (UserNetworkDO networkDO : networkDOList) {
             list.add(networkDO.getDistributionNetworkId().intValue());
         }
         return list;
