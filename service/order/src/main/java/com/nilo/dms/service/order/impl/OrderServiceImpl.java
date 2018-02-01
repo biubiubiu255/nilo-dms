@@ -445,6 +445,18 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         return orderNo;
     }
 
+    @Override
+    public List<DeliveryOrder> queryByPackageNo(String merchantNo, String packageNo) {
+        List<DeliveryOrderDO> queryList = deliveryOrderDao.queryByPackageNo(Long.parseLong(merchantNo),packageNo);
+
+        List<DeliveryOrder> list = new ArrayList<>();
+        if(queryList== null) return list;
+        for(DeliveryOrderDO d : queryList){
+            list.add(convert(d));
+        }
+        return list;
+    }
+
     private void updateDeliveryOrderStatus(OrderOptRequest optRequest, String orderNo, OrderHandleConfig handleConfig) {
         long affected = 0;
         //更新订单信息，循环10次，10次未更新成功，则跳出
@@ -597,6 +609,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setHigh(d.getHigh());
         deliveryOrder.setNetworkId(d.getNetworkId());
         deliveryOrder.setNextNetworkId(d.getNextNetworkId());
+
+        deliveryOrder.setPackage(d.getIsPackage()==1);
 
         return deliveryOrder;
     }

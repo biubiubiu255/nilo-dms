@@ -28,4 +28,6 @@ public interface OrderService {
 
     String addPackage(PackageRequest packageRequest);
 
+    List<DeliveryOrder> queryByPackageNo(String merchantNo,String packageNo);
+
 }
