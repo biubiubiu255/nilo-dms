@@ -25,27 +25,102 @@
 
 <div class="wap_content">
     <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
-        <h2>Stranded Parcel</h2>
+        <h2>Arrive Scan</h2>
     </div>
     <div class="search_banner">
         <div class="search_content" id="customers-search">
             <div class="search_input">
                 <i></i>
-                <input type="text" placeholder="Logistics No" class="search_input_field keywords"/>
+                <input type="text" id="logisticsNo" name="logisticsNo" placeholder="Logistics No" class="search_input_field keywords"/>
             </div>
-            <div class="search_button"><input type="button" value="scan" class="search_input_button submit"/></div>
+            <div class="search_button"><input type="button" value="scan" class="search_input_button"/></div>
         </div>
-        <div class="bottom_a_button"><a onclick="addTr2('tab', -1)">submit</a></div>
-        <%--<div class="bottom_a_button"><a onclick="addTr2('tab', -1)">delete</a></div>--%>
+        <div class="bottom_a_button11"><a onclick="delTr2()">delete</a></div>
+        <div class="bottom_a_button22"><a onclick="suiyi('fuxuan')">submit</a></div>
     </div>
 </div>
 <div>
     <table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
         <tr>
             <td>Logistics No</td>
-            <td><input type="checkbox"></td>
+            <td><input type="checkbox" id="allFuxuan" onclick="sel('fuxuan')"></td>
         </tr>
     </table>
 </div>
+
+<script>
+    $("#logisticsNo").focus();
+    $("#logisticsNo").keydown(function (event) {
+        event = document.all ? window.event : event;
+        if ((event.keyCode || event.which) == 13) {
+            addTr2('tab', -1);
+        }
+    });
+
+    function sel(a){
+        var o=document.getElementsByName(a)
+        for(var i=0;i<o.length;i++)
+            o[i].checked=event.srcElement.checked
+    }
+
+    function delTr2(){
+        delTr('fuxuan');
+    }
+
+    function delTr(fuxuan){
+        //获取选中的复选框，然后循环遍历删除
+        var fuxuans=$("input[name="+fuxuan+"]:checked");
+        if(fuxuans.size()==0){
+            alert("要删除指定行，需选中要删除的行！");
+            return;
+        }
+        fuxuans.each(function(){
+            $(this).parent().parent().remove();
+        });
+    }
+
+    function addTr2(tab, row) {
+        var kuang1 = document.getElementById("logisticsNo")
+        var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\""+kuang1.value+"\"></td></tr>";
+        addTr(tab, row, trHtml);
+    }
+    function addTr(tab, row, trHtml){
+        //获取table最后一行 $("#tab tr:last")
+        //获取table第一行 $("#tab tr").eq(0)
+        //获取table倒数第二行 $("#tab tr").eq(-2)
+        var $tr=$("#"+tab+" tr").eq(row);
+        if($tr.size()==0){
+            alert("指定的table id或行数不存在！");
+            return;
+        }
+        $tr.after(trHtml);
+        $("#logisticsNo").val("").focus();
+        $("#reason").val("0");
+        $("#memo").val("");
+    }
+
+    function suiyi(fuxuan) {
+        var arr = new Array();
+        $("input[name="+fuxuan+"]:checked").each(function (i, n) {
+            arr.push($(this).val());
+        });
+        $.ajax({
+            cache: false,
+            type: "POST",
+            traditional: true,
+            url: "/mobile/SjArriveScanController/test.html",
+            data : {arr : arr},
+            async: false,
+            error: function () {
+                alert("发送请求失败！");
+            },
+            success: function () {
+                console.log("zzzzzzzzzzzzzzzzzzzzzz")
+                // addTr2('tab', -1);
+                delTr(fuxuan);
+            }
+        });
+    }
+</script>
 </body>
 </html>

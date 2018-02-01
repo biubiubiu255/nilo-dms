@@ -101,7 +101,7 @@ a{ text-decoration:none;}
 .three_banner li a{ font-size:1.2em; color:#555;}
 
 
-.formula_modify{ width:100%; background:#fff; overflow:hidden;padding-top:10px;padding-bottom: 15px;}
+.formula_modify{ width:100%; background:#fff; overflow:hidden;}
 
 
 
@@ -172,9 +172,8 @@ a{ text-decoration:none;}
 .one_banner{ width:100%; overflow:hidden;padding:0px;margin: 0px;}
 .one_banner li{ width:100%; float:left; text-align:center; position: relative; padding:0px;margin: 0px; height:35px;}
 .one_banner li label{ width:30%; display:inline-block;float:left;line-height:28px;  position:absolute; left:0px; top:0px; text-align: center; font-size: 1.1em;}
-.one_banner li .input_value{position:absolute; left:30%; top:0px;text-align: center; padding:0px; width:50%; height:28px; line-height:28px;font-size: 1.1em; float:left;border:1px solid #d8d8d8;border-radius:10px;}
+.one_banner li .input_value{position:absolute; left:3px; top:0px;text-align: center; padding:0px; width:80%; height:28px; line-height:28px;font-size: 1.1em; float:left;border:1px solid #d8d8d8;border-radius:10px;}
 .one_banner li span{position:absolute; left:83%; top:0px;text-align: center; padding:0px; width:15%; height:28px; line-height:28px;font-size: 1.1em; float:left;border:1px solid #d8d8d8;border-radius:10px; background: lightskyblue;}
-.xq{width: 50% ; height: 30px; background: gainsboro; position:relative; left: 30%; border-radius:10px; }
 /*.one_banner li .invalid{border:1px solid #ec5252;border-radius:10px;}*/
 .one_banner li input.invalid,select.invalid{border:1px solid #ec5252;border-radius:10px;}
 
@@ -202,7 +201,6 @@ a{ text-decoration:none;}
 .one_anner li label{ width:45%; display:inline-block;float:left;line-height:28px;  position:absolute; left:0px; top:0px; text-align: center; font-size: 1.1em;}
 .one_anner li .input_value{position:absolute; left:42%; top:0px;text-align: center; padding:0px; width:50%; height:28px; line-height:28px;font-size: 1.1em; float:left;border:1px solid #d8d8d8;border-radius:10px;}
 .one_anner li span{position:absolute; left:83%; top:0px;text-align: center; padding:0px; width:15%; height:28px; line-height:28px;font-size: 1.1em; float:left;border:1px solid #d8d8d8;border-radius:10px; background: lightskyblue;}
-.xq{width: 50% ; height: 30px; background: gainsboro; position:relative; left: 30%; border-radius:10px; }
 /*.one_banner li .invalid{border:1px solid #ec5252;border-radius:10px;}*/
 .one_anner li input.invalid,select.invalid{border:1px solid #ec5252;border-radius:10px;}
 

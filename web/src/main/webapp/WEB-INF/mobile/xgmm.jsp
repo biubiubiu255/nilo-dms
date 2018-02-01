@@ -21,7 +21,7 @@
 <body>
 <div class="wap_content">
     <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="返回" class="wap_top_back"></a>
-        <h2>Modify the password</h2>
+        <h2>Modify password</h2>
 
     </div>
 
@@ -31,23 +31,21 @@
         <div class="banner_content">
         <ul class="one_banner">
             <li id="group_customers_id">
-                <label>Old password</label>
-                <input type="tel"   name="phone" class="input_value" /><br/>
+                <%--<label>Old password</label>--%>
+                <input type="tel" placeholder="Old password"  name="old" class="input_value22" /><br/>
             </li>
             <li>
-                <label style="float: left;">New password</label>
-                <input type="tel"   name="phone" class="input_value" />
+                <%--<label style="float: left;">New password</label>--%>
+                <input type="tel"  placeholder="New password" name="new" class="input_value22" />
             </li>
             <li>
-                <label>Repeat the new password</label>
-                <input type="tel"   name="phone" class="input_value" /><br/>
+                <%--<label>Repeat the new password</label>--%>
+                <input type="tel" placeholder="Repeat the new password"  name="repeat" class="input_value22" /><br/>
             </li>
 
         </ul>
         </div>
-        <div class="clear"></div>
-
-        <div class="bottom_a_button"><a href="javascript:void(0);" class="submit">submit</a></div>
+        <div class="bottom_a_button"><a onclick="">submit</a></div>
     </div>
 
 </div>

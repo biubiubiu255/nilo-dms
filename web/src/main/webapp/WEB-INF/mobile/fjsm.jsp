@@ -24,30 +24,30 @@
 <div class="wap_content">
 
     <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
-        <h2>Stranded Parcel</h2>
+        <h2>Send Scan</h2>
     </div>
 
     <div class="formula_modify">
         <form id="myForm" class="layui-form" action="">
             <div class="banner_content">
                 <ul class="one_banner">
-                    <li><label>Logistics No</label><input type='text' maxlength='100' class='input_value' name='waybillNumber' /><span>scan</span></li>
+                    <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' id='logisticsNo' name='logisticsNo' /><span>scan</span></li>
                     <li>
-                        <label>Next Station</label>
-                        <select required="required" class='input_value' name='nextStation'>
-                            <option value="1">Please select the site</option>
-                            <option value="2">test2</option>
-                            <option value="3">nckjd</option>
-                            <option value="4">dvad</option>
-                            <option value="5">test5</option>
-                            <option value="6">test6</option>
+                        <%--<label>Next Station</label>--%>
+                        <select required="required" class='input_value' id='nextStation' name='nextStation'>
+                            <option value="0">Please select the site</option>
+                            <option value="test2">test2</option>
+                            <option value="nckjd">nckjd</option>
+                            <option value="dvad">dvad</option>
+                            <option value="test5">test5</option>
+                            <option value="test6">test6</option>
                         </select>
                     </li>
-                    <li><label>Driver</label><input type='text' maxlength='100' class='input_value' name='driver' /></li>
-                    <li><label>Plate No</label><input type='text' maxlength='100' class='input_value' name='licensePlateNumber' /><span>save</span></li>
+                    <li><input type='text' placeholder="Driver" maxlength='100' class='input_value' id='driver' name='driver' /></li>
+                    <li><input type='text' placeholder="Plate No" maxlength='100' class='input_value' id='plateNo' name='plateNo' /><span onclick="addTr2('tab', 0);">save</span></li>
                 </ul>
-                <div class="bottom_a_button"><a onclick="">submit</a></div>
-                <%--<div class="bottom_a_button"><a onclick="">delete</a></div>--%>
+                <div class="bottom_a_button11"><a onclick="delTr2()">delete</a></div>
+                <div class="bottom_a_button22"><a onclick="suiyi('fuxuan')">submit</a></div>
             </div>
         </form>
     </div>
@@ -56,10 +56,77 @@
             <tr>
                 <td>Logistics No</td>
                 <td>Next Station</td>
-                <td><input type="checkbox"></td>
+                <td><input type="checkbox" id="allFuxuan" onclick="sel('fuxuan')"></td>
             </tr>
         </table>
     </div>
 </div>
+
+<script>
+    function addTr2(tab, row) {
+        var kuang1 = document.getElementById("logisticsNo")
+        var kuang2 = document.getElementById("nextStation")
+        var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang2.value+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\"" +kuang1.value+ "\"></td></tr>";
+        addTr(tab, row, trHtml);
+    }
+    function addTr(tab, row, trHtml){
+        //获取table最后一行 $("#tab tr:last")
+        //获取table第一行 $("#tab tr").eq(0)
+        //获取table倒数第二行 $("#tab tr").eq(-2)
+        var $tr=$("#"+tab+" tr").eq(row);
+        if($tr.size()==0){
+            alert("指定的table id或行数不存在！");
+            return;
+        }
+        $tr.after(trHtml);
+        $("#logisticsNo").val("").focus();
+        $("#nextStation").val("0");
+        $("#driver").val("");
+        $("#plateNo").val("");
+    }
+    function sel(a){
+        var o=document.getElementsByName(a)
+        for(var i=0;i<o.length;i++)
+            o[i].checked=event.srcElement.checked
+    }
+
+    function delTr2(){
+        delTr('fuxuan');
+    }
+
+    function delTr(fuxuan){
+        //获取选中的复选框，然后循环遍历删除
+        var fuxuans=$("input[name="+fuxuan+"]:checked");
+        if(fuxuans.size()==0){
+            alert("要删除指定行，需选中要删除的行！");
+            return;
+        }
+        fuxuans.each(function(){
+            $(this).parent().parent().remove();
+        });
+    }
+    function suiyi(fuxuan) {
+        var arr = new Array();
+        $("input[name="+fuxuan+"]:checked").each(function (i, n) {
+            arr.push($(this).val());
+        });
+        $.ajax({
+            cache: false,
+            type: "POST",
+            traditional: true,
+            url: "/mobile/SendScanController/test.html",
+            data : {arr : arr},
+            async: false,
+            error: function () {
+                alert("发送请求失败！");
+            },
+            success: function () {
+                console.log("zzzzzzzzzzzzzzzzzzzzzz")
+                // addTr2('tab', -1);
+                delTr(fuxuan);
+            }
+        });
+    }
+</script>
 </body>
 </html>

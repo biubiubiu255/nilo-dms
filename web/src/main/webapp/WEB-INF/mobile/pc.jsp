@@ -26,7 +26,7 @@
         <div class="search_content" id="customers-search">
             <div class="search_input">
                 <i></i>
-                <input type="text" placeholder="Logistics No" class="search_input_field keywords"/>
+                <input type="text" placeholder="Logistics No" id="logisticsNo" class="search_input_field keywords"/>
             </div>
             <div class="search_button"><input type="button" value="submit" class="search_input_button submit"/></div>
         </div>
@@ -39,5 +39,15 @@
         </tr>
     </table>
 </div>
+
+<script>
+    $("#logisticsNo").focus();
+    $("#logisticsNo").keydown(function (event) {
+        event = document.all ? window.event : event;
+        if ((event.keyCode || event.which) == 13) {
+            addTr2('tab', -1);
+        }
+    });
+</script>
 </body>
 </html>

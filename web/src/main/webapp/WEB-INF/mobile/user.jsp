@@ -23,7 +23,7 @@
     <div class="sy_wap_cnter">
         <div class="grz_t2" style="background-color: #37BCF9;">
             <div class="grz_t_img">
-                <img src="../mobile/images/hrg_tx1.png" title="" alt=""/><br/>
+                <img src="/mobile/images/hrg_tx1.png" title="" alt=""/><br/>
                 <h2>${sessionScope.userName}</h2>
                 <p>kilimall member</p>
             </div>

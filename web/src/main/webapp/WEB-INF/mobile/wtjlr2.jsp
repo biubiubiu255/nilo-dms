@@ -25,28 +25,28 @@
 <div class="wap_content">
 
     <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
-        <h2>Stranded Parcel</h2>
+        <h2>Porblem</h2>
     </div>
 
     <div class="formula_modify">
         <form id="myForm" class="layui-form" action="">
             <div class="banner_content">
                 <ul class="one_banner">
-                    <li><label>Logistics No</label><input type='text' maxlength='100' class='input_value' name='waybillNumber' /><span>scan</span></li>
+                    <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' name='waybillNumber' /><span>scan</span></li>
                     <li>
-                        <label>Reason</label>
+                        <%--<label>Reason</label>--%>
                         <select required="required" class='input_value' name='reason'>
-                            <option value="0">Return</option>
+                            <option value="0">Please select a return reason</option>
                             <option value="1">Over Scope Of Deliver</option>
                             <option value="2">Unable to contact customers</option>
-                            <option value="3">test</option>
+                            <option value="3">Return</option>
                             <option value="4">test</option>
                             <option value="5">Rejection</option>
                         </select><span>Save</span>
                     </li>
-                    <li><label>Memo</label><input type='text' maxlength='100' class='input_value' name='remarks' /></li>
+                    <li><input type='text' placeholder="Memo" maxlength='100' class='input_value' name='remarks' /></li>
                 </ul>
-                <%--<div class="bottom_a_button11"><a onclick="">delete</a></div>--%>
+                <div class="bottom_a_button11"><a onclick="">delete</a></div>
                 <div class="bottom_a_button22"><a onclick="">submit</a></div>
             </div>
         </form>

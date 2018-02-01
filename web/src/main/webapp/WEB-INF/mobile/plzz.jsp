@@ -26,31 +26,19 @@
     </div>
 
     <div class="formula_modify">
-        <div></div><br/>
         <div class="banner_content">
-        <ul class="one_anner">
-            <li id="group_customers_id">
-                <label>Total number of orders</label>
-                <input type="tel"   name="phone" class="input_value" /><br/>
-            </li>
-            <li>
-                <label style="float: left;">The total amount</label>
-                <input type="tel"   name="phone" class="input_value" />
-            </li>
-            <li>
-                <label>Trading water number</label>
-                <input type="tel"   name="phone" class="input_value" /><br/>
-            </li>
-            <li>
-        		<label>Photograph</label>
-                <div class="xq input_value"><img src="/mobile/images/2300.jpg" /></div>
-        	</li>
-
+        <ul class="one_banner">
+            <li><input type="tel" placeholder="Total number of orders"   name="phone" class="input_value22" /><br/></li>
+            <li><input type="tel" placeholder="The total amount"   name="phone" class="input_value22" /></li>
+            <li><input type="tel" placeholder="Trading water number"   name="phone" class="input_value22" /><br/></li>
+            <li><label>Photograph</label><div class="xq"><img src="/mobile/images/2300.jpg" /></div></li>
         </ul>
+            <center>
+                <div><img src="/mobile/images/test111.jpg" style="width: 100px; height: 100px;" /></div>
+            </center>
+            <div class="bottom_a_button"><a onclick="">submit</a></div>
         </div>
-        <div class="clear"></div>
 
-        <div class="bottom_a_button"><a href="javascript:void(0);" class="submit">submit</a></div>
     </div>
 	
 	
@@ -60,7 +48,7 @@
             <td>Order No</td>
             <td>Logistics No</td>
             <td>Amount</td>
-            <td>All<input type="checkbox"> </td>
+            <td>All<input type="checkbox" name="fuxuan"> </td>
         </tr>
         <tr>
             <td>1648411548948</td>

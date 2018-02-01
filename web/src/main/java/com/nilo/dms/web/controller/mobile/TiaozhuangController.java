@@ -76,6 +76,11 @@ public class TiaozhuangController {
         return "mobile/zlj2";
     }
 
+    @RequestMapping(value = "/lycx.html")
+    public String lycx() {
+        return "mobile/lycx";
+    }
+
     @RequestMapping(value = "/xgmm.html")
     public String xgmm() {
         return "mobile/xgmm";

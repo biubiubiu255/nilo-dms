@@ -24,20 +24,26 @@
 <body>
 
 <div class="wap_content">
-
     <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
-        <h2>Parcel Confirmation</h2>
+        <h2>Arrive Scan</h2>
     </div>
     <div class="search_banner">
         <div class="search_content" id="customers-search">
             <div class="search_input">
                 <i></i>
-                <input type="text" class="search_input_field keywords"/>
+                <input type="text" id="logisticsNo" name="logisticsNo" placeholder="Logistics No" class="search_input_field keywords"/>
             </div>
-            <div class="search_button"><input type="button" value="scan" class="search_input_button submit"/></div>
+            <div class="search_button"><input type="button" value="scan" class="search_input_button"/></div>
         </div>
-        <div class="bottom_a_button"><a onclick="addTr2('tab', -1)">submit</a></div>
     </div>
+</div>
+<div>
+    <table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
+        <tr>
+            <td>Logistics No</td>
+            <td><input type="checkbox" id="allFuxuan" onclick="sel('fuxuan')"></td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

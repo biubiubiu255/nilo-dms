@@ -77,7 +77,7 @@
   <div class="model_banner">
      <div class="model_banner_title"><i class="model_banner_title"></i>Basic function</div> 
      <ul class="model_banner_ul">
-       <a href="#">
+       <a href="/mobile/tiaozhuangController/lycx.html">
          <li><img src="/mobile/images/scheduler_info.png" /><br/>Routing Query</li>
        </a>
        <a href="/mobile/tiaozhuangController/xgmm.html" title="">
