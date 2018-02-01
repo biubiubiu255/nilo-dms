@@ -33,13 +33,14 @@
             <div class="banner_content">
                 <ul class="one_banner">
                     <li>
-                        <label>Waybill number</label>
-                        <input type="tel" id="waybillNumber" name="waybillNumber" class="input_value" />
+                        <%--<label>Logistics No</label>--%>
+                        <input type="tel" placeholder="Logistics No" id="waybillNumber" name="waybillNumber" class="input_value" />
                         <span>scan</span>
                     </li>
                     <li>
-                        <label style="float: left;">Carrier site</label>
+                        <%--<label style="float: left;">Carrier site</label>--%>
                         <select required="required" class='input_value' name='carrierSite'>
+                            <option value="0">Please enter Carrier site</option>
                             <option value="test1">test1</option>
                             <option value="test2">test2</option>
                             <option value="test3">test3</option>
@@ -49,8 +50,9 @@
                         </select>
                     </li>
                     <li>
-                        <label>Detained type</label>
+                        <%--<label>Stranded type</label>--%>
                         <select required="required" id="detainedType" class='input_value' name='detainedType'>
+                            <option value="0">Stranded type</option>
                             <option value="test1">test1</option>
                             <option value="test2">test2</option>
                             <option value="Address error">Address error</option>
@@ -60,8 +62,8 @@
                         </select>
                     </li>
                     <li>
-                        <label>Remarks</label>
-                        <input type="tel" name="remarks" class="input_value" /><br/>
+                        <%--<label>Memo</label>--%>
+                        <input type="tel" placeholder="Memo" name="remarks" class="input_value" /><br/>
                     </li>
                 </ul>
                 <div class="bottom_a_button"><a onclick="addTr2('tab', -1)">submit</a></div>

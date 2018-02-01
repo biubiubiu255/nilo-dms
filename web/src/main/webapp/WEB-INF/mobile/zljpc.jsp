@@ -20,7 +20,7 @@
 
 <div class="wap_content">
     <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="返回" class="wap_top_back"></a>
-        <h2>Stocktaking of Stranded Parcels</h2>
+        <h2>Stocking of Stranded Parcels</h2>
     </div>
     <div class="search_banner">
         <div class="search_content" id="customers-search">

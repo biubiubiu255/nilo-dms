@@ -25,7 +25,7 @@
 <div class="wap_content">
 
     <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
-        <h2>Stranded Parcel</h2>
+        <h2>Sign Scan</h2>
     </div>
 
     <div class="formula_modify">
@@ -33,17 +33,20 @@
             <div class="banner_content">
                 <ul class="one_banner">
                     <li>
-                        <label>Logistics No</label>
-                        <input type="tel" id="waybillNumber" name="waybillNumber" class="input_value" />
+                        <%--<label>Logistics No</label>--%>
+                        <input type="tel" placeholder="Logistics No" id="logisticsNo" name="logisticsNo" class="input_value" />
                         <span>scan</span>
                     </li>
-                    <li><label>Signer</label><input type='text' id="recipient" class='input_value' name='recipient' /><span>Aquire</span></li>
-                    <li><label>ID No</label><input type='text' class='input_value' name='idNumber' /></li>
+                    <li><input type='text' placeholder="Signer" id="signer" class='input_value' name='signer' /><span>Aquire</span></li>
+                    <li><input type='text' placeholder="Remark" id="remark" class='input_value' name='remark' /></li>
                     <li>
                         <label>Take a picture</label>
-                        <div class="xq input_value"><img src="/mobile/images/2300.jpg" /></div>
+                        <div class="xq"><img src="/mobile/images/2300.jpg" /></div>
                     </li>
                 </ul>
+                <center>
+                    <div><img src="/mobile/images/test111.jpg" style="width: 100px; height: 100px;" /></div>
+                </center>
                 <div class="bottom_a_button"><a onclick="doFind()">submit</a></div>
             </div>
         </form>
@@ -53,7 +56,6 @@
             <tr>
                 <td>Logistics No</td>
                 <td>Signer</td>
-                <td><input type="checkbox"></td>
             </tr>
         </table>
     </div>
@@ -78,9 +80,9 @@
     }
 
     function addTr2(tab, row) {
-        var kuang1 = document.getElementById("waybillNumber")
-        var kuang2 = document.getElementById("recipient")
-        var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang2.value+ "</td><td><input type=\"checkbox\"></td></tr>";
+        var kuang1 = document.getElementById("logisticsNo")
+        var kuang2 = document.getElementById("signer")
+        var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang2.value+ "</td></tr>";
         addTr(tab, row, trHtml);
     }
 
@@ -95,6 +97,9 @@
             return;
         }
         $tr.after(trHtml);
+        // $("#logisticsNo").val("").s();
+        // $("#signer").val("");
+        // $("#remarkx").val("");
     }
 </script>
 </body>

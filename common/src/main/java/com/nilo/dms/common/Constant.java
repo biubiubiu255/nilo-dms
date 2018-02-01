@@ -33,7 +33,9 @@ public class Constant {
             "/mobile/tiaozhuangController/zlj.html,/mobile/tiaozhuangController/pjqr.html,/mobile/tiaozhuangController/plzz.html," +
             "/mobile/tiaozhuangController/djsm.html,/mobile/tiaozhuangController/pjsm.html,/mobile/tiaozhuangController/fjsm.html," +
             "/mobile/tiaozhuangController/pc.html,/mobile/tiaozhuangController/zljpc.html,/mobile/tiaozhuangController/zlj2.html," +
-            "/mobile/tiaozhuangController/xgmm.html,/mobile/tiaozhuangController/wtjlr2.html,/mobile/DemoController/user.html," +
-            "/mobile/StrandedParcelController/test.html,/mobile/SignScanController/test.html";
+            "/mobile/tiaozhuangController/xgmm.html,/mobile/tiaozhuangController/wtjlr2.html,/mobile/DemoController/user.html,/mobile/tiaozhuangController/lycx.html" +
+            "/mobile/StrandedParcelController/test.html,/mobile/SignScanController/test.html,/mobile/CODSignController/test.html," +
+        "/mobile/PorblemController/test.html,/mobile/SjArriveScanController/test.html,/mobile/DeliverScanController/test.html," +
+            "/mobile/SendScanController/test.html";
 
 }
