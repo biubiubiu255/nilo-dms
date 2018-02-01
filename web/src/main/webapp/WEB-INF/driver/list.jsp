@@ -203,7 +203,8 @@
 			var load = layer.load(2);
 			var url = "/admin/driver/edit.html?id=" + d.id
 					+ "&driverId=" + d.driverId + "&driverName="
-					+ d.driverName + "&phone="  + d.phone;
+					+ d.driverName + "&phone="  + d.phone 
+					+ "&expressName=" + d.expressName;
 			var title = "Edit Driver";
 			$.ajax({
 				url : url,
