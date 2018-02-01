@@ -118,7 +118,7 @@
             }, function () {
                 $.ajax({
                     type: "POST",
-                    url: "/admin/user/resetPassword.html",
+                    url: "/admin/express/resetPassword.html",
                     dataType: "json",
                     data: {
                         userId: userId

@@ -8,12 +8,16 @@ import com.nilo.dms.common.BaseDo;
 public class ThirdDriverDO extends BaseDo<Long> {
 
     private String thirdExpressCode;
+    
+    private String expressName;
 
     private String driverId;
 
     private String driverName;
-
+    
     private String phone;
+    
+    //private String driverName;
 
     public String getPhone() {
         return phone;
@@ -46,4 +50,12 @@ public class ThirdDriverDO extends BaseDo<Long> {
     public void setDriverName(String driverName) {
         this.driverName = driverName;
     }
+
+	public String getExpressName() {
+		return expressName;
+	}
+
+	public void setExpressName(String expressName) {
+		this.expressName = expressName;
+	}
 }

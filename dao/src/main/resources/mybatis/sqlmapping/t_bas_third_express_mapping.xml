@@ -25,21 +25,21 @@
     <select id="findByMerchantIdAll" resultMap="expressDO" statementType="PREPARED">
         SELECT
         *
-        FROM t_bas_third_express;
+        FROM t_bas_third_express where valid = 0
     </select>
 
     <select id="findByMerchantId" resultMap="expressDO" statementType="PREPARED">
 
             SELECT
 	        *
-	        FROM t_bas_third_express where merchant_id = #{merchantId}
+	        FROM t_bas_third_express where merchant_id = #{merchantId} and valid = 0
     </select>
     
     <select id="findByExpress" resultMap="expressDO" statementType="PREPARED">
         <if test="expressName !=null and expressName !='' ">
 	        SELECT
 	        *
-	        FROM t_bas_third_express where express_name like CONCAT( CONCAT('%',#{expressName}),'%')
+	        FROM t_bas_third_express where express_name like CONCAT( CONCAT('%',#{expressName}),'%') and valid = 0
         </if> 
 
     </select>
@@ -62,9 +62,9 @@
 
     <insert id="addExpress" statementType="PREPARED" parameterType="com.nilo.dms.dao.dataobject.ThirdExpressDO">
         INSERT INTO t_bas_third_express
-        ( express_code,express_name,merchant_id,created_time,updated_time,version )
+        ( express_code,express_name,merchant_id,created_time,updated_time,version,valid )
         VALUES
-        (#{expressCode},#{expressName}, #{merchantId}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{expressCode},#{expressName}, #{merchantId}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID(),0)
     </insert>
     
     <!-- 动态更新语句 -->
@@ -75,9 +75,19 @@
         where id = #{id}
     </update>
     
-    <!-- 删除语句 -->
+    
+    <!-- 删除语句-->
+    <update id="deleteExpress" statementType="PREPARED" parameterType="com.nilo.dms.dao.dataobject.ThirdExpressDO">
+        update t_bas_third_express set valid = -1,
+        updated_time = UNIX_TIMESTAMP(NOW()) 
+        where id = #{id}
+    </update>
+    
+<!--     
+    删除语句
     <delete id="deleteExpress" statementType="PREPARED"  parameterType="com.nilo.dms.dao.dataobject.ThirdExpressDO">
         delete from  t_bas_third_express where id = #{id}
     </delete>
  
+  -->
 </mapper>
