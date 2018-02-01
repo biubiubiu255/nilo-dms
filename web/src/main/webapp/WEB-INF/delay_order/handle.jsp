@@ -3,9 +3,8 @@
 <%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
 <%
-    request.setAttribute("delayReasonList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "delay_reason"));
+    request.setAttribute("abnormalTypeList", SystemCodeUtil.getSystemCodeList((String)session.getAttribute("merchantId"),"abnormal_order_type"));
 %>
-
 <div class="box-body">
     <form id="myForm" class="layui-form" action="">
         <input type="hidden" name="orderNo" value="${delayDO.orderNo}">
@@ -19,10 +18,10 @@
         <div class="layui-form-item">
             <label class="layui-form-label layui-form-text">Reason:</label>
             <div class="layui-input-inline">
-                <select name="handleType" lay-filter="typeSelect" lay-verify="required" lay-search=""
+                <select name="abnormalType" lay-filter="abnormalType" lay-verify="required" lay-search=""
                         style="display: none">
                     <option value="">Select type....</option>
-                    <c:forEach items="${delayReasonList}" var="r">
+                    <c:forEach items="${abnormalTypeList}" var="r">
                         <option value=${r.code}>${r.value}</option>
                     </c:forEach>
                 </select>

@@ -13,6 +13,7 @@ public class DeliveryOrder {
     private String orderNo;
 
     private String orderType;
+    private String orderTypeDesc;
 
     private String referenceNo;
 
@@ -58,6 +59,78 @@ public class DeliveryOrder {
     private String isCod;
     private String notes;
     private String remark;
+
+    private Double high;
+    private Double length;
+    private Double width;
+    private boolean isPackage;
+    private String parentNo;
+    private Integer networkId;
+    private Integer nextNetworkId;
+
+    public String getOrderTypeDesc() {
+        return orderTypeDesc;
+    }
+
+    public void setOrderTypeDesc(String orderTypeDesc) {
+        this.orderTypeDesc = orderTypeDesc;
+    }
+
+    public Integer getNetworkId() {
+        return networkId;
+    }
+
+    public void setNetworkId(Integer networkId) {
+        this.networkId = networkId;
+    }
+
+    public Integer getNextNetworkId() {
+        return nextNetworkId;
+    }
+
+    public void setNextNetworkId(Integer nextNetworkId) {
+        this.nextNetworkId = nextNetworkId;
+    }
+
+    public boolean isPackage() {
+        return isPackage;
+    }
+
+    public void setPackage(boolean aPackage) {
+        isPackage = aPackage;
+    }
+
+    public String getParentNo() {
+        return parentNo;
+    }
+
+    public void setParentNo(String parentNo) {
+        this.parentNo = parentNo;
+    }
+
+    public Double getHigh() {
+        return high;
+    }
+
+    public void setHigh(Double high) {
+        this.high = high;
+    }
+
+    public Double getLength() {
+        return length;
+    }
+
+    public void setLength(Double length) {
+        this.length = length;
+    }
+
+    public Double getWidth() {
+        return width;
+    }
+
+    public void setWidth(Double width) {
+        this.width = width;
+    }
 
     public String getWarehouseId() {
         return warehouseId;

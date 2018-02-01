@@ -23,6 +23,10 @@ public class Constant {
 
     public static final String ADDRESS="address";
 
+    public static final String DELIVERY_ORDER_TYPE = "delivery_order_type";
+
+    public static final Integer IS_PACKAGE=1;
+
     public static final String ALLOW_URL="/dashboard.html,/home.html,/account/logout.html," +
             "/mobile/DemoController/toLoginPage.html,/mobile/DemoController/toIndexPage.html,/mobile/DemoController/test.html," +
             "/mobile/tiaozhuangController/customers.html,/mobile/tiaozhuangController/dshkqs.html,/mobile/tiaozhuangController/wtjlr.html," +

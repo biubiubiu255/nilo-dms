@@ -218,9 +218,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
     public void delay(DelayParam param) {
         //判断是否允许delay
         DeliveryOrderDelayDO delayDO = deliveryOrderDelayDao.findByOrderNo(Long.parseLong(param.getMerchantId()), param.getOrderNo());
-        if (delayDO != null && delayDO.getDelayTimes() >= delayDO.getAllowTimes()) {
-            throw new DMSException(BizErrorCode.DELAY_TIMES_LIMIT);
-        }
+
         transactionTemplate.execute(new TransactionCallback<Void>() {
             @Override
             public Void doInTransaction(TransactionStatus transactionStatus) {
@@ -265,6 +263,9 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
     @Override
     public void detain(DelayParam param) {
 
+        //查询运单信息
+        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(param.getMerchantId(),param.getOrderNo());
+
         transactionTemplate.execute(new TransactionCallback<Void>() {
             @Override
             public Void doInTransaction(TransactionStatus transactionStatus) {
@@ -273,19 +274,18 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
                     DeliveryOrderDelayDO update = new DeliveryOrderDelayDO();
                     update.setOrderNo(param.getOrderNo());
                     update.setMerchantId(Long.parseLong(param.getMerchantId()));
-                    update.setStatus(DelayStatusEnum.DETAIN.getCode());
+                    update.setStatus(DelayStatusEnum.COMPLETE.getCode());
                     deliveryOrderDelayDao.update(update);
 
-                    //修改订单状态为滞留
-                    OrderOptRequest optRequest = new OrderOptRequest();
-                    optRequest.setMerchantId(param.getMerchantId());
-                    optRequest.setOptBy(param.getOptBy());
-                    optRequest.setOptType(OptTypeEnum.DETAIN);
-                    optRequest.setRemark(param.getRemark());
-                    List<String> orderNoList = new ArrayList<>();
-                    orderNoList.add(param.getOrderNo());
-                    optRequest.setOrderNo(orderNoList);
-                    orderService.handleOpt(optRequest);
+                    AbnormalOrder abnormalOrder = new AbnormalOrder();
+                    abnormalOrder.setOrderNo(param.getOrderNo());
+                    abnormalOrder.setAbnormalType(param.getAbnormalType());
+                    abnormalOrder.setCreatedBy(param.getOptBy());
+                    abnormalOrder.setMerchantId(param.getMerchantId());
+                    abnormalOrder.setReferenceNo(deliveryOrder.getReferenceNo());
+                    abnormalOrder.setRemark(param.getRemark());
+                    //新增异常件
+                    abnormalOrderService.addAbnormalOrder(abnormalOrder);
                 } catch (Exception e) {
                     transactionStatus.setRollbackOnly();
                     throw e;

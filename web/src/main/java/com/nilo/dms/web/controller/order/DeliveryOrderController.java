@@ -67,7 +67,6 @@ public class DeliveryOrderController extends BaseController {
         if (orderStatus != null && orderStatus.length > 0) {
             parameter.setStatus(Arrays.asList(orderStatus));
         }
-        parameter.setFetchType(FetchTypeEnum.SEND_BY_SELF.getCode());
 
         Pagination page = getPage();
         List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
