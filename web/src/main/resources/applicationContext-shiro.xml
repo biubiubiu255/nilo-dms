@@ -18,7 +18,8 @@
         <property name="unauthorizedUrl" value="/illegalAccess.html"/>
         <property name="filterChainDefinitions">
             <value>
-                /DemoController/toLoginPage.html = anon
+            	/app/** = app
+                /mobile/login.html = anon
                 /DemoController/toIndexPage.html = anon
                 /captcha/image.html = anon
                 /account/login.html = anon
@@ -31,12 +32,14 @@
                 /admin/user/** = perms["10001"]
                 /admin/role/** = perms["10002"]
                 /admin/log/** = perms["10003"]
+                
             </value>
         </property>
         <property name="filters">
             <map>
                 <entry key="auth" value-ref="authFilter"/>
                 <entry key="logout" value-ref="logoutFilter"/>
+                <entry key="app" value-ref="appFilter"/>
             </map>
         </property>
     </bean>
@@ -46,6 +49,7 @@
     <bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
         <property name="redirectUrl" value="/"/>
     </bean>
+    <bean id="appFilter" class="com.nilo.dms.web.interceptor.AppFilter"/>
 
     <bean id="defaultWebSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager"/>
 

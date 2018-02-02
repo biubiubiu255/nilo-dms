@@ -35,7 +35,7 @@
                     <li>
                         <%--<label>Logistics No</label>--%>
                         <input type="tel" placeholder="Logistics No" id="logisticsNo" name="logisticsNo" class="input_value" />
-                        <span>scan</span>
+                        <span id="scan">scan</span>
                     </li>
                     <li><input type='text' placeholder="Signer" id="signer" class='input_value' name='signer' /><span>Aquire</span></li>
                     <li><input type='text' placeholder="Remark" id="remark" class='input_value' name='remark' /></li>
@@ -63,6 +63,18 @@
 
 
 <script type="text/javascript">
+
+document.getElementById('scan').onclick = function(){android.startScan()};
+	
+	function doScan(){
+		android.startScan();
+	}
+	function afterScan(scanResult){
+		alert(scanResult);
+		document.getElementById("logisticsNo").value = scanResult;
+	}
+
+
     function doFind() {
         $.ajax({
             cache: false,
