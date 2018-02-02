@@ -70,11 +70,8 @@ document.getElementById('scan').onclick = function(){android.startScan()};
 		android.startScan();
 	}
 	function afterScan(scanResult){
-		alert(scanResult);
 		document.getElementById("logisticsNo").value = scanResult;
 	}
-
-
     function doFind() {
         $.ajax({
             cache: false,

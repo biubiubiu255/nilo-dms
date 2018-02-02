@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
 <meta charset="UTF-8"/>
@@ -18,9 +19,11 @@
 </head>
 <body>
 <div class="wap_content"> 
-   <div class="wap_top"><h2>Kilimall</h2></div>
+   <div class="wap_top"><h2>KiliExpress</h2></div>
+   
+   <c:if test="${isRider }">
    <div class="j_sy_n1">
-     <div class="model_banner_title"><i></i>Salesman</div>
+     <div class="model_banner_title"><i></i>Rider</div>
      <ul class="model_banner_ul" style="width:100%; overflow:hidden;margin:0px;">
        <a href="/mobile/tiaozhuangController/customers.html" title="">
          <li><img src="/mobile/images/icon_1.png" /><br/>Sign Scan</li>
@@ -46,6 +49,8 @@
      </ul>  
      <div class="clear"></div>
   </div>
+  </c:if>
+  <c:if test="${isRider==false}">
   <div class="model_banner">
      <div class="model_banner_title"><i class="model_banner_title"></i>Network</div>
      <ul class="model_banner_ul">
@@ -73,7 +78,7 @@
      </ul>  
      <div class="clear"></div>
   </div>
-  
+  </c:if>
   <div class="model_banner">
      <div class="model_banner_title"><i class="model_banner_title"></i>Basic function</div> 
      <ul class="model_banner_ul">
@@ -86,40 +91,7 @@
      </ul>  
      <div class="clear"></div>
   </div>
-  <div class="j_bootm">
-  <footer>
-    <div class="w_current">
-        <a href="/mobile/DemoController/toIndexPage.html">
-            <i class="w_home"></i>
-            <p>Workbench</p>
-        </a>
-    </div>
-    <div class="">
-        <a href="">
-            <i class="w_vshop"></i>
-            <p>Message</p>
-        </a>
-    </div>
-    <div class="">
-        <a href="">
-            <i class="w_frbj"></i>
-            <p>daily</p>
-        </a>
-    </div>
-    <div class="">
-        <a href="">
-            <i class="w_classify"></i>
-            <p>Statistical report</p>
-        </a>
-    </div>   
-    <div class="">
-        <a href="/mobile/tiaozhuangController/user.html">
-            <i class="w_f-cart"></i>
-            <p>Personal settings</p>
-        </a>
-    </div>
-</footer>
-</div>
+  
 </div>
 </body>
 </html>

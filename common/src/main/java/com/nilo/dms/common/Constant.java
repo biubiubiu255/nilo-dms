@@ -28,7 +28,7 @@ public class Constant {
     public static final String IS_PACKAGE="Y";
 
     public static final String ALLOW_URL="/dashboard.html,/home.html,/account/logout.html," +
-            "/mobile/DemoController/toLoginPage.html,/mobile/DemoController/toIndexPage.html,/mobile/DemoController/test.html," +
+            "/mobile/network/DemoController/toLoginPage.html,/mobile/DemoController/toIndexPage.html,/mobile/DemoController/test.html," +
             "/mobile/tiaozhuangController/customers.html,/mobile/tiaozhuangController/dshkqs.html,/mobile/tiaozhuangController/wtjlr.html," +
             "/mobile/tiaozhuangController/zlj.html,/mobile/tiaozhuangController/pjqr.html,/mobile/tiaozhuangController/plzz.html," +
             "/mobile/tiaozhuangController/djsm.html,/mobile/tiaozhuangController/pjsm.html,/mobile/tiaozhuangController/fjsm.html," +
