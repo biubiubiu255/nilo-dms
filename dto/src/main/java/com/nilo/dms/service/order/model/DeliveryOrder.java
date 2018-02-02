@@ -1,6 +1,7 @@
 package com.nilo.dms.service.order.model;
 
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.nilo.dms.common.enums.*;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class DeliveryOrder {
 
     private String orderPlatform;
 
-    private Long totalPrice;
+    private Double totalPrice;
 
     private ReceiverInfo receiverInfo;
 
@@ -135,7 +136,7 @@ public class DeliveryOrder {
     public String getWarehouseId() {
         return warehouseId;
     }
-
+    @JSONField(name = "warehouse_id")
     public void setWarehouseId(String warehouseId) {
         this.warehouseId = warehouseId;
     }
@@ -156,10 +157,11 @@ public class DeliveryOrder {
         this.stop = stop;
     }
 
+
     public String getChannel() {
         return channel;
     }
-
+    @JSONField(name = "is_pickup")
     public void setChannel(String channel) {
         this.channel = channel;
     }
@@ -191,7 +193,7 @@ public class DeliveryOrder {
     public String getCarrierName() {
         return carrierName;
     }
-
+    @JSONField(name = "carrier_name")
     public void setCarrierName(String carrierName) {
         this.carrierName = carrierName;
     }
@@ -207,15 +209,16 @@ public class DeliveryOrder {
     public Double getDeliveryFee() {
         return deliveryFee;
     }
-
+    @JSONField(name = "delivery_fee")
     public void setDeliveryFee(Double deliveryFee) {
         this.deliveryFee = deliveryFee;
     }
 
+
     public String getIsCod() {
         return isCod;
     }
-
+    @JSONField(name = "is_pod")
     public void setIsCod(String isCod) {
         this.isCod = isCod;
     }
@@ -244,10 +247,11 @@ public class DeliveryOrder {
         this.serviceType = serviceType;
     }
 
+
     public Double getWeight() {
         return weight;
     }
-
+    @JSONField(name = "order_weight")
     public void setWeight(Double weight) {
         this.weight = weight;
     }
@@ -255,7 +259,7 @@ public class DeliveryOrder {
     public String getGoodsType() {
         return goodsType;
     }
-
+    @JSONField(name = "goods_type")
     public void setGoodsType(String goodsType) {
         this.goodsType = goodsType;
     }
@@ -268,18 +272,19 @@ public class DeliveryOrder {
         this.status = status;
     }
 
-    public Long getTotalPrice() {
+
+    public Double getTotalPrice() {
         return totalPrice;
     }
-
-    public void setTotalPrice(Long totalPrice) {
+    @JSONField(name = "order_amount")
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
     public SenderInfo getSenderInfo() {
         return senderInfo;
     }
-
+    @JSONField(name = "sender_info")
     public void setSenderInfo(SenderInfo senderInfo) {
         this.senderInfo = senderInfo;
     }
@@ -287,7 +292,7 @@ public class DeliveryOrder {
     public String getOrderNo() {
         return orderNo;
     }
-
+    @JSONField(name = "waybill_num")
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
@@ -295,15 +300,16 @@ public class DeliveryOrder {
     public String getOrderType() {
         return orderType;
     }
-
+    @JSONField(name = "order_type")
     public void setOrderType(String orderType) {
         this.orderType = orderType;
     }
 
+
     public String getReferenceNo() {
         return referenceNo;
     }
-
+    @JSONField(name = "client_ordersn")
     public void setReferenceNo(String referenceNo) {
         this.referenceNo = referenceNo;
     }
@@ -311,7 +317,7 @@ public class DeliveryOrder {
     public Long getOrderTime() {
         return orderTime;
     }
-
+    @JSONField(name = "order_time")
     public void setOrderTime(Long orderTime) {
         this.orderTime = orderTime;
     }
@@ -343,7 +349,7 @@ public class DeliveryOrder {
     public String getOrderPlatform() {
         return orderPlatform;
     }
-
+    @JSONField(name = "order_platform")
     public void setOrderPlatform(String orderPlatform) {
         this.orderPlatform = orderPlatform;
     }
@@ -351,15 +357,16 @@ public class DeliveryOrder {
     public ReceiverInfo getReceiverInfo() {
         return receiverInfo;
     }
-
+    @JSONField(name = "receiver_info")
     public void setReceiverInfo(ReceiverInfo receiverInfo) {
         this.receiverInfo = receiverInfo;
     }
 
+
     public List<GoodsInfo> getGoodsInfoList() {
         return goodsInfoList;
     }
-
+    @JSONField(name = "order_items_list")
     public void setGoodsInfoList(List<GoodsInfo> goodsInfoList) {
         this.goodsInfoList = goodsInfoList;
     }

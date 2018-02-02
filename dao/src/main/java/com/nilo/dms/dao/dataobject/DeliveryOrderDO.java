@@ -24,7 +24,7 @@ public class DeliveryOrderDO extends BaseDo<Long> {
 
     private String serviceType;
 
-    private Long totalPrice;
+    private Double totalPrice;
 
     private Double weight;
 
@@ -238,11 +238,11 @@ public class DeliveryOrderDO extends BaseDo<Long> {
         this.goodsType = goodsType;
     }
 
-    public Long getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Long totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 

@@ -90,10 +90,10 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     public String addCreateDeliveryOrderRequest(String merchantId, String data, String sign) {
 
-        String orderNo = SystemConfig.getNextSerialNo(merchantId, SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
         try {
 
             DeliveryOrder order = JSON.parseObject(data, DeliveryOrder.class);
+            String orderNo = order.getOrderNo();
             //校验订单参数
             verifyDeliveryOrderParam(order);
 
@@ -115,8 +115,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
-        return orderNo;
-
+        return null;
     }
 
 
@@ -630,7 +629,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setNetworkId(d.getNetworkId());
         deliveryOrder.setNextNetworkId(d.getNextNetworkId());
 
-        deliveryOrder.setPackage(StringUtil.equalsIgnoreCase(d.getIsPackage(),Constant.IS_PACKAGE));
+        deliveryOrder.setPackage(StringUtil.equalsIgnoreCase(d.getIsPackage(), Constant.IS_PACKAGE));
 
         return deliveryOrder;
     }
@@ -719,7 +718,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
         AssertUtil.isNotNull(data, SysErrorCode.REQUEST_IS_NULL);
 
-        AssertUtil.isNotBlank(data.getMerchantId(), BizErrorCode.MERCHANT_ID_EMPTY);
         AssertUtil.isNotBlank(data.getReferenceNo(), BizErrorCode.REFERENCE_NO_EMPTY);
         AssertUtil.isNotBlank(data.getOrderType(), BizErrorCode.ORDER_TYPE_EMPTY);
 
