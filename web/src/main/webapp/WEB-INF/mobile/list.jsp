@@ -58,11 +58,11 @@
     $('#login-form').submit(function () {
         $('.login-box-msg').html("Waiting...");
         var params = $(this).serialize();
-        $.post('/mobile/DemoController/test.html', params, function (resp) {
+        $.post('/mobile/test.html', params, function (resp) {
             if (resp.result) {
 
                 // location.href = 'dashboard.html';
-                location.href = '/mobile/DemoController/toIndexPage.html';
+                location.href = '/mobile/toIndexPage.html';
             } else {
                 $('.login-box-msg').html(resp.msg);
             }

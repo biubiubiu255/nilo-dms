@@ -30,28 +30,24 @@ import java.util.List;
  * Created by admin on 2017/11/22.
  */
 @Controller
-@RequestMapping("/mobile/DemoController")
+@RequestMapping("/mobile")
 public class DemoController  extends BaseController {
 //    @Autowired
 //    private AreaDao areaDao;
 private final Logger log = LoggerFactory.getLogger(getClass());
     @RequestMapping(value = "/toIndexPage.html")
     public String toIndexPage(Model model) {
-        System.out.println("-------------------------------");
         return "mobile/sindex";
     }
 
-    @RequestMapping(value = "/test.html",method = RequestMethod.POST)
-    @ResponseBody
-    public String test(UsernamePasswordToken token, HttpServletRequest request) {
+    @RequestMapping(value = "/login.html")
+    public String login(UsernamePasswordToken token, HttpServletRequest request) {
         Subject subject = SecurityUtils.getSubject();
         try {
             if (!subject.isAuthenticated()) {
-                System.out.println("-----------------------------------------");
                 subject.login(token);
                 // 登陆成功,保存用户信息到Session
                 Principal principal = (Principal) subject.getPrincipal();
-
                 request.getSession().setAttribute("userId", principal.getUserId());
                 request.getSession().setAttribute("userName", principal.getUserName());
                 request.getSession().setAttribute("name", principal.getUserName());
@@ -70,12 +66,14 @@ private final Logger log = LoggerFactory.getLogger(getClass());
             log.error("Login Failed.account={}", token.getUsername());
             return toJsonErrorMsg(BizErrorCode.LOGIN_FAILED.getDescription());
         }
-        return toJsonTrueMsg();
+        //return toJsonTrueMsg();
+        return "redirect:/mobile/toIndexPage.html";
     }
 
-    @RequestMapping(value = "/toLoginPage.html")
+    /*@RequestMapping(value = "/login.html")
     public String list(Model model) {
+    	
         return "mobile/list";
-    }
+    }*/
 
 }
