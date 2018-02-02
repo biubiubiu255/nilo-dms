@@ -67,7 +67,6 @@
 document.getElementById('scan').onclick = function(){android.startScan()};
 	
 	function doScan(){
-		alert('doScan');
 		android.startScan();
 	}
 	function afterScan(scanResult){
