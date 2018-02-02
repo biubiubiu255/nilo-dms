@@ -50,8 +50,14 @@ public class AuthenticationFilter extends FormAuthenticationFilter {
         String uri2 = uri.substring(1, uri.length());//去掉uri前面的‘/’
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         
-        //通过当前uri和Principal中授权的url比较，判断是否有权限
-        if(me!=null && uri.indexOf("api")!=-1) {
+        //手机端访问，如果是rider,限制只能访问带/mobile/rider的链接，其他的不用过虑
+        if(uri.indexOf("/mobile")!=-1) {
+        	if(me!=null&&me.isRider()&&uri.indexOf("/rider")!=-1) {
+        		throw new DMSException(BizErrorCode.USER_URL_NOT_ALLOWED);
+        	}
+        }
+        else if(me!=null && uri.indexOf("api")!=-1) {
+        	//通过当前uri和Principal中授权的url比较，判断是否有权限
         	List<String> urlAuthorities = me.getUrlAuthorities();
             if(Constant.ALLOW_URL.indexOf(uri)==-1&&urlAuthorities.indexOf(uri)==-1&&urlAuthorities.indexOf(uri2)==-1) {
             	//ErrorCode resutlCode = DEFAULT_ERROR_KEY_ATTRIBUTE_NAME

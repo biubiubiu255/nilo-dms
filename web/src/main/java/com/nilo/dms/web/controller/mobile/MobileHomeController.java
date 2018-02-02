@@ -31,13 +31,16 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/mobile")
-public class DemoController  extends BaseController {
+public class MobileHomeController  extends BaseController {
 //    @Autowired
 //    private AreaDao areaDao;
 private final Logger log = LoggerFactory.getLogger(getClass());
-    @RequestMapping(value = "/toIndexPage.html")
+    @RequestMapping(value = "/home.html")
     public String toIndexPage(Model model) {
-        return "mobile/sindex";
+    	Subject subject = SecurityUtils.getSubject();
+    	Principal principal = (Principal) subject.getPrincipal();
+    	model.addAttribute("isRider",principal.isRider());
+        return "mobile/home";
     }
 
     @RequestMapping(value = "/login.html")
@@ -67,13 +70,7 @@ private final Logger log = LoggerFactory.getLogger(getClass());
             return toJsonErrorMsg(BizErrorCode.LOGIN_FAILED.getDescription());
         }
         //return toJsonTrueMsg();
-        return "redirect:/mobile/toIndexPage.html";
+        return "redirect:/mobile/home.html";
     }
-
-    /*@RequestMapping(value = "/login.html")
-    public String list(Model model) {
-    	
-        return "mobile/list";
-    }*/
 
 }
