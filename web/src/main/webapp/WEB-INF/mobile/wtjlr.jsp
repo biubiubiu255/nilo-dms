@@ -24,8 +24,7 @@
 
 
 <div class="wap_content">
-
-    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
+    <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
         <h2>Porblem</h2>
     </div>
 
