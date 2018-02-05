@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/mobile/MobileArriveScanController")
+@RequestMapping("/mobile/arrive")
 public class MobileArriveScanController extends BaseController {
 
     @RequestMapping(value = "/toPage.html")
@@ -26,9 +26,10 @@ public class MobileArriveScanController extends BaseController {
 
     @RequestMapping(value = "/submit.html")
     @ResponseBody
-    public String submit(String[] arr) {
-        for(int i = 0; i < arr.length; i ++) {
-            System.out.println(arr[i]);
+    public String submit(String[] arrWaybillNo) {
+    	//arrWaybillNo
+        for(int i = 0; i < arrWaybillNo.length; i ++) {
+            System.out.println(arrWaybillNo[i]);
         }
         return "true";
     }
