@@ -32,13 +32,13 @@
         <form id="myForm" class="layui-form" action="">
             <div class="banner_content">
                 <ul class="one_banner">
-                    <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' id='logisticsNo' name='logisticsNo' /><span>scan</span></li>
+                    <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' id='logisticsNo' name='logisticsNo' /><span id="scan">scan</span></li>
                     <li>
                         <%--<label>station</label>--%>
                         <select required="required" class='input_value' id="nextStation" name='nextStation'>
                             <option value="0">Please select the site</option>
-                            <c:forEach items="${nextStation}" var="station">
-                                <option value="${station.code}" id="hhh" type="${station.type}">${station.name}</option>
+                            <c:forEach items="${nextStation}" var="nextStation">
+                                <option value="${nextStation.code}" id="hhh" type="${nextStation.type}">${nextStation.name}</option>
                             </c:forEach>
                         </select>
                     </li>
@@ -47,7 +47,7 @@
                             <option value="0">Please select a driver</option>
                         </select>
                     </li>
-                    <li><input type='text' placeholder="Plate No" maxlength='100' class='input_value' id='plateNo' name='plateNo' /><span onclick="addTr2('tab', -1);">save</span></li>
+                    <li><input type='text' placeholder="Plate No" maxlength='100' class='input_value' id='plateNo' name='plateNo' /><span onclick="addTr2('tab', 0);">save</span></li>
                 </ul>
                 <div class="bottom_a_button11"><a onclick="delTr2()">delete</a></div>
                 <div class="bottom_a_button22"><a onclick="Judge('fuxuan')">submit</a></div>
@@ -66,10 +66,21 @@
 </div>
 
 <script>
+
+    document.getElementById('scan').onclick = function(){android.startScan()};
+
+    function doScan(){
+        android.startScan();
+    }
+    function afterScan(scanResult){
+        document.getElementById("logisticsNo").value = scanResult;
+    }
+
+
     $(document).ready(function(){
-        var kuang3 = document.getElementById("station")
-        $("#station").change(function(){
-            var code = kuang3.value;
+        var kuang2 = document.getElementById("nextStation")
+        $("#nextStation").change(function(){
+            var code = kuang2.value;
             getNextStationDriver(code)
             // alert(kuang3.value)
         });
@@ -77,7 +88,7 @@
     function addTr2(tab, row) {
         var kuang1 = document.getElementById("logisticsNo")
         var kuang2 = document.getElementById("nextStation")
-        var kuang3 = document.getElementById("driver")
+        var kuang3 = document.getElementById("sendDriver")
         var kuang4 = document.getElementById("plateNo")
         if(kuang1.value == ""){
             alert("Logistics no cannot be empty")
@@ -104,7 +115,7 @@
         $tr.after(trHtml);
         $("#logisticsNo").val("").focus();
         $("#nextStation").val("0");
-        $("#driver").val("0");
+        $("#sendDriver").val("0");
         $("#plateNo").val("");
     }
     function sel(a){

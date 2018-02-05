@@ -33,7 +33,7 @@
         <form id="myForm" class="layui-form" action="">
             <div class="banner_content">
                 <ul class="one_banner">
-                    <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span>scan</span></li>
+                    <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span id="scan">scan</span></li>
                     <li>
                         <%--<label>station</label>--%>
                         <select required="required" class='input_value' id="station" name='station'>
@@ -44,7 +44,7 @@
                         </select>
                     </li>
                     <li>
-                        <select class='input_value' name="sendDriver" id="sendDriver" lay-search="">
+                        <select class='input_value' name="deliverDriver" id="deliverDriver" lay-search="">
                             <option value="0">Please select a driver</option>
                         </select>
                     </li>
@@ -69,6 +69,14 @@
 </div>
 
 <script>
+    document.getElementById('scan').onclick = function(){android.startScan()};
+
+    function doScan(){
+        android.startScan();
+    }
+    function afterScan(scanResult){
+        document.getElementById("logisticsNo").value = scanResult;
+    }
 
     $(document).ready(function(){
         var kuang3 = document.getElementById("station")
@@ -109,7 +117,7 @@
         $tr.after(trHtml);
         $("#logisticsNo").val("").focus();
         $("#station").val("0");
-        $("#driver").val("0");
+        $("#deliverDriver").val("0");
         $("#plateNo").val("");
     }
     function sel(a){
@@ -173,11 +181,11 @@
             data: {code: code},
             success: function (data) {
                 if (data.result) {
-                    $("#sendDriver").empty();
-                    $("#sendDriver").prepend("<option value='0'>Please select a driver</option>");
+                    $("#deliverDriver").empty();
+                    $("#deliverDriver").prepend("<option value='0'>Please select a driver</option>");
                     var driver = data.data;
                     for (var i = 0; i < driver.length; i++) {
-                        $("#sendDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
+                        $("#deliverDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
                     }
                     form.render();
                 }

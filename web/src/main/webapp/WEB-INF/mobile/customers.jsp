@@ -67,7 +67,7 @@
 document.getElementById('scan').onclick = function(){android.startScan()};
 	
 	function doScan(){
-		android.startScan(afterScan);
+		android.startScan();
 	}
 	function afterScan(scanResult){
 		document.getElementById("logisticsNo").value = scanResult;

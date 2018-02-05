@@ -33,7 +33,7 @@
                 <i></i>
                 <input type="text" id="logisticsNo" name="logisticsNo" placeholder="Logistics No" class="search_input_field keywords"/>
             </div>
-            <div class="search_button"><input type="button" value="scan" class="search_input_button"/></div>
+            <div class="search_button"><input type="button" value="scan" id="scan" class="search_input_button"/></div>
         </div>
         <div class="bottom_a_button11"><a onclick="delTr2()">delete</a></div>
         <div class="bottom_a_button22"><a onclick="Judge('fuxuan')">submit</a></div>
@@ -49,6 +49,17 @@
 </div>
 
 <script>
+
+    document.getElementById('scan').onclick = function(){android.startScan()};
+
+    function doScan(){
+        android.startScan();
+    }
+    function afterScan(scanResult){
+        document.getElementById("logisticsNo").value = scanResult;
+        addTr2('tab', 0,scanResult);
+    }
+
     $("#logisticsNo").focus();
     $("#logisticsNo").keydown(function (event) {
         event = document.all ? window.event : event;
@@ -64,13 +75,9 @@
     }
 
     function delTr2(){
-    	android.startScan(afterScan);
-        //delTr('fuxuan');
+    	// android.startScan(afterScan);
+        delTr('fuxuan');
     }
-    function afterScan(scanResult){
-		document.getElementById("logisticsNo").value = scanResult;
-	}
-
     function delTr(fuxuan){
         //获取选中的复选框，然后循环遍历删除
         var fuxuans=$("input[name="+fuxuan+"]:checked");
@@ -83,9 +90,8 @@
         });
     }
 
-    function addTr2(tab, row) {
-        var kuang1 = document.getElementById("logisticsNo")
-        var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\""+kuang1.value+"\"></td></tr>";
+    function addTr2(tab, row,scanResult) {
+        var trHtml = "<tr align='center'><td>" +scanResult+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\""+scanResult+"\"></td></tr>";
         addTr(tab, row, trHtml);
     }
     function addTr(tab, row, trHtml){
@@ -98,9 +104,7 @@
             return;
         }
         $tr.after(trHtml);
-        $("#logisticsNo").val("").focus();
-        $("#reason").val("0");
-        $("#memo").val("");
+        $("#logisticsNo").val("");
     }
 
     function Judge(fuxuan){
@@ -123,7 +127,7 @@
             cache: false,
             type: "POST",
             traditional: true,
-            url: "/mobile/SjArriveScanController/test.html",
+            url: "/mobile/MobileArriveScanController/submit.html",
             data : {arr : arr},
             async: false,
             error: function () {
