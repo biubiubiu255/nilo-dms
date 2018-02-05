@@ -6,7 +6,9 @@ import com.nilo.dms.common.enums.ImageTypeEnum;
 import com.nilo.dms.common.utils.FileUtil;
 import com.nilo.dms.dao.ImageDao;
 import com.nilo.dms.dao.dataobject.ImageDO;
+import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.RiderOptService;
+import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.SignForOrderParam;
 import com.nilo.dms.web.controller.BaseController;
 
@@ -16,17 +18,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
-@RequestMapping("/mobile/SignScanController")
+@RequestMapping("/mobile/sign")
 public class SignScanController extends BaseController {
     @Autowired
     private RiderOptService riderOptService;
+    
+    private OrderService orderService;
 
     //private static final String path = "F:\\ronny_1\\dms_master\\web\\target\\platform-dms\\upload";
     private static final String path = "H:\\Environmental\\java\\temp\\upload";
@@ -38,35 +45,13 @@ public class SignScanController extends BaseController {
     @Autowired
     private ImageDao imageDao;
     
-    
-    @RequestMapping(value = "/test.html")
-    @ResponseBody
-    public String test(String logisticsNo, String signer, String remark) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        try {
-            SignForOrderParam param = new SignForOrderParam();
-            param.setMerchantId(merchantId);
-            param.setOptBy(me.getUserId());
-//            param.setOrderNo(orderNo);
-//            param.setRemark(remark);
-//            param.setSignBy(signBy);
-            param.setOrderNo(logisticsNo);
-            param.setSignBy(signer);
-            param.setRemark(remark);
-            riderOptService.signForOrder(param);
-        } catch (Exception e) {
-            return toJsonErrorMsg(e.getMessage());
-        }
 
-        return "true";
-    }
-    
     //customers 客户
-    @RequestMapping(value = "/customers.html")
+    @RequestMapping(value = "/sign.html")
     public String customers() {
-        return "mobile/rider/sign scan/customers";
+    	
+
+        return "mobile/rider/sign/sign";
     }
     
     
@@ -130,5 +115,22 @@ public class SignScanController extends BaseController {
     }
     
     
+    @ResponseBody
+    @RequestMapping(value = "/getDetail.html", method = RequestMethod.GET)
+    public String getDetail(String orderNo, Model model) {
+    	
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        String merchantId = me.getMerchantId();
+    	DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+        
+    	model.addAttribute("deliveryOrder", deliveryOrder);
+    	
+        return toJsonTrueMsg();
+        
+    }
+    
+    
     
 }
+
+

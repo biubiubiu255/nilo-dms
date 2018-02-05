@@ -31,7 +31,7 @@
 	<div class="wap_content">
 
 		<div class="wap_top">
-			<a href="/mobile/DemoController/toIndexPage.html" title="Back"
+			<a href="/mobile/home.html" title="Back"
 				class="wap_top_back"></a>
 			<h2>Sign Scan</h2>
 		</div>
@@ -92,7 +92,7 @@
 			
 			upload.render({
 				elem : '.xq',
-				url : '/mobile/SignScanController/save.html',
+				url : '/mobile/sign/save.html',
 				auto : false , //选择文件后不自动上传
                 data:{} ,
 				bindAction : '#commit',
