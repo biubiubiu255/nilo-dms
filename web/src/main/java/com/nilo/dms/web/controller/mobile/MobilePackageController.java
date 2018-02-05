@@ -52,7 +52,7 @@ public class MobilePackageController  extends BaseController {
         
         model.addAttribute("nextStation",list);
         
-        return "mobile/package/packing";
+        return "mobile/network/package/packing";
     }
 
     @RequestMapping(value = "/scan.html")
