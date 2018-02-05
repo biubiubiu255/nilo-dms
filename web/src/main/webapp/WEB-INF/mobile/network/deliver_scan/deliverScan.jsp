@@ -114,8 +114,8 @@
         }
         $tr.after(trHtml);
         $("#logisticsNo").val("");
-        $("#station").val("0");
-        $("#deliverDriver").val("0");
+        // $("#station").val("0");
+        // $("#deliverDriver").val("0");
         $("#plateNo").val("");
     }
     function sel(a){
