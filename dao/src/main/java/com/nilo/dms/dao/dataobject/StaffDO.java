@@ -43,6 +43,8 @@ public class StaffDO extends BaseDo<Long> {
 
     private String email;
 
+    private String address;
+
     private Integer isRider;
 
     private Long employTime;
@@ -50,6 +52,14 @@ public class StaffDO extends BaseDo<Long> {
     private Long regularTime;
 
     private Long resignedTime;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public Integer getIsRider() {
         return isRider;

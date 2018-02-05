@@ -85,9 +85,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     @Qualifier("createDeliveryOrderProducer")
     private AbstractMQProducer createDeliveryOrderProducer;
 
-    @Autowired
-    private DeliveryFeeDetailsService deliveryFeeDetailsService;
-
     public String addCreateDeliveryOrderRequest(String merchantId, String data, String sign) {
 
         try {
@@ -258,6 +255,10 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                     break;
                 }
             }
+
+            List<DeliveryOrderGoodsDO> queryGoodsList = deliveryOrderGoodsDao.queryByOrderNo(merchantId, order.getOrderNo());
+            order.setGoodsInfoList(convert(queryGoodsList));
+
             list.add(order);
         }
         return list;
@@ -389,6 +390,21 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     }
 
     @Override
+    public void print(String merchantId, List<String> orderNos) {
+        for (String o : orderNos) {
+            DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), o);
+            if (orderDO == null) {
+                throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, o);
+            }
+            DeliveryOrderDO update = new DeliveryOrderDO();
+            update.setOrderNo(o);
+            update.setMerchantId(Long.parseLong(merchantId));
+            update.setPrintTimes(orderDO.getPrintTimes() + 1);
+            deliveryOrderDao.update(update);
+        }
+    }
+
+    @Override
     public String addPackage(PackageRequest packageRequest) {
 
 
@@ -401,6 +417,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                     //1、保存订单信息
                     DeliveryOrderDO orderHeader = new DeliveryOrderDO();
                     orderHeader.setMerchantId(merchant);
+                    orderHeader.setOrderTime(DateUtil.getSysTimeStamp());
                     orderHeader.setHigh(packageRequest.getHigh());
                     orderHeader.setWidth(packageRequest.getWidth());
                     orderHeader.setWeight(packageRequest.getWeight());
@@ -628,8 +645,10 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setHigh(d.getHigh());
         deliveryOrder.setNetworkId(d.getNetworkId());
         deliveryOrder.setNextNetworkId(d.getNextNetworkId());
-
         deliveryOrder.setPackage(StringUtil.equalsIgnoreCase(d.getIsPackage(), Constant.IS_PACKAGE));
+
+        deliveryOrder.setPrinted(d.getPrintTimes() > 0);
+        deliveryOrder.setPrintTimes(d.getPrintTimes());
 
         return deliveryOrder;
     }
@@ -717,10 +736,9 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     private void verifyDeliveryOrderParam(DeliveryOrder data) {
 
         AssertUtil.isNotNull(data, SysErrorCode.REQUEST_IS_NULL);
-
+        AssertUtil.isNotBlank(data.getOrderNo(), BizErrorCode.ORDER_NO_EMPTY);
         AssertUtil.isNotBlank(data.getReferenceNo(), BizErrorCode.REFERENCE_NO_EMPTY);
         AssertUtil.isNotBlank(data.getOrderType(), BizErrorCode.ORDER_TYPE_EMPTY);
-
         AssertUtil.isNotBlank(data.getGoodsType(), BizErrorCode.GOODS_TYPE_EMPTY);
 
         AssertUtil.isNotNull(data.getReceiverInfo(), BizErrorCode.RECEIVER_EMPTY);

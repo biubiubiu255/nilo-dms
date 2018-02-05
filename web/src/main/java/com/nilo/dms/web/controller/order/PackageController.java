@@ -150,6 +150,35 @@ public class PackageController extends BaseController {
         return toJsonTrueData(orderNo);
     }
 
+    @RequestMapping(value = "/print.html", method = RequestMethod.GET)
+    public String print(Model model) {
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
+        List<NextStation> list = new ArrayList<>();
+
+        for(DistributionNetworkDO n:networkDOList){
+            NextStation s = new NextStation();
+            s.setCode(""+n.getId());
+            s.setName(n.getName());
+            list.add(s);
+        }
+
+
+        WaybillScanDO scanDO = new WaybillScanDO();
+        scanDO.setMerchantId(Long.parseLong(merchantId));
+        scanDO.setScanBy(me.getUserId());
+        scanDO.setScanNo("" + IdWorker.getInstance().nextId());
+        waybillScanDao.insert(scanDO);
+
+        model.addAttribute("scanNo", scanDO.getScanNo());
+
+        model.addAttribute("nextStation",list);
+        return "package/package_scan";
+    }
+
+
     public static class NextStation{
         private String code;
         private String name;

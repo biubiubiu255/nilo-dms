@@ -14,6 +14,7 @@ public class DeliveryOrder {
     private String orderNo;
 
     private String orderType;
+
     private String orderTypeDesc;
 
     private String referenceNo;
@@ -46,7 +47,6 @@ public class DeliveryOrder {
 
     private String goodsType;
 
-
     private String warehouseId;
     private String stopId;
     private String stop;
@@ -68,6 +68,26 @@ public class DeliveryOrder {
     private String parentNo;
     private Integer networkId;
     private Integer nextNetworkId;
+
+    private boolean isPrinted;
+
+    private Integer printTimes;
+
+    public boolean isPrinted() {
+        return isPrinted;
+    }
+
+    public void setPrinted(boolean printed) {
+        isPrinted = printed;
+    }
+
+    public Integer getPrintTimes() {
+        return printTimes;
+    }
+
+    public void setPrintTimes(Integer printTimes) {
+        this.printTimes = printTimes;
+    }
 
     public String getOrderTypeDesc() {
         return orderTypeDesc;
@@ -272,7 +292,6 @@ public class DeliveryOrder {
         this.status = status;
     }
 
-
     public Double getTotalPrice() {
         return totalPrice;
     }
@@ -292,7 +311,7 @@ public class DeliveryOrder {
     public String getOrderNo() {
         return orderNo;
     }
-    @JSONField(name = "waybill_num")
+    @JSONField(name = "waybill_number")
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
@@ -309,7 +328,7 @@ public class DeliveryOrder {
     public String getReferenceNo() {
         return referenceNo;
     }
-    @JSONField(name = "client_ordersn")
+    @JSONField(name = "client_order_sn")
     public void setReferenceNo(String referenceNo) {
         this.referenceNo = referenceNo;
     }
