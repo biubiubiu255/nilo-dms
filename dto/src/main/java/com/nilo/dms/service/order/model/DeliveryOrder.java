@@ -279,7 +279,7 @@ public class DeliveryOrder {
     public String getGoodsType() {
         return goodsType;
     }
-    @JSONField(name = "goods_type")
+    @JSONField(name = "goods_type_id")
     public void setGoodsType(String goodsType) {
         this.goodsType = goodsType;
     }
@@ -319,7 +319,7 @@ public class DeliveryOrder {
     public String getOrderType() {
         return orderType;
     }
-    @JSONField(name = "order_type")
+    @JSONField(name = "logistics_type")
     public void setOrderType(String orderType) {
         this.orderType = orderType;
     }

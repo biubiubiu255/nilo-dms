@@ -25,7 +25,7 @@ public class ReceiverInfo {
     public String getReceiverName() {
         return receiverName;
     }
-    @JSONField(name = "name")
+    @JSONField(name = "contact_name")
     public void setReceiverName(String receiverName) {
         this.receiverName = receiverName;
     }
@@ -33,7 +33,7 @@ public class ReceiverInfo {
     public String getReceiverPhone() {
         return receiverPhone;
     }
-    @JSONField(name = "phone_number")
+    @JSONField(name = "contact_number")
     public void setReceiverPhone(String receiverPhone) {
         this.receiverPhone = receiverPhone;
     }
@@ -73,7 +73,7 @@ public class ReceiverInfo {
     public String getReceiverAddress() {
         return receiverAddress;
     }
-    @JSONField(name = "address")
+    @JSONField(name = "receiver_address")
     public void setReceiverAddress(String receiverAddress) {
         this.receiverAddress = receiverAddress;
     }

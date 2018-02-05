@@ -47,7 +47,9 @@ public class ApiController extends BaseController {
         MethodEnum method = param.getMethod();
         String data = param.getData();
         String sign = param.getSign();
-        String merchantId = param.getApp_key();
+        String merchantId = param.getApp_id();
+
+        logger.debug("API Data:", data);
 
         switch (method) {
             case CREATE_DELIVERY_ORDER: {

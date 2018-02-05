@@ -132,6 +132,10 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
             DeliveryOrder order = JSON.parseObject(data, DeliveryOrder.class);
             String orderNo = order.getOrderNo();
+
+            DeliveryOrder query = queryByOrderNo(merchantId,orderNo);
+            if(query!=null) return orderNo;
+
             // 校验订单参数
             verifyDeliveryOrderParam(order);
 
