@@ -35,7 +35,7 @@
         LEFT JOIN t_sys_role r ON r.id = ur.role_id
         left join t_sys_permission p on rp.permission = p.value
         WHERE
-        ur.user_id = #{userId} and p.is_menu=1 and r. STATUS = 1
-        order by show_order
+        ur.user_id = #{userId} and p.is_menu=1 and r. STATUS = 1 and p.status = 1
+        order by pid,show_order
     </select>
 </mapper>

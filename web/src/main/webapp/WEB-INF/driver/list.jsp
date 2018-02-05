@@ -43,6 +43,7 @@
             <th lay-data="{field:'CreatedTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
             <th lay-data="{title:'Opt',fixed: 'right', width:172, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
+
         </thead>
     </table>
 

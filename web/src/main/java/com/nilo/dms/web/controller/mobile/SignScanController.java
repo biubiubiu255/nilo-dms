@@ -1,14 +1,26 @@
 package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.enums.ImageStatusEnum;
+import com.nilo.dms.common.enums.ImageTypeEnum;
+import com.nilo.dms.common.utils.FileUtil;
+import com.nilo.dms.dao.ImageDao;
+import com.nilo.dms.dao.dataobject.ImageDO;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.model.SignForOrderParam;
 import com.nilo.dms.web.controller.BaseController;
+
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/mobile/SignScanController")
@@ -16,6 +28,17 @@ public class SignScanController extends BaseController {
     @Autowired
     private RiderOptService riderOptService;
 
+    //private static final String path = "F:\\ronny_1\\dms_master\\web\\target\\platform-dms\\upload";
+    private static final String path = "H:\\Environmental\\java\\temp\\upload";
+
+    private static final String[] suffixNameAllow = new String[]{".jpg", ".png"};
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private ImageDao imageDao;
+    
+    
     @RequestMapping(value = "/test.html")
     @ResponseBody
     public String test(String logisticsNo, String signer, String remark) {
@@ -39,4 +62,73 @@ public class SignScanController extends BaseController {
 
         return "true";
     }
+    
+    //customers 客户
+    @RequestMapping(value = "/customers.html")
+    public String customers() {
+        return "mobile/rider/sign scan/customers";
+    }
+    
+    
+    @RequestMapping(value = "/save.html")
+    @ResponseBody
+    
+    public String save(MultipartFile file, String logisticsNo, String signer, String remark ) {
+
+    	
+    	SignForOrderParam param = new SignForOrderParam();
+    	
+    	
+    	param.setOrderNo(logisticsNo);
+    	param.setSignBy(signer);
+    	param.setRemark(remark);
+    	
+    	//System.out.println("【参数】：" + ReflectionToStringBuilder.toString(param));
+    	
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        
+        //写入图片
+        
+        String fileName = "";
+        try {
+            if (file != null) {
+                fileName = FileUtil.uploadFile(file, path);
+
+                ImageDO imageDO = new ImageDO();
+                
+                imageDO.setMerchantId(Long.parseLong(me.getMerchantId()));
+                imageDO.setOrderNo(param.getOrderNo());
+                imageDO.setCreatedBy(me.getUserId());
+                imageDO.setUpdatedBy(me.getUserId());
+                imageDO.setStatus(ImageStatusEnum.NORMAL.getCode());
+                imageDO.setImageName(fileName);
+                imageDO.setImageType(ImageTypeEnum.RECEIVE.getCode());
+                //imageDO.setImageType(ImageTypeEnum.getEnum().getCode());
+                imageDao.insert(imageDO);
+
+            }
+        } catch (Exception e) {
+            return toJsonErrorMsg(e.getMessage());
+        }
+        
+        
+        //写入数据
+        
+        try {
+            param.setMerchantId(me.getMerchantId());
+            param.setOptBy(me.getUserId());
+            param.setOrderNo(logisticsNo);
+            param.setRemark(remark);
+            param.setSignBy(signer);
+            riderOptService.signForOrder(param);
+        } catch (Exception e) {
+            return toJsonErrorMsg(e.getMessage());
+        }
+
+        return toJsonTrueMsg();
+    }
+    
+    
+    
 }

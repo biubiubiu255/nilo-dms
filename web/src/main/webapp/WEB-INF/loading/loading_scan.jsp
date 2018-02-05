@@ -175,8 +175,8 @@
                 }
             });
 
-            form.on('select(nextStation)', function (data) {
-                getNextStationDriver(data.value);
+            form.on('select(carrier)', function (data) {
+                getThirdDriver(data.value);
             });
 
         });
@@ -295,10 +295,10 @@
             window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
         });
 
-        function getNextStationDriver(code) {
+        function getThirdDriver(code) {
             $.ajax({
                 type: "POST",
-                url: "/order/loading/getNextStationDriver.html",
+                url: "/order/loading/getThirdDriver.html",
                 dataType: "json",
                 data: {code: code},
                 success: function (data) {

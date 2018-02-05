@@ -33,17 +33,17 @@
             <label class="layui-form-label">expressName:</label>
             <div class="layui-input-block">
                 <select name="thirdExpressCode" lay-search="">
-                   <c:forEach var="values" items="${expressList}" varStatus="status">
-	                   <c:choose>
-						   <c:when test="${values.expressName == resultDate.expressName}">
-						       <option value="${values.expressCode}" selected="selected">${values.expressName }</option>
-						   </c:when>
-						   <c:otherwise>
-						       <option value="${values.expressCode}">${values.expressName }</option>
-						   </c:otherwise>
-					   </c:choose>
-					   ${values.expressName}  -----  ${resultDate.expressName}
-                   </c:forEach>
+				<c:forEach var="values" items="${expressList}" varStatus="status">
+					<c:choose>
+						<c:when test="${values.expressName == resultDate.expressName}">
+						<option value="${values.expressCode}" selected="selected">${values.expressName }</option>
+						</c:when>
+						<c:otherwise>
+						<option value="${values.expressCode}">${values.expressName }</option>
+						</c:otherwise>
+					</c:choose>
+					${values.expressName}  -----  ${resultDate.expressName}
+				</c:forEach>
 
                 </select></div>
         </div>

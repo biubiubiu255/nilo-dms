@@ -11,37 +11,51 @@
 %>
 <body>
 <div class="box-body">
-    <div class="layui-form layui-row">
-        <div class="layui-col-md4 layui-col-lg2">
-            OrderNo：
-            <div class="layui-inline">
-                <input class="layui-input" name="orderNo" autocomplete="off">
-            </div>
-        </div>
 
-        <div class="layui-col-md7 layui-col-lg4">
-            ArrivedTime：
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="fromTime" placeholder="From">
-            </div>
-            -
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="toTime" placeholder="To">
-            </div>
-        </div>
-        <div class="layui-col-md1 layui-col-lg1">
-            <shiro:hasPermission name="400031">
-                <button class="layui-btn layui-btn-normal search">Search</button>
+
+    <div class="layui-row">
+        <div class="layui-col-md2">
+            <shiro:hasPermission name="400032">
+                <button class="layui-btn layui-btn-normal arrive-scan">Arrive Scan</button>
             </shiro:hasPermission>
         </div>
+        <div class="layui-col-md1">
+            <button class="layui-btn btn-search">Search
+            </button>
+        </div>
     </div>
+    <div class="layui-collapse">
+        <div class="layui-colla-item">
+            <div class="layui-colla-content ">
+                <div class="layui-form layui-row">
+                    <div class="layui-col-md4 layui-col-lg2">
+                        OrderNo：
+                        <div class="layui-inline">
+                            <input class="layui-input" name="orderNo" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md7 layui-col-lg4">
+                        ArrivedTime：
+                        <div class="layui-inline">
+                            <input type="text" class="layui-input" id="fromTime" placeholder="From">
+                        </div>
+                        -
+                        <div class="layui-inline">
+                            <input type="text" class="layui-input" id="toTime" placeholder="To">
+                        </div>
+                    </div>
+                    <div class="layui-col-md1 layui-col-lg1">
+                        <shiro:hasPermission name="400031">
+                            <button class="layui-btn layui-btn-normal search">Search</button>
+                        </shiro:hasPermission>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <hr>
-    <!-- /.box-header -->
-    <div class="layui-btn-group demoTable">
-        <shiro:hasPermission name="400032">
-            <button class="layui-btn layui-btn-normal arrive-scan">Arrive Scan</button>
-        </shiro:hasPermission>
-    </div>
 
     <table class="layui-table"
            lay-data="{ url:'/order/arriveScan/list.html', page:true,limit:10, id:'${id0}'}"
@@ -80,11 +94,8 @@
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
     $(function () {
-        layui.use(['form', 'layer'], function () {
-            var form = layui.form;
-            form.render();
-        })
-        layui.use('laydate', function () {
+
+        layui.use(['form', 'layer', 'element', 'laydate'], function () {
             var layDate = layui.laydate;
             layDate.render({
                 elem: '#fromTime'
@@ -94,7 +105,13 @@
                 elem: '#toTime'
                 , lang: 'en'
             });
+
+            $(".btn-search").on("click", function () {
+                $(".layui-colla-content").toggleClass("layui-show");
+                $(".btn-search").toggleClass("layui-btn-warm");
+            })
         });
+
         layui.use('table', function () {
             var table = layui.table;
             //监听工具条

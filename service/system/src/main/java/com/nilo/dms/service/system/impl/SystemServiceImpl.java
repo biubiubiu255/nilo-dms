@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.InterfaceStatusEnum;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.MerchantConfigDao;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.MerchantConfigDO;
 import com.nilo.dms.service.system.DictionaryService;
 import com.nilo.dms.service.system.RedisUtil;
@@ -33,7 +35,6 @@ public class SystemServiceImpl implements SystemService {
 
     @Autowired
     private MerchantConfigDao merchantConfigDao;
-
     @Autowired
     private SerialNumberService serialNumberService;
 
@@ -88,6 +89,7 @@ public class SystemServiceImpl implements SystemService {
                 RedisUtil.hset(Constant.INTERFACE_CONF + c.getMerchantId(), config.getMethod(), JSON.toJSONString(config));
             }
         }
+
     }
 
     @Override
