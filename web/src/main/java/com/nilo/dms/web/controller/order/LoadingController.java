@@ -250,7 +250,7 @@ public class LoadingController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/getNextStationDriver.html")
+    @RequestMapping(value = "/getThirdDriver.html")
     public String getNextStationDriver(String code) {
 
         List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(code);
@@ -261,15 +261,7 @@ public class LoadingController extends BaseController {
             driver.setName(d.getDriverName());
             list.add(driver);
         }
-        if(isInteger(code)) {
-            List<StaffDO> staffList = staffDao.queryNetworkStaff(Long.parseLong(code));
-            for(StaffDO s : staffList){
-                Driver driver = new Driver();
-                driver.setCode(""+s.getUserId());
-                driver.setName(s.getStaffId());
-                list.add(driver);
-            }
-        }
+
         return toJsonTrueData(list);
     }
     private  boolean isInteger(String str) {

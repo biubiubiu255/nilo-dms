@@ -1,5 +1,6 @@
 package com.nilo.dms.service.org.impl;
 
+import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.enums.StaffStatusEnum;
@@ -19,6 +20,7 @@ import com.nilo.dms.service.org.DepartmentService;
 import com.nilo.dms.service.org.StaffService;
 import com.nilo.dms.service.org.model.Department;
 import com.nilo.dms.service.org.model.Staff;
+import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -167,6 +169,10 @@ public class StaffServiceImpl implements StaffService {
             staff.setDepartmentName(department.getDepartmentName());
             staff.setDepartmentId(department.getDepartmentId());
         }
+
+        String jobDesc = SystemCodeUtil.getCodeVal("" + staffDO.getMerchantId(), Constant.STAFF_JOB, staffDO.getJob());
+        staff.setJobDesc(jobDesc);
+
         staff.setBirthday(staffDO.getBirthday());
         staff.setEmail(staffDO.getEmail());
         staff.setEmployTime(staffDO.getEmployTime());
@@ -174,6 +180,7 @@ public class StaffServiceImpl implements StaffService {
         staff.setJob(staffDO.getJob());
         staff.setNickName(staffDO.getNickName());
         staff.setPhone(staffDO.getPhone());
+        staff.setAddress(staffDO.getAddress());
         staff.setRealName(staffDO.getRealName());
         staff.setSex(staffDO.getSex());
         staff.setStaffId(staffDO.getStaffId());
@@ -217,6 +224,7 @@ public class StaffServiceImpl implements StaffService {
         staffDO.setTitle(staff.getTitle());
         staffDO.setTitleLevel(staff.getTitleLevel());
         staffDO.setTitleTime(staff.getTitleTime());
+        staffDO.setAddress(staff.getAddress());
         if (staff.getStatus() != null) {
             staffDO.setStatus(staff.getStatus().getCode());
         }

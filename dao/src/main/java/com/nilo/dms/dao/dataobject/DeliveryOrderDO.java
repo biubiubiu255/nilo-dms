@@ -54,6 +54,16 @@ public class DeliveryOrderDO extends BaseDo<Long> {
     private Integer nextNetworkId;
     private String parentNo;
 
+    private Integer printTimes;
+
+    public Integer getPrintTimes() {
+        return printTimes;
+    }
+
+    public void setPrintTimes(Integer printTimes) {
+        this.printTimes = printTimes;
+    }
+
     public String getParentNo() {
         return parentNo;
     }

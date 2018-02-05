@@ -89,7 +89,7 @@
                 elem: '#uploadReceiveImage' //绑定元素
                 , url: '/image/upload/receive/'+orderNo+'.html' //上传接口
                 , before: function (obj) {
-                    //预读本地文件示例，不支持ie8
+                    layui.upload.config.data={'ab':'xxx'};
                     obj.preview(function (index, file, result) {
                         $('#imageList').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
                     });

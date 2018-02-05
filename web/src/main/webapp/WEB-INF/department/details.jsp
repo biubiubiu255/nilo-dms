@@ -17,14 +17,11 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Department</h3>
-                    <shiro:hasPermission name="100011">
+                    <shiro:hasPermission name="300011">
                         <button class="layui-btn layui-btn-normal  btn-add">Add</button>
                     </shiro:hasPermission>
-
-                    <button class="layui-btn layui-btn-normal btn-edit">Edit</button>
-
-                    <shiro:hasPermission name="100011">
-                        <button class="layui-btn layui-btn-normal btn-remove">Remove</button>
+                    <shiro:hasPermission name="300012">
+                        <button class="layui-btn layui-btn-normal  btn-edit">Edit</button>
                     </shiro:hasPermission>
                 </div>
                 <!-- form start -->
@@ -118,7 +115,8 @@
                     parent.layer.open({
                         type: 1,
                         title: title,
-                        area: ['800px'],
+                        area: ['800px','600px'],
+                        offset: ['100px', '250px'],
                         content: data,
                         end: function () {
                             location.reload();
@@ -155,7 +153,8 @@
                     parent.layer.open({
                         type: 1,
                         title: title,
-                        area: ['800px'],
+                        area: ['800px','600px'],
+                        offset: ['100px', '250px'],
                         content: data,
                         end: function () {
                             location.reload();

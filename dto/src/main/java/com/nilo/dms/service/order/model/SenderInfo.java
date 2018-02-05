@@ -26,7 +26,7 @@ public class SenderInfo {
     public String getSenderName() {
         return senderName;
     }
-    @JSONField(name = "sender_contactname")
+    @JSONField(name = "name")
     public void setSenderName(String senderName) {
         this.senderName = senderName;
     }
@@ -34,7 +34,7 @@ public class SenderInfo {
     public String getSenderPhone() {
         return senderPhone;
     }
-    @JSONField(name = "sender_contactnumber")
+    @JSONField(name = "phone_number")
     public void setSenderPhone(String senderPhone) {
         this.senderPhone = senderPhone;
     }
@@ -42,7 +42,7 @@ public class SenderInfo {
     public String getSenderCountry() {
         return senderCountry;
     }
-    @JSONField(name = "sender_country")
+    @JSONField(name = "country")
     public void setSenderCountry(String senderCountry) {
         this.senderCountry = senderCountry;
     }
@@ -50,7 +50,7 @@ public class SenderInfo {
     public String getSenderProvince() {
         return senderProvince;
     }
-    @JSONField(name = "sender_province")
+    @JSONField(name = "province")
     public void setSenderProvince(String senderProvince) {
         this.senderProvince = senderProvince;
     }
@@ -59,7 +59,7 @@ public class SenderInfo {
     public String getSenderCity() {
         return senderCity;
     }
-    @JSONField(name = "sender_city")
+    @JSONField(name = "city")
     public void setSenderCity(String senderCity) {
         this.senderCity = senderCity;
     }
@@ -76,7 +76,7 @@ public class SenderInfo {
     public String getSenderAddress() {
         return senderAddress;
     }
-    @JSONField(name = "sender_address")
+    @JSONField(name = "address")
     public void setSenderAddress(String senderAddress) {
         this.senderAddress = senderAddress;
     }

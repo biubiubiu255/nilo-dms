@@ -95,7 +95,7 @@
         function reloadTable(item) {
             table.reload("${id0}", {
                 where: {
-                    loadingNo: $("input[name='packageNo']").val(),
+                    packageNo: $("input[name='packageNo']").val(),
                 }
             });
         };

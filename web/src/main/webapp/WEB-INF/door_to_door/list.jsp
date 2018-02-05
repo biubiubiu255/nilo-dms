@@ -10,43 +10,60 @@
 %>
 <body>
 <div class="box-body">
-    <div class="layui-form layui-row">
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">OrderNo:</label>
-            <div class="layui-inline">
-                <input class="layui-input" name="orderNo" autocomplete="off">
-            </div>
-        </div>
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">ReferenceNo:</label>
-            <div class="layui-input-inline">
-                <input type="text" name="referenceNo" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-col-md8 layui-col-lg5">
-            <label class="layui-form-label">CreateTime:</label>
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
-            </div>
-            -
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="toCreatedTime" placeholder="To">
-            </div>
-        </div>
-
-        <div class="layui-col-md1 layui-col-lg1">
-            <shiro:hasPermission name="400043">
-                <button class="layui-btn layui-btn-normal search">Search</button>
+    <div class="layui-row">
+        <div class="layui-col-md5 layui-col-lg3">
+            <shiro:hasPermission name="400041">
+                <button class="layui-btn layui-btn-normal batch">Batch</button>
             </shiro:hasPermission>
+
+            <shiro:hasPermission name="400046">
+                <button class="layui-btn layui-btn-normal print">Print</button>
+            </shiro:hasPermission>
+            <shiro:hasPermission name="400047">
+                <button class="layui-btn layui-btn-normal printAgain">Print No Limit</button>
+            </shiro:hasPermission>
+            <button class="layui-btn btn-search">Search
+            </button>
         </div>
     </div>
-    <hr>
-    <!-- /.box-header -->
-    <div class="layui-btn-group demoTable">
-        <shiro:hasPermission name="400041">
-            <button class="layui-btn layui-btn-normal batchAllocate">Batch Allocate</button>
-        </shiro:hasPermission>
+    <div class="layui-collapse">
+        <div class="layui-colla-item">
+            <div class="layui-colla-content ">
+                <div class="layui-form layui-row">
+                    <div class="layui-col-md4 layui-col-lg3">
+                        <label class="layui-form-label">OrderNo:</label>
+                        <div class="layui-inline">
+                            <input class="layui-input" name="orderNo" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4 layui-col-lg3">
+                        <label class="layui-form-label">ReferenceNo:</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="referenceNo" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md8 layui-col-lg5">
+                        <label class="layui-form-label">CreateTime:</label>
+                        <div class="layui-inline">
+                            <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
+                        </div>
+                        -
+                        <div class="layui-inline">
+                            <input type="text" class="layui-input" id="toCreatedTime" placeholder="To">
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md1 layui-col-lg1">
+                        <shiro:hasPermission name="400043">
+                            <button class="layui-btn layui-btn-normal search">Search</button>
+                        </shiro:hasPermission>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <hr>
 
     <table class="layui-table" lay-data="{ url:'/order/doorToDoor/list.html', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
@@ -58,9 +75,13 @@
             <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.orderTime) }}</div>'}">
                 OrderTime
             </th>
+            <th lay-data="{field:'printTimes', width:200,templet: '<div>{{d.printTimes}}</div>'}">PrintTimes</th>
             <th lay-data="{field:'fetchAddress', width:200,templet: '<div>{{d.senderInfo.senderName}}</div>'}">Name</th>
-            <th lay-data="{field:'fetchAddress', width:200,templet: '<div>{{d.senderInfo.senderPhone}}</div>'}">Phone</th>
-            <th lay-data="{field:'fetchAddress', width:200,templet: '<div>{{d.senderInfo.senderAddress}}</div>'}">Fetch Address</th>
+            <th lay-data="{field:'fetchAddress', width:200,templet: '<div>{{d.senderInfo.senderPhone}}</div>'}">Phone
+            </th>
+            <th lay-data="{field:'fetchAddress', width:200,templet: '<div>{{d.senderInfo.senderAddress}}</div>'}">Fetch
+                Address
+            </th>
             <th lay-data="{field:'weight', width:100}">Weight</th>
             <th lay-data="{field:'goodsType', width:120}">GoodsType</th>
             <th lay-data="{field:'statusDesc', width:100}">Status</th>
@@ -83,11 +104,8 @@
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
     $(function () {
-        layui.use(['form', 'layer'], function () {
-            var form = layui.form;
-            form.render();
-        })
-        layui.use('laydate', function () {
+
+        layui.use(['form', 'layer', 'element', 'laydate'], function () {
             var layDate = layui.laydate;
             layDate.render({
                 elem: '#fromCreatedTime'
@@ -98,6 +116,7 @@
                 , lang: 'en'
             });
         });
+
         var table;
         layui.use('table', function () {
             table = layui.table;
@@ -116,20 +135,56 @@
             });
 
         });
-
+        $(".btn-search").on("click", function () {
+            $(".layui-colla-content").toggleClass("layui-show");
+            $(".btn-search").toggleClass("layui-btn-warm");
+        })
         $(".search").on("click", function () {
             reloadTable();
         })
 
-        $('.batchAllocate').on('click', function () {
+        $('.batch').on('click', function () {
             var checkStatus = table.checkStatus('${id0}')
                     , data = checkStatus.data;
-            if (data.length == 0) return;
+            if (data.length == 0) {
+                layer.msg("Pls select...");
+                return;
+            }
+            ;
             var arr = new Array();
             for (var i = 0; i < data.length; i++) {
                 arr.push(data[i].orderNo);
             }
             toAllocatePage(arr);
+        });
+
+        $('.print').on('click', function () {
+            var checkStatus = table.checkStatus('${id0}')
+                    , data = checkStatus.data;
+            if (data.length == 0) {
+                layer.msg("Pls select...");
+                return;
+            }
+            ;
+            var arr = new Array();
+            for (var i = 0; i < data.length; i++) {
+                arr.push(data[i].orderNo);
+            }
+            parent.window.open("/order/doorToDoor/print.html?orderNos="+arr);
+        });
+
+        $('.printAgain').on('click', function () {
+            var checkStatus = table.checkStatus('${id0}')
+                    , data = checkStatus.data;
+            if (data.length == 0) {
+                layer.msg("Pls select...");
+                return;
+            }
+            var arr = new Array();
+            for (var i = 0; i < data.length; i++) {
+                arr.push(data[i].orderNo);
+            }
+            parent.window.open("/order/doorToDoor/printAgain.html?orderNos="+arr);
         });
 
         function reloadTable(item) {
@@ -138,7 +193,6 @@
                     orderNo: $("input[name='orderNo']").val(),
                     referenceNo: $("input[name='referenceNo']").val(),
                     orderTypes: $("select[name='orderType']").val(),
-                    orderStatusLimit: $("select[name='orderStatusLimit']").val(),
                     fromCreatedTime: $("#fromCreatedTime").val(),
                     toCreatedTime: $("#toCreatedTime").val(),
                 }
@@ -156,7 +210,7 @@
                     parent.layer.open({
                         type: 1,
                         title: "Allocate Rider",
-                        area: ['800px','600px'],
+                        area: ['800px', '600px'],
                         offset: ['100px', '250px'],
                         content: data,
                         end: function () {
@@ -166,6 +220,7 @@
                 }
             });
         }
+
     });
 
 </script>

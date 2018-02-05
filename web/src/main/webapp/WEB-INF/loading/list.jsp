@@ -94,13 +94,7 @@
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
     $(function () {
-        layui.use(['form', 'layer'], function () {
-            var form = layui.form;
-            form.render();
-        })
-        layui.use(['element'], function () {
-        });
-        layui.use('laydate', function () {
+        layui.use(['form', 'layer','element','laydate'], function () {
             var layDate = layui.laydate;
             layDate.render({
                 elem: '#fromCreatedTime'

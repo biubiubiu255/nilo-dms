@@ -9,10 +9,7 @@ import com.nilo.dms.common.exception.SysErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.RoleDao;
-import com.nilo.dms.dao.UserInfoDao;
-import com.nilo.dms.dao.UserLoginDao;
-import com.nilo.dms.dao.UserNetworkDao;
+import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.dao.dataobject.UserInfoDO;
 import com.nilo.dms.dao.dataobject.UserLoginDO;
@@ -20,16 +17,11 @@ import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.LoginInfo;
 import com.nilo.dms.service.model.User;
 import com.nilo.dms.service.model.UserInfo;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
-import com.nilo.dms.dao.ThirdExpressDao;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +40,8 @@ public class UserServiceImpl implements UserService {
     private UserNetworkDao userNetworkDao;
 
     @Autowired
-    private TransactionTemplate transactionTemplate;
-    
-    @Autowired
     private ThirdExpressDao ThirdExpressDao;
-    
-    
+
 
     @Override
     public void updateUserInfo(UserInfo userInfo) {
@@ -84,6 +72,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
+    @Transactional
     public void addUser(User user) {
 
         //校验
@@ -101,35 +90,24 @@ public class UserServiceImpl implements UserService {
         //判断userName是否存在
         AssertUtil.isFalse(usernameExists(user.getLoginInfo().getUserName()), BizErrorCode.USER_NAME_EXIST);
 
-        transactionTemplate.execute(new TransactionCallback<Void>() {
-            @Override
-            public Void doInTransaction(TransactionStatus transactionStatus) {
 
-                try {
-                    //生成新的userId
-                    Long userId = IdWorker.getInstance().nextId();
-                    user.setUserId("" + userId);
+        //生成新的userId
+        Long userId = IdWorker.getInstance().nextId();
+        user.setUserId("" + userId);
 
-                    UserInfo userInfo = user.getUserInfo();
-                    userInfo.setMerchantId(user.getMerchantId());
-                    userInfo.setUserId("" + userId);
-                    UserInfoDO insert = convert(userInfo);
-                    userInfoDao.insert(insert);
+        UserInfo userInfo = user.getUserInfo();
+        userInfo.setMerchantId(user.getMerchantId());
+        userInfo.setUserId("" + userId);
+        UserInfoDO insert = convert(userInfo);
+        userInfoDao.insert(insert);
 
-                    LoginInfo loginInfo = user.getLoginInfo();
-                    loginInfo.setStatus(UserStatusEnum.NORMAL);
-                    loginInfo.setMerchantId(user.getMerchantId());
-                    loginInfo.setUserId("" + userId);
-                    UserLoginDO insert1 = convert(loginInfo);
-                    userLoginDao.insert(insert1);
-                } catch (Exception e) {
-                    logger.error("addUser Failed. Data:{}", user, e);
-                    transactionStatus.setRollbackOnly();
-                    throw e;
-                }
-                return null;
-            }
-        });
+        LoginInfo loginInfo = user.getLoginInfo();
+        loginInfo.setStatus(UserStatusEnum.NORMAL);
+        loginInfo.setMerchantId(user.getMerchantId());
+        loginInfo.setUserId("" + userId);
+        UserLoginDO insert1 = convert(loginInfo);
+        userLoginDao.insert(insert1);
+
     }
 
     /**
@@ -139,6 +117,7 @@ public class UserServiceImpl implements UserService {
      * @param roles
      */
     @Override
+    @Transactional
     public void updateUserRoles(String merchantId, String userId, Long[] roles) {
 
         AssertUtil.isNotBlank(userId, BizErrorCode.USER_ID_ILLEGAL);
@@ -146,50 +125,25 @@ public class UserServiceImpl implements UserService {
         UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(merchantId), Long.parseLong(userId));
         AssertUtil.isNotNull(userInfoDO, BizErrorCode.USER_ID_ILLEGAL);
 
-        transactionTemplate.execute(new TransactionCallback<Void>() {
-            @Override
-            public Void doInTransaction(TransactionStatus transactionStatus) {
-                try {
-                    // 先删后增
-                    roleDao.deleteAll(userIdLong);
-                    if (roles != null && roles.length > 0) {
-                        roleDao.insertAll(userIdLong, roles);
-                    }
-                } catch (Exception e) {
-                    logger.error("updateUserRoles Failed. userId:{}", userId, e);
-                    transactionStatus.setRollbackOnly();
-                    throw e;
-                }
-                return null;
-            }
-        });
+        // 先删后增
+        roleDao.deleteAll(userIdLong);
+        if (roles != null && roles.length > 0) {
+            roleDao.insertAll(userIdLong, roles);
+        }
 
     }
 
     @Override
+    @Transactional
     public void updateUserNetwork(String merchantId, String userId, Long[] networks) {
         AssertUtil.isNotBlank(userId, BizErrorCode.USER_ID_ILLEGAL);
         Long userIdLong = Long.parseLong(userId);
         UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(merchantId), Long.parseLong(userId));
         AssertUtil.isNotNull(userInfoDO, BizErrorCode.USER_ID_ILLEGAL);
-
-        transactionTemplate.execute(new TransactionCallback<Void>() {
-            @Override
-            public Void doInTransaction(TransactionStatus transactionStatus) {
-                try {
-                    // 先删后增
-                    userNetworkDao.deleteAll(userIdLong);
-                    if (networks != null && networks.length > 0) {
-                        userNetworkDao.insertAll(userIdLong, networks);
-                    }
-                } catch (Exception e) {
-                    logger.error("updateUserNetwork Failed. userId:{}", userId, e);
-                    transactionStatus.setRollbackOnly();
-                    throw e;
-                }
-                return null;
-            }
-        });
+        userNetworkDao.deleteAll(userIdLong);
+        if (networks != null && networks.length > 0) {
+            userNetworkDao.insertAll(userIdLong, networks);
+        }
     }
 
     public boolean usernameExists(String username) {
@@ -266,9 +220,7 @@ public class UserServiceImpl implements UserService {
         user.setLoginInfo(convert(loginDO));
         return user;
     }
-    
-    
-    
+
 
     @Override
     public UserInfo findUserInfoByUserId(String merchantId, String userId) {
@@ -388,48 +340,48 @@ public class UserServiceImpl implements UserService {
         return loginDO;
     }
 
-	@Override
-	public List<ThirdExpressDO> findUserPageByExpresses(String merchantId,
-			ThirdExpressDO express, Pagination pagination) {
-		
+    @Override
+    public List<ThirdExpressDO> findUserPageByExpresses(String merchantId,
+                                                        ThirdExpressDO express, Pagination pagination) {
+
         List<ThirdExpressDO> list = new ArrayList<ThirdExpressDO>();
-        
+
         list = ThirdExpressDao.findByExpress(express);
-        
+
         pagination.setTotalCount(list.size());
-        
+
         return list;
-	}
+    }
 
-	@Override
-	public void addExpress(ThirdExpressDO express) {
-		
-		ThirdExpressDao.addExpress(express);
-	}
+    @Override
+    public void addExpress(ThirdExpressDO express) {
 
-	@Override
-	public void updateExpress(ThirdExpressDO express) {
-		ThirdExpressDao.updateExpress(express);
-		
-	}
+        ThirdExpressDao.addExpress(express);
+    }
 
-	@Override
-	public void deleteExpress(ThirdExpressDO express) {
-		ThirdExpressDao.deleteExpress(express);
-		
-	}
+    @Override
+    public void updateExpress(ThirdExpressDO express) {
+        ThirdExpressDao.updateExpress(express);
 
-	@Override
-	public List<ThirdExpressDO> findExpressesAll(Pagination page) {
-		
+    }
+
+    @Override
+    public void deleteExpress(ThirdExpressDO express) {
+        ThirdExpressDao.deleteExpress(express);
+
+    }
+
+    @Override
+    public List<ThirdExpressDO> findExpressesAll(Pagination page) {
+
         List<ThirdExpressDO> list = new ArrayList<ThirdExpressDO>();
-        
+
         list = ThirdExpressDao.findByMerchantIdAll();
-        
+
         page.setTotalCount(list.size());
-	
-		return list;
-	}
+
+        return list;
+    }
 
 
 }
