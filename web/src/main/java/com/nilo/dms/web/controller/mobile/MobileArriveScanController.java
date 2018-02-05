@@ -6,6 +6,9 @@ import com.nilo.dms.dao.WaybillScanDao;
 import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.web.controller.BaseController;
+
+import java.util.Arrays;
+
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,18 +22,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/mobile/arrive")
 public class MobileArriveScanController extends BaseController {
 
-    @RequestMapping(value = "/toPage.html")
-    public String toPage() {
-        return "mobile/network/arrive_scan/arriveScan";
-    }
+	@Autowired
+	private OrderService orderService;
 
-    @RequestMapping(value = "/submit.html")
-    @ResponseBody
-    public String submit(String[] arrWaybillNo) {
-    	//arrWaybillNo
-        for(int i = 0; i < arrWaybillNo.length; i ++) {
-            System.out.println(arrWaybillNo[i]);
-        }
-        return "true";
-    }
+	@RequestMapping(value = "/toPage.html")
+	public String toPage() {
+		return "mobile/network/arrive_scan/arriveScan";
+	}
+
+	
+	@RequestMapping(value = "/submit.html")
+	@ResponseBody
+	public String submit(String[] arrWaybillNo) {
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		// 获取merchantId
+		String merchantId = me.getMerchantId();
+		String arriveBy = me.getUserId();
+
+		if (null != arrWaybillNo && arrWaybillNo.length > 0) {
+			orderService.waybillNoListArrive(Arrays.asList(arrWaybillNo), arriveBy, merchantId);
+		}
+		return toJsonTrueMsg();
+	}
 }
