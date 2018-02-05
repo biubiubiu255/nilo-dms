@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
-@RequestMapping("/mobile/sign")
+@RequestMapping("/mobile/rider/sign")
 public class SignScanController extends BaseController {
     @Autowired
     private RiderOptService riderOptService;
