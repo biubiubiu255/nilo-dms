@@ -8,13 +8,13 @@
 <body>
 <div class="box-body">
     <div class="layui-row">
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md3 layui-col-lg3">
             <label class="layui-form-label" >Name:</label>
             <div class="layui-input-inline">
                 <input type="text" name="name" autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-form layui-col-md4 layui-col-lg3">
+        <div class="layui-form layui-col-md3 layui-col-lg3">
             <label class="layui-form-label">Department:</label>
             <div class="layui-form-item layui-inline" style="margin: 0px">
                 <select lay-filter="departmentId" name="departmentId">
