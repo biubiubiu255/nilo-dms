@@ -64,8 +64,12 @@
     }
 
     function delTr2(){
-        delTr('fuxuan');
+    	android.startScan(afterScan);
+        //delTr('fuxuan');
     }
+    function afterScan(scanResult){
+		document.getElementById("logisticsNo").value = scanResult;
+	}
 
     function delTr(fuxuan){
         //获取选中的复选框，然后循环遍历删除

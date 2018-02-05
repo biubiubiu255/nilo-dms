@@ -84,6 +84,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
         if (orderDO != null) {
             return;
         }
+        Long merchantId = deliveryOrderRequestDO.getMerchantId();
         transactionTemplate.execute(new TransactionCallback<Void>() {
             @Override
             public Void doInTransaction(TransactionStatus transactionStatus) {
@@ -91,7 +92,6 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                 DeliveryOrder data = JSON.parseObject(deliveryOrderRequestDO.getData(), DeliveryOrder.class);
                 try {
 
-                    Long merchantId = Long.parseLong(data.getMerchantId());
                     //1、保存订单信息
                     DeliveryOrderDO orderHeader = new DeliveryOrderDO();
                     orderHeader.setOrderNo(orderNo);

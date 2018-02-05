@@ -6,8 +6,8 @@ import java.util.Map;
 /**
  * Created by ronny on 2017/8/22.
  */
-public enum OPEnum {
-    CREATE_DELIVERY_ORDER("create_delivery_order", "create_delivery_order"),
+public enum MethodEnum {
+    CREATE_DELIVERY_ORDER("nos.waybill.create", "create_delivery_order"),
     ARRIVE_SCAN("arrive_scan", "arrive_scan"),
     SIGN("sign", "sign"),
     ABNORMAL("abnormal", "abnormal"),
@@ -15,16 +15,16 @@ public enum OPEnum {
     private String code;
     private String value;
 
-    private static Map<String, OPEnum> map = new HashMap<String, OPEnum>(10);
+    private static Map<String, MethodEnum> map = new HashMap<String, MethodEnum>(10);
 
     static {
-        OPEnum[] enums = OPEnum.values();
-        for (OPEnum e : enums) {
+        MethodEnum[] enums = MethodEnum.values();
+        for (MethodEnum e : enums) {
             map.put(e.getCode(), e);
         }
     }
 
-    private OPEnum(String code, String value) {
+    private MethodEnum(String code, String value) {
         this.code = code;
         this.value = value;
     }
@@ -44,7 +44,7 @@ public enum OPEnum {
     public void setValue(String value) {
         this.value = value;
     }
-    public static OPEnum getEnum(String code) {
+    public static MethodEnum getEnum(String code) {
         return map.get(code);
     }
 }

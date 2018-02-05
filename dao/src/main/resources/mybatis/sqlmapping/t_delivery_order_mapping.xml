@@ -19,8 +19,8 @@
                 jdbcType="INTEGER"/>
         <result property="country" column="country" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="totalPrice" column="total_price" javaType="java.lang.Long"
-                jdbcType="INTEGER"/>
+        <result property="totalPrice" column="total_price" javaType="java.lang.Double"
+                jdbcType="DECIMAL"/>
         <result property="serviceType" column="service_Type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="orderPlatform" column="order_platform" javaType="java.lang.String"

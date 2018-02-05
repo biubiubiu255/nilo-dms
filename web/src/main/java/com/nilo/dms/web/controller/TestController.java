@@ -26,7 +26,7 @@ import java.util.Map;
  * Created by Administrator on 2017/6/7.
  */
 @Controller
-public class TestController extends BaseController{
+public class TestController extends BaseController {
 
     @Autowired
     @Qualifier("messageProducer")
@@ -44,8 +44,8 @@ public class TestController extends BaseController{
             data.setReferenceNo("90000000" + i);
             data.setMerchantId("1");
             data.setOrderTime(DateUtil.getSysTimeStamp());
-            data.setTotalPrice((long) i);
-            data.setWeight(i+12.2d);
+            data.setTotalPrice(123.2d);
+            data.setWeight(i + 12.2d);
             data.setCountry("CN");
             data.setOrderPlatform("Test");
             data.setOrderType("FBK");
@@ -88,20 +88,18 @@ public class TestController extends BaseController{
 
             List<GoodsInfo> list = new ArrayList<>();
             GoodsInfo g = new GoodsInfo();
-            g.setUnitPrice(1112l);
+            g.setUnitPrice(1112.2d);
             g.setGoodsDesc("Test Product1");
             g.setGoodsId("1");
             g.setQuality("Good");
             g.setQty(2);
-            g.setUserdefine01("user define 01");
 
             GoodsInfo g1 = new GoodsInfo();
-            g1.setUnitPrice(3333l);
+            g1.setUnitPrice(3333.4d);
             g1.setGoodsDesc("Test Product2 ");
             g1.setGoodsId("2");
             g1.setQuality("Good");
             g1.setQty(3);
-            g1.setUserdefine01("123123");
 
             list.add(g);
             list.add(g1);

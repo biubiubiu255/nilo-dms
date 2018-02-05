@@ -19,9 +19,9 @@ public class DeliveryOrderGoodsDO extends BaseDo<Long> {
 
     private String quality;
 
-    private Long unitPrice;
+    private Double unitPrice;
 
-    private Long totalPrice;
+    private Double totalPrice;
 
     private Integer status;
 
@@ -73,19 +73,19 @@ public class DeliveryOrderGoodsDO extends BaseDo<Long> {
         this.qty = qty;
     }
 
-    public Long getUnitPrice() {
+    public Double getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(Long unitPrice) {
+    public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
     }
 
-    public Long getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Long totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 

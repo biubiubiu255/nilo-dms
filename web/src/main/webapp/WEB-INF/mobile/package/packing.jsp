@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -24,8 +25,8 @@
 
 <div class="wap_content">
 
-    <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-        <h2>Sign Scan</h2>
+    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
+        <h2>Packing</h2>
     </div>
 
     <div class="formula_modify">
@@ -33,20 +34,24 @@
             <div class="banner_content">
                 <ul class="one_banner">
                     <li>
-                        <%--<label>Logistics No</label>--%>
-                        <input type="tel" placeholder="Logistics No" id="logisticsNo" name="logisticsNo" class="input_value" />
-                        <span id="scan">scan</span>
+                        <%--<label>Next Station</label>--%>
+                        <select required="required" class='input_value' id='nextStation' name='nextStation'>
+                            <option value="0">Please select the nextStation</option>
+                            <c:forEach items="${nextStation}" var="station">
+		                        <option value="${station.code}" type="${station.type}">${station.name}</option>
+		                    </c:forEach>
+                        </select>
                     </li>
-                    <li><input type='text' placeholder="Signer" id="signer" class='input_value' name='signer' /><span>Aquire</span></li>
-                    <li><input type='text' placeholder="Remark" id="remark" class='input_value' name='remark' /></li>
+                    <li><input type='text' placeholder="Weight" id="Weight" class='input_value' name='Weight' /></li>
+                    <li><input type='text' placeholder="Length" id="Length" class='input_value' name='Length' /></li>
+                    <li><input type='text' placeholder="Width" id="Width" class='input_value' name='Width' /></li>
+                    <li><input type='text' placeholder="High" id="High" class='input_value' name='High' /></li>
                     <li>
-                        <label>Take a picture</label>
-                        <div class="xq"><img src="/mobile/images/2300.jpg" /></div>
+                        <label>Scan Logistics No</label>
+                        <div class="xq">scan</div>
                     </li>
                 </ul>
-                <center>
-                    <div><img src="/mobile/images/test111.jpg" style="width: 100px; height: 100px;" /></div>
-                </center>
+                
                 <div class="bottom_a_button"><a onclick="doFind()">submit</a></div>
             </div>
         </form>
@@ -55,7 +60,7 @@
         <table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
             <tr>
                 <td>Logistics No</td>
-                <td>Signer</td>
+                 <td><input type="checkbox" id="allFuxuan" onclick="sel('fuxuan')"></td>
             </tr>
         </table>
     </div>

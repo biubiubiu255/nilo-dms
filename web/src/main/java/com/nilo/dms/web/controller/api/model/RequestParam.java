@@ -1,5 +1,6 @@
 package com.nilo.dms.web.controller.api.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.AssertUtil;
@@ -18,18 +19,18 @@ public class RequestParam {
 
     private String sign;
 
-    private String merchantId;
+    private String app_key;
 
     private Long timestamp;
 
-    private String op;
+    private String method;
 
-    public OPEnum getOp() {
-        return OPEnum.getEnum(this.op);
+    public MethodEnum getMethod() {
+        return MethodEnum.getEnum(this.method);
     }
 
-    public void setOp(String op) {
-        this.op = op;
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     public String getData() {
@@ -48,12 +49,12 @@ public class RequestParam {
         this.sign = sign;
     }
 
-    public String getMerchantId() {
-        return merchantId;
+    public String getApp_key() {
+        return app_key;
     }
 
-    public void setMerchantId(String merchantId) {
-        this.merchantId = merchantId;
+    public void setApp_key(String app_key) {
+        this.app_key = app_key;
     }
 
     public Long getTimestamp() {
@@ -65,12 +66,12 @@ public class RequestParam {
     }
 
     public void checkParam() {
-        AssertUtil.isNotBlank(merchantId, BizErrorCode.MERCHANT_ID_EMPTY);
+        AssertUtil.isNotBlank(app_key, BizErrorCode.MERCHANT_ID_EMPTY);
         AssertUtil.isNotBlank(data, BizErrorCode.DATA_EMPTY);
         AssertUtil.isNotBlank(sign, BizErrorCode.SIGN_EMPTY);
-        AssertUtil.isNotBlank(op, BizErrorCode.OP_EMPTY);
+        AssertUtil.isNotBlank(method, BizErrorCode.Method_EMPTY);
         AssertUtil.isNotNull(timestamp, BizErrorCode.TIMESTAMP_EMPTY);
-        AssertUtil.isNotNull(getOp(), BizErrorCode.OP_NOT_EXIST);
+        AssertUtil.isNotNull(getMethod(), BizErrorCode.METHOD_NOT_EXIST);
 
         //时间戳 10分钟内
         Long currentTime = DateUtil.getSysTimeStamp();
@@ -80,7 +81,7 @@ public class RequestParam {
         }
 
         //校验sign
-        String merchantId = this.merchantId;
+        String merchantId = this.app_key;
         MerchantConfig merchantConfig = SystemConfig.getMerchantConfig(merchantId);
         boolean check = checkSign(merchantConfig.getKey(), data, sign);
         AssertUtil.isTrue(check, BizErrorCode.SING_ERROR);
