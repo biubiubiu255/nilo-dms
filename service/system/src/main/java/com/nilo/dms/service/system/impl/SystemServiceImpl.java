@@ -79,6 +79,7 @@ public class SystemServiceImpl implements SystemService {
             }
         }
         for (MerchantConfigDO c : list) {
+            RedisUtil.set(Constant.MERCHANT_CONF + c.getMerchantCode(), JSON.toJSONString(convertTo(c)));
             RedisUtil.set(Constant.MERCHANT_CONF + c.getMerchantId(), JSON.toJSONString(convertTo(c)));
             List<InterfaceConfig> configList = interfaceConfigService.queryAll("" + c.getMerchantId());
             if (configList == null) continue;

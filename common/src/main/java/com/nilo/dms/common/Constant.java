@@ -10,6 +10,7 @@ public class Constant {
     public static final String SERIAL_NUMBER_CONF="System_serial_number_config";
 
     public static final String MERCHANT_CONF ="System_merchant_config";
+
     public static final String NETWORK_INFO ="System_network_info";
 
     public static final String INTERFACE_CONF ="System_interface_config";

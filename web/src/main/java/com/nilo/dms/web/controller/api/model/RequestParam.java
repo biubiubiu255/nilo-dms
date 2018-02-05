@@ -25,6 +25,16 @@ public class RequestParam {
 
     private String method;
 
+    private String app_id;
+
+    public String getApp_id() {
+        return app_id;
+    }
+
+    public void setApp_id(String app_id) {
+        this.app_id = app_id;
+    }
+
     public MethodEnum getMethod() {
         return MethodEnum.getEnum(this.method);
     }
@@ -81,8 +91,9 @@ public class RequestParam {
         }
 
         //校验sign
-        String merchantId = this.app_key;
-        MerchantConfig merchantConfig = SystemConfig.getMerchantConfig(merchantId);
+        MerchantConfig merchantConfig = SystemConfig.getMerchantConfigByCode(this.app_key);
+        if(merchantConfig== null) throw new DMSException(BizErrorCode.APP_KEY_NOT_EXIST,this.app_key);
+        this.app_id = merchantConfig.getMerchantId();
         boolean check = checkSign(merchantConfig.getKey(), data, sign);
         AssertUtil.isTrue(check, BizErrorCode.SING_ERROR);
 

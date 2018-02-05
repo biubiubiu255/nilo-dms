@@ -27,7 +27,10 @@ public class SystemConfig {
         MerchantConfig config = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + merchantId), MerchantConfig.class);
         return config;
     }
-
+    public static MerchantConfig getMerchantConfigByCode(String code) {
+        MerchantConfig config = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + code), MerchantConfig.class);
+        return config;
+    }
     /**
      * 日志配置
      */
