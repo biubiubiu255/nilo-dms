@@ -96,8 +96,6 @@
             alert("Please select a nextStation")
         }else if(kuang3.value == 0){
             alert("driver no cannot be empty")
-        }else if(kuang4.value == ""){
-            alert("plateNo no cannot be empty")
         }else{
             var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang2.value+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\"" +kuang1.value+ ","+kuang2.value+","+kuang3.value+","+kuang4.value+ "\"></td></tr>";
             addTr(tab, row, trHtml);
@@ -113,7 +111,7 @@
             return;
         }
         $tr.after(trHtml);
-        $("#logisticsNo").val("").focus();
+        $("#logisticsNo").val("");
         $("#nextStation").val("0");
         $("#sendDriver").val("0");
         $("#plateNo").val("");

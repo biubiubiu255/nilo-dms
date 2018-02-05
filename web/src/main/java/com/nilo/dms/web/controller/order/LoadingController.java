@@ -141,9 +141,6 @@ public class LoadingController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/addLoading.html")
     public String addLoading(Loading loading,String deliveryRider,String sendDriver) {
-
-
-
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();

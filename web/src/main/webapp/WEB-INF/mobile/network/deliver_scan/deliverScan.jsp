@@ -89,7 +89,7 @@
     function addTr2(tab) {
         var kuang1 = document.getElementById("logisticsNo")
         var kuang2 = document.getElementById("station")
-        var kuang3 = document.getElementById("sendDriver")
+        var kuang3 = document.getElementById("deliverDriver")
         var kuang4 = document.getElementById("plateNo")
         if(kuang1.value == ""){
             alert("Logistics no cannot be empty")
@@ -97,8 +97,6 @@
             alert("Please select a site")
         }else if(kuang3.value == 0){
             alert("driver no cannot be empty")
-        }else if(kuang4.value == ""){
-            alert("plateNo no cannot be empty")
         }else{
             var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang3.value+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\"" +kuang1.value+ ","+kuang2.value+","+kuang3.value+","+kuang4.value+"\"></td></tr>";
             addTr(tab,  trHtml);
@@ -115,7 +113,7 @@
             return;
         }
         $tr.after(trHtml);
-        $("#logisticsNo").val("").focus();
+        $("#logisticsNo").val("");
         $("#station").val("0");
         $("#deliverDriver").val("0");
         $("#plateNo").val("");
