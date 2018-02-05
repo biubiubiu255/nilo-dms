@@ -14,7 +14,7 @@
                 <input type="text" name="name" autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-form layui-col-md4 layui-col-lg3">
+        <div class="layui-form layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">Department:</label>
             <div class="layui-form-item layui-inline" style="margin: 0px">
                 <select lay-filter="departmentId" name="departmentId">
@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div class="layui-col-md2">
+        <div class="layui-col-md1">
             <button class="layui-btn layui-btn-normal search">Search</button>
         </div>
     </div>
@@ -59,7 +59,6 @@
                 Employ Time
             </th>
             <th lay-data="{field:'age', width:100}">Age</th>
-            <th lay-data="{field:'title', width:200}">Title</th>
             <th lay-data="{title:'Opt',fixed: 'right', width:280, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
         </thead>

@@ -5,6 +5,7 @@ import com.alibaba.rocketmq.common.message.MessageExt;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.CreateDeliveryRequestStatusEnum;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.service.order.model.*;
@@ -84,6 +85,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
         if (orderDO != null) {
             return;
         }
+        Long merchantId = deliveryOrderRequestDO.getMerchantId();
         transactionTemplate.execute(new TransactionCallback<Void>() {
             @Override
             public Void doInTransaction(TransactionStatus transactionStatus) {
@@ -91,7 +93,6 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                 DeliveryOrder data = JSON.parseObject(deliveryOrderRequestDO.getData(), DeliveryOrder.class);
                 try {
 
-                    Long merchantId = Long.parseLong(data.getMerchantId());
                     //1、保存订单信息
                     DeliveryOrderDO orderHeader = new DeliveryOrderDO();
                     orderHeader.setOrderNo(orderNo);
@@ -104,8 +105,6 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
                     orderHeader.setTotalPrice(data.getTotalPrice());
                     orderHeader.setWeight(data.getWeight());
-
-                    orderHeader.setServiceType(data.getServiceType().getCode());
                     orderHeader.setGoodsType(data.getGoodsType());
 
 

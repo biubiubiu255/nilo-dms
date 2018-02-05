@@ -24,7 +24,7 @@
 <body>
 
 <div class="wap_content">
-    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
+    <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
         <h2>Arrive Scan</h2>
     </div>
     <div class="search_banner">
@@ -33,10 +33,10 @@
                 <i></i>
                 <input type="text" id="logisticsNo" name="logisticsNo" placeholder="Logistics No" class="search_input_field keywords"/>
             </div>
-            <div class="search_button"><input type="button" value="scan" class="search_input_button"/></div>
+            <div class="search_button"><input type="button" value="scan" id="scan" class="search_input_button"/></div>
         </div>
         <div class="bottom_a_button11"><a onclick="delTr2()">delete</a></div>
-        <div class="bottom_a_button22"><a onclick="suiyi('fuxuan')">submit</a></div>
+        <div class="bottom_a_button22"><a onclick="Judge('fuxuan')">submit</a></div>
     </div>
 </div>
 <div>
@@ -49,11 +49,22 @@
 </div>
 
 <script>
+
+    document.getElementById('scan').onclick = function(){android.startScan()};
+
+    function doScan(){
+        android.startScan();
+    }
+    function afterScan(scanResult){
+        document.getElementById("logisticsNo").value = scanResult;
+        addTr2('tab', 0,scanResult);
+    }
+
     $("#logisticsNo").focus();
     $("#logisticsNo").keydown(function (event) {
         event = document.all ? window.event : event;
         if ((event.keyCode || event.which) == 13) {
-            addTr2('tab', -1);
+            addTr2('tab', 0);
         }
     });
 
@@ -64,14 +75,14 @@
     }
 
     function delTr2(){
+    	// android.startScan(afterScan);
         delTr('fuxuan');
     }
-
     function delTr(fuxuan){
         //获取选中的复选框，然后循环遍历删除
         var fuxuans=$("input[name="+fuxuan+"]:checked");
         if(fuxuans.size()==0){
-            alert("要删除指定行，需选中要删除的行！");
+            alert("You did not select the required action！");
             return;
         }
         fuxuans.each(function(){
@@ -79,9 +90,8 @@
         });
     }
 
-    function addTr2(tab, row) {
-        var kuang1 = document.getElementById("logisticsNo")
-        var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\""+kuang1.value+"\"></td></tr>";
+    function addTr2(tab, row,scanResult) {
+        var trHtml = "<tr align='center'><td>" +scanResult+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\""+scanResult+"\"></td></tr>";
         addTr(tab, row, trHtml);
     }
     function addTr(tab, row, trHtml){
@@ -94,9 +104,18 @@
             return;
         }
         $tr.after(trHtml);
-        $("#logisticsNo").val("").focus();
-        $("#reason").val("0");
-        $("#memo").val("");
+        $("#logisticsNo").val("");
+    }
+
+    function Judge(fuxuan){
+        //获取选中的复选框，然后循环遍历删除
+        var fuxuans=$("input[name="+fuxuan+"]:checked");
+        if(fuxuans.size()==0){
+            alert("You did not select the required action！");
+            return;
+        }else {
+            suiyi(fuxuan);
+        }
     }
 
     function suiyi(fuxuan) {
@@ -108,7 +127,7 @@
             cache: false,
             type: "POST",
             traditional: true,
-            url: "/mobile/SjArriveScanController/test.html",
+            url: "/mobile/MobileArriveScanController/submit.html",
             data : {arr : arr},
             async: false,
             error: function () {

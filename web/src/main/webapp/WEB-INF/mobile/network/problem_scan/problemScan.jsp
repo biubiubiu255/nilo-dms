@@ -2,29 +2,30 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="UTF-8"/>
-<meta http-equiv="Cache-Control" content="no-cache"/>
-<meta content="telephone=no" name="format-detection" />
-<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=2.0"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
-<meta name="keywords" content="#" />
-<meta name="description" content="#" />
-<title>网点功能</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta content="telephone=no" name="format-detection" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=2.0"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta name="keywords" content="#" />
+    <meta name="description" content="#" />
+    <title></title>
 
 
-<link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
-<link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
-<link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
-<script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="/mobile/js/functions.js"></script>
-<script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
-<script type="text/javascript" src="/mobile/js/mobile.js"></script>
+    <link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
+    <link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
+    <link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
+    <script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/mobile/js/functions.js"></script>
+    <script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
+    <script type="text/javascript" src="/mobile/js/mobile.js"></script>
 </head>
 <body>
-<div class="wap_content">
 
-    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
-        <h2>Send Scan</h2>
+
+<div class="wap_content">
+    <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
+        <h2>Porblem</h2>
     </div>
 
     <div class="formula_modify">
@@ -33,18 +34,17 @@
                 <ul class="one_banner">
                     <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' id='logisticsNo' name='logisticsNo' /><span>scan</span></li>
                     <li>
-                        <%--<label>Next Station</label>--%>
-                        <select required="required" class='input_value' id='nextStation' name='nextStation'>
-                            <option value="0">Please select the site</option>
-                            <option value="test2">test2</option>
-                            <option value="nckjd">nckjd</option>
-                            <option value="dvad">dvad</option>
-                            <option value="test5">test5</option>
-                            <option value="test6">test6</option>
-                        </select>
+                        <%--<label>Reason</label>--%>
+                        <select required="required" class='input_value' id="reason" name='reason'>
+                            <option value="0">Please select a return reason</option>
+                            <option value="Over Scope Of Deliver">Over Scope Of Deliver</option>
+                            <option value="Unable to contact customers">Unable to contact customers</option>
+                            <option value="Return">Return</option>
+                            <option value="test">test</option>
+                            <option value="Rejection">Rejection</option>
+                        </select><span onclick="addTr2('tab', -1);">Save</span>
                     </li>
-                    <li><input type='text' placeholder="Driver" maxlength='100' class='input_value' id='driver' name='driver' /></li>
-                    <li><input type='text' placeholder="Plate No" maxlength='100' class='input_value' id='plateNo' name='plateNo' /><span onclick="addTr2('tab', 0);">save</span></li>
+                    <li><input type='text' placeholder="Memo" maxlength='100' class='input_value' id="memo" name='memo' /></li>
                 </ul>
                 <div class="bottom_a_button11"><a onclick="delTr2()">delete</a></div>
                 <div class="bottom_a_button22"><a onclick="suiyi('fuxuan')">submit</a></div>
@@ -55,7 +55,7 @@
         <table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
             <tr>
                 <td>Logistics No</td>
-                <td>Next Station</td>
+                <td>Reason</td>
                 <td><input type="checkbox" id="allFuxuan" onclick="sel('fuxuan')"></td>
             </tr>
         </table>
@@ -65,8 +65,8 @@
 <script>
     function addTr2(tab, row) {
         var kuang1 = document.getElementById("logisticsNo")
-        var kuang2 = document.getElementById("nextStation")
-        var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang2.value+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\"" +kuang1.value+ "\"></td></tr>";
+        var kuang2 = document.getElementById("reason")
+        var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang2.value+ "</td><td><input type=\"checkbox\" id=\"fuxuan\" name=\"fuxuan\"  value=\""+kuang1.value+"\"></td></tr>";
         addTr(tab, row, trHtml);
     }
     function addTr(tab, row, trHtml){
@@ -80,9 +80,8 @@
         }
         $tr.after(trHtml);
         $("#logisticsNo").val("").focus();
-        $("#nextStation").val("0");
-        $("#driver").val("");
-        $("#plateNo").val("");
+        $("#reason").val("0");
+        $("#memo").val("");
     }
     function sel(a){
         var o=document.getElementsByName(a)
@@ -114,7 +113,7 @@
             cache: false,
             type: "POST",
             traditional: true,
-            url: "/mobile/SendScanController/test.html",
+            url: "/mobile/PorblemController/test.html",
             data : {arr : arr},
             async: false,
             error: function () {
@@ -128,5 +127,6 @@
         });
     }
 </script>
+
 </body>
 </html>

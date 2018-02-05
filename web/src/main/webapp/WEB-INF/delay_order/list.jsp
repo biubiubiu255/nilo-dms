@@ -7,27 +7,43 @@
 %>
 <body>
 <div class="box-body">
+
     <div class="layui-row">
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label" style="width:110px">OrderNo:</label>
-            <div class="layui-input-inline">
-                <input type="text" name="orderNo" autocomplete="off" class="layui-input">
-            </div>
+        <div class="layui-col-md1">
+            <button class="layui-btn btn-search">Search
+            </button>
         </div>
-        <div class="layui-col-md8 layui-col-lg5">
-            <label class="layui-form-label" style="width:110px">CreateTime:</label>
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
+    </div>
+
+    <div class="layui-collapse">
+        <div class="layui-colla-item">
+            <div class="layui-colla-content ">
+                <div class="layui-form layui-row">
+                    <div class="layui-row">
+                        <div class="layui-col-md4 layui-col-lg3">
+                            <label class="layui-form-label" style="width:110px">OrderNo:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="orderNo" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md8 layui-col-lg5">
+                            <label class="layui-form-label" style="width:110px">CreateTime:</label>
+                            <div class="layui-inline">
+                                <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
+                            </div>
+                            -
+                            <div class="layui-inline">
+                                <input type="text" class="layui-input" id="toCreatedTime" placeholder="To">
+                            </div>
+                        </div>
+                        <div class="layui-col-md1 layui-col-lg1">
+                            <shiro:hasPermission name="400022">
+                                <button class="layui-btn layui-btn-normal search">Search</button>
+                            </shiro:hasPermission>
+                        </div>
+                    </div>
+                </div>
             </div>
-            -
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="toCreatedTime" placeholder="To">
-            </div>
-        </div>
-        <div class="layui-col-md1 layui-col-lg1">
-            <shiro:hasPermission name="400022">
-                <button class="layui-btn layui-btn-normal search">Search</button>
-            </shiro:hasPermission>
         </div>
     </div>
 
@@ -61,12 +77,8 @@
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
     $(function () {
-        layui.use('form', function () {
-            var form = layui.form;
-            form.render();
-        })
 
-        layui.use('laydate', function () {
+        layui.use(['form','element','laydate'], function () {
             var layDate = layui.laydate;
             layDate.render({
                 elem: '#fromCreatedTime'
@@ -77,6 +89,7 @@
                 , lang: 'en'
             });
         });
+
         var table;
         layui.use('table', function () {
             table = layui.table;
@@ -98,7 +111,10 @@
         $(".search").on("click", function () {
             reloadTable();
         })
-
+        $(".btn-search").on("click", function () {
+            $(".layui-colla-content").toggleClass("layui-show");
+            $(".btn-search").toggleClass("layui-btn-warm");
+        })
         function reloadTable(item) {
             table.reload("${id0}", {
                 where: {
@@ -119,7 +135,7 @@
                     parent.layer.open({
                         type: 1,
                         content: data,
-                        area: ['800px','600px'],
+                        area: ['800px', '600px'],
                         offset: ['100px', '250px'],
                         end: function () {
                             reloadCurrentPage();

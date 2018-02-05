@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -21,29 +22,36 @@
 <script type="text/javascript" src="/mobile/js/mobile.js"></script>
 </head>
 <body>
+
 <div class="wap_content">
 
-    <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-        <h2>COD Sign</h2>
+    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
+        <h2>Packing</h2>
     </div>
 
     <div class="formula_modify">
         <form id="myForm" class="layui-form" action="">
             <div class="banner_content">
                 <ul class="one_banner">
-                    <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span>scan</span></li>
-                    <li><input type='text' placeholder="Serial number" maxlength='13' class='input_value' id="serialNumber" name='serialNumber' /></li>
-                    <li><input type='text' placeholder="Signer" maxlength='13' class='input_value' id="signer" name='signer' /><span>Aquire</span></li>
-                    <li><input type='text' placeholder="ID No" maxlength='13' class='input_value' id="idNo" name='idNo' /></li>
-                    <li><label>Pay Type</label><div style="position:absolute; left: 35%">
-                        <input type="radio" name="danxuan" value="cash"/>cash &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="danxuan" value="Phone payment"/>Phone payment</div>
+                    <li>
+                        <%--<label>Next Station</label>--%>
+                        <select required="required" class='input_value' id='nextStation' name='nextStation'>
+                            <option value="0">Please select the nextStation</option>
+                            <c:forEach items="${nextStation}" var="station">
+		                        <option value="${station.code}" type="${station.type}">${station.name}</option>
+		                    </c:forEach>
+                        </select>
                     </li>
-                    <li><label>Take a picture</label><div  class="xq"><img src="/mobile/images/2300.jpg" /></div></li>
+                    <li><input type='text' placeholder="Weight" id="Weight" class='input_value' name='Weight' /></li>
+                    <li><input type='text' placeholder="Length" id="Length" class='input_value' name='Length' /></li>
+                    <li><input type='text' placeholder="Width" id="Width" class='input_value' name='Width' /></li>
+                    <li><input type='text' placeholder="High" id="High" class='input_value' name='High' /></li>
+                    <li>
+                        <label>Scan Logistics No</label>
+                        <div class="xq">scan</div>
+                    </li>
                 </ul>
-                <center>
-                    <div><img src="/mobile/images/test111.jpg" style="width: 100px; height: 100px;" /></div>
-                </center>
+                
                 <div class="bottom_a_button"><a onclick="doFind()">submit</a></div>
             </div>
         </form>
@@ -52,7 +60,7 @@
         <table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
             <tr>
                 <td>Logistics No</td>
-                <td>Signer</td>
+                 <td><input type="checkbox" id="allFuxuan" onclick="sel('fuxuan')"></td>
             </tr>
         </table>
     </div>
@@ -60,11 +68,20 @@
 
 
 <script type="text/javascript">
+
+document.getElementById('scan').onclick = function(){android.startScan()};
+	
+	function doScan(){
+		android.startScan(afterScan);
+	}
+	function afterScan(scanResult){
+		document.getElementById("logisticsNo").value = scanResult;
+	}
     function doFind() {
         $.ajax({
             cache: false,
             type: "POST",
-            url: "/mobile/CODSignController/test.html",
+            url: "/mobile/SignScanController/test.html",
             data: $('#myForm').serialize(),
             async: false,
             error: function () {
@@ -94,6 +111,9 @@
             return;
         }
         $tr.after(trHtml);
+        // $("#logisticsNo").val("").s();
+        // $("#signer").val("");
+        // $("#remarkx").val("");
     }
 </script>
 </body>

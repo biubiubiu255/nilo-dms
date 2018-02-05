@@ -26,8 +26,12 @@ public interface OrderService {
 
     void arrive(String merchantId,String scanNo,String arriveBy);
 
+    void print(String merchantId, List<String> orderNos);
+
     String addPackage(PackageRequest packageRequest);
 
     List<DeliveryOrder> queryByPackageNo(String merchantNo,String packageNo);
+    
+    void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId);
 
 }

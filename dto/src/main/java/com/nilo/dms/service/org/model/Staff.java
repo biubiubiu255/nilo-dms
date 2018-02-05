@@ -24,6 +24,8 @@ public class Staff {
 
     private String job;
 
+    private String jobDesc;
+
     private String title;
 
     private Long titleTime;
@@ -51,6 +53,18 @@ public class Staff {
     private String address;
 
     private Boolean isRider;
+
+    public String getJobDesc() {
+        return jobDesc;
+    }
+
+    public void setJobDesc(String jobDesc) {
+        this.jobDesc = jobDesc;
+    }
+
+    public void setRider(Boolean rider) {
+        isRider = rider;
+    }
 
     public Boolean isRider() {
         return isRider;
@@ -234,11 +248,6 @@ public class Staff {
 
     public int getAge() {
         return AgeUtil.getAge(this.birthday);
-    }
-
-    public String getJobDesc() {
-        return "需要修改";
-        //return SystemCodeUtil.getCodeVal(this.merchantId, "job", this.job);
     }
 
     public String getStatusDesc() {

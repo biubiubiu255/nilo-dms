@@ -16,7 +16,7 @@ import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.model.AbnormalParam;
 import com.nilo.dms.service.order.model.SignForOrderParam;
 import com.nilo.dms.web.controller.BaseController;
-import com.nilo.dms.web.controller.api.model.OPEnum;
+import com.nilo.dms.web.controller.api.model.MethodEnum;
 import com.nilo.dms.web.controller.api.model.RequestParam;
 
 /**
@@ -44,15 +44,14 @@ public class ApiController extends BaseController {
 
         Map<String, String> resultData = new HashMap<>();
 
-        OPEnum op = param.getOp();
+        MethodEnum method = param.getMethod();
         String data = param.getData();
         String sign = param.getSign();
-        String merchantId = param.getMerchantId();
+        String merchantId = param.getApp_key();
 
-        switch (op) {
+        switch (method) {
             case CREATE_DELIVERY_ORDER: {
-                String orderNo = orderService.addCreateDeliveryOrderRequest(merchantId, data, sign);
-                resultData.put("orderNo", orderNo);
+                orderService.addCreateDeliveryOrderRequest(merchantId, data, sign);
                 break;
             }
             case ARRIVE_SCAN: {
@@ -79,12 +78,12 @@ public class ApiController extends BaseController {
 
     @RequestMapping(value = "api/login.html", method = RequestMethod.POST)
     @ResponseBody
-    public String login( LoginInfo loginInfo) {
+    public String login(LoginInfo loginInfo) {
 
-    	Map<String, String> resultData = new HashMap<>();
-    	resultData.put("userName", loginInfo.getUserName());
-    	
+        Map<String, String> resultData = new HashMap<>();
+        resultData.put("userName", loginInfo.getUserName());
+
         return toJsonTrueData(resultData);
     }
-    
+
 }

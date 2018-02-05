@@ -24,7 +24,7 @@ public class DeliveryOrderDO extends BaseDo<Long> {
 
     private String serviceType;
 
-    private Long totalPrice;
+    private Double totalPrice;
 
     private Double weight;
 
@@ -53,6 +53,16 @@ public class DeliveryOrderDO extends BaseDo<Long> {
     private Integer networkId;
     private Integer nextNetworkId;
     private String parentNo;
+
+    private Integer printTimes;
+
+    public Integer getPrintTimes() {
+        return printTimes;
+    }
+
+    public void setPrintTimes(Integer printTimes) {
+        this.printTimes = printTimes;
+    }
 
     public String getParentNo() {
         return parentNo;
@@ -238,11 +248,11 @@ public class DeliveryOrderDO extends BaseDo<Long> {
         this.goodsType = goodsType;
     }
 
-    public Long getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Long totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 

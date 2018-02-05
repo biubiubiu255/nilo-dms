@@ -56,7 +56,7 @@ public class DoorToDoorController extends BaseController {
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
         parameter.setOrderType(Arrays.asList(new String[]{"DS"}));
-        parameter.setStatus(Arrays.asList(new Integer[]{DeliveryOrderStatusEnum.CREATE.getCode(),DeliveryOrderStatusEnum.ALLOCATED.getCode()}));
+        parameter.setStatus(Arrays.asList(new Integer[]{DeliveryOrderStatusEnum.CREATE.getCode(), DeliveryOrderStatusEnum.ALLOCATED.getCode()}));
         Pagination page = getPage();
         List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
 
@@ -110,4 +110,34 @@ public class DoorToDoorController extends BaseController {
         return toJsonTrueMsg();
 
     }
+
+    @RequestMapping(value = "/print.html")
+    public String print(Model model, HttpServletRequest request, String orderNos) {
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        List<DeliveryOrder> list = orderService.queryByOrderNos(merchantId, Arrays.asList(orderNos.split(",")));
+        for (DeliveryOrder o : list) {
+            if(o.isPrinted()){
+                throw new IllegalArgumentException("Delivery Order :"+o.getOrderNo()+" is already printed.");
+            }
+        }
+        orderService.print(merchantId,Arrays.asList(orderNos.split(",")));
+        model.addAttribute("list", list);
+        return "door_to_door/print";
+    }
+
+    @RequestMapping(value = "/printAgain.html")
+    public String printAgain(Model model, HttpServletRequest request, String orderNos) {
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        List<DeliveryOrder> list = orderService.queryByOrderNos(merchantId, Arrays.asList(orderNos.split(",")));
+
+        orderService.print(merchantId,Arrays.asList(orderNos.split(",")));
+
+        model.addAttribute("list", list);
+        return "door_to_door/print";
+    }
+
 }

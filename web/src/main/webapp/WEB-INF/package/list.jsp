@@ -51,7 +51,6 @@
             <th lay-data="{field:'width', width:120}">Width</th>
             <th lay-data="{field:'high', width:120}">High</th>
             <th lay-data="{field:'remark', width:120}">Remark</th>
-            <th lay-data="{fixed: 'right', width:200, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
         </thead>
     </table>
@@ -96,7 +95,7 @@
         function reloadTable(item) {
             table.reload("${id0}", {
                 where: {
-                    loadingNo: $("input[name='packageNo']").val(),
+                    packageNo: $("input[name='packageNo']").val(),
                 }
             });
         };

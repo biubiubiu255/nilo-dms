@@ -31,9 +31,9 @@ public enum BizErrorCode implements ErrorCode {
     ORDER_TYPE_EMPTY("Order Type is empty.", "100019"),
     DATA_EMPTY("Data is empty.", "100020"),
     SIGN_EMPTY("Sign is empty.", "100021"),
-    OP_EMPTY("op is empty.", "100022"),
+    Method_EMPTY("method is empty.", "100022"),
     TIMESTAMP_EMPTY("Timestamp is empty.", "100023"),
-    OP_NOT_EXIST("op is not exist.", "100024"),
+    METHOD_NOT_EXIST("method is not exist.", "100024"),
     SING_ERROR("Sign is error.", "100025"),
 
 

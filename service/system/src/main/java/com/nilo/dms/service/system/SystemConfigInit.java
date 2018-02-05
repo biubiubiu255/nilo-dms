@@ -16,6 +16,7 @@ public class SystemConfigInit implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
+
         // 加载客户配置信息
         systemService.loadingAndRefreshCustomerConfig(null);
         // 加载流水号规则

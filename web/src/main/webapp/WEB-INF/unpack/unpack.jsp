@@ -83,14 +83,14 @@
         $("#orderNo").keydown(function (event) {
             event = document.all ? window.event : event;
             if ((event.keyCode || event.which) == 13) {
-                scan($("#orderNo").val(),"order");
+                scan($("#orderNo").val(), "order");
             }
         });
 
         $("#packageNo").keydown(function (event) {
             event = document.all ? window.event : event;
             if ((event.keyCode || event.which) == 13) {
-                scan($("#packageNo").val(),"package");
+                scan($("#packageNo").val(), "package");
             }
         });
 
@@ -98,7 +98,7 @@
             table.reload("${id0}", {
                 where: {
                     scanNo: '${scanNo}',
-                    packageNo:$("#packageNo").val()
+                    packageNo: $("#packageNo").val()
                 }
             });
         };
@@ -114,14 +114,14 @@
             });
         };
 
-        var scan=function (orderNo,type) {
+        var scan = function (orderNo, type) {
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
                 url: "/order/unpack/scan.html",
                 dataType: "json",
                 data: {
-                    orderNo: orderNo, scanNo: '${scanNo}',type:type
+                    orderNo: orderNo, scanNo: '${scanNo}', type: type
                 },
                 success: function (data) {
                     if (data.result) {
@@ -139,6 +139,27 @@
             });
         }
         $(".arrive").on("click", function () {
+
+            var data = table.cache["${id0}"];
+            var notArrived = false;
+            for (var i = 0; i < data.length; i++) {
+                if (!data[i].arrived) {
+                    notArrived = true;
+                    layer.confirm('Something is not arrived,Confirm Submit?', {
+                                btn: ['OK', 'Cancel']
+                                //按钮
+                            }, function () {
+                                arriveSubmit()
+                            }
+                    );
+                }
+            }
+            if (!notArrived) {
+                arriveSubmit();
+            }
+        })
+
+        function arriveSubmit() {
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
@@ -158,7 +179,7 @@
                     layer.close(load);
                 }
             });
-        })
+        }
     });
 </script>
 </body>

@@ -1,36 +1,6 @@
 package com.nilo.dms.service.order.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.nilo.dms.common.Constant;
-import com.nilo.dms.common.Pagination;
-import com.nilo.dms.common.enums.*;
-import com.nilo.dms.common.exception.BizErrorCode;
-import com.nilo.dms.common.exception.DMSException;
-import com.nilo.dms.common.exception.SysErrorCode;
-import com.nilo.dms.common.utils.AssertUtil;
-import com.nilo.dms.common.utils.DateUtil;
-import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.*;
-import com.nilo.dms.dao.dataobject.*;
-import com.nilo.dms.service.order.DeliveryFeeDetailsService;
-import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.system.RedisUtil;
-import com.nilo.dms.service.mq.producer.AbstractMQProducer;
-import com.nilo.dms.service.order.AbstractOrderOpt;
-import com.nilo.dms.service.order.OrderService;
-import com.nilo.dms.service.order.model.*;
-import com.nilo.dms.service.system.SystemCodeUtil;
-import com.nilo.dms.service.system.SystemConfig;
-import com.nilo.dms.service.system.model.*;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
+import static com.nilo.dms.common.Constant.IS_PACKAGE;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -38,7 +8,75 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.nilo.dms.common.Constant.IS_PACKAGE;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import com.alibaba.fastjson.JSON;
+import com.nilo.dms.common.Constant;
+import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.enums.CreateDeliveryRequestStatusEnum;
+import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
+import com.nilo.dms.common.enums.OptTypeEnum;
+import com.nilo.dms.common.enums.SerialTypeEnum;
+import com.nilo.dms.common.enums.ServiceTypeEnum;
+import com.nilo.dms.common.enums.TaskStatusEnum;
+import com.nilo.dms.common.enums.TaskTypeEnum;
+import com.nilo.dms.common.exception.BizErrorCode;
+import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.common.exception.SysErrorCode;
+import com.nilo.dms.common.utils.AssertUtil;
+import com.nilo.dms.common.utils.DateUtil;
+import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.DeliveryOrderDao;
+import com.nilo.dms.dao.DeliveryOrderGoodsDao;
+import com.nilo.dms.dao.DeliveryOrderReceiverDao;
+import com.nilo.dms.dao.DeliveryOrderRequestDao;
+import com.nilo.dms.dao.DeliveryOrderSenderDao;
+import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.UserNetworkDao;
+import com.nilo.dms.dao.WaybillScanDetailsDao;
+import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
+import com.nilo.dms.dao.dataobject.DeliveryOrderGoodsDO;
+import com.nilo.dms.dao.dataobject.DeliveryOrderReceiverDO;
+import com.nilo.dms.dao.dataobject.DeliveryOrderRequestDO;
+import com.nilo.dms.dao.dataobject.DeliveryOrderSenderDO;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.UserNetworkDO;
+import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
+import com.nilo.dms.service.mq.producer.AbstractMQProducer;
+import com.nilo.dms.service.order.AbstractOrderOpt;
+import com.nilo.dms.service.order.DeliveryFeeDetailsService;
+import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.TaskService;
+import com.nilo.dms.service.order.model.CreateDeliverOrderMessage;
+import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.DeliveryOrderParameter;
+import com.nilo.dms.service.order.model.DeliveryOrderStatusInfo;
+import com.nilo.dms.service.order.model.DeliveryRoute;
+import com.nilo.dms.service.order.model.GoodsInfo;
+import com.nilo.dms.service.order.model.NotifyRequest;
+import com.nilo.dms.service.order.model.OrderOptRequest;
+import com.nilo.dms.service.order.model.PackageRequest;
+import com.nilo.dms.service.order.model.PhoneMessage;
+import com.nilo.dms.service.order.model.ReceiverInfo;
+import com.nilo.dms.service.order.model.SenderInfo;
+import com.nilo.dms.service.order.model.Task;
+import com.nilo.dms.service.system.RedisUtil;
+import com.nilo.dms.service.system.SystemCodeUtil;
+import com.nilo.dms.service.system.SystemConfig;
+import com.nilo.dms.service.system.model.InterfaceConfig;
+import com.nilo.dms.service.system.model.MerchantConfig;
+import com.nilo.dms.service.system.model.OrderHandleConfig;
+import com.nilo.dms.service.system.model.RouteConfig;
+import com.nilo.dms.service.system.model.SMSConfig;
 
 /**
  * Created by ronny on 2017/9/15.
@@ -90,11 +128,11 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     public String addCreateDeliveryOrderRequest(String merchantId, String data, String sign) {
 
-        String orderNo = SystemConfig.getNextSerialNo(merchantId, SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
         try {
 
             DeliveryOrder order = JSON.parseObject(data, DeliveryOrder.class);
-            //校验订单参数
+            String orderNo = order.getOrderNo();
+            // 校验订单参数
             verifyDeliveryOrderParam(order);
 
             DeliveryOrderRequestDO requestDO = new DeliveryOrderRequestDO();
@@ -115,10 +153,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
-        return orderNo;
-
+        return null;
     }
-
 
     @Override
     public String createDeliveryOrder(final DeliveryOrder data) {
@@ -131,15 +167,16 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                 String orderNo = "";
                 Long merchant = Long.parseLong(data.getMerchantId());
                 try {
-                    //1、保存订单信息
+                    // 1、保存订单信息
                     data.setStatus(DeliveryOrderStatusEnum.CREATE);
                     DeliveryOrderDO orderHeader = convert(data);
-                    //获取订单号
-                    orderNo = SystemConfig.getNextSerialNo(data.getMerchantId(), SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
+                    // 获取订单号
+                    orderNo = SystemConfig.getNextSerialNo(data.getMerchantId(),
+                            SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
                     orderHeader.setOrderNo(orderNo);
                     deliveryOrderDao.insert(orderHeader);
 
-                    //2、保存订单商品明细信息
+                    // 2、保存订单商品明细信息
                     for (GoodsInfo g : data.getGoodsInfoList()) {
                         DeliveryOrderGoodsDO goods = new DeliveryOrderGoodsDO();
                         goods.setMerchantId(merchant);
@@ -152,7 +189,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                         deliveryOrderGoodsDao.insert(goods);
                     }
 
-                    //3、保存收货人信息
+                    // 3、保存收货人信息
                     ReceiverInfo receiverInfo = data.getReceiverInfo();
                     DeliveryOrderReceiverDO r = new DeliveryOrderReceiverDO();
                     r.setOrderNo(orderNo);
@@ -166,7 +203,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                     r.setProvince(receiverInfo.getReceiverProvince());
                     deliveryOrderReceiverDao.insert(r);
 
-                    //3、保存寄件人信息
+                    // 3、保存寄件人信息
                     SenderInfo senderInfo = data.getSenderInfo();
                     DeliveryOrderSenderDO s = new DeliveryOrderSenderDO();
                     s.setMerchantId(merchant);
@@ -195,7 +232,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     public DeliveryOrderStatusInfo queryStatus(String merchantId, String orderNo) {
         return null;
     }
-
 
     @Override
     public List<DeliveryOrder> queryDeliveryOrderBy(DeliveryOrderParameter parameter, Pagination pagination) {
@@ -227,7 +263,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         map.put("offset", pagination.getOffset());
         map.put("limit", pagination.getLimit());
 
-        //查询记录
+        // 查询记录
         List<DeliveryOrderDO> queryList = deliveryOrderDao.queryDeliveryOrderListBy(map);
         Long count = deliveryOrderDao.queryCountBy(map);
         pagination.setTotalCount(count == null ? 0 : count);
@@ -238,7 +274,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     private List<DeliveryOrder> batchQuery(List<DeliveryOrderDO> deliveryOrderDOs, Long merchantId) {
 
         List<DeliveryOrder> list = new ArrayList<>();
-        //构建订单号集合
+        // 构建订单号集合
         List<String> orderNos = new ArrayList<>();
         for (DeliveryOrderDO o : deliveryOrderDOs) {
             orderNos.add(o.getOrderNo());
@@ -274,7 +310,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         Long merchantIdL = Long.parseLong(merchantId);
         DeliveryOrderSenderDO senderDO = deliveryOrderSenderDao.queryByOrderNo(merchantIdL, order.getOrderNo());
         DeliveryOrderReceiverDO receiverDO = deliveryOrderReceiverDao.queryByOrderNo(merchantIdL, order.getOrderNo());
-        List<DeliveryOrderGoodsDO> queryGoodsList = deliveryOrderGoodsDao.queryByOrderNo(merchantIdL, order.getOrderNo());
+        List<DeliveryOrderGoodsDO> queryGoodsList = deliveryOrderGoodsDao.queryByOrderNo(merchantIdL,
+                order.getOrderNo());
         order.setGoodsInfoList(convert(queryGoodsList));
         order.setSenderInfo(convert(senderDO));
         order.setReceiverInfo(convert(receiverDO));
@@ -296,32 +333,36 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     @Override
     public void handleOpt(OrderOptRequest optRequest) {
 
-
-        //校验操作参数
+        // 校验操作参数
         checkOtpParam(optRequest);
-        //校验操作类型
+        // 校验操作类型
         checkOptType(optRequest);
         transactionTemplate.execute(new TransactionCallback<Void>() {
             @Override
             public Void doInTransaction(TransactionStatus transactionStatus) {
                 try {
 
-                    OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(optRequest.getMerchantId(), optRequest.getOptType().getCode());
+                    OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(optRequest.getMerchantId(),
+                            optRequest.getOptType().getCode());
 
                     for (String orderNo : optRequest.getOrderNo()) {
-                        DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(optRequest.getMerchantId()), orderNo);
+                        DeliveryOrderDO orderDO = deliveryOrderDao
+                                .queryByOrderNo(Long.parseLong(optRequest.getMerchantId()), orderNo);
                         if (handleConfig.getUpdateStatus() != null) {
-                            //更新订单状态
+                            // 更新订单状态
                             updateDeliveryOrderStatus(optRequest, orderNo, handleConfig);
-                            //通知商户订单状态变更
-                            notifyMerchantStatusUpdate(optRequest.getMerchantId(), orderNo, orderDO.getReferenceNo(), DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
-                            //记录物流轨迹
-                            routeRecord(optRequest.getMerchantId(), orderNo, optRequest.getOptType().getCode(), optRequest.getParams());
-                            //短信消息
+                            // 通知商户订单状态变更
+                            notifyMerchantStatusUpdate(optRequest.getMerchantId(), orderNo, orderDO.getReferenceNo(),
+                                    DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
+                            // 记录物流轨迹
+                            routeRecord(optRequest.getMerchantId(), orderNo, optRequest.getOptType().getCode(),
+                                    optRequest.getParams());
+                            // 短信消息
                             sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);
                         }
-                        //记录操作日志
-                        addOptLog(optRequest, orderNo, DeliveryOrderStatusEnum.getEnum(orderDO.getStatus()), DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
+                        // 记录操作日志
+                        addOptLog(optRequest, orderNo, DeliveryOrderStatusEnum.getEnum(orderDO.getStatus()),
+                                DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
                     }
 
                 } catch (Exception e) {
@@ -335,63 +376,97 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     }
 
     @Override
+    @Transactional
     public void arrive(String merchantId, String scanNo, String arriveBy) {
         List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
 
-        transactionTemplate.execute(new TransactionCallback<Void>() {
-            @Override
-            public Void doInTransaction(TransactionStatus transactionStatus) {
-                try {
-                    List<String> orderNos = new ArrayList<>();
-                    for (WaybillScanDetailsDO details : scanDetailList) {
-                        orderNos.add(details.getOrderNo());
-                    }
-                    OrderOptRequest optRequest = new OrderOptRequest();
-                    optRequest.setMerchantId(merchantId);
-                    optRequest.setOptBy(arriveBy);
-                    optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
-                    optRequest.setOrderNo(orderNos);
-                    handleOpt(optRequest);
+        List<String> orderNos = new ArrayList<>();
+        for (WaybillScanDetailsDO details : scanDetailList) {
+            orderNos.add(details.getOrderNo());
+        }
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setMerchantId(merchantId);
+        optRequest.setOptBy(arriveBy);
+        optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
+        optRequest.setOrderNo(orderNos);
+        handleOpt(optRequest);
 
-                    // 更新重量
-                    for (WaybillScanDetailsDO details : scanDetailList) {
-                        if (details.getWeight() == null) continue;
-                        DeliveryOrderDO orderDO = new DeliveryOrderDO();
-                        orderDO.setOrderNo(details.getOrderNo());
-                        orderDO.setWeight(details.getWeight());
-                        orderDO.setMerchantId(Long.parseLong(merchantId));
-                        deliveryOrderDao.update(orderDO);
-                    }
+        // 更新重量
+        for (WaybillScanDetailsDO details : scanDetailList) {
+            if (details.getWeight() == null)
+                continue;
+            DeliveryOrderDO orderDO = new DeliveryOrderDO();
+            orderDO.setOrderNo(details.getOrderNo());
+            orderDO.setWeight(details.getWeight());
+            orderDO.setMerchantId(Long.parseLong(merchantId));
 
-                    List<UserNetworkDO> userNetworkDOList = userNetworkDao.queryByUserId(Long.parseLong(arriveBy));
-                    //网点到件的运单为自提，添加网点任务
-                    for (WaybillScanDetailsDO details : scanDetailList) {
-                        DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), details.getOrderNo());
-                        if (StringUtil.equalsIgnoreCase(orderDO.getChannel(), "Y") && !StringUtil.equalsIgnoreCase(orderDO.getIsPackage(), "Y")) {
-                            Task task = new Task();
-                            task.setMerchantId(merchantId);
-                            task.setStatus(TaskStatusEnum.CREATE);
-                            task.setCreatedBy(arriveBy);
-                            task.setOrderNo(details.getOrderNo());
-                            task.setHandledBy("" + userNetworkDOList.get(0).getDistributionNetworkId());
-                            task.setTaskType(TaskTypeEnum.SELF_DELIVERY);
-                            taskService.addTask(task);
-                        }
-                    }
+            deliveryOrderDao.update(orderDO);
+        }
 
-                } catch (Exception e) {
-                    logger.error("arrive Failed. Data:{}", scanNo, e);
-                    transactionStatus.setRollbackOnly();
-                    throw e;
-                }
-                return null;
+        this.updateNetworkTask(orderNos, arriveBy, merchantId);
+
+    }
+
+    @Override
+    @Transactional
+    public void print(String merchantId, List<String> orderNos) {
+        for (String o : orderNos) {
+            DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), o);
+            if (orderDO == null) {
+                throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, o);
             }
-        });
+            DeliveryOrderDO update = new DeliveryOrderDO();
+            update.setOrderNo(o);
+            update.setMerchantId(Long.parseLong(merchantId));
+            update.setPrintTimes(orderDO.getPrintTimes() + 1);
+            deliveryOrderDao.update(update);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId) {
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setMerchantId(merchantId);
+        optRequest.setOptBy(arriveBy);
+        optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
+        optRequest.setOrderNo(waybillNos);
+        handleOpt(optRequest);
+
+        this.updateNetworkTask(waybillNos, arriveBy, merchantId);
+
+    }
+
+
+    /**
+     * 根据运单号list、收件人更新网点自提任务
+     *
+     * @param waybillNos
+     * @param arriveBy
+     * @param merchantId
+     */
+    private void updateNetworkTask(List<String> waybillNos, String arriveBy, String merchantId) {
+
+        List<UserNetworkDO> userNetworkDOList = userNetworkDao.queryByUserId(Long.parseLong(arriveBy)); // 网点到件的运单为自提，添加网点任务
+        for (String waybillNo : waybillNos) {
+            DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
+            if (StringUtil.equalsIgnoreCase(orderDO.getChannel(), "Y")
+                    && !StringUtil.equalsIgnoreCase(orderDO.getIsPackage(), "Y")) {
+                Task task = new Task();
+                task.setMerchantId(merchantId);
+                task.setStatus(TaskStatusEnum.CREATE);
+                task.setCreatedBy(arriveBy);
+                task.setOrderNo(waybillNo);
+                task.setHandledBy("" + userNetworkDOList.get(0).getDistributionNetworkId());
+                task.setTaskType(TaskTypeEnum.SELF_DELIVERY);
+                taskService.addTask(task);
+            }
+        }
+
     }
 
     @Override
     public String addPackage(PackageRequest packageRequest) {
-
 
         String orderNo = transactionTemplate.execute(new TransactionCallback<String>() {
             @Override
@@ -399,7 +474,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                 String orderNo = "";
                 Long merchant = Long.parseLong(packageRequest.getMerchantId());
                 try {
-                    //1、保存订单信息
+                    // 1、保存订单信息
                     DeliveryOrderDO orderHeader = new DeliveryOrderDO();
                     orderHeader.setMerchantId(merchant);
                     orderHeader.setHigh(packageRequest.getHigh());
@@ -411,14 +486,15 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                     orderHeader.setStatus(DeliveryOrderStatusEnum.ARRIVED.getCode());
                     orderHeader.setNextNetworkId(packageRequest.getNextNetworkId());
                     orderHeader.setNetworkId(packageRequest.getNetworkId());
-                    //获取订单号
-                    orderNo = SystemConfig.getNextSerialNo(packageRequest.getMerchantId(), SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
+                    // 获取订单号
+                    orderNo = SystemConfig.getNextSerialNo(packageRequest.getMerchantId(),
+                            SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
                     orderHeader.setOrderNo(orderNo);
                     deliveryOrderDao.insert(orderHeader);
 
-
-                    //发件网点信息
-                    DistributionNetworkDO networkDO = distributionNetworkDao.queryById(new Long(packageRequest.getNetworkId()));
+                    // 发件网点信息
+                    DistributionNetworkDO networkDO = distributionNetworkDao
+                            .queryById(new Long(packageRequest.getNetworkId()));
                     DeliveryOrderReceiverDO r = new DeliveryOrderReceiverDO();
                     r.setOrderNo(orderNo);
                     r.setMerchantId(merchant);
@@ -431,8 +507,9 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                     r.setProvince(networkDO.getProvince());
                     deliveryOrderReceiverDao.insert(r);
 
-                    //3、保存收件网点信息
-                    DistributionNetworkDO receiverNetwork = distributionNetworkDao.queryById(new Long(packageRequest.getNextNetworkId()));
+                    // 3、保存收件网点信息
+                    DistributionNetworkDO receiverNetwork = distributionNetworkDao
+                            .queryById(new Long(packageRequest.getNextNetworkId()));
                     DeliveryOrderSenderDO s = new DeliveryOrderSenderDO();
                     s.setMerchantId(merchant);
                     s.setOrderNo(orderNo);
@@ -445,7 +522,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                     s.setProvince(receiverNetwork.getProvince());
                     deliveryOrderSenderDao.insert(s);
 
-                    //关联包裹与子运单
+                    // 关联包裹与子运单
                     for (String o : packageRequest.getOrderNos()) {
                         DeliveryOrderDO update = new DeliveryOrderDO();
                         update.setMerchantId(merchant);
@@ -470,7 +547,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         List<DeliveryOrderDO> queryList = deliveryOrderDao.queryByPackageNo(Long.parseLong(merchantNo), packageNo);
 
         List<DeliveryOrder> list = new ArrayList<>();
-        if (queryList == null) return list;
+        if (queryList == null)
+            return list;
         for (DeliveryOrderDO d : queryList) {
             list.add(convert(d));
         }
@@ -479,23 +557,24 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     private void updateDeliveryOrderStatus(OrderOptRequest optRequest, String orderNo, OrderHandleConfig handleConfig) {
         long affected = 0;
-        //更新订单信息，循环10次，10次未更新成功，则跳出
+        // 更新订单信息，循环10次，10次未更新成功，则跳出
         for (int i = 0; i < 10; i++) {
-            DeliveryOrderDO query = deliveryOrderDao.queryByOrderNo(Long.parseLong(optRequest.getMerchantId()), orderNo);
+            DeliveryOrderDO query = deliveryOrderDao.queryByOrderNo(Long.parseLong(optRequest.getMerchantId()),
+                    orderNo);
             DeliveryOrderDO update = new DeliveryOrderDO();
             update.setMerchantId(query.getMerchantId());
             update.setOrderNo(orderNo);
             update.setStatus(handleConfig.getUpdateStatus());
             update.setVersion(query.getVersion());
-            //更新订单信息
+            // 更新订单信息
             affected = deliveryOrderDao.update(update);
             if (affected > 0) {
-                //记录操作日志
+                // 记录操作日志
                 break;
             }
             Thread.yield();
         }
-        //判断是否更新成功
+        // 判断是否更新成功
         if (affected == 0) {
             throw new DMSException(SysErrorCode.DB_EXCEPTION);
         }
@@ -503,15 +582,17 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     private void sendPhoneSMS(String merchantId, String optType, DeliveryOrderDO query) {
         try {
-            SMSConfig smsConfig = JSON.parseObject(RedisUtil.hget(Constant.SMS_CONF + merchantId, optType), SMSConfig.class);
+            SMSConfig smsConfig = JSON.parseObject(RedisUtil.hget(Constant.SMS_CONF + merchantId, optType),
+                    SMSConfig.class);
 
             if (smsConfig == null) {
                 return;
             }
 
             String content = smsConfig.getContent();
-            //查询手机号码
-            DeliveryOrderReceiverDO receiverDO = deliveryOrderReceiverDao.queryByOrderNo(query.getMerchantId(), query.getOrderNo());
+            // 查询手机号码
+            DeliveryOrderReceiverDO receiverDO = deliveryOrderReceiverDao.queryByOrderNo(query.getMerchantId(),
+                    query.getOrderNo());
             PhoneMessage message = new PhoneMessage();
             message.setPhoneNum(receiverDO.getContactNumber());
             message.setContent(content);
@@ -532,12 +613,15 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
      * @param referenceNo
      * @param status
      */
-    private void notifyMerchantStatusUpdate(String merchantId, String orderNo, String referenceNo, DeliveryOrderStatusEnum status) {
+    private void notifyMerchantStatusUpdate(String merchantId, String orderNo, String referenceNo,
+                                            DeliveryOrderStatusEnum status) {
         NotifyRequest notify = new NotifyRequest();
         try {
 
-            MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + merchantId), MerchantConfig.class);
-            InterfaceConfig interfaceConfig = JSON.parseObject(RedisUtil.hget(Constant.INTERFACE_CONF + merchantId, "update_status"), InterfaceConfig.class);
+            MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + merchantId),
+                    MerchantConfig.class);
+            InterfaceConfig interfaceConfig = JSON.parseObject(
+                    RedisUtil.hget(Constant.INTERFACE_CONF + merchantId, "update_status"), InterfaceConfig.class);
             if (interfaceConfig == null) {
                 return;
             }
@@ -563,8 +647,10 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
      */
     private void routeRecord(String merchantId, String orderNos, String optType, Map<String, String> params) {
 
-        RouteConfig routeConfig = JSON.parseObject(RedisUtil.hget(Constant.ROUTE_CONF + merchantId, optType), RouteConfig.class);
-        if (routeConfig == null || StringUtil.isEmpty(routeConfig.getRouteDescC()) || StringUtil.isEmpty(routeConfig.getRouteDescE())) {
+        RouteConfig routeConfig = JSON.parseObject(RedisUtil.hget(Constant.ROUTE_CONF + merchantId, optType),
+                RouteConfig.class);
+        if (routeConfig == null || StringUtil.isEmpty(routeConfig.getRouteDescC())
+                || StringUtil.isEmpty(routeConfig.getRouteDescE())) {
             return;
         }
         DeliveryRoute route = new DeliveryRoute();
@@ -606,7 +692,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setServiceType(ServiceTypeEnum.getEnum(d.getServiceType()));
         deliveryOrder.setWeight(d.getWeight());
         deliveryOrder.setGoodsType(d.getGoodsType());
-        String orderTypeDesc = SystemCodeUtil.getCodeVal("" + d.getMerchantId(), Constant.DELIVERY_ORDER_TYPE, d.getOrderType());
+        String orderTypeDesc = SystemCodeUtil.getCodeVal("" + d.getMerchantId(), Constant.DELIVERY_ORDER_TYPE,
+                d.getOrderType());
         deliveryOrder.setOrderTypeDesc(orderTypeDesc);
 
         deliveryOrder.setWarehouseId(d.getWarehouseId());
@@ -630,7 +717,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setNetworkId(d.getNetworkId());
         deliveryOrder.setNextNetworkId(d.getNextNetworkId());
 
-        deliveryOrder.setPackage(StringUtil.equalsIgnoreCase(d.getIsPackage(),Constant.IS_PACKAGE));
+        deliveryOrder.setPackage(StringUtil.equalsIgnoreCase(d.getIsPackage(), Constant.IS_PACKAGE));
 
         return deliveryOrder;
     }
@@ -719,7 +806,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
         AssertUtil.isNotNull(data, SysErrorCode.REQUEST_IS_NULL);
 
-        AssertUtil.isNotBlank(data.getMerchantId(), BizErrorCode.MERCHANT_ID_EMPTY);
         AssertUtil.isNotBlank(data.getReferenceNo(), BizErrorCode.REFERENCE_NO_EMPTY);
         AssertUtil.isNotBlank(data.getOrderType(), BizErrorCode.ORDER_TYPE_EMPTY);
 

@@ -10,6 +10,7 @@ public class Constant {
     public static final String SERIAL_NUMBER_CONF="System_serial_number_config";
 
     public static final String MERCHANT_CONF ="System_merchant_config";
+    public static final String NETWORK_INFO ="System_network_info";
 
     public static final String INTERFACE_CONF ="System_interface_config";
 
@@ -24,11 +25,12 @@ public class Constant {
     public static final String ADDRESS="address";
 
     public static final String DELIVERY_ORDER_TYPE = "delivery_order_type";
+    public static final String STAFF_JOB = "job";
 
     public static final String IS_PACKAGE="Y";
 
     public static final String ALLOW_URL="/dashboard.html,/home.html,/account/logout.html," +
-            "/mobile/DemoController/toLoginPage.html,/mobile/DemoController/toIndexPage.html,/mobile/DemoController/test.html," +
+            "/mobile/network/DemoController/toLoginPage.html,/mobile/DemoController/toIndexPage.html,/mobile/DemoController/test.html," +
             "/mobile/tiaozhuangController/customers.html,/mobile/tiaozhuangController/dshkqs.html,/mobile/tiaozhuangController/wtjlr.html," +
             "/mobile/tiaozhuangController/zlj.html,/mobile/tiaozhuangController/pjqr.html,/mobile/tiaozhuangController/plzz.html," +
             "/mobile/tiaozhuangController/djsm.html,/mobile/tiaozhuangController/pjsm.html,/mobile/tiaozhuangController/fjsm.html," +

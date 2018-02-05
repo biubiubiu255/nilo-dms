@@ -21,7 +21,7 @@
 <body>
 <div class="wap_content">
    
-    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="返回" class="wap_top_back"></a>
+    <div class="wap_top"><a href="javascript:history.go(-1)" title="返回" class="wap_top_back"></a>
         <h2>Batch transfer</h2>
     </div>
 
