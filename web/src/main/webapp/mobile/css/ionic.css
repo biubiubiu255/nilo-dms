@@ -7803,8 +7803,8 @@ input[type="checkbox"] {
 .item-input input[type="checkbox"] {
   width: auto; }
 
-input[type="file"] {
-  line-height: 34px; }
+ input[type="file"] {
+  line-height: 34px; } 
 
 .previous-input-focus,
 .cloned-text-input + input,

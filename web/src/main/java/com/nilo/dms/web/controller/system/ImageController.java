@@ -62,6 +62,7 @@ public class ImageController extends BaseController {
                 fileName = FileUtil.uploadFile(file, path);
 
                 ImageDO imageDO = new ImageDO();
+                
                 imageDO.setMerchantId(Long.parseLong(me.getMerchantId()));
                 imageDO.setOrderNo(orderNo);
                 imageDO.setCreatedBy(me.getUserId());

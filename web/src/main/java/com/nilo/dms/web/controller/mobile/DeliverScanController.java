@@ -9,9 +9,13 @@ import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.service.order.LoadingService;
+import com.nilo.dms.service.order.model.Loading;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.order.LoadingController;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +30,7 @@ import java.util.regex.Pattern;
 @Controller
 @RequestMapping("/mobile/DeliverScanController")
 public class DeliverScanController extends BaseController {
+    private final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     private ThirdExpressDao thirdExpressDao;
     @Autowired
@@ -71,10 +76,23 @@ public class DeliverScanController extends BaseController {
     @RequestMapping(value = "/test.html")
     @ResponseBody
     public String test(String[] arr) {
-        System.out.println("```````````");
-        for(int i = 0; i < arr.length; i ++) {
-            System.out.println(arr[i]);
+
+        Loading loading = new Loading();
+        for(int i = 0; i < arr.length; i ++){
+            String q = arr[i];
+            String[] sourceStrArray = q.split(",");
+//            String a = sourceStrArray[1];
+//            String b = sourceStrArray[2];
+//            String c = sourceStrArray[3];
+//            String d = sourceStrArray[4];
+//            System.out.println(a+"     "+b+"    "+c+"    "+d);
+            for(int j=0; j<sourceStrArray.length; j++){
+                System.out.println(sourceStrArray[j]);
+            }
         }
+//        for(int i = 0; i < arr.length; i ++) {
+//            System.out.println(arr[i]);
+//        }
         return "true";
     }
     @RequestMapping(value = "/getDriver.html")
