@@ -55,7 +55,7 @@ public class MobilePackageController  extends BaseController {
         return "mobile/package/packing";
     }
 
-    @RequestMapping(value = "/login.html")
+    @RequestMapping(value = "/scan.html")
     public String login(UsernamePasswordToken token, HttpServletRequest request) {
         Subject subject = SecurityUtils.getSubject();
         try {
