@@ -24,7 +24,7 @@
 <body>
 
 <div class="wap_content">
-    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
+    <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
         <h2>Arrive Scan</h2>
     </div>
     <div class="search_banner">
@@ -36,7 +36,7 @@
             <div class="search_button"><input type="button" value="scan" class="search_input_button"/></div>
         </div>
         <div class="bottom_a_button11"><a onclick="delTr2()">delete</a></div>
-        <div class="bottom_a_button22"><a onclick="suiyi('fuxuan')">submit</a></div>
+        <div class="bottom_a_button22"><a onclick="Judge('fuxuan')">submit</a></div>
     </div>
 </div>
 <div>
@@ -53,7 +53,7 @@
     $("#logisticsNo").keydown(function (event) {
         event = document.all ? window.event : event;
         if ((event.keyCode || event.which) == 13) {
-            addTr2('tab', -1);
+            addTr2('tab', 0);
         }
     });
 
@@ -71,7 +71,7 @@
         //获取选中的复选框，然后循环遍历删除
         var fuxuans=$("input[name="+fuxuan+"]:checked");
         if(fuxuans.size()==0){
-            alert("要删除指定行，需选中要删除的行！");
+            alert("You did not select the required action！");
             return;
         }
         fuxuans.each(function(){
@@ -97,6 +97,17 @@
         $("#logisticsNo").val("").focus();
         $("#reason").val("0");
         $("#memo").val("");
+    }
+
+    function Judge(fuxuan){
+        //获取选中的复选框，然后循环遍历删除
+        var fuxuans=$("input[name="+fuxuan+"]:checked");
+        if(fuxuans.size()==0){
+            alert("You did not select the required action！");
+            return;
+        }else {
+            suiyi(fuxuan);
+        }
     }
 
     function suiyi(fuxuan) {

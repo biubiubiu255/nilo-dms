@@ -43,22 +43,22 @@ public class TiaozhuangController {
 
     @RequestMapping(value = "/djsm.html")
     public String djsm() {
-        return "mobile/djsm";
+        return "mobile/arrive_scan/djsm";
     }
 
     @RequestMapping(value = "/pjsm.html")
     public String pjsm() {
-        return "mobile/pjsm";
+        return "mobile/deliver_scan/pjsm";
     }
 
     @RequestMapping(value = "/fjsm.html")
     public String fjsm() {
-        return "mobile/fjsm";
+        return "mobile/send_scan/fjsm";
     }
 
     @RequestMapping(value = "/wtjlr2.html")
     public String wtjlr2() {
-        return "mobile/wtjlr2";
+        return "mobile/network/problem_scan/problemScan";
     }
 
     @RequestMapping(value = "/pc.html")
@@ -73,7 +73,7 @@ public class TiaozhuangController {
 
     @RequestMapping(value = "/zlj2.html")
     public String zlj2() {
-        return "mobile/zlj2";
+        return "mobile/network/stranded__parcel/zlj2";
     }
 
     @RequestMapping(value = "/lycx.html")

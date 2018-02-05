@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/mobile/SjArriveScanController")
 public class SjArriveScanController extends BaseController {
+    @RequestMapping(value = "/toPage.html")
+    public String toPage() {
+        return "mobile/network/arrive_scan/arriveScan";
+    }
+
     @RequestMapping(value = "/test.html")
     @ResponseBody
     public String test(String[] arr) {

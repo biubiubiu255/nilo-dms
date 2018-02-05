@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -24,7 +25,7 @@
 
 <div class="wap_content">
 
-    <div class="wap_top"><a href="/mobile/DemoController/toIndexPage.html" title="Back" class="wap_top_back"></a>
+    <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
         <h2>Deliver Scan</h2>
     </div>
 
@@ -37,19 +38,22 @@
                         <%--<label>station</label>--%>
                         <select required="required" class='input_value' id="station" name='station'>
                             <option value="0">Please select the site</option>
-                            <option value="test2">test2</option>
-                            <option value="nckjd">nckjd</option>
-                            <option value="dvad">dvad</option>
-                            <option value="test5">test5</option>
-                            <option value="test6">test6</option>
+                            <c:forEach items="${station}" var="station">
+                                <option value="${station.code}" id="hhh" type="${station.type}">${station.name}</option>
+                            </c:forEach>
                         </select>
                     </li>
-                    <li><input type='text' placeholder="Driver" maxlength='100' class='input_value' id='driver' name='driver' /></li>
+                    <li>
+                        <select class='input_value' name="sendDriver" id="sendDriver" lay-search="">
+                            <option value="0">Please select a driver</option>
+                        </select>
+                    </li>
+                    <%--<li><input type='text' placeholder="Driver" maxlength='100' class='input_value' id='driver' name='driver' /></li>--%>
                     <li><input type='text' placeholder="Plate No" maxlength='100' class='input_value' id='plateNo' name='plateNo' /><span onclick="addTr2('tab');">save</span></li>
 
                 </ul>
                 <div class="bottom_a_button11"><a onclick="delTr2()">delete</a></div>
-                <div class="bottom_a_button22"><a onclick="suiyi('fuxuan')">submit</a></div>
+                <div class="bottom_a_button22"><a onclick="Judge('fuxuan')">submit</a></div>
             </div>
         </form>
     </div>
@@ -65,11 +69,33 @@
 </div>
 
 <script>
+
+    $(document).ready(function(){
+        var kuang3 = document.getElementById("station")
+        $("#station").change(function(){
+            var code = kuang3.value;
+            getNextStationDriver(code)
+            // alert(kuang3.value)
+        });
+    });
     function addTr2(tab) {
         var kuang1 = document.getElementById("logisticsNo")
-        var kuang2 = document.getElementById("driver")
-        var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang2.value+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\"" +kuang1.value+ "\"></td></tr>";
-        addTr(tab,  trHtml);
+        var kuang2 = document.getElementById("station")
+        var kuang3 = document.getElementById("sendDriver")
+        var kuang4 = document.getElementById("plateNo")
+        if(kuang1.value == ""){
+            alert("Logistics no cannot be empty")
+        }else if(kuang2.value == 0){
+            alert("Please select a site")
+        }else if(kuang3.value == 0){
+            alert("driver no cannot be empty")
+        }else if(kuang4.value == ""){
+            alert("plateNo no cannot be empty")
+        }else{
+            var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang3.value+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\"" +kuang1.value+ ","+kuang2.value+","+kuang3.value+","+kuang4.value+"\"></td></tr>";
+            addTr(tab,  trHtml);
+        }
+
     }
     function addTr(tab, trHtml){
         //获取table最后一行 $("#tab tr:last")
@@ -83,7 +109,7 @@
         $tr.after(trHtml);
         $("#logisticsNo").val("").focus();
         $("#station").val("0");
-        $("#driver").val("");
+        $("#driver").val("0");
         $("#plateNo").val("");
     }
     function sel(a){
@@ -100,12 +126,22 @@
         //获取选中的复选框，然后循环遍历删除
         var fuxuans=$("input[name="+fuxuan+"]:checked");
         if(fuxuans.size()==0){
-            alert("要删除指定行，需选中要删除的行！");
+            alert("You did not select the required action！");
             return;
         }
         fuxuans.each(function(){
             $(this).parent().parent().remove();
         });
+    }
+    function Judge(fuxuan){
+        //获取选中的复选框，然后循环遍历删除
+        var fuxuans=$("input[name="+fuxuan+"]:checked");
+        if(fuxuans.size()==0){
+            alert("You did not select the required action！");
+            return;
+        }else {
+            suiyi(fuxuan);
+        }
     }
     function suiyi(fuxuan) {
         var arr = new Array();
@@ -126,6 +162,25 @@
                 console.log("zzzzzzzzzzzzzzzzzzzzzz")
                 // addTr2('tab', -1);
                 delTr(fuxuan);
+            }
+        });
+    }
+    function getNextStationDriver(code) {
+        $.ajax({
+            type: "POST",
+            url: "/mobile/DeliverScanController/getDriver.html",
+            dataType: "json",
+            data: {code: code},
+            success: function (data) {
+                if (data.result) {
+                    $("#sendDriver").empty();
+                    $("#sendDriver").prepend("<option value='0'>Please select a driver</option>");
+                    var driver = data.data;
+                    for (var i = 0; i < driver.length; i++) {
+                        $("#sendDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
+                    }
+                    form.render();
+                }
             }
         });
     }

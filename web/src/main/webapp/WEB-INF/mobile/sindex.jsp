@@ -49,13 +49,13 @@
   <div class="model_banner">
      <div class="model_banner_title"><i class="model_banner_title"></i>Network</div>
      <ul class="model_banner_ul">
-       <a href="/mobile/tiaozhuangController/djsm.html" title="">
+       <a href="/mobile/SjArriveScanController/toPage.html" title="">
          <li><img src="/mobile/images/icon_3.png" /><br/>Arrive Scan</li>
        </a>
-       <a href="/mobile/tiaozhuangController/pjsm.html" title="">
+       <a href="/mobile/DeliverScanController/toPage.html" title="">
          <li><img src="/mobile/images/icon_5.png" /><br/>Deliver Scan</li>
        </a>
-       <a href="/mobile/tiaozhuangController/fjsm.html" title="">
+       <a href="/mobile/SendScanController/toPage.html" title="">
          <li><img src="/mobile/images/icon_4.png" /><br/>Send Scan</li>
        </a>
        <a href="/mobile/tiaozhuangController/wtjlr2.html" title="">
@@ -87,38 +87,6 @@
      <div class="clear"></div>
   </div>
   <div class="j_bootm">
-  <footer>
-    <div class="w_current">
-        <a href="/mobile/DemoController/toIndexPage.html">
-            <i class="w_home"></i>
-            <p>Workbench</p>
-        </a>
-    </div>
-    <div class="">
-        <a href="">
-            <i class="w_vshop"></i>
-            <p>Message</p>
-        </a>
-    </div>
-    <div class="">
-        <a href="">
-            <i class="w_frbj"></i>
-            <p>daily</p>
-        </a>
-    </div>
-    <div class="">
-        <a href="">
-            <i class="w_classify"></i>
-            <p>Statistical report</p>
-        </a>
-    </div>   
-    <div class="">
-        <a href="/mobile/tiaozhuangController/user.html">
-            <i class="w_f-cart"></i>
-            <p>Personal settings</p>
-        </a>
-    </div>
-</footer>
 </div>
 </div>
 </body>
