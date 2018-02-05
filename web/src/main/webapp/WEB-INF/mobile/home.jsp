@@ -75,6 +75,9 @@
        <a href="/mobile/tiaozhuangController/zlj2.html" title="">
          <li><img src="/mobile/images/icon_7.png" /><br/>Stranded Parcel</li>
        </a>
+       <a href="/mobile/package/packing.html" title="">
+         <li><img src="/mobile/images/icon_3.png" /><br/>Packing</li>
+       </a>
      </ul>  
      <div class="clear"></div>
   </div>
