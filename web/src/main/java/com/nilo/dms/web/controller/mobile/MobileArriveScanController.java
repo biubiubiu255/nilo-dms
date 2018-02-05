@@ -25,7 +25,7 @@ public class MobileArriveScanController extends BaseController {
 	@Autowired
 	private OrderService orderService;
 
-	@RequestMapping(value = "/toPage.html")
+	@RequestMapping(value = "/scan.html")
 	public String toPage() {
 		return "mobile/network/arrive_scan/arriveScan";
 	}

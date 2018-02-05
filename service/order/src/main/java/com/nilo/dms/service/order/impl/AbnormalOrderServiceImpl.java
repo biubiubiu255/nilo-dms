@@ -21,9 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,12 +41,6 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private TransactionTemplate transactionTemplate;
-
-    @Autowired
-    private DeliveryFeeDetailsService deliveryFeeDetailsService;
 
     @Autowired
     private MerchantService merchantService;
@@ -112,6 +104,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
     }
 
     @Override
+    @Transactional
     public void handleAbnormal(AbnormalOptRequest request) {
 
         String abnormalOrder = request.getAbnormalNo();
@@ -124,35 +117,18 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         }
         String orderNo = abnormalOrderDO.getOrderNo();
 
-        transactionTemplate.execute(new TransactionCallback<Void>() {
-            @Override
-            public Void doInTransaction(TransactionStatus transactionStatus) {
-                try {
-                    switch (request.getHandleType()) {
-                        case RESEND: {
-                            handlerAbnormalOpt(request, orderNo);
-                            break;
-                        }
-                        case RETURN: {
-                            handlerAbnormalOpt(request, orderNo);
-                            break;
-                        }
-                    }
 
-                    /*//添加费用明细
-                    deliveryFeeDetailsService.buildDeliveryFee(request.getMerchantId(), orderNo, request.getHandleType());
-                    //是否退回商家
-                    if (request.isReturnToMerchant()) {
-                        returnToMerchant(request.getMerchantId(), orderNo);
-                    }*/
-                } catch (Exception e) {
-                    logger.error("handleAbnormal Failed. abnormalOrder:{}", request.getAbnormalNo(), e);
-                    transactionStatus.setRollbackOnly();
-                    throw e;
-                }
-                return null;
+        switch (request.getHandleType()) {
+            case RESEND: {
+                handlerAbnormalOpt(request, orderNo);
+                break;
             }
-        });
+            case RETURN: {
+                handlerAbnormalOpt(request, orderNo);
+                break;
+            }
+        }
+
     }
 
 
@@ -245,8 +221,8 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         abnormalOrder.setMerchantId("" + abnormalOrderDO.getMerchantId());
         abnormalOrder.setAbnormalNo(abnormalOrderDO.getAbnormalNo());
         abnormalOrder.setAbnormalType(abnormalOrderDO.getAbnormalType());
-        String abnormalTypeDesc= SystemCodeUtil.getCodeVal(""+abnormalOrderDO.getMerchantId(), "abnormal_order_type",abnormalOrderDO.getAbnormalType());
-        abnormalOrder.setAbnormalTypeDesc(abnormalTypeDesc==""?abnormalOrderDO.getAbnormalType():abnormalTypeDesc);
+        String abnormalTypeDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), "abnormal_order_type", abnormalOrderDO.getAbnormalType());
+        abnormalOrder.setAbnormalTypeDesc(abnormalTypeDesc == "" ? abnormalOrderDO.getAbnormalType() : abnormalTypeDesc);
         abnormalOrder.setRemark(abnormalOrderDO.getRemark());
         abnormalOrder.setOrderNo(abnormalOrderDO.getOrderNo());
 

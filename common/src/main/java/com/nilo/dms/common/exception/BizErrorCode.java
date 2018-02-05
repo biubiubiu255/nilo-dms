@@ -85,6 +85,9 @@ public enum BizErrorCode implements ErrorCode {
     USER_URL_NOT_ALLOWED("User Url Not Allowed.", "100060"),
     HANDLE_TYPE_EMPTY("Handle type is empty.", "100061"),
     PACKAGE_NO_ERROR("Package No is not exist.", "100062"),
+
+    APP_KEY_NOT_EXIST("App Key {0} is not exist.", "100063"),
+
     ;
 
     private final String description;
