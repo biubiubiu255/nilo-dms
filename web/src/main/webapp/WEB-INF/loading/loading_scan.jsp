@@ -122,7 +122,6 @@
     <div class="layui-form-item">
         <div class="layui-input-block" style="margin-left:120px;">
             <button class="layui-btn ship">Ship</button>
-            <button class="layui-btn layui-btn-normal print">Print</button>
         </div>
     </div>
 
@@ -278,6 +277,7 @@
                 success: function (data) {
                     if (data.result) {
                         layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
+                            parent.window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
                             location.reload();
                         });
                     } else {
@@ -289,10 +289,6 @@
                 }
             });
 
-        });
-
-        $('.print').on('click', function () {
-            window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
         });
 
         function getThirdDriver(code) {

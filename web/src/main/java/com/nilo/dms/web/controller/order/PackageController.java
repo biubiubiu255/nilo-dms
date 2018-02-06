@@ -6,12 +6,12 @@ import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.impl.UserServiceImpl;
+import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.service.order.OrderService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
-import com.nilo.dms.service.order.model.DeliveryOrderParameter;
-import com.nilo.dms.service.order.model.Loading;
-import com.nilo.dms.service.order.model.PackageRequest;
+import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,8 +50,10 @@ public class PackageController extends BaseController {
     private WaybillScanDao waybillScanDao;
     @Autowired
     private WaybillScanDetailsDao waybillScanDetailsDao;
+    @Autowired
+    private UserService userService;
 
-    
+
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list() {
         return "package/list";
@@ -68,7 +71,7 @@ public class PackageController extends BaseController {
         parameter.setMerchantId(merchantId);
         parameter.setOrderNo(packageNo);
         parameter.setIsPackage(IS_PACKAGE);
-        List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter,page);
+        List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
         return toPaginationLayUIData(page, list);
     }
 
@@ -80,9 +83,9 @@ public class PackageController extends BaseController {
         List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
         List<NextStation> list = new ArrayList<>();
 
-        for(DistributionNetworkDO n:networkDOList){
+        for (DistributionNetworkDO n : networkDOList) {
             NextStation s = new NextStation();
-            s.setCode(""+n.getId());
+            s.setCode("" + n.getId());
             s.setName(n.getName());
             list.add(s);
         }
@@ -96,7 +99,7 @@ public class PackageController extends BaseController {
 
         model.addAttribute("scanNo", scanDO.getScanNo());
 
-        model.addAttribute("nextStation",list);
+        model.addAttribute("nextStation", list);
         return "package/package_scan";
     }
 
@@ -123,7 +126,7 @@ public class PackageController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/addPackage.html")
-    public String addLoading(PackageRequest packageRequest,String scanNo) {
+    public String addLoading(PackageRequest packageRequest, String scanNo) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
@@ -133,13 +136,13 @@ public class PackageController extends BaseController {
 
             List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
             List<String> orderNos = new ArrayList<>();
-            for(WaybillScanDetailsDO d : scanDetailList){
+            for (WaybillScanDetailsDO d : scanDetailList) {
                 orderNos.add(d.getOrderNo());
             }
             packageRequest.setOrderNos(orderNos);
             packageRequest.setMerchantId(merchantId);
             packageRequest.setOptBy(me.getUserId());
-            if(me.getNetworks()!=null&&me.getNetworks().size()!=0) {
+            if (me.getNetworks() != null && me.getNetworks().size() != 0) {
                 packageRequest.setNetworkId(me.getNetworks().get(0));
             }
 
@@ -150,36 +153,36 @@ public class PackageController extends BaseController {
         return toJsonTrueData(orderNo);
     }
 
-    @RequestMapping(value = "/print.html", method = RequestMethod.GET)
-    public String print(Model model) {
+
+    @RequestMapping(value = "/{orderNo}.html", method = RequestMethod.GET)
+    public String details(Model model, @PathVariable String orderNo) {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
-        List<NextStation> list = new ArrayList<>();
 
-        for(DistributionNetworkDO n:networkDOList){
-            NextStation s = new NextStation();
-            s.setCode(""+n.getId());
-            s.setName(n.getName());
-            list.add(s);
-        }
+        DeliveryOrder packageInfo = orderService.queryByOrderNo(merchantId, orderNo);
+        UserInfo userInfo = userService.findUserInfoByUserId(merchantId, packageInfo.getCreatedBy());
+        List<DeliveryOrder> list = orderService.queryByPackageNo(merchantId, orderNo);
+        model.addAttribute("list", list);
+        model.addAttribute("packageInfo", packageInfo);
+        model.addAttribute("packageBy", userInfo.getName());
+        return "package/details";
+    }
 
-
-        WaybillScanDO scanDO = new WaybillScanDO();
-        scanDO.setMerchantId(Long.parseLong(merchantId));
-        scanDO.setScanBy(me.getUserId());
-        scanDO.setScanNo("" + IdWorker.getInstance().nextId());
-        waybillScanDao.insert(scanDO);
-
-        model.addAttribute("scanNo", scanDO.getScanNo());
-
-        model.addAttribute("nextStation",list);
-        return "package/package_scan";
+    @RequestMapping(value = "/print/{orderNo}.html", method = RequestMethod.GET)
+    public String print(Model model,@PathVariable String orderNo) {
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        DeliveryOrder packageInfo = orderService.queryByOrderNo(merchantId, orderNo);
+        List<DeliveryOrder> list = orderService.queryByPackageNo(merchantId, orderNo);
+        model.addAttribute("list", list);
+        model.addAttribute("packageInfo", packageInfo);
+        return "package/print";
     }
 
 
-    public static class NextStation{
+    public static class NextStation {
         private String code;
         private String name;
         private String type;

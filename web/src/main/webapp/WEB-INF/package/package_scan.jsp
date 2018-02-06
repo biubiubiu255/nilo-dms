@@ -46,7 +46,7 @@
                 <input type="text" name="width" value="" autocomplete="off"
                        class="layui-input" >
             </div>
-            <label class="layui-form-label" style="width:120px">High</label>
+            <label class="layui-form-label" style="width:120px">Height</label>
             <div class="layui-input-inline">
                 <input type="text" name="high" value="" autocomplete="off"
                        class="layui-input" >

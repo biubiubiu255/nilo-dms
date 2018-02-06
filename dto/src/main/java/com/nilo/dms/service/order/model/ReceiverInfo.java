@@ -21,6 +21,45 @@ public class ReceiverInfo {
 
     private String receiverAddress;
 
+    private String countryId;
+
+    private String provinceId;
+
+    private String cityId;
+
+    private String areaId;
+
+    public String getCountryId() {
+        return countryId;
+    }
+    @JSONField(name = "country_id")
+    public void setCountryId(String countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+    @JSONField(name = "province_id")
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public String getCityId() {
+        return cityId;
+    }
+    @JSONField(name = "city_id")
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
+    }
+
+    public String getAreaId() {
+        return areaId;
+    }
+    @JSONField(name = "area_id")
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
+    }
 
     public String getReceiverName() {
         return receiverName;

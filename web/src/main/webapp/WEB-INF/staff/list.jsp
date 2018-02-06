@@ -33,7 +33,7 @@
     <hr>
     <div class="layui-row">
         <div class="layui-col-md3">
-            <shiro:hasPermission name="400011">
+            <shiro:hasPermission name="300031">
                 <button class="layui-btn layui-btn-normal add-staff">Add Staff</button>
             </shiro:hasPermission>
         </div>
@@ -65,10 +65,15 @@
     </table>
 
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
-        <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="regular">Regular</a>
-        <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="resigned">Resigned</a>
-
+        <shiro:hasPermission name="300033">
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="300034">
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="regular">Regular</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="300035">
+            <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="resigned">Resigned</a>
+        </shiro:hasPermission>
     </script>
 </div>
 
