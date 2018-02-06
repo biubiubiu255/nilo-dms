@@ -59,7 +59,7 @@
             <tr>
                 <td>Logistics No</td>
                 <td>Next Station</td>
-                <td><input type="checkbox" id="allFuxuan" onclick="sel('fuxuan')"></td>
+                <td><input type="checkbox" id="allFuxuan" checked="checked" onclick="sel('fuxuan')"></td>
             </tr>
         </table>
     </div>
@@ -97,7 +97,7 @@
         }else if(kuang3.value == 0){
             alert("driver no cannot be empty")
         }else{
-            var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang2.value+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\"" +kuang1.value+ ","+kuang2.value+","+kuang3.value+","+kuang4.value+ "\"></td></tr>";
+            var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang2.value+ "</td><td><input type=\"checkbox\" checked=\"checked\" name=\"fuxuan\" value=\"" +kuang1.value+ ","+kuang2.value+","+kuang3.value+","+kuang4.value+ "\"></td></tr>";
             addTr(tab, row, trHtml);
         }
     }
@@ -156,7 +156,7 @@
             cache: false,
             type: "POST",
             traditional: true,
-            url: "/mobile/SendScanController/test.html",
+            url: "/mobile/send/test.html",
             data : {arr : arr},
             async: false,
             error: function () {
@@ -172,7 +172,7 @@
     function getNextStationDriver(code) {
         $.ajax({
             type: "POST",
-            url: "/mobile/SendScanController/getDriver.html",
+            url: "/mobile/send/getDriver.html",
             dataType: "json",
             data: {code: code},
             success: function (data) {

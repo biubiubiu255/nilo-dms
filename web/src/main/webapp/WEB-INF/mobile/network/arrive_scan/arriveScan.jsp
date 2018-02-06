@@ -43,7 +43,7 @@
     <table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
         <tr>
             <td>Logistics No</td>
-            <td><input type="checkbox" id="allFuxuan" onclick="sel('fuxuan')"></td>
+            <td><input type="checkbox" id="allFuxuan" checked="checked" onclick="sel('fuxuan')"></td>
         </tr>
     </table>
 </div>
@@ -91,7 +91,7 @@
     }
 
     function addTr2(tab, row,scanResult) {
-        var trHtml = "<tr align='center'><td>" +scanResult+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\""+scanResult+"\"></td></tr>";
+        var trHtml = "<tr align='center'><td>" +scanResult+ "</td><td><input type=\"checkbox\" checked=\"checked\" name=\"fuxuan\" value=\""+scanResult+"\"></td></tr>";
         addTr(tab, row, trHtml);
     }
     function addTr(tab, row, trHtml){
