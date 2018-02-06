@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Controller
-@RequestMapping("/mobile/SendScanController")
+@RequestMapping("/mobile/send")
 public class SendScanController extends BaseController {
     @Autowired
     private ThirdExpressDao thirdExpressDao;
@@ -34,7 +34,7 @@ public class SendScanController extends BaseController {
     @Autowired
     private StaffDao staffDao;
 
-    @RequestMapping(value = "/toPage.html")
+    @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId

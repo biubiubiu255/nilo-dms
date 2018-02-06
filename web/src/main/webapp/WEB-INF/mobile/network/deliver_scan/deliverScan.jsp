@@ -33,7 +33,6 @@
         <form id="myForm" class="layui-form" action="">
             <div class="banner_content">
                 <ul class="one_banner">
-                    <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span id="scan">scan</span></li>
                     <li>
                         <%--<label>station</label>--%>
                         <select required="required" class='input_value' id="station" name='station'>
@@ -48,7 +47,7 @@
                             <option value="0">Please select a driver</option>
                         </select>
                     </li>
-                    <%--<li><input type='text' placeholder="Driver" maxlength='100' class='input_value' id='driver' name='driver' /></li>--%>
+                    <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span id="scan">scan</span></li>
                     <li><input type='text' placeholder="Plate No" maxlength='100' class='input_value' id='plateNo' name='plateNo' /><span onclick="addTr2('tab');">save</span></li>
 
                 </ul>
@@ -61,8 +60,7 @@
         <table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
             <tr>
                 <td>Logistics No</td>
-                <td>Driver</td>
-                <td><input type="checkbox" id="allFuxuan" onclick="sel('fuxuan')"></td>
+                <td><input type="checkbox" id="allFuxuan" checked="checked" onclick="sel('fuxuan')"></td>
             </tr>
         </table>
     </div>
@@ -98,7 +96,7 @@
         }else if(kuang3.value == 0){
             alert("driver no cannot be empty")
         }else{
-            var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td>" +kuang3.value+ "</td><td><input type=\"checkbox\" name=\"fuxuan\" value=\"" +kuang1.value+ ","+kuang2.value+","+kuang3.value+","+kuang4.value+"\"></td></tr>";
+            var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td><input type=\"checkbox\" checked=\"checked\" name=\"fuxuan\" value=\"" +kuang1.value+ "\"></td></tr>";
             addTr(tab,  trHtml);
         }
 
