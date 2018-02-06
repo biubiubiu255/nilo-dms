@@ -90,6 +90,7 @@ function ajaxRequest(postURL, params, showMsg, callback,loadMask) {
         success: function(json) {
             closeMask();
             try {
+            	
                 var response = toObject(json);
                 if (showMsg) {
                     if (response.result) {
