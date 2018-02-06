@@ -9,28 +9,44 @@
 %>
 
 
-
-
 <!DOCTYPE HTML>
 <html>
-<head>
-<meta charset="UTF-8"/>
-<meta http-equiv="Cache-Control" content="no-cache"/>
-<meta content="telephone=no" name="format-detection" />
-<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=2.0"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
-<meta name="keywords" content="#" />
-<meta name="description" content="#" />
-<title></title>
+
+<%@ include file="../../header.jsp" %>
 
 
-<link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
-<link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
-<link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
-<script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="/mobile/js/functions.js"></script>
-<script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
-<script type="text/javascript" src="/mobile/js/mobile.js"></script>
+<script type="text/javascript">
+     
+    $(function(){
+    	
+    	var mobile = new MobileData({
+            autoLoad:false
+            ,formId:'problem-form'
+        });
+    	
+    	mobile.initSubmitForm({
+    		formId: 'problem-form' ,
+    		mbObject: mobile , 
+    		postUrl : '/mobile/rider/problem/save.html' ,
+    		callback: function (data) {
+    			if (data.result) showInfo(null);
+			}
+    	});
+    	
+    	//scan
+        var scan_callback = function (code) {
+    		// code 订单号
+            mobile.setFormFieldValue('logisticsNo',code);
+        }
+    	
+        $.scanner(scan_callback);                   //直接传一个空的回调函数
+        $.scanner(scan_callback('这里是订单号'), 1); //测试模式，直接传订单号 
+
+    	
+    });
+</script>
+
+
 </head>
 <body>
 
@@ -40,13 +56,42 @@
         <h2>Problem</h2>
     </div>
 
+    <div class="banner_content">
+        <form id="problem-form">
+            <div class="banner_content">
+                <input type="hidden" name="id" />
+                <ul class="one_banner">
+                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' name='logisticsNo' /><span>scan</span></li>
+                    <li>
+                        <%--<label>Reason</label>--%>
+                        <select required="required" class='input_value' name='reason'>  
+	                       <c:forEach var="values" items="${abnormalTypeList}" varStatus="status">
+	                           <option value="${values.code}">${values.value }</option>
+		                   </c:forEach>
+                        </select>
+                    </li>
+                    <li><input type='text' placeholder="Memo" maxlength='100' class='input_value' name='memo' /></li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+            <div class="bottom_a_button">
+				<a onclick="javascript:void(0);" class="submit">submit</a>
+			</div>
+        </form>
+
+    </div>
+
+
+ 
+
+<%-- 
     <div class="formula_modify">
         <form id="myForm" class="layui-form" action="">
             <div class="banner_content">
                 <ul class="one_banner">
-                    <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' name='logisticsNo' /><span>scan</span></li>
+                    <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' name='logisticsNo' /><span class="scanner">scan</span></li>
                     <li>
-                        <%--<label>Reason</label>--%>
+                        <label>Reason</label>
                         <select required="required" class='input_value' name='reason'>  
 	                       <c:forEach var="values" items="${abnormalTypeList}" varStatus="status">
 	                           <option value="${values.code}">${values.value }</option>
@@ -60,22 +105,11 @@
 				</div>
             </div>
         </form>
-    </div>
+    </div> --%>
 
 </div>
 
-<script>
 
-    function save() {
-
-       var param = $("#myForm").serialize();
-       ajaxRequest("/mobile/rider/problem/save.html", param, true, function(result){
-    	   
-       });
-        
-    }
-    
-</script>
 
 </body>
 </html>
