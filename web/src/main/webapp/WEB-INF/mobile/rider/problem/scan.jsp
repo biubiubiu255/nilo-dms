@@ -113,7 +113,7 @@
             cache: false,
             type: "POST",
             traditional: true,
-            url: "/mobile/PorblemController/test.html",
+            url: "/mobile/rider/problem/test.html",
             data : {arr : arr},
             async: false,
             error: function () {
