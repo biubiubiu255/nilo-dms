@@ -21,6 +21,7 @@ public class DeliveryOrder {
 
     private Long orderTime;
 
+    private String createdBy;
     private Long createdTime;
 
     private Long updatedTime;
@@ -67,11 +68,37 @@ public class DeliveryOrder {
     private boolean isPackage;
     private String parentNo;
     private Integer networkId;
+    private String networkDesc;
     private Integer nextNetworkId;
+    private String nextNetworkDesc;
 
     private boolean isPrinted;
 
     private Integer printTimes;
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getNetworkDesc() {
+        return networkDesc;
+    }
+
+    public void setNetworkDesc(String networkDesc) {
+        this.networkDesc = networkDesc;
+    }
+
+    public String getNextNetworkDesc() {
+        return nextNetworkDesc;
+    }
+
+    public void setNextNetworkDesc(String nextNetworkDesc) {
+        this.nextNetworkDesc = nextNetworkDesc;
+    }
 
     public boolean isPrinted() {
         return isPrinted;

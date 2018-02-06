@@ -59,6 +59,9 @@ public class SystemServiceImpl implements SystemService {
     @Autowired
     private BizFeeConfigService bizFeeConfigService;
 
+    @Autowired
+    private DistributionNetworkDao distributionNetworkDao;
+
     @Override
     public void loadingAndRefreshCustomerConfig(String merchantId) {
 
@@ -91,6 +94,15 @@ public class SystemServiceImpl implements SystemService {
             }
         }
 
+    }
+
+    @Override
+    public void loadingAndRefreshNetwork() {
+        List<DistributionNetworkDO> list = distributionNetworkDao.findAll();
+
+        for (DistributionNetworkDO r : list) {
+            RedisUtil.hset(Constant.NETWORK_INFO + r.getMerchantId(),""+r.getId(), JSON.toJSONString(r));
+        }
     }
 
     @Override

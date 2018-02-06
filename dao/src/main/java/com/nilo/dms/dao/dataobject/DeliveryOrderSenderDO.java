@@ -25,6 +25,46 @@ public class DeliveryOrderSenderDO extends BaseDo<Long> {
 
     private String address;
 
+    private String countryId;
+
+    private String provinceId;
+
+    private String cityId;
+
+    private String areaId;
+
+    public String getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(String countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public String getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
+    }
+
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
+    }
+
     public Long getMerchantId() {
         return merchantId;
     }

@@ -151,6 +151,10 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     r.setCountry(receiverInfo.getReceiverCountry());
                     r.setName(receiverInfo.getReceiverName());
                     r.setProvince(receiverInfo.getReceiverProvince());
+                    r.setCountryId(receiverInfo.getCountryId());
+                    r.setProvinceId(receiverInfo.getProvinceId());
+                    r.setCityId(receiverInfo.getCityId());
+                    r.setAreaId(receiverInfo.getAreaId());
                     deliveryOrderReceiverDao.insert(r);
 
                     //3、保存寄件人信息
@@ -165,6 +169,10 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     s.setCountry(senderInfo.getSenderCountry());
                     s.setName(senderInfo.getSenderName());
                     s.setProvince(senderInfo.getSenderProvince());
+                    s.setCountryId(senderInfo.getCountryId());
+                    s.setProvinceId(senderInfo.getProvinceId());
+                    s.setCityId(senderInfo.getCityId());
+                    s.setAreaId(senderInfo.getAreaId());
                     deliveryOrderSenderDao.insert(s);
 
                     //添加成功，通知商户

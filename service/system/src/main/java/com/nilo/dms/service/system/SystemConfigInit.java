@@ -19,7 +19,9 @@ public class SystemConfigInit implements InitializingBean {
 
         // 加载客户配置信息
         systemService.loadingAndRefreshCustomerConfig(null);
-        // 加载流水号规则
+
+        systemService.loadingAndRefreshNetwork();
+
         systemService.loadingAndRefreshSerialNumRule(null);
         // 加载日志配置
         systemService.loadingAndRefreshLogConfig();
