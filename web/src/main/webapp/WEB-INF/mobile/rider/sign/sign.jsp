@@ -59,8 +59,8 @@
 
 
 						<div>
-							<img src="/mobile/images/test111.jpg"
-								style="width: 100px; height: 100px;" id="lypic" />
+							<img src=""
+								style="width: 100px; height: 100px;" id="lypic" /> 
 						</div>
 					</center>
 

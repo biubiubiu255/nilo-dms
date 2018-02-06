@@ -128,10 +128,11 @@
             data : {arrWaybillNo : arrWaybillNo},
             async: false,
             error: function () {
-                alert("发送请求失败！");
+                alert("submit error！");
             },
             success: function () {
                 // addTr2('tab', -1);
+                alert("submit success！");
                 delTr(fuxuan);
             }
         });
