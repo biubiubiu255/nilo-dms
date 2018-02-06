@@ -58,6 +58,9 @@ function excuteFunction(callback) {
  功能描述： 将字符串转换为对象
  */
 function toObject(value) {
+    if(typeof (value) == 'object'){
+        return value;
+    }
     return eval("(" + value + ")");
 }
 

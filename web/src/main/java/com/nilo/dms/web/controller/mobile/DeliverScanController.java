@@ -77,34 +77,13 @@ public class DeliverScanController extends BaseController {
 
     @RequestMapping(value = "/test.html")
     @ResponseBody
-    public String test(String[] arr) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-
-//        Loading loading = new Loading();
-        for(int i = 0; i < arr.length; i ++){
-            Loading loading = new Loading();
-            String q = arr[i];
-            String[] sourceStrArray = q.split(",");
-            String logisticsNo = sourceStrArray[0];
-            String station = sourceStrArray[1];
-            String deliverDriver = sourceStrArray[2];
-            String plateNo = sourceStrArray[3];
-
-            loading.setMerchantId(merchantId);
-            loading.setNextStation(station);
-            loading.setRider(deliverDriver);
-            loading.setTruckNo(plateNo);
-
-            String loadingNo = loadingService.addLoading(loading);
-            System.out.println(loadingNo);
-            loadingService.loadingScan(merchantId, loadingNo, logisticsNo, me.getUserId());
-            loadingService.ship(merchantId, loadingNo, me.getUserId());
+    public String test(String[] arr,String station,String deliverDriver,String plateNo,String abc) {
+        System.out.println(station);
+        System.out.println(deliverDriver);
+        System.out.println(plateNo);
+        for(int i = 0; i < arr.length; i ++) {
+            System.out.println(arr[i]);
         }
-//        for(int i = 0; i < arr.length; i ++) {
-//            System.out.println(arr[i]);
-//        }
         return "true";
     }
     @RequestMapping(value = "/getDriver.html")

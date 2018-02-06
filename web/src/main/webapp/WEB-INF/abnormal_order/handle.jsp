@@ -3,7 +3,7 @@
 <%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
 <%
-    request.setAttribute("abnormalTypeList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "abnormal_order_type"));
+    request.setAttribute("abnormalTypeList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.ABNORMAL_ORDER_TYPE));
 %>
 
 <div class="box-body">

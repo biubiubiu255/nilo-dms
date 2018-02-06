@@ -1,5 +1,6 @@
 package com.nilo.dms.common;
 
+
 /**
  * Created by admin on 2017/11/13.
  */
@@ -26,6 +27,10 @@ public class Constant {
     public static final String ADDRESS="address";
 
     public static final String DELIVERY_ORDER_TYPE = "delivery_order_type";
+    
+    public static final String ABNORMAL_ORDER_TYPE = "abnormal_order_type";
+    
+    
     public static final String STAFF_JOB = "job";
 
     public static final String IS_PACKAGE="Y";

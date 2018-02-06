@@ -61,7 +61,8 @@
     $("#logisticsNo").keydown(function (event) {
         event = document.all ? window.event : event;
         if ((event.keyCode || event.which) == 13) {
-            addTr2('tab', 0);
+             var scanResult = document.getElementById("logisticsNo").value
+            addTr2('tab', 0,scanResult);
         }
     }); */
 
@@ -128,10 +129,11 @@
             data : {arrWaybillNo : arrWaybillNo},
             async: false,
             error: function () {
-                alert("发送请求失败！");
+                alert("submit error！");
             },
             success: function () {
                 // addTr2('tab', -1);
+                alert("submit success！");
                 delTr(fuxuan);
             }
         });

@@ -351,8 +351,3 @@ function cutstr(str, len, dot) {
 }
 
 
-
-var afterScanCallBack = null;
-function afterScan(scanResult){
-    invokeCallBack(afterScanCallBack,scanResult);
-}

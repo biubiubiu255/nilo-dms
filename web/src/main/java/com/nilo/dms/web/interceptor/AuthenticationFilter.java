@@ -50,10 +50,13 @@ public class AuthenticationFilter extends FormAuthenticationFilter {
         String uri2 = uri.substring(1, uri.length());//去掉uri前面的‘/’
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         
+        
         //手机端访问，如果是rider,限制只能访问带/mobile/rider的链接，其他的不用过虑
         if(uri.indexOf("/mobile")!=-1) {
-        	if(me!=null&&me.isRider()&&uri.indexOf("/rider")!=-1) {
-        		throw new DMSException(BizErrorCode.USER_URL_NOT_ALLOWED);
+	        	if(me!=null&&me.isRider()&&uri.indexOf("/rider")==-1) {
+	        		if(uri.indexOf("/mobile/home")==-1) {
+	        		throw new DMSException(BizErrorCode.USER_URL_NOT_ALLOWED);
+	        	}
         	}
         }
         else if(me!=null && uri.indexOf("api")!=-1) {
