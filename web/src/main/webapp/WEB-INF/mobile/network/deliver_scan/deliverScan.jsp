@@ -99,7 +99,8 @@
     <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
         <h2 data-locale="delivery_scan_title">Deliver Scan</h2>
     </div>
-    <div class="banner_content">
+    <div class="formula_modify">
+    <%--<div class="banner_content">--%>
         <form id="delivery-form">
             <div class="banner_content">
                 <input type="hidden" name="id" />
@@ -114,11 +115,11 @@
                         </select>
                     </li>
                     <li>
-                        <select class='input_value' required="required" name="deliverDriver">
-                            <option value=""><label class="i18n" name="select_driver_tip">Please select a driver</label></option>
+                        <select required="required" class='input_value' name="deliverDriver">
+                            <option value="">Please select a driver</option>
                         </select>
                     </li>
-                    <li><input type='text' placeholder="Plate No" maxlength='100' class='input_value' id='plateNo' name='plateNo' /><span onclick="addTr2('tab');">save</span></li>
+                    <li><input type='text' placeholder="Plate No" maxlength='100' class='input_value' id='plateNo' name='plateNo' /></li>
                     <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span class="scanner" id="scan">scan</span></li>
 
                 </ul>

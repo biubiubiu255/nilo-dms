@@ -77,13 +77,14 @@ public class DeliverScanController extends BaseController {
 
     @RequestMapping(value = "/test.html")
     @ResponseBody
-    public String test(String[] arr,String station,String deliverDriver,String plateNo,String abc) {
+    public String test(String items,String station,String deliverDriver,String plateNo) {
         System.out.println(station);
         System.out.println(deliverDriver);
         System.out.println(plateNo);
-        for(int i = 0; i < arr.length; i ++) {
-            System.out.println(arr[i]);
-        }
+        System.out.println(items);
+//        for(int i = 0; i < items.length; i ++) {
+//            System.out.println(items[i]);
+//        }
         return "true";
     }
     @RequestMapping(value = "/getDriver.html")
