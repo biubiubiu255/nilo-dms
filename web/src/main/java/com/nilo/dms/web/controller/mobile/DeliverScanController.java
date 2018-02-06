@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Controller
-@RequestMapping("/mobile/DeliverScanController")
+@RequestMapping("/mobile/deliver")
 public class DeliverScanController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
@@ -42,7 +42,7 @@ public class DeliverScanController extends BaseController {
     @Autowired
     private StaffDao staffDao;
 
-    @RequestMapping(value = "/toPage.html")
+    @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
