@@ -158,7 +158,7 @@
             cache: false,
             type: "POST",
             traditional: true,
-            url: "/mobile/DeliverScanController/test.html",
+            url: "/mobile/deliver/test.html",
             data : {arr : arr},
             async: false,
             error: function () {
@@ -174,7 +174,7 @@
     function getNextStationDriver(code) {
         $.ajax({
             type: "POST",
-            url: "/mobile/DeliverScanController/getDriver.html",
+            url: "/mobile/deliver/getDriver.html",
             dataType: "json",
             data: {code: code},
             success: function (data) {
@@ -185,7 +185,7 @@
                     for (var i = 0; i < driver.length; i++) {
                         $("#deliverDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
                     }
-                    form.render();
+                    
                 }
             }
         });

@@ -452,6 +452,9 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     private void updateNetworkTask(List<String> waybillNos, String arriveBy, String merchantId) {
 
         List<UserNetworkDO> userNetworkDOList = userNetworkDao.queryByUserId(Long.parseLong(arriveBy)); // 网点到件的运单为自提，添加网点任务
+        if(userNetworkDOList==null||userNetworkDOList.size()==0) {
+        	return;
+        }
         for (String waybillNo : waybillNos) {
             DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
             if (StringUtil.equalsIgnoreCase(orderDO.getChannel(), "Y")

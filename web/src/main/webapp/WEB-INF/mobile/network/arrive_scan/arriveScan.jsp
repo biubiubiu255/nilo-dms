@@ -119,22 +119,21 @@
     }
 
     function suiyi(fuxuan) {
-        var arr = new Array();
+        var arrWaybillNo = new Array();
         $("input[name="+fuxuan+"]:checked").each(function (i, n) {
-            arr.push($(this).val());
+        	arrWaybillNo.push($(this).val());
         });
         $.ajax({
             cache: false,
             type: "POST",
             traditional: true,
-            url: "/mobile/MobileArriveScanController/submit.html",
-            data : {arr : arr},
+            url: "/mobile/arrive/submit.html",
+            data : {arrWaybillNo : arrWaybillNo},
             async: false,
             error: function () {
                 alert("发送请求失败！");
             },
             success: function () {
-                console.log("zzzzzzzzzzzzzzzzzzzzzz")
                 // addTr2('tab', -1);
                 delTr(fuxuan);
             }
