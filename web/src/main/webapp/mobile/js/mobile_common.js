@@ -21,31 +21,27 @@ function auditStates(value) {
 }
 
 function showMask() {
-    $("<div id=\"load-mask-body\" class=\"mobile-mask\"></div>").css({
-		display: "block",
-		width: "100%",
-		height: $(document).height()
-	}).appendTo("body").css({
-		zIndex: 9999
-	});
+    $("<div id=\"my-mask-body-div\" class=\"mobile-mask\"></div>").css({
+        display: "block",
+        width: "100%",
+        height: $(window).height()
+    }).appendTo("body").css({
+        zIndex: 9999
+    });
 
-	$('<div id="load-mask-amina" class="mobile_load_anima"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>').appendTo("body").css({
-		display: "block",
-		zIndex: 10000,
-		left: ($(document.body).outerWidth(true) - 150) / 2,
-		top: $(window).height()-400
-	});
+    $("<div id=\"my-mask-div\" class=\"mobile-mask-msg\" style=\"font-size:12px;\"></div>").html("玩命加载中，请稍候......").appendTo("body").css({
+        display: "block",
+        zIndex: 10000,
+        left: ($(document.body).outerWidth(true) - 190) / 2,
+        top: ($(window).height() - 45) / 2
+    });
+
 }
 
 function closeMask() {
-    $("#load-mask-body").remove();
-    $("#load-mask-amina").remove();
+    $("#my-mask-body-div").remove();
+    $("#my-mask-div").remove();
 }
-
-
-
-
-
 
 //执行某个函数
 function excuteFunction(callback) {
@@ -72,17 +68,43 @@ function invokeCallBack(callback, param) {
     }
 }
 
+//显示消息
+function msgbox(msg_title, msg_content, type, time_out) {
+    alert(msg_content);
+    return;
+    time_out == undefined ? 5000 : time_out;
+    if (isEmpty(type)) {
+        type = 'show';
+    }
+    if (isEmpty(time_out)) {
+        time_out = 5000;
+    }
+    $.messager.show({
+        title: msg_title,
+        msg: msg_content,
+        timeout: time_out,
+        showType: type
+    });
+}
 
+function showWarning(msg) {
+    alert(msg);
+}
 
+function showError(msg) {
+    alert(msg);
+}
+
+function showInfo(msg) {
+    alert(msg);
+}
 
 /*
  发送ajax请求
  */
-function ajaxRequest(postURL, params, showMsg, callback,loadMask) {
-	if(typeof(loadMask) == 'undefined' || loadMask === true){
-		showMask();
-	}
-    var xhr = $.ajax({
+function ajaxRequest(postURL, params, showMsg, callback) {
+    showMask();
+    $.ajax({
         url: postURL,
         type: 'POST',
         data: params,
@@ -90,11 +112,10 @@ function ajaxRequest(postURL, params, showMsg, callback,loadMask) {
         success: function(json) {
             closeMask();
             try {
-            	
                 var response = toObject(json);
                 if (showMsg) {
                     if (response.result) {
-                        msgbox(response.msg);
+                        msgbox('提示', response.msg);
                     } else {
                         showError(response.msg);
                     }
@@ -103,14 +124,7 @@ function ajaxRequest(postURL, params, showMsg, callback,loadMask) {
                     invokeCallBack(callback, response);
                 }
             } catch (e) {
-                //showError('此次请求发生异常，请重试!' + e);
-            }
-        }
-    	,
-        complete: function (XMLHttpRequest,status) {
-            if(status == 'timeout') {
-                // xhr.abort();    超时后中断请求
-               // showError('网络超时，请刷新!');
+                showError('此次请求发生异常，请重试!' + e);
             }
         }
     });
@@ -123,124 +137,14 @@ var extjson = {
     , sortName: 'id'
     , sortOrder: 'desc'
     , searchParam: ''
-    , authorized:0
-    , reset: true
+    , reset: true       
+    , authorize: 1       
 }
-
-
-
-//显示消息
-function msgbox(msg,callback) {
-	var msgboxNum = $("[id^='top-tip-']").length;
-	var warningNum = $("[id^='warning-tip-']").length;
-	var totalTipNum = warningNum + msgboxNum;
-	var topPx = 0;
-	if(totalTipNum > 0){
-		topPx = totalTipNum * 51;
-	}
-	var div_id = "top-tip-"+(((1+Math.random())*0x10000)|0).toString(16).substring(1);
-    $("<div id=\""+div_id+"\" class=\"top-tip-msg\" style=\"margin-top:"+topPx+"px;\"></div>").html(msg).appendTo("body").css({
-        display: "none",
-        zIndex: 10000,
-        left: 0,
-        top: 0
-    }).fadeIn();
-	setTimeout(function(){
-		$("#"+div_id).fadeOut();	
-		$("#"+div_id).remove();
-		excuteFunction(callback);
-	},2000);
-}
-
-
-//显示消息
-function warningTipMsg(msg,callback) {
-	var msgboxNum = $("[id^='top-tip-']").length;
-	var warningNum = $("[id^='warning-tip-']").length;
-	var totalTipNum = warningNum + msgboxNum;
-	var topPx = 0;
-	var timout = 2000;
-	if(totalTipNum > 0){
-		topPx = totalTipNum * 51;
-		timout = 3000;
-	}
-	//console.dir(topPx);
-	var div_id = "warning-tip-"+(((1+Math.random())*0x10000)|0).toString(16).substring(1);
-    $("<div id=\""+div_id+"\" class=\"warning-tip-msg\" style=\"margin-top:"+topPx+"px;\"></div>").html("提示 : "+msg).appendTo("body").css({
-        display: "none",
-        zIndex: 10000,
-        left: 0,
-        top: 0
-    }).fadeIn();
-	setTimeout(function(){
-		$("#"+div_id).fadeOut();	
-		$("#"+div_id).remove();
-	},timout);
-}
-
-
-function showInfo(msg){
-	$("<div id=\"warning-mask-div\" class=\"mobile-mask\"></div>").css({
-        display: "block",
-        width: "100%",
-        //height: $(window).height()
-		height: 100000
-    }).appendTo("body").css({
-        zIndex: 10000
-    });
- 
-    $("<div id=\"warning-content-div\" class=\"mobile-info-msg\" style=\"font-size:12px;\"></div>").html("<h2>"+msg+"</h2><botton onclick=\"$('#warning-mask-div').remove();$('#warning-content-div').remove();\"> OK </botton>").appendTo("body").css({
-        display: "block",
-        zIndex: 10001,
-        left: ($(document.body).outerWidth(true) - 250) / 2,
-        top: ($(window).height() - 120) / 2
-    });	
-}
-
-
-
-function showWarning(msg){
-	$("<div id=\"warning-mask-div\" class=\"mobile-mask\"></div>").css({
-        display: "block",
-        width: "100%",
-        //height: $(window).height()
-		height: 100000
-    }).appendTo("body").css({
-        zIndex: 10002
-    });
- 
-    $("<div id=\"warning-content-div\" class=\"mobile-warning-msg\" style=\"font-size:12px;\"></div>").html("<h2>"+msg+"</h2><botton onclick=\"$('#warning-mask-div').remove();$('#warning-content-div').remove();\"> OK </botton>").appendTo("body").css({
-        display: "block",
-        zIndex: 10003,
-        left: ($(document.body).outerWidth(true) - 250) / 2,
-        top: ($(window).height() - 120) / 2
-    });
-}
-
-function showError(msg){
-	$("<div id=\"error-mask-div\" class=\"mobile-mask\"></div>").css({
-        display: "block",
-        width: "100%",
-        //height: $(window).height()
-		height: 100000
-    }).appendTo("body").css({
-        zIndex: 10013
-    });
- 
-    $("<div id=\"error-content-div\" class=\"mobile-error-msg\" style=\"font-size:12px;\"></div>").html("<h2>"+msg+"</h2><botton onclick=\"$('#error-mask-div').remove();$('#error-content-div').remove();\"> OK </botton>").appendTo("body").css({
-        display: "block",
-        zIndex: 10015,
-        left: ($(document.body).outerWidth(true) - 250) / 2,
-        top: ($(window).height() - 120) / 2
-    });
-}
-
-
 
 function pagenate_table(mjson) {
     var url = mjson.postUrl;
     if (isEmpty(url)) {
-        showWarning("url不能为空！");
+        alert("url不能为空！");
         return;
     }
     showMask();
@@ -256,7 +160,7 @@ function pagenate_table(mjson) {
     var rows = mjson.pageSize;
     var sort = mjson.sortName;
     var order = mjson.sortOrder;
-    var authorized = mjson.authorized;
+    var authorized = mjson.authorize;
     var params = {"parameters": param, "page": page, "rows": rows, "sort": sort, "order": order,"authorized":authorized};
     $.ajax({
         url: url,
@@ -276,15 +180,8 @@ function pagenate_table(mjson) {
                     $('.append_more').html('上移，加载更多数据');
                 }
                 mjson.total = response.total;
-				if(response.Relogin == "yes"){
-					var msg = response.msg;
-					$('.append_more').html(msg);
-					showWarning(msg);
-					window.location.href='index.php';
-				}
-				
             } catch (e) {
-                //showError('此次请求发生异常，请重试!');
+                showError('此次请求发生异常，请重试!');
             }
             mjson.reset = false;
             closeMask();
@@ -305,7 +202,7 @@ function bindScrollEvent(mjson, executeEvent) {
         if (scrollTop + windowHeight == scrollHeight) {
             var page = isEmpty(mjson.page) ? 1 : mjson.page;
             mjson.page = page + 1;
-            if (mjson.total == 0 && page > 1) {
+            if (mjson.total == 0) {
                 $('.append_more').html('没有找到任何数据');
             } else if (page * mjson.pageSize < mjson.total) {
                 $('.append_more').html('上移，加载更多数据');
@@ -315,36 +212,6 @@ function bindScrollEvent(mjson, executeEvent) {
             }
         }
     });
-}
-
-
-
-
-
-function getMyDate(mydate,days,format){
-	var formatDate;
-    if (!isEmpty(mydate)) {
-       formatDate = new Date(mydate) ;
-    } else {
-	   formatDate = new Date();
-    }
-	if(format == 'MM-DD'){
-		var month = formatDate.getMonth() + 1; 
-		return month.toString()+'月'+ formatDate.getDate()+'日'	
-	}
-	if(days != 0){
-		formatDate.setDate(formatDate.getDate()+days);	
-	}
-	var year = formatDate.getFullYear();
-	var month = formatDate.getMonth() + 1; 
-	if (month < 10) {
-		month = "0" + month.toString();
-	}
-	var date = formatDate.getDate();
-	if (date < 10) {
-		date = "0" + date.toString();
-	}	
-	return year+'-'+month+'-'+date;
 }
 
 
@@ -362,8 +229,7 @@ function GetCurrentTime(format, time) {
     }
     var year = myDate.getFullYear();
     var month = myDate.getMonth() + 1; //month是从0开始计数的，因此要 + 1    
-
-	if (month < 10) {
+    if (month < 10) {
         month = "0" + month.toString();
     }
     var date = myDate.getDate();
@@ -482,4 +348,11 @@ function cutstr(str, len, dot) {
             return str_cut;
         }
     }
+}
+
+
+
+var afterScanCallBack = null;
+function afterScan(scanResult){
+    invokeCallBack(afterScanCallBack,scanResult);
 }

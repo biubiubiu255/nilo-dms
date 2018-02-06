@@ -1,6 +1,6 @@
 html{ overflow:auto;}
-body {font-family:'Microsoft YaHei','微软雅黑', "SimSun",Arial,sans-serif,'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; background:#f5f4f9; overflow:auto !important;}
-input,h2,h3,h4,h5,h6{font-family:'Microsoft YaHei','微软雅黑', "SimSun",Arial,sans-serif,'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif}
+body {font-family:'Microsoft YaHei','寰蒋闆呴粦', "SimSun",Arial,sans-serif,'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; background:#f5f4f9; overflow:auto !important;}
+input,h2,h3,h4,h5,h6{font-family:'Microsoft YaHei','寰蒋闆呴粦', "SimSun",Arial,sans-serif,'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif}
 button, input[type="button"], input[type="reset"], input[type="submit"] { cursor: pointer;-webkit-appearance: button; -moz-appearance: button;}
 button::-moz-focus-inner, input::-moz-focus-inner { padding:0; border:0;}
 table { border-collapse: collapse; border-spacing: 0;}
@@ -12,7 +12,7 @@ a{ text-decoration:none;}
 .wap_content{ width:100%; margin:0 auto;margin-bottom:15px; position:relative;}
 
 
-/*首页*/
+/*棣栭〉*/
 .wap_top{ line-height:50px; background:#37BCF9; width:100%;  height:50px; position:relative;}
 .wap_top .wap_top_back{ width:30px; height:50px; background:url(../images/check_back.png) no-repeat center; background-size:14px auto; position:absolute; top:0px; left:5px;}
 .wap_top .wap_top_close{ width:30px; height:50px; background:url(../images/close_button.png) no-repeat center; background-size:25px auto; position:absolute; top:0px; left:5px;}
@@ -413,7 +413,7 @@ select.input_value.invalid{border:1px solid #ec5252;border-radius:10px;}
     color: rgba(255, 255, 255, 1);
     text-decoration: none;
     background-color: rgba(174, 222, 244, 1);
-    font-family: "Microsoft YaHei", 微软雅黑, 宋体;
+    font-family: "Microsoft YaHei", 寰蒋闆呴粦, 瀹嬩綋;
     font-weight: 700;
     font-size: 2em;
     display: block;
@@ -466,7 +466,7 @@ select.input_value.invalid{border:1px solid #ec5252;border-radius:10px;}
     color: hsl(39, 100%, 30%) !important;
     background-color: hsl(39, 100%, 50%);
     text-decoration: none;
-    font-family: "Microsoft YaHei", 微软雅黑, 宋体;
+    font-family: "Microsoft YaHei", 寰蒋闆呴粦, 瀹嬩綋;
     font-weight: 700;
     font-size: 2em;
     display: block;
@@ -521,7 +521,7 @@ select.input_value.invalid{border:1px solid #ec5252;border-radius:10px;}
     color: rgba(255, 255, 255, 1);
     background-color: rgba(219, 87, 51, 1);
     text-decoration: none;
-    font-family: "Microsoft YaHei", 微软雅黑, 宋体;
+    font-family: "Microsoft YaHei", 寰蒋闆呴粦, 瀹嬩綋;
     font-weight: 700;
     font-size: 2em;
     display: block;
@@ -659,7 +659,7 @@ select.input_value.invalid{border:1px solid #ec5252;border-radius:10px;}
     width: 14px;
 }
 
-/*发货*/
+/*鍙戣揣*/
 .mobile-mask {
     position: absolute;
     left: 0;
@@ -695,8 +695,8 @@ select.input_value.invalid{border:1px solid #ec5252;border-radius:10px;}
 
 
 html{ overflow:auto;}
-body {font-family:'Microsoft YaHei','微软雅黑', "SimSun",Arial,sans-serif,'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; background:#f5f4f9; overflow:auto !important;}
-input,h2,h3,h4,h5,h6{font-family:'Microsoft YaHei','微软雅黑', "SimSun",Arial,sans-serif,'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif}
+body {font-family:'Microsoft YaHei','寰蒋闆呴粦', "SimSun",Arial,sans-serif,'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; background:#f5f4f9; overflow:auto !important;}
+input,h2,h3,h4,h5,h6{font-family:'Microsoft YaHei','寰蒋闆呴粦', "SimSun",Arial,sans-serif,'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif}
 a{ text-decoration:none;}
 .clear{ clear:both;}
 label,input{}
@@ -869,11 +869,11 @@ label,input{}
 .yjfk_fd a.submit:hover{ background:#0c60ee;}
 .back{position:absolute; top:0px; left:5px; width:14px; height:45px; line-height:45px; background:url(../images/w_t_r.png) no-repeat center; background-size:14px auto; display:inline-block;}
 
-/*添加寄件人地址*/
+/*娣诲姞瀵勪欢浜哄湴鍧�*/
 
 html{ overflow:auto;}
-body {font-family:'Microsoft YaHei','微软雅黑', "SimSun",Arial,sans-serif,'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; background:#f5f4f9; overflow:auto !important;}
-input,h2,h3,h4,h5,h6{font-family:'Microsoft YaHei','微软雅黑', "SimSun",Arial,sans-serif,'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif}
+body {font-family:'Microsoft YaHei','寰蒋闆呴粦', "SimSun",Arial,sans-serif,'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif; background:#f5f4f9; overflow:auto !important;}
+input,h2,h3,h4,h5,h6{font-family:'Microsoft YaHei','寰蒋闆呴粦', "SimSun",Arial,sans-serif,'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif}
 button, input[type="button"], input[type="reset"], input[type="submit"] { cursor: pointer;-webkit-appearance: button; -moz-appearance: button;}
 button::-moz-focus-inner, input::-moz-focus-inner { padding:0; border:0;}
 table { border-collapse: collapse; border-spacing: 0;}
@@ -881,7 +881,7 @@ a{ text-decoration:none;}
 .clear{ clear:both;}
 
 
-/*登录*/
+/*鐧诲綍*/
 .j_dly{ width:100%;}
 .j_dly_logo{max-width: 360px; margin: auto; margin-bottom: 30px;background-repeat: no-repeat;background-position: center;text-align: center;font-size: 16px; color: #555;line-height: 25px;}
 .j_dly_logo img{ margin-top:20%; width:60%;}
@@ -901,7 +901,7 @@ a{ text-decoration:none;}
 .j_dly_33 input{ width:100%; height:40px; background:#37BCF9; border:0px; line-height:40px; font-size:1em; color:#fff; border-radius:45px;}
 
 
-/*首页*/
+/*棣栭〉*/
 
 .j_top .j_top_a1{ width:30px; height:50px; background:url(../images/ckh_r.png) no-repeat center; background-size:14px auto; position:absolute; top:0px; left:5px;}
 .j_top .j_top_a2{ width:30px; height:50px; background:url(../images/ckh_r1.png) no-repeat center; background-size:25px auto; position:absolute; top:0px; right:45px;}
@@ -980,7 +980,7 @@ a{ text-decoration:none;}
 .ckh_bot input{ width:30px; height:30px; border:1px solid #d8d8d8; float:left; margin: 10px; text-align:center;}
 
 
-/*2016-10-11 新增表单*/
+/*2016-10-11 鏂板琛ㄥ崟*/
 button, input, select, textarea { font-size: 100%; vertical-align: middle; outline: none;}
 .xmxz_dl{ padding:15px 5px;}
 .xmxz_dl b{ font-weight:normal; font-size:1.2em; color:#000; margin-bottom:15px; display:inline-block;}
@@ -1006,17 +1006,17 @@ button, input, select, textarea { font-size: 100%; vertical-align: middle; outli
 .ckh_xz1 .ckh_xz_inp2{ width:100%; height:40px; line-height:40px; color:#fff; border:0px; background:#37BCF9; border-radius:5px; }
 .ckh_xz1 .ckh_xz_inp2:hover{ background:#0c60ee;}
 
-/*物流跟踪*/
+/*鐗╂祦璺熻釜*/
 .one_banner li .input_value2{position:absolute; left:30%; top:40px;text-align: center; padding:0px; width:48%; height:28px; line-height:28px;font-size: 1.1em; float:left;border:1px solid #d8d8d8;border-radius:10px;}
 .one_banner li .input_value3{width:12% ;position:absolute;right:-2%; top:3px;text-align: center;height:20px; float:right;border:1px solid #d8d8d8;}
 .input_button3{ margin-top:15px; padding:0;
     position:fixed;width:80px; height:35px;right: 1px;top:71px; line-height:35px; color:#fff; border:0px; background:#37BCF9; border-radius:7px; }
-/*地址库*/
+/*鍦板潃搴�*/
 
 .input_button2{ margin-top:45px; padding:0;
     position:fixed;width:120px; height:40px; line-height:40px; color:#fff; border:0px; background:#37BCF9; border-radius:5px; }
 
-/*订单管理*/
+/*璁㈠崟绠＄悊*/
 
 .wap_tab_banner{ min-width:320px; margin:0 auto; height:45px; line-height:45px; background:#fff; overflow:hidden; border-bottom:1px solid #d8d8d8; margin-top:15px; position:relative;}
 .trun_left{ background: url(../images/j_sj_l.png) no-repeat center #B4CFED; width:20px; height:45px; position:absolute; top:0px; left:0px; display:inline-block; background-size:10px auto;}
@@ -1080,12 +1080,12 @@ button, input, select, textarea { font-size: 100%; vertical-align: middle; outli
 .banner_content li a.ckh_unlock{position: absolute; top:70px;left:75%; background:url(../images/unlock.png) no-repeat 4px 4px #7DCD46; border-radius:20px; display:inline-block; background-size:17px; padding:0 8px 0 24px; height:25px;width:80px; line-height:25px; text-align:center; color:#fff; font-size:14px;}
 
 .banner_content li a.formula_selected{position: absolute; top:5px;right:5px; background:url(../images/chk_ok.png) no-repeat 4px 4px #30c09f; border-radius:20px; display:inline-block; background-size:17px; padding:0 8px 0 24px; height:25px;width:80px; line-height:25px; text-align:center; color:#fff; font-size:14px;}
-/*消息推送*/
+/*娑堟伅鎺ㄩ��*/
 .bottom_a_button2{margin-top:15px; padding:0;  }
 .bottom_a_button2 a{ position:fixed; bottom:0; z-index: 100;width:100%; height:40px; line-height:40px; color:#fff; border:0px; background:#37BCF9; border-radius:5px;text-align:center;}
 .bottom_a_button2 a:hover{ background:#37BCF9;}
 
-/*意见反馈*/
+/*鎰忚鍙嶉*/
 .sy_head13{ width:100%; height:45px; position:relative; background:#37BCF9; max-width:640px; position:fixed; top:0px; margin:0 auto; font-size:1.3em; z-index:1000;}
 .sy_head13 a.sy_head_a1{ position:absolute; top:0px; left:5px; width:14px; height:45px; line-height:45px; background:url(../images/w_t_r.png) no-repeat center; background-size:14px auto; display:inline-block;}
 .sy_head13 h2{ line-height:45px; text-align:center; padding:0 10px; font-weight:normal; color:#fff; font-size:1.4em;}
@@ -1095,13 +1095,13 @@ button, input, select, textarea { font-size: 100%; vertical-align: middle; outli
 .yjfk_fd2 a:hover{ background:#0c60ee;}
 @charset "utf-8";
 /* CSS Document */
-* { margin: 0; padding: 0; font-family:'Microsoft YaHei','微软雅黑', "SimSun",Arial,sans-serif;}
+* { margin: 0; padding: 0; font-family:'Microsoft YaHei','寰蒋闆呴粦', "SimSun",Arial,sans-serif;}
 html,body{ -webkit-text-size-adjust:none;}
 body, nav, dl, dt, dd, p, h1, h2, h3, h4, ul, ol, li, input, button, textarea, footer { margin: 0; padding: 0;}
 .dis{ display:none;}
 em,i{ font-style:normal;}
-body { font: 16px/1.5 'Microsoft YaHei','微软雅黑', "SimSun",Arial,sans-serif; color: #333; background:#F8F8F8; -webkit-text-size-adjust: none; min-width: 320px; overflow-x:hidden; position: relative;}
-h1, h2, h3, h4, h5, h6 { font-size: 100%; font-family:'Microsoft YaHei','微软雅黑', "SimSun",Arial,sans-serif;}
+body { font: 16px/1.5 'Microsoft YaHei','寰蒋闆呴粦', "SimSun",Arial,sans-serif; color: #333; background:#F8F8F8; -webkit-text-size-adjust: none; min-width: 320px; overflow-x:hidden; position: relative;}
+h1, h2, h3, h4, h5, h6 { font-size: 100%; font-family:'Microsoft YaHei','寰蒋闆呴粦', "SimSun",Arial,sans-serif;}
 form {display: inline;}
 ul, ol,li{ list-style: none}
 a { text-decoration: none; color: #555555;}
@@ -1142,7 +1142,7 @@ input,label{ vertical-align:middle;}
 .sy_head1 a.sy_hea2{ position:absolute; top:0px; right:5px;display:inline-block; line-height:45px; color:#fff;}
 header{ margin-bottom:45px;}
 
-/*我的收益*/
+/*鎴戠殑鏀剁泭*/
 
 .sy_kk{ width:100%; font-size:1.3em; color:#999;}
 .sy_kk_1{ padding:15px 5px 0 5px; text-align:right; font-size:1em;}
@@ -1173,7 +1173,7 @@ header{ margin-bottom:45px;}
 .sy_cj_a a{ text-align:center; margin:0 10px; color:#555;}
 
 
-/*意见反馈*/
+/*鎰忚鍙嶉*/
 
 .yjfk_tex textarea{ width:96%; height:100px; border:1px solid #e0dddd; border-radius:5px; padding:2%;}
 
@@ -1344,7 +1344,7 @@ footer .ft-fav{ width: 40%;}
 
 .countime{ display: inline-block;line-height: 34px; margin-right: 10px; font-size:14px;}
 .countime s{ color:#e73641; font-size:14px;}
-/*个人设置*/
+/*涓汉璁剧疆*/
 .input_button4{ margin-top:15px; padding:0;
     position:fixed;margin-left:15px;width:120px; height:40px;text-align: center; line-height:40px; color:#fff; border:0px; background:#37BCF9; border-radius:5px; }
 .j_grxx{ width:100%; margin-top:15px;}
@@ -1396,10 +1396,10 @@ footer .ft-fav{ width: 40%;}
   https://twitter.com/benjsperry  https://twitter.com/ionicframework
   MIT License: https://github.com/driftyco/ionicons
 
-  Android-style icons originally built by Google’s
+  Android-style icons originally built by Google鈥檚
   Material Design Icons: https://github.com/google/material-design-icons
   used under CC BY http://creativecommons.org/licenses/by/4.0/
-  Modified icons to fit ionicon’s grid from original.
+  Modified icons to fit ionicon鈥檚 grid from original.
 */
 @font-face {
     font-family: "Ionicons";
@@ -2155,2203 +2155,2203 @@ footer .ft-fav{ width: 40%;}
     -moz-osx-font-smoothing: grayscale; }
 
 .ion-alert:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-alert-circled:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-android-add:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-add-circle:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-alarm-clock:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-alert:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-apps:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-archive:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-arrow-back:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-arrow-down:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-arrow-dropdown:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-arrow-dropdown-circle:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-arrow-dropleft:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-arrow-dropleft-circle:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-arrow-dropright:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-arrow-dropright-circle:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-arrow-dropup:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-arrow-dropup-circle:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-arrow-forward:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-android-arrow-up:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-attach:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-bar:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-bicycle:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-boat:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-bookmark:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-bulb:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-bus:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-calendar:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-call:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-camera:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-cancel:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-car:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-cart:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-chat:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-checkbox:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-checkbox-blank:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-checkbox-outline:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-checkbox-outline-blank:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-checkmark-circle:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-clipboard:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-close:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-cloud:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-cloud-circle:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-cloud-done:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-cloud-outline:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-color-palette:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-compass:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-contact:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-contacts:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-contract:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-create:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-delete:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-android-desktop:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-document:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-done:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-done-all:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-download:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-drafts:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-exit:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-expand:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-favorite:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-favorite-outline:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-film:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-folder:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-folder-open:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-funnel:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-globe:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-hand:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-hangout:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-happy:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-home:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-image:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-laptop:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-list:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-locate:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-lock:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-mail:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-map:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-menu:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-microphone:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-microphone-off:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-more-horizontal:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-more-vertical:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-navigate:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-notifications:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-notifications-none:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-notifications-off:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-open:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-options:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-people:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-person:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-person-add:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-phone-landscape:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-phone-portrait:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-pin:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-plane:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-playstore:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-print:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-radio-button-off:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-radio-button-on:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-refresh:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-remove:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-remove-circle:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-restaurant:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-sad:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-search:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-send:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-settings:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-share:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-share-alt:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-star:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-star-half:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-star-outline:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-stopwatch:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-android-subway:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-sunny:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-sync:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-textsms:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-time:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-train:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-unlock:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-upload:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-volume-down:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-volume-mute:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-volume-off:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-volume-up:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-walk:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-warning:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-watch:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-android-wifi:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-aperture:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-archive:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-arrow-down-a:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-arrow-down-b:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-arrow-down-c:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-arrow-expand:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-arrow-graph-down-left:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-arrow-graph-down-right:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-arrow-graph-up-left:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-arrow-graph-up-right:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-arrow-left-a:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-arrow-left-b:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-arrow-left-c:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-arrow-move:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-arrow-resize:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-arrow-return-left:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-arrow-return-right:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-arrow-right-a:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-arrow-right-b:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-arrow-right-c:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-arrow-shrink:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-arrow-swap:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-arrow-up-a:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-arrow-up-b:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-arrow-up-c:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-asterisk:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-at:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-backspace:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-backspace-outline:before {
-    content: ""; }
+    content: "飵�"; }
 
 .ion-bag:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-battery-charging:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-battery-empty:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-battery-full:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-battery-half:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-battery-low:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-beaker:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-beer:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-bluetooth:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-bonfire:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-bookmark:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-bowtie:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-briefcase:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-bug:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-calculator:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-calendar:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-camera:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-card:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-cash:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-chatbox:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-chatbox-working:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-chatboxes:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-chatbubble:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-chatbubble-working:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-chatbubbles:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-checkmark:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-checkmark-circled:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-checkmark-round:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-chevron-down:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-chevron-left:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-chevron-right:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-chevron-up:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-clipboard:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-clock:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-close:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-close-circled:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-close-round:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-closed-captioning:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-cloud:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-code:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-code-download:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-code-working:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-coffee:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-compass:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-compose:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-connection-bars:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-contrast:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-crop:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-cube:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-disc:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-document:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-document-text:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-drag:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-earth:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-easel:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-edit:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-egg:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-eject:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-email:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-email-unread:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-erlenmeyer-flask:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-erlenmeyer-flask-bubbles:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-eye:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-eye-disabled:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-female:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-filing:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-film-marker:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-fireball:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-flag:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-flame:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-flash:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-flash-off:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-folder:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-fork:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-fork-repo:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-forward:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-funnel:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-gear-a:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-gear-b:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-grid:before {
-    content: ""; }
+    content: "飫�"; }
 
 .ion-hammer:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-happy:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-happy-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-headphone:before {
-    content: ""; }
+    content: "飬�"; }
 
 .ion-heart:before {
-    content: ""; }
+    content: "飬�"; }
 
 .ion-heart-broken:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-help:before {
-    content: ""; }
+    content: "飬�"; }
 
 .ion-help-buoy:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-help-circled:before {
-    content: ""; }
+    content: "飬�"; }
 
 .ion-home:before {
-    content: ""; }
+    content: "飬�"; }
 
 .ion-icecream:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-image:before {
-    content: ""; }
+    content: "飬�"; }
 
 .ion-images:before {
-    content: ""; }
+    content: "飬�"; }
 
 .ion-information:before {
-    content: ""; }
+    content: "飬�"; }
 
 .ion-information-circled:before {
-    content: ""; }
+    content: "飬�"; }
 
 .ion-ionic:before {
-    content: ""; }
+    content: "飬�"; }
 
 .ion-ios-alarm:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-alarm-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-albums:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-albums-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-americanfootball:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-americanfootball-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-analytics:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-analytics-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-arrow-back:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-arrow-down:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-arrow-forward:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-arrow-left:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-arrow-right:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-arrow-thin-down:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-arrow-thin-left:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-arrow-thin-right:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-arrow-thin-up:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-arrow-up:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-at:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-at-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-barcode:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-barcode-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-baseball:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-baseball-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-basketball:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-basketball-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-bell:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-bell-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-body:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-body-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-bolt:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-bolt-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-book:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-book-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-bookmarks:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-bookmarks-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-box:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-box-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-briefcase:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-briefcase-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-browsers:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-browsers-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-calculator:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-calculator-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-calendar:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-calendar-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-camera:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-camera-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-cart:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-cart-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-chatboxes:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-chatboxes-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-chatbubble:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-chatbubble-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-checkmark:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-checkmark-empty:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-checkmark-outline:before {
-    content: ""; }
+    content: "飶�"; }
 
 .ion-ios-circle-filled:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-circle-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-clock:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-clock-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-close:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-close-empty:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-close-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-cloud:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-cloud-download:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-cloud-download-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-cloud-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-cloud-upload:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-cloud-upload-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-cloudy:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-cloudy-night:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-cloudy-night-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-cloudy-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-cog:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-cog-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-color-filter:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-color-filter-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-color-wand:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-color-wand-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-compose:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-compose-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-contact:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-contact-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-copy:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-copy-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-crop:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-crop-strong:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-download:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-download-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-drag:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-email:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-email-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-eye:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-eye-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-fastforward:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-fastforward-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-filing:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-filing-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-film:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-film-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-flag:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-flag-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-flame:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-flame-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-flask:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-flask-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-flower:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-flower-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-folder:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-folder-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-football:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-football-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-game-controller-a:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-game-controller-a-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-game-controller-b:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-game-controller-b-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-gear:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-gear-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-glasses:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-glasses-outline:before {
-    content: ""; }
+    content: "飷�"; }
 
 .ion-ios-grid-view:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-grid-view-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-heart:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-heart-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-help:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-help-empty:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-help-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-home:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-home-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-infinite:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-infinite-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-information:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-information-empty:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-information-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-ionic-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-keypad:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-keypad-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-lightbulb:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-lightbulb-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-list:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-list-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-location:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-location-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-locked:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-locked-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-loop:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-loop-strong:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-medical:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-medical-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-medkit:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-medkit-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-mic:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-mic-off:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-mic-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-minus:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-minus-empty:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-minus-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-monitor:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-monitor-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-moon:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-moon-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-more:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-more-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-musical-note:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-musical-notes:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-navigate:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-navigate-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-nutrition:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-nutrition-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-paper:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-paper-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-paperplane:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-paperplane-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-partlysunny:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-partlysunny-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-pause:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-pause-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-paw:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-paw-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-people:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-people-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-person:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-person-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-personadd:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-personadd-outline:before {
-    content: ""; }
+    content: "飸�"; }
 
 .ion-ios-photos:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-photos-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-pie:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-pie-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-pint:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-pint-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-play:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-play-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-plus:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-plus-empty:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-plus-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-pricetag:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-pricetag-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-pricetags:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-pricetags-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-printer:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-printer-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-pulse:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-pulse-strong:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-rainy:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-rainy-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-recording:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-recording-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-redo:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-redo-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-refresh:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-refresh-empty:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-refresh-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-reload:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-reverse-camera:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-reverse-camera-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-rewind:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-rewind-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-rose:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-rose-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-search:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-search-strong:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-settings:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-settings-strong:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-shuffle:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-shuffle-strong:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-skipbackward:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-skipbackward-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-skipforward:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-skipforward-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-snowy:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-speedometer:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-speedometer-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-star:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-star-half:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-star-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-stopwatch:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-stopwatch-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-sunny:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-sunny-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-telephone:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-telephone-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-tennisball:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-tennisball-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-thunderstorm:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-thunderstorm-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-time:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-time-outline:before {
-    content: ""; }
+    content: "飹�"; }
 
 .ion-ios-timer:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-timer-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-toggle:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-toggle-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-trash:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-trash-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-undo:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-undo-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-unlocked:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-unlocked-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-upload:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-upload-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-videocam:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-videocam-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-volume-high:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-volume-low:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-wineglass:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-wineglass-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-world:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ios-world-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-ipad:before {
-    content: ""; }
+    content: "飮�"; }
 
 .ion-iphone:before {
-    content: ""; }
+    content: "飮�"; }
 
 .ion-ipod:before {
-    content: ""; }
+    content: "飮�"; }
 
 .ion-jet:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-key:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-knife:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-laptop:before {
-    content: ""; }
+    content: "飮�"; }
 
 .ion-leaf:before {
-    content: ""; }
+    content: "飮�"; }
 
 .ion-levels:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-lightbulb:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-link:before {
-    content: ""; }
+    content: "飮�"; }
 
 .ion-load-a:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-load-b:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-load-c:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-load-d:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-location:before {
-    content: ""; }
+    content: "飮�"; }
 
 .ion-lock-combination:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-locked:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-log-in:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-log-out:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-loop:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-magnet:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-male:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-man:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-map:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-medkit:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-merge:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-mic-a:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-mic-b:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-mic-c:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-minus:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-minus-circled:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-minus-round:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-model-s:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-monitor:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-more:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-mouse:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-music-note:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-navicon:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-navicon-round:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-navigate:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-network:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-no-smoking:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-nuclear:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-outlet:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-paintbrush:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-paintbucket:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-paper-airplane:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-paperclip:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-pause:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-person:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-person-add:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-person-stalker:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-pie-graph:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-pin:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-pinpoint:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-pizza:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-plane:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-planet:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-play:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-playstation:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-plus:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-plus-circled:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-plus-round:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-podium:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-pound:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-power:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-pricetag:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-pricetags:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-printer:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-pull-request:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-qr-scanner:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-quote:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-radio-waves:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-record:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-refresh:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-reply:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-reply-all:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-ribbon-a:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-ribbon-b:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-sad:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-sad-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-scissors:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-search:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-settings:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-share:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-shuffle:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-skip-backward:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-skip-forward:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-android:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-android-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-angular:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-angular-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-apple:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-apple-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-bitcoin:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-social-bitcoin-outline:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-social-buffer:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-buffer-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-chrome:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-chrome-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-codepen:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-codepen-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-css3:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-css3-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-designernews:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-designernews-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-dribbble:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-dribbble-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-dropbox:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-dropbox-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-euro:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-euro-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-facebook:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-facebook-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-foursquare:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-social-foursquare-outline:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-social-freebsd-devil:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-social-github:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-github-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-google:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-social-google-outline:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-social-googleplus:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-googleplus-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-hackernews:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-hackernews-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-html5:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-html5-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-instagram:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-social-instagram-outline:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-social-javascript:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-javascript-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-linkedin:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-linkedin-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-markdown:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-nodejs:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-octocat:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-pinterest:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-social-pinterest-outline:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-social-python:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-reddit:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-reddit-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-rss:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-rss-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-sass:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-skype:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-skype-outline:before {
-    content: ""; }
+    content: "飯�"; }
 
 .ion-social-snapchat:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-snapchat-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-tumblr:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-tumblr-outline:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-tux:before {
-    content: ""; }
+    content: "飲�"; }
 
 .ion-social-twitch:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-twitch-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-twitter:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-twitter-outline:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-usd:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-social-usd-outline:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-social-vimeo:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-vimeo-outline:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-whatsapp:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-whatsapp-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-windows:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-windows-outline:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-wordpress:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-wordpress-outline:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-yahoo:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-yahoo-outline:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-yen:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-yen-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-social-youtube:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-social-youtube-outline:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-soup-can:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-soup-can-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-speakerphone:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-speedometer:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-spoon:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-star:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-stats-bars:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-steam:before {
-    content: ""; }
+    content: "飳�"; }
 
 .ion-stop:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-thermometer:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-thumbsdown:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-thumbsup:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-toggle:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-toggle-filled:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-transgender:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-trash-a:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-trash-b:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-trophy:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-tshirt:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-tshirt-outline:before {
-    content: ""; }
+    content: "飺�"; }
 
 .ion-umbrella:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-university:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-unlocked:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-upload:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-usb:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-videocamera:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-volume-high:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-volume-low:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-volume-medium:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-volume-mute:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-wand:before {
-    content: ""; }
+    content: "飴�"; }
 
 .ion-waterdrop:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-wifi:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-wineglass:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-woman:before {
-    content: ""; }
+    content: "飰�"; }
 
 .ion-wrench:before {
-    content: ""; }
+    content: "飱�"; }
 
 .ion-xbox:before {
-    content: ""; }
+    content: "飳�"; }
 
 /**
  * Resets

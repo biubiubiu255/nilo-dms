@@ -28,9 +28,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Controller
-@RequestMapping("/mobile/DeliverScanController")
+@RequestMapping("/mobile/deliver")
 public class DeliverScanController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private LoadingService loadingService;
     @Autowired
     private ThirdExpressDao thirdExpressDao;
     @Autowired
@@ -40,7 +42,7 @@ public class DeliverScanController extends BaseController {
     @Autowired
     private StaffDao staffDao;
 
-    @RequestMapping(value = "/toPage.html")
+    @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
@@ -76,19 +78,29 @@ public class DeliverScanController extends BaseController {
     @RequestMapping(value = "/test.html")
     @ResponseBody
     public String test(String[] arr) {
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
 
-        Loading loading = new Loading();
+//        Loading loading = new Loading();
         for(int i = 0; i < arr.length; i ++){
+            Loading loading = new Loading();
             String q = arr[i];
             String[] sourceStrArray = q.split(",");
-//            String a = sourceStrArray[1];
-//            String b = sourceStrArray[2];
-//            String c = sourceStrArray[3];
-//            String d = sourceStrArray[4];
-//            System.out.println(a+"     "+b+"    "+c+"    "+d);
-            for(int j=0; j<sourceStrArray.length; j++){
-                System.out.println(sourceStrArray[j]);
-            }
+            String logisticsNo = sourceStrArray[0];
+            String station = sourceStrArray[1];
+            String deliverDriver = sourceStrArray[2];
+            String plateNo = sourceStrArray[3];
+
+            loading.setMerchantId(merchantId);
+            loading.setNextStation(station);
+            loading.setRider(deliverDriver);
+            loading.setTruckNo(plateNo);
+
+            String loadingNo = loadingService.addLoading(loading);
+            System.out.println(loadingNo);
+            loadingService.loadingScan(merchantId, loadingNo, logisticsNo, me.getUserId());
+            loadingService.ship(merchantId, loadingNo, me.getUserId());
         }
 //        for(int i = 0; i < arr.length; i ++) {
 //            System.out.println(arr[i]);

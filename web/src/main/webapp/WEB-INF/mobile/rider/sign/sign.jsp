@@ -31,7 +31,7 @@
 	<div class="wap_content">
 
 		<div class="wap_top">
-			<a href="/mobile/DemoController/toIndexPage.html" title="Back"
+			<a href="/mobile/home.html" title="Back"
 				class="wap_top_back"></a>
 			<h2>Sign Scan</h2>
 		</div>
@@ -92,7 +92,7 @@
 			
 			upload.render({
 				elem : '.xq',
-				url : '/mobile/SignScanController/save.html',
+				url : '/mobile/sign/save.html',
 				auto : false , //选择文件后不自动上传
                 data:{} ,
 				bindAction : '#commit',
@@ -121,7 +121,9 @@
 		});
 
 		document.getElementById('scan').onclick = function() {
-			android.startScan()
+			//android.startScan()
+			var orderNo = $("#logisticsNo").val();
+			drawTab(orderNo);
 		};
 
 		function doScan() {
@@ -130,22 +132,29 @@
 		function afterScan(scanResult) {
 			alert(scanResult);
 			document.getElementById("logisticsNo").value = scanResult;
+			
 		}
 
+		function drawTab(orderNo){
+			
+            // var result;
+			// url  param  isShowMsg callback isShowLoadMsgBox
+            ajaxRequest("/mobile/rider/sign/getDetail.html", {orderNo : orderNo}, true, function(response){
+            	if(response){
+            		$("#signer").val(response.data.receiverInfo.receiverName);
+            		$("#remark").val(response.data.remark);
+                	//alert(response.data.receiverInfo.receiverName);
+                	//alert(response.data.remark);
+            	}
+
+            }, true);
+
+		}
+		
+        
+		
 		function doFind() {
-			$.ajax({
-				cache : false,
-				type : "POST",
-				url : "/mobile/SignScanController/test.html",
-				data : $('#myForm').serialize(),
-				async : false,
-				error : function() {
-					alert("发送请求失败！");
-				},
-				success : function() {
-					addTr2('tab', -1);
-				}
-			});
+			//load
 		}
 
 		function addTr2(tab, row) {

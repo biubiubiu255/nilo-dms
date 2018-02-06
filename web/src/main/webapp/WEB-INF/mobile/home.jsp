@@ -32,20 +32,20 @@
 				</div>
 				<ul class="model_banner_ul"
 					style="width: 100%; overflow: hidden; margin: 0px;">
-					<a href="/mobile/sign/sign.html" title="">
+					<a href="/mobile/rider/sign/sign.html" title="">
 						<li><img src="/mobile/images/icon_1.png" /><br />Sign Scan</li>
 					</a>
 					<!-- <a href="/mobile/tiaozhuangController/dshkqs.html" title="">
          <li><img src="/mobile/images/icon_2.png" /><br/>COD Sign</li>
        </a> -->
-					<a href="/mobile/selfCollect/sign.html" title="">
+					<a href="/mobile/rider/self/self.html" title="">
 						<li><img src="/mobile/images/icon_6.png" /><br />Self-Collect
 							Sign</li>
 					</a>
-					<a href="/mobile/porblem/scan.html" title="">
-						<li><img src="/mobile/images/icon_7.png" /><br />Porblem</li>
+					<a href="/mobile/rider/problem/scan.html" title="">
+						<li><img src="/mobile/images/icon_7.png" /><br />Problem</li>
 					</a>
-					<a href="/mobile/stranded/scan.html" title="">
+					<a href="/mobile/rider/stranded/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br />Stranded
 							Parcel</li>
 					</a>
@@ -81,7 +81,7 @@
 					</a>
 
 					<a href="/mobile/porblem/scan.html" title="">
-						<li><img src="/mobile/images/icon_7.png" /><br />Porblem</li>
+						<li><img src="/mobile/images/icon_7.png" /><br />Problem</li>
 					</a>
 
 					<a href="/mobile/stranded/scan.html" title="">
