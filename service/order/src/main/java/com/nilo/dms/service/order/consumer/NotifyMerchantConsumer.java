@@ -2,6 +2,7 @@ package com.nilo.dms.service.order.consumer;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.rocketmq.common.message.MessageExt;
+import com.nilo.dms.common.enums.MethodEnum;
 import com.nilo.dms.common.enums.NotifyStatusEnum;
 import com.nilo.dms.common.utils.HttpUtil;
 import com.nilo.dms.common.utils.StringUtil;
@@ -38,9 +39,10 @@ public class NotifyMerchantConsumer extends AbstractMQConsumer {
             NotifyRequest request = (NotifyRequest) obj;
             logger.info("MessageExt:{},Message:{}", messageExt, request);
             Map<String, String> params = new HashMap<>();
-            params.put("op", request.getOp());
+            params.put("method", MethodEnum.STATUS_UPDATE.getCode());
             params.put("sign", request.getSign());
             params.put("data", request.getData());
+            params.put("app_key", "dms");
 
 
             //判断是否是第一次通知
@@ -50,7 +52,7 @@ public class NotifyMerchantConsumer extends AbstractMQConsumer {
                 notifyDO.setOrderNo(request.getOrderNo());
                 notifyDO.setReferenceNo(request.getReferenceNo());
                 notifyDO.setStatus(NotifyStatusEnum.CREATE.getCode());
-                notifyDO.setBizType(request.getOp());
+                notifyDO.setBizType(request.getMethod());
                 notifyDO.setMerchantId(Long.parseLong(request.getMerchantId()));
                 notifyDO.setNum(1);
                 notifyDO.setNotifyId(msgId);

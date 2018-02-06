@@ -13,7 +13,7 @@ public class NotifyRequest {
 
     private String url;
 
-    private String op;
+    private String method;
 
     private String sign;
 
@@ -51,12 +51,12 @@ public class NotifyRequest {
         this.url = url;
     }
 
-    public String getOp() {
-        return op;
+    public String getMethod() {
+        return method;
     }
 
-    public void setOp(String op) {
-        this.op = op;
+    public void setMethod(String method) {
+        this.method = method;
     }
 
     public String getMerchantId() {
@@ -81,7 +81,7 @@ public class NotifyRequest {
                 "merchantId='" + merchantId + '\'' +
                 ", orderNo='" + orderNo + '\'' +
                 ", url='" + url + '\'' +
-                ", op='" + op + '\'' +
+                ", method='" + method + '\'' +
                 ", sign='" + sign + '\'' +
                 ", data='" + data + '\'' +
                 '}';

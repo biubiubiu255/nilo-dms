@@ -7,6 +7,7 @@ import com.google.zxing.common.BitMatrix;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.web.controller.BaseController;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.imageio.ImageIO;
@@ -23,10 +24,9 @@ import java.io.OutputStream;
 @RequestMapping("/barCode")
 public class BarCodeController extends BaseController {
 
-    @RequestMapping("/createCode128.html")
-    public void createCode128(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping("/{content}.html")
+    public void createCode128(HttpServletRequest request, HttpServletResponse response, @PathVariable String content) throws Exception {
 
-        String content = request.getParameter("content");
         if (StringUtil.isEmpty(content)) return;
 
         BarcodeFormat format = BarcodeFormat.CODE_128;

@@ -50,4 +50,5 @@ public enum UserStatusEnum implements EnumMessage{
     public Map getMap() {
         return map;
     }
+
 }

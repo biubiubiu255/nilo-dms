@@ -17,7 +17,37 @@ public class DeliveryOrderRouteDO extends BaseDo<Long> {
 
     private String opt;
 
+    private String optNetwork;
+
+    private String optBy;
+
+    private Long optTime;
+
     private String remark;
+
+    public String getOptNetwork() {
+        return optNetwork;
+    }
+
+    public void setOptNetwork(String optNetwork) {
+        this.optNetwork = optNetwork;
+    }
+
+    public String getOptBy() {
+        return optBy;
+    }
+
+    public void setOptBy(String optBy) {
+        this.optBy = optBy;
+    }
+
+    public Long getOptTime() {
+        return optTime;
+    }
+
+    public void setOptTime(Long optTime) {
+        this.optTime = optTime;
+    }
 
     public String getOpt() {
         return opt;

@@ -281,7 +281,11 @@ public class LoadingServiceImpl implements LoadingService {
             OrderOptRequest optRequest = new OrderOptRequest();
             optRequest.setMerchantId(merchantId);
             optRequest.setOptBy(optBy);
-            optRequest.setOptType(OptTypeEnum.SHIP);
+            if(StringUtil.isNotEmpty(loadingDO.getNextStation())) {
+                optRequest.setOptType(OptTypeEnum.DELIVERY);
+            }else{
+                optRequest.setOptType(OptTypeEnum.SEND);
+            }
             List<String> orderNoList = new ArrayList<>();
             orderNoList.add(details.getOrderNo());
             optRequest.setOrderNo(orderNoList);

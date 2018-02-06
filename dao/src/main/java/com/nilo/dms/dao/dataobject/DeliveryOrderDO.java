@@ -54,7 +54,44 @@ public class DeliveryOrderDO extends BaseDo<Long> {
     private Integer nextNetworkId;
     private String parentNo;
 
+    private Double needPayAmount;
+    private Double alreadyPaid;
+    private Double billNo;
+    private Double accountNo;
+
     private Integer printTimes;
+
+    public Double getNeedPayAmount() {
+        return needPayAmount;
+    }
+
+    public void setNeedPayAmount(Double needPayAmount) {
+        this.needPayAmount = needPayAmount;
+    }
+
+    public Double getAlreadyPaid() {
+        return alreadyPaid;
+    }
+
+    public void setAlreadyPaid(Double alreadyPaid) {
+        this.alreadyPaid = alreadyPaid;
+    }
+
+    public Double getBillNo() {
+        return billNo;
+    }
+
+    public void setBillNo(Double billNo) {
+        this.billNo = billNo;
+    }
+
+    public Double getAccountNo() {
+        return accountNo;
+    }
+
+    public void setAccountNo(Double accountNo) {
+        this.accountNo = accountNo;
+    }
 
     public Integer getPrintTimes() {
         return printTimes;
