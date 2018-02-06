@@ -75,14 +75,7 @@
 				</div>
 			</form>
 		</div>
-		<div>
-			<table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
-				<tr>
-					<td>Logistics No</td>
-					<td>Signer</td>
-				</tr>
-			</table>
-		</div>
+
 	</div>
 
 	<script src="/layui/layui.js" charset="utf-8"></script>
