@@ -31,7 +31,7 @@
     		callback: function (data) {
     			if (data.result) showInfo(null);
 			}
-    	});
+    	});  
     	
     	//scan
         var scan_callback = function (code) {

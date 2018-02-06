@@ -12,8 +12,6 @@
 <meta name="keywords" content="#" />
 <meta name="description" content="#" />
 
-<link rel="stylesheet" href="${ctx}/layui/css/layui.css" media="all">
-<link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css" />
 <link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
 <script src="/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="/mobile/js/jquery-1.9.1.min.js"></script>

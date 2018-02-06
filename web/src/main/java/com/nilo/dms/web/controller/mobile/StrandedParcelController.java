@@ -4,6 +4,7 @@ import com.nilo.dms.common.Principal;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.model.AbnormalOrder;
 import com.nilo.dms.service.order.model.AbnormalParam;
+import com.nilo.dms.service.order.model.DelayParam;
 import com.nilo.dms.web.controller.BaseController;
 
 import org.apache.shiro.SecurityUtils;
@@ -28,36 +29,25 @@ public class StrandedParcelController extends BaseController {
         public String customers() {
             return "mobile/rider/stranded/scan";
         }
-    	
-    	
-        
+
         @RequestMapping(value = "/save.html", method = RequestMethod.POST)
         @ResponseBody
-        public String save(@RequestParam("logisticsNo") String orderNo, 
-        			@RequestParam("reason") String abnormalType, @RequestParam("memo") String remark) {
+/*        public String save(@RequestParam("logisticsNo") String orderNo, 
+        			@RequestParam("reason") String abnormalType, @RequestParam("memo") String remark) {*/
+          public String save(DelayParam param) {
         	
-            AbnormalOrder abnormalOrder = new AbnormalOrder();
-            abnormalOrder.setOrderNo(orderNo);
-            abnormalOrder.setAbnormalType(abnormalType);
-            abnormalOrder.setRemark(remark);
-            
             Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-            //获取merchantId
-            String merchantId = me.getMerchantId();
-            try {
-                AbnormalParam param = new AbnormalParam();
-                abnormalOrder.setCreatedBy(me.getUserId());
-                abnormalOrder.setMerchantId(merchantId);
-                param.setAbnormalOrder(abnormalOrder);
-                param.setOptBy(me.getUserId());
-                riderOptService.abnormal(param);
 
+            String merchantId = me.getMerchantId();
+            
+            try {
+                param.setOptBy(me.getUserId());
+                param.setMerchantId(merchantId);
+                riderOptService.detain(param);
             } catch (Exception e) {
                 return toJsonErrorMsg(e.getMessage());
             }
             return toJsonTrueMsg();
         }
-    
-    
     
 }
