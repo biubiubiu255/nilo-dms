@@ -20,174 +20,122 @@
 <script type="text/javascript" src="/mobile/js/functions.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile.js"></script>
+<script type="text/javascript" src="/mobile/js/jquery.scanner.js"></script>
+<script type="text/javascript" src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        loadLanguage('cn');
+
+        var mobile = new MobileData({
+            autoLoad:false
+            ,formId:'delivery-form'
+            ,model : 'customers'
+        });
+
+        var station = mobile.getFormField('station');
+        var deliverDriver = mobile.getFormField('deliverDriver');
+
+        if(station.length > 0){
+            station.bind('change',function(){
+                var station_value = $(this).val();
+                ajaxRequest('/mobile/deliver/getDriver.html',{code: station_value},false,function(data){
+                    if(deliverDriver.length > 0)
+                        deliverDriver.empty();
+                        deliverDriver.prepend("<option value='0'>Please select a driver</option>");
+                        var driver = data.data;
+                        for (var i = 0; i < driver.length; i++) {
+                            deliverDriver.append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
+                        }
+                });
+            });
+        }
+
+        mobile.initSubmitForm({
+           formId:'delivery-form'
+            ,mbObject:mobile
+           ,postUrl:'/mobile/deliver/test.html'
+            ,callback:function (data) {
+                showError('dddd');
+            }
+        });
+
+        var code_array = [];
+        var scan_callback = function (code) {
+            mobile.setFormFieldValue('logisticsNo',code);
+            if(!isEmpty(code_array[code])){
+                warningTipMsg('This order already scanned');
+                return;
+            }
+            code_array[code] = code;
+            var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class='input_value' value=\""+code+"\" name='items[]' /><span>"+code+"</span></li>";
+            $('#append_order_items_id').prepend(append_html);
+        }
+        $.scanner(scan_callback);
+
+
+
+        $('a.delete_button').click(function(){
+            var checkboxs = $('#delivery-form').find('input:checked');
+            for(var i=0;i<checkboxs.length;i++){
+                var value = $(checkboxs[i]).attr('value');
+                delete code_array[value];
+                $('#code'+value).remove();
+            }
+        });
+
+
+
+    });
+
+</script>
+
+
 </head>
 <body>
 
 <div class="wap_content">
 
     <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-        <h2>Deliver Scan</h2>
+        <h2 data-locale="delivery_scan_title">Deliver Scan</h2>
     </div>
-
-    <div class="formula_modify">
-        <form id="myForm" class="layui-form" action="">
+    <div class="banner_content">
+        <form id="delivery-form">
             <div class="banner_content">
+                <input type="hidden" name="id" />
                 <ul class="one_banner">
                     <li>
                         <%--<label>station</label>--%>
-                        <select required="required" class='input_value' id="station" name='station'>
-                            <option value="0">Please select the site</option>
+                        <select required="required" class='input_value' name='station'>
+                            <option value="">Please select the site</option>
                             <c:forEach items="${station}" var="station">
-                                <option value="${station.code}" id="hhh" type="${station.type}">${station.name}</option>
+                                <option value="${station.code}" type="${station.type}">${station.name}</option>
                             </c:forEach>
                         </select>
                     </li>
                     <li>
-                        <select class='input_value' name="deliverDriver" id="deliverDriver" lay-search="">
-                            <option value="0">Please select a driver</option>
+                        <select class='input_value' required="required" name="deliverDriver">
+                            <option value=""><label class="i18n" name="select_driver_tip">Please select a driver</label></option>
                         </select>
                     </li>
-                    <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span id="scan">scan</span></li>
                     <li><input type='text' placeholder="Plate No" maxlength='100' class='input_value' id='plateNo' name='plateNo' /><span onclick="addTr2('tab');">save</span></li>
+                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span class="scanner" id="scan">scan</span></li>
 
                 </ul>
-                <div class="bottom_a_button11"><a onclick="delTr2()">delete</a></div>
-                <div class="bottom_a_button22"><a onclick="Judge('fuxuan')">submit</a></div>
+                <div class="clear"></div>
+                <ul id = 'append_order_items_id'>
+                    <%--<li id="code123"><input type='checkbox' class='input_value' value="123" name='items' /><span>code 12123123</span></li>--%>
+                    <%--<li id="code456"><input type='checkbox' class='input_value' value="456" name='items' /><span>code 12123123</span></li>--%>
+                </ul>
             </div>
+            <div class="bottom_a_button11"><a href="javascript:void(0);" class="delete_button">delete</a></div>
+            <div class="bottom_a_button22"><a href="javascript:void(0);" class="submit">submit</a></div>
         </form>
+
     </div>
-    <div>
-        <table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
-            <tr>
-                <td>Logistics No</td>
-                <td><input type="checkbox" id="allFuxuan" checked="checked" onclick="sel('fuxuan')"></td>
-            </tr>
-        </table>
-    </div>
+
 </div>
 
-<script>
-    document.getElementById('scan').onclick = function(){android.startScan()};
 
-    function doScan(){
-        android.startScan();
-    }
-    function afterScan(scanResult){
-        document.getElementById("logisticsNo").value = scanResult;
-    }
-
-    $(document).ready(function(){
-        var kuang3 = document.getElementById("station")
-        $("#station").change(function(){
-            var code = kuang3.value;
-            getNextStationDriver(code)
-            // alert(kuang3.value)
-        });
-    });
-    function addTr2(tab) {
-        var kuang1 = document.getElementById("logisticsNo")
-        var kuang2 = document.getElementById("station")
-        var kuang3 = document.getElementById("deliverDriver")
-        var kuang4 = document.getElementById("plateNo")
-        if(kuang1.value == ""){
-            alert("Logistics no cannot be empty")
-        }else if(kuang2.value == 0){
-            alert("Please select a site")
-        }else if(kuang3.value == 0){
-            alert("driver no cannot be empty")
-        }else{
-            var trHtml = "<tr align='center'><td>" +kuang1.value+ "</td><td><input type=\"checkbox\" checked=\"checked\" name=\"fuxuan\" value=\"" +kuang1.value+ "\"></td></tr>";
-            addTr(tab,  trHtml);
-        }
-
-    }
-    function addTr(tab, trHtml){
-        //获取table最后一行 $("#tab tr:last")
-        //获取table第一行 $("#tab tr").eq(0)
-        //获取table倒数第二行 $("#tab tr").eq(-2)
-        var $tr=$("#"+tab+" tr").eq(0);
-        if($tr.size()==0){
-            alert("指定的table id或行数不存在！");
-            return;
-        }
-        $tr.after(trHtml);
-        $("#logisticsNo").val("");
-        // $("#station").val("0");
-        // $("#deliverDriver").val("0");
-        $("#plateNo").val("");
-    }
-    function sel(a){
-        var o=document.getElementsByName(a)
-        for(var i=0;i<o.length;i++)
-            o[i].checked=event.srcElement.checked
-    }
-
-    function delTr2(){
-        delTr('fuxuan');
-    }
-
-    function delTr(fuxuan){
-        //获取选中的复选框，然后循环遍历删除
-        var fuxuans=$("input[name="+fuxuan+"]:checked");
-        if(fuxuans.size()==0){
-            alert("You did not select the required action！");
-            return;
-        }
-        fuxuans.each(function(){
-            $(this).parent().parent().remove();
-        });
-    }
-    function Judge(fuxuan){
-        //获取选中的复选框，然后循环遍历删除
-        var fuxuans=$("input[name="+fuxuan+"]:checked");
-        if(fuxuans.size()==0){
-            alert("You did not select the required action！");
-            return;
-        }else {
-            suiyi(fuxuan);
-        }
-    }
-    function suiyi(fuxuan) {
-        var arr = new Array();
-        $("input[name="+fuxuan+"]:checked").each(function (i, n) {
-            arr.push($(this).val());
-        });
-        $.ajax({
-            cache: false,
-            type: "POST",
-            traditional: true,
-            url: "/mobile/deliver/test.html",
-            data : {arr : arr},
-            async: false,
-            error: function () {
-                alert("发送请求失败！");
-            },
-            success: function () {
-                console.log("zzzzzzzzzzzzzzzzzzzzzz")
-                // addTr2('tab', -1);
-                delTr(fuxuan);
-            }
-        });
-    }
-    function getNextStationDriver(code) {
-        $.ajax({
-            type: "POST",
-            url: "/mobile/deliver/getDriver.html",
-            dataType: "json",
-            data: {code: code},
-            success: function (data) {
-                if (data.result) {
-                    $("#deliverDriver").empty();
-                    $("#deliverDriver").prepend("<option value='0'>Please select a driver</option>");
-                    var driver = data.data;
-                    for (var i = 0; i < driver.length; i++) {
-                        $("#deliverDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
-                    }
-                    form.render();
-                }
-            }
-        });
-    }
-</script>
 </body>
 </html>

@@ -7,8 +7,8 @@
         }
 
         afterScanCallBack = func;
-        if($('div.scanner').length > 0) {
-            $('div.scanner').unbind('click').bind('click', function (e) {
+        if($('span.scanner').length > 0) {
+            $('span.scanner').unbind('click').bind('click', function (e) {
                 android.startScan();
             });
         }
@@ -21,3 +21,10 @@
         }
     };
 })(jQuery);
+
+
+
+var afterScanCallBack = null;
+function afterScan(scanResult){
+    invokeCallBack(afterScanCallBack,scanResult);
+}

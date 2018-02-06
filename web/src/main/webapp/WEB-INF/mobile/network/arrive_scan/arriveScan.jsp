@@ -64,7 +64,8 @@
     $("#logisticsNo").keydown(function (event) {
         event = document.all ? window.event : event;
         if ((event.keyCode || event.which) == 13) {
-            addTr2('tab', 0);
+             var scanResult = document.getElementById("logisticsNo").value
+            addTr2('tab', 0,scanResult);
         }
     });
 
