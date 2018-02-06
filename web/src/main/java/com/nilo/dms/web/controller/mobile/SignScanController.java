@@ -33,6 +33,7 @@ public class SignScanController extends BaseController {
     @Autowired
     private RiderOptService riderOptService;
     
+    @Autowired
     private OrderService orderService;
 
     //private static final String path = "F:\\ronny_1\\dms_master\\web\\target\\platform-dms\\upload";
@@ -116,16 +117,19 @@ public class SignScanController extends BaseController {
     
     
     @ResponseBody
-    @RequestMapping(value = "/getDetail.html", method = RequestMethod.GET)
-    public String getDetail(String orderNo, Model model) {
+    @RequestMapping(value = "/getDetail.html", method = RequestMethod.POST)
+    public String getDetail(Model model, String orderNo) {
     	
+    	if (orderNo==null) {
+			return toJsonErrorMsg("错误信息");
+		}
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         String merchantId = me.getMerchantId();
     	DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
         
     	model.addAttribute("deliveryOrder", deliveryOrder);
     	
-        return toJsonTrueMsg();
+        return toJsonTrueData(deliveryOrder);
         
     }
     

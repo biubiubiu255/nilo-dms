@@ -26,6 +26,17 @@
         <result property="contactNumber" column="contact_number" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
 
+
+        <result property="countryId" column="country_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="provinceId" column="province_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="cityId" column="city_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="areaId" column="area_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
@@ -35,7 +46,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, merchant_id , order_no ,country, province ,  city,area,name ,address,contact_number, created_time , updated_time ,version
+        id, merchant_id , order_no ,country, province ,  city,area,country_id,province_id,city_id,area_id,name ,address,contact_number, created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -43,9 +54,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_waybill_receiver
-        ( merchant_id ,order_no ,country, province ,  city,area,name ,address,contact_number, created_time , updated_time ,version)
+        ( merchant_id ,order_no ,country, province ,  city,area,country_id,province_id,city_id,area_id,name ,address,contact_number, created_time , updated_time ,version)
         VALUES
-        ( #{merchantId}, #{orderNo}, #{country}, #{province},#{city},#{area},#{name},#{address},#{contactNumber},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        ( #{merchantId}, #{orderNo}, #{country}, #{province},#{city},#{area},#{countryId}, #{provinceId},#{cityId},#{areaId},#{name},#{address},#{contactNumber},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
 

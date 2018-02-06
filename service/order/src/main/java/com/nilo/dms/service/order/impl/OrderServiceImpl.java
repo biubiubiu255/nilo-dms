@@ -452,6 +452,9 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     private void updateNetworkTask(List<String> waybillNos, String arriveBy, String merchantId) {
 
         List<UserNetworkDO> userNetworkDOList = userNetworkDao.queryByUserId(Long.parseLong(arriveBy)); // 网点到件的运单为自提，添加网点任务
+        if(userNetworkDOList==null||userNetworkDOList.size()==0) {
+        	return;
+        }
         for (String waybillNo : waybillNos) {
             DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
             if (StringUtil.equalsIgnoreCase(orderDO.getChannel(), "Y")
@@ -494,6 +497,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                     orderNo = SystemConfig.getNextSerialNo(packageRequest.getMerchantId(),
                             SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
                     orderHeader.setOrderNo(orderNo);
+                    orderHeader.setCreatedBy(packageRequest.getOptBy());
                     deliveryOrderDao.insert(orderHeader);
 
                     // 发件网点信息
@@ -721,8 +725,16 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setNetworkId(d.getNetworkId());
         deliveryOrder.setNextNetworkId(d.getNextNetworkId());
 
+        if(d.getNetworkId()!=null) {
+            DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + d.getMerchantId(),""+d.getNetworkId()),DistributionNetworkDO.class);
+            deliveryOrder.setNetworkDesc(networkDO.getName());
+        }
+        if(d.getNextNetworkId()!=null) {
+            DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + d.getMerchantId(),""+d.getNextNetworkId()),DistributionNetworkDO.class);
+            deliveryOrder.setNextNetworkDesc(networkDO.getName());
+        }
         deliveryOrder.setPackage(StringUtil.equalsIgnoreCase(d.getIsPackage(), Constant.IS_PACKAGE));
-
+        deliveryOrder.setCreatedBy(d.getCreatedBy());
         return deliveryOrder;
     }
 

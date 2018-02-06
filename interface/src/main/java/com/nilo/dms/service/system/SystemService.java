@@ -8,6 +8,8 @@ public interface SystemService {
 
     void loadingAndRefreshCustomerConfig(String merchantId);
 
+    void loadingAndRefreshNetwork();
+
     void loadingAndRefreshSerialNumRule(String merchantId);
 
     void loadingAndRefreshLogConfig();

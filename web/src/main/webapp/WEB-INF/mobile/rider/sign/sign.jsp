@@ -75,14 +75,7 @@
 				</div>
 			</form>
 		</div>
-		<div>
-			<table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
-				<tr>
-					<td>Logistics No</td>
-					<td>Signer</td>
-				</tr>
-			</table>
-		</div>
+
 	</div>
 
 	<script src="/layui/layui.js" charset="utf-8"></script>
@@ -121,7 +114,9 @@
 		});
 
 		document.getElementById('scan').onclick = function() {
-			android.startScan()
+			//android.startScan()
+			var orderNo = $("#logisticsNo").val();
+			drawTab(orderNo);
 		};
 
 		function doScan() {
@@ -130,22 +125,29 @@
 		function afterScan(scanResult) {
 			alert(scanResult);
 			document.getElementById("logisticsNo").value = scanResult;
+			
 		}
 
+		function drawTab(orderNo){
+			
+            // var result;
+			// url  param  isShowMsg callback isShowLoadMsgBox
+            ajaxRequest("/mobile/rider/sign/getDetail.html", {orderNo : orderNo}, true, function(response){
+            	if(response){
+            		$("#signer").val(response.data.receiverInfo.receiverName);
+            		$("#remark").val(response.data.remark);
+                	//alert(response.data.receiverInfo.receiverName);
+                	//alert(response.data.remark);
+            	}
+
+            }, true);
+
+		}
+		
+        
+		
 		function doFind() {
-			$.ajax({
-				cache : false,
-				type : "POST",
-				url : "/mobile/SignScanController/test.html",
-				data : $('#myForm').serialize(),
-				async : false,
-				error : function() {
-					alert("发送请求失败！");
-				},
-				success : function() {
-					addTr2('tab', -1);
-				}
-			});
+			//load
 		}
 
 		function addTr2(tab, row) {

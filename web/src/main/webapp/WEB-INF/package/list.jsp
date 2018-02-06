@@ -9,35 +9,35 @@
 %>
 <body>
 <div class="box-body">
-<!-- /.box-header -->
-<div class="layui-row">
+    <!-- /.box-header -->
+    <div class="layui-row">
 
-    <div class="layui-col-md5">
-        <shiro:hasPermission name="400071">
-            <button class="layui-btn layui-btn-normal loading-scan">Package Scan</button>
-        </shiro:hasPermission>
-        <button class="layui-btn btn-search">Search</button>
+        <div class="layui-col-md5">
+            <shiro:hasPermission name="400082">
+                <button class="layui-btn layui-btn-normal loading-scan">Package Scan</button>
+            </shiro:hasPermission>
+            <button class="layui-btn btn-search">Search</button>
+        </div>
+
     </div>
-    
- </div>
-    <div class="layui-collapse" >
-	<div class="layui-colla-item">
-    <div class="layui-colla-content ">
-    <div class="layui-form layui-row">
-        <div class="layui-col-md4 layui-col-lg3">
-            PackageNo:
-            <div class="layui-inline">
-                <input class="layui-input" name="packageNo" autocomplete="off">
+    <div class="layui-collapse">
+        <div class="layui-colla-item">
+            <div class="layui-colla-content ">
+                <div class="layui-form layui-row">
+                    <div class="layui-col-md4 layui-col-lg3">
+                        PackageNo:
+                        <div class="layui-inline">
+                            <input class="layui-input" name="packageNo" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="layui-col-md1">
+                        <button class="layui-btn layui-btn-normal search">Search</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal search">Search</button>
-        </div>
     </div>
-    </div>
-    </div>
-    </div>
-    
+
 
     <table class="layui-table" lay-data="{ url:'/order/package/list.html', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
@@ -45,28 +45,32 @@
         <tr>
             <th lay-data="{fixed: 'left',field:'orderNo', width:200}">PackageNo</th>
             <th lay-data="{field:'statusDesc', width:150}">Status</th>
-            <th lay-data="{field:'nextNetworkId', width:150}">NextStation</th>
+            <th lay-data="{field:'nextNetworkDesc', width:150}">NextStation</th>
             <th lay-data="{field:'weight', width:120}">Weight</th>
             <th lay-data="{field:'length', width:120}">Length</th>
             <th lay-data="{field:'width', width:120}">Width</th>
             <th lay-data="{field:'high', width:120}">High</th>
-            <th lay-data="{field:'remark', width:120}">Remark</th>
+            <th lay-data="{field:'remark', width:200}">Remark</th>
+            <th lay-data="{title:'Opt',fixed: 'right', width:150, align:'center', toolbar: '#barDemo'}"></th>
+
         </tr>
         </thead>
     </table>
 
-
+    <script type="text/html" id="barDemo">
+        <shiro:hasPermission name="400083">
+            <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="details">Details</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="400084">
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="print">Print</a>
+        </shiro:hasPermission>
+    </script>
 </div>
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
     $(function () {
-        layui.use(['form', 'layer'], function () {
-            var form = layui.form;
-            form.render();
-        })
-        layui.use(['element'], function () {
-        });
-        layui.use('laydate', function () {
+        var table;
+        layui.use(['form', 'element','laydate','table'], function () {
             var layDate = layui.laydate;
             layDate.render({
                 elem: '#fromCreatedTime'
@@ -76,22 +80,25 @@
                 elem: '#toCreatedTime'
                 , lang: 'en'
             });
-        });
-        var table;
-        layui.use('table', function () {
             table = layui.table;
-
-            $(".search").on("click", function () {
-                reloadTable();
-            })
-            $(".btn-search").on("click", function () {
-            	$(".layui-colla-content").toggleClass("layui-show");
-            	$(".btn-search").toggleClass("layui-btn-warm");
-            })
-
-
+            table.on('tool(demo)', function (obj) {
+                var data = obj.data;
+                var orderNo = data.orderNo;
+                if (obj.event === 'details') {
+                    detailsPackage(orderNo);
+                }
+                if (obj.event === 'print') {
+                    printPackage(orderNo);
+                }
+            });
         });
-
+        $(".search").on("click", function () {
+            reloadTable();
+        })
+        $(".btn-search").on("click", function () {
+            $(".layui-colla-content").toggleClass("layui-show");
+            $(".btn-search").toggleClass("layui-btn-warm");
+        })
         function reloadTable(item) {
             table.reload("${id0}", {
                 where: {
@@ -101,11 +108,6 @@
         };
 
         $(".loading-scan").on("click", function () {
-            toLoadingScanPage("");
-        })
-
-        function toLoadingScanPage() {
-
             var url = "/order/package/packagePage.html";
             parent.addTabs({
                 id: '40008001',
@@ -113,8 +115,29 @@
                 close: true,
                 url: url
             });
+        });
+
+        function detailsPackage( orderNo ) {
+            $.ajax({
+                url: "/order/package/" + orderNo + ".html",
+                type: 'GET',
+                dataType: 'text',
+                success: function (data) {
+                    //弹出即全屏
+                    var index = layer.open({
+                        type: 1,
+                        content: data,
+                        area: ['800px', '600px'],
+                        maxmin: true
+                    });
+                    layer.full(index);
+                }
+            });
         }
 
+        function printPackage( orderNo ) {
+            parent.window.open("/order/package/print/"+orderNo+".html");
+        }
     });
 
 </script>

@@ -1,20 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
-<%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
-<%@ page import="com.nilo.dms.service.model.User" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
 <html>
 <%@ include file="../common/header.jsp" %>
-<%
-    request.setAttribute("id0", RandomStringUtils.randomAlphabetic(8));
-    request.setAttribute("nextStation", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "next_station"));
-%>
 
 <script type="text/javascript">window.print();</script>
 <style>
-    *{
+    * {
         font-size: large;
     }
+
     html {
         -webkit-text-size-adjust: none;
     }
@@ -41,9 +36,7 @@
     <div class="row">
         <div class="center-block" style="width:400px;">
 
-            <h4>Shipment List</h4>
-
-            <h5 style="position:absolute;right: 10px;top: 20px;"> Date ${date_str}</h5>
+            <h4>Package List</h4>
         </div>
 
         <br><br>
@@ -51,66 +44,53 @@
 
 
     <div class="row">
-        <div class="col-xs-3">
-            Loading NO: ${loading.loadingNo}
+        <div class="col-xs-4">
+            Package NO: ${packageInfo.orderNo}
         </div>
         <div class="col-xs-3">
-            Carrier Name: ${loading.carrier}
+            NextStation: ${packageInfo.nextNetworkDesc}
         </div>
         <div class="col-xs-3">
-            Rider :${loading.riderName}
+            Date: <lp:formatTime time="${packageInfo.createdTime }"
+                                 pattern="yyyy-MM-dd"/>
         </div>
-        <div class="col-xs-3">
-            Operator :
-            ${sessionScope.userName}
+        <div class="col-xs-2">
+            Weight: ${packageInfo.weight}
         </div>
         <br><br>
     </div>
+
     <br><br>
-    <div class="row">
-        <div class="col-xs-12">
+    <div class="layui-row">
+        <div class="layui-col-md12 layui-col-lg12">
             <table class="table table-bordered">
                 <thead>
                 <tr>
                     <th>Order No</th>
-                    <th>Customer Name</th>
-                    <th>Contact No</th>
-                    <th>Address</th>
+                    <th>Order Type</th>
                     <th>Price</th>
+                    <th>Weight</th>
                 </tr>
                 </thead>
                 <tbody>
-                	<c:forEach items="${loading.detailsList}" var="item">
-	                   <tr>
-	                        <td>${item.orderNo}</td>
-	                        <td>${item.deliveryOrder.receiverInfo.receiverName}</td>
-	                        <td>${item.deliveryOrder.receiverInfo.receiverPhone}</td>
-	                        <td>${item.deliveryOrder.receiverInfo.receiverAddress}</td>
-	                        <td>0</td>
-	                   </tr>
-                   </c:forEach> 
+                <c:forEach items="${list}" var="item">
+                    <tr>
+                        <td>${item.orderNo}</td>
+                        <td>${item.orderType}</td>
+                        <td>${item.totalPrice}</td>
+                        <td>${item.weight}</td>
+                    </tr>
+                </c:forEach>
                 </tbody>
             </table>
         </div>
         <br><br>
 
     </div>
-    <div class="row">
-        <div class="col-xs-6">
-            Total Order Amount:${fn:length(loading.detailsList)}
-        </div>
 
-        <div class="col-xs-6">
-            Pending payment :0
-        </div>
-        <br><br>
-    </div>
-    
-<br><br>
-        <div class="col-xs-12" style="float: right" >
-            Rider's Name:____________________________
-        </div>
-        <br><br>
-    </div>
-    
+    <br><br>
+
+    <br><br>
+</div>
+
 </html>

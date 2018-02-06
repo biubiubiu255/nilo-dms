@@ -29,11 +29,8 @@
     </div>
     <div class="search_banner">
         <div class="search_content" id="customers-search">
-            <div class="search_input">
-                <i></i>
-                <input type="text" id="logisticsNo" name="logisticsNo" placeholder="Logistics No" class="search_input_field keywords"/>
-            </div>
-            <div class="search_button"><input type="button" value="scan" id="scan" class="search_input_button"/></div>
+            
+            <div ><input type="button" value="scan" id="scan" style="height:40px; width:100%; background:#ec5252; border-radius:5px;"/></div>
         </div>
         <div class="bottom_a_button11"><a onclick="delTr2()">delete</a></div>
         <div class="bottom_a_button22"><a onclick="Judge('fuxuan')">submit</a></div>
@@ -56,18 +53,18 @@
         android.startScan();
     }
     function afterScan(scanResult){
-        document.getElementById("logisticsNo").value = scanResult;
+        //document.getElementById("logisticsNo").value = scanResult;
         addTr2('tab', 0,scanResult);
     }
 
-    $("#logisticsNo").focus();
+    /* $("#logisticsNo").focus();
     $("#logisticsNo").keydown(function (event) {
         event = document.all ? window.event : event;
         if ((event.keyCode || event.which) == 13) {
              var scanResult = document.getElementById("logisticsNo").value
             addTr2('tab', 0,scanResult);
         }
-    });
+    }); */
 
     function sel(a){
         var o=document.getElementsByName(a)
@@ -105,7 +102,7 @@
             return;
         }
         $tr.after(trHtml);
-        $("#logisticsNo").val("");
+        //$("#logisticsNo").val("");
     }
 
     function Judge(fuxuan){
@@ -120,22 +117,21 @@
     }
 
     function suiyi(fuxuan) {
-        var arr = new Array();
+        var arrWaybillNo = new Array();
         $("input[name="+fuxuan+"]:checked").each(function (i, n) {
-            arr.push($(this).val());
+        	arrWaybillNo.push($(this).val());
         });
         $.ajax({
             cache: false,
             type: "POST",
             traditional: true,
-            url: "/mobile/MobileArriveScanController/submit.html",
-            data : {arr : arr},
+            url: "/mobile/arrive/submit.html",
+            data : {arrWaybillNo : arrWaybillNo},
             async: false,
             error: function () {
                 alert("发送请求失败！");
             },
             success: function () {
-                console.log("zzzzzzzzzzzzzzzzzzzzzz")
                 // addTr2('tab', -1);
                 delTr(fuxuan);
             }
