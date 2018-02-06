@@ -1,4 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
+<%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
+<%@ page import="com.nilo.dms.common.Constant" %>
+
+<%
+    request.setAttribute("abnormalTypeList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.ABNORMAL_ORDER_TYPE));
+%>
+
+
+
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -35,13 +47,10 @@
                     <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' id='logisticsNo' name='logisticsNo' /><span>scan</span></li>
                     <li>
                         <%--<label>Reason</label>--%>
-                        <select required="required" class='input_value' id="reason" name='reason'>
-                            <option value="0">Please select a return reason</option>
-                            <option value="Over Scope Of Deliver">Over Scope Of Deliver</option>
-                            <option value="Unable to contact customers">Unable to contact customers</option>
-                            <option value="Return">Return</option>
-                            <option value="test">test</option>
-                            <option value="Rejection">Rejection</option>
+                        <select required="required" class='input_value' id="reason" name='reason'>  
+	                       <c:forEach var="values" items="${abnormalTypeList}" varStatus="status">
+	                           <option value="${values.code}">${values.value }</option>
+		                   </c:forEach>
                         </select><span onclick="addTr2('tab', -1);">Save</span>
                     </li>
                     <li><input type='text' placeholder="Memo" maxlength='100' class='input_value' id="memo" name='memo' /></li>
@@ -126,6 +135,32 @@
             }
         });
     }
+    
+    
+    function save() {
+        var arr = new Array();
+        //var logNo = $("")
+        $("input[name="+fuxuan+"]:checked").each(function (i, n) {
+            arr.push($(this).val());
+        });
+        $.ajax({
+            cache: false,
+            type: "POST",
+            traditional: true,
+            url: "/mobile/rider/problem/test.html",
+            data : {arr : arr},
+            async: false,
+            error: function () {
+                alert("发送请求失败！");
+            },
+            success: function () {
+                console.log("zzzzzzzzzzzzzzzzzzzzzz")
+                // addTr2('tab', -1);
+                delTr(fuxuan);
+            }
+        });
+    }
+    
 </script>
 
 </body>
