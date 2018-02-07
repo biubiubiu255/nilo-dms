@@ -1,15 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
-<%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
-<%@ page import="com.nilo.dms.service.model.User" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html>
 <%@ include file="../common/header.jsp" %>
-<%
-    request.setAttribute("id0", RandomStringUtils.randomAlphabetic(8));
-    request.setAttribute("nextStation", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "next_station"));
-%>
-
 <script type="text/javascript">window.print();</script>
 <style>
     *{
@@ -22,21 +14,13 @@
     td {
         padding: 5px;
     }
-
-    .col-center-block {
-        float: none;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
     tr {
         height: 200%;
     }
 
 </style>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="/js/bootstrap.min.js"></script>
+<script src="${ctx}/bootstrap/js/bootstrap.min.js"></script>
 <div class="container">
     <div class="row">
         <div class="center-block" style="width:400px;">

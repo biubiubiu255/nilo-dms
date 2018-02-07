@@ -231,5 +231,15 @@ public class DeliveryOrderController extends BaseController {
         return "delivery_order/edit";
     }
 
+    @RequestMapping(value = "/print/{orderNo}.html", method = RequestMethod.GET)
+    public String print(Model model, @PathVariable String orderNo) {
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        //查询订单详情
+        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+        model.addAttribute("delivery", deliveryOrder);
 
+        return "delivery_order/print";
+    }
 }

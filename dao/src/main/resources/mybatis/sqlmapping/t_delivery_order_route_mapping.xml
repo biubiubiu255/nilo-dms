@@ -13,6 +13,14 @@
                 jdbcType="VARCHAR"/>
         <result property="opt" column="opt" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+        <result property="optBy" column="opt_by" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="optTime" column="opt_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="optNetwork" column="opt_Network" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
         <result property="remark" column="remark" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="memoCn" column="memo_cn" javaType="java.lang.String"
@@ -28,7 +36,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id ,merchant_id,order_no,opt,remark,memo_cn,memo_En, created_time , updated_time ,version
+        id ,merchant_id,order_no,opt,opt_by,opt_time,opt_network,remark,memo_cn,memo_En, created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -36,9 +44,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_waybill_route
-        ( merchant_id ,order_no,opt,remark,memo_cn,memo_En, created_time , updated_time ,version)
+        ( merchant_id ,order_no,opt,opt_by,opt_time,opt_network,remark,memo_cn,memo_En, created_time , updated_time ,version)
         VALUES
-        (#{merchantId},#{orderNo},#{opt},#{remark},#{memoCn}, #{memoEn},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{merchantId},#{orderNo},#{opt},#{optBy},#{optTime},#{optNetwork},#{remark},#{memoCn}, #{memoEn},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
     <select id="findBy" resultMap="routeDO" statementType="PREPARED">

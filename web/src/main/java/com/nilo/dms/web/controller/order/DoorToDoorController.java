@@ -119,7 +119,7 @@ public class DoorToDoorController extends BaseController {
         List<DeliveryOrder> list = orderService.queryByOrderNos(merchantId, Arrays.asList(orderNos.split(",")));
         for (DeliveryOrder o : list) {
             if(o.isPrinted()){
-                throw new IllegalArgumentException("Delivery Order :"+o.getOrderNo()+" is already printed.");
+                throw new IllegalArgumentException("DELIVERY Order :"+o.getOrderNo()+" is already printed.");
             }
         }
         orderService.print(merchantId,Arrays.asList(orderNos.split(",")));

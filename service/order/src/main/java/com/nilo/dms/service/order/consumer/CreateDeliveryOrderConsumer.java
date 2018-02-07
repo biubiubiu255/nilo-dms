@@ -122,6 +122,11 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setNotes(data.getNotes());
                     orderHeader.setRemark(data.getRemark());
 
+                    orderHeader.setNeedPayAmount(data.getNeedPayAmount());
+                    orderHeader.setAlreadyPaid(data.getAlreadyPaid());
+                    orderHeader.setBillNo(data.getBillNo());
+                    orderHeader.setAccountNo(data.getAccountNo());
+
                     deliveryOrderDao.insert(orderHeader);
 
                     //2、保存订单商品明细信息
@@ -215,7 +220,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
             notify.setReferenceNo(referenceNo);
             notify.setOrderNo(orderNo);
             notify.setMerchantId(merchantId);
-            notify.setOp(interfaceConfig.getOp());
+            notify.setMethod(interfaceConfig.getOp());
             notify.setUrl(interfaceConfig.getUrl());
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("orderNo", orderNo);

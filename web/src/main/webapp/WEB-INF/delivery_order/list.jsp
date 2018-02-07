@@ -27,6 +27,7 @@
                                                                          aria-hidden="true"></i>Template
                 </button>
             </shiro:hasPermission> --%>
+
             <shiro:hasPermission name="400016">
                 <button class="layui-btn btn-search">Search
                 </button>
@@ -95,15 +96,15 @@
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:250}">OrderNo</th>
+            <th lay-data="{fixed: 'left',field:'orderNo', width:200}">OrderNo</th>
             <th lay-data="{field:'orderTypeDesc', width:100}">OrderType</th>
             <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
             <th lay-data="{field:'statusDesc', width:100}">Status</th>
             <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.orderTime) }}</div>'}">
                 OrderTime
             </th>
-            <th lay-data="{field:'country', width:100}">Country</th>
             <th lay-data="{field:'weight', width:100}">Weight</th>
+            <th lay-data="{field:'country', width:100}">Country</th>
             <th lay-data="{field:'goodsType', width:120}">GoodsType</th>
             <th lay-data="{field:'receiverInfo', width:150,templet: '<div>{{d.receiverInfo.receiverName}}</div>' }">
                 Receiver
@@ -133,13 +134,16 @@
         <shiro:hasPermission name="400015">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
         </shiro:hasPermission>
+        <shiro:hasPermission name="400017">
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="print">Print</a>
+        </shiro:hasPermission>
     </script>
     <%@ include file="../common/footer.jsp" %>
     <script src="${ctx}/dist/js/ajaxfileupload.js"></script>
     <script type="text/javascript">
         $(function () {
 
-            layui.use(['element','form','laydate'], function () {
+            layui.use(['element', 'form', 'laydate'], function () {
                 var layDate = layui.laydate;
                 layDate.render({
                     elem: '#fromCreatedTime'
@@ -161,6 +165,8 @@
                         orderDetails(orderNo);
                     } else if (obj.event === 'edit') {
                         editOrder(orderNo);
+                    }else if(obj.event==='print'){
+                        print(orderNo);
                     }
                 });
 
@@ -194,6 +200,7 @@
                 $(".layui-colla-content").toggleClass("layui-show");
                 $(".btn-search").toggleClass("layui-btn-warm");
             })
+
 
             layui.use('upload', function () {
                 var upload = layui.upload;
@@ -237,11 +244,16 @@
                 });
             }
 
+            function print(orderNo) {
+                parent.window.open("/order/deliveryOrder/print/" + orderNo + ".html");
+            }
+
+
             $(".btn-add").on("click", function () {
                 var url = "/order/deliveryOrder/add.html";
                 var index = parent.layer.open({
                     type: 2,
-                    title: 'Add Delivery',
+                    title: 'Add DELIVERY',
                     shadeClose: true,
                     area: ['800px', '600px'],
                     content: url,
@@ -251,7 +263,7 @@
             function editOrder(orderNo) {
                 var index = parent.layer.open({
                     type: 2,
-                    title: 'Edit Delivery',
+                    title: 'Edit DELIVERY',
                     shadeClose: true,
                     area: ['800px', '600px'],
                     content: "/order/deliveryOrder/edit/" + orderNo + ".html",

@@ -1,6 +1,8 @@
 package com.nilo.dms.service.order.model;
 
 import com.nilo.dms.common.enums.LoadingStatusEnum;
+import com.nilo.dms.common.enums.LoadingTypeEnum;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.service.model.User;
 
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.List;
 public class Loading {
 
     private String merchantId;
+
+    private LoadingTypeEnum loadingType;
 
     private String loadingNo;
 
@@ -37,6 +41,15 @@ public class Loading {
     private String riderName;
 
     private String loadingName;
+
+    public LoadingTypeEnum getLoadingType() {
+        if (StringUtil.isNotEmpty(nextStation)) return LoadingTypeEnum.SEND;
+        return LoadingTypeEnum.DELIVERY;
+    }
+
+    public void setLoadingType(LoadingTypeEnum loadingType) {
+        this.loadingType = loadingType;
+    }
 
     public String getLoadingName() {
         return loadingName;

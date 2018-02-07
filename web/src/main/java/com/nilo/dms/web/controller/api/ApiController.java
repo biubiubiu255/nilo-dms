@@ -1,8 +1,10 @@
 package com.nilo.dms.web.controller.api;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +15,9 @@ import com.alibaba.fastjson.JSON;
 import com.nilo.dms.service.model.LoginInfo;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.RiderOptService;
-import com.nilo.dms.service.order.model.AbnormalParam;
 import com.nilo.dms.service.order.model.SignForOrderParam;
 import com.nilo.dms.web.controller.BaseController;
-import com.nilo.dms.web.controller.api.model.MethodEnum;
+import com.nilo.dms.common.enums.MethodEnum;
 import com.nilo.dms.web.controller.api.model.RequestParam;
 
 /**
@@ -52,23 +53,22 @@ public class ApiController extends BaseController {
         logger.debug("API Data:", data);
 
         switch (method) {
-            case CREATE_DELIVERY_ORDER: {
+            case CREATE_WAYBILL: {
                 orderService.addCreateDeliveryOrderRequest(merchantId, data, sign);
                 break;
             }
+            case WAYBILL_TRACE: {
+                break;
+            }
             case ARRIVE_SCAN: {
+                List<String> list = JSONArray.parseArray(data,String.class);
+                orderService.waybillNoListArrive(list,"api",merchantId);
                 break;
             }
             case SIGN: {
                 SignForOrderParam signForOrderParam = JSON.parseObject(data, SignForOrderParam.class);
                 signForOrderParam.setMerchantId(merchantId);
                 riderOptService.signForOrder(signForOrderParam);
-                break;
-            }
-            case ABNORMAL: {
-                AbnormalParam abnormalParam = JSON.parseObject(data, AbnormalParam.class);
-                abnormalParam.getAbnormalOrder().setMerchantId(merchantId);
-                riderOptService.abnormal(abnormalParam);
                 break;
             }
             default:

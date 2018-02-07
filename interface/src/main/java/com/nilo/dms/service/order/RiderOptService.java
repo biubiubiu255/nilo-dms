@@ -26,6 +26,8 @@ public interface RiderOptService {
      */
     void delay(DelayParam param);
 
+    
+    
     /**
      * 滞留
      *

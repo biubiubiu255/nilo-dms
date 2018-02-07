@@ -16,9 +16,10 @@ public enum DeliveryOrderStatusEnum implements EnumMessage{
     PICK_UP_FAILED(6, "Pickup failed"),
     ARRIVED(20, "Arrived"),
     LOADING(25, "Loading"),
-    SHIP(30, "Ship"),
+    DELIVERY(30, "Delivery"),
+    SEND(31, "Send"),
     DETAIN(35, "Detain"),
-    ABNORMAL(40, "Reject"),
+    PROBLEM(40, "Problem"),
     RECEIVED(50, "Received"),
     CANCELED(60, "Canceled"),;
 

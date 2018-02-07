@@ -7,6 +7,7 @@
         }
 
         afterScanCallBack = func;
+
         if($('span.scanner').length > 0) {
             $('span.scanner').unbind('click').bind('click', function (e) {
                 android.startScan();

@@ -60,6 +60,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         task.setHandledTime(DateUtil.getSysTimeStamp());
         taskService.updateTask(task);
 
+
     }
 
     @Override
@@ -179,7 +180,6 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
             update.setDelayTimes(delayDO.getDelayTimes() + 1);
             deliveryOrderDelayDao.update(update);
             if (update.getDelayTimes() == MAX_DELAY_TIMES) {
-                //abnormalOrderService.addAbnormalOrder(abnormalOrder);
             }
         }
 

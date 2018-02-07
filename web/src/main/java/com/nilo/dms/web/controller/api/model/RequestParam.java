@@ -1,10 +1,9 @@
 package com.nilo.dms.web.controller.api.model;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.nilo.dms.common.enums.MethodEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.AssertUtil;
-import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.service.system.model.MerchantConfig;
@@ -84,11 +83,11 @@ public class RequestParam {
         AssertUtil.isNotNull(getMethod(), BizErrorCode.METHOD_NOT_EXIST);
 
         //时间戳 10分钟内
-        Long currentTime = DateUtil.getSysTimeStamp();
+       /* Long currentTime = DateUtil.getSysTimeStamp();
         Long diff = Math.abs(currentTime - this.timestamp);
         if (diff > 10 * 60) {
             throw new DMSException(BizErrorCode.TIMESTAMP_ERROR);
-        }
+        }*/
 
         //校验sign
         MerchantConfig merchantConfig = SystemConfig.getMerchantConfigByCode(this.app_key);

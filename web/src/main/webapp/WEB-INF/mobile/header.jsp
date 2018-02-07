@@ -12,11 +12,11 @@
 <meta name="keywords" content="#" />
 <meta name="description" content="#" />
 
-<link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css" />
 <link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
-<link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
-<script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="/mobile/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/mobile/js/functions.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile.js"></script>
+<script type="text/javascript" src="/mobile/js/jquery.scanner.js"></script>
 </head>

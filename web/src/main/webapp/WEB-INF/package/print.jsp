@@ -35,10 +35,8 @@
 <div class="container">
     <div class="row">
         <div class="center-block" style="width:400px;">
-
             <h4>Package List</h4>
         </div>
-
         <br><br>
     </div>
 

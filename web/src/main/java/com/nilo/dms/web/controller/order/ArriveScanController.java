@@ -162,7 +162,7 @@ public class ArriveScanController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
-            orderService.arrive(merchantId, scanNo, me.getUserId());
+            orderService.arrive(merchantId, scanNo,""+me.getNetworks().get(0), me.getUserId());
         } catch (Exception e) {
             log.error("arrive failed. scanNo:{}", scanNo, e);
             return toJsonErrorMsg(e.getMessage());

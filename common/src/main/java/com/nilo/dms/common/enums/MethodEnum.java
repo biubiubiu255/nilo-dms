@@ -1,16 +1,18 @@
-package com.nilo.dms.web.controller.api.model;
+package com.nilo.dms.common.enums;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by ronny on 2017/8/22.
+ * Created by admin on 2018/2/6.
  */
 public enum MethodEnum {
-    CREATE_DELIVERY_ORDER("nos.waybill.create", "create_delivery_order"),
+    CREATE_WAYBILL("nos.waybill.create", "nos.waybill.create"),
+    WAYBILL_TRACE("nos.waybill.trace","waybill.trace"),
+    STATUS_UPDATE("nos.waybill.status","waybill.status"),
+
     ARRIVE_SCAN("arrive_scan", "arrive_scan"),
     SIGN("sign", "sign"),
-    ABNORMAL("abnormal", "abnormal"),
     ;
     private String code;
     private String value;

@@ -37,6 +37,9 @@ public class RouteConsumer extends AbstractMQConsumer {
             orderRouteDO.setOrderNo(rout.getOrderNo());
             orderRouteDO.setRemark(rout.getRemark());
             orderRouteDO.setMemoCn(rout.getTraceCN());
+            orderRouteDO.setOptBy(rout.getOptBy());
+            orderRouteDO.setOptTime(rout.getOptTime());
+            orderRouteDO.setOptNetwork(rout.getOptNetwork());
             orderRouteDO.setMerchantId(Long.parseLong(rout.getMerchantId()));
             orderRouteDO.setOpt(rout.getOpt());
 

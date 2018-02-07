@@ -79,6 +79,7 @@ public class DelayOrderController extends BaseController {
     public String detain(DelayParam param) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {

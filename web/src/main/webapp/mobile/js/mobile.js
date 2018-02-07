@@ -1066,3 +1066,17 @@ MobileData.defaults = {
     ,buttonEvents:[]
 };
 
+
+
+MobileData.prototype.appendFromTemplate = function(options){
+	 var response = options.response;
+	 if(!response.result) return;
+	 var mbObject = this;
+	 var templateId = isEmpty(options.templateId) ? mbObject.DataJson.templateId : options.templateId;
+	 var appendId = isEmpty(options.appendId) ? mbObject.DataJson.appendId : options.appendId;
+	    var html = $('#'+templateId).html();
+	    var data = response.data;
+	 var gethtml = mbObject.formatTemplate(data, html);
+	 gethtml = mbObject.dicValueFomatter(gethtml);
+	 $('#'+appendId).prepend(gethtml);
+	};

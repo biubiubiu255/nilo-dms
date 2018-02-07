@@ -328,7 +328,7 @@
 
                 var orderNo = $("#orderNo").val();
                 if(!orderNo){
-                    layer.msg("Pls Submit Delivery Order Info First.");
+                    layer.msg("Pls Submit DELIVERY Order Info First.");
                     return false;
                 }
 
@@ -358,7 +358,7 @@
 
                 var orderNo = $("#orderNo").val();
                 if(!orderNo){
-                    layer.msg("Pls Submit Delivery Order Info First.");
+                    layer.msg("Pls Submit DELIVERY Order Info First.");
                     return false;
                 }
 
@@ -420,7 +420,7 @@
         $(".add-goods-page").on('click', function () {
             var orderNo = $("#orderNo").val();
             if(!orderNo){
-                layer.msg("Pls Submit Delivery Order Info First.");
+                layer.msg("Pls Submit DELIVERY Order Info First.");
                 return false;
             }
             $.ajax({
