@@ -1,8 +1,10 @@
 package com.nilo.dms.web.controller.api;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +58,11 @@ public class ApiController extends BaseController {
                 break;
             }
             case WAYBILL_TRACE: {
+                break;
+            }
+            case ARRIVE_SCAN: {
+                List<String> list = JSONArray.parseArray(data,String.class);
+                orderService.waybillNoListArrive(list,"api",merchantId);
                 break;
             }
             case SIGN: {

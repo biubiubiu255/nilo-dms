@@ -19,7 +19,7 @@ public enum DeliveryOrderStatusEnum implements EnumMessage{
     DELIVERY(30, "Delivery"),
     SEND(31, "Send"),
     DETAIN(35, "Detain"),
-    ABNORMAL(40, "Reject"),
+    PROBLEM(40, "Problem"),
     RECEIVED(50, "Received"),
     CANCELED(60, "Canceled"),;
 

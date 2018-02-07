@@ -24,7 +24,7 @@ public interface OrderService {
 
     void handleOpt(OrderOptRequest optRequest);
 
-    void arrive(String merchantId,String scanNo,String arriveBy);
+    void arrive(String merchantId,String scanNo,String networkId,String arriveBy);
 
     void print(String merchantId, List<String> orderNos);
 

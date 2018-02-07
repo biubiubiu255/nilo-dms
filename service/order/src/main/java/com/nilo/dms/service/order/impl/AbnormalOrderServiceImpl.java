@@ -46,6 +46,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
     private MerchantService merchantService;
 
     @Override
+    @Transactional
     public void addAbnormalOrder(AbnormalOrder abnormalOrder) {
 
         String abnormalNo = SystemConfig.getNextSerialNo(abnormalOrder.getMerchantId(), SerialTypeEnum.ABNORMAL_DELIVERY_ORDER_NO.getCode());
@@ -53,6 +54,16 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         abnormalOrder.setStatus(AbnormalOrderStatusEnum.CREATE);
         AbnormalOrderDO abnormalOrderDO = convertTo(abnormalOrder);
         abnormalOrderDao.insert(abnormalOrderDO);
+
+        //操作运单状态为问题件
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setMerchantId(abnormalOrder.getMerchantId());
+        optRequest.setOptBy(abnormalOrder.getCreatedBy());
+        optRequest.setOptType(OptTypeEnum.PROBLEM);
+        List<String> orderNoList = new ArrayList<>();
+        orderNoList.add(abnormalOrder.getOrderNo());
+        optRequest.setOrderNo(orderNoList);
+        orderService.handleOpt(optRequest);
 
     }
 

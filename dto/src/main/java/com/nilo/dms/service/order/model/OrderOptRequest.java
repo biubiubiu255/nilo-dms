@@ -18,9 +18,19 @@ public class OrderOptRequest {
 
     private String optBy;
 
+    private String networkId;
+
     private String remark;
 
     private Map<String,String> params;
+
+    public String getNetworkId() {
+        return networkId;
+    }
+
+    public void setNetworkId(String networkId) {
+        this.networkId = networkId;
+    }
 
     public String getRemark() {
         return remark;

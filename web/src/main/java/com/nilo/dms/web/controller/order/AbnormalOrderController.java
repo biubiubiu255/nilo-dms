@@ -84,7 +84,6 @@ public class AbnormalOrderController extends BaseController {
             abnormalOrder.setMerchantId(merchantId);
             param.setAbnormalOrder(abnormalOrder);
             param.setOptBy(me.getUserId());
-
             riderOptService.abnormal(param);
 
         } catch (Exception e) {

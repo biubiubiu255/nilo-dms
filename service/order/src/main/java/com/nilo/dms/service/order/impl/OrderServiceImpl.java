@@ -3,11 +3,10 @@ package com.nilo.dms.service.order.impl;
 import static com.nilo.dms.common.Constant.IS_PACKAGE;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.model.UserInfo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,6 +104,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     private DeliveryOrderRequestDao deliveryOrderRequestDao;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private UserService userService;
     @Autowired
     private UserNetworkDao userNetworkDao;
     @Autowired
@@ -355,13 +356,12 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                         if (handleConfig.getUpdateStatus() != null) {
                             // 更新订单状态
                             updateDeliveryOrderStatus(optRequest, orderNo, handleConfig);
-                            // 通知商户订单状态变更
-                            notifyMerchantStatusUpdate(optRequest.getMerchantId(), orderNo, orderDO.getReferenceNo(),
+                            // 通知KiliBoss订单状态变更
+                            notifyStatusUpdate(optRequest, orderNo, orderDO.getReferenceNo(),
                                     DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
                         }
                         // 记录物流轨迹
-                        routeRecord(optRequest.getMerchantId(), orderNo, optRequest.getOptBy(),optRequest.getOptType().getCode(),
-                                optRequest.getParams());
+                        routeRecord(optRequest, orderNo);
                         // 短信消息
                         sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);
 
@@ -382,7 +382,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     @Override
     @Transactional
-    public void arrive(String merchantId, String scanNo, String arriveBy) {
+    public void arrive(String merchantId, String scanNo, String networkId, String arriveBy) {
         List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
 
         List<String> orderNos = new ArrayList<>();
@@ -394,6 +394,13 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         optRequest.setOptBy(arriveBy);
         optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
         optRequest.setOrderNo(orderNos);
+        Map<String, String> params = new HashMap<>();
+        DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, "" + networkId), DistributionNetworkDO.class);
+        UserInfo userInfo = userService.findUserInfoByUserId(merchantId, arriveBy);
+        params.put("0", networkDO.getName());
+        params.put("1", userInfo.getName());
+        optRequest.setParams(params);
+        optRequest.setNetworkId(networkId);
         handleOpt(optRequest);
 
         // 更新重量
@@ -408,7 +415,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             deliveryOrderDao.update(orderDO);
         }
 
-        this.updateNetworkTask(orderNos, arriveBy, merchantId);
+        this.addNetworkTask(orderNos, arriveBy, merchantId);
 
     }
 
@@ -438,7 +445,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         optRequest.setOrderNo(waybillNos);
         handleOpt(optRequest);
 
-        this.updateNetworkTask(waybillNos, arriveBy, merchantId);
+        this.addNetworkTask(waybillNos, arriveBy, merchantId);
 
     }
 
@@ -450,7 +457,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
      * @param arriveBy
      * @param merchantId
      */
-    private void updateNetworkTask(List<String> waybillNos, String arriveBy, String merchantId) {
+    private void addNetworkTask(List<String> waybillNos, String arriveBy, String merchantId) {
 
         List<UserNetworkDO> userNetworkDOList = userNetworkDao.queryByUserId(Long.parseLong(arriveBy)); // 网点到件的运单为自提，添加网点任务
         if (userNetworkDOList == null || userNetworkDOList.size() == 0) {
@@ -615,36 +622,39 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     }
 
     /**
-     * 通知商户运单状态变更
+     * 通知Kiliboss状态变更
      *
-     * @param merchantId
      * @param orderNo
      * @param referenceNo
      * @param status
      */
-    private void notifyMerchantStatusUpdate(String merchantId, String orderNo, String referenceNo,
-                                            DeliveryOrderStatusEnum status) {
-        String s = StatusConvert.convert(status);
-        if (s == null) return;
+    private void notifyStatusUpdate(OrderOptRequest optRequest, String orderNo, String referenceNo,
+                                    DeliveryOrderStatusEnum status) {
+        String convertResult = StatusConvert.convert(status);
+        if (convertResult == null) return;
 
         try {
             NotifyRequest notify = new NotifyRequest();
 
-            MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + merchantId),
+            MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + optRequest.getMerchantId()),
                     MerchantConfig.class);
             InterfaceConfig interfaceConfig = JSON.parseObject(
-                    RedisUtil.hget(Constant.INTERFACE_CONF + merchantId, "update_status"), InterfaceConfig.class);
+                    RedisUtil.hget(Constant.INTERFACE_CONF + optRequest.getMerchantId(), "update_status"), InterfaceConfig.class);
             if (interfaceConfig == null) {
                 return;
             }
             notify.setOrderNo(orderNo);
             notify.setReferenceNo(referenceNo);
-            notify.setMerchantId(merchantId);
+            notify.setMerchantId(optRequest.getMerchantId());
             notify.setMethod(interfaceConfig.getOp());
             notify.setUrl(interfaceConfig.getUrl());
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("orderNo", orderNo);
-            dataMap.put("status", status);
+            dataMap.put("status", convertResult);
+            UserInfo userInfo = userService.findUserInfoByUserId(optRequest.getMerchantId(), optRequest.getOptBy());
+            dataMap.put("opt_by", userInfo.getName());
+            dataMap.put("network", optRequest.getNetworkId());
+            dataMap.put("remark", optRequest.getRemark());
             String data = JSON.toJSONString(dataMap);
             notify.setData(data);
             notify.setSign(createSign(merchantConfig.getKey(), data));
@@ -663,7 +673,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             convertRelation.put(DeliveryOrderStatusEnum.SEND, "185");
             convertRelation.put(DeliveryOrderStatusEnum.PICK_UP, "210");
             convertRelation.put(DeliveryOrderStatusEnum.RECEIVED, "190");
-            convertRelation.put(DeliveryOrderStatusEnum.ABNORMAL, "197");
+            convertRelation.put(DeliveryOrderStatusEnum.PROBLEM, "197");
         }
 
         public static String convert(DeliveryOrderStatusEnum status) {
@@ -678,9 +688,9 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     /**
      * 记录轨迹
      */
-    private void routeRecord(String merchantId, String orderNo, String optType,String optBy, Map<String, String> params) {
+    private void routeRecord(OrderOptRequest optRequest, String orderNo) {
 
-        RouteConfig routeConfig = JSON.parseObject(RedisUtil.hget(Constant.ROUTE_CONF + merchantId, optType),
+        RouteConfig routeConfig = JSON.parseObject(RedisUtil.hget(Constant.ROUTE_CONF + optRequest.getMerchantId(), optRequest.getOptType().getCode()),
                 RouteConfig.class);
         if (routeConfig == null || StringUtil.isEmpty(routeConfig.getRouteDescC())
                 || StringUtil.isEmpty(routeConfig.getRouteDescE())) {
@@ -688,18 +698,26 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         }
         DeliveryRoute route = new DeliveryRoute();
         try {
-            route.setMerchantId(merchantId);
+
+            route.setMerchantId(optRequest.getMerchantId());
             route.setOrderNo(orderNo);
-            route.setOptBy(optBy);
+            route.setOptBy(optRequest.getOptBy());
             String routeDesc = routeConfig.getRouteDescC();
             String routeDescE = routeConfig.getRouteDescE();
-            route.setOpt(optType);
-            String[] args = new String[params.size()];
-            for (int i = 0; i < args.length; i++) {
-                args[i] = params.get("" + i);
+            route.setOpt(optRequest.getOptType().getCode());
+            if (optRequest.getParams() != null) {
+                String[] args = new String[optRequest.getParams().size()];
+                for (int i = 0; i < args.length; i++) {
+                    args[i] = optRequest.getParams().get("" + i);
+                }
+                route.setTraceCN(MessageFormat.format(routeDesc, args));
+                route.setTraceEN(MessageFormat.format(routeDescE, args));
+            } else {
+                route.setTraceCN(routeDesc);
+                route.setTraceEN(routeDescE);
             }
-            route.setTraceCN(MessageFormat.format(routeDesc, args));
-            route.setTraceEN(MessageFormat.format(routeDescE, args));
+            route.setOptTime(DateUtil.getSysTimeStamp());
+            route.setOptNetwork(optRequest.getNetworkId());
             routeProducer.sendMessage(route);
         } catch (Exception e) {
             logger.error("Send Message Failed. route:{}", route, e);

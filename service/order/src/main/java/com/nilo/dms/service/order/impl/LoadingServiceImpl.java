@@ -1,5 +1,7 @@
 package com.nilo.dms.service.order.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.*;
 import com.nilo.dms.common.exception.BizErrorCode;
@@ -10,6 +12,7 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.LoadingDao;
 import com.nilo.dms.dao.LoadingDetailsDao;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.LoadingDO;
 import com.nilo.dms.dao.dataobject.LoadingDetailsDO;
 import com.nilo.dms.service.UserService;
@@ -22,6 +25,7 @@ import com.nilo.dms.service.order.model.Loading;
 import com.nilo.dms.service.order.model.LoadingDetails;
 import com.nilo.dms.service.order.model.OrderOptRequest;
 import com.nilo.dms.service.order.model.Task;
+import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -281,20 +285,26 @@ public class LoadingServiceImpl implements LoadingService {
             OrderOptRequest optRequest = new OrderOptRequest();
             optRequest.setMerchantId(merchantId);
             optRequest.setOptBy(optBy);
+            Map<String, String> args = new HashMap<>();
             if(StringUtil.isNotEmpty(loadingDO.getNextStation())) {
-                optRequest.setOptType(OptTypeEnum.DELIVERY);
-            }else{
+                //参数
+                DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, "" + loadingDO.getNextStation()), DistributionNetworkDO.class);
+                args.put("0", networkDO.getName());
+                optRequest.setParams(args);
+
                 optRequest.setOptType(OptTypeEnum.SEND);
+            }else{
+                //参数
+                args.put("0", rider.getUserInfo().getName());
+                args.put("1", rider.getUserInfo().getPhone());
+                optRequest.setParams(args);
+                optRequest.setOptType(OptTypeEnum.DELIVERY);
             }
             List<String> orderNoList = new ArrayList<>();
             orderNoList.add(details.getOrderNo());
             optRequest.setOrderNo(orderNoList);
 
-            //参数
-            Map<String, String> args = new HashMap<>();
-            args.put("0", rider.getUserInfo().getName());
-            args.put("1", rider.getUserInfo().getPhone());
-            optRequest.setParams(args);
+
 
             orderService.handleOpt(optRequest);
 
