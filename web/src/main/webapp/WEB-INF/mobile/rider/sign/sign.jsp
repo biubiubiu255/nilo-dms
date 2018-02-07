@@ -118,7 +118,7 @@
 			var orderNo = $("#logisticsNo").val();
 			drawTab(orderNo);
 		};
-
+		android.startScan();
 		function doScan() {
 			android.startScan();
 		}

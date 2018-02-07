@@ -13,7 +13,7 @@
 <html>
 
 <%@ include file="../../header.jsp" %>
-
+<link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
      
@@ -39,8 +39,8 @@
             mobile.setFormFieldValue('logisticsNo',code);
         }
     	
-        $.scanner(scan_callback);                   //直接传一个空的回调函数
-        $.scanner(scan_callback('这里是订单号'), 1); //测试模式，直接传订单号 
+        $.scanner(scan_callback, 1);                   //直接传一个空的回调函数
+        //$.scanner(scan_callback('这里是订单号'), 1); //测试模式，直接传订单号 
 
     	
     });
@@ -61,7 +61,7 @@
             <div class="banner_content">
                 <input type="hidden" name="id" />
                 <ul class="one_banner">
-                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' name='logisticsNo' /><span>scan</span></li>
+                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' name='logisticsNo' /><span class="scanner">scan</span></li>
                     <li>
                         <%--<label>Reason</label>--%>
                         <select required="required" class='input_value' name='reason'>  
