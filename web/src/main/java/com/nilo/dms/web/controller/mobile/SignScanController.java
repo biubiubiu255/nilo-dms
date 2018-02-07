@@ -30,111 +30,91 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/mobile/rider/sign")
 public class SignScanController extends BaseController {
-    @Autowired
-    private RiderOptService riderOptService;
-    
-    @Autowired
-    private OrderService orderService;
+	@Autowired
+	private RiderOptService riderOptService;
 
-    //private static final String path = "F:\\ronny_1\\dms_master\\web\\target\\platform-dms\\upload";
-    private static final String path = "H:\\Environmental\\java\\temp\\upload";
+	@Autowired
+	private OrderService orderService;
 
-    private static final String[] suffixNameAllow = new String[]{".jpg", ".png"};
+	// private static final String path =
+	// "F:\\ronny_1\\dms_master\\web\\target\\platform-dms\\upload";
+	private static final String path = "D:\\temp\\upload";
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+	private static final String[] suffixNameAllow = new String[] { ".jpg", ".png" };
 
-    @Autowired
-    private ImageDao imageDao;
-    
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
-    //customers 客户
-    @RequestMapping(value = "/sign.html")
-    public String customers() {
-    	
+	@Autowired
+	private ImageDao imageDao;
 
-        return "mobile/rider/sign/sign";
-    }
-    
-    
-    @RequestMapping(value = "/save.html")
-    @ResponseBody
-    
-    public String save(MultipartFile file, String logisticsNo, String signer, String remark ) {
+	// customers 客户
+	@RequestMapping(value = "/sign.html")
+	public String customers() {
 
-    	
-    	SignForOrderParam param = new SignForOrderParam();
-    	
-    	
-    	param.setOrderNo(logisticsNo);
-    	param.setSignBy(signer);
-    	param.setRemark(remark);
-    	
-    	//System.out.println("【参数】：" + ReflectionToStringBuilder.toString(param));
-    	
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        //获取merchantId
-        
-        //写入图片
-        
-        String fileName = "";
-        try {
-            if (file != null) {
-                fileName = FileUtil.uploadFile(file, path);
+		return "mobile/rider/sign/sign";
+	}
 
-                ImageDO imageDO = new ImageDO();
-                
-                imageDO.setMerchantId(Long.parseLong(me.getMerchantId()));
-                imageDO.setOrderNo(param.getOrderNo());
-                imageDO.setCreatedBy(me.getUserId());
-                imageDO.setUpdatedBy(me.getUserId());
-                imageDO.setStatus(ImageStatusEnum.NORMAL.getCode());
-                imageDO.setImageName(fileName);
-                imageDO.setImageType(ImageTypeEnum.RECEIVE.getCode());
-                //imageDO.setImageType(ImageTypeEnum.getEnum().getCode());
-                imageDao.insert(imageDO);
+	@RequestMapping(value = "/save.html")
+	@ResponseBody
 
-            }
-        } catch (Exception e) {
-            return toJsonErrorMsg(e.getMessage());
-        }
-        
-        
-        //写入数据
-        
-        try {
-            param.setMerchantId(me.getMerchantId());
-            param.setOptBy(me.getUserId());
-            param.setOrderNo(logisticsNo);
-            param.setRemark(remark);
-            param.setSignBy(signer);
-            riderOptService.signForOrder(param);
-        } catch (Exception e) {
-            return toJsonErrorMsg(e.getMessage());
-        }
+	public String save(MultipartFile file, String logisticsNo, String signer, String remark) {
 
-        return toJsonTrueMsg();
-    }
-    
-    
-    @ResponseBody
-    @RequestMapping(value = "/getDetail.html", method = RequestMethod.POST)
-    public String getDetail(Model model, String orderNo) {
-    	
-    	if (orderNo==null) {
+		SignForOrderParam param = new SignForOrderParam();
+		param.setOrderNo(logisticsNo);
+		param.setSignBy(signer);
+		param.setRemark(remark);
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		// 写入图片
+		String fileName = "";
+		try {
+			if (file != null) {
+				fileName = FileUtil.uploadFile(file, path);
+				ImageDO imageDO = new ImageDO();
+				imageDO.setMerchantId(Long.parseLong(me.getMerchantId()));
+				imageDO.setOrderNo(param.getOrderNo());
+				imageDO.setCreatedBy(me.getUserId());
+				imageDO.setUpdatedBy(me.getUserId());
+				imageDO.setStatus(ImageStatusEnum.NORMAL.getCode());
+				imageDO.setImageName(fileName);
+				imageDO.setImageType(ImageTypeEnum.RECEIVE.getCode());
+				// imageDO.setImageType(ImageTypeEnum.getEnum().getCode());
+				imageDao.insert(imageDO);
+
+			}
+		} catch (Exception e) {
+			return toJsonErrorMsg(e.getMessage());
+		}
+		// 写入数据
+		try {
+			param.setMerchantId(me.getMerchantId());
+			param.setOptBy(me.getUserId());
+			param.setOrderNo(logisticsNo);
+			param.setRemark(remark);
+			param.setSignBy(signer);
+			riderOptService.signForOrder(param);
+		} catch (Exception e) {
+			return toJsonErrorMsg(e.getMessage());
+		}
+		return toJsonTrueMsg();
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/getDetail.html", method = RequestMethod.POST)
+	public String getDetail(Model model, String orderNo) {
+
+		if (orderNo == null) {
 			return toJsonErrorMsg("错误信息");
 		}
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        String merchantId = me.getMerchantId();
-    	DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
-        
-    	model.addAttribute("deliveryOrder", deliveryOrder);
-    	
-        return toJsonTrueData(deliveryOrder);
-        
-    }
-    
-    
-    
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		String merchantId = me.getMerchantId();
+		DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+
+		//model.addAttribute("deliveryOrder", deliveryOrder);
+		if(deliveryOrder==null) {
+			return toJsonErrorMsg("orderNo is error");
+		}
+		return toJsonTrueData(deliveryOrder);
+
+	}
+
 }
-
-

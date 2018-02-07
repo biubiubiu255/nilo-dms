@@ -36,8 +36,8 @@ public class DeliverScanController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     private LoadingService loadingService;
-    @Autowired
-    private OrderService orderService;
+//    @Autowired
+//    private OrderService orderService;
 
     @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
@@ -50,9 +50,9 @@ public class DeliverScanController extends BaseController {
         return "mobile/network/deliver_scan/deliverScan";
     }
 
-    @RequestMapping(value = "/test.html")
+    @RequestMapping(value = "/submit.html")
     @ResponseBody
-    public String test(String scaned_codes[],String rider,String logisticsNo ) {
+    public String submit(String scaned_codes[],String rider,String logisticsNo ) {
         Loading loading = new Loading();
         loading.setRider(rider);
 
@@ -82,7 +82,6 @@ public class DeliverScanController extends BaseController {
             try {
                 loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i], me.getUserId());
                 //order = orderService.queryByOrderNo(merchantId, scaned_codes);
-                loadingService.ship(merchantId, loadingNo, me.getUserId());
 
             }catch (Exception e) {
                 log.error("loadingScan failed. orderNo:{}", scaned_codes[i], e);
@@ -90,6 +89,7 @@ public class DeliverScanController extends BaseController {
             }
 
         }
+        loadingService.ship(merchantId, loadingNo, me.getUserId());
         return toJsonTrueData(loadingNo);
 
     }

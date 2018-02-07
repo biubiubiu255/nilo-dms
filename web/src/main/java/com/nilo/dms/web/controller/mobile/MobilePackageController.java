@@ -23,6 +23,7 @@ import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.order.PackageController.NextStation;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by admin on 2017/11/22.
@@ -43,9 +44,9 @@ public class MobilePackageController  extends BaseController {
         List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
         List<NextStation> list = new ArrayList<>();
 
-        for(DistributionNetworkDO n:networkDOList){
+        for(DistributionNetworkDO n:networkDOList) {
             NextStation s = new NextStation();
-            s.setCode(""+n.getId());
+            s.setCode("" + n.getId());
             s.setName(n.getName());
             list.add(s);
         }
@@ -55,34 +56,19 @@ public class MobilePackageController  extends BaseController {
         return "mobile/network/package/packing";
     }
 
-    @RequestMapping(value = "/scan.html")
-    public String login(UsernamePasswordToken token, HttpServletRequest request) {
-        Subject subject = SecurityUtils.getSubject();
-        try {
-            if (!subject.isAuthenticated()) {
-                subject.login(token);
-                // 登陆成功,保存用户信息到Session
-                Principal principal = (Principal) subject.getPrincipal();
-                request.getSession().setAttribute("userId", principal.getUserId());
-                request.getSession().setAttribute("userName", principal.getUserName());
-                request.getSession().setAttribute("name", principal.getUserName());
-                request.getSession().setAttribute("merchantId", principal.getMerchantId());
+    @RequestMapping(value = "/submit.html")
+    @ResponseBody
+    public String submit(String scaned_codes[],String nextStation,String weight,String length,String width,String high ) {
 
-            }
-        } catch (DMSException e1) {
-            log.error("Login Failed.account={}", token.getUsername());
-            return toJsonErrorMsg(e1.getMessage());
+        for (int i=0;i<scaned_codes.length;i++){
+            System.out.println(scaned_codes[i]);
         }
-        catch (DisabledAccountException e2) {
-            log.error("Login Failed.account={}", token.getUsername());
-            return toJsonErrorMsg(BizErrorCode.DISABLED_ACCOUNT.getDescription());
-        }
-        catch (Exception e) {
-            log.error("Login Failed.account={}", token.getUsername());
-            return toJsonErrorMsg(BizErrorCode.LOGIN_FAILED.getDescription());
-        }
-        //return toJsonTrueMsg();
-        return "redirect:/mobile/home.html";
+        System.out.println(nextStation);
+        System.out.println(weight);
+        System.out.println(length);
+        System.out.println(width);
+        System.out.println(high);
+
+        return "true";
     }
-
 }
