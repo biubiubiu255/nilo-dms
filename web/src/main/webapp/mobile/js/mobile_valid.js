@@ -52,6 +52,9 @@
 			var action = opts.action;
 			$("#"+formId+ " .submit").unbind("click").bind("click",function(event) {									
                 if(requestIng)return;
+
+                if(!opts.beforeSubmit()) return;
+
                 var form_data = form.triggerHandler("submitForm");
 				//表单提交前的的审核验证
 				var auditAttr = $("#"+formId+ " .submit").attr('is_audit');

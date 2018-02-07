@@ -30,17 +30,6 @@ import java.util.regex.Pattern;
 @Controller
 @RequestMapping("/mobile/deliver")
 public class DeliverScanController extends BaseController {
-    private final Logger log = LoggerFactory.getLogger(getClass());
-    @Autowired
-    private LoadingService loadingService;
-    @Autowired
-    private ThirdExpressDao thirdExpressDao;
-    @Autowired
-    private DistributionNetworkDao distributionNetworkDao;
-    @Autowired
-    private ThirdDriverDao thirdDriverDao;
-    @Autowired
-    private StaffDao staffDao;
 
     @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
@@ -50,114 +39,18 @@ public class DeliverScanController extends BaseController {
         String merchantId = me.getMerchantId();
         model.addAttribute("riderList", getRiderList(merchantId));
 
-        //第三方快递公司及自提点
-        List<ThirdExpressDO> expressDOList = thirdExpressDao.findByMerchantId(Long.parseLong(merchantId));
-        List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
-
-        List<NextStation> list = new ArrayList<>();
-        for(ThirdExpressDO e : expressDOList){
-            NextStation s = new NextStation();
-            s.setCode(e.getExpressCode());
-            s.setName(e.getExpressName());
-            s.setType("T");
-            list.add(s);
-        }
-        for(DistributionNetworkDO n:networkDOList){
-            NextStation s = new NextStation();
-            s.setCode(""+n.getId());
-            s.setName(n.getName());
-            s.setType("N");
-            list.add(s);
-        }
-        model.addAttribute("station",list);
-        model.addAttribute("thirdCarrier",expressDOList);
-
         return "mobile/network/deliver_scan/deliverScan";
     }
 
     @RequestMapping(value = "/test.html")
     @ResponseBody
-    public String test(String items,String station,String deliverDriver,String plateNo) {
-        System.out.println(station);
-        System.out.println(deliverDriver);
-        System.out.println(plateNo);
-        System.out.println(items);
-//        for(int i = 0; i < items.length; i ++) {
-//            System.out.println(items[i]);
+    public String test(String scaned_codes,String rider,String logisticsNo ) {
+        System.out.println(scaned_codes);
+//        for (int i=0; i<scaned_codes.length;i++){
+//            System.out.println(scaned_codes[i]);
 //        }
+        System.out.println(rider);
         return "true";
     }
-    @RequestMapping(value = "/getDriver.html")
-    @ResponseBody
-    public String getDriver(String code) {
-        List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(code);
-        List<Driver> list = new ArrayList<>();
-        for(ThirdDriverDO d : thirdDriver){
-            Driver driver = new Driver();
-            driver.setCode(d.getDriverId());
-            driver.setName(d.getDriverName());
-            list.add(driver);
-        }
-        if(isInteger(code)) {
-            List<StaffDO> staffList = staffDao.queryNetworkStaff(Long.parseLong(code));
-            for(StaffDO s : staffList){
-                Driver driver = new Driver();
-                driver.setCode(""+s.getUserId());
-                driver.setName(s.getStaffId());
-                list.add(driver);
-            }
-        }
-        return toJsonTrueData(list);
-    }
-    private  boolean isInteger(String str) {
-        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-        return pattern.matcher(str).matches();
-    }
-    public static class Driver{
-        private String code;
-        private String name;
 
-        public String getCode() {
-            return code;
-        }
-        public void setCode(String code) {
-            this.code = code;
-        }
-        public String getName() {
-            return name;
-        }
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-
-    public static class NextStation{
-        private String code;
-        private String name;
-        private String type;
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-    }
 }

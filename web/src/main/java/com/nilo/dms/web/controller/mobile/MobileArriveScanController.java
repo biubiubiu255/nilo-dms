@@ -27,14 +27,17 @@ public class MobileArriveScanController extends BaseController {
 	
 	@RequestMapping(value = "/submit.html")
 	@ResponseBody
-	public String submit(String[] arrWaybillNo) {
+	public String submit(String[] logisticsNos) {
+//		for (int i=0;i<logisticsNos.length;i++){
+//			System.out.println(logisticsNos[i]);
+//		}
 		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 		// 获取merchantId
 		String merchantId = me.getMerchantId();
 		String arriveBy = me.getUserId();
 
-		if (null != arrWaybillNo && arrWaybillNo.length > 0) {
-			orderService.waybillNoListArrive(Arrays.asList(arrWaybillNo), arriveBy, merchantId);
+		if (null != logisticsNos && logisticsNos.length > 0) {
+			orderService.waybillNoListArrive(Arrays.asList(logisticsNos), arriveBy, merchantId);
 		}
 		return toJsonTrueMsg();
 	}

@@ -88,10 +88,11 @@ public class SendScanController extends BaseController {
     }
     @RequestMapping(value = "/test.html")
     @ResponseBody
-    public String test(String[] arr) {
-        for(int i = 0; i < arr.length; i ++) {
-            System.out.println(arr[i]);
-        }
+    public String test(String id,String scaned_codes,String nextStation,String sendDriver,String plateNo,String logisticsNo ) {
+        System.out.println(scaned_codes);
+        System.out.println(nextStation);
+        System.out.println(sendDriver);
+        System.out.println(plateNo);
         return "true";
     }
     private  boolean isInteger(String str) {
