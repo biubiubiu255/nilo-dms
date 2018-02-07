@@ -20,4 +20,6 @@ public interface TaskDao extends BaseDao<Long, TaskDO> {
     TaskDO findByTaskId(Long taskId);
 
     TaskDO queryByTypeAndOrderNo(@Param(value = "merchantId") Long merchantId, @Param(value = "taskType") String taskType, @Param(value = "orderNo") String orderNo);
+    
+    TaskDO queryUnFinishTaskByOrderNo(@Param(value = "merchantId") Long merchantId, @Param(value = "orderNo") String orderNo);
 }
