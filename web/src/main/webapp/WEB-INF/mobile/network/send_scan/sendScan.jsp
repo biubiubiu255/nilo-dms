@@ -33,13 +33,14 @@
             ,model : 'customers'
         });
 
-        var station = mobile.getFormField('nextStation');
+        // var station = mobile.getFormField('nextStation');
+        var carrier = mobile.getFormField('carrier');
         var deliverDriver = mobile.getFormField('sendDriver');
 
-        if(station.length > 0){
-            station.bind('change',function(){
-                var station_value = $(this).val();
-                ajaxRequest('/mobile/send/getDriver.html',{code: station_value},false,function(data){
+        if(carrier.length > 0){
+            carrier.bind('change',function(){
+                var carrier_value = $(this).val();
+                ajaxRequest('/mobile/send/getDriver.html',{code: carrier_value},false,function(data){
                     if(deliverDriver.length > 0)
                         deliverDriver.empty();
                     deliverDriver.prepend("<option value=''>Please select a driver</option>");
@@ -55,7 +56,7 @@
         mobile.initSubmitForm({
             formId:'delivery-form'
             ,mbObject:mobile
-            ,postUrl:'/mobile/send/test.html'
+            ,postUrl:'/mobile/send/submit.html'
             ,beforeSubmit:function () {
                 var scaned_array = [];
                 var checkboxs = $('#delivery-form').find('input:checked');
@@ -68,8 +69,12 @@
                 return true;
             }
             ,callback:function (data) {
-                showError('Successful submission');
-                del();
+                if (data.result) {
+                    showInfo('Success '+data.msg);
+                    del();
+                } else {
+                    showError(data.msg)
+                }
             }
         });
 
@@ -117,7 +122,7 @@
         <%--<div class="banner_content">--%>
         <form id="delivery-form">
             <div class="banner_content">
-                <input type="hidden" name="id" />
+                <input type="hidden" name="scaned_codes" />
                 <ul class="one_banner">
                     <li>
                         <%--<label>station</label>--%>
@@ -125,6 +130,14 @@
                             <option value="">Please select the site</option>
                             <c:forEach items="${nextStation}" var="station">
                                 <option value="${station.code}" type="${station.type}">${station.name}</option>
+                            </c:forEach>
+                        </select>
+                    </li>
+                    <li>
+                        <select required="required" class='input_value' name="carrier">
+                            <option value="">choose or search....</option>
+                            <c:forEach items="${thirdCarrier}" var="carrier">
+                                <option value="${carrier.expressCode}" >${carrier.expressName}</option>
                             </c:forEach>
                         </select>
                     </li>

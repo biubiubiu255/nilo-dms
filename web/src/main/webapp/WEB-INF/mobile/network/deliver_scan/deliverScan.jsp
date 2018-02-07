@@ -14,7 +14,6 @@
 
 
 <link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
-<link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
 <link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
 <script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="/mobile/js/functions.js"></script>
@@ -23,10 +22,8 @@
 <script type="text/javascript" src="/mobile/js/jquery.scanner.js"></script>
 <script type="text/javascript" src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
 <script type="text/javascript">
-
     $(document).ready(function(){
         loadLanguage('en');
-
         var mobile = new MobileData({
             autoLoad:false
             ,formId:'delivery-form'
@@ -36,7 +33,7 @@
         mobile.initSubmitForm({
            formId:'delivery-form'
             ,mbObject:mobile
-           ,postUrl:'/mobile/deliver/test.html'
+           ,postUrl:'/mobile/deliver/submit.html'
             ,beforeSubmit:function () {
                var scaned_array = [];
                 var checkboxs = $('#delivery-form').find('input:checked');
@@ -57,7 +54,6 @@
                 }
             }
         });
-
 
         var scan_callback = function (code) {
             mobile.setFormFieldValue('logisticsNo',code);
@@ -116,7 +112,7 @@
                     <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span class="scanner" id="scan">scan</span></li>
 
                 </ul>
-                <div class="clear"></div>
+                <%--<div class="clear"></div>--%>
                 <ul id = 'append_order_items_id'>
 
                 </ul>
