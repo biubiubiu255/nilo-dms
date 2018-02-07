@@ -49,14 +49,17 @@
                return true;
             }
             ,callback:function (data) {
-                showError('Successful submission');
-                del();
+                if (data.result) {
+                    showInfo('Success '+data.msg);
+                    del();
+                } else {
+                    showError(data.msg)
+                }
             }
         });
 
 
         var scan_callback = function (code) {
-            alert("6546486465415135")
             mobile.setFormFieldValue('logisticsNo',code);
             if(!isEmpty(code_array[code])){
                 warningTipMsg('This order already scanned');
