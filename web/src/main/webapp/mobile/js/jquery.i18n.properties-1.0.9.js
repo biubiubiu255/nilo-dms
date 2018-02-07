@@ -476,7 +476,7 @@ String.prototype.split = function (separator, limit) {
 
 function loadLanguage(language_text,path_param) {
 	var language = 'en';
-	var filepath = '../language/';
+	var filepath = '/mobile/language/';
 	if(!isEmpty(path_param)){
         filepath = path_param;
     }

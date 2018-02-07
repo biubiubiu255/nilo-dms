@@ -23,6 +23,8 @@
 <script type="text/javascript" src="/mobile/js/functions.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile.js"></script>
+<script type="text/javascript"
+	src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
 
 
 </head>
@@ -31,8 +33,7 @@
 	<div class="wap_content">
 
 		<div class="wap_top">
-			<a href="/mobile/home.html" title="Back"
-				class="wap_top_back"></a>
+			<a href="/mobile/home.html" title="Back" class="wap_top_back"></a>
 			<h2>Sign Scan</h2>
 		</div>
 
@@ -40,54 +41,41 @@
 			<form id="myForm" class="layui-form" action="">
 				<div class="banner_content">
 					<ul class="one_banner">
-						<li>
-							<%--<label>Logistics No</label>--%> <input type="tel"
-							placeholder="Logistics No" id="logisticsNo" name="logisticsNo"
-							class="input_value" /> <span id="scan">scan</span>
-						</li>
+						<li><input type="text" placeholder="Logistics No"
+							id="logisticsNo" name="logisticsNo" class="input_value" /><span
+							id="scan">scan</span></li>
 						<li><input type='text' placeholder="Signer" id="signer"
-							class='input_value' name='signer' /><span>Aquire</span></li>
+							class='input_value' name='signer' required="required" />
+						<!-- <span>Aquire</span> --></li>
 						<li><input type='text' placeholder="Remark" id="remark"
 							class='input_value' name='remark' /></li>
-						<li><label>Take a picture</label>
+						<li><label>Sign Picture</label>
 							<div class="xq">
 								<img src="/mobile/images/2300.jpg" />
 							</div></li>
 					</ul>
 					<center>
-
-
-
 						<div>
-							<img src=""
-								style="width: 100px; height: 100px;" id="lypic" /> 
+							<img src="" style="width: 100px; height: 100px;" id="lypic" />
 						</div>
 					</center>
-
-
-
-
-
 					<div class="bottom_a_button">
-						<!-- <a onclick="doFind()" id="commit">submit</a> -->
 						<a id="commit">submit</a>
 					</div>
 				</div>
 			</form>
 		</div>
-
 	</div>
-
 	<script src="/layui/layui.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		layui.use('upload', function() {
 			var $ = layui.jquery, upload = layui.upload;
-			
+
 			upload.render({
 				elem : '.xq',
-				url : '/mobile/sign/save.html',
-				auto : false , //选择文件后不自动上传
-                data:{} ,
+				url : '/mobile/rider/sign/save.html',
+				auto : false, //选择文件后不自动上传
+				data : {},
 				bindAction : '#commit',
 				choose : function(obj) {
 					obj.preview(function(index, file, result) {
@@ -96,15 +84,24 @@
 					});
 				},
 				before : function(res) {
-					this.data = {logisticsNo: $("#logisticsNo").val(), signer: $("#signer").val(), remark: $("#remark").val()};
+					this.data = {
+						logisticsNo : $("#logisticsNo").val(),
+						signer : $("#signer").val(),
+						remark : $("#remark").val()
+					};
 					//layui.upload.config.data = {logisticsNo:1,signer:2};
-				}, 
-
+				},
 				done : function(res) {
-					console.log(res)
+					if (res.result) {
+						showError('submit success');
+						$("#remark").reset();
+					} else {
+						showError(res.msg);
+						$("#remark").reset();
+					}
 				}
 			});
-			
+
 			var inputFile = $("input[type='file']");
 
 			inputFile.addClass("layui-hide");
@@ -114,38 +111,36 @@
 		});
 
 		document.getElementById('scan').onclick = function() {
-			//android.startScan()
-			var orderNo = $("#logisticsNo").val();
-			drawTab(orderNo);
+			doScan()
 		};
-		android.startScan();
+
 		function doScan() {
-			android.startScan();
+			if (typeof (android) != 'undefined') {
+				android.startScan();
+			}
 		}
+		doScan();
 		function afterScan(scanResult) {
-			alert(scanResult);
 			document.getElementById("logisticsNo").value = scanResult;
-			
+			drawTab(scanResult);
 		}
 
-		function drawTab(orderNo){
-			
-            // var result;
-			// url  param  isShowMsg callback isShowLoadMsgBox
-            ajaxRequest("/mobile/rider/sign/getDetail.html", {orderNo : orderNo}, true, function(response){
-            	if(response){
-            		$("#signer").val(response.data.receiverInfo.receiverName);
-            		$("#remark").val(response.data.remark);
-                	//alert(response.data.receiverInfo.receiverName);
-                	//alert(response.data.remark);
-            	}
+		function drawTab(orderNo) {
+			ajaxRequest("/mobile/rider/sign/getDetail.html", {
+				orderNo : orderNo
+			}, true, function(response) {
+				if (response) {
+					if (response.result) {
+						$("#signer").val(
+								response.data.receiverInfo.receiverName);
+						$("#remark").val(response.data.remark);
+					}
+				}
 
-            }, true);
+			}, true);
 
 		}
-		
-        
-		
+
 		function doFind() {
 			//load
 		}
