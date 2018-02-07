@@ -7,7 +7,8 @@ table { border-collapse: collapse; border-spacing: 0;}
 a{ text-decoration:none;}
 .clear{ clear:both;}
 .form_bottom{ clear:both;margin-bottom: 70px;} 
-.search_bottom_margin{ clear:both;margin-bottom: 40px;} 
+.search_bottom_margin{ clear:both;margin-bottom: 40px;}
+.arrive_scan{position:absolute; left:3px; top:0px;text-align: center; padding:0px; width:90%; height:100%; line-height:28px;font-size: 1.1em; float:left;border:1px solid #d8d8d8;border-radius:10px; background: lightskyblue;}
 
 .wap_content{ width:100%; margin:0 auto;margin-bottom:15px; position:relative;}
 /*登录*/

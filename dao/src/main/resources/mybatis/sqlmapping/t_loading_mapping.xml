@@ -29,16 +29,7 @@
                 jdbcType="INTEGER"/>
         <result property="status" column="status" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
-        <result property="userdefine01" column="userdefine_01" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="userdefine02" column="userdefine_02" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="userdefine03" column="userdefine_03" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="userdefine04" column="userdefine_04" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="userdefine05" column="userdefine_05" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
+
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
@@ -48,7 +39,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id ,merchant_id,loading_no,carrier,rider,truck_no,next_station,truck_type,loading_from_time,loading_to_time,loading_by,status,userdefine_01,userdefine_02,userdefine_03,userdefine_04,userdefine_05,created_time , updated_time ,version
+        id ,merchant_id,loading_no,carrier,rider,truck_no,next_station,truck_type,loading_from_time,loading_to_time,loading_by,status,created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -56,9 +47,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_handle_loading
-        ( merchant_id,loading_no,carrier,rider,truck_no,next_station,truck_type,loading_from_time,loading_to_time,loading_by,status,userdefine_01,userdefine_02,userdefine_03,userdefine_04,userdefine_05,created_time , updated_time ,version)
+        ( merchant_id,loading_no,carrier,rider,truck_no,next_station,truck_type,loading_from_time,loading_to_time,loading_by,status,created_time , updated_time ,version)
         VALUES
-        (#{merchantId},#{loadingNo}, #{carrier},#{rider},#{truckNo},#{nextStation},#{truckType},#{loadingFromTime},#{loadingToTime},#{loadingBy},#{status},#{userdefine01},#{userdefine02},#{userdefine03},#{userdefine04},#{userdefine05}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{merchantId},#{loadingNo}, #{carrier},#{rider},#{truckNo},#{nextStation},#{truckType},#{loadingFromTime},#{loadingToTime},#{loadingBy},#{status}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
     <!-- 动态更新语句 -->
     <update id="update" parameterType="com.nilo.dms.dao.dataobject.LoadingDO" statementType="PREPARED">
