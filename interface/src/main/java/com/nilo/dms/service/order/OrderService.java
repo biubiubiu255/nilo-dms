@@ -33,5 +33,7 @@ public interface OrderService {
     List<DeliveryOrder> queryByPackageNo(String merchantNo,String packageNo);
     
     void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId);
+    
+    void updataMultiChildOrder(String merchantId, String networkId, String arriveBy, String scanNo, List<String> ChildorderNos);
 
 }
