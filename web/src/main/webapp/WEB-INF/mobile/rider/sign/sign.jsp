@@ -23,6 +23,8 @@
 <script type="text/javascript" src="/mobile/js/functions.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile.js"></script>
+<script type="text/javascript" src="/mobile/js/jquery.scanner.js"></script>
+<script type="text/javascript" src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
 
 
 </head>
@@ -43,7 +45,7 @@
 						<li>
 							<%--<label>Logistics No</label>--%> <input type="tel"
 							placeholder="Logistics No" id="logisticsNo" name="logisticsNo"
-							class="input_value" /> <span id="scan">scan</span>
+							class="input_value" /> <span id="scan" class="scanner">scan</span>
 						</li>
 						<li><input type='text' placeholder="Signer" id="signer"
 							class='input_value' name='signer' /><span>Aquire</span></li>

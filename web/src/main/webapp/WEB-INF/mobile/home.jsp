@@ -38,10 +38,10 @@
 					<!-- <a href="/mobile/tiaozhuangController/dshkqs.html" title="">
          <li><img src="/mobile/images/icon_2.png" /><br/>COD Sign</li>
        </a> -->
-					<a href="/mobile/rider/self/self.html" title="">
+					<!-- <a href="/mobile/rider/self/self.html" title="">
 						<li><img src="/mobile/images/icon_6.png" /><br />Self-Collect
 							Sign</li>
-					</a>
+					</a> -->
 					<a href="/mobile/rider/problem/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br />Problem</li>
 					</a>
