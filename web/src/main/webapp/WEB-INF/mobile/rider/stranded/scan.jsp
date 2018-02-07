@@ -12,21 +12,23 @@
 <!DOCTYPE HTML>
 
 <%@ include file="../../header.jsp" %>
+<link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css" />
+
 
 <body>
 
 <div class="wap_content">
 
     <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-        <h2>Problem</h2>
+        <h2>Stranded</h2>
     </div>
 
-    <div class="banner_content">
+    <div class="banner_content formula_modify">
         <form id="stranded-form">
             <div class="banner_content">
                 <input type="hidden" name="id" />
-                <ul class="one_banner">
-                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' name='orderNo' /><span>scan</span></li>
+               <ul class="one_banner">
+                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' name='orderNo' /><span class="scanner">scan</span></li>
                     <li>
                         <%--<label>Reason</label>--%>
                         <select required="required" class='input_value' name='reason'>  
@@ -36,6 +38,7 @@
                         </select>
                     </li>
                     <li><input type='text' placeholder="Memo" maxlength='100' class='input_value' name='remark' /></li>
+                    <a ></a>
                 </ul>
                 <div class="clear"></div>
             </div>
@@ -70,14 +73,13 @@
     	//scan
         var scan_callback = function (code) {
     		// code 订单号
-            mobile.setFormFieldValue('logisticsNo',code);
+            mobile.setFormFieldValue('orderNo',code);
         }
     	
     	
-        $.scanner(scan_callback);                   //直接传一个空的回调函数
-        $.scanner(scan_callback('这里是订单号'), 1); //测试模式，直接传订单号 
-
-    	
+        $.scanner(scan_callback);                     //直接传一个空的回调函数
+        //$.scanner(scan_callback('这里是订单号'), 1); //测试模式，直接传订单号 
+        
     });
 </script>
 
