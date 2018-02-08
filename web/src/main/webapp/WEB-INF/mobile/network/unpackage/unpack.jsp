@@ -27,8 +27,7 @@
 <script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile.js"></script>
 <script type="text/javascript" src="/mobile/js/jquery.scanner.js"></script>
-<script type="text/javascript"
-	src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
+<script type="text/javascript" src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
 
 <script type="text/javascript">
 
@@ -47,13 +46,19 @@
         mobile.initSubmitForm({
            formId:'unpackage-form'
             ,mbObject:mobile
-           ,postUrl:'/mobile/deliver/test.html'
+           ,postUrl:'/mobile/network/unpackage/save.html'
             ,callback:function (data) {
-                showError('dddd');
+
+                if (data.result==true) {
+                	showInfo();
+				} else {
+	                showError('commit error');
+				}
             }
         });
 
-
+        android.startScan();
+        
         var scan_callback = function (code) {
         	
         	if(isEmpty(code)){
@@ -65,19 +70,23 @@
 				mobile.setFormFieldValue("logisticsNo", code);
 				getOrderList(code);
 				isScanBigPack=true;
+				updatePackage();
+				//$(".scanner").first().hide();
 				return;
 			}
             
             updatePackage(code) ? showError("Scan success") : showError("unfound");
         }
         
-        //$.scanner(scan_callback);
+        $.scanner(scan_callback);
         
         $("#test").click(function() {
-			//test();
 			scan_callback('Kili201802000015');
 		});
-
+        $("#test2").click(function() {
+			scan_callback('168081000340000768');
+		});
+        
     });
     
     /*
@@ -91,20 +100,32 @@
     	
     	var isFound = false;
     	
+    	var text = "";
+    	
     	var iconSussess = '<i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe618;</i>';
     	
 		$("span[iscomplete='false']").each(function(index){
 			
 			var elem = $(this);
-			
+
 	        if(code==elem.attr("value")){
+	        	
+	        	alert(code + "  ----  " + elem.attr("value"))
 	        	
 	        	isFound = true;
 	        	
 	        	elem.attr("iscomplete", "true");
 	        	
-	        	elem.parent().parent().parent().find(".sign-icon").parent().html(iconSussess);	
-	  
+	        	elem.parent().parent().parent().find(".sign-icon").parent().html(iconSussess);
+	        	
+	        	if(text!=""){
+	        		text += ',' + code;
+	        	}else {
+					text  = code; 
+				}
+	        	
+	        	$("input[name='scanNos']").first().val(text);
+	        	
 	        }
 	     
 		});
@@ -131,7 +152,7 @@
 
 			for (var int = 0; int < result.data.length; int++) {
 				tempRes = result.data[int];
-		        point += '<li><a href="javascript:void(0);" style="display:inline-block;width: 95%"><h3>Arrived：' + (int+1) + ' </h3><div class="banner_center"><span iscomplete="false" value="' + tempRes.orderNo + '">' + tempRes.orderNo + '</span><p></p><span>OrderType:' + tempRes.orderType + '</span><span style=" float:right;">Weight: ' + tempRes.weight 
+		        point += '<li><a href="javascript:void(0);" style="display:inline-block;width: 95%"><h3 iscomplete="false" value="' + tempRes.orderNo + '">OrderNo：' + tempRes.orderNo + ' </h3><div class="banner_center"><span>dese:' + tempRes.nextNetworkDesc + '</span><p></p><span>OrderType:' + tempRes.orderType + '</span><span style=" float:right;">Weight: ' + tempRes.weight 
                 point += '</span><p></p><span>ReferenceNo:0</span></div></a><div class="banner_bottom"><p align="right"><i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop sign-icon">&#x1002;</i></p></div></li>';
 			}
 			
@@ -140,9 +161,6 @@
 		});
 	}
     
-    function test() {
-    	alert("sssghg");
-	}
     
 </script>
 
@@ -154,17 +172,16 @@
 
 		<div class="wap_top">
 			<a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-			<h2 data-locale="delivery_scan_title">Deliver Scan</h2>
+			<h2>unpackage</h2>
 		</div>
 		<div class="banner_content">
 			<form id="unpackage-form">
 				<div class="banner_content">
-					<input type="hidden" name="id" />
+					<input type="hidden" name="scanNos" value=""/>
 					<ul class="one_banner">
-
-						<li><input type='text' placeholder="Logistics No"
-							required="required" maxlength='100' class='input_value'
-							name='logisticsNo' /><span class="scanner">scan</span></li>
+						<li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value'
+							name='logisticsNo' /><!-- <span class="scanner">scan</span> -->
+						</li>
 
 
 					</ul>
@@ -176,10 +193,10 @@
 				</div>
 
 				<div class="bottom_a_button">
-					<a class="scan" style="margin-bottom: 100px" id="test">test
-						scan</a> <a onclick="javascript:void(0);" class="scan"
-						style="margin-bottom: 50px" class="input_value">scan</a> <a
-						onclick="javascript:void(0);" class="submit">submit</a>
+<!-- 				<a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
+					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>  -->
+					<a onclick="javascript:void(0);" class="scanner" style="margin-bottom: 50px" class="input_value">scan</a> 
+					<a onclick="javascript:void(0);" class="submit">submit</a>
 				</div>
 			</form>
 
