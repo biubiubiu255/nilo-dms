@@ -124,6 +124,8 @@ public class ArriveScanController extends BaseController {
         DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId,orderNo);
         if(deliveryOrder == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST,orderNo);
 
+        WaybillScanDetailsDO query = waybillScanDetailsDao.queryBy(orderNo, scanNo);
+        if (query != null) throw new DMSException(BizErrorCode.ALREADY_SCAN, orderNo);
         WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
         scanDetailsDO.setScanNo(scanNo);
         scanDetailsDO.setOrderNo(orderNo);
@@ -163,7 +165,6 @@ public class ArriveScanController extends BaseController {
         String merchantId = me.getMerchantId();
         try {
             orderService.arrive(merchantId, scanNo,""+me.getNetworks().get(0), me.getUserId());
-            
         } catch (Exception e) {
             log.error("arrive failed. scanNo:{}", scanNo, e);
             return toJsonErrorMsg(e.getMessage());

@@ -40,7 +40,11 @@
         <include refid="Base_Column_List"/>
         FROM t_waybill_scan_details where scan_no = #{scanNo}
     </select>
-
+    <select id="queryBy" resultMap="waybillScanDetails" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill_scan_details where order_no=#{orderNo} and   scan_no = #{scanNo}
+    </select>
     <update id="update" parameterType="com.nilo.dms.dao.dataobject.WaybillScanDetailsDO" statementType="PREPARED">
         update t_waybill_scan_details
         <trim prefix="set" suffixOverrides="," suffix="where scan_no=#{scanNo} and order_no = #{orderNo}">

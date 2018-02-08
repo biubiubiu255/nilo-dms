@@ -50,18 +50,14 @@
             ,callback:function (data) {
 
                 if (data.result==true) {
-                	showInfo();
+                	showInfo("commit sussess");
 				} else {
 	                showError('commit error');
 				}
             }
         });
 
-        android.startScan();
-        
-        var scan = function scan(){
-        	android.startScan();
-        }
+        //android.startScan();
         
         var scan_callback = function (code) {
         	
@@ -83,6 +79,14 @@
         }
         
         $.scanner(scan_callback);
+        
+
+        $("#test").click(function() {
+			scan_callback('Kili201802000035');
+		});
+        $("#test2").click(function() {
+			scan_callback('NILO18020596390');
+		});
         
     });
     
@@ -194,15 +198,9 @@
 				</div>
 
 				<div class="bottom_a_button">
-<<<<<<< HEAD
-<!-- 				<a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
-					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>  -->
-					<a onclick="scan()" class="scanner" style="margin-bottom: 50px" >scan</a> 
-=======
-<!--  				<a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
-					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>   -->
+<!--   					<a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
+					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>    -->
 					<span class="scanner"><a onclick="javascript:void(0);"style="margin-bottom: 50px">scan</a></span>
->>>>>>> branch 'master' of http://git.kilimall.com/kilimall/nilo-dms.git
 					<a onclick="javascript:void(0);" class="submit">submit</a>
 				</div>
 			</form>

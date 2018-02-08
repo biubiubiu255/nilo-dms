@@ -8,6 +8,7 @@ import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.exception.SysErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.UserNetworkDao;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.RoleService;
@@ -190,10 +191,12 @@ public class UserController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/changePassword.html", method = RequestMethod.POST)
-    public String changePassword(String oldPassword, String newPassword) {
+    public String changePassword(String oldPassword, String newPassword,String newPassword2) {
         try {
             AssertUtil.isNotNull(user, SysErrorCode.REQUEST_IS_NULL);
             AssertUtil.isNotBlank(oldPassword, SysErrorCode.REQUEST_IS_NULL);
+            AssertUtil.isEquals(newPassword, newPassword2,BizErrorCode.NEW_PASSWORD_NOT_EQUAL);
+
             Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
             String userId = me.getUserId();
             //校验旧密码

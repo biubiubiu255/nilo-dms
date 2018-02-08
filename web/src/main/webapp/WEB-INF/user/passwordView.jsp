@@ -22,7 +22,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">Password Again</label>
             <div class="layui-input-block">
-                <input type="password" name="password2" autocomplete="off" class="layui-input">
+                <input type="password" name="newPassword2" autocomplete="off" class="layui-input">
             </div>
         </div>
 
@@ -52,11 +52,9 @@
                     dataType: "json",
                     success: function (data) {
                         if (data.result) {
-                            window.parent.layer.close(window.parent.layer.index);
                             layer.msg('SUCCESS!', {icon: 1, time: 1000}, function () {
                                 layer.closeAll();
-                                var url = "account/logout.html";
-                                window.location.href = url;
+                                window.location.href = "account/logout.html";
                             });
                         } else {
                             //失败，提交表单成功后，释放hold，如果不释放hold，就变成了只能提交一次的表单
