@@ -35,104 +35,101 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/mobile/package")
-public class MobilePackageController  extends BaseController {
-    @Autowired
-    private OrderService orderService;
-    @Autowired
-    private DistributionNetworkDao distributionNetworkDao;
+public class MobilePackageController extends BaseController {
+	@Autowired
+	private OrderService orderService;
+	@Autowired
+	private DistributionNetworkDao distributionNetworkDao;
 
-    
-    private final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @RequestMapping(value = "/packing.html")
-    public String toPackage(Model model) {
-    	Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
-        List<NextStation> list = new ArrayList<>();
+	@RequestMapping(value = "/packing.html")
+	public String toPackage(Model model) {
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		// 获取merchantId
+		String merchantId = me.getMerchantId();
+		List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
+		List<NextStation> list = new ArrayList<>();
 
-        for(DistributionNetworkDO n:networkDOList) {
-            NextStation s = new NextStation();
-            s.setCode("" + n.getId());
-            s.setName(n.getName());
-            list.add(s);
-        }
+		for (DistributionNetworkDO n : networkDOList) {
+			NextStation s = new NextStation();
+			s.setCode("" + n.getId());
+			s.setName(n.getName());
+			list.add(s);
+		}
 
-        model.addAttribute("nextStation",list);
-        
-        return "mobile/network/package/packing";
-    }
+		model.addAttribute("nextStation", list);
 
-    @RequestMapping(value = "/submit.html")
-    @ResponseBody
-    public String submit(String scaned_codes[],int nextStation,Double weight,Double length,Double width,Double high ) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        String orderNo = "";
-        try {
-            List<String> orderNos = new ArrayList<>();
-            for (int i = 0; i < scaned_codes.length; i++) {
-                orderNos.add(scaned_codes[i]);
-            }
+		return "mobile/network/package/packing";
+	}
 
-            PackageRequest packageRequest = new PackageRequest();
-            packageRequest.setOrderNos(orderNos);
-            packageRequest.setMerchantId(merchantId);
-            packageRequest.setOptBy(me.getUserId());
-            packageRequest.setNextNetworkId(nextStation);
-            packageRequest.setWeight(weight);
-            packageRequest.setLength(length);
-            packageRequest.setWidth(width);
-            packageRequest.setHigh(high);
-            if (me.getNetworks() != null && me.getNetworks().size() != 0) {
-                packageRequest.setNetworkId(me.getNetworks().get(0));
-            }
-            orderNo = orderService.addPackage(packageRequest);
-        }catch (Exception e) {
-            return toJsonErrorMsg(e.getMessage());
-        }
-        return toJsonTrueData(orderNo);
+	@RequestMapping(value = "/submit.html")
+	@ResponseBody
+	public String submit(String scaned_codes[], int nextStation, Double weight, Double length, Double width,
+			Double high) {
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		// 获取merchantId
+		String merchantId = me.getMerchantId();
+		String orderNo = "";
 
-//        for (int i=0;i<scaned_codes.length;i++){
-//            System.out.println(scaned_codes[i]);
-//        }
-//        System.out.println(nextStation);
-//        System.out.println(weight);
-//        System.out.println(length);
-//        System.out.println(width);
-//        System.out.println(high);
-//        return "true";
-    }
+		List<String> orderNos = new ArrayList<>();
+		for (int i = 0; i < scaned_codes.length; i++) {
+			orderNos.add(scaned_codes[i]);
+		}
 
-    public static class NextStation {
-        private String code;
-        private String name;
-        private String type;
+		PackageRequest packageRequest = new PackageRequest();
+		packageRequest.setOrderNos(orderNos);
+		packageRequest.setMerchantId(merchantId);
+		packageRequest.setOptBy(me.getUserId());
+		packageRequest.setNextNetworkId(nextStation);
+		packageRequest.setWeight(weight);
+		packageRequest.setLength(length);
+		packageRequest.setWidth(width);
+		packageRequest.setHigh(high);
+		if (me.getNetworks() != null && me.getNetworks().size() != 0) {
+			packageRequest.setNetworkId(me.getNetworks().get(0));
+		}
+		orderNo = orderService.addPackage(packageRequest);
+		return toJsonTrueMsg();
 
-        public String getCode() {
-            return code;
-        }
+		// for (int i=0;i<scaned_codes.length;i++){
+		// System.out.println(scaned_codes[i]);
+		// }
+		// System.out.println(nextStation);
+		// System.out.println(weight);
+		// System.out.println(length);
+		// System.out.println(width);
+		// System.out.println(high);
+		// return "true";
+	}
 
-        public void setCode(String code) {
-            this.code = code;
-        }
+	public static class NextStation {
+		private String code;
+		private String name;
+		private String type;
 
-        public String getName() {
-            return name;
-        }
+		public String getCode() {
+			return code;
+		}
 
-        public void setName(String name) {
-            this.name = name;
-        }
+		public void setCode(String code) {
+			this.code = code;
+		}
 
-        public String getType() {
-            return type;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public void setType(String type) {
-            this.type = type;
-        }
-    }
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+	}
 }

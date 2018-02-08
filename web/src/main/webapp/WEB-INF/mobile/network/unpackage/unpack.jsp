@@ -59,6 +59,10 @@
 
         android.startScan();
         
+        var scan = function scan(){
+        	android.startScan();
+        }
+        
         var scan_callback = function (code) {
         	
         	if(isEmpty(code)){
@@ -79,13 +83,6 @@
         }
         
         $.scanner(scan_callback);
-        
-        $("#test").click(function() {
-			scan_callback('Kili201802000015');
-		});
-        $("#test2").click(function() {
-			scan_callback('168081000340000768');
-		});
         
     });
     
@@ -195,7 +192,7 @@
 				<div class="bottom_a_button">
 <!-- 				<a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
 					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>  -->
-					<a onclick="javascript:void(0);" class="scanner" style="margin-bottom: 50px" class="input_value">scan</a> 
+					<a onclick="scan()" class="scanner" style="margin-bottom: 50px" >scan</a> 
 					<a onclick="javascript:void(0);" class="submit">submit</a>
 				</div>
 			</form>
