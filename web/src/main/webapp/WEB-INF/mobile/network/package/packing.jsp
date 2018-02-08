@@ -49,10 +49,11 @@
             }
             ,callback:function (data) {
                 if (data.result) {
-                    showInfo('Success '+data.msg);
+                    showInfo('Success'+data.msg);
                     del();
                 } else {
                     showError(data.msg)
+                    alert(data.msg)
                 }
             }
         });
@@ -113,8 +114,8 @@
                     <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo'/><span class="scanner" id="scan">scan</span></li>
                 </ul>
                 <ul id = 'append_packing_id'>
-                    <%--<li id="code123"><input type='checkbox' class='input_value' value="123" name='items' /><span>code 12123123</span></li>--%>
-                    <%--<li id="code456"><input type='checkbox' class='input_value' value="456" name='items' /><span>code 12123123</span></li>--%>
+                    <li id="code123"><input type='checkbox' class='input_value' value="1111111111111" name='items' /><span>code 12123123</span></li>
+                    <li id="code456"><input type='checkbox' class='input_value' value="2222222222222" name='items' /><span>code 12123123</span></li>
                 </ul>
             </div>
             <div class="bottom_a_button"><a href="javascript:void(0);" class="submit">submit</a></div>

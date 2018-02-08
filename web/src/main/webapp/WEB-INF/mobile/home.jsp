@@ -84,11 +84,11 @@
 						<li><img src="/mobile/images/icon_3.png" /><br />UnPack</li>
 					</a>
 
-					<a href="/mobile/porblem/scan.html" title="">
+					<a href="/mobile/rider/problem/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br />Problem</li>
 					</a>
 
-					<a href="/mobile/stranded/scan.html" title="">
+					<a href="/mobile/rider/stranded/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br />Stranded
 							Parcel</li>
 					</a>
