@@ -39,7 +39,7 @@ public class NotifyMerchantConsumer extends AbstractMQConsumer {
             NotifyRequest request = (NotifyRequest) obj;
             logger.info("MessageExt:{},Message:{}", messageExt, request);
             Map<String, String> params = new HashMap<>();
-            params.put("method", MethodEnum.STATUS_UPDATE.getCode());
+            params.put("method", request.getMethod());
             params.put("sign", request.getSign());
             params.put("data", request.getData());
             params.put("app_key", "dms");

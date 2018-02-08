@@ -102,7 +102,7 @@ public class ArriveScanController extends BaseController {
 
         if (StringUtil.isEmpty(scanNo)) return toPaginationLayUIData(pagination, list);
 
-        List<WaybillScanDetailsDO> scanDetailsDOList = waybillScanDetailsDao.queryByScanNo( scanNo);
+        List<WaybillScanDetailsDO> scanDetailsDOList = waybillScanDetailsDao.queryByScanNo(scanNo);
         if (scanDetailsDOList == null) return toPaginationLayUIData(pagination, list);
 
         List<String> orderNos = new ArrayList<>();
@@ -121,9 +121,11 @@ public class ArriveScanController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
 
-        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId,orderNo);
-        if(deliveryOrder == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST,orderNo);
+        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+        if (deliveryOrder == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
 
+        WaybillScanDetailsDO query = waybillScanDetailsDao.queryBy(orderNo, scanNo);
+        if (query != null) throw new DMSException(BizErrorCode.ALREADY_SCAN, orderNo);
         WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
         scanDetailsDO.setScanNo(scanNo);
         scanDetailsDO.setOrderNo(orderNo);
@@ -143,6 +145,7 @@ public class ArriveScanController extends BaseController {
         waybillScanDetailsDao.update(scanDetailsDO);
         return toJsonTrueMsg();
     }
+
     @ResponseBody
     @RequestMapping(value = "/deleteDetails.html")
     public String deleteDetails(String orderNo, String scanNo) {
@@ -151,9 +154,10 @@ public class ArriveScanController extends BaseController {
         WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
         scanDetailsDO.setScanNo(scanNo);
         scanDetailsDO.setOrderNo(orderNo);
-        waybillScanDetailsDao.deleteBy(orderNo,scanNo);
+        waybillScanDetailsDao.deleteBy(orderNo, scanNo);
         return toJsonTrueMsg();
     }
+
     @ResponseBody
     @RequestMapping(value = "/arrive.html")
     public String arrive(String scanNo) {
@@ -162,7 +166,7 @@ public class ArriveScanController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
-            orderService.arrive(merchantId, scanNo,""+me.getNetworks().get(0), me.getUserId());
+            orderService.arrive(merchantId, scanNo, "" + me.getNetworks().get(0), me.getUserId());
         } catch (Exception e) {
             log.error("arrive failed. scanNo:{}", scanNo, e);
             return toJsonErrorMsg(e.getMessage());

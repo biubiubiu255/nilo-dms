@@ -13,5 +13,7 @@ public interface WaybillScanDetailsDao extends BaseDao<Long, WaybillScanDetailsD
 
     List<WaybillScanDetailsDO> queryByScanNo(@Param("scanNo") String scanNo);
 
+    WaybillScanDetailsDO queryBy(@Param("orderNo") String orderNo, @Param("scanNo") String scanNo);
+
     void deleteBy(@Param("orderNo") String orderNo, @Param("scanNo") String scanNo);
 }

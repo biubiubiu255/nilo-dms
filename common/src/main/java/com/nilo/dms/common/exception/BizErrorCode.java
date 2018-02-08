@@ -87,6 +87,9 @@ public enum BizErrorCode implements ErrorCode {
     PACKAGE_NO_ERROR("Package No is not exist.", "100062"),
 
     APP_KEY_NOT_EXIST("App Key {0} is not exist.", "100063"),
+    ARRIVE_EMPTY("Arrive Scan is empty.", "100064"),
+    ALREADY_SCAN("{0}  already scan", "100065"),
+    NEW_PASSWORD_NOT_EQUAL("New Password not equal.", "100066"),
 
     ;
 
