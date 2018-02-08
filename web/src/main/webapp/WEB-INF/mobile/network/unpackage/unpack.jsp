@@ -57,7 +57,7 @@
             }
         });
 
-        //android.startScan();
+        android.startScan();
         
         var scan_callback = function (code) {
         	
@@ -109,10 +109,9 @@
 		$("h3[iscomplete='false']").each(function(index){
 			
 			var elem = $(this);
-
+			
+			//alert(code + "  ----  " + elem.attr("value"))
 	        if(code==elem.attr("value")){
-	        	
-	        	alert(code + "  ----  " + elem.attr("value"))
 	        	
 	        	isFound = true;
 	        	
@@ -152,12 +151,14 @@
     		var desc='';
     		var point="";
     		var tempRes=null;
+    		var iconPoint=null;
     		
 			for (var int = 0; int < result.data.length; int++) {
 				tempRes = result.data[int];
+				tempRes.arrived==false ? iconPoint='<i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop sign-icon">&#x1002;</i>' : iconPoint='<i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe618;</i>';
 				tempRes.nextNetworkDesc=='undefined' ? desc='' : desc=tempRes.nextNetworkDesc;
-		        point += '<li><a href="javascript:void(0);" style="display:inline-block;width: 95%"><h3 iscomplete="false" value="' + tempRes.orderNo + '">OrderNo：' + tempRes.orderNo + ' </h3><div class="banner_center"><span>dese:' + desc + '</span><p></p><span>OrderType:' + tempRes.orderType + '</span><span style=" float:right;">Weight: ' + tempRes.weight 
-                point += '</span><p></p><span>ReferenceNo:0</span></div></a><div class="banner_bottom"><p align="right"><i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop sign-icon">&#x1002;</i></p></div></li>';
+		        point += '<li><a href="javascript:void(0);" style="display:inline-block;width: 95%"><h3 iscomplete="' + tempRes.arrived + '" value="' + tempRes.orderNo + '">OrderNo：' + tempRes.orderNo + ' </h3><div class="banner_center"><span>dese:' + desc + '</span><p></p><span>OrderType:' + tempRes.orderType + '</span><span style=" float:right;">Weight: ' + tempRes.weight 
+                point += '</span><p></p><span>ReferenceNo:0</span></div></a><div class="banner_bottom"><p align="right">' + iconPoint + '</p></div></li>';
 			}
 			
 			$("#child-packages").append(point);
@@ -197,8 +198,8 @@
 				</div>
 
 				<div class="bottom_a_button">
-<!--   					<a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
-					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>    -->
+<!--    					<a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
+					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>  -->
 					<span class="scanner"><a onclick="javascript:void(0);"style="margin-bottom: 50px">scan</a></span>
 					<a onclick="javascript:void(0);" class="submit">submit</a>
 				</div>
