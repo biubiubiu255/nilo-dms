@@ -72,6 +72,9 @@
 					<a href="/mobile/deliver/scan.html" title="">
 						<li><img src="/mobile/images/icon_5.png" /><br />Deliver Scan</li>
 					</a>
+					<a href="/mobile/deliver/list.html" title="">
+						<li><img src="/mobile/images/icon_5.png" /><br />Deliver List</li>
+					</a>
 					<a href="/mobile/send/scan.html" title="">
 						<li><img src="/mobile/images/icon_4.png" /><br />Send Scan</li>
 					</a>
