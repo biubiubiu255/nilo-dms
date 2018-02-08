@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
 <meta charset="UTF-8" />
@@ -69,11 +70,13 @@
 						<li><img src="/mobile/images/icon_3.png" /><br />Arrive Scan</li>
 					</a>
 					<a href="/mobile/deliver/scan.html" title="">
-						<li><img src="/mobile/images/icon_5.png" /><br />Deliver
-							Scan</li>
+						<li><img src="/mobile/images/icon_5.png" /><br />Deliver Scan</li>
 					</a>
 					<a href="/mobile/send/scan.html" title="">
 						<li><img src="/mobile/images/icon_4.png" /><br />Send Scan</li>
+					</a>
+					<a href="/mobile/send/list.html" title="">
+						<li><img src="/mobile/images/icon_4.png" /><br />Send List</li>
 					</a>
 
 					<a href="/mobile/package/packing.html" title="">
