@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
 <meta charset="UTF-8" />
@@ -38,10 +39,10 @@
 					<!-- <a href="/mobile/tiaozhuangController/dshkqs.html" title="">
          <li><img src="/mobile/images/icon_2.png" /><br/>COD Sign</li>
        </a> -->
-					<a href="/mobile/rider/self/self.html" title="">
+					<!-- <a href="/mobile/rider/self/self.html" title="">
 						<li><img src="/mobile/images/icon_6.png" /><br />Self-Collect
 							Sign</li>
-					</a>
+					</a> -->
 					<a href="/mobile/rider/problem/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br />Problem</li>
 					</a>
@@ -69,26 +70,28 @@
 						<li><img src="/mobile/images/icon_3.png" /><br />Arrive Scan</li>
 					</a>
 					<a href="/mobile/deliver/scan.html" title="">
-						<li><img src="/mobile/images/icon_5.png" /><br />Deliver
-							Scan</li>
+						<li><img src="/mobile/images/icon_5.png" /><br />Deliver Scan</li>
 					</a>
 					<a href="/mobile/send/scan.html" title="">
 						<li><img src="/mobile/images/icon_4.png" /><br />Send Scan</li>
+					</a>
+					<a href="/mobile/send/list.html" title="">
+						<li><img src="/mobile/images/icon_4.png" /><br />Send List</li>
 					</a>
 
 					<a href="/mobile/package/packing.html" title="">
 						<li><img src="/mobile/images/icon_3.png" /><br />Packing</li>
 					</a>
 					
-					<a href="/mobile/package/unpack.html" title="">
+					<a href="/mobile/network/unpackage/unpack.html" title="">
 						<li><img src="/mobile/images/icon_3.png" /><br />UnPack</li>
 					</a>
 
-					<a href="/mobile/porblem/scan.html" title="">
+					<a href="/mobile/rider/problem/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br />Problem</li>
 					</a>
 
-					<a href="/mobile/stranded/scan.html" title="">
+					<a href="/mobile/rider/stranded/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br />Stranded
 							Parcel</li>
 					</a>
@@ -106,7 +109,7 @@
 					<li><img src="/mobile/images/scheduler_info.png" /><br />Routing
 						Query</li>
 				</a>
-				<a href="/mobile/tiaozhuangController/xgmm.html" title="">
+				<a href="/mobile/password/toPage.html" title="">
 					<li><img src="/mobile/images/index_icon_1.png" /><br />Modify
 						password</li>
 				</a>

@@ -112,7 +112,13 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
 
         //根据订单号查询任务
         Task t = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(), TaskTypeEnum.DISPATCH.getCode(), param.getOrderNo());
-        if (t == null || t.getStatus() == TaskStatusEnum.COMPLETE) {
+        /*if (t == null || t.getStatus() == TaskStatusEnum.COMPLETE) {
+            throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getOrderNo());
+        }*/
+        if(t == null) {
+        	t = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(), TaskTypeEnum.SELF_DELIVERY.getCode(), param.getOrderNo());
+        }
+        if(t != null && t.getStatus() == TaskStatusEnum.COMPLETE){
             throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getOrderNo());
         }
 
@@ -126,12 +132,13 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         optRequest.setOrderNo(orderNoList);
         orderService.handleOpt(optRequest);
 
-        Task task = new Task();
-        task.setTaskId(t.getTaskId());
-        task.setStatus(TaskStatusEnum.COMPLETE);
-        task.setHandledTime(DateUtil.getSysTimeStamp());
-
-        taskService.updateTask(task);
+        if(t!=null) {
+	        Task task = new Task();
+	        task.setTaskId(t.getTaskId());
+	        task.setStatus(TaskStatusEnum.COMPLETE);
+	        task.setHandledTime(DateUtil.getSysTimeStamp());
+	        taskService.updateTask(task);
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.ThirdDriverDao;
@@ -9,8 +10,13 @@ import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.service.order.LoadingService;
+import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Loading;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +31,7 @@ import java.util.regex.Pattern;
 @Controller
 @RequestMapping("/mobile/send")
 public class SendScanController extends BaseController {
+    private final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     private ThirdExpressDao thirdExpressDao;
     @Autowired
@@ -32,7 +39,9 @@ public class SendScanController extends BaseController {
     @Autowired
     private ThirdDriverDao thirdDriverDao;
     @Autowired
-    private StaffDao staffDao;
+    private LoadingService loadingService;
+//    @Autowired
+//    private StaffDao staffDao;
 
     @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
@@ -75,24 +84,72 @@ public class SendScanController extends BaseController {
             driver.setName(d.getDriverName());
             list.add(driver);
         }
-        if(isInteger(code)) {
-            List<StaffDO> staffList = staffDao.queryNetworkStaff(Long.parseLong(code));
-            for(StaffDO s : staffList){
-                Driver driver = new Driver();
-                driver.setCode(""+s.getUserId());
-                driver.setName(s.getStaffId());
-                list.add(driver);
-            }
-        }
+//        List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(code);
+//        List<Driver> list = new ArrayList<>();
+//        for(ThirdDriverDO d : thirdDriver){
+//            Driver driver = new Driver();
+//            driver.setCode(d.getDriverId());
+//            driver.setName(d.getDriverName());
+//            list.add(driver);
+//        }
+//        if(isInteger(code)) {
+//            List<StaffDO> staffList = staffDao.queryNetworkStaff(Long.parseLong(code));
+//            for(StaffDO s : staffList){
+//                Driver driver = new Driver();
+//                driver.setCode(""+s.getUserId());
+//                driver.setName(s.getStaffId());
+//                list.add(driver);
+//            }
+//        }
         return toJsonTrueData(list);
     }
-    @RequestMapping(value = "/test.html")
+    @RequestMapping(value = "/submit.html")
     @ResponseBody
-    public String test(String[] arr) {
-        for(int i = 0; i < arr.length; i ++) {
-            System.out.println(arr[i]);
+    public String submit(String scaned_codes[],String nextStation,String carrier,String sendDriver,String plateNo,String logisticsNo ) {
+//        System.out.println(scaned_codes);
+//        System.out.println(nextStation);
+//        System.out.println(carrier);
+//        System.out.println(sendDriver);
+//        System.out.println(plateNo);
+        Loading loading = new Loading();
+        loading.setNextStation(nextStation);
+        loading.setRider(sendDriver);
+        loading.setCarrier(carrier);
+        loading.setTruckNo(plateNo);
+
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        String loadingNo = "";
+        try {
+            if(StringUtil.isEmpty(sendDriver)){
+                throw new IllegalArgumentException("Rider or Driver is empty.");
+            }
+            loading.setMerchantId(merchantId);
+            loading.setLoadingBy(me.getUserId());
+            if(StringUtil.isNotEmpty(sendDriver)) {
+                loading.setRider(sendDriver);
+            }
+            loadingNo = loadingService.addLoading(loading);
+        } catch (Exception e) {
+            log.error("addLoading failed. loading:{}", loading, e);
+            return toJsonErrorMsg(e.getMessage());
         }
-        return "true";
+
+        DeliveryOrder order = null;
+        for (int i=0; i<scaned_codes.length; i++){
+            try {
+                loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i], me.getUserId());
+                //order = orderService.queryByOrderNo(merchantId, scaned_codes);
+
+            }catch (Exception e) {
+                log.error("loadingScan failed. orderNo:{}", scaned_codes[i], e);
+                return toJsonErrorMsg(e.getMessage());
+            }
+
+        }
+        loadingService.ship(merchantId, loadingNo, me.getUserId());
+        return toJsonTrueData(loadingNo);
     }
     private  boolean isInteger(String str) {
         Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");

@@ -1,6 +1,7 @@
 package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.ThirdDriverDao;
@@ -10,6 +11,8 @@ import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.order.LoadingService;
+import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.Loading;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.order.LoadingController;
@@ -33,14 +36,8 @@ public class DeliverScanController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     private LoadingService loadingService;
-    @Autowired
-    private ThirdExpressDao thirdExpressDao;
-    @Autowired
-    private DistributionNetworkDao distributionNetworkDao;
-    @Autowired
-    private ThirdDriverDao thirdDriverDao;
-    @Autowired
-    private StaffDao staffDao;
+//    @Autowired
+//    private OrderService orderService;
 
     @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
@@ -50,113 +47,51 @@ public class DeliverScanController extends BaseController {
         String merchantId = me.getMerchantId();
         model.addAttribute("riderList", getRiderList(merchantId));
 
-        //第三方快递公司及自提点
-        List<ThirdExpressDO> expressDOList = thirdExpressDao.findByMerchantId(Long.parseLong(merchantId));
-        List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
-
-        List<NextStation> list = new ArrayList<>();
-        for(ThirdExpressDO e : expressDOList){
-            NextStation s = new NextStation();
-            s.setCode(e.getExpressCode());
-            s.setName(e.getExpressName());
-            s.setType("T");
-            list.add(s);
-        }
-        for(DistributionNetworkDO n:networkDOList){
-            NextStation s = new NextStation();
-            s.setCode(""+n.getId());
-            s.setName(n.getName());
-            s.setType("N");
-            list.add(s);
-        }
-        model.addAttribute("station",list);
-        model.addAttribute("thirdCarrier",expressDOList);
-
         return "mobile/network/deliver_scan/deliverScan";
     }
 
-    @RequestMapping(value = "/test.html")
+    @RequestMapping(value = "/submit.html")
     @ResponseBody
-    public String test(String[] arr,String station,String deliverDriver,String plateNo,String abc) {
-        System.out.println(station);
-        System.out.println(deliverDriver);
-        System.out.println(plateNo);
-        for(int i = 0; i < arr.length; i ++) {
-            System.out.println(arr[i]);
-        }
-        return "true";
-    }
-    @RequestMapping(value = "/getDriver.html")
-    @ResponseBody
-    public String getDriver(String code) {
-        List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(code);
-        List<Driver> list = new ArrayList<>();
-        for(ThirdDriverDO d : thirdDriver){
-            Driver driver = new Driver();
-            driver.setCode(d.getDriverId());
-            driver.setName(d.getDriverName());
-            list.add(driver);
-        }
-        if(isInteger(code)) {
-            List<StaffDO> staffList = staffDao.queryNetworkStaff(Long.parseLong(code));
-            for(StaffDO s : staffList){
-                Driver driver = new Driver();
-                driver.setCode(""+s.getUserId());
-                driver.setName(s.getStaffId());
-                list.add(driver);
+    public String submit(String scaned_codes[],String rider,String logisticsNo ) {
+        Loading loading = new Loading();
+        loading.setRider(rider);
+
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        String loadingNo = "";
+        try {
+            System.out.println("*--------------------------");
+            if(StringUtil.isEmpty(rider)){
+                throw new IllegalArgumentException("Rider or Driver is empty.");
             }
+            loading.setMerchantId(merchantId);
+            loading.setLoadingBy(me.getUserId());
+            if(StringUtil.isNotEmpty(rider)) {
+                loading.setRider(rider);
+            }
+            loadingNo = loadingService.addLoading(loading);
+        } catch (Exception e) {
+            log.error("addLoading failed. loading:{}", loading, e);
+            return toJsonErrorMsg(e.getMessage());
         }
-        return toJsonTrueData(list);
+
+        DeliveryOrder order = null;
+        for (int i=0; i<scaned_codes.length; i++){
+            System.out.println("====================");
+            try {
+                loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i], me.getUserId());
+                //order = orderService.queryByOrderNo(merchantId, scaned_codes);
+
+            }catch (Exception e) {
+                log.error("loadingScan failed. orderNo:{}", scaned_codes[i], e);
+                return toJsonErrorMsg(e.getMessage());
+            }
+
+        }
+        loadingService.ship(merchantId, loadingNo, me.getUserId());
+        return toJsonTrueData(loadingNo);
+
     }
-    private  boolean isInteger(String str) {
-        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-        return pattern.matcher(str).matches();
-    }
-    public static class Driver{
-        private String code;
-        private String name;
 
-        public String getCode() {
-            return code;
-        }
-        public void setCode(String code) {
-            this.code = code;
-        }
-        public String getName() {
-            return name;
-        }
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-
-    public static class NextStation{
-        private String code;
-        private String name;
-        private String type;
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
-    }
 }
