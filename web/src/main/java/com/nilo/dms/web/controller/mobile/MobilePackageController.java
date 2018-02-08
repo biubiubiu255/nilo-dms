@@ -40,8 +40,7 @@ public class MobilePackageController  extends BaseController {
     private OrderService orderService;
     @Autowired
     private DistributionNetworkDao distributionNetworkDao;
-    @Autowired
-    private WaybillScanDao waybillScanDao;
+
     
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -92,7 +91,6 @@ public class MobilePackageController  extends BaseController {
             }
             orderNo = orderService.addPackage(packageRequest);
         }catch (Exception e) {
-            System.out.println("错错错错错错");
             return toJsonErrorMsg(e.getMessage());
         }
         return toJsonTrueData(orderNo);

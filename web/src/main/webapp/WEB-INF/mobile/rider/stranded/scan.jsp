@@ -64,7 +64,7 @@
     	mobile.initSubmitForm({
     		formId: 'stranded-form' ,
     		mbObject: mobile , 
-    		postUrl : '/mobile/stranded/save.html' ,
+    		postUrl : '/mobile/rider/stranded/save.html' ,
     		callback: function (data) {
     			if (data.result) showInfo(null);
 			}
