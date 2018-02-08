@@ -212,7 +212,7 @@ public class DeliveryOrderController extends BaseController {
         String merchantId = me.getMerchantId();
         //查询订单详情
         DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
-        List<DeliveryOrderRoute> orderRouteList = deliveryRouteService.queryRoute(merchantId, orderNo);
+        List<DeliveryRoute> orderRouteList = deliveryRouteService.queryRoute(merchantId, orderNo);
         model.addAttribute("deliveryOrder", deliveryOrder);
         model.addAttribute("orderRouteList", orderRouteList);
 

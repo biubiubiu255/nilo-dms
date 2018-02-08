@@ -14,8 +14,6 @@ public interface OrderService {
 
     String createDeliveryOrder(DeliveryOrder data);
 
-    DeliveryOrderStatusInfo queryStatus(String merchantId, String orderNo);
-
     List<DeliveryOrder> queryDeliveryOrderBy(DeliveryOrderParameter parameter, Pagination pagination);
 
     DeliveryOrder queryByOrderNo(String merchantId, String orderNo);
@@ -34,6 +32,4 @@ public interface OrderService {
     
     void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId);
     
-    void updataMultiChildOrder(String merchantId, String networkId, String arriveBy, String scanNo, List<String> ChildorderNos);
-
 }

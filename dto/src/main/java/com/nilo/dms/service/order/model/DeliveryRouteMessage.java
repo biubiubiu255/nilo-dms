@@ -1,45 +1,23 @@
 package com.nilo.dms.service.order.model;
 
-import com.nilo.dms.common.enums.OptTypeEnum;
-
 import java.util.List;
-import java.util.Map;
 
 /**
- * Created by admin on 2017/11/3.
+ * Created by admin on 2017/10/10.
  */
-public class OrderOptRequest {
+public class DeliveryRouteMessage {
 
     private String merchantId;
 
     private List<String> orderNo;
 
-    private OptTypeEnum optType;
+    private String optType;
 
     private String optBy;
 
-    private String networkId;
-
     private String rider;
 
-    private String remark;
-
-
-    public String getNetworkId() {
-        return networkId;
-    }
-
-    public void setNetworkId(String networkId) {
-        this.networkId = networkId;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
+    private String networkId;
 
     public String getRider() {
         return rider;
@@ -47,6 +25,14 @@ public class OrderOptRequest {
 
     public void setRider(String rider) {
         this.rider = rider;
+    }
+
+    public String getNetworkId() {
+        return networkId;
+    }
+
+    public void setNetworkId(String networkId) {
+        this.networkId = networkId;
     }
 
     public String getMerchantId() {
@@ -65,11 +51,11 @@ public class OrderOptRequest {
         this.orderNo = orderNo;
     }
 
-    public OptTypeEnum getOptType() {
+    public String getOptType() {
         return optType;
     }
 
-    public void setOptType(OptTypeEnum optType) {
+    public void setOptType(String optType) {
         this.optType = optType;
     }
 
