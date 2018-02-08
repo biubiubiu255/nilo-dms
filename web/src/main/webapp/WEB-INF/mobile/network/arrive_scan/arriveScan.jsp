@@ -77,8 +77,7 @@
 								return;
 							}
 							code_array[code] = code;
-							var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class='input_value' value=\""+code+"\" name='items[]' /><span>"
-									+ code + "</span></li>";
+							var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class='fuxuank' value=\""+code+"\" name='items[]' /><span class='suiyi'>" + code + "</span></li>";
 							$('#append_order_items_id').prepend(append_html);
 						}
 						$.scanner(scan_callback);
