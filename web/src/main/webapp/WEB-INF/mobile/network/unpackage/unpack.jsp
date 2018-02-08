@@ -57,7 +57,8 @@
             }
         });
 
-
+        android.startScan();
+        
         var scan_callback = function (code) {
         	
         	if(isEmpty(code)){
@@ -70,6 +71,7 @@
 				getOrderList(code);
 				isScanBigPack=true;
 				updatePackage();
+				//$(".scanner").first().hide();
 				return;
 			}
             
@@ -150,7 +152,7 @@
 
 			for (var int = 0; int < result.data.length; int++) {
 				tempRes = result.data[int];
-		        point += '<li><a href="javascript:void(0);" style="display:inline-block;width: 95%"><h3>Arrived：' + (int+1) + ' </h3><div class="banner_center"><span iscomplete="false" value="' + tempRes.createdBy + '">' + tempRes.createdBy + '</span><p></p><span>OrderType:' + tempRes.orderType + '</span><span style=" float:right;">Weight: ' + tempRes.weight 
+		        point += '<li><a href="javascript:void(0);" style="display:inline-block;width: 95%"><h3 iscomplete="false" value="' + tempRes.orderNo + '">OrderNo：' + tempRes.orderNo + ' </h3><div class="banner_center"><span>dese:' + tempRes.nextNetworkDesc + '</span><p></p><span>OrderType:' + tempRes.orderType + '</span><span style=" float:right;">Weight: ' + tempRes.weight 
                 point += '</span><p></p><span>ReferenceNo:0</span></div></a><div class="banner_bottom"><p align="right"><i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop sign-icon">&#x1002;</i></p></div></li>';
 			}
 			
@@ -178,7 +180,7 @@
 					<input type="hidden" name="scanNos" value=""/>
 					<ul class="one_banner">
 						<li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value'
-							name='logisticsNo' /><span class="scanner">scan</span>
+							name='logisticsNo' /><!-- <span class="scanner">scan</span> -->
 						</li>
 
 
@@ -191,9 +193,9 @@
 				</div>
 
 				<div class="bottom_a_button">
-<!-- 					<a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
+<!-- 				<a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
 					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>  -->
-					<a onclick="javascript:void(0);" class="scan" style="margin-bottom: 50px" class="input_value">scan</a> 
+					<a onclick="javascript:void(0);" class="scanner" style="margin-bottom: 50px" class="input_value">scan</a> 
 					<a onclick="javascript:void(0);" class="submit">submit</a>
 				</div>
 			</form>
