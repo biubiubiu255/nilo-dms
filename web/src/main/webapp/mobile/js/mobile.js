@@ -127,7 +127,7 @@ MobileData.prototype.appendNewRecord = function(primary_id){
 	ajaxRequest(findUrl,{
 		parameters:escape(searchParam)
 	},false,function(response){
-		if(response.rows){
+		if(response.data){
             //console.dir(existsId);
             //console.dir(existsId.length); 
             if(existsId.length > 0){
@@ -668,7 +668,7 @@ MobileData.prototype.paginate = function(options) {
     var order = mbObject.DataJson.sortOrder;
     var authorized = mbObject.DataJson.authorized;
 	//alert("postparam:"+param);
-    var params = {"parameters": param, "page": page, "rows": rows, "sort": sort, "order": order,"authorized":authorized};
+    var params = {"parameters": param, "page": page, "limit": rows/*, "sort": sort, "order": order,"authorized":authorized*/};
 	params = $.extend(params,defaultOptions.appendParam); 
 	params = $.extend(params,mbObject.DataJson.postParams); 
 	$('#'+mbObject.DataJson.appendId).parent().find('.append_more').html('玩命加载中，请稍后……');
@@ -681,7 +681,7 @@ MobileData.prototype.paginate = function(options) {
         success: function(json) {
             try {
                 var response = toObject(json);
-				var total = response.total;
+				var total = response.pages;
                 if (options.clearHtml && total == 0) {
 					$('#'+mbObject.DataJson.appendId).parent().find('.append_more').html('没有找到任何数据');
                 }else if(total > 0 && total <= mbObject.DataJson.pageSize){
@@ -697,7 +697,7 @@ MobileData.prototype.paginate = function(options) {
 				}
 				if(!options.defaultFormatter)return;
 				mbObject.formatterData(response);
-				mbObject.DataJson.total = response.total;
+				mbObject.DataJson.total = response.pages;
 				mbObject.DataJson.page = mbObject.DataJson.page + 1;
 				if (callback) {
                     invokeCallBack(callback, response);
@@ -769,7 +769,7 @@ MobileData.prototype.dicValueFomatter = function (gethtml) {
 MobileData.prototype.formatterData = function (response) {
 	var mbObject = this;
 	var model = mbObject.DataJson.model;
-	var rows = response.rows;
+	var rows = response.data;
 	var templateId = this.DataJson.templateId;
 	var appendId = this.DataJson.appendId;
 	var html = $('#'+templateId).html();

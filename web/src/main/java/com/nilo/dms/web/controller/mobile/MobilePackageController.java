@@ -62,6 +62,26 @@ public class MobilePackageController extends BaseController {
 
 		return "mobile/network/package/packing";
 	}
+	
+	@RequestMapping(value = "/list.html")
+	public String toList(Model model) {
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		// 获取merchantId
+		String merchantId = me.getMerchantId();
+		List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
+		List<NextStation> list = new ArrayList<>();
+
+		for (DistributionNetworkDO n : networkDOList) {
+			NextStation s = new NextStation();
+			s.setCode("" + n.getId());
+			s.setName(n.getName());
+			list.add(s);
+		}
+
+		model.addAttribute("nextStation", list);
+
+		return "mobile/network/package/list";
+	}
 
 	@RequestMapping(value = "/submit.html")
 	@ResponseBody

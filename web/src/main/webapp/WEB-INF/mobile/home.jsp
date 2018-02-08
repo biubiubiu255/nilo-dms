@@ -82,6 +82,9 @@
 					<a href="/mobile/package/packing.html" title="">
 						<li><img src="/mobile/images/icon_3.png" /><br />Packing</li>
 					</a>
+					<a href="/mobile/package/list.html" title="">
+						<li><img src="/mobile/images/icon_3.png" /><br />Pack List</li>
+					</a>
 					
 					<a href="/mobile/network/unpackage/unpack.html" title="">
 						<li><img src="/mobile/images/icon_3.png" /><br />UnPack</li>
