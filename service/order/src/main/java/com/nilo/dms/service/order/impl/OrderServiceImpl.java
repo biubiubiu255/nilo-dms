@@ -384,7 +384,9 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     @Transactional
     public void arrive(String merchantId, String scanNo, String networkId, String arriveBy) {
         List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
-
+        if (scanDetailList == null || scanDetailList.size() == 0) {
+            throw new DMSException(BizErrorCode.ARRIVE_EMPTY);
+        }
         List<String> orderNos = new ArrayList<>();
         for (WaybillScanDetailsDO details : scanDetailList) {
             orderNos.add(details.getOrderNo());
@@ -768,6 +770,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setHigh(d.getHigh());
         deliveryOrder.setNetworkId(d.getNetworkId());
         deliveryOrder.setNextNetworkId(d.getNextNetworkId());
+        deliveryOrder.setPrintTimes(d.getPrintTimes());
 
         if (d.getNetworkId() != null) {
             DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + d.getMerchantId(), "" + d.getNetworkId()), DistributionNetworkDO.class);
