@@ -5,6 +5,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.nilo.dms.common.utils.IdWorker;
+import com.nilo.dms.dao.WaybillScanDao;
+import com.nilo.dms.dao.dataobject.WaybillScanDO;
+import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.model.PackageRequest;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -32,7 +37,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/mobile/package")
 public class MobilePackageController  extends BaseController {
     @Autowired
+    private OrderService orderService;
+    @Autowired
     private DistributionNetworkDao distributionNetworkDao;
+    @Autowired
+    private WaybillScanDao waybillScanDao;
     
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -50,7 +59,7 @@ public class MobilePackageController  extends BaseController {
             s.setName(n.getName());
             list.add(s);
         }
-        
+
         model.addAttribute("nextStation",list);
         
         return "mobile/network/package/packing";
@@ -58,17 +67,74 @@ public class MobilePackageController  extends BaseController {
 
     @RequestMapping(value = "/submit.html")
     @ResponseBody
-    public String submit(String scaned_codes[],String nextStation,String weight,String length,String width,String high ) {
+    public String submit(String scaned_codes[],int nextStation,Double weight,Double length,Double width,Double high ) {
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        String orderNo = "";
+        try {
+            List<String> orderNos = new ArrayList<>();
+            for (int i = 0; i < scaned_codes.length; i++) {
+                orderNos.add(scaned_codes[i]);
+            }
 
-        for (int i=0;i<scaned_codes.length;i++){
-            System.out.println(scaned_codes[i]);
+            PackageRequest packageRequest = new PackageRequest();
+            packageRequest.setOrderNos(orderNos);
+            packageRequest.setMerchantId(merchantId);
+            packageRequest.setOptBy(me.getUserId());
+            packageRequest.setNextNetworkId(nextStation);
+            packageRequest.setWeight(weight);
+            packageRequest.setLength(length);
+            packageRequest.setWidth(width);
+            packageRequest.setHigh(high);
+            if (me.getNetworks() != null && me.getNetworks().size() != 0) {
+                packageRequest.setNetworkId(me.getNetworks().get(0));
+            }
+            orderNo = orderService.addPackage(packageRequest);
+        }catch (Exception e) {
+            System.out.println("错错错错错错");
+            return toJsonErrorMsg(e.getMessage());
         }
-        System.out.println(nextStation);
-        System.out.println(weight);
-        System.out.println(length);
-        System.out.println(width);
-        System.out.println(high);
+        return toJsonTrueData(orderNo);
 
-        return "true";
+//        for (int i=0;i<scaned_codes.length;i++){
+//            System.out.println(scaned_codes[i]);
+//        }
+//        System.out.println(nextStation);
+//        System.out.println(weight);
+//        System.out.println(length);
+//        System.out.println(width);
+//        System.out.println(high);
+//        return "true";
+    }
+
+    public static class NextStation {
+        private String code;
+        private String name;
+        private String type;
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
     }
 }
