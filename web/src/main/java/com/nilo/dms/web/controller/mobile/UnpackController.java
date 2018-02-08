@@ -45,6 +45,7 @@ import com.nilo.dms.service.order.model.OrderOptRequest;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.order.PackageController.NextStation;
+import com.nilo.dms.web.controller.order.UnPackageController.UnpackInfo;
 
 @Controller
 @RequestMapping("/mobile/network/unpackage")
@@ -92,26 +93,37 @@ public class UnpackController extends BaseController  {
     
     @ResponseBody
     @RequestMapping(value = "/scanList.html")
-    public String scanList(String scanNo) {
+    public String scanList(String scanNo, String packageNo) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<DeliveryOrder> list = new ArrayList<>();
+        List<UnpackInfo> list = new ArrayList<>();
         Pagination pagination = new Pagination(0, 100);
 
         if (StringUtil.isEmpty(scanNo)) return toPaginationLayUIData(pagination, list);
 
-        List<WaybillScanDetailsDO> scanDetailsDOList = waybillScanDetailsDao.queryByScanNo( scanNo);
-        if (scanDetailsDOList == null) return toPaginationLayUIData(pagination, list);
-
-        List<String> orderNos = new ArrayList<>();
-        for (WaybillScanDetailsDO details : scanDetailsDOList) {
-            orderNos.add(details.getOrderNo());
+        List<WaybillScanDetailsDO> scanDetailsDOList = waybillScanDetailsDao.queryByScanNo(scanNo);
+        List<DeliveryOrder> orderList = orderService.queryByPackageNo(merchantId, packageNo);
+        if (orderList == null) throw new DMSException(BizErrorCode.PACKAGE_NO_ERROR);
+        for (DeliveryOrder o : orderList) {
+            UnpackInfo i = new UnpackInfo();
+            i.setOrderNo(o.getOrderNo());
+            i.setOrderType(o.getOrderType());
+            i.setReferenceNo(o.getReferenceNo());
+            i.setWeight(o.getWeight());
+            for (WaybillScanDetailsDO d : scanDetailsDOList) {
+                if (StringUtil.equals(d.getOrderNo(), o.getOrderNo())) {
+                    i.setArrived(true);
+                    break;
+                }
+            }
+            list.add(i);
         }
-        list = orderService.queryByOrderNos(merchantId, orderNos);
+
         pagination.setTotalCount(list.size());
         return toPaginationLayUIData(pagination, list);
+        
     }
     
     
