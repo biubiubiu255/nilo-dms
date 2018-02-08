@@ -106,7 +106,7 @@
 					<li><img src="/mobile/images/scheduler_info.png" /><br />Routing
 						Query</li>
 				</a>
-				<a href="/mobile/tiaozhuangController/xgmm.html" title="">
+				<a href="/mobile/password/toPage.html" title="">
 					<li><img src="/mobile/images/index_icon_1.png" /><br />Modify
 						password</li>
 				</a>
