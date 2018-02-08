@@ -80,6 +80,7 @@
         
         $.scanner(scan_callback);
         
+
         $("#test").click(function() {
 			scan_callback('Kili201802000035');
 		});
@@ -198,9 +199,11 @@
 				</div>
 
 				<div class="bottom_a_button">
-<!--    					<a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
-					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>  -->
+
+<!--   				a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
+					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>    -->
 					<span class="scanner"><a onclick="javascript:void(0);"style="margin-bottom: 50px">scan</a></span>
+
 					<a onclick="javascript:void(0);" class="submit">submit</a>
 				</div>
 			</form>
