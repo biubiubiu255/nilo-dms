@@ -160,6 +160,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         }
         return null;
     }
+    
+    
 
     @Override
     public String createDeliveryOrder(final DeliveryOrder data) {
@@ -389,6 +391,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         for (WaybillScanDetailsDO details : scanDetailList) {
             orderNos.add(details.getOrderNo());
         }
+        
+        // 这里解析
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setMerchantId(merchantId);
         optRequest.setOptBy(arriveBy);
@@ -416,6 +420,44 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         }
 
         this.addNetworkTask(orderNos, arriveBy, merchantId);
+
+    }
+    
+    @Override
+    @Transactional
+    public void updataMultiChildOrder(String merchantId, String networkId, String arriveBy, String scanNo, List<String> ChildorderNos) {
+    	
+	
+    	List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
+
+        // 这里解析
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setMerchantId(merchantId);
+        optRequest.setOptBy(arriveBy);
+        optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
+        optRequest.setOrderNo(ChildorderNos);
+        Map<String, String> params = new HashMap<>();
+        DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, "" + networkId), DistributionNetworkDO.class);
+        UserInfo userInfo = userService.findUserInfoByUserId(merchantId, arriveBy);
+        params.put("0", networkDO.getName());
+        params.put("1", userInfo.getName());
+        optRequest.setParams(params);
+        optRequest.setNetworkId(networkId);
+        handleOpt(optRequest);
+
+        // 更新重量
+        for (WaybillScanDetailsDO details : scanDetailList) {
+            if (details.getWeight() == null)
+                continue;
+            DeliveryOrderDO orderDO = new DeliveryOrderDO();
+            orderDO.setOrderNo(details.getOrderNo());
+            orderDO.setWeight(details.getWeight());
+            orderDO.setMerchantId(Long.parseLong(merchantId));
+
+            deliveryOrderDao.update(orderDO);
+        }
+
+        this.addNetworkTask(ChildorderNos, arriveBy, merchantId);
 
     }
 
