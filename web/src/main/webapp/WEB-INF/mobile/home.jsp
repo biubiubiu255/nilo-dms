@@ -75,6 +75,9 @@
 					<a href="/mobile/send/scan.html" title="">
 						<li><img src="/mobile/images/icon_4.png" /><br />Send Scan</li>
 					</a>
+					<a href="/mobile/send/list.html" title="">
+						<li><img src="/mobile/images/icon_4.png" /><br />Send List</li>
+					</a>
 
 					<a href="/mobile/package/packing.html" title="">
 						<li><img src="/mobile/images/icon_3.png" /><br />Packing</li>
