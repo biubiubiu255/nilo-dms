@@ -1,5 +1,6 @@
 package com.nilo.dms.web.controller.mobile;
 
+import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DistributionNetworkDao;
@@ -42,6 +43,17 @@ public class SendScanController extends BaseController {
     private LoadingService loadingService;
 //    @Autowired
 //    private StaffDao staffDao;
+
+    @RequestMapping(value = "/list.html")
+    public String list(String loadingNo, Integer loadingStatus) {
+
+//        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+//        //获取merchantId
+//        String merchantId = me.getMerchantId();
+//        Pagination page = getPage();
+//        List<Loading> list = loadingService.queryBy(merchantId, loadingNo, loadingStatus, page);
+        return "mobile/test";
+    }
 
     @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
