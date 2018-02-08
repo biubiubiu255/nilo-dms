@@ -1,5 +1,7 @@
 package com.nilo.dms.web.controller.mobile;
 
+import static com.nilo.dms.common.Constant.IS_PACKAGE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,8 @@ import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.dao.WaybillScanDao;
 import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.DeliveryOrderParameter;
 import com.nilo.dms.service.order.model.PackageRequest;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
@@ -21,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
@@ -82,6 +87,23 @@ public class MobilePackageController extends BaseController {
 
 		return "mobile/network/package/list";
 	}
+	
+	
+	@ResponseBody
+    @RequestMapping(value = "/pageList.html")
+    public String pageList(String parameters) {
+
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        Pagination page = getPage();
+        DeliveryOrderParameter parameter = new DeliveryOrderParameter();
+        parameter.setMerchantId(merchantId);
+        parameter.setOrderNo(parameters);
+        parameter.setIsPackage(IS_PACKAGE);
+        List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
+        return toPaginationLayUIData(page, list);
+    }
 
 	@RequestMapping(value = "/submit.html")
 	@ResponseBody
