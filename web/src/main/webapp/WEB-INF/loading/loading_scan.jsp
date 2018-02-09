@@ -199,6 +199,9 @@
                     return false;
                 }
                 var orderNo = $("#orderNo").val();
+                if (loadingNo == '') {
+                    return false;
+                }
                 var load = layer.load(2);
                 $.ajax({
                     type: "POST",

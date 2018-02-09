@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public enum MethodEnum {
     CREATE_WAYBILL("nos.waybill.create", "nos.waybill.create"),
+    CANCEL_WAYBILL("nos.waybill.cancel", "nos.waybill.cancel"),
     WAYBILL_TRACE("nos.waybill.trace","waybill.trace"),
     STATUS_UPDATE("nos.waybill.status","waybill.status"),
 

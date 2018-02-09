@@ -68,4 +68,11 @@
         delete from t_handle_loading_details where loading_no = #{loadingNo} and order_no = #{orderNo}
     </delete>
 
+    <select id="queryByOrderNo" resultMap="loadingDetailsDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_handle_loading_details where loading_no = #{loadingNo} and order_no = #{orderNo}
+    </select>
+
+
 </mapper>

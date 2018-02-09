@@ -174,8 +174,10 @@ public class LoadingServiceImpl implements LoadingService {
             throw new DMSException(BizErrorCode.LOADING_STATUS_LIMITED, loadingNo);
         }
 
-        User optUser = userService.findByUserId(merchantId, optBy);
-
+        LoadingDetailsDO loadingDetailsDO = loadingDetailsDao.queryByOrderNo(loadingNo, orderNo);
+        if (loadingDetailsDO != null) {
+            throw new DMSException(BizErrorCode.DELIVERY_NO_EXIST);
+        }
         //修改订单信息
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setMerchantId(merchantId);
@@ -289,9 +291,9 @@ public class LoadingServiceImpl implements LoadingService {
             OrderOptRequest optRequest = new OrderOptRequest();
             optRequest.setMerchantId(merchantId);
             optRequest.setOptBy(optBy);
-            if(StringUtil.isNotEmpty(loadingDO.getNextStation())) {
+            if (StringUtil.isNotEmpty(loadingDO.getNextStation())) {
                 optRequest.setOptType(OptTypeEnum.SEND);
-            }else{
+            } else {
                 optRequest.setOptType(OptTypeEnum.DELIVERY);
             }
             List<String> orderNoList = new ArrayList<>();

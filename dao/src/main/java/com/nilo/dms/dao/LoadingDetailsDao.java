@@ -12,12 +12,14 @@ import java.util.List;
  * Created by admin on 2017/9/19.
  */
 @Repository
-public interface LoadingDetailsDao extends BaseDao<Long,LoadingDetailsDO> {
+public interface LoadingDetailsDao extends BaseDao<Long, LoadingDetailsDO> {
 
     List<LoadingDetailsDO> queryByLoadingNo(String loadingNo);
 
-    List<LoadingDetailsDO> queryByLoadingNos(@Param(value="loadingNos")List<String> loadingNos);
+    List<LoadingDetailsDO> queryByLoadingNos(@Param(value = "loadingNos") List<String> loadingNos);
 
-    Integer deleteBy(@Param(value="loadingNo") String loadingNo,@Param(value="orderNo") String orderNo);
+    Integer deleteBy(@Param(value = "loadingNo") String loadingNo, @Param(value = "orderNo") String orderNo);
+
+    LoadingDetailsDO queryByOrderNo(@Param(value = "loadingNo") String loadingNo, @Param(value = "orderNo") String orderNo);
 
 }

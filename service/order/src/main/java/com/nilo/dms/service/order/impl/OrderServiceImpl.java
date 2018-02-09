@@ -666,7 +666,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             notify.setMethod(interfaceConfig.getOp());
             notify.setUrl(interfaceConfig.getUrl());
             Map<String, Object> dataMap = new HashMap<>();
-            dataMap.put("orderNo", orderNo);
+            dataMap.put("waybill_number", orderNo);
             dataMap.put("status", convertResult);
             UserInfo userInfo = userService.findUserInfoByUserId(optRequest.getMerchantId(), optRequest.getOptBy());
             dataMap.put("opt_by", userInfo.getName());
@@ -704,7 +704,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
 
     private String createSign(String key, String data) {
-        return new String(DigestUtils.md5Hex("key=" + key + "&data=" + data));
+        return new String(DigestUtils.md5Hex( key + data + key).toUpperCase());
     }
 
     private DeliveryOrder convert(DeliveryOrderDO d) {
