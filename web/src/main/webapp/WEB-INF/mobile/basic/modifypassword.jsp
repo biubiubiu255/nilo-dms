@@ -23,7 +23,7 @@
 <script type="text/javascript" src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        loadLanguage('en');
+        loadLanguage('cn');
         var mobile = new MobileData({
             autoLoad: false
             , formId: 'password-form'
@@ -59,7 +59,7 @@
 <body>
 <div class="wap_content">
     <div class="wap_top"><a href="javascript:history.go(-1)" title="返回" class="wap_top_back"></a>
-        <h2>Modify password</h2>
+        <h2 data-locale="password_title">Modify password</h2>
     </div>
 
     <div class="formula_modify">
@@ -81,7 +81,7 @@
 
                 </ul>
             </div>
-            <div class="bottom_a_button"><a href="javascript:void(0);" class="submit">submit</a></div>
+            <div class="bottom_a_button"><a href="javascript:void(0);" class="submit" data-locale="all_submit">submit</a></div>
         </form>
     </div>
 </div>

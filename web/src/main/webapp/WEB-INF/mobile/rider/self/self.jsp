@@ -9,7 +9,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
 <meta name="keywords" content="#" />
 <meta name="description" content="#" />
-<title>业务员功能</title>
 
 
 <link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css"/>

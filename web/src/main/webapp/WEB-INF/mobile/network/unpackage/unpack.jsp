@@ -17,7 +17,7 @@
 
 <link rel="stylesheet" href="/layui/css/layui.css" media="all">
 <link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css" />
-<link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
+<link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
 
 
 
@@ -178,9 +178,9 @@
 
 		<div class="wap_top">
 			<a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-			<h2>unpackage</h2>
+			<h2 data-locale="unpack_title">unpackage</h2>
 		</div>
-		<div class="banner_content">
+		<div class="formula_modify">
 			<form id="unpackage-form">
 				<div class="banner_content">
 					<input type="hidden" name="scanNos" value=""/>
@@ -202,9 +202,9 @@
 
 <!--   				a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
 					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>    -->
-					<span class="scanner"><a onclick="javascript:void(0);"style="margin-bottom: 50px">scan</a></span>
+					<span class="scanner"><a onclick="javascript:void(0);"style="margin-bottom: 50px" data-locale="all_scan">scan</a></span>
 
-					<a onclick="javascript:void(0);" class="submit">submit</a>
+					<a onclick="javascript:void(0);" class="submit" data-locale="all_submit">submit</a>
 				</div>
 			</form>
 

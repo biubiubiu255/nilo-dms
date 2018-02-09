@@ -23,7 +23,7 @@
 <script type="text/javascript" src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-        loadLanguage('en');
+        loadLanguage('cn');
         var mobile = new MobileData({
             autoLoad:false
             ,formId:'delivery-form'
@@ -103,13 +103,14 @@
                     <li>
                     <select required="required" class='input_value' name='rider'>
                         <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
-                        <option value="">choose a rider....</option>
+                        <option value="" data-locale="delivery_scan_rider">choose a rider</option>
                         <c:forEach items="${riderList}" var="rider">
                             <option value="${rider.userId}"> ${rider.staffId}</option>
                         </c:forEach>
                     </select>
                     </li>
-                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span class="scanner" id="scan">scan</span></li>
+                    <%--<li><input type='text' placeholder="Logistics No" required="required" property_name="arrive_scan_no" set_attr="placeholder" class='input_value keywords i18n-input' id="logisticsNo" name='logisticsNo' /><span data-locale="arrive_scan_scan" class="scanner" id="scan">scan</span></li>--%>
+                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span class="scanner" id="scan" data-locale="all_scan">scan</span></li>
 
                 </ul>
                 <%--<div class="clear"></div>--%>
@@ -117,8 +118,8 @@
                     <%--<li id="code123"><input type='checkbox' class='fuxuank' value="123" name='items' /><span class="suiyi">9879846541231354674612123123</span></li>--%>
                 </ul>
             </div>
-            <div class="bottom_a_button11"><a href="javascript:void(0);" class="delete_button">delete</a></div>
-            <div class="bottom_a_button22"><a href="javascript:void(0);" class="submit">submit</a></div>
+            <div class="bottom_a_button11"><a href="javascript:void(0);" class="delete_button" data-locale="all_delete">delete</a></div>
+            <div class="bottom_a_button22"><a href="javascript:void(0);" class="submit" data-locale="all_submit">submit</a></div>
         </form>
 
     </div>
