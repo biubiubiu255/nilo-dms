@@ -53,7 +53,7 @@ public class RouteController extends BaseController {
     
     
     
-    @RequestMapping(value = "/homepage.html", method=RequestMethod.GET)
+    @RequestMapping(value = "/route.html", method=RequestMethod.GET)
     public String homepage() {
         return "mobile/basic/route/route";
     }
