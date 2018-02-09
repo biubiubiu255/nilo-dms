@@ -76,10 +76,8 @@ public class DeliveryOrder {
     private Double alreadyPaid;
     private Double billNo;
     private Double accountNo;
-
-    private boolean isPrinted;
-
     private Integer printTimes;
+    private boolean isPrinted;
 
     public Double getNeedPayAmount() {
         return needPayAmount;

@@ -58,7 +58,7 @@
             <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">Delete</a>
         </shiro:hasPermission>
         <shiro:hasPermission name="300025">
-            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="reset">Reset Password</a>
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="reset">Reset</a>
         </shiro:hasPermission>
         <shiro:hasPermission name="300026">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="active">Active</a>
