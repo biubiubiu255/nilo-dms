@@ -111,7 +111,7 @@
 				<div class="banner_content">
 					<input type="hidden" name="scanedCodes" />
 					<ul class="one_banner">
-						<li><input type='text'  placeholder="Logistics_No" required="required" property_name="arrive_scan_no" set_attr="placeholder" class='input_value keywords i18n-input' id="logisticsNo" name='logisticsNo' /><span data-locale="all_scan" class="scanner" id="scan">scan</span></li>
+						<li><input type='text'  placeholder="Logistics_No" required="required" property_name="Logistics_No" set_attr="placeholder" class='input_value keywords i18n-input' id="logisticsNo" name='logisticsNo' /><span data-locale="all_scan" class="scanner" id="scan">scan</span></li>
 						<%--<li><input type='text' placeholder="Logistics No" required="required" class='input_value' id="logisticsNo" name='logisticsNo' /><span data-locale="all_scan" class="scanner" id="scan">scan</span></li>--%>
 					</ul>
 				</div>

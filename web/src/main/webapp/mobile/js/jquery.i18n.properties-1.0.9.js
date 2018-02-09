@@ -475,7 +475,7 @@ String.prototype.split = function (separator, limit) {
 
 
 function loadLanguage(language_text) {   
-	var language = 'en';
+	var language = 'cn';
 	if(!isEmpty(language_text)){
 			language = language_text;
 	}
@@ -499,7 +499,7 @@ function loadLanguage(language_text) {
 				if (!selectAttr) {
 					selectAttr = "value";
 				};
-				$(this).attr(selectAttr, $.i18n.prop($(this).attr(selectAttr)));
+				$(this).attr(selectAttr, $.i18n.prop($(this).attr('property_name')));
 			});
 		 }    
 	});    
