@@ -248,7 +248,7 @@
             <if test="goodsType != null and goodsType !='' ">
                 goods_Type = #{goodsType},
             </if>
-            <if test="parentNo != null and parentNo !='' ">
+            <if test="parentNo != null">
                 parent_No = #{parentNo},
             </if>
             <if test="printTimes != null">

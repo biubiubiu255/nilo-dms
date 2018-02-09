@@ -2,6 +2,7 @@ package com.nilo.dms.web.controller.order;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
@@ -71,6 +72,10 @@ public class PackageController extends BaseController {
         parameter.setMerchantId(merchantId);
         parameter.setOrderNo(packageNo);
         parameter.setIsPackage(IS_PACKAGE);
+        List<Integer> status = new ArrayList<>();
+        status.add(DeliveryOrderStatusEnum.ARRIVED.getCode());
+        status.add(DeliveryOrderStatusEnum.SEND.getCode());
+        parameter.setStatus(status);
         List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
         return toPaginationLayUIData(page, list);
     }
@@ -170,7 +175,7 @@ public class PackageController extends BaseController {
     }
 
     @RequestMapping(value = "/print/{orderNo}.html", method = RequestMethod.GET)
-    public String print(Model model,@PathVariable String orderNo) {
+    public String print(Model model, @PathVariable String orderNo) {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();

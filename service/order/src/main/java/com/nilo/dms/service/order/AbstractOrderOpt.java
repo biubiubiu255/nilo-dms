@@ -79,24 +79,4 @@ public abstract class AbstractOrderOpt {
         }
     }
 
-    protected void addOptLog(OrderOptRequest optRequest,String orderNo, DeliveryOrderStatusEnum before, DeliveryOrderStatusEnum after) {
-        try {
-                DeliveryOrderOptDO optDO = new DeliveryOrderOptDO();
-                optDO.setOrderNo(orderNo);
-                optDO.setMerchantId(Long.parseLong(optRequest.getMerchantId()));
-                optDO.setOpt(optRequest.getOptType().getCode());
-                optDO.setOptBy(optRequest.getOptBy());
-                optDO.setFromStatus(before.getCode());
-                if (after != null) {
-                    optDO.setToStatus(after.getCode());
-                } else {
-                    optDO.setToStatus(before.getCode());
-                }
-                optDO.setRemark(optRequest.getRemark());
-                deliveryOrderOptDao.insert(optDO);
-        } catch (Exception e) {
-            logger.error("Add Opt Log Failed. optRequest:{}", optRequest, e);
-        }
-    }
-
 }
