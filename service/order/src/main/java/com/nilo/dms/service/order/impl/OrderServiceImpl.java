@@ -708,6 +708,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         }
         deliveryOrder.setPackage(StringUtil.equalsIgnoreCase(d.getIsPackage(), Constant.IS_PACKAGE));
         deliveryOrder.setCreatedBy(d.getCreatedBy());
+        deliveryOrder.setPrintTimes(d.getPrintTimes());
         return deliveryOrder;
     }
 
