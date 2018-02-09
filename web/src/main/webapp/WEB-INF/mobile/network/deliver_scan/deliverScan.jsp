@@ -47,7 +47,7 @@
             }
             ,callback:function (data) {
                 if (data.result) {
-                    showInfo('Success '+data.msg);
+                    showInfo('Success');
                     del();
                 } else {
                     showError(data.msg)
@@ -103,7 +103,7 @@
                     <li>
                     <select required="required" class='input_value' name='rider'>
                         <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
-                        <option value="">choose or search....</option>
+                        <option value="">choose a rider....</option>
                         <c:forEach items="${riderList}" var="rider">
                             <option value="${rider.userId}"> ${rider.staffId}</option>
                         </c:forEach>

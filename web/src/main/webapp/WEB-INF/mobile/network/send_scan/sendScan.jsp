@@ -126,7 +126,7 @@
                     <li>
                         <%--<label>station</label>--%>
                         <select required="required" class='input_value' name='nextStation'>
-                            <option value="">Please select the site</option>
+                            <option value="">Please select the nextStation</option>
                             <c:forEach items="${nextStation}" var="station">
                                 <option value="${station.code}" type="${station.type}">${station.name}</option>
                             </c:forEach>

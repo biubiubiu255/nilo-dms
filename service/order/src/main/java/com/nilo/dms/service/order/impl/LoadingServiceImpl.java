@@ -289,6 +289,7 @@ public class LoadingServiceImpl implements LoadingService {
             if(StringUtil.isNotEmpty(loadingDO.getNextStation())) {
                 //参数
                 DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, "" + loadingDO.getNextStation()), DistributionNetworkDO.class);
+
                 args.put("0", networkDO.getName());
                 optRequest.setParams(args);
 
