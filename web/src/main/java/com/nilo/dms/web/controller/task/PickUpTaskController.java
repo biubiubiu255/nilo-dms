@@ -1,6 +1,7 @@
 package com.nilo.dms.web.controller.task;
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.enums.TaskStatusEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.dao.UserInfoDao;
 import com.nilo.dms.dao.dataobject.UserInfoDO;
@@ -65,9 +66,7 @@ public class PickUpTaskController extends BaseController {
         parameter.setMerchantId(merchantId);
         parameter.setTaskType(TaskTypeEnum.PICK_UP.getCode());
         parameter.setHandledBy(me.getUserId());
-        if (taskStatus != null) {
-            parameter.setStatus(Arrays.asList(taskStatus));
-        }
+        parameter.setStatus(Arrays.asList(new Integer[]{TaskStatusEnum.CREATE.getCode()}));
         Pagination page = getPage();
         List<Task> list = taskService.queryTask(parameter, page);
 
