@@ -20,6 +20,9 @@ public enum OptTypeEnum implements EnumMessage{
     DELAY("delay", "Delay"),
     DETAIN("detain", "Detain"),
     RECEIVE("receive", "Receive"),
+    PACKAGE("package", "Package"),
+    UNPACK ("unpack", "Unpack"),
+
     PROBLEM("problem", "Problem"),
     ;
     private String code;

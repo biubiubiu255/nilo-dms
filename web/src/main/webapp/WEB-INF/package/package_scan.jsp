@@ -101,7 +101,7 @@
 
         layui.use('table', function () {
             table = layui.table;
-            table.on('tool(demo)', function (obj) {
+            table.on('tool(${id0})', function (obj) {
                 var data = obj.data;
                 var orderNo = data.orderNo;
                 if (obj.event === 'delete') {

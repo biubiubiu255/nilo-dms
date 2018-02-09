@@ -8,6 +8,7 @@ import java.util.*;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.*;
+import com.nilo.dms.service.order.model.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,19 +53,6 @@ import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.UserNetworkDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
-import com.nilo.dms.service.order.model.CreateDeliverOrderMessage;
-import com.nilo.dms.service.order.model.DeliveryOrder;
-import com.nilo.dms.service.order.model.DeliveryOrderParameter;
-import com.nilo.dms.service.order.model.DeliveryOrderStatusInfo;
-import com.nilo.dms.service.order.model.DeliveryRoute;
-import com.nilo.dms.service.order.model.GoodsInfo;
-import com.nilo.dms.service.order.model.NotifyRequest;
-import com.nilo.dms.service.order.model.OrderOptRequest;
-import com.nilo.dms.service.order.model.PackageRequest;
-import com.nilo.dms.service.order.model.PhoneMessage;
-import com.nilo.dms.service.order.model.ReceiverInfo;
-import com.nilo.dms.service.order.model.SenderInfo;
-import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
@@ -90,6 +78,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     private UserService userService;
     @Autowired
     private DeliveryRouteService deliveryRouteService;
+    @Autowired
+    private OrderOptLogService orderOptLogService;
     @Autowired
     private DeliveryOrderGoodsDao deliveryOrderGoodsDao;
     @Autowired
@@ -349,9 +339,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                         }
                         // 短信消息
                         sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);
-                        // 记录操作日志
-                        addOptLog(optRequest, orderNo, DeliveryOrderStatusEnum.getEnum(orderDO.getStatus()),
-                                DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
                     }
                     // 记录物流轨迹
                     deliveryRouteService.addRoute(optRequest);
@@ -465,6 +452,15 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     public String addPackage(PackageRequest packageRequest) {
         String orderNo = "";
         Long merchant = Long.parseLong(packageRequest.getMerchantId());
+
+        // 判断是否允许打包
+        for (String o : packageRequest.getOrderNos()) {
+            DeliveryOrder deliveryOrder = queryByOrderNo(packageRequest.getMerchantId(), o);
+            if (StringUtil.isNotEmpty(deliveryOrder.getParentNo()) || deliveryOrder.getStatus() != DeliveryOrderStatusEnum.ARRIVED) {
+                throw new DMSException(BizErrorCode.PACKAGE_NOT_ALLOW, o);
+            }
+        }
+
         // 1、保存订单信息
         DeliveryOrderDO orderHeader = new DeliveryOrderDO();
         orderHeader.setMerchantId(merchant);
@@ -522,7 +518,61 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             deliveryOrderDao.update(update);
         }
 
+        // 添加操作日志
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setOrderNo(packageRequest.getOrderNos());
+        optRequest.setOptType(OptTypeEnum.PACKAGE);
+        optRequest.setOptBy(packageRequest.getOptBy());
+        optRequest.setNetworkId("" + packageRequest.getNetworkId());
+        optRequest.setMerchantId(packageRequest.getMerchantId());
+        orderOptLogService.addOptLog(optRequest);
         return orderNo;
+    }
+
+    @Override
+    @Transactional
+    public void unpack(UnpackRequest unpackRequest) {
+
+
+        Iterator<String> iterator = unpackRequest.getOrderNos().iterator();
+        // 判断是否允许拆包
+        for (; iterator.hasNext(); ) {
+            String orderNo = iterator.next();
+            DeliveryOrder deliveryOrder = queryByOrderNo(unpackRequest.getMerchantId(), orderNo);
+            if (StringUtil.isEmpty(deliveryOrder.getParentNo()) && !deliveryOrder.isPackage()) {
+                throw new DMSException(BizErrorCode.PACKAGE_NOT_ALLOW, orderNo);
+            }
+            if (deliveryOrder.isPackage()) {
+                OrderOptRequest optRequest = new OrderOptRequest();
+                optRequest.setMerchantId(unpackRequest.getMerchantId());
+                optRequest.setOptBy(unpackRequest.getOptBy());
+                optRequest.setOptType(OptTypeEnum.RECEIVE);
+                optRequest.setOrderNo(Arrays.asList(new String[]{orderNo}));
+                optRequest.setNetworkId("" + unpackRequest.getNetworkId());
+                handleOpt(optRequest);
+                iterator.remove();
+            }
+        }
+        //1、到件
+        waybillNoListArrive(unpackRequest.getOrderNos(), unpackRequest.getOptBy(), unpackRequest.getMerchantId());
+
+        // 2、添加操作日志
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setOrderNo(unpackRequest.getOrderNos());
+        optRequest.setOptType(OptTypeEnum.UNPACK);
+        optRequest.setOptBy(unpackRequest.getOptBy());
+        optRequest.setNetworkId("" + unpackRequest.getNetworkId());
+        optRequest.setMerchantId(unpackRequest.getMerchantId());
+        orderOptLogService.addOptLog(optRequest);
+
+        for (String o : unpackRequest.getOrderNos()) {
+            //3、清除 大包号
+            DeliveryOrderDO update = new DeliveryOrderDO();
+            update.setMerchantId(Long.parseLong(unpackRequest.getMerchantId()));
+            update.setOrderNo(o);
+            update.setParentNo("");
+            deliveryOrderDao.update(update);
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.nilo.dms.service.order;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.service.order.model.DeliveryOrderOpt;
+import com.nilo.dms.service.order.model.OrderOptRequest;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface OrderOptLogService {
 
     List<DeliveryOrderOpt> queryByOrderNos(String merchantId, List<String> orderNo);
 
+    void addOptLog(OrderOptRequest request);
 }

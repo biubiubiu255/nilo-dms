@@ -1,15 +1,23 @@
 package com.nilo.dms.service.order.impl;
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.enums.OptTypeEnum;
+import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
+import com.nilo.dms.dao.WaybillLogPackageDao;
+import com.nilo.dms.dao.WaybillLogUnPackDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
+import com.nilo.dms.dao.dataobject.WaybillLogPackageDO;
+import com.nilo.dms.dao.dataobject.WaybillLogUnPackDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.User;
 import com.nilo.dms.service.order.OrderOptLogService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.DeliveryOrderOpt;
+import com.nilo.dms.service.order.model.DeliveryRoute;
+import com.nilo.dms.service.order.model.OrderOptRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +38,12 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
     private UserService userService;
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private WaybillLogUnPackDao waybillLogUnPackDao;
+    @Autowired
+    private WaybillLogPackageDao waybillLogPackageDao;
+
     @Override
     public List<DeliveryOrderOpt> queryBy(String merchantId, String optType, String orderNo, String optBy, Long fromtTime, Long toTime, Pagination pagination) {
 
@@ -94,6 +108,45 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
         List<DeliveryOrderOptDO> queryList = deliveryOrderOptDao.queryByOrderNos(Long.parseLong(merchantId), orderNos);
 
         return convert(queryList, merchantId);
+    }
+
+    @Override
+    public void addOptLog(OrderOptRequest request) {
+
+        OptTypeEnum optTypeEnum = request.getOptType();
+
+        switch (optTypeEnum) {
+            case PACKAGE: {
+                for(String orderNo : request.getOrderNo()) {
+                    DeliveryOrder deliveryOrder = orderService.queryByOrderNo(request.getMerchantId(), orderNo);
+                    WaybillLogPackageDO packageDO = new WaybillLogPackageDO();
+                    packageDO.setOptTime(DateUtil.getSysTimeStamp());
+                    packageDO.setOptBy(request.getOptBy());
+                    packageDO.setNetworkId(Integer.parseInt(request.getNetworkId()));
+                    packageDO.setParentNo(deliveryOrder.getParentNo());
+                    packageDO.setOrderNo(orderNo);
+                    packageDO.setMerchantId(Long.parseLong(request.getMerchantId()));
+                    waybillLogPackageDao.insert(packageDO);
+                }
+                break;
+            }
+            case UNPACK: {
+                for(String orderNo : request.getOrderNo()) {
+                    DeliveryOrder deliveryOrder = orderService.queryByOrderNo(request.getMerchantId(), orderNo);
+                    WaybillLogUnPackDO unPackDO = new WaybillLogUnPackDO();
+                    unPackDO.setOptTime(DateUtil.getSysTimeStamp());
+                    unPackDO.setOptBy(request.getOptBy());
+                    unPackDO.setNetworkId(Integer.parseInt(request.getNetworkId()));
+                    unPackDO.setParentNo(deliveryOrder.getParentNo());
+                    unPackDO.setOrderNo(orderNo);
+                    unPackDO.setMerchantId(Long.parseLong(request.getMerchantId()));
+                    waybillLogUnPackDao.insert(unPackDO);
+                }
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     private DeliveryOrderOpt convert(DeliveryOrderOptDO d) {
