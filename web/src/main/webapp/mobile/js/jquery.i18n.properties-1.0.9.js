@@ -499,7 +499,7 @@ function loadLanguage(language_text) {
 				if (!selectAttr) {
 					selectAttr = "value";
 				};
-				$(this).attr(selectAttr, $.i18n.prop($(this).attr(selectAttr)));
+				$(this).attr(selectAttr, $.i18n.prop($(this).attr('property_name')));
 			});
 		 }    
 	});    
