@@ -90,7 +90,7 @@ public class DeliverScanController extends BaseController {
 
         }
         loadingService.ship(merchantId, loadingNo, me.getUserId());
-        return toJsonTrueData(loadingNo);
+        return toJsonTrueMsg();
 
     }
 

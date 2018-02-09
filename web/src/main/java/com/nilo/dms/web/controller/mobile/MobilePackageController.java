@@ -99,7 +99,7 @@ public class MobilePackageController extends BaseController {
         Pagination page = getPage();
         DeliveryOrderParameter parameter = new DeliveryOrderParameter();
         parameter.setMerchantId(merchantId);
-        if(!"packageNo".equals(parameters)) {
+        if(!("packageNo".equals(parameters))) {
         	 parameter.setOrderNo(parameters);
         }
         parameter.setIsPackage(IS_PACKAGE);

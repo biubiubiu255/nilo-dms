@@ -16,7 +16,6 @@
 
 
 <link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css" />
-<link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
 <link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
 <script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="/mobile/js/functions.js"></script>
@@ -77,7 +76,7 @@
 								return;
 							}
 							code_array[code] = code;
-							var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class='fuxuank' value=\""+code+"\" name='items[]' /><span class='suiyi'>" + code + "</span></li>";
+							var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class=\'fuxuank\' value=\""+code+"\" name='items[]' /><span class='suiyi'>" + code + "</span></li>";
 							$('#append_order_items_id').prepend(append_html);
 						}
 						$.scanner(scan_callback);
@@ -101,7 +100,7 @@
 </head>
 <body>
 
-	<div class="wap_content">
+	<div class="formula_modify">
 		<div class="wap_top">
 			<a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
 			<h2 data-locale="arrive_scan_title">Arrive Scan</h2>
@@ -112,25 +111,17 @@
 				<div class="banner_content">
 					<input type="hidden" name="scanedCodes" />
 					<ul class="one_banner">
-						<li><input type='text' placeholder="Logistics No"
-							required="required" maxlength='100' class='input_value'
-							id="logisticsNo" name='logisticsNo' /><span class="scanner"
-							id="scan">scan</span></li>
-
+						<li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span class="scanner" id="scan">scan</span></li>
 					</ul>
 				</div>
 
 				<ul id='append_order_items_id'>
-					<%--<li id="code123"><input type='checkbox' class='input_value' value="123" name='items' /><span>code 12123123</span></li>--%>
+					<%--<li id="code123"><input type='checkbox' class='fuxuank' value="123" name='items' /><span class="suiyi">code 12123123</span></li>--%>
 					<%--<li id="code456"><input type='checkbox' class='input_value' value="456" name='items' /><span>code 12123123</span></li>--%>
 				</ul>
 
-				<div class="bottom_a_button11">
-					<a href="javascript:void(0);" class="delete_button">delete</a>
-				</div>
-				<div class="bottom_a_button22">
-					<a href="javascript:void(0);" class="submit">submit</a>
-				</div>
+				<div class="bottom_a_button11"><a href="javascript:void(0);" class="delete_button">delete</a></div>
+				<div class="bottom_a_button22"><a href="javascript:void(0);" class="submit">submit</a></div>
 
 				<!-- <div class="bottom_a_button11">
 					<a onclick="delTr2()">delete</a>
