@@ -33,7 +33,7 @@ public class SenderInfo {
     public String getCountryId() {
         return countryId;
     }
-
+    @JSONField(name = "country_id")
     public void setCountryId(String countryId) {
         this.countryId = countryId;
     }
@@ -41,7 +41,7 @@ public class SenderInfo {
     public String getProvinceId() {
         return provinceId;
     }
-
+    @JSONField(name = "province_id")
     public void setProvinceId(String provinceId) {
         this.provinceId = provinceId;
     }
@@ -49,7 +49,7 @@ public class SenderInfo {
     public String getCityId() {
         return cityId;
     }
-
+    @JSONField(name = "city_id")
     public void setCityId(String cityId) {
         this.cityId = cityId;
     }
@@ -57,7 +57,7 @@ public class SenderInfo {
     public String getAreaId() {
         return areaId;
     }
-
+    @JSONField(name = "area_id")
     public void setAreaId(String areaId) {
         this.areaId = areaId;
     }
