@@ -111,7 +111,7 @@
 				<i class="model_banner_title"></i>Basic function
 			</div>
 			<ul class="model_banner_ul">
-				<a href="/mobile/tiaozhuangController/lycx.html">
+				<a href="/mobile/basic/route/homepage.html">
 					<li><img src="/mobile/images/scheduler_info.png" /><br />Routing
 						Query</li>
 				</a>
