@@ -16,6 +16,10 @@ public class DeliveryRoute {
 
     private String optNetwork;
 
+    private String networkDesc;
+
+    private String optByName;
+
     private String optBy;
 
     private Long optTime;
@@ -23,6 +27,22 @@ public class DeliveryRoute {
     private String phone;
 
     private String remark;
+
+    public String getNetworkDesc() {
+        return networkDesc;
+    }
+
+    public void setNetworkDesc(String networkDesc) {
+        this.networkDesc = networkDesc;
+    }
+
+    public String getOptByName() {
+        return optByName;
+    }
+
+    public void setOptByName(String optByName) {
+        this.optByName = optByName;
+    }
 
     public String getPhone() {
         return phone;
