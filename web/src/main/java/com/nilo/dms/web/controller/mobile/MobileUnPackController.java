@@ -31,7 +31,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/mobile/network/unpackage")
-public class UnpackController extends BaseController {
+public class MobileUnPackController extends BaseController {
 
     @Autowired
     private DistributionNetworkDao distributionNetworkDao;
