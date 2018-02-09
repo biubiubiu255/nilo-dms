@@ -78,7 +78,7 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
         route.setOptNetwork(routeDO.getOptNetwork());
         route.setPhone(routeDO.getPhone());
         route.setOptBy(routeDO.getOptBy());
-        route.setOptTime(routeDO.getOptTime());
+        route.setOptTime(routeDO.getCreatedTime());
         if (StringUtil.isNotEmpty(routeDO.getOptNetwork())) {
             DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + routeDO.getMerchantId(), "" + routeDO.getOptNetwork()), DistributionNetworkDO.class);
             route.setNetworkDesc(networkDO.getName());
