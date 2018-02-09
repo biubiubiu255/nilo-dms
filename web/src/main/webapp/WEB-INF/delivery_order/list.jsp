@@ -104,7 +104,6 @@
                 OrderTime
             </th>
             <th lay-data="{field:'weight', width:100}">Weight</th>
-            <th lay-data="{field:'country', width:100}">Country</th>
             <th lay-data="{field:'goodsType', width:120}">GoodsType</th>
             <th lay-data="{field:'receiverInfo', width:150,templet: '<div>{{d.receiverInfo.receiverName}}</div>' }">
                 Receiver

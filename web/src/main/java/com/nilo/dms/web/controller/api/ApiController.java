@@ -1,10 +1,16 @@
 package com.nilo.dms.web.controller.api;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.nilo.dms.common.enums.OptTypeEnum;
+import com.nilo.dms.common.exception.BizErrorCode;
+import com.nilo.dms.common.utils.AssertUtil;
+import com.nilo.dms.service.order.model.OrderOptRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +66,18 @@ public class ApiController extends BaseController {
         switch (method) {
             case CREATE_WAYBILL: {
                 orderService.addCreateDeliveryOrderRequest(merchantId, data, sign);
+                break;
+            }
+            case CANCEL_WAYBILL: {
+                OrderOptRequest optRequest = new OrderOptRequest();
+                JSONObject jsonObject = JSON.parseObject(data);
+                String orderNo = jsonObject.getString("waybill_number");
+                AssertUtil.isNotBlank(orderNo, BizErrorCode.ORDER_NO_EMPTY);
+                optRequest.setOrderNo(Arrays.asList(new String[]{orderNo}));
+                optRequest.setMerchantId(merchantId);
+                optRequest.setOptBy("api");
+                optRequest.setOptType(OptTypeEnum.CANCEL);
+                orderService.handleOpt(optRequest);
                 break;
             }
             case WAYBILL_TRACE: {
