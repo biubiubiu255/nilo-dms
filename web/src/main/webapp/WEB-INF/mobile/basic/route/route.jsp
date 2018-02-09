@@ -64,8 +64,10 @@
 					});
 	
 	function getResult(d) {
-		
-		var dataStr = GetCurrentTime('YYYY-MM-DD hh:mm:ss', d.optTime);
+		//alert("test"+d.opt);
+		//var dataStr = GetCurrentTime('YYYY-MM-DD hh:mm:ss', parseint(d.optTime));
+		var dataStr = UnixToDate(d.optTime, 'YYYY-MM-DD hh:mm:ss');
+
 		
 		var point = '';
 	
@@ -93,6 +95,24 @@
     	//alert(point);
 		return point;
 	}
+	function UnixToDate(unixTime, isFull, timeZone) {  
+	    if (typeof (timeZone) == 'number'){  
+	        unixTime = parseInt(unixTime) + parseInt(timeZone) * 60 * 60;  
+	    }  
+	    var time = new Date(unixTime * 1000);  
+	    var ymdhis = "";  
+	    ymdhis += time.getUTCFullYear() + "-";  
+	    ymdhis += (time.getUTCMonth()+1) + "-";  
+	    ymdhis += time.getUTCDate();  
+	    if (isFull === true){  
+	        ymdhis += " " + time.getUTCHours() + ":";  
+	        ymdhis += time.getUTCMinutes() + ":";  
+	        ymdhis += time.getUTCSeconds();  
+	    }  
+	    return ymdhis;  
+	}  
+	  
+	
 	
 
 </script>
