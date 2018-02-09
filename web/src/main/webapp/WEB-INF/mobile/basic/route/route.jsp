@@ -66,7 +66,7 @@
 	function getResult(d) {
 		//alert("test"+d.opt);
 		//var dataStr = GetCurrentTime('YYYY-MM-DD hh:mm:ss', parseint(d.optTime));
-		var dataStr = UnixToDate(d.optTime, 'YYYY-MM-DD hh:mm:ss');
+		var dataStr = UnixToDate(d.optTime, true);
 
 		
 		var point = '';
