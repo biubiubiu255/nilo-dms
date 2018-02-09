@@ -198,14 +198,17 @@
 
 				</div>
 
-				<div class="bottom_a_button">
+<!-- 				<div class="bottom_a_button">
 
-<!--   				a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
-					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>    -->
+  				a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
+					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>   
 					<span class="scanner"><a onclick="javascript:void(0);"style="margin-bottom: 50px" data-locale="all_scan">scan</a></span>
 
 					<a onclick="javascript:void(0);" class="submit" data-locale="all_submit">submit</a>
-				</div>
+					
+				</div> -->
+            <div class="bottom_a_button11"><a href="javascript:void(0);" class="submit" data-locale="all_delete">确定</a></div>
+            <div class="bottom_a_button22"><a href="javascript:void(0);" class="scanner" data-locale="all_submit">scan</a></div>
 			</form>
 
 		</div>
