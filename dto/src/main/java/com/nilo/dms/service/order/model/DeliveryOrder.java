@@ -79,6 +79,16 @@ public class DeliveryOrder {
     private Integer printTimes;
     private boolean isPrinted;
 
+    private String allocatedRider;
+
+    public String getAllocatedRider() {
+        return allocatedRider;
+    }
+
+    public void setAllocatedRider(String allocatedRider) {
+        this.allocatedRider = allocatedRider;
+    }
+
     public Double getNeedPayAmount() {
         return needPayAmount;
     }
@@ -194,7 +204,7 @@ public class DeliveryOrder {
     public Double getHigh() {
         return high;
     }
-
+    @JSONField(name = "height")
     public void setHigh(Double high) {
         this.high = high;
     }
@@ -291,7 +301,7 @@ public class DeliveryOrder {
     public Double getDeliveryFee() {
         return deliveryFee;
     }
-    @JSONField(name = "delivery_fee")
+    @JSONField(name = "shipping_fee")
     public void setDeliveryFee(Double deliveryFee) {
         this.deliveryFee = deliveryFee;
     }
@@ -333,7 +343,7 @@ public class DeliveryOrder {
     public Double getWeight() {
         return weight;
     }
-    @JSONField(name = "order_weight")
+    @JSONField(name = "weight")
     public void setWeight(Double weight) {
         this.weight = weight;
     }
@@ -349,7 +359,7 @@ public class DeliveryOrder {
     public DeliveryOrderStatusEnum getStatus() {
         return status;
     }
-
+    @JSONField(name = "order_status")
     public void setStatus(DeliveryOrderStatusEnum status) {
         this.status = status;
     }
@@ -398,7 +408,7 @@ public class DeliveryOrder {
     public Long getOrderTime() {
         return orderTime;
     }
-    @JSONField(name = "order_time")
+    @JSONField(name = "add_time")
     public void setOrderTime(Long orderTime) {
         this.orderTime = orderTime;
     }

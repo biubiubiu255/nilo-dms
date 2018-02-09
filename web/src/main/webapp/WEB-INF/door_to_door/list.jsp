@@ -75,16 +75,17 @@
             <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.orderTime) }}</div>'}">
                 OrderTime
             </th>
-            <th lay-data="{field:'printTimes', width:200,templet: '<div>{{d.printTimes}}</div>'}">PrintTimes</th>
-            <th lay-data="{field:'fetchAddress', width:200,templet: '<div>{{d.senderInfo.senderName}}</div>'}">Name</th>
-            <th lay-data="{field:'fetchAddress', width:200,templet: '<div>{{d.senderInfo.senderPhone}}</div>'}">Phone
+            <th lay-data="{field:'statusDesc', width:100}">Status</th>
+            <th lay-data="{field:'allocatedRider', width:100}">Rider</th>
+            <th lay-data="{field:'printTimes', width:100,templet: '<div>{{d.printTimes}}</div>'}">PrintTimes</th>
+            <th lay-data="{field:'senderName', width:100,templet: '<div>{{d.senderInfo.senderName}}</div>'}">Name</th>
+            <th lay-data="{field:'senderPhone', width:150,templet: '<div>{{d.senderInfo.senderPhone}}</div>'}">Phone
             </th>
-            <th lay-data="{field:'fetchAddress', width:200,templet: '<div>{{d.senderInfo.senderAddress}}</div>'}">Fetch
+            <th lay-data="{field:'senderAddress', width:200,templet: '<div>{{d.senderInfo.senderAddress}}</div>'}">Fetch
                 Address
             </th>
             <th lay-data="{field:'weight', width:100}">Weight</th>
             <th lay-data="{field:'goodsType', width:120}">GoodsType</th>
-            <th lay-data="{field:'statusDesc', width:100}">Status</th>
             <th lay-data="{field:'createdTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
                 CreatedTime
             </th>

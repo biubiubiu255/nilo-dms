@@ -5,6 +5,7 @@ import com.alibaba.rocketmq.common.message.MessageExt;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.CreateDeliveryRequestStatusEnum;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
+import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
@@ -99,8 +100,28 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setCountry(data.getCountry());
                     orderHeader.setMerchantId(merchantId);
                     orderHeader.setOrderPlatform(data.getOrderPlatform());
-                    orderHeader.setOrderTime(data.getOrderTime());
-                    orderHeader.setOrderType(data.getOrderType());
+                    if(data.getOrderTime()!= null) {
+                        orderHeader.setOrderTime(data.getOrderTime());
+                    }else{
+                        orderHeader.setOrderTime(DateUtil.getSysTimeStamp());
+                    }
+                    switch (data.getOrderType()) {
+                        case "1": {
+                            orderHeader.setOrderType("FBK");
+                            break;
+                        }
+                        case "2": {
+                            orderHeader.setOrderType("GS");
+                            break;
+                        }
+                        case "0": {
+                            orderHeader.setOrderType("DS");
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+
                     orderHeader.setReferenceNo(data.getReferenceNo());
                     orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
                     orderHeader.setTotalPrice(data.getTotalPrice());
