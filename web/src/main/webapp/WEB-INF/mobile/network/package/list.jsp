@@ -60,15 +60,16 @@
         <div class="search_content" id="customers-search">
             <div class="search_input">
                 <i></i>
-                <input type="text" placeholder="enter number" searchParam="{keywords}" 
-					class="search_input_field keywords"/>
+                <input type="text" placeholder="enter number" searchParam="{keywords}"
+                       property_name="all_logistics_no" set_attr="placeholder"
+					class="search_input_field keywords i18n-input"/>
             </div>
-            <div class="search_button"><input type="button" value="search" class="search_input_button submit"/></div>
+            <div class="search_button"><input type="button" property_name="all_search" set_attr="value" value="search" class="search_input_button submit i18n-input"/></div>
         </div>
    </div>
    <div class="banner_content">
         <ul id = 'append_customers_id'>
-            <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span class="scanner" id="scan">search</span></li>
+
         </ul>
         <div class="append_more"></div> 
    </div>

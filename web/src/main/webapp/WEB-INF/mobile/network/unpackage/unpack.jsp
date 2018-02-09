@@ -185,7 +185,7 @@
 				<div class="banner_content">
 					<input type="hidden" name="scanNos" value=""/>
 					<ul class="one_banner">
-						<li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value'
+						<li><input type='text' placeholder="Logistics No" required="required" maxlength='100' property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input'
 							name='logisticsNo' /><!-- <span class="scanner">scan</span> -->
 						</li>
 

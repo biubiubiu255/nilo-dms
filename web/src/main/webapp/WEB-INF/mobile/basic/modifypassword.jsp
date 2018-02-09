@@ -68,15 +68,15 @@
                 <ul class="one_banner">
                     <li>
                         <%--<label>Old password</label>--%>
-                        <input type="text" required="required" placeholder="Old password"  name="oldPassword" class="input_value22" /><br/>
+                        <input type="text" required="required" placeholder="Old password"  name="oldPassword" property_name="password_oldPassword" set_attr="placeholder" class='input_value22 i18n-input' /><br/>
                     </li>
                     <li>
                         <%--<label style="float: left;">New password</label>--%>
-                        <input type="password" required="required"  placeholder="New password" name="newPassword" class="input_value22" />
+                        <input type="password" required="required"  placeholder="New password" name="newPassword" property_name="password_newPassword" set_attr="placeholder" class='input_value22 i18n-input' />
                     </li>
                     <li>
                         <%--<label>Repeat the new password</label>--%>
-                        <input type="password" required="required" placeholder="Repeat the new password"  name="againPassword" class="input_value22" /><br/>
+                        <input type="password" required="required" placeholder="Repeat the new password"  name="againPassword" property_name="password_againPassword" set_attr="placeholder" class='input_value22 i18n-input' /><br/>
                     </li>
 
                 </ul>
