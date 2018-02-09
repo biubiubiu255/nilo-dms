@@ -39,11 +39,19 @@
 							model : 'customers'
 						});
 						var inputVal='';
+						var content ='';
 						$("#query").click(function() {
 							inputVal = $("input[name='logisticsNo']").val();
 							ajaxRequest("/mobile/basic/route/query.html", {orderNo:inputVal}, true, function(res) {
 								if (!res.result) {
 									showError(res.msg);
+								}else{
+				                    for (var int = 0; int < res.data.length; int++) {
+				                    	
+				                    	//alert(res.data[int].opt);
+				                    	content += getResult(res.data[int]);
+									}
+				                    $(".banner_center").first().html(content);
 								}
 							})
 						});
@@ -54,6 +62,39 @@
 						$.scanner(scan_callback);
                      
 					});
+	
+	function getResult(d) {
+		
+		var dataStr = GetCurrentTime('YYYY-MM-DD hh:mm:ss', d.optTime);
+		
+		var point = '';
+	
+    	//alert(d.opt);
+    	//alert(dataStr);
+		switch (d.opt) {
+		
+		case 'arrive_scan':
+			point = '快件由' + d.optByName + '扫描，网点：' + d.networkDesc;
+							break;
+
+		case 'delivery':
+			point = '正在派件，派件员【'+d.optByName+'，'+d.phone+'】';
+			break;
+			
+		case 'receive':
+			point = '快件已签收，签收人：' + d.optByName;
+			break;
+			
+		default:
+			break;
+		}
+		
+		point = '<span>' + dataStr + '<br/></span><span>' + point + '</span><br/><hr/><br/>';
+    	//alert(point);
+		return point;
+	}
+	
+
 </script>
 
 </head>
@@ -90,17 +131,6 @@ ul li{
 					        <li>
 					            <a href="javascript:void(0);" style="display:inline-block;width: 95%" class="bigpackage_item" id="bigpackage_item-button-10255">
 					                <div class="banner_center">
-					                    <span>2017/09/02 15:26:13</span>
-					                    <span style=" float:right;">快件由wms扫描</span>
-					                    <p></p><hr/>
-
-					                    <span>2017/09/03 02:26:13</span>
-					                    <span style=" float:right;">快件已到达站点，等待扫描</span>
-					                    <p></p><hr/>
-					                    
-					                    <span>2017/09/03 02:26:13</span>
-					                    <span style=" float:right;">正在派件，派件员【joke，13256226226】，该件为冷藏件，记录温度为【℃】，扫描人【admin】</span>
-					                    <p></p><hr/>
 					                </div>
 					            </a>
 					        </li>
