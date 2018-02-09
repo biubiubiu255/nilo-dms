@@ -495,11 +495,11 @@ function loadLanguage(language_text) {
 			});
 			var insertInputEle = $(".i18n-input");
 			insertInputEle.each(function() {
-				var selectAttr = $(this).attr('selectattr');
+				var selectAttr = $(this).attr('set_attr');
 				if (!selectAttr) {
 					selectAttr = "value";
 				};
-				$(this).attr(selectAttr, $.i18n.prop($(this).attr('selectname')));
+				$(this).attr(selectAttr, $.i18n.prop($(this).attr(selectAttr)));
 			});
 		 }    
 	});    

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,9 @@ import com.nilo.dms.web.controller.api.model.RequestParam;
  */
 @Controller
 public class ApiController extends BaseController {
+
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private OrderService orderService;
@@ -50,7 +55,7 @@ public class ApiController extends BaseController {
         String sign = param.getSign();
         String merchantId = param.getApp_id();
 
-        logger.debug("API Data:", data);
+        log.info("API Data:{}", data);
 
         switch (method) {
             case CREATE_WAYBILL: {
