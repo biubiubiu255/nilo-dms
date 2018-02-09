@@ -685,7 +685,7 @@ MobileData.prototype.paginate = function(options) {
     var order = mbObject.DataJson.sortOrder;
     var authorized = mbObject.DataJson.authorized;
 	//alert("postparam:"+param);
-    var params = {"parameters": param, "page": page, "rows": rows, "sort": sort, "order": order,"authorized":authorized};
+    var params = {"parameters": param, "page": page, "limit": rows/*, "sort": sort, "order": order,"authorized":authorized*/};
 	params = $.extend(params,defaultOptions.appendParam); 
 	params = $.extend(params,mbObject.DataJson.postParams); 
 	$('#'+mbObject.DataJson.appendId).parent().find('.append_more').html('玩命加载中，请稍后……');
@@ -714,7 +714,7 @@ MobileData.prototype.paginate = function(options) {
 				}
 				if(!options.defaultFormatter)return;
 				mbObject.formatterData(response);
-				mbObject.DataJson.total = response.total;
+				mbObject.DataJson.total = response.pages;
 				mbObject.DataJson.page = mbObject.DataJson.page + 1;
 				if (callback) {
                     invokeCallBack(callback, response);
@@ -786,7 +786,7 @@ MobileData.prototype.dicValueFomatter = function (gethtml) {
 MobileData.prototype.formatterData = function (response) {
 	var mbObject = this;
 	var model = mbObject.DataJson.model;
-	var rows = response.rows;
+	var rows = response.data;
 	var templateId = this.DataJson.templateId;
 	var appendId = this.DataJson.appendId;
 	var html = $('#'+templateId).html();
