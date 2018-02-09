@@ -3,7 +3,6 @@ package com.nilo.dms.web.controller.report.model;
 import com.nilo.dms.service.order.model.AbnormalOrder;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.DeliveryOrderOpt;
-import com.nilo.dms.service.order.model.DeliveryOrderRoute;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,8 +15,6 @@ public class DeliveryOrderDetails implements Serializable {
 
     private DeliveryOrder deliveryOrder;
 
-    private DeliveryOrderRoute route;
-
     private AbnormalOrder abnormalOrder;
 
     public DeliveryOrder getDeliveryOrder() {
@@ -26,14 +23,6 @@ public class DeliveryOrderDetails implements Serializable {
 
     public void setDeliveryOrder(DeliveryOrder deliveryOrder) {
         this.deliveryOrder = deliveryOrder;
-    }
-
-    public DeliveryOrderRoute getRoute() {
-        return route;
-    }
-
-    public void setRoute(DeliveryOrderRoute route) {
-        this.route = route;
     }
 
     public AbnormalOrder getAbnormalOrder() {

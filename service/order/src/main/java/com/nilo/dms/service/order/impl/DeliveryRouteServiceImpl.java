@@ -1,12 +1,17 @@
 package com.nilo.dms.service.order.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.dao.DeliveryOrderRouteDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderRouteDO;
 import com.nilo.dms.dao.dataobject.DeliveryOrderSenderDO;
+import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.DeliveryRouteService;
-import com.nilo.dms.service.order.model.DeliveryOrderRoute;
+import com.nilo.dms.service.order.model.DeliveryRoute;
+import com.nilo.dms.service.order.model.DeliveryRouteMessage;
+import com.nilo.dms.service.order.model.OrderOptRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,33 +25,51 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
 
     @Autowired
     private DeliveryOrderRouteDao deliveryOrderRouteDao;
+    @Autowired
+    @Qualifier("routeProducer")
+    private AbstractMQProducer routeProducer;
 
     @Override
-    public List<DeliveryOrderRoute> queryRoute(String merchantId, String orderNo) {
+    public List<DeliveryRoute> queryRoute(String merchantId, String orderNo) {
 
         List<DeliveryOrderRouteDO> routeDOs = deliveryOrderRouteDao.findBy(Long.parseLong(merchantId), orderNo);
-
         if (routeDOs == null) return null;
 
-        List<DeliveryOrderRoute> routeList = new ArrayList<>();
-        for(DeliveryOrderRouteDO routeDO: routeDOs){
+        List<DeliveryRoute> routeList = new ArrayList<>();
+        for (DeliveryOrderRouteDO routeDO : routeDOs) {
             routeList.add(convert(routeDO));
         }
 
         return routeList;
     }
 
-    private DeliveryOrderRoute convert(DeliveryOrderRouteDO routeDO) {
-        DeliveryOrderRoute route = new DeliveryOrderRoute();
+    @Override
+    public void addRoute(OrderOptRequest request) {
+
+        DeliveryRouteMessage message = new DeliveryRouteMessage();
+        message.setMerchantId(request.getMerchantId());
+        message.setOrderNo(request.getOrderNo());
+        message.setOptType(request.getOptType().getCode());
+        message.setOptBy(request.getOptBy());
+        message.setRider(request.getRider());
+        message.setNetworkId(request.getNetworkId());
+        try {
+            routeProducer.sendMessage(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private DeliveryRoute convert(DeliveryOrderRouteDO routeDO) {
+        DeliveryRoute route = new DeliveryRoute();
         route.setMerchantId("" + routeDO.getMerchantId());
         route.setOrderNo(routeDO.getOrderNo());
-
         route.setOpt(routeDO.getOpt());
-        route.setRemark(routeDO.getRemark());
-        route.setMemoCN(routeDO.getMemoCn());
-        route.setMemoEN(routeDO.getMemoEn());
-
-        route.setCreatedTime(routeDO.getCreatedTime());
+        route.setOptNetwork(routeDO.getOptNetwork());
+        route.setPhone(routeDO.getPhone());
+        route.setOptBy(routeDO.getOptBy());
+        route.setOptTime(routeDO.getOptTime());
         return route;
     }
 }

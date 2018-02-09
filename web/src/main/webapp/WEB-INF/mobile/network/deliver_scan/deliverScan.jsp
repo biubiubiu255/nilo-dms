@@ -47,7 +47,7 @@
             }
             ,callback:function (data) {
                 if (data.result) {
-                    showInfo('Success '+data.msg);
+                    showInfo('Success');
                     del();
                 } else {
                     showError(data.msg)
@@ -62,7 +62,7 @@
                 return;
             }
             code_array[code] = code;
-            var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class='input_value' value='"+code+"' name='items' /><span>"+code+"</span></li>";
+            var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class='fuxuank' value='"+code+"' name='items' /><span class='suiyi'>"+code+"</span></li>";
             $('#append_order_items_id').prepend(append_html);
         }
         $.scanner(scan_callback);
@@ -103,7 +103,7 @@
                     <li>
                     <select required="required" class='input_value' name='rider'>
                         <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
-                        <option value="">choose or search....</option>
+                        <option value="">choose a rider....</option>
                         <c:forEach items="${riderList}" var="rider">
                             <option value="${rider.userId}"> ${rider.staffId}</option>
                         </c:forEach>
@@ -114,7 +114,7 @@
                 </ul>
                 <%--<div class="clear"></div>--%>
                 <ul id = 'append_order_items_id'>
-
+                    <%--<li id="code123"><input type='checkbox' class='fuxuank' value="123" name='items' /><span class="suiyi">9879846541231354674612123123</span></li>--%>
                 </ul>
             </div>
             <div class="bottom_a_button11"><a href="javascript:void(0);" class="delete_button">delete</a></div>

@@ -126,7 +126,7 @@ public class AbnormalOrderController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        Task task = taskService.queryTaskByTypeAndOrderNo(merchantId, TaskTypeEnum.DISPATCH.getCode(), orderNo);
+        Task task = taskService.queryTaskByTypeAndOrderNo(merchantId, TaskTypeEnum.DELIVERY.getCode(), orderNo);
         if (task != null) {
             model.addAttribute("rider", task.getHandledBy());
         }

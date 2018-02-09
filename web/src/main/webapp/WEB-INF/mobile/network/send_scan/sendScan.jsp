@@ -14,7 +14,6 @@
 
 
 <link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css"/>
-<link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
 <link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
 <script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="/mobile/js/functions.js"></script>
@@ -86,7 +85,7 @@
                 return;
             }
             code_array[code] = code;
-            var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class='input_value' value='"+code+"' name='items' /><span>"+code+"</span></li>";
+            var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class='fuxuank' value='"+code+"' name='items' /><span class='suiyi'>"+code+"</span></li>";
             $('#append_order_items_id').prepend(append_html);
         }
         $.scanner(scan_callback);
@@ -127,7 +126,7 @@
                     <li>
                         <%--<label>station</label>--%>
                         <select required="required" class='input_value' name='nextStation'>
-                            <option value="">Please select the site</option>
+                            <option value="">Please select the nextStation</option>
                             <c:forEach items="${nextStation}" var="station">
                                 <option value="${station.code}" type="${station.type}">${station.name}</option>
                             </c:forEach>

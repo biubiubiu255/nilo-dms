@@ -12,10 +12,6 @@ public class DeliveryRoute {
 
     private String orderNo;
 
-    private String traceCN;
-
-    private String traceEN;
-
     private String opt;
 
     private String optNetwork;
@@ -24,7 +20,17 @@ public class DeliveryRoute {
 
     private Long optTime;
 
+    private String phone;
+
     private String remark;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getOptNetwork() {
         return optNetwork;
@@ -80,21 +86,5 @@ public class DeliveryRoute {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
-    }
-
-    public String getTraceCN() {
-        return traceCN;
-    }
-
-    public void setTraceCN(String traceCN) {
-        this.traceCN = traceCN;
-    }
-
-    public String getTraceEN() {
-        return traceEN;
-    }
-
-    public void setTraceEN(String traceEN) {
-        this.traceEN = traceEN;
     }
 }

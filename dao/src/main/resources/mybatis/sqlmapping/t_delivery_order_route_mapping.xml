@@ -19,14 +19,9 @@
                 jdbcType="INTEGER"/>
         <result property="optNetwork" column="opt_Network" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
 
-
-        <result property="remark" column="remark" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="memoCn" column="memo_cn" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="memoEn" column="memo_En" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
@@ -36,7 +31,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id ,merchant_id,order_no,opt,opt_by,opt_time,opt_network,remark,memo_cn,memo_En, created_time , updated_time ,version
+        id ,merchant_id,order_no,opt,opt_by,opt_network,phone, created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -44,15 +39,15 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_waybill_route
-        ( merchant_id ,order_no,opt,opt_by,opt_time,opt_network,remark,memo_cn,memo_En, created_time , updated_time ,version)
+        ( merchant_id ,order_no,opt,opt_by,opt_network,phone, created_time , updated_time ,version)
         VALUES
-        (#{merchantId},#{orderNo},#{opt},#{optBy},#{optTime},#{optNetwork},#{remark},#{memoCn}, #{memoEn},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{merchantId},#{orderNo},#{opt},#{optBy},#{optNetwork},#{phone},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
     <select id="findBy" resultMap="routeDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_waybill_route where merchant_id=#{merchantId} and order_no = #{orderNo}
+        FROM t_waybill_route where merchant_id=#{merchantId} and order_no = #{orderNo} order by created_time desc;
     </select>
 
 </mapper>

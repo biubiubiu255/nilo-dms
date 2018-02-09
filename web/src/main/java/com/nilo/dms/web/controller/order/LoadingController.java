@@ -81,14 +81,14 @@ public class LoadingController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html")
-    public String list(String loadingNo, Integer loadingStatus) {
+    public String list(String loadingNo,Integer loadingStatus) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = (Principal)SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
-        List<Loading> list = loadingService.queryBy(merchantId, loadingNo, loadingStatus, page);
-        return toPaginationLayUIData(page, list);
+        List<Loading> list = loadingService.queryBy(merchantId,loadingNo,loadingStatus,page);
+        return toPaginationLayUIData(page,list);
     }
 
     @RequestMapping(value = "/loadingScanPage.html", method = RequestMethod.GET)

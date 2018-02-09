@@ -9,7 +9,7 @@ import java.util.Map;
 public enum TaskTypeEnum implements EnumMessage{
     PICK_UP("pick_up", "pick_up."),
     SELF_DELIVERY("self_delivery", "self_delivery."),
-    DISPATCH("dispatch", "DISPATCH."),
+    DELIVERY("delivery", "Delivery."),
     SEND("send", "Send"),
     ;
     private String code;

@@ -69,7 +69,7 @@ public class DispatchReportController extends BaseController {
         TaskParameter parameter = new TaskParameter();
         parameter.setMerchantId(merchantId);
         parameter.setHandledBy(rider);
-        parameter.setTaskType(TaskTypeEnum.DISPATCH.getCode());
+        parameter.setTaskType(TaskTypeEnum.DELIVERY.getCode());
         List<Integer> status = new ArrayList<>();
         status.add(TaskStatusEnum.COMPLETE.getCode());
         status.add(TaskStatusEnum.PROCESS.getCode());

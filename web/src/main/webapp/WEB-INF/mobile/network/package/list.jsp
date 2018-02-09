@@ -40,10 +40,10 @@
 			//,viewModel:'view_customers'
 			,templateId:'customers_tmplate'
 			,appendId:'append_customers_id'
-			,controller:'/order/package/list.html'
+			,controller:'/mobile/package/pageList.html'
 			,formId:'customers-form'
 			,searchId:'customers-search'
-			,findUrl:'/order/package/list.html'
+			,findUrl:'/mobile/package/pageList.html'
 			,searchParam:'packageNo'
 		});
 	});
@@ -59,7 +59,7 @@
         <div class="search_content" id="customers-search">
             <div class="search_input">
                 <i></i>
-                <input type="text" placeholder="enter number" searchParam="packageNo like '%{keywords}%'" 
+                <input type="text" placeholder="enter number" searchParam="{keywords}" 
 					class="search_input_field keywords"/>
             </div>
             <div class="search_button"><input type="button" value="Search" class="search_input_button submit"/></div>

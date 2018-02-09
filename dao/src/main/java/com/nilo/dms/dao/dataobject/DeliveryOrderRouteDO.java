@@ -11,10 +11,6 @@ public class DeliveryOrderRouteDO extends BaseDo<Long> {
 
     private String orderNo;
 
-    private String memoCn;
-
-    private String memoEn;
-
     private String opt;
 
     private String optNetwork;
@@ -23,7 +19,15 @@ public class DeliveryOrderRouteDO extends BaseDo<Long> {
 
     private Long optTime;
 
-    private String remark;
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getOptNetwork() {
         return optNetwork;
@@ -57,36 +61,12 @@ public class DeliveryOrderRouteDO extends BaseDo<Long> {
         this.opt = opt;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
     public String getOrderNo() {
         return orderNo;
     }
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
-    }
-
-    public String getMemoCn() {
-        return memoCn;
-    }
-
-    public void setMemoCn(String memoCn) {
-        this.memoCn = memoCn;
-    }
-
-    public String getMemoEn() {
-        return memoEn;
-    }
-
-    public void setMemoEn(String memoEn) {
-        this.memoEn = memoEn;
     }
 
     public Long getMerchantId() {

@@ -184,10 +184,7 @@ public class LoadingServiceImpl implements LoadingService {
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(orderNo);
         optRequest.setOrderNo(orderNoList);
-        //参数
-        Map<String, String> args = new HashMap<>();
-        args.put("0", optUser.getUserInfo().getName());
-        optRequest.setParams(args);
+
         //loading不更新订单状态
         //orderService.handleOpt(optRequest);
 
@@ -236,9 +233,6 @@ public class LoadingServiceImpl implements LoadingService {
             throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
         }
 
-        User optUser = userService.findByUserId(merchantId, optBy);
-
-
         //修改订单状态
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setMerchantId(merchantId);
@@ -247,10 +241,6 @@ public class LoadingServiceImpl implements LoadingService {
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(orderNo);
         optRequest.setOrderNo(orderNoList);
-        //参数
-        Map<String, String> args = new HashMap<>();
-        args.put("0", optUser.getUserInfo().getName());
-        optRequest.setParams(args);
 
         //loading 不更新状态
         //orderService.handleOpt(optRequest);
@@ -281,33 +271,6 @@ public class LoadingServiceImpl implements LoadingService {
 
         for (LoadingDetailsDO details : detailsDO) {
 
-            //修改订单状态为发运
-            OrderOptRequest optRequest = new OrderOptRequest();
-            optRequest.setMerchantId(merchantId);
-            optRequest.setOptBy(optBy);
-            Map<String, String> args = new HashMap<>();
-            if(StringUtil.isNotEmpty(loadingDO.getNextStation())) {
-                //参数
-                DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, "" + loadingDO.getNextStation()), DistributionNetworkDO.class);
-                args.put("0", networkDO.getName());
-                optRequest.setParams(args);
-
-                optRequest.setOptType(OptTypeEnum.SEND);
-            }else{
-                //参数
-                args.put("0", rider.getUserInfo().getName());
-                args.put("1", rider.getUserInfo().getPhone());
-                optRequest.setParams(args);
-                optRequest.setOptType(OptTypeEnum.DELIVERY);
-            }
-            List<String> orderNoList = new ArrayList<>();
-            orderNoList.add(details.getOrderNo());
-            optRequest.setOrderNo(orderNoList);
-
-
-
-            orderService.handleOpt(optRequest);
-
             //添加发运任务
             Task task = new Task();
             task.setMerchantId(merchantId);
@@ -318,9 +281,26 @@ public class LoadingServiceImpl implements LoadingService {
             if (StringUtil.isNotEmpty(loadingDO.getNextStation())) {
                 task.setTaskType(TaskTypeEnum.SEND);
             } else {
-                task.setTaskType(TaskTypeEnum.DISPATCH);
+                task.setTaskType(TaskTypeEnum.DELIVERY);
             }
             taskService.addTask(task);
+
+            //修改订单状态为发运
+            OrderOptRequest optRequest = new OrderOptRequest();
+            optRequest.setMerchantId(merchantId);
+            optRequest.setOptBy(optBy);
+            if(StringUtil.isNotEmpty(loadingDO.getNextStation())) {
+                optRequest.setOptType(OptTypeEnum.SEND);
+            }else{
+                optRequest.setOptType(OptTypeEnum.DELIVERY);
+            }
+            List<String> orderNoList = new ArrayList<>();
+            orderNoList.add(details.getOrderNo());
+            optRequest.setOrderNo(orderNoList);
+            optRequest.setRider(loadingDO.getRider());
+            optRequest.setNetworkId(loadingDO.getNextStation());
+            orderService.handleOpt(optRequest);
+
         }
         // 更新发运状态
         LoadingDO update = new LoadingDO();

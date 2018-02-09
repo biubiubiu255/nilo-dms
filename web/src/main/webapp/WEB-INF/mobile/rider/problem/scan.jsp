@@ -56,7 +56,7 @@
         <h2>Problem</h2>
     </div>
 
-    <div class="banner_content">
+    <div class="formula_modify">
         <form id="problem-form">
             <div class="banner_content">
                 <input type="hidden" name="id" />
