@@ -481,7 +481,7 @@ function loadLanguage(language_text) {
 	}
 	$.i18n.properties({
 		 name:'string',    //属性文件名     命名格式： 文件名_国家代号.properties  
-		 path:'language/',   //注意这里路径是你属性文件的所在文件夹
+		 path:'/mobile/language/',   //注意这里路径是你属性文件的所在文件夹  
 		 mode:'map',    
 		 language:language,     //这就是国家代号 name+language刚好组成属性文件名：strings+zh -> strings_zh.properties  
 		 callback:function(){    
@@ -512,5 +512,6 @@ $(function(){
 	if('zh'==lang){
 		lang = 'cn';
 	}
+	//alert(lang);
     loadLanguage(lang);
 });
