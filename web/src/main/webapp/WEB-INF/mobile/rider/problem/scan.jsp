@@ -14,11 +14,12 @@
 
 <%@ include file="../../header.jsp" %>
 <link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
 
 <script type="text/javascript">
-     
+
     $(function(){
-    	
+        loadLanguage('cn');
     	var mobile = new MobileData({
             autoLoad:false
             ,formId:'problem-form'
@@ -53,7 +54,7 @@
 
 <div class="wap_content">
     <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-        <h2>Problem</h2>
+        <h2 data-locale="Problem_title">Problem</h2>
     </div>
 
     <div class="formula_modify">
@@ -61,7 +62,7 @@
             <div class="banner_content">
                 <input type="hidden" name="id" />
                 <ul class="one_banner">
-                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' name='logisticsNo' /><span class="scanner">scan</span></li>
+                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' name='logisticsNo' /><span class="scanner" data-locale="all_scan">scan</span></li>
                     <li>
                         <%--<label>Reason</label>--%>
                         <select required="required" class='input_value' name='reason'>  
@@ -75,7 +76,7 @@
                 <div class="clear"></div>
             </div>
             <div class="bottom_a_button">
-				<a onclick="javascript:void(0);" class="submit">submit</a>
+				<a onclick="javascript:void(0);" class="submit" data-locale="all_submit">submit</a>
 			</div>
         </form>
 

@@ -46,9 +46,9 @@
 								if (!res.result) {
 									showError(res.msg);
 								}else{
+				
+									content = '';
 				                    for (var int = 0; int < res.data.length; int++) {
-				                    	
-				                    	//alert(res.data[int].opt);
 				                    	content += getResult(res.data[int]);
 									}
 				                    $(".banner_center").first().html(content);
@@ -57,7 +57,8 @@
 						});
 						
 						var scan_callback = function(code) {
-							mobile.setFormFieldValue('logisticsNo', code);
+							$("input[name='logisticsNo']").val(code);
+							$("#query").trigger("click");
 						}
 						$.scanner(scan_callback);
                      
@@ -133,7 +134,7 @@ ul li{
 
 		<div class="wap_top">
 			<a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-			<h2>unpackage</h2>
+			<h2>Route</h2>
 		</div>
 		<div class="banner_content">
 			<form id="unpackage-form">

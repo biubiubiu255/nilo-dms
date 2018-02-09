@@ -35,6 +35,7 @@
 </script>
 <script type="text/javascript">
 	$(function(){
+        loadLanguage('cn');
 		var mobile = new MobileData({
 			model : 'customers'
 			//,viewModel:'view_customers'
@@ -53,8 +54,8 @@
 
 <div class="wap_content"> 
    <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-   <h2>Pack List</h2>
-   <a href="javascript:void(0)" class="top_button_add" id="customers-add-button"></a>   </div>
+        <h2 data-locale="pack_list_title">Pack List</h2>
+   </div>
    <div class="search_banner">
         <div class="search_content" id="customers-search">
             <div class="search_input">
@@ -62,11 +63,13 @@
                 <input type="text" placeholder="enter number" searchParam="{keywords}" 
 					class="search_input_field keywords"/>
             </div>
-            <div class="search_button"><input type="button" value="Search" class="search_input_button submit"/></div>
+            <div class="search_button"><input type="button" value="search" class="search_input_button submit"/></div>
         </div>
    </div>
    <div class="banner_content">
-        <ul id = 'append_customers_id'></ul>
+        <ul id = 'append_customers_id'>
+            <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span class="scanner" id="scan">search</span></li>
+        </ul>
         <div class="append_more"></div> 
    </div>
 </div>

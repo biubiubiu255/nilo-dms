@@ -34,7 +34,7 @@
 
 		<div class="wap_top">
 			<a href="/mobile/home.html" title="Back" class="wap_top_back"></a>
-			<h2>Sign Scan</h2>
+			<h2 data-locale="sign_scan_title">Sign Scan</h2>
 		</div>
 
 		<div class="formula_modify">
@@ -43,13 +43,13 @@
 					<ul class="one_banner">
 						<li><input type="text" placeholder="Logistics No"
 							id="logisticsNo" name="logisticsNo" class="input_value" /><span
-							id="scan">scan</span></li>
+							id="scan" data-locale="all_scan">scan</span></li>
 						<li><input type='text' placeholder="Signer" id="signer"
 							class='input_value' name='signer' required="required" />
 						<!-- <span>Aquire</span> --></li>
 						<li><input type='text' placeholder="Remark" id="remark"
 							class='input_value' name='remark' /></li>
-						<li><label>Sign Picture</label>
+						<li><label data-locale="sign_scan_Picture">Sign Picture</label>
 							<div class="xq">
 								<img src="/mobile/images/2300.jpg" />
 							</div></li>
@@ -60,7 +60,7 @@
 						</div>
 					</center>
 					<div class="bottom_a_button">
-						<a id="commit">submit</a>
+						<a id="commit" data-locale="all_submit">submit</a>
 					</div>
 				</div>
 			</form>
@@ -68,6 +68,7 @@
 	</div>
 	<script src="/layui/layui.js" charset="utf-8"></script>
 	<script type="text/javascript">
+        loadLanguage('cn');
 		layui.use('upload', function() {
 			var $ = layui.jquery, upload = layui.upload;
 
