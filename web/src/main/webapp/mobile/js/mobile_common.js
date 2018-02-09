@@ -220,10 +220,11 @@ function bindScrollEvent(mjson, executeEvent) {
  format=1返回hh:mm:ss形式的时间
  */
 function GetCurrentTime(format, time) {
+	
     var currentTime = "";
     var myDate;
     if (time) {
-        myDate = time;
+    	String(time).length==10 ? myDate = new Date(time*1000) : myDate = new Date(time);
     } else {
         myDate = new Date();
     }

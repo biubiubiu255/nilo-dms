@@ -475,7 +475,7 @@ String.prototype.split = function (separator, limit) {
 
 
 function loadLanguage(language_text) {   
-	var language = 'en';
+	var language = 'cn';
 	if(!isEmpty(language_text)){
 			language = language_text;
 	}
