@@ -115,10 +115,10 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         /*if (t == null || t.getStatus() == TaskStatusEnum.COMPLETE) {
             throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getOrderNo());
         }*/
-        if(t == null) {
-        	t = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(), TaskTypeEnum.SELF_DELIVERY.getCode(), param.getOrderNo());
+        if (t == null) {
+            t = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(), TaskTypeEnum.SELF_DELIVERY.getCode(), param.getOrderNo());
         }
-        if(t != null && t.getStatus() == TaskStatusEnum.COMPLETE){
+        if (t != null && t.getStatus() == TaskStatusEnum.COMPLETE) {
             throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getOrderNo());
         }
 
@@ -132,12 +132,12 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         optRequest.setOrderNo(orderNoList);
         orderService.handleOpt(optRequest);
 
-        if(t!=null) {
-	        Task task = new Task();
-	        task.setTaskId(t.getTaskId());
-	        task.setStatus(TaskStatusEnum.COMPLETE);
-	        task.setHandledTime(DateUtil.getSysTimeStamp());
-	        taskService.updateTask(task);
+        if (t != null) {
+            Task task = new Task();
+            task.setTaskId(t.getTaskId());
+            task.setStatus(TaskStatusEnum.COMPLETE);
+            task.setHandledTime(DateUtil.getSysTimeStamp());
+            taskService.updateTask(task);
         }
     }
 
@@ -145,7 +145,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
     @Transactional
     public void abnormal(AbnormalParam param) {
         //根据订单号查询任务
-        Task t = taskService.queryTaskByTypeAndOrderNo(param.getAbnormalOrder().getMerchantId(), TaskTypeEnum.DELIVERY.getCode(), param.getAbnormalOrder().getOrderNo());
+        Task t = taskService.queryTaskByTypeAndOrderNo(param.getAbnormalOrder().getMerchantId(), null, param.getAbnormalOrder().getOrderNo());
         if (t == null || t.getStatus() == TaskStatusEnum.COMPLETE) {
             throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getAbnormalOrder().getOrderNo());
         }

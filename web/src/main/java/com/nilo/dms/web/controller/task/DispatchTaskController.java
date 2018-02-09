@@ -67,12 +67,8 @@ public class DispatchTaskController extends BaseController {
             parameter.setTaskType(TaskTypeEnum.SELF_DELIVERY.getCode());
             parameter.setHandledBy("" + me.getNetworks().get(0));
         }
-        if (taskStatus != null) {
-            parameter.setStatus(Arrays.asList(taskStatus));
-        } else {
-            parameter.setStatus(Arrays.asList(new Integer[]{TaskStatusEnum.CREATE.getCode(), TaskStatusEnum.COMPLETE.getCode()}));
+        parameter.setStatus(Arrays.asList(new Integer[]{TaskStatusEnum.CREATE.getCode()}));
 
-        }
         Pagination page = getPage();
         List<Task> list = taskService.queryTask(parameter, page);
         return toPaginationLayUIData(page, list);
