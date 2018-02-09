@@ -46,9 +46,9 @@
 								if (!res.result) {
 									showError(res.msg);
 								}else{
+				
+									content = '';
 				                    for (var int = 0; int < res.data.length; int++) {
-				                    	
-				                    	//alert(res.data[int].opt);
 				                    	content += getResult(res.data[int]);
 									}
 				                    $(".banner_center").first().html(content);
