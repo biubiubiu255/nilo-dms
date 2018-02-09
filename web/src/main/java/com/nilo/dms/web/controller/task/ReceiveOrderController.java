@@ -102,7 +102,7 @@ public class ReceiveOrderController extends BaseController {
                     PropertyUtils.setProperty(receiverData, cell1.getColName(), cell1.getValue());
                 }
                 //查询TaskId
-                Task task = taskService.queryTaskByTypeAndOrderNo(merchantId, TaskTypeEnum.DISPATCH.getCode(), receiverData.getOrderNo());
+                Task task = taskService.queryTaskByTypeAndOrderNo(merchantId, TaskTypeEnum.DELIVERY.getCode(), receiverData.getOrderNo());
                 if (task == null) {
                     Map<String, String> map = new HashMap<>();
                     map.put("message", receiverData.getOrderNo()+":No Dispatch Task for this orderNo" );

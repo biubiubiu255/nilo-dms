@@ -8,6 +8,7 @@ import com.nilo.dms.common.BaseDo;
 public class UserNetworkDO extends BaseDo<Long> {
 
     private Long userId;
+
     private Long distributionNetworkId;
 
     public Long getUserId() {

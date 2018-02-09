@@ -5,7 +5,6 @@ import com.nilo.dms.common.enums.TaskStatusEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.dataobject.StaffDO;
-import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
@@ -62,7 +61,7 @@ public class DispatchTaskController extends BaseController {
         parameter.setMerchantId(merchantId);
         //如果当前用户不是快递员查询条件
         if (me.isRider()) {
-            parameter.setTaskType(TaskTypeEnum.DISPATCH.getCode());
+            parameter.setTaskType(TaskTypeEnum.DELIVERY.getCode());
             parameter.setHandledBy(me.getUserId());
         } else {
             parameter.setTaskType(TaskTypeEnum.SELF_DELIVERY.getCode());

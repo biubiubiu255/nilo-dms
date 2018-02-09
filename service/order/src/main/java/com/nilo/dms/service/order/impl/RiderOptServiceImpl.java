@@ -111,7 +111,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
     public void signForOrder(SignForOrderParam param) {
 
         //根据订单号查询任务
-        Task t = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(), TaskTypeEnum.DISPATCH.getCode(), param.getOrderNo());
+        Task t = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(), TaskTypeEnum.DELIVERY.getCode(), param.getOrderNo());
         /*if (t == null || t.getStatus() == TaskStatusEnum.COMPLETE) {
             throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getOrderNo());
         }*/
@@ -145,7 +145,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
     @Transactional
     public void abnormal(AbnormalParam param) {
         //根据订单号查询任务
-        Task t = taskService.queryTaskByTypeAndOrderNo(param.getAbnormalOrder().getMerchantId(), TaskTypeEnum.DISPATCH.getCode(), param.getAbnormalOrder().getOrderNo());
+        Task t = taskService.queryTaskByTypeAndOrderNo(param.getAbnormalOrder().getMerchantId(), TaskTypeEnum.DELIVERY.getCode(), param.getAbnormalOrder().getOrderNo());
         if (t == null || t.getStatus() == TaskStatusEnum.COMPLETE) {
             throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getAbnormalOrder().getOrderNo());
         }

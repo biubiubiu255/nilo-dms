@@ -99,7 +99,9 @@ public class MobilePackageController extends BaseController {
         Pagination page = getPage();
         DeliveryOrderParameter parameter = new DeliveryOrderParameter();
         parameter.setMerchantId(merchantId);
-        parameter.setOrderNo(parameters);
+        if(!"packageNo".equals(parameters)) {
+        	 parameter.setOrderNo(parameters);
+        }
         parameter.setIsPackage(IS_PACKAGE);
         List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
         return toPaginationLayUIData(page, list);
