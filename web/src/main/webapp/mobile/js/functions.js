@@ -58,9 +58,6 @@ function excuteFunction(callback) {
  功能描述： 将字符串转换为对象
  */
 function toObject(value) {
-    if(typeof (value) == 'object'){
-        return value;
-    }
     return eval("(" + value + ")");
 }
 
@@ -93,7 +90,6 @@ function ajaxRequest(postURL, params, showMsg, callback,loadMask) {
         success: function(json) {
             closeMask();
             try {
-            	
                 var response = toObject(json);
                 if (showMsg) {
                     if (response.result) {
@@ -106,14 +102,16 @@ function ajaxRequest(postURL, params, showMsg, callback,loadMask) {
                     invokeCallBack(callback, response);
                 }
             } catch (e) {
-                //showError('此次请求发生异常，请重试!' + e);
+                showError('此次请求发生异常，请重试!' + e);
             }
         }
-    	,
+    	,error: function (textStatus) {
+    		showError('ERROR: 请求发生异常，请重试!');
+        },
         complete: function (XMLHttpRequest,status) {
             if(status == 'timeout') {
-                // xhr.abort();    超时后中断请求
-               // showError('网络超时，请刷新!');
+                xhr.abort();    // 超时后中断请求
+                showError('网络超时，请刷新!');
             }
         }
     });
@@ -221,18 +219,18 @@ function showWarning(msg){
 }
 
 function showError(msg){
-	$("<div id=\"error-mask-div\" class=\"mobile-mask\"></div>").css({
+	$("<div id=\"warning-mask-div\" class=\"mobile-mask\"></div>").css({
         display: "block",
         width: "100%",
         //height: $(window).height()
 		height: 100000
     }).appendTo("body").css({
-        zIndex: 10013
+        zIndex: 10004
     });
  
-    $("<div id=\"error-content-div\" class=\"mobile-error-msg\" style=\"font-size:12px;\"></div>").html("<h2>"+msg+"</h2><botton onclick=\"$('#error-mask-div').remove();$('#error-content-div').remove();\"> OK </botton>").appendTo("body").css({
+    $("<div id=\"warning-content-div\" class=\"mobile-error-msg\" style=\"font-size:12px;\"></div>").html("<h2>"+msg+"</h2><botton onclick=\"$('#warning-mask-div').remove();$('#warning-content-div').remove();\"> OK </botton>").appendTo("body").css({
         display: "block",
-        zIndex: 10015,
+        zIndex: 10005,
         left: ($(document.body).outerWidth(true) - 250) / 2,
         top: ($(window).height() - 120) / 2
     });
@@ -287,7 +285,7 @@ function pagenate_table(mjson) {
 				}
 				
             } catch (e) {
-                //showError('此次请求发生异常，请重试!');
+                showError('此次请求发生异常，请重试!');
             }
             mjson.reset = false;
             closeMask();
@@ -359,7 +357,8 @@ function GetCurrentTime(format, time) {
     var currentTime = "";
     var myDate;
     if (time) {
-        myDate = time;
+    	//这里new date()，只接受13位时间戳
+    	String(time).length==10 ? myDate = new Date(time*1000) : myDate = new Date(time);
     } else {
         myDate = new Date();
     }
