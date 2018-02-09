@@ -130,7 +130,11 @@
     <select id="queryByTypeAndOrderNo" resultMap="taskDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_waybill_task where merchant_id = #{merchantId} and task_type=#{taskType} and order_no = #{orderNo} order by
+        FROM t_waybill_task where merchant_id = #{merchantId}
+        <if test="taskType !=null">
+            and task_type=#{taskType}
+        </if>
+        and order_no = #{orderNo} order by
         created_time desc limit 1
     </select>
 </mapper>

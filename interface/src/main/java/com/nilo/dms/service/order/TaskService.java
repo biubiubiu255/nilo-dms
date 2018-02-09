@@ -20,6 +20,4 @@ public interface TaskService {
     List<Task> queryTask(TaskParameter parameter, Pagination pagination);
 
     Task queryTaskByTypeAndOrderNo(String merchantId, String taskType, String orderNo);
-
-    Task queryByTaskId(String taskId);
 }

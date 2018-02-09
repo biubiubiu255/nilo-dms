@@ -90,6 +90,8 @@ public enum BizErrorCode implements ErrorCode {
     ARRIVE_EMPTY("Arrive Scan is empty.", "100064"),
     ALREADY_SCAN("{0}  already scan", "100065"),
     NEW_PASSWORD_NOT_EQUAL("New Password not equal.", "100066"),
+    PACKAGE_NOT_ALLOW("Delivery No {0} can not package.", "100067"),
+    UNPACK_NOT_ALLOW("Delivery No {0} can not unpack.", "100068"),
 
     ;
 

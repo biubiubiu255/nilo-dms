@@ -1,15 +1,22 @@
 package com.nilo.dms.service.order.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.OptTypeEnum;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderRouteDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderRouteDO;
 import com.nilo.dms.dao.dataobject.DeliveryOrderSenderDO;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.DeliveryRouteService;
 import com.nilo.dms.service.order.model.DeliveryRoute;
 import com.nilo.dms.service.order.model.DeliveryRouteMessage;
 import com.nilo.dms.service.order.model.OrderOptRequest;
+import com.nilo.dms.service.system.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -23,6 +30,8 @@ import java.util.List;
 @Service
 public class DeliveryRouteServiceImpl implements DeliveryRouteService {
 
+    @Autowired
+    private UserService userService;
     @Autowired
     private DeliveryOrderRouteDao deliveryOrderRouteDao;
     @Autowired
@@ -69,7 +78,16 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
         route.setOptNetwork(routeDO.getOptNetwork());
         route.setPhone(routeDO.getPhone());
         route.setOptBy(routeDO.getOptBy());
-        route.setOptTime(routeDO.getOptTime());
+        route.setOptTime(routeDO.getCreatedTime());
+        if (StringUtil.isNotEmpty(routeDO.getOptNetwork())) {
+            DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + routeDO.getMerchantId(), "" + routeDO.getOptNetwork()), DistributionNetworkDO.class);
+            route.setNetworkDesc(networkDO.getName());
+        }
+        if (StringUtil.isNotEmpty(routeDO.getOptBy())) {
+            UserInfo userInfo = userService.findUserInfoByUserId("" + routeDO.getMerchantId(), routeDO.getOptBy());
+            if (userInfo != null) route.setOptByName(userInfo.getName());
+        }
+
         return route;
     }
 }

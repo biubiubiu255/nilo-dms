@@ -26,17 +26,6 @@
 	                <input class="layui-input" name="orderNo" autocomplete="off">
 	            </div>
 	        </div>
-	        <div class="layui-col-md4 layui-col-lg3">
-	            <label class="layui-form-label">Status:</label>
-	            <div class="layui-form-item layui-inline">
-	                <select lay-filter="taskStatus" multiple name="taskStatus">
-	                    <option value="">Pls select Status...</option>
-	                    <option value=1>Create</option>
-	                    <option value=2>Process</option>
-	                    <option value=3>Complete</option>
-	                </select>
-	            </div>
-	        </div>
 	        <div class="layui-col-md1">
 	            <button class="layui-btn layui-btn-normal search">Search</button>
 	        </div>

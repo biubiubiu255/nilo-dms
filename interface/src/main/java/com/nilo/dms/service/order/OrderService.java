@@ -28,6 +28,8 @@ public interface OrderService {
 
     String addPackage(PackageRequest packageRequest);
 
+    void unpack(UnpackRequest unpackRequest);
+
     List<DeliveryOrder> queryByPackageNo(String merchantNo,String packageNo);
     
     void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId);

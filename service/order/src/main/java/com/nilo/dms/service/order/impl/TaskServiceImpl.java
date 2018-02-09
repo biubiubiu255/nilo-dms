@@ -192,12 +192,6 @@ public class TaskServiceImpl implements TaskService {
         return convert(taskDO);
     }
 
-    @Override
-    public Task queryByTaskId(String taskId) {
-        TaskDO taskDO = taskDao.findByTaskId(Long.parseLong(taskId));
-        return convert(taskDO);
-    }
-
     private Task convert(TaskDO taskDO) {
         if (taskDO == null) return null;
         Task task = new Task();

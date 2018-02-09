@@ -16,6 +16,7 @@ import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.DeliveryOrderParameter;
 import com.nilo.dms.service.order.model.PackageRequest;
+import com.nilo.dms.service.order.model.UnpackRequest;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -35,7 +36,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/order/unpack")
-public class UnPackageController extends BaseController {
+public class UnPackController extends BaseController {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -116,6 +117,27 @@ public class UnPackageController extends BaseController {
         scanDetailsDO.setScanNo(scanNo);
         scanDetailsDO.setOrderNo(orderNo);
         waybillScanDetailsDao.insert(scanDetailsDO);
+        return toJsonTrueMsg();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/unpack.html")
+    public String unpack( String scanNo) {
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
+        List<String> orderNos = new ArrayList<>();
+        for (WaybillScanDetailsDO d : scanDetailList) {
+            orderNos.add(d.getOrderNo());
+        }
+        UnpackRequest request = new UnpackRequest();
+        request.setMerchantId(merchantId);
+        request.setOptBy(me.getUserId());
+        request.setNetworkId(me.getNetworks().get(0));
+        request.setOrderNos(orderNos);
+        orderService.unpack(request);
+
         return toJsonTrueMsg();
     }
 

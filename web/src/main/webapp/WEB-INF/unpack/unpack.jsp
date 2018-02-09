@@ -48,7 +48,7 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block" style="margin-left:120px;">
-            <button class="layui-btn arrive">Submit</button>
+            <button class="layui-btn unpack">Submit</button>
         </div>
     </div>
     <script type="text/html" id="arrivedTpl">
@@ -138,7 +138,7 @@
                 }
             });
         }
-        $(".arrive").on("click", function () {
+        $(".unpack").on("click", function () {
 
             var data = table.cache["${id0}"];
             var notArrived = false;
@@ -149,21 +149,21 @@
                                 btn: ['OK', 'Cancel']
                                 //按钮
                             }, function () {
-                                arriveSubmit()
+                        unpackSubmit()
                             }
                     );
                 }
             }
             if (!notArrived) {
-                arriveSubmit();
+                unpackSubmit();
             }
         })
 
-        function arriveSubmit() {
+        function unpackSubmit() {
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/order/arriveScan/arrive.html",
+                url: "/order/unpack/unpack.html",
                 dataType: "json",
                 data: {scanNo: '${scanNo}'},
                 success: function (data) {

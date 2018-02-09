@@ -143,7 +143,7 @@
      */
     function getOrderList(orderNo) {
     	
-    	ajaxRequest('/mobile/network/unpackage/scanList.html', 'scanNo=227185144014966784&packageNo='+orderNo, false, function(result) {
+    	ajaxRequest('/mobile/network/unpackage/scanList.html', 'scanNo=&packageNo='+orderNo, false, function(result) {
     		//if (result.data.length=0) showWarning("No subparcels were found");
     		//alert(result.data.length);
     		//alert(result.data.length);

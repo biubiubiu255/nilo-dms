@@ -16,7 +16,6 @@ function MobileData(DataJson){
 	this.isComboSelect = DataJson.isComboSelect;
 	var mbObject = this;
 
-
 	if(mbObject.isComboSelect){
 		var scrollWindow = $("div."+mbObject.DataJson.scopeId).find("div.bottom_window");
 		var nScrollHight = 0; //滚动距离总长(注意不是滚动条的长度)
@@ -36,7 +35,7 @@ function MobileData(DataJson){
 					$('#'+mbObject.DataJson.appendId).parent().find('.append_more').html('没有找到任何数据');
 				}else if(total > 0 && total <= mbObject.DataJson.pageSize){
 					$('#'+mbObject.DataJson.appendId).parent().find('.append_more').html('');	
-				} else if (page * (mbObject.DataJson.pageSize-1) < mbObject.DataJson.total) {
+				} else if (mbObject.DataJson.pageSize * (page-1) < mbObject.DataJson.total) {
 					$('#'+mbObject.DataJson.appendId).parent().find('.append_more').html('上移，加载更多数据');
 					mbObject.requestIng = true;
 					mbObject.paginate({clearHtml:false,appendParam:mbObject.DataJson.postParams});
@@ -60,7 +59,7 @@ function MobileData(DataJson){
 					$('#'+mbObject.DataJson.appendId).parent().find('.append_more').html('没有找到任何数据');
 				}else if(total > 0 && total <= mbObject.DataJson.pageSize){
 					$('#'+mbObject.DataJson.appendId).parent().find('.append_more').html('');	
-				} else if (page * (mbObject.DataJson.pageSize-1) < mbObject.DataJson.total) {
+				} else if (mbObject.DataJson.pageSize * (page-1) < mbObject.DataJson.total) {
 					$('#'+mbObject.DataJson.appendId).parent().find('.append_more').html('上移，加载更多数据');
 					mbObject.requestIng = true;
 					mbObject.paginate({clearHtml:false,appendParam:mbObject.DataJson.postParams});
@@ -127,7 +126,7 @@ MobileData.prototype.appendNewRecord = function(primary_id){
 	ajaxRequest(findUrl,{
 		parameters:escape(searchParam)
 	},false,function(response){
-		if(response.data){
+		if(response.rows){
             //console.dir(existsId);
             //console.dir(existsId.length); 
             if(existsId.length > 0){
@@ -140,6 +139,11 @@ MobileData.prototype.appendNewRecord = function(primary_id){
 		}
 	});
 };
+
+
+
+
+
 
 
 /*
@@ -160,7 +164,11 @@ MobileData.prototype.editData = function(e){
         showWarning('已经审核的记录不允许修改！');
         return;
     }
-    
+
+    if(!isEmpty(mbObject.DataJson.editRecord) && !isEmpty(mbObject.DataJson.editRecord.beforeLoadForm)){
+        invokeCallBack(mbObject.DataJson.editRecord.beforeLoadForm);
+    }
+
 	//显示表单
 	$("#"+formId).show();
 	$("#"+formId+" .form_content").stop().animate({width: '100%'});
@@ -195,7 +203,7 @@ MobileData.prototype.editData = function(e){
                     invokeCallBack(e.data.afterLoadForm, response.rows[0]);
                 }
 			}else{
-				//showError('数据获取失败，请重试！');
+				showError('数据获取失败，请重试！');
 			}
 		}
 	});
@@ -204,6 +212,10 @@ MobileData.prototype.editData = function(e){
 	if(!isEmpty(e.data.postUrl)){
         postUrl = e.data.postUrl;
     }
+    if(!isEmpty(mbObject.DataJson.editRecord) && !isEmpty(mbObject.DataJson.editRecord.postUrl)){
+        postUrl = mbObject.DataJson.editRecord.postUrl;
+    }
+
     var defaultOptions = {
         submitUrl:postUrl
 		,showMsg: true
@@ -363,7 +375,7 @@ MobileData.prototype.openFormWindow = function(json){
 MobileData.prototype.initSubmitForm = function(json){
 	var mbObject = json.mbObject;
 	var formId = json.formId; 
-	if(!isEmpty(formId)){
+	if(!isEmpty(formId) && !isEmpty(mbObject)){
 		mbObject.DataJson.formId = formId;
 	}
 	if(!isEmpty(json.beforeInitForm)){
@@ -628,12 +640,17 @@ MobileData.prototype.reload = function(options) {
 分页查询
 */
 MobileData.prototype.paginate = function(options) {
+    var mbObject = this;
+    if(!isEmpty(options) &&!isEmpty(options.callback)){
+        mbObject.DataJson.afterLoadCallBack = options.callback;
+	}
+
 	var defaultOptions = {
         findUrl:this.DataJson.findUrl
 		,appendId:this.DataJson.appendId
         ,searchParam:""
 		,appendParam:{}
-		,callback: function(){}
+		,callback: mbObject.DataJson.afterLoadCallBack
 		,defaultFormatter:true
 		,templateId:this.DataJson.templateId
 		,clearHtml:true
@@ -642,7 +659,7 @@ MobileData.prototype.paginate = function(options) {
     };
 	options = $.extend(defaultOptions,options); 
 	var url = options.findUrl;
-	var mbObject = this;
+
     if (options.clearHtml) {
         mbObject.DataJson.page = 1;
         $('#' + options.appendId).html('');
@@ -681,7 +698,7 @@ MobileData.prototype.paginate = function(options) {
         success: function(json) {
             try {
                 var response = toObject(json);
-				var total = response.pages;
+				var total = response.total;
                 if (options.clearHtml && total == 0) {
 					$('#'+mbObject.DataJson.appendId).parent().find('.append_more').html('没有找到任何数据');
                 }else if(total > 0 && total <= mbObject.DataJson.pageSize){
@@ -708,12 +725,12 @@ MobileData.prototype.paginate = function(options) {
 			mbObject.requestIng = false;
             closeMask();
         },error: function (textStatus) {
-    		//showError('ERROR: 请求发生异常，请重试!');
+    		showError('ERROR: 请求发生异常，请重试!');
         },
         complete: function (XMLHttpRequest,status) {
             if(status == 'timeout') {
-                 //xhr.abort();    超时后中断请求
-                //showError('网络超时，请刷新!');
+                xhr.abort();    // 超时后中断请求
+                showError('网络超时，请刷新!');
             }
         }
     });
@@ -777,98 +794,7 @@ MobileData.prototype.formatterData = function (response) {
 	var ids = [];
 	$.each(rows, function(i, o){ 
 		var gethtml = mbObject.formatTemplate(o, html);
-
         gethtml = mbObject.dicValueFomatter(gethtml);
-        //替换函数
-        if(gethtml.indexOf('renderBool') != -1){
-            gethtml = gethtml.replace(/renderBool\(0\)/g,'<font color="red">否</font>');
-            gethtml = gethtml.replace(/renderBool\(1\)/g,'<font color="green">是</font>');
-        }
-		//替换函数
-        if(gethtml.indexOf('renderAudit') != -1){
-            gethtml = gethtml.replace(/renderAudit\(0\)/g,'<font color="red">未审核</font>');
-            gethtml = gethtml.replace(/renderAudit\(1\)/g,'<font color="green">已审核</font>');
-        }
-		
-		//配比状态特殊处理
-		if(gethtml.indexOf('FORMULA_STATUS') != -1){
-			var formula_audit = o.formula_audit;
-			var formula_status = o.formula_status;
-			if(formula_status == '0'){
-				gethtml = gethtml.replace('FORMULA_STATUS','<font color="red">配比待下发</font>');
-			}else{
-				if(parseInt(formula_status) != parseInt(formula_audit)){
-					gethtml = gethtml.replace('FORMULA_STATUS','<font color="blue">配比待审核</font>');
-				}else{
-					gethtml = gethtml.replace('FORMULA_STATUS','<font color="green">配比已下发</font>');
-				}
-			}
-        }
-		
-		//配比状态特殊处理
-		if(model == 'delivery' && gethtml.indexOf('DELIVERY_STATUS') != -1){
-			var is_active = o.is_active;
-			 
-			if(is_active == '0'){
-				gethtml = gethtml.replace('DELIVERY_STATUS','<i class="red">作废</i>');
-			}else{
-				gethtml = gethtml.replace('DELIVERY_STATUS','<i class="blue">有效</i>');
-			}
-        }
-		
-		
-		if(model == 'depotin'){
-			var in_number = o.in_number;
-			var tone_value = (in_number/1000).toFixed(2);
-			gethtml = gethtml.replace('IN_NUMBER',tone_value);
-		}
-		
-		if(model == 'metage'){
-			var net_weigh = o.net_weigh;
-			var tone_value = (net_weigh/1000).toFixed(2);
-			gethtml = gethtml.replace('NET_WEIGHT',tone_value);
-		}
-		
-		//车辆状态、车辆类型处理
-		if(model == 'car'){
-			if(gethtml.indexOf('renderCarStatus') != -1){
-				var car_status = o.car_status;
-				switch(car_status){
-					case '0':
-						gethtml = gethtml.replace(/renderCarStatus\(0\)/g,'<font color="green">可调度</font>');
-						break;
-					case '1':
-						gethtml = gethtml.replace(/renderCarStatus\(1\)/g,'<font color="red">出车</font>');
-						break;
-					case '2':	
-						gethtml = gethtml.replace(/renderCarStatus\(2\)/g,'<font color="blue">休息</font>');
-						break;
-					default:	
-						gethtml = gethtml.replace(/renderCarStatus\(3\)/g,'维修');
-						break;
-				}
-			}
-			if(gethtml.indexOf('renderCarType') != -1){
-				var car_type = o.car_type;
-				switch(car_type){
-					case '0':
-						gethtml = gethtml.replace(/renderCarType\(0\)/g,'搅拌车');
-						break;
-					case '1':
-						gethtml = gethtml.replace(/renderCarType\(1\)/g,'泵车');
-						break;
-					case '2':	
-						gethtml = gethtml.replace(/renderCarType\(2\)/g,'铲车');
-						break;
-					default:	
-						gethtml = gethtml.replace(/renderCarType\(3\)/g,'机动车');
-						break;
-				}
-			}
-		}
-		
-		
-		
 		arr.push(gethtml);  
 		var idField = mbObject.DataJson.idField;
 		var id = o[idField];
@@ -980,7 +906,77 @@ MobileData.prototype.formatterData = function (response) {
 		});
 	}
 };
+//添加到mobile的数据中
+MobileData.prototype.appendFromTemplate = function(options){
+    var response = options.response;
+    if(!response.result) return;
+    var mbObject = this;
+    var model = mbObject.DataJson.model;
+    var templateId = isEmpty(options.templateId) ? mbObject.DataJson.templateId : options.templateId;
+    var appendId = isEmpty(options.appendId) ? mbObject.DataJson.appendId : options.appendId;
+    var html = $('#'+templateId).html();
+    var data = response.data;
+    if(isEmpty(data))return;
+    var gethtml = mbObject.formatTemplate(data, html);
+    gethtml = mbObject.dicValueFomatter(gethtml);
+    if(options.appendType == 'modify'){
+        var primary_id = response.data.id;
+        var appendListId = model+"_li_"+primary_id;
+        $('#'+appendListId).html(gethtml);
+    }else {
+        $('#' + appendId).prepend(gethtml);
+    }
 
+
+    //buttonEvents:[{class_name: 'ckh_delete', attr_name: 'id', handler: RemoveLi}]
+	//新append 的html 绑定事件处理
+
+    if($('#'+appendId).find('a').length > 0){
+		var id = data.id;
+		var template_del_id = model+'_delete_'+id;
+		var template_edit_id = model+'_edit_'+id;
+		var template_audit_id = model+'_audit_'+id;
+		var template_unaudit_id = model+'_unaudit_'+id;
+		if($("#"+template_del_id).length > 0){
+			$("#"+template_del_id).unbind("click").bind("click",{id:id,object:mbObject},mbObject.deleteData);
+		}
+		if($("#"+template_edit_id).length > 0){
+			$("#"+template_edit_id).unbind("click").bind("click",{id:id,object:mbObject},mbObject.editData);
+		}
+		//审核与反审核处理
+		var is_audit = $('#'+model+'_li_'+id).attr('is_audit');
+		if($("#"+template_audit_id).length > 0){
+			if(is_audit == 1){  //remove 审核按钮
+				$("#"+template_audit_id).remove();
+			}else{
+				$("#"+template_audit_id).unbind("click").bind("click",{id:id,object:mbObject,audit:1},mbObject.auditData);
+			}
+		}
+		if($("#"+template_unaudit_id).length > 0){
+			if(is_audit == 0){  //remove 反审核按钮
+				$("#"+template_unaudit_id).remove();
+			}else{
+				$("#"+template_unaudit_id).unbind("click").bind("click",{id:id,object:mbObject,audit:0},mbObject.auditData);
+			}
+		}
+		//处理自定义事件
+		var buttonEvents = mbObject.DataJson.buttonEvents;
+		for(var i=0;i<buttonEvents.length;i++){
+			var buttonJson = buttonEvents[i];
+			var class_name = buttonJson.class_name;
+			var attr_name = buttonJson.attr_name;
+			var handler = buttonJson.handler;
+			var button = $('#'+model+'_li_'+id).find('a.'+class_name);
+			var button_id = class_name+'-button-'+id;
+			button.attr('id',button_id);
+			var attr_value = $('#'+model+'_li_'+id).attr(attr_name);
+			if(button.length > 0 && !isEmpty(handler)){
+				var paramJson = {id:id,object:mbObject,button:button,attr_value:attr_value};
+				invokeCallBack(handler, paramJson);
+			}
+		}
+    }
+};
 
 MobileData.prototype.initComboSelect = function (initOpts) {
 	var group_id = initOpts.scopeId;
@@ -1063,20 +1059,7 @@ MobileData.defaults = {
 	, viewModel:''
 	, loadMask:true
 	,isComboSelect:false
+	,afterLoadCallBack:function(){ }
     ,buttonEvents:[]
 };
 
-
-
-MobileData.prototype.appendFromTemplate = function(options){
-	 var response = options.response;
-	 if(!response.result) return;
-	 var mbObject = this;
-	 var templateId = isEmpty(options.templateId) ? mbObject.DataJson.templateId : options.templateId;
-	 var appendId = isEmpty(options.appendId) ? mbObject.DataJson.appendId : options.appendId;
-	    var html = $('#'+templateId).html();
-	    var data = response.data;
-	 var gethtml = mbObject.formatTemplate(data, html);
-	 gethtml = mbObject.dicValueFomatter(gethtml);
-	 $('#'+appendId).prepend(gethtml);
-	};
