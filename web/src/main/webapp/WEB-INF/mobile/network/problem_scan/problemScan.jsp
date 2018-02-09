@@ -19,13 +19,14 @@
     <script type="text/javascript" src="/mobile/js/functions.js"></script>
     <script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
     <script type="text/javascript" src="/mobile/js/mobile.js"></script>
+    <script type="text/javascript" src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
 </head>
 <body>
 
 
 <div class="wap_content">
     <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-        <h2>Porblem</h2>
+        <h2 data-locale="delivery_scan_title">Porblem</h2>
     </div>
 
     <div class="formula_modify">

@@ -474,18 +474,14 @@ String.prototype.split = function (separator, limit) {
 
 
 
-function loadLanguage(language_text,path_param) {
+function loadLanguage(language_text) {   
 	var language = 'en';
-	var filepath = '/mobile/language/';
-	if(!isEmpty(path_param)){
-        filepath = path_param;
-    }
 	if(!isEmpty(language_text)){
 			language = language_text;
 	}
-	$.i18n.properties({    
+	$.i18n.properties({
 		 name:'string',    //属性文件名     命名格式： 文件名_国家代号.properties  
-		 path:filepath,   //注意这里路径是你属性文件的所在文件夹
+		 path:'/mobile/language/',   //注意这里路径是你属性文件的所在文件夹  
 		 mode:'map',    
 		 language:language,     //这就是国家代号 name+language刚好组成属性文件名：strings+zh -> strings_zh.properties  
 		 callback:function(){    
@@ -499,13 +495,23 @@ function loadLanguage(language_text,path_param) {
 			});
 			var insertInputEle = $(".i18n-input");
 			insertInputEle.each(function() {
-				var selectAttr = $(this).attr('selectattr');
+				var selectAttr = $(this).attr('set_attr');
 				if (!selectAttr) {
 					selectAttr = "value";
 				};
-				$(this).attr(selectAttr, $.i18n.prop($(this).attr('selectname')));
+				$(this).attr(selectAttr, $.i18n.prop($(this).attr(selectAttr)));
 			});
 		 }    
 	});    
  }   
-                
+
+
+$(function(){
+	var _OurplusLanguage = (navigator.systemLanguage?navigator.systemLanguage:navigator.language);
+	var lang = _OurplusLanguage.substr(0, 2)
+	if('zh'==lang){
+		lang = 'cn';
+	}
+	//alert(lang);
+    loadLanguage(lang);
+});

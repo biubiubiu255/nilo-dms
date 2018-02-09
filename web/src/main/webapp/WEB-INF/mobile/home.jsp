@@ -26,7 +26,7 @@
 			<h2>KiliExpress</h2>
 		</div>
 
-		<c:if test="${isRider }">
+		<%--<c:if test="${isRider }">--%>
 			<div class="j_sy_n1">
 				<div class="model_banner_title">
 					<i></i>Rider
@@ -59,7 +59,7 @@
 				</ul>
 				<div class="clear"></div>
 			</div>
-		</c:if>
+		<%--</c:if>--%>
 		<c:if test="${isRider==false}">
 			<div class="model_banner">
 				<div class="model_banner_title">

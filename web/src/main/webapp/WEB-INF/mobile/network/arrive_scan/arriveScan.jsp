@@ -30,7 +30,7 @@
 	$(document)
 			.ready(
 					function() {
-						loadLanguage('en');
+						//loadLanguage('cn');
 
 						var mobile = new MobileData({
 							autoLoad : false,
@@ -111,7 +111,8 @@
 				<div class="banner_content">
 					<input type="hidden" name="scanedCodes" />
 					<ul class="one_banner">
-						<li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span class="scanner" id="scan">scan</span></li>
+						<li><input type='text'  placeholder="Logistics_No" required="required" property_name="arrive_scan_no" set_attr="placeholder" class='input_value keywords i18n-input' id="logisticsNo" name='logisticsNo' /><span data-locale="all_scan" class="scanner" id="scan">scan</span></li>
+						<%--<li><input type='text' placeholder="Logistics No" required="required" class='input_value' id="logisticsNo" name='logisticsNo' /><span data-locale="all_scan" class="scanner" id="scan">scan</span></li>--%>
 					</ul>
 				</div>
 
@@ -120,126 +121,11 @@
 					<%--<li id="code456"><input type='checkbox' class='input_value' value="456" name='items' /><span>code 12123123</span></li>--%>
 				</ul>
 
-				<div class="bottom_a_button11"><a href="javascript:void(0);" class="delete_button">delete</a></div>
-				<div class="bottom_a_button22"><a href="javascript:void(0);" class="submit">submit</a></div>
-
-				<!-- <div class="bottom_a_button11">
-					<a onclick="delTr2()">delete</a>
-				</div>
-				<div class="bottom_a_button22">
-					<a onclick="Judge('fuxuan')">submit</a>
-				</div> -->
-
-				<!-- <table cellpadding="0" id="tab" cellspacing="0" class="pf_div1">
-					<tr>
-						<td>Logistics No</td>
-						<td><input type="checkbox" id="allFuxuan" checked="checked"
-							onclick="sel('fuxuan')"></td>
-					</tr>
-				</table> -->
+				<div class="bottom_a_button11"><a href="javascript:void(0);" class="delete_button" data-locale="all_delete">delete</a></div>
+				<div class="bottom_a_button22"><a href="javascript:void(0);" class="submit" data-locale="all_submit">submit</a></div>
 			</form>
 		</div>
 
 	</div>
-
-	<!-- <script>
-		document.getElementById('scan').onclick = function() {
-			android.startScan()
-		};
-
-		function doScan() {
-			android.startScan();
-		}
-		function afterScan(scanResult) {
-			//document.getElementById("logisticsNo").value = scanResult;
-			addTr2('tab', 0, scanResult);
-		}
-
-		/* $("#logisticsNo").focus();
-		$("#logisticsNo").keydown(function (event) {
-		    event = document.all ? window.event : event;
-		    if ((event.keyCode || event.which) == 13) {
-		         var scanResult = document.getElementById("logisticsNo").value
-		        addTr2('tab', 0,scanResult);
-		    }
-		}); */
-
-		function sel(a) {
-			var o = document.getElementsByName(a)
-			for (var i = 0; i < o.length; i++)
-				o[i].checked = event.srcElement.checked
-		}
-
-		function delTr2() {
-			// android.startScan(afterScan);
-			delTr('fuxuan');
-		}
-		function delTr(fuxuan) {
-			//获取选中的复选框，然后循环遍历删除
-			var fuxuans = $("input[name=" + fuxuan + "]:checked");
-			if (fuxuans.size() == 0) {
-				alert("You did not select the required action！");
-				return;
-			}
-			fuxuans.each(function() {
-				$(this).parent().parent().remove();
-			});
-		}
-
-		function addTr2(tab, row, scanResult) {
-			var trHtml = "<tr align='center'><td>"
-					+ scanResult
-					+ "</td><td><input type=\"checkbox\" checked=\"checked\" name=\"fuxuan\" value=\""+scanResult+"\"></td></tr>";
-			addTr(tab, row, trHtml);
-		}
-		function addTr(tab, row, trHtml) {
-			//获取table最后一行 $("#tab tr:last")
-			//获取table第一行 $("#tab tr").eq(0)
-			//获取table倒数第二行 $("#tab tr").eq(-2)
-			var $tr = $("#" + tab + " tr").eq(row);
-			if ($tr.size() == 0) {
-				alert("指定的table id或行数不存在！");
-				return;
-			}
-			$tr.after(trHtml);
-			//$("#logisticsNo").val("");
-		}
-
-		function Judge(fuxuan) {
-			//获取选中的复选框，然后循环遍历删除
-			var fuxuans = $("input[name=" + fuxuan + "]:checked");
-			if (fuxuans.size() == 0) {
-				alert("You did not select the required action！");
-				return;
-			} else {
-				suiyi(fuxuan);
-			}
-		}
-
-		function suiyi(fuxuan) {
-			var arrWaybillNo = new Array();
-			$("input[name=" + fuxuan + "]:checked").each(function(i, n) {
-				arrWaybillNo.push($(this).val());
-			});
-			$.ajax({
-				cache : false,
-				type : "POST",
-				traditional : true,
-				url : "/mobile/arrive/submit.html",
-				data : {
-					arrWaybillNo : arrWaybillNo
-				},
-				async : false,
-				error : function() {
-					alert("submit error！");
-				},
-				success : function() {
-					// addTr2('tab', -1);
-					alert("submit success！");
-					delTr(fuxuan);
-				}
-			});
-		}
-	</script> -->
 </body>
 </html>
