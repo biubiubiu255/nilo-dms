@@ -28,7 +28,7 @@
             <div class="banner_content">
                 <input type="hidden" name="id" />
                <ul class="one_banner">
-                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' name='orderNo' /><span class="scanner" data-locale="all_scan">scan</span></li>
+                    <li><input type='text' placeholder="Logistics No" required="required" property_name="all_logistics_no" set_attr="placeholder" maxlength='100' class='input_value i18n-input' name='orderNo' /><span class="scanner" data-locale="all_scan">scan</span></li>
                     <li>
                         <%--<label>Reason</label>--%>
                         <select required="required" class='input_value' name='reason'>  
@@ -37,7 +37,7 @@
 		                   </c:forEach>
                         </select>
                     </li>
-                    <li><input type='text' placeholder="Memo" maxlength='100' class='input_value' name='remark' /></li>
+                    <li><input type='text' placeholder="Remark" property_name="stranded_remark" set_attr="placeholder" maxlength='100' class='input_value i18n-input' name='remark' /></li>
                     <a ></a>
                 </ul>
                 <div class="clear"></div>

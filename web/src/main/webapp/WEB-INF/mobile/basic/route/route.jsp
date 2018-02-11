@@ -31,8 +31,6 @@
 	$(document)
 			.ready(
 					function() {
-						loadLanguage('en');
-
 						var mobile = new MobileData({
 							autoLoad : false,
 							formId : 'arrive-form',
@@ -114,11 +112,11 @@ ul li{
 
 </style>
 	
-<div class="wap_content">
+<div class="formula_modify">
 
 		<div class="wap_top">
 			<a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-			<h2>Route</h2>
+			<h2 data-locale="route_title">Route</h2>
 		</div>
 		<div class="banner_content">
 			<form id="unpackage-form">
@@ -126,9 +124,9 @@ ul li{
 					<input type="hidden" name="scanNos" value=""/>
 					<ul class="one_banner">
 	                    <li>
-	                        <input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' name='logisticsNo' style="width: 62%;" />
-	                    	<span class="scanner" style="left: 66%;">scan</span>
-	                    	<span id="query">query</span>
+	                        <input type='text' placeholder="Logistics No" required="required" maxlength='100' property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input' name='logisticsNo' style="width: 62%;" />
+	                    	<span class="scanner" style="left: 66%;" data-locale="all_scan">scan</span>
+	                    	<span id="query" data-locale="all_query">Query</span>
 	                    </li>
 					</ul>
 					
@@ -140,6 +138,7 @@ ul li{
 					            </a>
 					        </li>
 					    </ul>
+				</div>
 			</form>
 
 		</div>

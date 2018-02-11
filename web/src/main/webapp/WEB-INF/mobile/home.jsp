@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
 <meta charset="UTF-8" />
@@ -19,6 +20,11 @@
 <link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
 <link href="/mobile/css/jxj_css.css" type="text/css" rel="stylesheet" />
 <link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
+<script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/mobile/js/functions.js"></script>
+<script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
+<script type="text/javascript" src="/mobile/js/mobile.js"></script>
+<script type="text/javascript" src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
 </head>
 <body>
 	<div class="wap_content">
@@ -29,33 +35,19 @@
 		<%--<c:if test="${isRider }">--%>
 			<div class="j_sy_n1">
 				<div class="model_banner_title">
-					<i></i>Rider
+					<i class="model_banner_title"></i><div data-locale="home_rider">Rider</div>
 				</div>
 				<ul class="model_banner_ul"
 					style="width: 100%; overflow: hidden; margin: 0px;">
 					<a href="/mobile/rider/sign/sign.html" title="">
-						<li><img src="/mobile/images/icon_1.png" /><br />Sign Scan</li>
+						<li><img src="/mobile/images/icon_1.png" /><br /><label data-locale="sign_scan">Sign Scan</label></li>
 					</a>
-					<!-- <a href="/mobile/tiaozhuangController/dshkqs.html" title="">
-         <li><img src="/mobile/images/icon_2.png" /><br/>COD Sign</li>
-       </a> -->
-					<!-- <a href="/mobile/rider/self/self.html" title="">
-						<li><img src="/mobile/images/icon_6.png" /><br />Self-Collect
-							Sign</li>
-					</a> -->
 					<a href="/mobile/rider/problem/scan.html" title="">
-						<li><img src="/mobile/images/icon_7.png" /><br />Problem</li>
+						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="problem">Problem</label></li>
 					</a>
 					<a href="/mobile/rider/stranded/scan.html" title="">
-						<li><img src="/mobile/images/icon_7.png" /><br />Stranded
-							Parcel</li>
+						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="stranded_parcel">Stranded Parcel</label></li>
 					</a>
-					<!-- <a href="/mobile/tiaozhuangController/pjqr.html" title="">
-         <li><img src="/mobile/images/icon_3.png" /><br/>Parcel Confirmation</li>
-       </a>
-       <a href="/mobile/tiaozhuangController/plzz.html" title="">
-         <li><img src="/mobile/images/icon_5.png" /><br/>Batch transfer</li>
-       </a> -->
 				</ul>
 				<div class="clear"></div>
 			</div>
@@ -63,61 +55,47 @@
 		<c:if test="${isRider==false}">
 			<div class="model_banner">
 				<div class="model_banner_title">
-					<i class="model_banner_title"></i>Network
+					<i class="model_banner_title"></i><div data-locale="home_network">Network</div>
 				</div>
 				<ul class="model_banner_ul">
 					<a href="/mobile/arrive/scan.html" title="">
-						<li><img src="/mobile/images/icon_3.png" /><br />Arrive Scan</li>
+						<li><img src="/mobile/images/icon_3.png" /><br /><label data-locale="arrive_scan">Arrive Scan</label></li>
 					</a>
 					<a href="/mobile/deliver/scan.html" title="">
-						<li><img src="/mobile/images/icon_5.png" /><br />Deliver Scan</li>
+						<li><img src="/mobile/images/icon_5.png" /><br /><label data-locale="deliver_scan">Deliver Scan</label></li>
 					</a>
-					<!-- <a href="/mobile/deliver/list.html" title="">
-						<li><img src="/mobile/images/icon_5.png" /><br />Deliver List</li>
-					</a> -->
 					<a href="/mobile/send/scan.html" title="">
-						<li><img src="/mobile/images/icon_4.png" /><br />Send Scan</li>
+						<li><img src="/mobile/images/icon_4.png" /><br /><label data-locale="send_scan">Send Scan</label></li>
 					</a>
-					<!-- <a href="/mobile/send/list.html" title="">
-						<li><img src="/mobile/images/icon_4.png" /><br />Send List</li>
-					</a> -->
-
 					<a href="/mobile/package/packing.html" title="">
-						<li><img src="/mobile/images/icon_3.png" /><br />Packing</li>
+						<li><img src="/mobile/images/icon_3.png" /><br /><label data-locale="packing">Packing</label></li>
 					</a>
 					<a href="/mobile/package/list.html" title="">
-						<li><img src="/mobile/images/icon_3.png" /><br />Pack List</li>
+						<li><img src="/mobile/images/icon_3.png" /><br /><label data-locale="pack_list">Pack List</label></li>
 					</a>
-					
 					<a href="/mobile/network/unpackage/unpack.html" title="">
-						<li><img src="/mobile/images/icon_3.png" /><br />UnPack</li>
+						<li><img src="/mobile/images/icon_3.png" /><br /><label data-locale="unPack">UnPack</label></li>
 					</a>
-
 					<a href="/mobile/rider/problem/scan.html" title="">
-						<li><img src="/mobile/images/icon_7.png" /><br />Problem</li>
+						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="problem">Problem</label></li>
 					</a>
-
 					<a href="/mobile/rider/stranded/scan.html" title="">
-						<li><img src="/mobile/images/icon_7.png" /><br />Stranded
-							Parcel</li>
+						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="stranded_parcel">Stranded Parcel</label></li>
 					</a>
-
 				</ul>
 				<div class="clear"></div>
 			</div>
 		</c:if>
 		<div class="model_banner">
 			<div class="model_banner_title">
-				<i class="model_banner_title"></i>Basic function
+				<i class="model_banner_title"></i><div data-locale="home_basic">Basic function</div>
 			</div>
 			<ul class="model_banner_ul">
 				<a href="/mobile/basic/route/route.html">
-					<li><img src="/mobile/images/scheduler_info.png" /><br />Routing
-						Query</li>
+					<li><img src="/mobile/images/scheduler_info.png" /><br /><label data-locale="routing_query">Routing Query</label></li>
 				</a>
 				<a href="/mobile/password/toPage.html" title="">
-					<li><img src="/mobile/images/index_icon_1.png" /><br />Modify
-						password</li>
+					<li><img src="/mobile/images/index_icon_1.png" /><br /><label data-locale="modify_password">Modify password</label></li>
 				</a>
 			</ul>
 			<div class="clear"></div>

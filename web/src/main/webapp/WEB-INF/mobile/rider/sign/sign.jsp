@@ -41,14 +41,14 @@
 			<form id="myForm" class="layui-form" action="">
 				<div class="banner_content">
 					<ul class="one_banner">
-						<li><input type="text" placeholder="Logistics No"
-							id="logisticsNo" name="logisticsNo" class="input_value" /><span
+						<li><input type="text" placeholder="Logistics No" property_name="all_logistics_no" set_attr="placeholder"
+							id="logisticsNo" name="logisticsNo" class="input_value i18n-input" /><span
 							id="scan" data-locale="all_scan">scan</span></li>
-						<li><input type='text' placeholder="Signer" id="signer"
-							class='input_value' name='signer' required="required" />
+						<li><input type='text' placeholder="Signer" id="signer" property_name="sign_scan_signer" set_attr="placeholder"
+							class='input_value i18n-input' name='signer' required="required" />
 						<!-- <span>Aquire</span> --></li>
-						<li><input type='text' placeholder="Remark" id="remark"
-							class='input_value' name='remark' /></li>
+						<li><input type='text' placeholder="Remark" id="remark" property_name="sign_scan_remark" set_attr="placeholder"
+							class='input_value i18n-input' name='remark' /></li>
 						<li><label data-locale="sign_scan_Picture">Sign Picture</label>
 							<div class="xq">
 								<img src="/mobile/images/2300.jpg" />

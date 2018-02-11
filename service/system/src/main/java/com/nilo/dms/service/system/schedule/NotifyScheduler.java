@@ -40,6 +40,7 @@ public class NotifyScheduler implements Job {
                     Map<String, String> params = new HashMap<>();
                     params.put("op", notify.getBizType());
                     params.put("sign", notify.getSign());
+                    params.put("app_key","dms");
                     params.put("data", notify.getParam());
                     String response = "";
                     try {

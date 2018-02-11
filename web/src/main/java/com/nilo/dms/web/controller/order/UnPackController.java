@@ -103,7 +103,7 @@ public class UnPackController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/scan.html")
-    public String scan(String orderNo, String scanNo, String type) {
+    public String scanner(String orderNo, String scanNo, String type) {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();

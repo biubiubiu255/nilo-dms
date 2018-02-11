@@ -145,8 +145,8 @@
                             <option value="" data-locale="send_scan_driver">Please select a driver</option>
                         </select>
                     </li>
-                    <li><input type='text' placeholder="Plate No" maxlength='100' class='input_value' id='plateNo' name='plateNo' /></li>
-                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span data-locale="all_scan" class="scanner" id="scan">scan</span></li>
+                    <li><input type='text' placeholder="Plate No" maxlength='100' property_name="send_scan_plateNo" set_attr="placeholder" class='input_value i18n-input' id='plateNo' name='plateNo' /></li>
+                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input' id="logisticsNo" name='logisticsNo' /><span data-locale="all_scan" class="scanner" id="scan">scan</span></li>
 
                 </ul>
                 <div class="clear"></div>

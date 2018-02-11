@@ -110,7 +110,7 @@
                     </select>
                     </li>
                     <%--<li><input type='text' placeholder="Logistics No" required="required" property_name="arrive_scan_no" set_attr="placeholder" class='input_value keywords i18n-input' id="logisticsNo" name='logisticsNo' /><span data-locale="arrive_scan_scan" class="scanner" id="scan">scan</span></li>--%>
-                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' class='input_value' id="logisticsNo" name='logisticsNo' /><span class="scanner" id="scan" data-locale="all_scan">scan</span></li>
+                    <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input' id="logisticsNo" name='logisticsNo' /><span class="scanner" id="scan" data-locale="all_scan">scan</span></li>
 
                 </ul>
                 <%--<div class="clear"></div>--%>

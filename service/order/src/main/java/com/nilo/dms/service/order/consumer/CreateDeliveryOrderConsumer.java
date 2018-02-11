@@ -105,21 +105,15 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     }else{
                         orderHeader.setOrderTime(DateUtil.getSysTimeStamp());
                     }
-                    switch (data.getOrderType()) {
-                        case "1": {
-                            orderHeader.setOrderType("FBK");
-                            break;
-                        }
-                        case "2": {
-                            orderHeader.setOrderType("GS");
-                            break;
-                        }
-                        case "0": {
-                            orderHeader.setOrderType("DS");
-                            break;
-                        }
-                        default:
-                            break;
+
+                    if(StringUtil.equals(data.getOrderType(),"1")){
+                        orderHeader.setOrderType("FBK");
+                    }
+                    if(StringUtil.equals(data.getOrderType(),"2")){
+                        orderHeader.setOrderType("GS");
+                    }
+                    if(StringUtil.equals(data.getOrderType(),"0")){
+                        orderHeader.setOrderType("DS");
                     }
 
                     orderHeader.setReferenceNo(data.getReferenceNo());
