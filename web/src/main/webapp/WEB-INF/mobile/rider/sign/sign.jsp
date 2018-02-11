@@ -60,7 +60,7 @@
 						</div>
 					</center>
 					<div class="bottom_a_button">
-						<a id="commit">确定</a>
+						<a id="commit">submit</a>
 					</div>
 				</div>
 			</form>
