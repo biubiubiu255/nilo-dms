@@ -60,7 +60,7 @@
 						</div>
 					</center>
 					<div class="bottom_a_button">
-						<a id="commit">submit</a>
+						<a id="commit">确定</a>
 					</div>
 				</div>
 			</form>
@@ -127,44 +127,6 @@
 					$.scanner(scan_callback);
                  
 					});
-		
-		
-/* 
-		document.getElementById('scan').onclick = function() {
-			doScan()
-		};
-
-		function doScan() {
-			if (typeof (android) != 'undefined') {
-				android.startScan();
-			}
-		}
-		doScan();
-		function afterScan(scanResult) {
-			document.getElementById("logisticsNo").value = scanResult;
-			drawTab(scanResult);
-		}
-
-		function drawTab(orderNo) {
-			ajaxRequest("/mobile/rider/sign/getDetail.html", {
-				orderNo : orderNo
-			}, true, function(response) {
-				if (response) {
-					if (response.result) {
-						$("#signer").val(
-								response.data.receiverInfo.receiverName);
-						$("#remark").val(response.data.remark);
-					}
-				}
-
-			}, true);
-
-		}
-
-
-		function doFind() {
-			//load
-		} */
 
 	</script>
 </body>

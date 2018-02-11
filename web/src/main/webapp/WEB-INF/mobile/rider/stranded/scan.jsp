@@ -43,7 +43,7 @@
                 <div class="clear"></div>
             </div>
             <div class="bottom_a_button">
-				<a onclick="javascript:void(0);" class="submit" data-locale="all_submit">save</a>
+				<a onclick="javascript:void(0);" class="submit" data-locale="all_submit">submit</a>
 			</div>
         </form>
 
