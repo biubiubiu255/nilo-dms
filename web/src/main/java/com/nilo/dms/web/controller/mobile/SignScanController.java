@@ -17,6 +17,7 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +39,13 @@ public class SignScanController extends BaseController {
 
 	// private static final String path =
 	// "F:\\ronny_1\\dms_master\\web\\target\\platform-dms\\upload";
-	private static final String path = "D:\\temp\\upload";
+	
+
+    //@Value("#{configProperties['temp_photo_file_path']}")
+	//private String path;
+    
+    @Value("#{configProperties['temp_photo_file_path']}")
+	private static final String path = "";
 
 	private static final String[] suffixNameAllow = new String[] { ".jpg", ".png" };
 
@@ -68,6 +75,7 @@ public class SignScanController extends BaseController {
 		String fileName = "";
 		try {
 			if (file != null) {
+				System.out.print("【========================】" + path);
 				fileName = FileUtil.uploadFile(file, path);
 				ImageDO imageDO = new ImageDO();
 				imageDO.setMerchantId(Long.parseLong(me.getMerchantId()));
