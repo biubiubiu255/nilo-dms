@@ -49,7 +49,7 @@
 				                    for (var int = 0; int < res.data.length; int++) {
 				                    	content += getResult(res.data[int]);
 									}
-				                    if(content=='') content='<span>没有找到此单号的物流信息</span>';
+				                    if(content=='') content='<span>' + getI18nAttr('title_not_found_order') + '</span>';
 				                    $(".banner_center").first().html(content);
 								}
 							})
