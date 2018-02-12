@@ -1063,3 +1063,31 @@ MobileData.defaults = {
     ,buttonEvents:[]
 };
 
+
+function getI18nAttr(value) {
+
+		var _OurplusLanguage = (navigator.systemLanguage?navigator.systemLanguage:navigator.language);
+		var lang = _OurplusLanguage.substr(0, 2)
+		
+		if('zh'==lang){
+			language = 'en';
+		}else {
+			language = 'en';
+		}
+		
+		var content=null;
+		
+		$.i18n.properties({
+			 name:'string',    //属性文件名     命名格式： 文件名_国家代号.properties  
+			 path:'/mobile/language/',   //注意这里路径是你属性文件的所在文件夹  
+			 mode:'map',    
+			 language:language,     //这就是国家代号 name+language刚好组成属性文件名：strings+zh -> strings_zh.properties  
+			 callback:function(){    
+				 content = $.i18n.prop(value);
+			 }    
+		});    
+		
+		return content;
+	
+}
+

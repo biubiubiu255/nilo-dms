@@ -59,8 +59,8 @@
 							$("input[name='logisticsNo']").val(code);
 							$("#query").trigger("click");
 						}
-						$.scanner(scan_callback);
-                     
+						$.scanner(scan_callback(), 1);
+						
 					});
 	
 	
@@ -72,18 +72,29 @@
 	
     	//alert(d.opt);
     	//alert(dataStr);
+    	
+    	var map = {
+    				route_const_parcel: getI18nAttr('route_const_parcel'),
+    				all_scan: getI18nAttr('all_scan'),
+    				home_network: getI18nAttr('home_network'),
+    				route_const_delivering: getI18nAttr('route_const_delivering'),
+    				home_rider: getI18nAttr('home_rider'),
+    				route_const_signed: getI18nAttr('route_const_signed'),
+    				sign_scan_signer: getI18nAttr('sign_scan_signer')
+    			  };
+    	
 		switch (d.opt) {
 		
 		case 'arrive_scan':
-			point = '快件由' + d.optByName + '扫描，网点：' + d.networkDesc;
-							break;
+			point = map.route_const_parcel + '：' + d.optByName + map.all_scan + '，' + map.home_network + '：' + d.networkDesc;
+			break;
 
 		case 'delivery':
-			point = '正在派件，派件员【'+d.optByName+'，'+d.phone+'】';
+			point = map.route_const_delivering  + '，' + map.home_rider + '【' + d.optByName + '，' + d.phone+'】';
 			break;
 			
 		case 'receive':
-			point = '快件已签收，签收人：' + d.optByName;
+			point = map.route_const_signed + '，' + map.sign_scan_signer + '：' + d.optByName;
 			break;
 			
 		default:
@@ -95,8 +106,9 @@
     	//alert(point);
 		return point;
 	}
+
 	
-	
+
 
 </script>
 
