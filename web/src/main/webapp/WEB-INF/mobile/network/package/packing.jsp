@@ -25,7 +25,7 @@
 <script type="text/javascript" src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-        loadLanguage('cn');
+        //loadLanguage('cn');
         var mobile = new MobileData({
             autoLoad:false
             ,formId:'packing-form'

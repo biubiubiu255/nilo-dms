@@ -23,6 +23,7 @@
 <script type="text/javascript" src="/mobile/js/functions.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile.js"></script>
+<script type="text/javascript" src="/mobile/js/jquery.scanner.js"></script>
 <script type="text/javascript"
 	src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
 
@@ -41,9 +42,9 @@
 			<form id="myForm" class="layui-form" action="">
 				<div class="banner_content">
 					<ul class="one_banner">
+					
 						<li><input type="text" placeholder="Logistics No" property_name="all_logistics_no" set_attr="placeholder"
-							id="logisticsNo" name="logisticsNo" class="input_value i18n-input" /><span
-							id="scan" data-locale="all_scan">scan</span></li>
+							id="logisticsNo" name="logisticsNo" class="input_value i18n-input" /><span class="scanner" data-locale="all_scan"></span></li>
 						<li><input type='text' placeholder="Signer" id="signer" property_name="sign_scan_signer" set_attr="placeholder"
 							class='input_value i18n-input' name='signer' required="required" />
 						<!-- <span>Aquire</span> --></li>
@@ -68,8 +69,8 @@
 	</div>
 	<script src="/layui/layui.js" charset="utf-8"></script>
 	<script type="text/javascript">
-        loadLanguage('cn');
-		layui.use('upload', function() {
+        //loadLanguage('en');
+		layui.use(['upload', 'jquery'], function() {
 			var $ = layui.jquery, upload = layui.upload;
 
 			upload.render({
@@ -95,10 +96,10 @@
 				done : function(res) {
 					if (res.result) {
 						showError('submit success');
-						$("#remark").reset();
+						$("#remark").val();
 					} else {
 						showError(res.msg);
-						$("#remark").reset();
+						$("#remark").val();
 					}
 				}
 			});
@@ -110,42 +111,23 @@
 			inputFile.css("display", "none");
 
 		});
-
-		document.getElementById('scan').onclick = function() {
-			doScan()
-		};
-
-		function doScan() {
-			if (typeof (android) != 'undefined') {
-				android.startScan();
-			}
-		}
-		doScan();
-		function afterScan(scanResult) {
-			document.getElementById("logisticsNo").value = scanResult;
-			drawTab(scanResult);
-		}
-
-		function drawTab(orderNo) {
-			ajaxRequest("/mobile/rider/sign/getDetail.html", {
-				orderNo : orderNo
-			}, true, function(response) {
-				if (response) {
-					if (response.result) {
-						$("#signer").val(
-								response.data.receiverInfo.receiverName);
-						$("#remark").val(response.data.remark);
+		
+		android.startScan();
+		
+		$(document)
+		.ready(
+				function() {
+					var mobile = new MobileData({
+						autoLoad : false,
+						formId : 'myForm',
+						model : 'customers'
+					});
+					var scan_callback = function(code) {
+						mobile.setFormFieldValue("logisticsNo", code)
 					}
-				}
-
-			}, true);
-
-		}
-
-
-		function doFind() {
-			//load
-		}
+					$.scanner(scan_callback);
+                 
+					});
 
 	</script>
 </body>

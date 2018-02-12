@@ -511,6 +511,8 @@ $(function(){
 	var lang = _OurplusLanguage.substr(0, 2)
 	if('zh'==lang){
 		lang = 'cn';
+	}else {
+		lang = 'en';
 	}
 	//alert(lang);
     loadLanguage(lang);

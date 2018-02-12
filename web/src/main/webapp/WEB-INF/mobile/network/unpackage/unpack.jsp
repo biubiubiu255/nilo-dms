@@ -35,7 +35,7 @@
     	
     	var isScanBigPack = false;
     	
-        loadLanguage('cn');
+        //loadLanguage('cn');
 
         var mobile = new MobileData({
             autoLoad:false
@@ -149,6 +149,13 @@
     		//alert(result.data.length);
     		//alert(result.data[0].createdTime);
     		
+    		if(result.data.length==0) {
+    			showError("not found package");
+    			setTimeout(function () {  window.history.go(-1); }, 2000);
+
+
+    		}
+
     		var desc='';
     		var point="";
     		var tempRes=null;
@@ -183,12 +190,11 @@
 		<div class="formula_modify">
 			<form id="unpackage-form">
 				<div class="banner_content">
-					<input type="hidden" name="scanNos" value=""/>
+					<input type="hidden" name="scanNos" value="" required="required" />
 					<ul class="one_banner">
 						<li><input type='text' placeholder="Logistics No" required="required" maxlength='100' property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input'
 							name='logisticsNo' /><!-- <span class="scanner">scan</span> -->
 						</li>
-
 
 					</ul>
 
@@ -207,8 +213,8 @@
 					<a onclick="javascript:void(0);" class="submit" data-locale="all_submit">submit</a>
 					
 				</div> -->
-            <div class="bottom_a_button11"><a href="javascript:void(0);" class="submit" data-locale="all_submit">确定</a></div>
-            <div class="bottom_a_button22"><a href="javascript:void(0);" class="scanner" data-locale="all_scan">scan</a></div>
+            <div class="bottom_a_button11"><a href="javascript:void(0);" class="submit"  data-locale="all_submit"></a></div>
+            <div class="bottom_a_button22"><a href="javascript:void(0);"><span class="scanner">scan</span></a></div>
 			</form>
 
 		</div>
