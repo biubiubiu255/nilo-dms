@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.nilo.dms.common.utils.IdWorker;
+import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.WaybillScanDao;
 import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.service.order.OrderService;
@@ -45,6 +46,8 @@ public class MobilePackageController extends BaseController {
 	private OrderService orderService;
 	@Autowired
 	private DistributionNetworkDao distributionNetworkDao;
+	@Autowired
+	private DeliveryOrderOptDao deliveryOrderOptDao;
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -67,7 +70,21 @@ public class MobilePackageController extends BaseController {
 
 		return "mobile/network/package/packing";
 	}
-	
+
+	@ResponseBody
+	@RequestMapping(value = "/check.html")
+	public String check(String code) {
+
+		Long a = deliveryOrderOptDao.getStateByOrderNo(code);
+		if (a==null){
+			return toJsonErrorMsg("There is no OrderNo");
+		}
+		if(!(a==20)){
+			return toJsonErrorMsg("There are restrictions on this order");
+		}
+		return toJsonTrueMsg();
+	}
+
 	@RequestMapping(value = "/list.html")
 	public String toList(Model model) {
 		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();

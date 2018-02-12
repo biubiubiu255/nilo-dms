@@ -26,6 +26,20 @@ a{ text-decoration:none;}
 .j_dly_4{ color:#999; width:100%; text-align:center; font-size:0.85em; float:left; margin-top:0px;}
 .j_dly_3 input:hover{ background:#b91117;}
 
+.listheal{
+    position:fixed;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    z-index: 10000;
+}
+.listbody{
+    position:relative;
+    top: 90px;
+    right: 0px;
+    left: 0px;
+}
+
 /*首页*/
 .wap_top{ line-height:50px; background:#37BCF9; width:100%;  height:50px; position:relative;}
 .wap_top .wap_top_back{ width:30px; height:50px; background:url(../images/check_back.png) no-repeat center; background-size:14px auto; position:absolute; top:0px; left:5px;}

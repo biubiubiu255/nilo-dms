@@ -21,6 +21,7 @@ public class DeliveryOrderSenderDO extends BaseDo<Long> {
 
     private String city;
 
+
     private String area;
 
     private String address;

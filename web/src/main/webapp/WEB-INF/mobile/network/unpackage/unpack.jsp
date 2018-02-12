@@ -207,8 +207,8 @@
 					<a onclick="javascript:void(0);" class="submit" data-locale="all_submit">submit</a>
 					
 				</div> -->
-            <div class="bottom_a_button11"><a href="javascript:void(0);" class="submit" data-locale="all_delete">确定</a></div>
-            <div class="bottom_a_button22"><a href="javascript:void(0);" class="scanner" data-locale="all_submit">scan</a></div>
+            <div class="bottom_a_button11"><a href="javascript:void(0);" class="submit" data-locale="all_submit">确定</a></div>
+            <div class="bottom_a_button22"><a href="javascript:void(0);" class="scanner" data-locale="all_scan">scan</a></div>
 			</form>
 
 		</div>

@@ -3,10 +3,7 @@ package com.nilo.dms.web.controller.mobile;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DistributionNetworkDao;
-import com.nilo.dms.dao.StaffDao;
-import com.nilo.dms.dao.ThirdDriverDao;
-import com.nilo.dms.dao.ThirdExpressDao;
+import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
@@ -41,6 +38,8 @@ public class SendScanController extends BaseController {
     private ThirdDriverDao thirdDriverDao;
     @Autowired
     private LoadingService loadingService;
+    @Autowired
+    private DeliveryOrderOptDao deliveryOrderOptDao;
 //    @Autowired
 //    private StaffDao staffDao;
 
@@ -53,6 +52,20 @@ public class SendScanController extends BaseController {
 //        Pagination page = getPage();
 //        List<Loading> list = loadingService.queryBy(merchantId, loadingNo, loadingStatus, page);
         return "mobile/test";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/check.html")
+    public String check(String code) {
+
+        Long a = deliveryOrderOptDao.getStateByOrderNo(code);
+        if (a==null){
+            return toJsonErrorMsg("There is no OrderNo");
+        }
+        if(!(a==20)){
+            return toJsonErrorMsg("There are restrictions on this order");
+        }
+        return toJsonTrueMsg();
     }
 
     @RequestMapping(value = "/scan.html")
@@ -161,7 +174,7 @@ public class SendScanController extends BaseController {
 
         }
         loadingService.ship(merchantId, loadingNo, me.getUserId());
-        return toJsonTrueData(loadingNo);
+        return toJsonTrueMsg();
     }
     private  boolean isInteger(String str) {
         Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
