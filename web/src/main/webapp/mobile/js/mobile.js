@@ -1084,7 +1084,7 @@ function getI18nAttr(value) {
 			 language:language,     //这就是国家代号 name+language刚好组成属性文件名：strings+zh -> strings_zh.properties  
 			 callback:function(){    
 				 content = $.i18n.prop(value);
-			 }    
+			 } 
 		});    
 		
 		return content;

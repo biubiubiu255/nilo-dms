@@ -61,7 +61,7 @@
 						</div>
 					</center>
 					<div class="bottom_a_button">
-						<a id="commit" data-locale="sign_scan_Picture">submit</a>
+						<a id="commit" data-locale="all_submit">submit</a>
 					</div>
 				</div>
 			</form>

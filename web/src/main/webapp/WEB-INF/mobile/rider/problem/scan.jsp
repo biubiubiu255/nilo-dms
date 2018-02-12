@@ -40,9 +40,9 @@
             mobile.setFormFieldValue('logisticsNo',code);
         }
     	
-        $.scanner(scan_callback, 1);                   //直接传一个空的回调函数
+        $.scanner(scan_callback);                   //直接传一个空的回调函数
         //$.scanner(scan_callback('这里是订单号'), 1); //测试模式，直接传订单号 
-
+        android.startScan();
     	
     });
 </script>

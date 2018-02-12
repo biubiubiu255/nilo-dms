@@ -59,7 +59,9 @@
 							$("input[name='logisticsNo']").val(code);
 							$("#query").trigger("click");
 						}
-						$.scanner(scan_callback(), 1);
+						$.scanner(scan_callback);
+						
+						android.startScan();
 						
 					});
 	
