@@ -1070,7 +1070,7 @@ function getI18nAttr(value) {
 		var lang = _OurplusLanguage.substr(0, 2)
 		
 		if('zh'==lang){
-			language = 'en';
+			language = 'cn';
 		}else {
 			language = 'en';
 		}
