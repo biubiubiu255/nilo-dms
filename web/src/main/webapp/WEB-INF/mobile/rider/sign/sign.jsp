@@ -112,7 +112,7 @@
 
 		});
 		
-		
+		android.startScan();
 		
 		$(document)
 		.ready(
