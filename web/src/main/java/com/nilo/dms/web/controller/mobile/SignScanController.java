@@ -36,13 +36,6 @@ public class SignScanController extends BaseController {
 
 	@Autowired
 	private OrderService orderService;
-
-	// private static final String path =
-	// "F:\\ronny_1\\dms_master\\web\\target\\platform-dms\\upload";
-	
-
-    //@Value("#{configProperties['temp_photo_file_path']}")
-	//private String path;
     
     @Value("#{configProperties['temp_photo_file_path']}")
 	private static final String path = "";

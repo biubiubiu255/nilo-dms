@@ -35,7 +35,7 @@
 </script>
 <script type="text/javascript">
 	$(function(){
-        loadLanguage('cn');
+        //loadLanguage('cn');
 		var mobile = new MobileData({
 			model : 'customers'
 			//,viewModel:'view_customers'

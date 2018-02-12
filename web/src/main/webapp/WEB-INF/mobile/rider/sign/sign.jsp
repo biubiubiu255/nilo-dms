@@ -42,8 +42,9 @@
 			<form id="myForm" class="layui-form" action="">
 				<div class="banner_content">
 					<ul class="one_banner">
+					
 						<li><input type="text" placeholder="Logistics No" property_name="all_logistics_no" set_attr="placeholder"
-							id="logisticsNo" name="logisticsNo" class="input_value i18n-input" /><span class="scanner">scan</span></li>
+							id="logisticsNo" name="logisticsNo" class="input_value i18n-input" /><span class="scanner" data-locale="all_scan"></span></li>
 						<li><input type='text' placeholder="Signer" id="signer" property_name="sign_scan_signer" set_attr="placeholder"
 							class='input_value i18n-input' name='signer' required="required" />
 						<!-- <span>Aquire</span> --></li>
@@ -60,7 +61,7 @@
 						</div>
 					</center>
 					<div class="bottom_a_button">
-						<a id="commit">submit</a>
+						<a id="commit" data-locale="sign_scan_Picture">submit</a>
 					</div>
 				</div>
 			</form>
@@ -68,7 +69,7 @@
 	</div>
 	<script src="/layui/layui.js" charset="utf-8"></script>
 	<script type="text/javascript">
-        loadLanguage('cn');
+        //loadLanguage('en');
 		layui.use(['upload', 'jquery'], function() {
 			var $ = layui.jquery, upload = layui.upload;
 

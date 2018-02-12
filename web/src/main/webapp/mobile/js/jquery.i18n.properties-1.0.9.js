@@ -510,7 +510,9 @@ $(function(){
 	var _OurplusLanguage = (navigator.systemLanguage?navigator.systemLanguage:navigator.language);
 	var lang = _OurplusLanguage.substr(0, 2)
 	if('zh'==lang){
-		lang = 'cn';
+		lang = 'en';
+	}else {
+		lang = 'en';
 	}
 	//alert(lang);
     loadLanguage(lang);

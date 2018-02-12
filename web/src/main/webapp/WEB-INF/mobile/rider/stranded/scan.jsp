@@ -55,7 +55,7 @@
 <script type="text/javascript">
      
     $(function(){
-        loadLanguage('cn');
+        //loadLanguage('cn');
     	var mobile = new MobileData({
             autoLoad:false
             ,formId:'stranded-form'

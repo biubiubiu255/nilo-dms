@@ -24,7 +24,7 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
-        loadLanguage('cn');
+        //loadLanguage('cn');
 
         var mobile = new MobileData({
             autoLoad:false
