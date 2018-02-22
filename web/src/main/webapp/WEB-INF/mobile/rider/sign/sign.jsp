@@ -71,6 +71,7 @@
 	<script type="text/javascript">
         //loadLanguage('en');
 		layui.use(['upload', 'jquery'], function() {
+			
 			var $ = layui.jquery, upload = layui.upload;
 
 			upload.render({
@@ -82,6 +83,7 @@
 				choose : function(obj) {
 					obj.preview(function(index, file, result) {
 						//$('#demo2').append('<img name = "s_pmt_dw" style="width: 120px; height: 150px; margin-left: 16px;" src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
+						$("#lypic").first().show();
 						$('#lypic').attr('src', result); //图片链接（base64）  
 					});
 				},
@@ -97,6 +99,7 @@
 					if (res.result) {
 						showError('submit success');
 						$("#remark").val();
+
 					} else {
 						showError(res.msg);
 						$("#remark").val();
@@ -112,7 +115,7 @@
 
 		});
 		
-		android.startScan();
+		//android.startScan();
 		
 		$(document)
 		.ready(
@@ -126,8 +129,11 @@
 						mobile.setFormFieldValue("logisticsNo", code)
 					}
 					$.scanner(scan_callback);
-                 
-					});
+					
+					$("#lypic").first().hide();
+					
+				});
+
 
 	</script>
 </body>
