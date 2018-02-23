@@ -204,9 +204,10 @@ public class StaffServiceImpl implements StaffService {
         if (StringUtil.isNotEmpty(staff.getCompanyId())) {
             staffDO.setCompanyId(Long.parseLong(staff.getCompanyId()));
         }
+        if(staff.isRider()!=null){
+            staffDO.setIsRider(staff.isRider()?1:0);
 
-        staffDO.setIsRider(staff.getIsRiderCode());
-
+        }
         staffDO.setBirthday(staff.getBirthday());
         staffDO.setEmail(staff.getEmail());
         staffDO.setEmployTime(staff.getEmployTime());
