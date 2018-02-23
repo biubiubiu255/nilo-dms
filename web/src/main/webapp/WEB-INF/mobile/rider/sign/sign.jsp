@@ -126,7 +126,12 @@
 						model : 'customers'
 					});
 					var scan_callback = function(code) {
-						mobile.setFormFieldValue("logisticsNo", code)
+						mobile.setFormFieldValue("logisticsNo", code);
+						ajaxRequest('/mobile/rider/sign/getDetail.html',{orderNo: code},false,function(data){
+					                            alert("lalalallala");
+					       alert(data.data);
+					       // mobile.setFormFieldValue("signer", code)
+					    });
 					}
 					$.scanner(scan_callback);
 					
