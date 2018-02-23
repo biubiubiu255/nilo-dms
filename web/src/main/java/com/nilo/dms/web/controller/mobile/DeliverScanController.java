@@ -2,10 +2,7 @@ package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DistributionNetworkDao;
-import com.nilo.dms.dao.StaffDao;
-import com.nilo.dms.dao.ThirdDriverDao;
-import com.nilo.dms.dao.ThirdExpressDao;
+import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
@@ -38,6 +35,8 @@ public class DeliverScanController extends BaseController {
     private LoadingService loadingService;
 //    @Autowired
 //    private OrderService orderService;
+    @Autowired
+    private DeliveryOrderOptDao deliveryOrderOptDao;
 
     @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
@@ -48,6 +47,20 @@ public class DeliverScanController extends BaseController {
         model.addAttribute("riderList", getRiderList(merchantId));
 
         return "mobile/network/deliver_scan/deliverScan";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/check.html")
+    public String check(String code) {
+
+        Long a = deliveryOrderOptDao.getStateByOrderNo(code);
+        if (a==null){
+            return toJsonErrorMsg("There is no OrderNo");
+        }
+        if(!(a==20)){
+            return toJsonErrorMsg("There are restrictions on this order");
+        }
+        return toJsonTrueMsg();
     }
 
     @RequestMapping(value = "/submit.html")
@@ -61,7 +74,6 @@ public class DeliverScanController extends BaseController {
         String merchantId = me.getMerchantId();
         String loadingNo = "";
         try {
-            System.out.println("*--------------------------");
             if(StringUtil.isEmpty(rider)){
                 throw new IllegalArgumentException("Rider or Driver is empty.");
             }
@@ -78,7 +90,6 @@ public class DeliverScanController extends BaseController {
 
         DeliveryOrder order = null;
         for (int i=0; i<scaned_codes.length; i++){
-            System.out.println("====================");
             try {
                 loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i], me.getUserId());
                 //order = orderService.queryByOrderNo(merchantId, scaned_codes);

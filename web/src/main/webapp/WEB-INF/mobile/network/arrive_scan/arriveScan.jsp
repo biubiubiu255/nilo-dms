@@ -27,74 +27,80 @@
 
 
 <script type="text/javascript">
-	$(document)
-			.ready(
-					function() {
-						//loadLanguage('cn');
+	$(document).ready(
+		function() {
+			//loadLanguage('cn');
 
-						var mobile = new MobileData({
-							autoLoad : false,
-							formId : 'arrive-form',
-							model : 'customers'
-						});
+			var mobile = new MobileData({
+				autoLoad : false,
+				formId : 'arrive-form',
+				model : 'customers'
+			});
 
-						mobile.initSubmitForm({
-							formId : 'arrive-form',
-							mbObject : mobile,
-							postUrl : '/mobile/arrive/submit.html',
-							beforeSubmit : function() {
-								var scaned_array = [];
-								var checkboxs = $('#arrive-form').find(
-										'input:checked');
-								for (var i = 0; i < checkboxs.length; i++) {
-									var value = $(checkboxs[i]).attr('value');
-									scaned_array.push(value);
-								}
-								console.dir(scaned_array);
-								mobile.setFormFieldValue('scanedCodes',
-										scaned_array.join(','));
-								return true;
-							},
-							callback : function(data) {
-								console.log(data);
-								if (data.result) {
-									showError('submit success')
-									del();
-								} else {
-									showError(data.msg);
+			mobile.initSubmitForm({
+				formId : 'arrive-form',
+				mbObject : mobile,
+				postUrl : '/mobile/arrive/submit.html',
+				beforeSubmit : function() {
+					var scaned_array = [];
+					var checkboxs = $('#arrive-form').find(
+							'input:checked');
+					for (var i = 0; i < checkboxs.length; i++) {
+						var value = $(checkboxs[i]).attr('value');
+						scaned_array.push(value);
+					}
+					console.dir(scaned_array);
+					mobile.setFormFieldValue('scanedCodes',
+							scaned_array.join(','));
+					return true;
+				},
+				callback : function(data) {
+					if (data.result) {
+						showInfo('submit success')
+						del();
+					} else {
+						showError(data.msg);
+						// window .history.go(-1);
+					}
 
-								}
+				}
+			});
 
-							}
-						});
+			var code_array = [];
+			var scan_callback = function(code) {
+				mobile.setFormFieldValue('logisticsNo', code);
+				if (!isEmpty(code_array[code])) {
+					warningTipMsg('This order already scanned');
+					return;
+				}
+				code_array[code] = code;
+				var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class=\'fuxuank\' value=\""+code+"\" name='items[]' /><span class='suiyi'>" + code + "</span></li>";
+                ajaxRequest('/mobile/arrive/check.html',{code: code},false,function(data){
+					if(data.result){
+                        $('#append_order_items_id').prepend(append_html);
+					}
+					else{
+                        showError(data.msg);
+					}
+				});
 
-						var code_array = [];
-						var scan_callback = function(code) {
-							mobile.setFormFieldValue('logisticsNo', code);
-							if (!isEmpty(code_array[code])) {
-								warningTipMsg('This order already scanned');
-								return;
-							}
-							code_array[code] = code;
-							var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class=\'fuxuank\' value=\""+code+"\" name='items[]' /><span class='suiyi'>" + code + "</span></li>";
-							$('#append_order_items_id').prepend(append_html);
-						}
-						$.scanner(scan_callback);
+			}
+			$.scanner(scan_callback);
 
-						$('a.delete_button').click(function () {
-				            del();
-				        });
+			$('a.delete_button').click(function () {
+				del();
+			});
 
-						function del() {
-							var checkboxs = $('#arrive-form').find(
-									'input:checked');
-							for (var i = 0; i < checkboxs.length; i++) {
-								var value = $(checkboxs[i]).attr('value');
-								delete code_array[value];
-								$('#code' + value).remove();
-							}
-						}
-					});
+			function del() {
+				var checkboxs = $('#arrive-form').find(
+						'input:checked');
+				for (var i = 0; i < checkboxs.length; i++) {
+					var value = $(checkboxs[i]).attr('value');
+					delete code_array[value];
+					$('#code' + value).remove();
+				}
+			}
+		});
 </script>
 
 </head>

@@ -65,7 +65,16 @@
             }
             code_array[code] = code;
             var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class='fuxuank' value='"+code+"' name='items' /><span class='suiyi'>"+code+"</span></li>";
-            $('#append_packing_id').prepend(append_html);
+            ajaxRequest('/mobile/package/check.html',{code: code},false,function(data){
+                if(data.result){
+                    $('#append_packing_id').prepend(append_html);
+                }
+                else{
+                    showError(data.msg);
+                }
+            });
+
+
         }
         $.scanner(scan_callback);
 

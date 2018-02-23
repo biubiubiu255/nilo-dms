@@ -992,7 +992,7 @@ MobileData.prototype.initComboSelect = function (initOpts) {
 		$("div."+group_id).toggle();
 		if(!inited){
 			//赋值scopeId,便于内部判断。
-			ini	ts.options.scopeId = group_id;
+            initOpts.options.scopeId = group_id;
 			initOpts.options.isComboSelect = true;
 			iniMb = new MobileData(initOpts.options);
 			iniMb.valueField = initOpts.valueField;

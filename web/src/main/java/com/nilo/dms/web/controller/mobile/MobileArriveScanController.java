@@ -2,6 +2,8 @@ package com.nilo.dms.web.controller.mobile;
 
 import java.util.Arrays;
 
+import com.nilo.dms.dao.DeliveryOrderOptDao;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,9 +21,26 @@ public class MobileArriveScanController extends BaseController {
 	@Autowired
 	private OrderService orderService;
 
+	@Autowired
+	private DeliveryOrderOptDao deliveryOrderOptDao;
+
 	@RequestMapping(value = "/scan.html")
 	public String toPage() {
 		return "mobile/network/arrive_scan/arriveScan";
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/check.html")
+	public String check(String code) {
+
+		Long a = deliveryOrderOptDao.getStateByOrderNo(code);
+		if (a==null){
+			return toJsonErrorMsg("There is no OrderNo");
+		}
+		if(a==35 ||a==40 || a==50 || a==60){
+			return toJsonErrorMsg("There are restrictions on this order");
+		}
+		return toJsonTrueMsg();
 	}
 
 	
@@ -35,11 +54,15 @@ public class MobileArriveScanController extends BaseController {
 		// 获取merchantId
 		String merchantId = me.getMerchantId();
 		String arriveBy = me.getUserId();
-		
-		String[] logisticsNoArray = scanedCodes.split(",");
-		if (null != logisticsNoArray && logisticsNoArray.length > 0) {
-			orderService.waybillNoListArrive(Arrays.asList(logisticsNoArray), arriveBy, merchantId);
+		try {
+			String[] logisticsNoArray = scanedCodes.split(",");
+			if (null != logisticsNoArray && logisticsNoArray.length > 0) {
+				orderService.waybillNoListArrive(Arrays.asList(logisticsNoArray), arriveBy, merchantId);
+			}
+		}catch (Exception e){
+			return toJsonErrorMsg(e.getMessage());
 		}
+
 		return toJsonTrueMsg();
 	}
 }

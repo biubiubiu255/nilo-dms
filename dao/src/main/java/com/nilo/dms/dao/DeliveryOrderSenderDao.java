@@ -17,4 +17,6 @@ public interface DeliveryOrderSenderDao extends BaseDao<Long,DeliveryOrderSender
     List<DeliveryOrderSenderDO> queryByOrderNos(@Param("merchantId")Long merchantId, @Param("orderNos")List<String> orderNo);
 
     DeliveryOrderSenderDO queryByOrderNo(@Param("merchantId")Long merchantId, @Param("orderNo")String orderNo);
+
+//    DeliveryOrderSenderDO queryByOrderNo
 }

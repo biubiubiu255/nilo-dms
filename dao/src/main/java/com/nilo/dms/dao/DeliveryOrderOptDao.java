@@ -22,4 +22,5 @@ public interface DeliveryOrderOptDao extends BaseDao<Long, DeliveryOrderOptDO> {
 
     List<DeliveryOrderOptDO> queryByOrderNos(@Param(value = "merchantId") Long merchantId, @Param(value = "orderNos") List<String> orderNos);
 
+    Long getStateByOrderNo(@Param(value = "orderNo") String orderNo);
 }

@@ -29,6 +29,9 @@
     <sql id="Base_Column_List">
         id, order_no ,merchant_id,opt,opt_by, from_status,to_status ,remark, created_time
     </sql>
+    <select id="getStateByOrderNo" resultType="java.lang.Long">
+        SELECT status FROM t_waybill WHERE order_no =#{orderNo}
+    </select>
 
     <!-- 插入语句 -->
     <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderOptDO" statementType="PREPARED"

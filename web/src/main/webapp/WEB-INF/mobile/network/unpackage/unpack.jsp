@@ -152,10 +152,10 @@
     		if(result.data.length==0) {
     			showError("not found package");
     			setTimeout(function () {  window.history.go(-1); }, 2000);
-    			
-    			
+
+
     		}
-    		
+
     		var desc='';
     		var point="";
     		var tempRes=null;

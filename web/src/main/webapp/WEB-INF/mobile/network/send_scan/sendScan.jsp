@@ -69,10 +69,10 @@
             }
             ,callback:function (data) {
                 if (data.result) {
-                    showInfo('Success '+data.msg);
+                    showInfo('Success');
                     del();
                 } else {
-                    showError(data.msg)
+                    showError(data.msg);
                 }
             }
         });
@@ -86,7 +86,14 @@
             }
             code_array[code] = code;
             var append_html = "<li id='code"+code+"'><input type='checkbox' checked='checked' class='fuxuank' value='"+code+"' name='items' /><span class='suiyi'>"+code+"</span></li>";
-            $('#append_order_items_id').prepend(append_html);
+            ajaxRequest('/mobile/send/check.html',{code: code},false,function(data){
+                if(data.result){
+                    $('#append_order_items_id').prepend(append_html);
+                }
+                else{
+                    showError(data.msg);
+                }
+            });
         }
         $.scanner(scan_callback);
         // $.scanner(scan_callback('11111111213123'),1,true);
