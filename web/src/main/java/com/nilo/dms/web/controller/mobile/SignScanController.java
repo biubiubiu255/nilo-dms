@@ -6,6 +6,7 @@ import com.nilo.dms.common.enums.ImageTypeEnum;
 import com.nilo.dms.common.utils.FileUtil;
 import com.nilo.dms.dao.ImageDao;
 import com.nilo.dms.dao.dataobject.ImageDO;
+import com.nilo.dms.service.FileService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
@@ -36,7 +37,10 @@ public class SignScanController extends BaseController {
 
 	@Autowired
 	private OrderService orderService;
-    
+	
+	@Autowired
+	private FileService fileService;
+	
     @Value("#{configProperties['temp_photo_file_path']}")
 	private static final String path = "";
 
@@ -64,22 +68,13 @@ public class SignScanController extends BaseController {
 		param.setRemark(remark);
 		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 		// 写入图片
-		String fileName = "";
 		try {
 			if (file != null) {
 				System.out.print("【========================】" + path);
-				fileName = FileUtil.uploadFile(file, path);
-				ImageDO imageDO = new ImageDO();
-				imageDO.setMerchantId(Long.parseLong(me.getMerchantId()));
-				imageDO.setOrderNo(param.getOrderNo());
-				imageDO.setCreatedBy(me.getUserId());
-				imageDO.setUpdatedBy(me.getUserId());
-				imageDO.setStatus(ImageStatusEnum.NORMAL.getCode());
-				imageDO.setImageName(fileName);
-				imageDO.setImageType(ImageTypeEnum.RECEIVE.getCode());
-				// imageDO.setImageType(ImageTypeEnum.getEnum().getCode());
-				imageDao.insert(imageDO);
 
+				fileService.uploadSignImage(me.getMerchantId(), me.getUserId(), logisticsNo, file.getBytes());
+				
+				// imageDO.setImageType(ImageTypeEnum.getEnum().getCode());
 			}
 		} catch (Exception e) {
 			return toJsonErrorMsg(e.getMessage());
