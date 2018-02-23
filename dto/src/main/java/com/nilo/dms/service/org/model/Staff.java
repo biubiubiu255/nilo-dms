@@ -74,10 +74,6 @@ public class Staff {
         isRider = rider;
     }
 
-    public Integer getIsRiderCode() {
-        return isRider == true ? 1 : 0;
-    }
-
     public Long getRegularTime() {
         return regularTime;
     }
