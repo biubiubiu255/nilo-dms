@@ -125,7 +125,7 @@ public class ArriveScanController extends BaseController {
         if(deliveryOrder == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST,orderNo);
 
         WaybillScanDetailsDO query = waybillScanDetailsDao.queryBy(orderNo, scanNo);
-        if (query != null) throw new DMSException(BizErrorCode.ALREADY_SCAN, orderNo);
+        if (query != null ) throw new DMSException(BizErrorCode.ALREADY_SCAN, orderNo);
         WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
         scanDetailsDO.setScanNo(scanNo);
         scanDetailsDO.setOrderNo(orderNo);

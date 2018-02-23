@@ -19,6 +19,8 @@ public class LoginInfo implements Serializable {
     private UserTypeEnum userType;
     private UserStatusEnum status;
 
+
+
     public String getMerchantId() {
         return merchantId;
     }

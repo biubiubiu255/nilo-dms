@@ -32,7 +32,6 @@ public class RouteConsumer extends AbstractMQConsumer {
     public void handleMessage(MessageExt messageExt, Object obj) throws Exception {
 
         DeliveryOrderRouteDao deliveryOrderRouteDao = SpringContext.getBean("deliveryOrderRouteDao", DeliveryOrderRouteDao.class);
-        UserNetworkDao userNetworkDao = SpringContext.getBean("userNetworkDao", UserNetworkDao.class);
         try {
             DeliveryRouteMessage message = (DeliveryRouteMessage) obj;
             logger.info("MessageExt:{},DeliveryRouteMessage:{}", messageExt, message);

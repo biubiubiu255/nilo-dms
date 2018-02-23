@@ -95,7 +95,7 @@
             //执行实例
             var uploadInst = upload.render({
                 elem: '#uploadAbnormalImage' //绑定元素
-                , url: '/image/upload/abnormal/'+orderNo+'.html' //上传接口
+                , url: '/image/upload/problem/'+orderNo+'.html' //上传接口
                 , before: function (obj) {
                     //预读本地文件示例，不支持ie8
                     obj.preview(function (index, file, result) {

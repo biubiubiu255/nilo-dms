@@ -28,7 +28,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">Department:</label>
             <div class="layui-input-inline">
-                <select lay-filter="departmentId" name="departmentId">
+                <select lay-verify="required" name="departmentId">
                     <option value="">Pls select order type...</option>
                     <c:forEach items="${departmentList}" var="r">
                         <option value=${r.departmentId}>${r.departmentName}</option>
@@ -52,7 +52,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">Real Name:</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="realName" value="${staff.realName}" autocomplete="off" class="layui-input">
+                    <input type="text" lay-verify="required" name="realName" value="${staff.realName}" autocomplete="off" class="layui-input">
                 </div>
             </div>
         </div>
@@ -60,14 +60,14 @@
             <div class="layui-inline">
                 <label class="layui-form-label">Employ:</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" name="employTimeDate" id="employTime"
+                    <input type="text" class="layui-input" lay-verify="required" name="employTimeDate" id="employTime"
                            placeholder="Employ Time">
                 </div>
             </div>
             <div class="layui-inline">
                 <label class="layui-form-label">Birthday:</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" name="birthday" id="birthday"
+                    <input type="text" class="layui-input" lay-verify="required" name="birthday" id="birthday"
                            placeholder="Birthday">
                 </div>
             </div>

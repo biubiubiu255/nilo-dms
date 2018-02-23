@@ -57,7 +57,7 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
 
         DeliveryRouteMessage message = new DeliveryRouteMessage();
         message.setMerchantId(request.getMerchantId());
-        message.setOrderNo(request.getOrderNo());
+        message.setOrderNo(request.getOrderNo().toArray(new String[request.getOrderNo().size()]));
         message.setOptType(request.getOptType().getCode());
         message.setOptBy(request.getOptBy());
         message.setRider(request.getRider());
@@ -87,7 +87,7 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
             UserInfo userInfo = userService.findUserInfoByUserId("" + routeDO.getMerchantId(), routeDO.getOptBy());
             if (userInfo != null) route.setOptByName(userInfo.getName());
         }
-
+        route.setCreatedTime(routeDO.getCreatedTime());
         return route;
     }
 }
