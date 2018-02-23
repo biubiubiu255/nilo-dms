@@ -3,6 +3,8 @@ package com.nilo.dms.web.controller.order;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
+import com.nilo.dms.common.exception.BizErrorCode;
+import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
@@ -140,6 +142,9 @@ public class PackageController extends BaseController {
         try {
 
             List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
+            if(scanDetailList==null ||scanDetailList.size()==0){
+                throw new DMSException(BizErrorCode.PACKAGE_EMPTY);
+            }
             List<String> orderNos = new ArrayList<>();
             for (WaybillScanDetailsDO d : scanDetailList) {
                 orderNos.add(d.getOrderNo());
