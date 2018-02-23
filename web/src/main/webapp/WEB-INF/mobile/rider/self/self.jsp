@@ -71,7 +71,6 @@
                 alert("发送请求失败！");
             },
             success: function () {
-                console.log("zzzzzzzzzzzzzzzzzzzzzz")
                 addTr2('tab', -1);
             }
         });

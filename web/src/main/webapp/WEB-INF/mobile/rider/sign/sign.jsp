@@ -44,7 +44,7 @@
 					<ul class="one_banner">
 					
 						<li><input type="text" placeholder="Logistics No" property_name="all_logistics_no" set_attr="placeholder"
-							id="logisticsNo" name="logisticsNo" class="input_value i18n-input" /><span class="scanner" data-locale="all_scan"></span></li>
+							id="logisticsNo" name="logisticsNo" required="required" class="input_value i18n-input" /><span class="scanner" data-locale="all_scan"></span></li>
 						<li><input type='text' placeholder="Signer" id="signer" property_name="sign_scan_signer" set_attr="placeholder"
 							class='input_value i18n-input' name='signer' required="required" />
 						<!-- <span>Aquire</span> --></li>
@@ -57,7 +57,7 @@
 					</ul>
 					<center>
 						<div>
-							<img src="" style="width: 100px; height: 100px;" id="lypic" />
+							<img src="" style="width: 100px; height: 100px;" required="required" id="lypic" />
 						</div>
 					</center>
 					<div class="bottom_a_button">
@@ -83,6 +83,9 @@
 				choose : function(obj) {
 					obj.preview(function(index, file, result) {
 						//$('#demo2').append('<img name = "s_pmt_dw" style="width: 120px; height: 150px; margin-left: 16px;" src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
+						if('#lypic==null || #lypic=""'){
+						    alert("...")
+						}
 						$("#lypic").first().show();
 						$('#lypic').attr('src', result); //图片链接（base64）  
 					});
@@ -97,7 +100,7 @@
 				},
 				done : function(res) {
 					if (res.result) {
-						showError('submit success');
+						showInfo('submit success');
 						$("#remark").val();
 
 					} else {
@@ -126,7 +129,13 @@
 						model : 'customers'
 					});
 					var scan_callback = function(code) {
-						mobile.setFormFieldValue("logisticsNo", code)
+                        mobile.setFormFieldValue("logisticsNo", code)
+                        ajaxRequest('/mobile/rider/sign/getDetail.html',{orderNo: code},false,function(data){
+                            if(!(data.msg==null)){
+                                showError(data.msg)
+							}
+							mobile.setFormFieldValue("signer", data.data)
+						});
 					}
 					$.scanner(scan_callback);
 					

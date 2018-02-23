@@ -30,7 +30,12 @@
     		mbObject: mobile , 
     		postUrl : '/mobile/rider/problem/save.html' ,
     		callback: function (data) {
-    			if (data.result) showInfo(null);
+    			if (data.result) {
+    		        showInfo(null)
+                    alert("978")
+    		    }else{
+    			    alert("000")
+                }
 			}
     	});  
     	
@@ -65,7 +70,8 @@
                     <li><input type='text' placeholder="Logistics No" required="required" property_name="all_logistics_no" set_attr="placeholder" maxlength='100' class='input_value i18n-input' name='logisticsNo' /><span class="scanner" data-locale="all_scan">scan</span></li>
                     <li>
                         <%--<label>Reason</label>--%>
-                        <select required="required" class='input_value' name='reason'>  
+                        <select required="required" class='input_value' name='reason'>
+                            <option value="">Please enter a reason</option>
 	                       <c:forEach var="values" items="${abnormalTypeList}" varStatus="status">
 	                           <option value="${values.code}">${values.value }</option>
 		                   </c:forEach>
