@@ -10,7 +10,7 @@
 </style>
 <div class="box-body">
     <c:forEach items="${list}" var="image" varStatus="status">
-        <img src="/upload/${image.imageName}" alt="${image.imageName}" class="layui-show-img">
+        <img src="${image.imageName}" alt="${image.imageName}" class="layui-show-img">
     </c:forEach>
 
 </div>

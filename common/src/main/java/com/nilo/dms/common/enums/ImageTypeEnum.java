@@ -7,8 +7,8 @@ import java.util.Map;
  * Created by ronny on 2017/8/22.
  */
 public enum ImageTypeEnum implements EnumMessage{
-    ABNORMAL("abnormal", "Abnormal"),
-    RECEIVE("receive", "receive"),
+    PROBLEM("problem", "Problem"),
+    RECEIVE("receive", "Receive"),
     ;
     private String code;
     private String desc;

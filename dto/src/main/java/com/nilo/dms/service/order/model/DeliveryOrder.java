@@ -77,7 +77,6 @@ public class DeliveryOrder {
     private Double billNo;
     private Double accountNo;
     private Integer printTimes;
-    private boolean isPrinted;
 
     private String allocatedRider;
 
@@ -146,13 +145,8 @@ public class DeliveryOrder {
     }
 
     public boolean isPrinted() {
-        return isPrinted;
+        return printTimes==null?false:true;
     }
-
-    public void setPrinted(boolean printed) {
-        isPrinted = printed;
-    }
-
     public Integer getPrintTimes() {
         return printTimes;
     }

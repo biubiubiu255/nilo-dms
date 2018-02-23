@@ -357,6 +357,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     @Transactional
     public void arrive(String merchantId, String scanNo, String networkId, String arriveBy) {
         List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
+        if (scanDetailList == null || scanDetailList.size() == 0) throw new DMSException(BizErrorCode.ARRIVE_EMPTY);
+
 
         List<String> orderNos = new ArrayList<>();
         for (WaybillScanDetailsDO details : scanDetailList) {
@@ -704,7 +706,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
 
     private String createSign(String key, String data) {
-        return new String(DigestUtils.md5Hex( key + data + key).toUpperCase());
+        return new String(DigestUtils.md5Hex(key + data + key).toUpperCase());
     }
 
     private DeliveryOrder convert(DeliveryOrderDO d) {

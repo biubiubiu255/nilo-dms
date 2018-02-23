@@ -1,5 +1,6 @@
 package com.nilo.dms.service.order.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ public class DeliveryRouteMessage {
 
     private String merchantId;
 
-    private List<String> orderNo;
+    private String[] orderNo;
 
     private String optType;
 
@@ -43,11 +44,11 @@ public class DeliveryRouteMessage {
         this.merchantId = merchantId;
     }
 
-    public List<String> getOrderNo() {
+    public String[] getOrderNo() {
         return orderNo;
     }
 
-    public void setOrderNo(List<String> orderNo) {
+    public void setOrderNo(String[] orderNo) {
         this.orderNo = orderNo;
     }
 

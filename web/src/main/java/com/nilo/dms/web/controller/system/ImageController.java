@@ -9,11 +9,13 @@ import com.nilo.dms.common.utils.ImageCut;
 import com.nilo.dms.dao.ImageDao;
 import com.nilo.dms.dao.dataobject.ImageDO;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.service.FileService;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +37,10 @@ public class ImageController extends BaseController {
 
     private static final String[] suffixNameAllow = new String[]{".jpg", ".png"};
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    @Value("#{configProperties['staticUrl']}")
+    private String staticUrl;
+    @Autowired
+    private FileService fileService;
 
     @Autowired
     private ImageDao imageDao;
@@ -46,32 +51,40 @@ public class ImageController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<ImageDO> list = imageDao.findBy(Long.parseLong(merchantId), orderNo, imageType);
+        for (ImageDO i : list) {
+            i.setImageName(staticUrl + i.getImageName());
+        }
         model.addAttribute("list", list);
         return "image/show";
     }
 
     @ResponseBody
-    @RequestMapping(value = "/upload/{imageType}/{orderNo}.html")
-    public String upload(MultipartFile file, @PathVariable String orderNo, @PathVariable String imageType) {
+    @RequestMapping(value = "/upload/sign/{orderNo}.html")
+    public String sign(MultipartFile file, @PathVariable String orderNo) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String fileName = "";
         try {
             if (file != null) {
-                fileName = FileUtil.uploadFile(file, path);
+                fileService.uploadSignImage(me.getMerchantId(), me.getUserId(), orderNo, file.getBytes());
+            }
+        } catch (Exception e) {
+            return toJsonErrorMsg(e.getMessage());
+        }
+        return toJsonTrueData(fileName);
+    }
 
-                ImageDO imageDO = new ImageDO();
-                
-                imageDO.setMerchantId(Long.parseLong(me.getMerchantId()));
-                imageDO.setOrderNo(orderNo);
-                imageDO.setCreatedBy(me.getUserId());
-                imageDO.setUpdatedBy(me.getUserId());
-                imageDO.setStatus(ImageStatusEnum.NORMAL.getCode());
-                imageDO.setImageName(fileName);
-                imageDO.setImageType(ImageTypeEnum.getEnum(imageType).getCode());
-                imageDao.insert(imageDO);
+    @ResponseBody
+    @RequestMapping(value = "/upload/problem/{orderNo}.html")
+    public String problem(MultipartFile file, @PathVariable String orderNo) {
 
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String fileName = "";
+        try {
+            if (file != null) {
+                fileService.uploadProblemImage(me.getMerchantId(), me.getUserId(), orderNo, file.getBytes());
             }
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());

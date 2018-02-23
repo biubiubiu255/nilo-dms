@@ -87,7 +87,7 @@
             //执行实例
             var uploadInst = upload.render({
                 elem: '#uploadReceiveImage' //绑定元素
-                , url: '/image/upload/receive/'+orderNo+'.html' //上传接口
+                , url: '/image/upload/sign/'+orderNo+'.html' //上传接口
                 , before: function (obj) {
                     layui.upload.config.data={'ab':'xxx'};
                     obj.preview(function (index, file, result) {
