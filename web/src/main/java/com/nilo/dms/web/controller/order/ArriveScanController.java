@@ -47,7 +47,7 @@ public class ArriveScanController extends BaseController {
     @Autowired
     private WaybillScanDetailsDao waybillScanDetailsDao;
 
-    @RequestMapping(value = "/arriveScanPage.html", method = RequestMethod.GET)
+    @RequestMapping(value = "/scanPage.html", method = RequestMethod.GET)
     public String arriveScanPage(Model model) {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 
@@ -62,32 +62,6 @@ public class ArriveScanController extends BaseController {
         model.addAttribute("scanNo", scanDO.getScanNo());
 
         return "arrive_scan/arrive_scan";
-    }
-
-
-    @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
-    public String list(Model model, HttpServletRequest request) {
-        return "arrive_scan/list";
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/list.html")
-    public String getOrderList(String orderNo, String fromTime, String toTime) {
-
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        Pagination page = getPage();
-        Long fromTimeL = null;
-        if (StringUtil.isNotEmpty(fromTime)) {
-            fromTimeL = DateUtil.parse(fromTime, "yyyy-MM-dd");
-        }
-        Long toTimeL = null;
-        if (StringUtil.isNotEmpty(toTime)) {
-            toTimeL = DateUtil.parse(toTime, "yyyy-MM-dd") + 24 * 60 * 60 - 1;
-        }
-        List<DeliveryOrderOpt> list = orderOptLogService.queryBy(merchantId, OptTypeEnum.ARRIVE_SCAN.getCode(), orderNo, me.getUserId(), fromTimeL, toTimeL, page);
-        return toPaginationLayUIData(page, list);
     }
 
     @ResponseBody
