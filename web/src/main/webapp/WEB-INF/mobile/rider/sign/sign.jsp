@@ -73,6 +73,8 @@
 		layui.use(['upload', 'jquery'], function() {
 			
 			var $ = layui.jquery, upload = layui.upload;
+			
+			var isUpPic = false;
 
 			upload.render({
 				elem : '.xq',
@@ -86,13 +88,19 @@
 						$("#lypic").first().show();
 						$('#lypic').attr('src', result); //图片链接（base64）  
 					});
+					isUpPic = true;
 				},
 				before : function(res) {
+                    if(isUpPic===false) {
+                    	showWarning("plase chose pic");
+                    	return;
+                    }
 					this.data = {
 						logisticsNo : $("#logisticsNo").val(),
 						signer : $("#signer").val(),
 						remark : $("#remark").val()
 					};
+
 					//layui.upload.config.data = {logisticsNo:1,signer:2};
 				},
 				done : function(res) {
@@ -126,7 +134,12 @@
 						model : 'customers'
 					});
 					var scan_callback = function(code) {
-						mobile.setFormFieldValue("logisticsNo", code)
+						mobile.setFormFieldValue("logisticsNo", code);
+						ajaxRequest('/mobile/rider/sign/getDetail.html',{orderNo: code},false,function(data){
+					                            alert("lalalallala");
+					       alert(data.data);
+					       // mobile.setFormFieldValue("signer", code)
+					    });
 					}
 					$.scanner(scan_callback);
 					
