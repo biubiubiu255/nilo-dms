@@ -94,7 +94,7 @@
                     <td colspan="2" style="padding-bottom:5px;"><img src="${ctx}/dist/img/logo.png" height="30">
                     </td>
                     <td class="cc" colspan="2" style="padding-bottom:5px;">Pickup list</td>
-                    <td></td>
+                    <td  style="font-size:14px; text-align:right;">PrintTimes:${delivery.printTimes}</td>
                     <td style="font-size:14px; text-align:right;">No.${delivery.orderNo}</td>
                 </tr>
                 <tr>
