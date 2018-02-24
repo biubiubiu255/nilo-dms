@@ -72,7 +72,6 @@ public class CODSignController extends BaseController {
         DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
 
         //model.addAttribute("deliveryOrder", deliveryOrder);
-        System.out.println(deliveryOrder);
         if(deliveryOrder==null) {
             return toJsonErrorMsg("orderNo is error");
         }

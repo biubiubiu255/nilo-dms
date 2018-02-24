@@ -13,7 +13,6 @@
 
 
 <link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css" />
-<link href="/mobile/css/mp.css" type="text/css" rel="stylesheet" />
 <link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
 <link rel="stylesheet" href="/layui/css/multselect.css" media="all">
 <script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
@@ -30,6 +29,7 @@
 
         var $ = layui.jquery, upload = layui.upload;
 
+        var isUpPic = false;
         upload.render({
             elem : '.xq',
             url : '/mobile/rider/COD/save.html',
@@ -42,12 +42,18 @@
                     $("#lypic").first().show();
                     $('#lypic').attr('src', result); //图片链接（base64）
                 });
+                isUpPic = true;
             },
             before : function(res) {
+                if(isUpPic===false) {
+                    showWarning("plase chose pic");
+                    return;
+                }
                 this.data = {
                     logisticsNo : $("#logisticsNo").val(),
                     signer : $("#signer").val(),
-                    remark : $("#remark").val()
+                    idNo : $("#idNo").val(),
+                    danxuan: $("input[name='danxuan']").val()
                 };
                 //layui.upload.config.data = {logisticsNo:1,signer:2};
             },
