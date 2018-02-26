@@ -15,7 +15,6 @@
         <property name="namesrvAddr" value="${mq.namesrvAddr}"/>
         <property name="producers">
             <list>
-                <ref bean="messageProducer" />
                 <ref bean="notifyMerchantProducer" />
                 <ref bean="routeProducer" />
                 <ref bean="createDeliveryOrderProducer" />
@@ -24,7 +23,6 @@
         </property>
     </bean>
 
-    <bean id="messageProducer" class="com.nilo.dms.service.order.producer.WSMessageProducer"/>
     <bean id="notifyMerchantProducer" class="com.nilo.dms.service.order.producer.NotifyMerchantProducer"/>
     <bean id="routeProducer" class="com.nilo.dms.service.order.producer.RouteProducer"/>
     <bean id="createDeliveryOrderProducer" class="com.nilo.dms.service.order.producer.CreateDeliveryOrderProducer"/>
@@ -36,7 +34,6 @@
         <property name="namesrvAddr" value="${mq.namesrvAddr}"/>
         <property name="consumers">
             <list>
-                <ref bean="messageConsumer" />
                 <ref bean="notifyMerchantConsumer" />
                 <ref bean="routeConsumer" />
                 <ref bean="createDeliveryOrderConsumer" />
@@ -45,7 +42,6 @@
         </property>
     </bean>
 
-    <bean id="messageConsumer" class="com.nilo.dms.service.order.consumer.WSMessageConsumer"/>
     <bean id="notifyMerchantConsumer" class="com.nilo.dms.service.order.consumer.NotifyMerchantConsumer"/>
     <bean id="routeConsumer" class="com.nilo.dms.service.order.consumer.RouteConsumer"/>
     <bean id="createDeliveryOrderConsumer" class="com.nilo.dms.service.order.consumer.CreateDeliveryOrderConsumer"/>

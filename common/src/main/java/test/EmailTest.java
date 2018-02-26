@@ -22,7 +22,7 @@ public class EmailTest {
 
             mailInfo.setContent(content);
             mailInfo.setSubject("放假通知-Test");
-            mailInfo.setToAddress(Arrays.asList(new String[]{"ronny.zeng@kilimall.com", "rita.ding@kilimall.com"}));
+            mailInfo.setToAddress(Arrays.asList("ronny.zeng@kilimall.com"));
             mailInfo.setCcAddress(Arrays.asList(new String[]{"ronny.zeng@kilimall.com", "rita.ding@kilimall.com"}));
             mailInfo.setBccAddress(Arrays.asList(new String[]{"ronny.zeng@kilimall.com", "rita.ding@kilimall.com"}));
 

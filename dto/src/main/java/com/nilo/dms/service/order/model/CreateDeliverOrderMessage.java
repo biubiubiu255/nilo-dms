@@ -44,4 +44,14 @@ public class CreateDeliverOrderMessage implements Serializable{
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
+
+    @Override
+    public String toString() {
+        return "CreateDeliverOrderMessage{" +
+                "requestId=" + requestId +
+                ", optBy='" + optBy + '\'' +
+                ", orderNo='" + orderNo + '\'' +
+                ", merchantId='" + merchantId + '\'' +
+                '}';
+    }
 }

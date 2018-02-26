@@ -47,11 +47,11 @@
             <div class="deliveryDiv">
                 <label class="layui-form-label" style="width:120px">Rider</label>
                 <div class="layui-input-inline">
-                    <select name="deliveryRider" id="deliveryRider" lay-search=""
+                    <select name="deliveryRider" lay-verify="required" id="deliveryRider" lay-search=""
                             <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
                         <option value="">choose or search....</option>
                         <c:forEach items="${riderList}" var="rider">
-                            <option value="${rider.userId}"> ${rider.staffId}</option>
+                            <option value="${rider.userId}"> ${rider.staffId}-${rider.realName}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -120,7 +120,7 @@
     </script>
 
     <div class="layui-form-item">
-        <div class="layui-input-block" style="margin-left:120px;">
+        <div class="layui-input-block shipDiv" style="margin-left:120px; display: none">
             <button class="layui-btn ship">Ship</button>
         </div>
     </div>
@@ -152,6 +152,7 @@
                             $("#orderNo").focus();
                             $("#loadingNo").val(data.data);
                             $("#loadingNo").attr("disabled", true);
+                            $(".shipDiv").show();
                             layer.closeAll();
                         } else {
                             layer.msg(data.msg, {icon: 2, time: 2000});
@@ -269,18 +270,20 @@
 
         $('.ship').on('click', function () {
 
+            var loadingNo = $("#loadingNo").val();
+
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
                 url: "/order/loading/ship.html",
                 dataType: "json",
                 data: {
-                    loadingNo: $("#loadingNo").val(),
+                    loadingNo: loadingNo,
                 },
                 success: function (data) {
                     if (data.result) {
                         layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
-                            parent.window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
+                            parent.window.open("/order/loading/print.html?loadingNo=" + loadingNo);
                             location.reload();
                         });
                     } else {

@@ -60,7 +60,7 @@ public class UserController extends BaseController {
         return "user/list";
     }
 
-    
+
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
     public String getUserList(String username) {
