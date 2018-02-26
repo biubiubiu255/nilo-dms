@@ -11,7 +11,7 @@
             <!-- small box -->
             <div class="small-box bg-aqua">
                 <div class="inner">
-                    <h3>150</h3>
+                    <h3>150</h3>34
 
                     <p>New Orders</p>
                 </div>
