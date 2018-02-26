@@ -252,8 +252,9 @@ public class LoadingController extends BaseController {
 
         List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(code);
         List<Driver> list = new ArrayList<>();
+        Driver driver = new Driver();
         for(ThirdDriverDO d : thirdDriver){
-            Driver driver = new Driver();
+            driver = new Driver();
             driver.setCode(d.getDriverId());
             driver.setName(d.getDriverName());
             list.add(driver);

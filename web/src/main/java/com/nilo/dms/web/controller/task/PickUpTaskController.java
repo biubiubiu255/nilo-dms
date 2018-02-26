@@ -64,9 +64,9 @@ public class PickUpTaskController extends BaseController {
         TaskParameter parameter = new TaskParameter();
         parameter.setOrderNo(orderNo);
         parameter.setMerchantId(merchantId);
-        parameter.setTaskType(TaskTypeEnum.PICK_UP.getCode());
+        parameter.setTaskType(Arrays.asList(TaskTypeEnum.PICK_UP.getCode()));
         parameter.setHandledBy(me.getUserId());
-        parameter.setStatus(Arrays.asList(new Integer[]{TaskStatusEnum.CREATE.getCode()}));
+        parameter.setStatus(Arrays.asList(TaskStatusEnum.CREATE.getCode()));
         Pagination page = getPage();
         List<Task> list = taskService.queryTask(parameter, page);
 

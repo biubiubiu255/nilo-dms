@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -69,7 +71,7 @@ public class DispatchReportController extends BaseController {
         TaskParameter parameter = new TaskParameter();
         parameter.setMerchantId(merchantId);
         parameter.setHandledBy(rider);
-        parameter.setTaskType(TaskTypeEnum.DELIVERY.getCode());
+        parameter.setTaskType(Arrays.asList(TaskTypeEnum.DELIVERY.getCode()));
         List<Integer> status = new ArrayList<>();
         status.add(TaskStatusEnum.COMPLETE.getCode());
         status.add(TaskStatusEnum.PROCESS.getCode());
