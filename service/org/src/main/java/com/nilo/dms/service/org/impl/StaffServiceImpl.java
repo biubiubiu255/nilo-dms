@@ -58,10 +58,9 @@ public class StaffServiceImpl implements StaffService {
     private DepartmentService departmentService;
 
     @Override
-    public void addStaff(String merchantId, Staff staff) {
+    public void addStaff(Staff staff) {
 
-        staff.setMerchantId(merchantId);
-
+        String merchantId = staff.getMerchantId();
         if (StringUtil.isEmpty(staff.getStaffId())) {
             String staffID = SystemConfig.getNextSerialNo(merchantId, SerialTypeEnum.STAFF_ID.getCode());
             staff.setStaffId(staffID);
@@ -117,8 +116,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public void updateStaff(String merchantId, Staff staff) {
-        staff.setMerchantId(merchantId);
+    public void updateStaff(Staff staff) {
         StaffDO staffDO = convert(staff);
         staffDao.update(staffDO);
     }

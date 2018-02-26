@@ -29,10 +29,6 @@ import java.util.Map;
 public class TestController extends BaseController {
 
     @Autowired
-    @Qualifier("messageProducer")
-    private AbstractMQProducer messageProducer;
-
-    @Autowired
     private OrderService orderService;
 
     @RequestMapping(value = "/test2.html")

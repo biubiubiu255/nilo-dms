@@ -48,10 +48,6 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private TransactionTemplate transactionTemplate;
 
-    @Autowired
-    @Qualifier("messageProducer")
-    private AbstractMQProducer messageProducer;
-
     @Override
     public String addTask(Task task) {
 

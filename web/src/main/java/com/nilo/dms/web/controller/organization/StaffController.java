@@ -80,7 +80,8 @@ public class StaffController extends BaseController {
             StaffStatusEnum statusEnum = StaffStatusEnum.getEnum(staffStatus);
             staff.setStatus(statusEnum);
             staff.setIsRider(isRiderCode != null);
-            staffService.updateStaff(me.getMerchantId(), staff);
+            staff.setMerchantId(me.getMerchantId());
+            staffService.updateStaff( staff);
         } catch (Exception e) {
             logger.error("editStaff Failed. ", e);
             return toJsonErrorMsg(e.getMessage());
@@ -101,7 +102,7 @@ public class StaffController extends BaseController {
             StaffStatusEnum statusEnum = StaffStatusEnum.getEnum(staffStatus);
             staff.setStatus(statusEnum);
             staff.setIsRider(isRiderCode != null);
-            staffService.addStaff(me.getMerchantId(), staff);
+            staffService.addStaff( staff);
         } catch (Exception e) {
             logger.error("editStaff Failed. ", e);
             return toJsonErrorMsg(e.getMessage());
@@ -120,7 +121,7 @@ public class StaffController extends BaseController {
             staff.setStatus(StaffStatusEnum.REGULAR);
             staff.setStaffId(staffId);
             staff.setRegularTime(DateUtil.getSysTimeStamp());
-            staffService.updateStaff(me.getMerchantId(), staff);
+            staffService.updateStaff(staff);
         } catch (Exception e) {
             logger.error("editStaff Failed. ", e);
             return toJsonErrorMsg(e.getMessage());
@@ -139,7 +140,7 @@ public class StaffController extends BaseController {
             staff.setStatus(StaffStatusEnum.RESIGNED);
             staff.setStaffId(staffId);
             staff.setResignedTime(DateUtil.getSysTimeStamp());
-            staffService.updateStaff(me.getMerchantId(), staff);
+            staffService.updateStaff(staff);
         } catch (Exception e) {
             logger.error("editStaff Failed. ", e);
             return toJsonErrorMsg(e.getMessage());
