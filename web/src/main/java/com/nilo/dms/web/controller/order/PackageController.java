@@ -140,10 +140,13 @@ public class PackageController extends BaseController {
         try {
 
             List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
+            
             List<String> orderNos = new ArrayList<>();
+            
             for (WaybillScanDetailsDO d : scanDetailList) {
                 orderNos.add(d.getOrderNo());
             }
+            
             packageRequest.setOrderNos(orderNos);
             packageRequest.setMerchantId(merchantId);
             packageRequest.setOptBy(me.getUserId());

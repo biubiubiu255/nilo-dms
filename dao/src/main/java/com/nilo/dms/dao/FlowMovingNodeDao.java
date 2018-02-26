@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface FlowMovingNodeDao extends BaseDao<Long,FlowMovingNodeDO> {
 
     FlowMovingNodeDO queryFlowNodeBy(String flowId);
+
+    void queryFlowBy();
 }

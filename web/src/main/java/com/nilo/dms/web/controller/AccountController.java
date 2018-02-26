@@ -2,8 +2,10 @@ package com.nilo.dms.web.controller;
 
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.UserLoginDao;
 import com.nilo.dms.common.Principal;
+import io.leopard.web.captcha.CaptchaUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -33,22 +35,28 @@ public class AccountController extends BaseController {
     @ResponseBody
     public String index(UsernamePasswordToken token, String randomCode, HttpServletRequest request) {
         Subject subject = SecurityUtils.getSubject();
+        HttpSession session = request.getSession();
         try {
             if (!subject.isAuthenticated()) { // 未登陆的
-            /*    // 校验验证码
-                String codeValidate = CaptchaUtil.getCode(request);
-                if (!StringUtil.equalsIgnoreCase(randomCode, codeValidate)) {
-                    throw new DMSException(BizErrorCode.VERIFY_CODE_ERROR);
-                }*/
+                //登录次数超过3次，即开始验证码
+                if (session.getAttribute("login_number")==null) session.setAttribute("login_number", 1);
+                int login_number = (int)session.getAttribute("login_number");
+                if (login_number++ > 3){
+                    // 校验验证码
+                    String codeValidate = CaptchaUtil.getCode(request);
+                    if (!StringUtil.equalsIgnoreCase(randomCode, codeValidate)) {
+                        throw new DMSException(BizErrorCode.VERIFY_CODE_ERROR);
+                    }
+                }
+                session.setAttribute("login_number", login_number);
+
                 subject.login(token);
                 // 登陆成功,保存用户信息到Session
                 Principal principal = (Principal) subject.getPrincipal();
-
-                request.getSession().setAttribute("userId", principal.getUserId());
-                request.getSession().setAttribute("userName", principal.getUserName());
-                request.getSession().setAttribute("name", principal.getUserName());
-                request.getSession().setAttribute("merchantId", principal.getMerchantId());
-
+                session.setAttribute("userId", principal.getUserId());
+                session.setAttribute("userName", principal.getUserName());
+                session.setAttribute("name", principal.getUserName());
+                session.setAttribute("merchantId", principal.getMerchantId());
             }
         } catch (DMSException e1) {
             log.error("Login Failed.account={}", token.getUsername());
