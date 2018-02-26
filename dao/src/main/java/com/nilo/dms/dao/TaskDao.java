@@ -1,7 +1,6 @@
 package com.nilo.dms.dao;
 
 import com.nilo.dms.common.BaseDao;
-import com.nilo.dms.dao.dataobject.CompanyDO;
 import com.nilo.dms.dao.dataobject.TaskDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -22,4 +21,5 @@ public interface TaskDao extends BaseDao<Long, TaskDO> {
     TaskDO queryByTypeAndOrderNo(@Param(value = "merchantId") Long merchantId, @Param(value = "taskType") String taskType, @Param(value = "orderNo") String orderNo);
     
     TaskDO queryUnFinishTaskByOrderNo(@Param(value = "merchantId") Long merchantId, @Param(value = "orderNo") String orderNo);
+
 }

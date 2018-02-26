@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -16,6 +17,34 @@
     <link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
     <script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="/mobile/js/functions.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $("#all").click(function(){
+                var o;
+                if(this.checked){
+                    o=document.getElementsByName("fuxuan");
+                    for(var i=0;i<o.length;i++){
+                        o[i].checked=event.srcElement.checked
+                    };
+                } else{
+                    $("[name=fuxuan]").attr("checked",false);
+                }
+            });
+            $("[name=fuxuan]").click(function(){
+                var o=document.getElementsByName("fuxuan");
+                for (var i = 0; i < o.length; i++) {
+                    if (!o[i].checked) {
+                        $("#all").prop("checked", false);
+                        return;
+                    }else{
+                        $("#all").prop("checked", true);
+                    }
+                };
+            });
+        });
+
+    </script>
 </head>
 
 <body>
@@ -28,16 +57,25 @@
     <div class="formula_modify">
         <div class="banner_content">
         <ul class="ni">
-            <li>订单号</li>
             <li>运单号</li>
             <li>金额</li>
+            <li>签收时间</li>
+            <li>全选&nbsp;<input type="checkbox" class="fuxuank" id="all" ></li>
         </ul>
+        <c:forEach items="${list}" var="m">
+            <ul class="ni">
+                <li>${m.orderNo}</li>
+                <li>${m.needPayAmount}</li>
+                <li>${m.handledTime}</li>
+                <li><input type="checkbox" class="fuxuank" name="fuxuan" value="" ></li>
+            </ul>
+        </c:forEach>
             <div class="bottom_a_button"><a onclick="">submit</a></div>
         </div>
 
     </div>
     </div>
-        <div class="bottom_a_button"><a href="#" class="submit">submit</a></div>
+        <div class="bottom_a_button"><a href="/mobile/rider/Batch/Complete.html" class="submit" id="submit">submit</a></div>
     </div>
 </body>
 <html>

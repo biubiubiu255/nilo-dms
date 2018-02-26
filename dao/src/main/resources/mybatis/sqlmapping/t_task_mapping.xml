@@ -35,6 +35,23 @@
                 jdbcType="VARCHAR"/>
     </resultMap>
 
+    <!--<resultMap id="WaybillTaskDo" type="com.nilo.dms.dao.dataobject.WaybillTaskDo">-->
+        <!--<result property="orderNo" column="order_no" javaType="java.lang.String"-->
+                <!--jdbcType="VARCHAR"/>-->
+        <!--<result property="idCOD" column="task_type" javaType="java.lang.String"-->
+                <!--jdbcType="VARCHAR"/>-->
+        <!--<result property="needPayAmount" column="task_type" javaType="java.lang.Double"-->
+                <!--jdbcType="DOUBLE"/>-->
+        <!--<result property="alreadyPaid" column="task_type" javaType="java.lang.Double"-->
+                <!--jdbcType="DOUBLE"/>-->
+        <!--<result property="handledBy" column="handled_by" javaType="java.lang.String"-->
+                <!--jdbcType="VARCHAR"/>-->
+        <!--<result property="handledTime" column="handled_time" javaType="java.lang.Long"-->
+                <!--jdbcType="INTEGER"/>-->
+        <!--<result property="status" column="status" javaType="java.lang.Integer"-->
+                <!--jdbcType="INTEGER"/>-->
+    <!--</resultMap>-->
+
     <sql id="Base_Column_List">
         id ,merchant_id,task_id,task_type,created_by,handled_by,handled_time,order_no, status,task_rate,task_desc,created_time , updated_time ,version
     </sql>
@@ -137,4 +154,11 @@
         and order_no = #{orderNo} order by
         created_time desc limit 1
     </select>
+
+    <!--<select id="queryAllWaybillTask" resultType="com.nilo.dms.dao.dataobject.WaybillTaskDo">-->
+        <!--SELECT a.order_no,a.is_cod,a.need_pay_amount,a.already_paid,b.handled_by,b.handled_time,b.status-->
+        <!--from t_waybill a INNER JOIN t_waybill_task b-->
+        <!--on a.order_no = b.order_no-->
+        <!--where a.is_cod=1 and b.`status`=3 AND need_pay_amount>0-->
+    <!--</select>-->
 </mapper>
