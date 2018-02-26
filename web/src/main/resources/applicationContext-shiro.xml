@@ -21,8 +21,9 @@
             	/app/** = app
                 /mobile/login.html = anon
                 /DemoController/toIndexPage.html = anon
-                /captcha/image.html = anon
-                /account/login.html = anon
+                /captcha/image.html  = anon
+                /account/login.html  = anon
+                /account/verify.html = anon
                 /api.html = anon
                 /api/login.html = anon
                 /websocket.html = anon
