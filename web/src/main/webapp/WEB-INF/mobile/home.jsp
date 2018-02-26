@@ -42,11 +42,17 @@
 					<a href="/mobile/rider/sign/sign.html" title="">
 						<li><img src="/mobile/images/icon_1.png" /><br /><label data-locale="sign_scan">Sign Scan</label></li>
 					</a>
+					<a href="/mobile/rider/COD/sign.html" title="">
+						<li><img src="/mobile/images/icon_2.png" /><br /><label >COD Sign</label></li>
+					</a>
 					<a href="/mobile/rider/problem/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="problem">Problem</label></li>
 					</a>
 					<a href="/mobile/rider/stranded/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="stranded_parcel">Stranded Parcel</label></li>
+					</a>
+					<a href="/mobile/rider/Batch/sign.html" title="">
+						<li><img src="/mobile/images/icon_5.png" /><br /><label>Batch transfer</label></li>
 					</a>
 				</ul>
 				<div class="clear"></div>

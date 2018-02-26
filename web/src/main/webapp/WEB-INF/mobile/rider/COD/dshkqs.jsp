@@ -1,0 +1,146 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="Cache-Control" content="no-cache"/>
+<meta content="telephone=no" name="format-detection" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=2.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+<meta name="keywords" content="#" />
+<meta name="description" content="#" />
+<title></title>
+
+
+<link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css" />
+<link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" href="/layui/css/multselect.css" media="all">
+<script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/mobile/js/functions.js"></script>
+<script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
+<script type="text/javascript" src="/mobile/js/mobile.js"></script>
+<script type="text/javascript" src="/mobile/js/jquery.scanner.js"></script>
+<script type="text/javascript"
+        src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
+<script src="/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript">
+    //loadLanguage('en');
+    layui.use(['upload', 'jquery'], function() {
+
+        var $ = layui.jquery, upload = layui.upload;
+
+        var isUpPic = false;
+        upload.render({
+            elem : '.xq',
+            url : '/mobile/rider/COD/save.html',
+            auto : false, //选择文件后不自动上传
+            data : {},
+            bindAction : '#commit',
+            choose : function(obj) {
+                obj.preview(function(index, file, result) {
+                    //$('#demo2').append('<img name = "s_pmt_dw" style="width: 120px; height: 150px; margin-left: 16px;" src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
+                    $("#lypic").first().show();
+                    $('#lypic').attr('src', result); //图片链接（base64）
+                });
+                isUpPic = true;
+            },
+            before : function(res) {
+                if(isUpPic===false) {
+                    showWarning("plase chose pic");
+                    return;
+                }
+                this.data = {
+                    logisticsNo : $("#logisticsNo").val(),
+                    signer : $("#signer").val(),
+                    idNo : $("#idNo").val(),
+                    danxuan: $("input[name='danxuan']").val()
+                };
+                //layui.upload.config.data = {logisticsNo:1,signer:2};
+            },
+            done : function(res) {
+                if (res.result) {
+                    showInfo('submit success');
+                    $("#remark").val();
+
+                } else {
+                    showError(res.msg);
+                    $("#remark").val();
+                }
+            }
+        });
+
+        var inputFile = $("input[type='file']");
+
+        inputFile.addClass("layui-hide");
+
+        inputFile.css("display", "none");
+
+    });
+
+    //android.startScan();
+
+    $(document)
+        .ready(
+            function() {
+                var mobile = new MobileData({
+                    autoLoad : false,
+                    formId : 'myForm',
+                    model : 'customers'
+                });
+                var scan_callback = function(code) {
+                    mobile.setFormFieldValue("logisticsNo", code)
+                    ajaxRequest('/mobile/rider/COD/getDetail.html',{orderNo: code},false,function(data){
+                        if(!(data.msg==null)){
+                            showError(data.msg)
+                        }
+                        mobile.setFormFieldValue("signer", data.data)
+                    });
+                }
+                $.scanner(scan_callback);
+
+                $("#lypic").first().hide();
+
+            });
+
+
+</script>
+</head>
+<body>
+<div class="wap_content">
+
+    <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
+        <h2>COD Sign</h2>
+    </div>
+
+    <div class="formula_modify">
+        <form id="myForm" class="layui-form" action="">
+            <div class="banner_content">
+                <ul class="one_banner">
+                    <li><input type="text" placeholder="Logistics No" property_name="all_logistics_no" set_attr="placeholder"
+                               id="logisticsNo" name="logisticsNo" class="input_value i18n-input" /><span class="scanner" data-locale="all_scan"></span></li>
+                    <li><input type='text' placeholder="Signer" id="signer" property_name="sign_scan_signer" set_attr="placeholder"
+                               class='input_value i18n-input' name='signer' required="required" />
+                    <li><input type='text' placeholder="ID No" maxlength='13' class='input_value' id="idNo" name='idNo' /></li>
+                    <li><label>Pay Type</label><div style="position:absolute; left: 30%">
+                        <input type="radio" name="danxuan" value="cash"/>cash &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="danxuan" value="Online payment"/>Online payment</div>
+                    </li>
+                    <li><label data-locale="sign_scan_Picture">Sign Picture</label>
+                        <div class="xq">
+                            <img src="/mobile/images/2300.jpg" />
+                        </div></li>
+                </ul>
+                <center>
+                    <div>
+                        <img src="" style="width: 100px; height: 100px;" id="lypic" />
+                    </div>
+                </center>
+                <div class="bottom_a_button">
+                    <a id="commit" data-locale="all_submit">submit</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

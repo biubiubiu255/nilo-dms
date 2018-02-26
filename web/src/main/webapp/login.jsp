@@ -44,15 +44,15 @@
                 <input type="password" class="form-control" placeholder="Password" name="password">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
-            <div class="form-group has-captcha">
+            <div class="form-group has-captcha" style="display: none;">
                 <input type="text" name="randomCode" class="form-control" placeholder="Captcha" autocomplete="off">
             </div>
             <div class="row">
 
-                <div class="col-xs-8">
+                <div class="col-xs-8" style="display: none;">
                     <img id="captcha_img" alt="refresh" src="captcha/image.html"/>
                 </div>
-                <div class="col-xs-4">
+                <div class="col-xs-4" style="float: right;">
                     <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
                 </div>
                 <!-- /.col -->
@@ -66,7 +66,17 @@
 <script src="./bootstrap/js/bootstrap.min.js"></script>
 <script>
 
+        $(function () {
+            $.get('account/verify.html', function (resp) {
+                if (resp.result) {
+                    setVerifyStyle(true);
+                } else {
+                    setVerifyStyle(false);
+                }
+            }, "json");
+        });
 
+        var loginNum = 0;
         $('#login-form').submit(function () {
             $('.login-box-msg').html("Waiting...");
             var params = $(this).serialize();
@@ -75,6 +85,9 @@
                     location.href = 'dashboard.html';
                 } else {
                     $('.login-box-msg').html(resp.msg);
+                    if(++loginNum >= 3){
+                        setVerifyStyle(true);
+                    }
                 }
             }, "json");
             return false;
@@ -84,6 +97,16 @@
             var src = "captcha/image.html?";
             $(this).attr('src', src + Math.random());
         }).trigger('click');
+
+        function setVerifyStyle(bool) {
+            if(bool===false){
+                $(".has-captcha").first().attr("style", "display:none;");
+                $(".col-xs-8").first().attr("style", "display:none;");
+            }else {
+                $(".has-captcha").first().attr("style", "display:block;");
+                $(".col-xs-8").first().attr("style", "display:block;");
+            }
+        }
 
 </script>
 </body>

@@ -31,8 +31,9 @@
                     <li><input type='text' placeholder="Logistics No" required="required" property_name="all_logistics_no" set_attr="placeholder" maxlength='100' class='input_value i18n-input' name='orderNo' /><span class="scanner" data-locale="all_scan">scan</span></li>
                     <li>
                         <%--<label>Reason</label>--%>
-                        <select required="required" class='input_value' name='reason'>  
-	                       <c:forEach var="values" items="${abnormalTypeList}" varStatus="status">
+                        <select required="required" class='input_value' name='reason'>
+                            <option value="">Please enter a reason</option>
+	                       <c:forEach var="values" items="${abnormalTypeList}" >
 	                           <option value="${values.code}">${values.value }</option>
 		                   </c:forEach>
                         </select>
@@ -66,7 +67,11 @@
     		mbObject: mobile , 
     		postUrl : '/mobile/rider/stranded/save.html' ,
     		callback: function (data) {
-    			if (data.result) showInfo(null);
+                if (data.result) {
+                    showInfo('submit success')
+                } else {
+                    showError(data.msg);
+                }
 			}
     	});
     	
@@ -77,7 +82,7 @@
         }
     	
     	
-        $.scanner(scan_callback, 1);                     //直接传一个空的回调函数
+        $.scanner(scan_callback);                     //直接传一个空的回调函数
         //$.scanner(scan_callback('这里是订单号'), 1); //测试模式，直接传订单号 
         
     });

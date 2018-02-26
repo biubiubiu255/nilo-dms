@@ -42,7 +42,10 @@ public class ProblemController extends BaseController {
     @ResponseBody
     public String save(@RequestParam("logisticsNo") String orderNo, 
     			@RequestParam("reason") String abnormalType, @RequestParam("memo") String remark) {
-    	
+
+
+
+        System.out.println("+++++++++++++++++++++++++++++");
         AbnormalOrder abnormalOrder = new AbnormalOrder();
         abnormalOrder.setOrderNo(orderNo);
         abnormalOrder.setAbnormalType(abnormalType);

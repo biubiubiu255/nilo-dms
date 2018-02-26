@@ -60,9 +60,8 @@ public class SignScanController extends BaseController {
 
 	@RequestMapping(value = "/save.html")
 	@ResponseBody
-
 	public String save(MultipartFile file, String logisticsNo, String signer, String remark) {
-
+		System.out.println("+++++++++++++++++++++++");
 		SignForOrderParam param = new SignForOrderParam();
 		param.setOrderNo(logisticsNo);
 		param.setSignBy(signer);
@@ -109,7 +108,8 @@ public class SignScanController extends BaseController {
 		if(deliveryOrder==null) {
 			return toJsonErrorMsg("orderNo is error");
 		}
-		return toJsonTrueData(deliveryOrder);
+		String receiverName = deliveryOrder.getReceiverInfo().getReceiverName();
+		return toJsonTrueData(receiverName);
 
 	}
 

@@ -136,8 +136,10 @@
 					var scan_callback = function(code) {
 						mobile.setFormFieldValue("logisticsNo", code);
 						ajaxRequest('/mobile/rider/sign/getDetail.html',{orderNo: code},false,function(data){
-					                            alert("lalalallala");
-					       alert(data.data);
+                            if(!(data.msg==null)){
+                                showError(data.msg)
+                            }
+                            mobile.setFormFieldValue("signer", data.data)
 					       // mobile.setFormFieldValue("signer", code)
 					    });
 					}
