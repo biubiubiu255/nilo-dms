@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.SendReportDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="sendDO" type="com.nilo.dms.dao.dataobject.SendReportDO">
+        <result property="referenceNo" column="reference_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="nextNetwork" column="next_network_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="network" column="network_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderCategory" column="order_category" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="stop" column="stop" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="carrierName" column="carrier_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="deliveryFee" column="delivery_fee" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="remark" column="remark" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="name" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="contactNumber" column="contact_number" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="address" column="address" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="querySendReport" resultMap="sendDO">
+        SELECT a.reference_no,a.next_network_id,a.network_id,a.order_no,a.order_category,a.weight,a.`stop`,carrier_name,a.delivery_fee,a.`status`,a.remark,b.name,b.contact_number,b.address
+        FROM t_waybill a INNER JOIN t_waybill_receiver b
+        ON a.order_no=b.order_no
+        WHERE 1=1
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="carrierName !=null and carrierName !='' ">
+            and a.carrier_name = #{carrierName}
+        </if>
+        <if test="status !=null and status.size() > 0 ">
+            <foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">
+                a.status=#{item}
+            </foreach>
+        </if>
+        order by a.order_no desc
+        limit #{offset} , #{limit}
+    </select>
+
+    <select id="queryCountBy" resultType="java.lang.Long">
+        SELECT
+        count(1)
+        FROM t_waybill a INNER JOIN t_waybill_receiver b
+        ON a.order_no=b.order_no
+        WHERE 1=1
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="carrierName !=null and carrierName !='' ">
+            and a.carrier_name = #{carrierName}
+        </if>
+        <if test="status !=null and status.size() > 0 ">
+            <foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">
+                a.status=#{item}
+            </foreach>
+        </if>
+        order by null
+
+    </select>
+</mapper>

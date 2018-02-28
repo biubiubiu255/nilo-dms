@@ -70,7 +70,6 @@ public class DeliveryOrderController extends BaseController {
 
         Pagination page = getPage();
         List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
-
         return toPaginationLayUIData(page, list);
     }
 
