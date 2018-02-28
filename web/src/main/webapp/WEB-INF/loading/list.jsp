@@ -10,46 +10,45 @@
 %>
 <body>
 <div class="box-body">
-<!-- /.box-header -->
-<div class="layui-row">
+    <!-- /.box-header -->
+    <div class="layui-row">
 
-    <div class="layui-col-md5">
-        <shiro:hasPermission name="400061">
-            <button class="layui-btn layui-btn-normal loading-scan">Loading Scan</button>
-        </shiro:hasPermission>
-        <button class="layui-btn btn-search">Search</button>
+        <div class="layui-col-md5">
+            <shiro:hasPermission name="400061">
+                <button class="layui-btn layui-btn-normal loading-scan">Loading Scan</button>
+            </shiro:hasPermission>
+            <button class="layui-btn btn-search">Search</button>
+        </div>
+
     </div>
-    
- </div>
-    <div class="layui-collapse" >
-	<div class="layui-colla-item">
-    <div class="layui-colla-content ">
-    <div class="layui-form layui-row">
-        <div class="layui-col-md4 layui-col-lg3">
-            LoadingNo：
-            <div class="layui-inline">
-                <input class="layui-input" name="loadingNo" autocomplete="off">
+    <div class="layui-collapse">
+        <div class="layui-colla-item">
+            <div class="layui-colla-content ">
+                <div class="layui-form layui-row">
+                    <div class="layui-col-md4 layui-col-lg3">
+                        LoadingNo：
+                        <div class="layui-inline">
+                            <input class="layui-input" name="loadingNo" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4 layui-col-lg3">
+                        <label class="layui-form-label" style="width:110px">Status:</label>
+                        <div class="layui-form-item layui-inline" style="margin: 0px">
+                            <select lay-filter="loadingStatus" name="loadingStatus">
+                                <option value="">Pls select Status...</option>
+                                <option value=1>Create</option>
+                                <option value=2>Loading</option>
+                                <option value=3>Ship</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md1">
+                        <button class="layui-btn layui-btn-normal search">Search</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label" style="width:110px">Status:</label>
-            <div class="layui-form-item layui-inline" style="margin: 0px">
-                <select lay-filter="loadingStatus" name="loadingStatus">
-                    <option value="">Pls select Status...</option>
-                    <option value=1>Create</option>
-                    <option value=2>Loading</option>
-                    <option value=3>Ship</option>
-                </select>
-            </div>
-        </div>
-        <div class="layui-col-md1">
-            <button class="layui-btn layui-btn-normal search">Search</button>
-        </div>
     </div>
-    </div>
-    </div>
-    </div>
-    
 
     <table class="layui-table" lay-data="{ url:'/order/loading/list.html', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
@@ -94,7 +93,7 @@
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
     $(function () {
-        layui.use(['form', 'layer','element','laydate'], function () {
+        layui.use(['form', 'layer', 'element', 'laydate'], function () {
             var layDate = layui.laydate;
             layDate.render({
                 elem: '#fromCreatedTime'
@@ -126,8 +125,8 @@
                 reloadTable();
             })
             $(".btn-search").on("click", function () {
-            	$(".layui-colla-content").toggleClass("layui-show");
-            	$(".btn-search").toggleClass("layui-btn-warm");
+                $(".layui-colla-content").toggleClass("layui-show");
+                $(".btn-search").toggleClass("layui-btn-warm");
             })
 
 

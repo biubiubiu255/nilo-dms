@@ -741,6 +741,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setOrderType(d.getOrderType());
         deliveryOrder.setOrderPlatform(d.getOrderPlatform());
         deliveryOrder.setTotalPrice(d.getTotalPrice());
+        deliveryOrder.setNeedPayAmount(d.getNeedPayAmount());
         deliveryOrder.setStatus(DeliveryOrderStatusEnum.getEnum(d.getStatus()));
         deliveryOrder.setServiceType(ServiceTypeEnum.getEnum(d.getServiceType()));
         deliveryOrder.setWeight(d.getWeight());

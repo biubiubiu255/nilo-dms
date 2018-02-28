@@ -100,6 +100,24 @@
                 jdbcType="VARCHAR"/>
     </resultMap>
 
+
+    <resultMap id="orderCancellationDO" type="com.nilo.dms.dao.dataobject.OrderCancellationDO">
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderType" column="order_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="referenceNo" column="reference_No" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="signTime" column="sign_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="totalAmount" column="total_Amount" javaType="java.lang.Double"
+                jdbcType="DECIMAL"/>
+        <result property="needPayAmount" column="need_pay_Amount" javaType="java.lang.Double"
+                jdbcType="DECIMAL"/>
+        <result property="riderName" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
     <sql id="Base_Column_List">
         id, merchant_id,network_Id,order_no,parent_No,need_pay_amount,paid_type,already_paid,bill_no,account_No,order_type,service_Type,reference_No,weight,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,delivery_Fee,is_Cod,notes,remark,width,length,high,network_id,next_network_id,is_Package,print_times,created_time,created_by , updated_time ,version
     </sql>
@@ -216,7 +234,6 @@
             and nextStation = #{nextStation}
         </if>
         order by null
-
     </select>
 
 
@@ -267,6 +284,34 @@
         <include refid="Base_Column_List"/>
         FROM t_waybill
         WHERE merchant_id=#{merchantId} and parent_no = #{packageNo}
-
     </select>
+
+
+    <select id="queryAllNotCancellation" resultMap="orderCancellationDO">
+
+        SELECT w.order_no,w.reference_no,w.order_type,w.total_price,w.need_pay_amount,l.name
+        FROM t_waybill w left join t_waybill_task t on w.order_no = t.order_no
+        left join t_sys_user_info l on t.handled_by = l.id
+
+        WHERE w.merchant_id=#{merchantId} and w.status='50' and is_cod = 1 and already_paid = 0 and order_type != 'PG'
+        and need_pay_amount >0 and t.task_type = 'delivery'
+        <if test="userId != null">
+            and t.handled_by = #{userId}
+        </if>
+        order by w.updated_time desc
+        limit #{offset} , #{limit}
+    </select>
+
+    <select id="queryAllNotCancellationCount" resultType="java.lang.Long">
+        SELECT count(w.order_no)
+        FROM t_waybill w left join t_waybill_task t on w.order_no = t.order_no
+        left join t_sys_user_info l on t.handled_by = l.id
+
+        WHERE w.merchant_id=#{merchantId} and w.status='50' and is_cod = 1 and already_paid = 0 and order_type != 'PG'
+        and need_pay_amount >0 and t.task_type = 'delivery'
+        <if test="userId != null">
+            and t.handled_by = #{userId}
+        </if>
+    </select>
+
 </mapper>

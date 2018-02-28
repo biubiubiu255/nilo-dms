@@ -24,30 +24,32 @@
         <div class="layui-input-inline">
             <input type="text" id="orderNoScan" autocomplete="off" placeholder="Scan" class="layui-input">
         </div>
-        <div class="layui-input-inline">
-            <button class="layui-btn layui-btn-normal arrive">Submit</button>
-        </div>
+
     </div>
 
-
-    <table class="layui-table" id="${id0}"
-           lay-data="{ url:'/order/arriveScan/scanList.html', page:true,limit:10, id:'${id0}'}" lay-filter="${id0}">
-        <thead>
-        <tr>
-            <th lay-data="{field:'orderNo', width:200}">OrderNo</th>
-            <th lay-data="{field:'weight', width:100,edit:'text'}">Weight</th>
-            <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
-            <th lay-data="{field:'orderType', width:100}">OrderType</th>
-            <th lay-data="{field:'country', width:100}">Country</th>
-            <th lay-data="{title:'Opt',fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
-        </tr>
-        </thead>
-    </table>
-
-    <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">Delete</a>
-    </script>
-
+    <div style="margin-left:120px;">
+        <table class="layui-table" id="${id0}"
+               lay-data="{ url:'/order/arriveScan/scanList.html', page:true,limit:10, id:'${id0}'}" lay-filter="${id0}">
+            <thead>
+            <tr>
+                <th lay-data="{field:'orderNo', width:200}">OrderNo</th>
+                <th lay-data="{field:'weight', width:100,edit:'text'}">Weight</th>
+                <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
+                <th lay-data="{field:'orderType', width:100}">OrderType</th>
+                <th lay-data="{field:'country', width:100}">Country</th>
+                <th lay-data="{title:'Opt',fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
+            </tr>
+            </thead>
+        </table>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-normal arrive">Submit</button>
+            </div>
+        </div>
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">Delete</a>
+        </script>
+    </div>
 </div>
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">

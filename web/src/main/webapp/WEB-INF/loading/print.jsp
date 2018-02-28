@@ -17,7 +17,6 @@
     tr {
         height: 200%;
     }
-
 </style>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="${ctx}/bootstrap/js/bootstrap.min.js"></script>
