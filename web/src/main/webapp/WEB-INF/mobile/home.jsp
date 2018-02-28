@@ -43,7 +43,7 @@
 						<li><img src="/mobile/images/icon_1.png" /><br /><label data-locale="sign_scan">Sign Scan</label></li>
 					</a>
 					<a href="/mobile/rider/COD/sign.html" title="">
-						<li><img src="/mobile/images/icon_2.png" /><br /><label >COD Sign</label></li>
+						<li><img src="/mobile/images/icon_2.png" /><br /><label >Payment</label></li>
 					</a>
 					<a href="/mobile/rider/problem/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="problem">Problem</label></li>

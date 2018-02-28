@@ -79,7 +79,8 @@
         <result property="printTimes" column="print_times" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
 
-
+		<result property="paidType" column="paid_type" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
         <result property="needPayAmount" column="need_pay_amount" javaType="java.lang.Double"
                 jdbcType="DECIMAL"/>
         <result property="alreadyPaid" column="already_paid" javaType="java.lang.Double"
@@ -100,7 +101,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, merchant_id,network_Id,order_no,parent_No,need_pay_amount,already_paid,bill_no,account_No,order_type,service_Type,reference_No,weight,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,delivery_Fee,is_Cod,notes,remark,width,length,high,network_id,next_network_id,is_Package,print_times,created_time,created_by , updated_time ,version
+        id, merchant_id,network_Id,order_no,parent_No,need_pay_amount,paid_type,already_paid,bill_no,account_No,order_type,service_Type,reference_No,weight,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,delivery_Fee,is_Cod,notes,remark,width,length,high,network_id,next_network_id,is_Package,print_times,created_time,created_by , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -226,6 +227,9 @@
 
             <if test="status != null ">
                 status = #{status},
+            </if>
+            <if test="paidType != null ">
+                paid_type = #{paidType},
             </if>
             <if test="weight != null">
                 weight = #{weight},

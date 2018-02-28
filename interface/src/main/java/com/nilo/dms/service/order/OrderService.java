@@ -1,9 +1,14 @@
 package com.nilo.dms.service.order;
 
-import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.order.model.*;
-
 import java.util.List;
+
+import com.nilo.dms.common.Pagination;
+import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
+import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.DeliveryOrderParameter;
+import com.nilo.dms.service.order.model.OrderOptRequest;
+import com.nilo.dms.service.order.model.PackageRequest;
+import com.nilo.dms.service.order.model.UnpackRequest;
 
 /**
  * Created by ronny on 2017/9/15.
@@ -33,5 +38,7 @@ public interface OrderService {
     List<DeliveryOrder> queryByPackageNo(String merchantNo,String packageNo);
     
     void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId);
+    
+    long updatePaidType(DeliveryOrderDO deliveryOrderDO);
     
 }

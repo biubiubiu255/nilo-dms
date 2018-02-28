@@ -2,13 +2,14 @@ package com.nilo.dms.service.order.impl;
 
 import static com.nilo.dms.common.Constant.IS_PACKAGE;
 
-import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.model.UserInfo;
-import com.nilo.dms.service.order.*;
-import com.nilo.dms.service.order.model.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.CreateDeliveryRequestStatusEnum;
+import com.nilo.dms.common.enums.DeliveryOrderPaidTypeEnum;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.enums.SerialTypeEnum;
@@ -52,14 +54,32 @@ import com.nilo.dms.dao.dataobject.DeliveryOrderSenderDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.UserNetworkDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
+import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
+import com.nilo.dms.service.order.AbstractOrderOpt;
+import com.nilo.dms.service.order.DeliveryRouteService;
+import com.nilo.dms.service.order.OrderOptLogService;
+import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.TaskService;
+import com.nilo.dms.service.order.model.CreateDeliverOrderMessage;
+import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.DeliveryOrderParameter;
+import com.nilo.dms.service.order.model.GoodsInfo;
+import com.nilo.dms.service.order.model.NotifyRequest;
+import com.nilo.dms.service.order.model.OrderOptRequest;
+import com.nilo.dms.service.order.model.PackageRequest;
+import com.nilo.dms.service.order.model.PhoneMessage;
+import com.nilo.dms.service.order.model.ReceiverInfo;
+import com.nilo.dms.service.order.model.SenderInfo;
+import com.nilo.dms.service.order.model.Task;
+import com.nilo.dms.service.order.model.UnpackRequest;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.service.system.model.InterfaceConfig;
 import com.nilo.dms.service.system.model.MerchantConfig;
 import com.nilo.dms.service.system.model.OrderHandleConfig;
-import com.nilo.dms.service.system.model.RouteConfig;
 import com.nilo.dms.service.system.model.SMSConfig;
 
 /**
@@ -742,7 +762,9 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         deliveryOrder.setIsCod(d.getIsCod());
         deliveryOrder.setNotes(d.getNotes());
         deliveryOrder.setRemark(d.getRemark());
-
+        deliveryOrder.setNeedPayAmount(d.getNeedPayAmount());
+        deliveryOrder.setPaidType(DeliveryOrderPaidTypeEnum.getEnum(d.getStatus()));
+        
         deliveryOrder.setParentNo(d.getParentNo());
         deliveryOrder.setLength(d.getLength());
         deliveryOrder.setWidth(d.getWidth());
@@ -859,4 +881,11 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverPhone(), BizErrorCode.RECEIVE_PHONE_EMPTY);
         AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverAddress(), BizErrorCode.RECEIVE_ADDRESS_EMPTY);
     }
+
+	@Override
+	public long updatePaidType(DeliveryOrderDO deliveryOrderDO) {
+		
+		return deliveryOrderDao.update(deliveryOrderDO);
+		
+	}
 }

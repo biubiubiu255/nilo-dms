@@ -79,8 +79,18 @@ public class DeliveryOrder {
     private Integer printTimes;
 
     private String allocatedRider;
+    private DeliveryOrderPaidTypeEnum paidType;
+    
 
-    public String getAllocatedRider() {
+    public DeliveryOrderPaidTypeEnum getPaidType() {
+		return paidType;
+	}
+
+	public void setPaidType(DeliveryOrderPaidTypeEnum paidType) {
+		this.paidType = paidType;
+	}
+
+	public String getAllocatedRider() {
         return allocatedRider;
     }
 
