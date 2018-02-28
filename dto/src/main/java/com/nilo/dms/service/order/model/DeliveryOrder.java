@@ -91,7 +91,7 @@ public class DeliveryOrder {
     public Double getNeedPayAmount() {
         return needPayAmount;
     }
-
+    @JSONField(name = "need_pay_amount")
     public void setNeedPayAmount(Double needPayAmount) {
         this.needPayAmount = needPayAmount;
     }
@@ -247,7 +247,7 @@ public class DeliveryOrder {
     public String getChannel() {
         return channel;
     }
-    @JSONField(name = "is_pickup")
+    @JSONField(name = "delivery_type")
     public void setChannel(String channel) {
         this.channel = channel;
     }
@@ -434,7 +434,7 @@ public class DeliveryOrder {
     public String getOrderPlatform() {
         return orderPlatform;
     }
-    @JSONField(name = "order_platform")
+    @JSONField(name = "client_name")
     public void setOrderPlatform(String orderPlatform) {
         this.orderPlatform = orderPlatform;
     }

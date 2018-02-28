@@ -105,6 +105,9 @@
             </th>
             <th lay-data="{field:'weight', width:100}">Weight</th>
             <th lay-data="{field:'goodsType', width:120}">GoodsType</th>
+            <th lay-data="{field:'orderPlatform', width:120}">Platform</th>
+            <th lay-data="{field:'totalPrice', width:120}">Order Amount</th>
+            <th lay-data="{field:'needPayAmount', width:120}">Need Pay</th>
             <th lay-data="{field:'receiverInfo', width:150,templet: '<div>{{d.receiverInfo.receiverName}}</div>' }">
                 Receiver
                 Name

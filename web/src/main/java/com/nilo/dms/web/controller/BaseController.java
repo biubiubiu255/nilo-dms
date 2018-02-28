@@ -117,7 +117,7 @@ public class BaseController {
         jo.put("code", 0);
         jo.put("msg", 0);
         jo.put("data", data);
-        jo.put("pages",pagination.getTotalCount());
+        jo.put("pages",pagination.getTotalCount()/pagination.getLimit());
         return jo.toJSONString();
     }
 
