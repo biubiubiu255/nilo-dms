@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface StaffService {
 
-    void addStaff(String merchantId,Staff staff);
+    void addStaff(Staff staff);
 
-    void updateStaff(String merchantId,Staff staff);
+    void updateStaff(Staff staff);
 
     Staff findByStaffId(String companyId, String staffId);
 

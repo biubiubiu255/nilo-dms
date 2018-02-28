@@ -20,7 +20,9 @@ public enum DeliveryOrderStatusEnum implements EnumMessage{
     SEND(31, "Send"),
     DETAIN(35, "Detain"),
     PROBLEM(40, "Problem"),
-    RECEIVED(50, "Received"),
+
+    RECEIVED(50, "Received"), //change this value
+
     CANCELED(60, "Canceled"),;
 
     private Integer code;

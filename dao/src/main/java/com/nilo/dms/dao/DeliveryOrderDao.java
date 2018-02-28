@@ -27,4 +27,9 @@ public interface DeliveryOrderDao extends BaseDao<Long,DeliveryOrderDO> {
 
     List<DeliveryOrderDO> queryByPackageNo(@Param("merchantId")Long merchantId,@Param("packageNo") String packageNo);
 
+    List<DeliveryOrderDO> queryAllNotCancellation(@Param("merchantId")Long merchantId,@Param("userId") String userId,@Param("offset")Integer offset,@Param("limit")Integer limit);
+
+    Long queryAllNotCancellationCount(@Param("merchantId")Long merchantId,@Param("userId") String userId);
+
+
 }

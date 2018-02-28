@@ -171,16 +171,14 @@ public class LoadingController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        DeliveryOrder order = null;
         try {
             //装车
             loadingService.loadingScan(merchantId, loadingNo, orderNo, me.getUserId());
-            order = orderService.queryByOrderNo(merchantId, orderNo);
         } catch (Exception e) {
             log.error("loadingScan failed. orderNo:{}", orderNo, e);
             return toJsonErrorMsg(e.getMessage());
         }
-        return toJsonTrueData(order);
+        return toJsonTrueMsg();
     }
 
     @ResponseBody
@@ -252,8 +250,9 @@ public class LoadingController extends BaseController {
 
         List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(code);
         List<Driver> list = new ArrayList<>();
+        Driver driver = new Driver();
         for(ThirdDriverDO d : thirdDriver){
-            Driver driver = new Driver();
+            driver = new Driver();
             driver.setCode(d.getDriverId());
             driver.setName(d.getDriverName());
             list.add(driver);

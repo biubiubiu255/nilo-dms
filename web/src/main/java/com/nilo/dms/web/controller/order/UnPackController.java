@@ -127,6 +127,9 @@ public class UnPackController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
+        if(scanDetailList==null ||scanDetailList.size()==0){
+            throw new DMSException(BizErrorCode.PACKAGE_EMPTY);
+        }
         List<String> orderNos = new ArrayList<>();
         for (WaybillScanDetailsDO d : scanDetailList) {
             orderNos.add(d.getOrderNo());

@@ -53,7 +53,9 @@ public class Staff {
     private String address;
 
     private Boolean isRider;
-
+    public Integer getIsRiderCode() {
+        return isRider == true ? 1 : 0;
+    }
     public String getJobDesc() {
         return jobDesc;
     }

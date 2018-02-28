@@ -58,7 +58,7 @@ public class RouteController extends BaseController {
         return "mobile/basic/route/route";
     }
 
-    @RequestMapping(value = "/query.html")
+@RequestMapping(value = "/query.html")
     @ResponseBody
     public String query(String orderNo ) {
 

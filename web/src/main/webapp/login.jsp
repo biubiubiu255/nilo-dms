@@ -65,6 +65,17 @@
 <!-- Bootstrap 3.3.6 -->
 <script src="./bootstrap/js/bootstrap.min.js"></script>
 <script>
+
+        $(function () {
+            $.get('account/verify.html', function (resp) {
+                if (resp.result) {
+                    setVerifyStyle(true);
+                } else {
+                    setVerifyStyle(false);
+                }
+            }, "json");
+        });
+
         var loginNum = 0;
         $('#login-form').submit(function () {
             $('.login-box-msg').html("Waiting...");
@@ -75,8 +86,7 @@
                 } else {
                     $('.login-box-msg').html(resp.msg);
                     if(++loginNum >= 3){
-                        $(".has-captcha").first().attr("style", "display:block;");
-                        $(".col-xs-8").first().attr("style", "display:block;");
+                        setVerifyStyle(true);
                     }
                 }
             }, "json");
@@ -87,6 +97,16 @@
             var src = "captcha/image.html?";
             $(this).attr('src', src + Math.random());
         }).trigger('click');
+
+        function setVerifyStyle(bool) {
+            if(bool===false){
+                $(".has-captcha").first().attr("style", "display:none;");
+                $(".col-xs-8").first().attr("style", "display:none;");
+            }else {
+                $(".has-captcha").first().attr("style", "display:block;");
+                $(".col-xs-8").first().attr("style", "display:block;");
+            }
+        }
 
 </script>
 </body>

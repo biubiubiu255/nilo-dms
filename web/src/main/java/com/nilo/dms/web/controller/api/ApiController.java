@@ -5,12 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.nilo.dms.common.enums.OptTypeEnum;
-import com.nilo.dms.common.exception.BizErrorCode;
-import com.nilo.dms.common.utils.AssertUtil;
-import com.nilo.dms.service.order.model.OrderOptRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +14,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
-import com.nilo.dms.service.model.LoginInfo;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.nilo.dms.common.enums.MethodEnum;
+import com.nilo.dms.common.enums.OptTypeEnum;
+import com.nilo.dms.common.exception.BizErrorCode;
+import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.RiderOptService;
+import com.nilo.dms.service.order.model.OrderOptRequest;
+import com.nilo.dms.service.order.model.PaymentResponse;
+import com.nilo.dms.service.order.model.PaymentResult;
 import com.nilo.dms.service.order.model.SignForOrderParam;
 import com.nilo.dms.web.controller.BaseController;
-import com.nilo.dms.common.enums.MethodEnum;
 import com.nilo.dms.web.controller.api.model.RequestParam;
 
 /**
@@ -101,14 +102,14 @@ public class ApiController extends BaseController {
     }
 
 
-    @RequestMapping(value = "api/login.html", method = RequestMethod.POST)
+    @RequestMapping(value = "api/paymentNotify.html", method = RequestMethod.POST)
     @ResponseBody
-    public String login(LoginInfo loginInfo) {
+    public String paymentNotify(PaymentResult paymentResult) {
 
-        Map<String, String> resultData = new HashMap<>();
-        resultData.put("userName", loginInfo.getUserName());
-
-        return toJsonTrueData(resultData);
+        PaymentResponse paymentResponse = new PaymentResponse();
+        return JSON.toJSONString(paymentResponse);
     }
+    
+    
 
 }

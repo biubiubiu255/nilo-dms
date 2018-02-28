@@ -81,4 +81,13 @@ public class AccountController extends BaseController {
         subject.logout(); // already call session.invalidate();
         return "redirect:/";
     }
+
+    @RequestMapping(value = "/verify.html", method = RequestMethod.GET)
+    @ResponseBody
+    public String verify(HttpSession session){
+        if (session.getAttribute("login_number")==null || (int)session.getAttribute("login_number")<4){
+            return toJsonErrorMsg("");
+        }
+        return toJsonTrueMsg();
+    }
 }
