@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -69,7 +70,7 @@ public class PickupReportController extends BaseController {
         TaskParameter parameter = new TaskParameter();
         parameter.setMerchantId(merchantId);
         parameter.setHandledBy(rider);
-        parameter.setTaskType(TaskTypeEnum.PICK_UP.getCode());
+        parameter.setTaskType(Arrays.asList(TaskTypeEnum.PICK_UP.getCode()));
         List<Integer> status = new ArrayList<>();
         status.add(TaskStatusEnum.COMPLETE.getCode());
         status.add(TaskStatusEnum.PROCESS.getCode());

@@ -99,7 +99,9 @@
         <include refid="Base_Column_List"/>
         FROM t_waybill_task where merchant_id = #{merchantId}
         <if test="taskType != null and taskType != ''">
-            and task_type = #{taskType}
+            <foreach collection="taskType" item="item" index="index" open="and (" separator="or" close=")">
+                task_type=#{item}
+            </foreach>
         </if>
         <if test="handledBy != null and handledBy != ''">
             and handled_by = #{handledBy}

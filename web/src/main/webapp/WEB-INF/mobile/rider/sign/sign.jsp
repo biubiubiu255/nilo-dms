@@ -42,7 +42,7 @@
 			<form id="myForm" class="layui-form" action="">
 				<div class="banner_content">
 					<ul class="one_banner">
-					
+
 						<li><input type="text" placeholder="Logistics No" property_name="all_logistics_no" set_attr="placeholder"
 							id="logisticsNo" name="logisticsNo" class="input_value i18n-input" /><span class="scanner" data-locale="all_scan"></span></li>
 						<li><input type='text' placeholder="Signer" id="signer" property_name="sign_scan_signer" set_attr="placeholder"
@@ -71,9 +71,9 @@
 	<script type="text/javascript">
         //loadLanguage('en');
 		layui.use(['upload', 'jquery'], function() {
-			
+
 			var $ = layui.jquery, upload = layui.upload;
-			
+
 			var isUpPic = false;
 
 			upload.render({
@@ -86,7 +86,7 @@
 					obj.preview(function(index, file, result) {
 						//$('#demo2').append('<img name = "s_pmt_dw" style="width: 120px; height: 150px; margin-left: 16px;" src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
 						$("#lypic").first().show();
-						$('#lypic').attr('src', result); //图片链接（base64）  
+						$('#lypic').attr('src', result); //图片链接（base64）
 					});
 					isUpPic = true;
 				},
@@ -122,9 +122,9 @@
 			inputFile.css("display", "none");
 
 		});
-		
+
 		//android.startScan();
-		
+
 		$(document)
 		.ready(
 				function() {
@@ -144,9 +144,9 @@
 					    });
 					}
 					$.scanner(scan_callback);
-					
+
 					$("#lypic").first().hide();
-					
+
 				});
 
 

@@ -24,10 +24,10 @@
             autoLoad:false
             ,formId:'problem-form'
         });
-    	
+
     	mobile.initSubmitForm({
     		formId: 'problem-form' ,
-    		mbObject: mobile , 
+    		mbObject: mobile ,
     		postUrl : '/mobile/rider/problem/save.html' ,
     		callback: function (data) {
     			if (data.result) {
@@ -37,18 +37,18 @@
     			    alert("000")
                 }
 			}
-    	});  
-    	
+    	});
+
     	//scan
         var scan_callback = function (code) {
     		// code 订单号
             mobile.setFormFieldValue('logisticsNo',code);
         }
-    	
+
         $.scanner(scan_callback);                   //直接传一个空的回调函数
-        //$.scanner(scan_callback('这里是订单号'), 1); //测试模式，直接传订单号 
+        //$.scanner(scan_callback('这里是订单号'), 1); //测试模式，直接传订单号
         android.startScan();
-    	
+
     });
 </script>
 
@@ -89,9 +89,9 @@
     </div>
 
 
- 
 
-<%-- 
+
+<%--
     <div class="formula_modify">
         <form id="myForm" class="layui-form" action="">
             <div class="banner_content">
@@ -99,7 +99,7 @@
                     <li><input type='text' placeholder="Logistics No" maxlength='100' class='input_value' name='logisticsNo' /><span class="scanner">scan</span></li>
                     <li>
                         <label>Reason</label>
-                        <select required="required" class='input_value' name='reason'>  
+                        <select required="required" class='input_value' name='reason'>
 	                       <c:forEach var="values" items="${abnormalTypeList}" varStatus="status">
 	                           <option value="${values.code}">${values.value }</option>
 		                   </c:forEach>

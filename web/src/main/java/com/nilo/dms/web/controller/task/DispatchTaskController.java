@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -61,10 +62,10 @@ public class DispatchTaskController extends BaseController {
         parameter.setMerchantId(merchantId);
         //如果当前用户不是快递员查询条件
         if (me.isRider()) {
-            parameter.setTaskType(TaskTypeEnum.DELIVERY.getCode());
             parameter.setHandledBy(me.getUserId());
+            parameter.setTaskType(Arrays.asList(new String[]{TaskTypeEnum.DELIVERY.getCode()})); //快递员类型权限
         } else {
-            parameter.setTaskType(TaskTypeEnum.SELF_DELIVERY.getCode());
+            parameter.setTaskType(Arrays.asList(TaskTypeEnum.SELF_DELIVERY.getCode(), TaskTypeEnum.SEND.getCode()));  //管理员，自提、第三方权限
             parameter.setHandledBy("" + me.getNetworks().get(0));
         }
         parameter.setStatus(Arrays.asList(new Integer[]{TaskStatusEnum.CREATE.getCode()}));
