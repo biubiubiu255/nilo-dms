@@ -43,12 +43,12 @@
 			<form id="myForm" class="layui-form" action="">
 				<div class="banner_content">
 					<ul class="one_banner">
-
+						<input type="hidden" name="isPaid" id="isPaid" value="${isPaid}"/>
 						<li><input type="text" placeholder="Logistics No"
 							property_name="all_logistics_no" set_attr="placeholder"
 							id="logisticsNo" name="logisticsNo"
-							class="input_value i18n-input" value="${logisticsNo}" /><span class="scanner"
-							data-locale="all_scan"></span></li>
+							class="input_value i18n-input" value="${logisticsNo}" /><span
+							class="scanner" data-locale="all_scan"></span></li>
 						<li><input type='text' placeholder="signer" id="signer"
 							property_name="sign_scan_signer" set_attr="placeholder"
 							class='input_value i18n-input' name='signer' required="required"
@@ -85,6 +85,7 @@
 	<script src="/layui/layui.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		//loadLanguage('en');
+
 		layui.use([ 'upload', 'jquery' ], function() {
 
 			var $ = layui.jquery, upload = layui.upload;
@@ -106,17 +107,14 @@
 					isUpPic = true;
 				},
 				before : function(res) {
-					var isPaid = $
-					{
-						isPaid
-					}
-					if (isPaid == false) {
+
+					if ($("#ispaid").val() == 'false') {
 						showWarning("you need to payment first!");
 						return;
 					}
 
 					if (isUpPic === false) {
-						showWarning("plase chose pic");
+						showWarning("plase chose a pic");
 						return;
 					}
 					this.data = {
@@ -124,13 +122,14 @@
 						signer : $("#signer").val(),
 						remark : $("#remark").val()
 					};
-
+					showMask();
 					//layui.upload.config.data = {logisticsNo:1,signer:2};
 				},
 				done : function(res) {
+					closeMask();
 					if (res.result) {
 						showError('submit success');
-						$("#remark").val();
+						javascript:history.go(-1);
 
 					} else {
 						showError(res.msg);

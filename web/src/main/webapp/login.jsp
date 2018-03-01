@@ -26,7 +26,7 @@
 
 </head>
 
-<body class="hold-transition login-page">
+<body class="hold-transition" style="background: url('/public/img/bg02.jpg'); background-size: cover;">
 <div class="login-box">
     <div class="login-logo">
         DMS

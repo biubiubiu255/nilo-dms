@@ -26,12 +26,14 @@
             <button class="dropdown tabClose" data-toggle="dropdown">
                 Tab <i class="fa fa-bars" style="padding-left: 3px;"></i>
             </button>
-            <ul class="dropdown-menu dropdown-menu-right" style="min-width: 128px;">
+<%--
+            <ul class="dropdown-menu-right" style="min-width: 128px;">
                 <li><a class="tabReload" href="javascript:refreshTab();">Reload</a></li>
                 <li><a class="tabCloseCurrent" href="javascript:closeCurrentTab();">Close Current</a></li>
                 <li><a class="tabCloseAll" href="javascript:closeOtherTabs(true);">Close All</a></li>
                 <li><a class="tabCloseOther" href="javascript:closeOtherTabs();">Close Others</a></li>
             </ul>
+            --%>
         </div>
         <button class="roll-nav roll-right fullscreen" onclick="App.handleFullScreen()"><i
                 class="fa fa-arrows-alt"></i></button>
@@ -92,7 +94,7 @@
     $(function () {
         App.setbasePath("../");
         App.setGlobalImgPath("dist/img/");
-
+        /*
         addTabs({
             id: '999999',
             title: 'Home',
@@ -100,7 +102,14 @@
             url: 'home.html',
             urlType: "relative"
         });
-
+        */
+        addTabs({
+            id: '999999',
+            title: 'Waybill List',
+            close: false,
+            url: '/order/deliveryOrder/listPage.html',
+            urlType: "relative"
+        });
         App.fixIframeCotent();
 
         var menus = eval('${menu}');

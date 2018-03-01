@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nilo.dms.dao.WaybillStatementDao">
 
- <resultMap id="WaybillStatement" type="com.nilo.dms.dao.dataobject.WaybillTaskDo">
+ <resultMap id="WaybillStatement" type="com.nilo.dms.dao.dataobject.WaybillStatementDo">
       <result property="orderNo" column="order_no" javaType="java.lang.String" jdbcType="VARCHAR"/>
       <result property="order_type" column="order_type" javaType="java.lang.String" jdbcType="VARCHAR"/>
       <result property="money" column="money" javaType="java.lang.Double" jdbcType="DOUBLE"/>
@@ -13,12 +13,11 @@
  </resultMap>
 
  <select id="queryAllWaybillStatement" resultMap="WaybillStatement" >
-  SELECT id, order_type, order_no, money, settlement_time, sign_time, status
+  SELECT id, order_type, order_no, money, statement_time, sign_time, status
   from t_waybill_statement
   where `status`= 1
-  AND  order_type = #{order_type}
   AND  statement_time > #{sTime}
-  AND  statement_time <![CDATA[<]]>  #{sTime}
+  AND  statement_time <![CDATA[<]]>  #{eTime}
  </select>
 
 </mapper>

@@ -266,13 +266,12 @@ public class CODSignController extends BaseController {
 			// 支付完成
 			WaybillPaymentRecord waybillPaymentRecord = new WaybillPaymentRecord();
 			waybillPaymentRecord.setPaymentOrderId(merchantOrderNo);
-			waybillPaymentRecord.setPaymentOrderId(orderId);
+			waybillPaymentRecord.setThirdPaySn(orderId);
 			if ("SUCCESS".equalsIgnoreCase(status)) {
 				waybillPaymentRecord.setStatus(1);
 			} else {
 				waybillPaymentRecord.setStatus(0);
 			}
-			paymentService.savePaymentOrderRecord(waybillPaymentRecord);
 			paymentService.payRerun(waybillPaymentRecord);
 			List<String> orderNos = paymentService.getOrderNosByPayOrderId(merchantOrderNo);
 			
