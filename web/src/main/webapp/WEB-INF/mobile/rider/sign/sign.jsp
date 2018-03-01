@@ -107,8 +107,7 @@
 					isUpPic = true;
 				},
 				before : function(res) {
-
-					if ($("#ispaid").val() == 'false') {
+					if ($("#isPaid").val() == 'false') {
 						showWarning("you need to payment first!");
 						return;
 					}
