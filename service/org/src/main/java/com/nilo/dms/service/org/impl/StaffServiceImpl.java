@@ -100,6 +100,7 @@ public class StaffServiceImpl implements StaffService {
                     userService.addUser(user);
 
                     //添加员工信息
+                    staff.setStatus(StaffStatusEnum.REGULAR);
                     StaffDO staffDO = convert(staff);
                     staffDO.setUserId(Long.parseLong(user.getUserId()));
                     staffDao.insert(staffDO);
@@ -202,8 +203,8 @@ public class StaffServiceImpl implements StaffService {
         if (StringUtil.isNotEmpty(staff.getCompanyId())) {
             staffDO.setCompanyId(Long.parseLong(staff.getCompanyId()));
         }
-        if(staff.isRider()!=null){
-            staffDO.setIsRider(staff.isRider()?1:0);
+        if (staff.isRider() != null) {
+            staffDO.setIsRider(staff.isRider() ? 1 : 0);
 
         }
         staffDO.setBirthday(staff.getBirthday());

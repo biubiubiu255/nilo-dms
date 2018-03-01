@@ -39,12 +39,6 @@ public class NotifyMerchantConsumer extends AbstractMQConsumer {
         try {
 
             NotifyRequest request = (NotifyRequest) obj;
-            //到件只通知一次
-            if (StringUtil.equals(request.getBizType(), OptTypeEnum.ARRIVE_SCAN.getCode())) {
-                NotifyDO notifyDO = notifyDao.findByBizType(Long.parseLong(request.getMerchantId()), request.getOrderNo(), OptTypeEnum.ARRIVE_SCAN.getCode());
-                if (notifyDO != null) return;
-
-            }
 
             logger.info("MessageExt:{},Message:{}", messageExt, request);
             Map<String, String> params = new HashMap<>();

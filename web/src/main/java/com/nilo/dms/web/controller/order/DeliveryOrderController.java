@@ -270,7 +270,7 @@ public class DeliveryOrderController extends BaseController {
             for (String field : header) {
                 String value = null;
                 try {
-                    value = (String) PropertyUtils.getSimpleProperty(order, field);
+                    value = getProperty(order, field);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (InvocationTargetException e) {

@@ -204,7 +204,7 @@
 
 
             $(".btn-export").on("click", function () {
-                var url = "/order/deliveryOrder/exportTemplate.html";
+                var url = "/order/deliveryOrder/export.html";
                 window.location.href = url;
             })
 

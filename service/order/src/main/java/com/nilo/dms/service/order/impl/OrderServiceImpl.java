@@ -13,18 +13,14 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.*;
 import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
-import com.nilo.dms.service.system.model.InterfaceConfig;
-import com.nilo.dms.service.system.model.MerchantConfig;
 import com.nilo.dms.service.system.model.OrderHandleConfig;
 import com.nilo.dms.service.system.model.SMSConfig;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +52,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     @Autowired
     private DeliveryRouteService deliveryRouteService;
     @Autowired
+    private NotifyMerchantService notifyMerchantService;
+    @Autowired
     private OrderOptLogService orderOptLogService;
     @Autowired
     private DeliveryOrderGoodsDao deliveryOrderGoodsDao;
@@ -74,9 +72,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     @Autowired
     private UserNetworkDao userNetworkDao;
-    @Autowired
-    @Qualifier("notifyMerchantProducer")
-    private AbstractMQProducer notifyMerchantProducer;
+
 
     @Autowired
     @Qualifier("phoneSMSProducer")
@@ -304,20 +300,18 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
                     OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(optRequest.getMerchantId(),
                             optRequest.getOptType().getCode());
-
                     for (String orderNo : optRequest.getOrderNo()) {
                         DeliveryOrderDO orderDO = deliveryOrderDao
                                 .queryByOrderNo(Long.parseLong(optRequest.getMerchantId()), orderNo);
                         if (handleConfig.getUpdateStatus() != null) {
                             // 更新订单状态
                             updateDeliveryOrderStatus(optRequest, orderNo, handleConfig);
-                            // 通知KiliBoss订单状态变更
-                            notifyStatusUpdate(optRequest, orderNo, orderDO.getReferenceNo(),
-                                    DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
                         }
                         // 短信消息
                         sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);
                     }
+                    //通知上游系统状态变更
+                    notifyMerchantService.updateStatus(optRequest);
                     // 记录物流轨迹
                     deliveryRouteService.addRoute(optRequest);
 
@@ -623,81 +617,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         } catch (Exception e) {
             logger.error("Send Phone Message Failed.", e);
         }
-
     }
 
-    /**
-     * 通知Kiliboss状态变更
-     *
-     * @param orderNo
-     * @param referenceNo
-     * @param status
-     */
-    private void notifyStatusUpdate(OrderOptRequest optRequest, String orderNo, String referenceNo,
-                                    DeliveryOrderStatusEnum status) {
-        String convertResult = StatusConvert.convert(status);
-        if (convertResult == null) return;
-
-        try {
-            NotifyRequest notify = new NotifyRequest();
-
-            MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + optRequest.getMerchantId()),
-                    MerchantConfig.class);
-            InterfaceConfig interfaceConfig = JSON.parseObject(
-                    RedisUtil.hget(Constant.INTERFACE_CONF + optRequest.getMerchantId(), "update_status"), InterfaceConfig.class);
-            if (interfaceConfig == null) {
-                return;
-            }
-            notify.setOrderNo(orderNo);
-            notify.setReferenceNo(referenceNo);
-            notify.setMerchantId(optRequest.getMerchantId());
-            notify.setBizType(optRequest.getOptType().getCode());
-            notify.setMethod(MethodEnum.STATUS_UPDATE.getCode());
-            notify.setUrl(interfaceConfig.getUrl());
-            Map<String, Object> dataMap = new HashMap<>();
-            dataMap.put("waybill_number", orderNo);
-            dataMap.put("status", convertResult);
-            UserInfo userInfo = userService.findUserInfoByUserId(optRequest.getMerchantId(), optRequest.getOptBy());
-            dataMap.put("opt_by", userInfo.getName());
-            if (optRequest.getOptType() == OptTypeEnum.DELIVERY) {
-                dataMap.put("contact_num", userInfo.getPhone());
-            }
-            dataMap.put("network", optRequest.getNetworkId());
-            dataMap.put("remark", optRequest.getRemark());
-            String data = JSON.toJSONString(dataMap);
-            notify.setData(data);
-            notify.setSign(createSign(merchantConfig.getKey(), data));
-            notifyMerchantProducer.sendMessage(notify);
-        } catch (Exception e) {
-            logger.error("Send Message Failed. orderNo:{}", orderNo, e);
-        }
-    }
-
-    private static class StatusConvert {
-        private static Map<DeliveryOrderStatusEnum, String> convertRelation = new HashMap<>();
-
-        static {
-            convertRelation.put(DeliveryOrderStatusEnum.ARRIVED, "170");
-            convertRelation.put(DeliveryOrderStatusEnum.DELIVERY, "180");
-            convertRelation.put(DeliveryOrderStatusEnum.SEND, "185");
-            convertRelation.put(DeliveryOrderStatusEnum.PICK_UP, "210");
-            convertRelation.put(DeliveryOrderStatusEnum.RECEIVED, "190");
-            convertRelation.put(DeliveryOrderStatusEnum.PROBLEM, "197");
-        }
-
-        public static String convert(DeliveryOrderStatusEnum status) {
-            if (convertRelation.containsKey(status)) {
-                return convertRelation.get(status);
-            } else {
-                return null;
-            }
-        }
-    }
-
-
-    private String createSign(String key, String data) {
-        return new String(DigestUtils.md5Hex(key + data + key).toUpperCase());
-    }
 
     private DeliveryOrder convert(DeliveryOrderDO d) {
         DeliveryOrder deliveryOrder = new DeliveryOrder();
