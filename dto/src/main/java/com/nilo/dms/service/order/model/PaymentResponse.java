@@ -2,12 +2,14 @@ package com.nilo.dms.service.order.model;
 
 public class PaymentResponse {
 
-	private String status;// string Y enum {SUCCESS, FAILURE}
+	
 	private String errorCode;// string Y 100=SUCCESS others=FAILURE
 	private String merchantId;// string Y Merchant id in LipaPay
-	private String signType;// string Y Signature algorithm, e.g. MD5
 	private String merchantOrderNo;// string Y Merchant order No.
 	private String orderId;// string Y Lipapay sn
+	private String signType;// string Y Signature algorithm, e.g. MD5
+	private String status;// string Y enum {SUCCESS, FAILURE}
+	
 	private String sign;// string Y See "Signature Rule"
 
 	public String getStatus() {
@@ -64,6 +66,12 @@ public class PaymentResponse {
 
 	public void setSign(String sign) {
 		this.sign = sign;
+	}
+
+	@Override
+	public String toString() {
+		return "errorCode=" + errorCode + "& merchantId=" + merchantId + "& merchantOrderNo="
+				+ merchantOrderNo + "& orderId=" + orderId + "& signType=" + signType + "& status=" + status ;
 	}
 
 }

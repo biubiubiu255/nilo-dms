@@ -139,6 +139,8 @@
         FROM t_waybill
         WHERE merchant_id = #{merchantId} and order_no=#{orderNo}
     </select>
+    
+    
 
     <select id="queryByOrderNos" resultMap="orderDO" statementType="PREPARED">
         SELECT
@@ -152,6 +154,17 @@
                 #{orderNo}
             </foreach>
         </if>
+    </select>
+    
+    <select id="selectByOrderNos" resultMap="orderDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill
+        WHERE  order_no in
+            <foreach collection="orderNos" item="orderNo" index="index"
+                     open="(" close=")" separator=",">
+                #{orderNo}
+            </foreach>
     </select>
 
     <select id="queryByReferenceNo" resultMap="orderDO" statementType="PREPARED">

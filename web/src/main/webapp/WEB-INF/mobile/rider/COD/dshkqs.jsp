@@ -91,7 +91,7 @@
 					}
 				} else if (payType == '0') {
 					ajaxRequest('/mobile/rider/COD/cashSave.html', {
-						orderNo : $("#logisticsNo").val(),
+						logisticsNo : $("#logisticsNo").val(),
 						paidType : 0
 					}, false, function(res) {
 						if(res.result){
