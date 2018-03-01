@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.rocketmq.common.message.MessageExt;
 import com.nilo.dms.common.enums.MethodEnum;
 import com.nilo.dms.common.enums.NotifyStatusEnum;
+import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.utils.HttpUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.NotifyDao;
@@ -36,7 +37,15 @@ public class NotifyMerchantConsumer extends AbstractMQConsumer {
         NotifyDao notifyDao = SpringContext.getBean("notifyDao", NotifyDao.class);
         String response = "";
         try {
+
             NotifyRequest request = (NotifyRequest) obj;
+            //到件只通知一次
+            if (StringUtil.equals(request.getBizType(), OptTypeEnum.ARRIVE_SCAN.getCode())) {
+                NotifyDO notifyDO = notifyDao.findByBizType(Long.parseLong(request.getMerchantId()), request.getOrderNo(), OptTypeEnum.ARRIVE_SCAN.getCode());
+                if (notifyDO != null) return;
+
+            }
+
             logger.info("MessageExt:{},Message:{}", messageExt, request);
             Map<String, String> params = new HashMap<>();
             params.put("method", request.getMethod());
@@ -52,7 +61,8 @@ public class NotifyMerchantConsumer extends AbstractMQConsumer {
                 notifyDO.setOrderNo(request.getOrderNo());
                 notifyDO.setReferenceNo(request.getReferenceNo());
                 notifyDO.setStatus(NotifyStatusEnum.CREATE.getCode());
-                notifyDO.setBizType(request.getMethod());
+                notifyDO.setBizType(request.getBizType());
+                notifyDO.setMethod(request.getMethod());
                 notifyDO.setMerchantId(Long.parseLong(request.getMerchantId()));
                 notifyDO.setNum(1);
                 notifyDO.setNotifyId(msgId);

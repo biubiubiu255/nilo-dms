@@ -49,5 +49,9 @@
         <include refid="Base_Column_List"/>
         FROM t_waybill_route where merchant_id=#{merchantId} and order_no = #{orderNo} order by created_time desc;
     </select>
-
+    <select id="findByType" resultMap="routeDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill_route where merchant_id=#{merchantId} and order_no = #{orderNo} and opt = #{type};
+    </select>
 </mapper>

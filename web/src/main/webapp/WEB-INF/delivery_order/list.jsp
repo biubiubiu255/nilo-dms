@@ -12,6 +12,7 @@
 <div class="box-body">
     <div class="layui-row">
         <div class="layui-col-md5">
+
             <%-- <shiro:hasPermission name="400011">
                 <button class="layui-btn layui-btn-normal btn-add">Add</button>
             </shiro:hasPermission>
@@ -27,7 +28,9 @@
                                                                          aria-hidden="true"></i>Template
                 </button>
             </shiro:hasPermission> --%>
-
+                <shiro:hasPermission name="400017">
+                    <button class="layui-btn layui-btn-normal btn-export">Export</button>
+                </shiro:hasPermission>
             <shiro:hasPermission name="400016">
                 <button class="layui-btn btn-search">Search
                 </button>
@@ -81,7 +84,12 @@
                             <lp:deliveryStatus selectId="orderStatus" selectName="orderStatus" multiple="true"/>
                         </div>
                     </div>
-
+                    <div class="layui-col-md3 layui-col-lg3">
+                        <label class="layui-form-label">Platform:</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="platform" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
                     <div class="layui-col-md1">
                         <button class="layui-btn layui-btn-normal search">Search</button>
                     </div>

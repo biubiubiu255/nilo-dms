@@ -11,6 +11,8 @@ public class NotifyDO extends BaseDo<Long> {
 
     private String bizType;
 
+    private String method;
+
     private String notifyId;
 
     private String orderNo;
@@ -28,6 +30,14 @@ public class NotifyDO extends BaseDo<Long> {
     private Integer num;
 
     private String sign;
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
 
     public String getReferenceNo() {
         return referenceNo;
