@@ -12,6 +12,7 @@
 <div class="box-body">
     <div class="layui-row">
         <div class="layui-col-md5">
+
             <%-- <shiro:hasPermission name="400011">
                 <button class="layui-btn layui-btn-normal btn-add">Add</button>
             </shiro:hasPermission>
@@ -27,7 +28,9 @@
                                                                          aria-hidden="true"></i>Template
                 </button>
             </shiro:hasPermission> --%>
-
+                <shiro:hasPermission name="400017">
+                    <button class="layui-btn layui-btn-normal btn-export">Export</button>
+                </shiro:hasPermission>
             <shiro:hasPermission name="400016">
                 <button class="layui-btn btn-search">Search
                 </button>
@@ -54,11 +57,11 @@
                     <div class="layui-col-md8 layui-col-lg5">
                         <label class="layui-form-label">CreateTime:</label>
                         <div class="layui-inline">
-                            <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
+                            <input type="text" class="layui-input" name="fromCreatedTime" id="fromCreatedTime" placeholder="From">
                         </div>
                         -
                         <div class="layui-inline">
-                            <input type="text" class="layui-input" id="toCreatedTime" placeholder="To">
+                            <input type="text" class="layui-input" name="toCreatedTime" id="toCreatedTime" placeholder="To">
                         </div>
                     </div>
                 </div>
@@ -81,7 +84,12 @@
                             <lp:deliveryStatus selectId="orderStatus" selectName="orderStatus" multiple="true"/>
                         </div>
                     </div>
-
+                    <div class="layui-col-md3 layui-col-lg3">
+                        <label class="layui-form-label">Platform:</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="platform" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
                     <div class="layui-col-md1">
                         <button class="layui-btn layui-btn-normal search">Search</button>
                     </div>
@@ -188,13 +196,15 @@
                         orderStatus: $("select[name='orderStatus']").val(),
                         fromCreatedTime: $("#fromCreatedTime").val(),
                         toCreatedTime: $("#toCreatedTime").val(),
+                        platform: $("input[name='platform']").val(),
+
                     }
                 });
             };
 
 
             $(".btn-export").on("click", function () {
-                var url = "/order/deliveryOrder/exportTemplate.html";
+                var url = "/order/deliveryOrder/export.html";
                 window.location.href = url;
             })
 

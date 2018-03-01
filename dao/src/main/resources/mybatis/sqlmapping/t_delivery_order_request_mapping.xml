@@ -73,4 +73,11 @@
         order by created_time desc
         limit #{offset} , #{limit}
     </select>
+
+    <select id="queryByOrderNo" resultMap="requestDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_log_create_waybill where merchant_id=#{merchantId}
+            and order_no = #{orderNo}
+    </select>
 </mapper>

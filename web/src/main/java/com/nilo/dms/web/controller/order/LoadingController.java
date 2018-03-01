@@ -13,6 +13,7 @@ import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.service.order.model.LoadingDetails;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,15 +45,11 @@ public class LoadingController extends BaseController {
     @Autowired
     private LoadingService loadingService;
     @Autowired
-    private OrderService orderService;
-    @Autowired
     private DistributionNetworkDao distributionNetworkDao;
     @Autowired
     private ThirdExpressDao thirdExpressDao;
     @Autowired
     private ThirdDriverDao thirdDriverDao;
-    @Autowired
-    private StaffDao staffDao;
 
     @RequestMapping(value = "/print.html")
     public String print(Model model, HttpServletRequest request) {
@@ -62,13 +59,12 @@ public class LoadingController extends BaseController {
         String loadingNo = request.getParameter("loadingNo");
         //查询详情
         Loading loading = loadingService.queryByLoadingNo(merchantId, loadingNo);
-        
-        String temp_str="";     
-        Date dt = new Date();     
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        temp_str=sdf.format(dt); 
-        
-        model.addAttribute("date_str",temp_str);
+
+        double totalAmount = 0d;
+        for(LoadingDetails d : loading.getDetailsList()){
+            totalAmount = totalAmount + d.getDeliveryOrder().getNeedPayAmount();
+        }
+        model.addAttribute("totalAmount", totalAmount);
         model.addAttribute("loading", loading);
         
         return "loading/print";
@@ -260,10 +256,7 @@ public class LoadingController extends BaseController {
 
         return toJsonTrueData(list);
     }
-    private  boolean isInteger(String str) {
-        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-        return pattern.matcher(str).matches();
-    }
+
     public static class Driver{
         private String code;
         private String name;

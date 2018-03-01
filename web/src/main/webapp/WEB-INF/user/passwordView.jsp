@@ -8,7 +8,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">Old Password</label>
             <div class="layui-input-block">
-                <input type="text" name="oldPassword" autocomplete="off" class="layui-input">
+                <input type="password" name="oldPassword" autocomplete="off" class="layui-input">
             </div>
         </div>
 

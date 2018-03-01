@@ -31,10 +31,8 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
 
     @Autowired
     TaskService taskService;
-
     @Autowired
     OrderService orderService;
-
     @Autowired
     private AbnormalOrderService abnormalOrderService;
 

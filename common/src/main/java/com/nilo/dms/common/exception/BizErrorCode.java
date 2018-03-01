@@ -97,6 +97,7 @@ public enum BizErrorCode implements ErrorCode {
     UNPACK_NOT_ALLOW("Delivery No {0} can not unpack.", "100068"),
     DELIVERY_NO_EXIST("Delivery No exist.", "100069"),
     PACKAGE_EMPTY("Package is empty", "100070"),
+    WEIGHT_EMPTY("Weight is empty", "100071"),
 
     ORDER_NO_ARRIVE("The order has not arrived", "100071");  //订单未到达
     ;

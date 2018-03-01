@@ -100,14 +100,14 @@
 						signer : $("#signer").val(),
 						remark : $("#remark").val()
 					};
-                    showMask();
-                    //showError('submit success');
 
 					//layui.upload.config.data = {logisticsNo:1,signer:2};
 				},
 				done : function(res) {
 					if (res.result) {
-                        $("#remark").val();
+						showError('submit success');
+						$("#remark").val();
+
 					} else {
 						showError(res.msg);
 						$("#remark").val();

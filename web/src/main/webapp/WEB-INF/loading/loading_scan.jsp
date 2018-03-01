@@ -16,9 +16,7 @@
             <div class="layui-input-inline">
                 <input type="text" id="loadingNo" value="" autocomplete="off" disabled class="layui-input">
             </div>
-            <div class="layui-input-inline">
-                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="createSubmit">Create</button>
-            </div>
+
         </div>
 
         <div class="layui-form-item">
@@ -34,12 +32,6 @@
                 <input type="text" name="loadingBy" value="${sessionScope.userName}" autocomplete="off"
                        class="layui-input layui-disabled" disabled>
             </div>
-            <label class="layui-form-label" style="width:120px">Quantity</label>
-            <div class="layui-input-inline">
-                <input type="text" name="quantity" value="${loading.detailsList.size()}" autocomplete="off"
-                       class="layui-input layui-disabled"
-                       disabled>
-            </div>
         </div>
 
         <div class="layui-form-item">
@@ -47,7 +39,7 @@
             <div class="deliveryDiv">
                 <label class="layui-form-label" style="width:120px">Rider</label>
                 <div class="layui-input-inline">
-                    <select name="deliveryRider" lay-verify="required" id="deliveryRider" lay-search=""
+                    <select name="deliveryRider" id="deliveryRider" lay-search=""
                             <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
                         <option value="">choose or search....</option>
                         <c:forEach items="${riderList}" var="rider">
@@ -84,7 +76,9 @@
                     </select>
                 </div>
             </div>
-
+            <div class="layui-input-inline">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="createSubmit">Create</button>
+            </div>
         </div>
     </form>
     <hr>

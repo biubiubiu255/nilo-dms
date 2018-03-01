@@ -13,4 +13,6 @@ public interface DeliveryOrderRouteDao extends BaseDao<Long, DeliveryOrderRouteD
 
     List<DeliveryOrderRouteDO> findBy(@Param("merchantId") Long merchantId, @Param("orderNo") String orderNo);
 
+    DeliveryOrderRouteDO findByType(@Param("merchantId") Long merchantId, @Param("orderNo") String orderNo,@Param("type") String type);
+
 }

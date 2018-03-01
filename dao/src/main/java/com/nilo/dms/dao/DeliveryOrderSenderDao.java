@@ -1,7 +1,6 @@
 package com.nilo.dms.dao;
 
 import com.nilo.dms.common.BaseDao;
-import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
 import com.nilo.dms.dao.dataobject.DeliveryOrderSenderDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

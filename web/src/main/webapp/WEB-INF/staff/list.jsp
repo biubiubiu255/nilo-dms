@@ -47,6 +47,7 @@
             <th lay-data="{fixed: 'left',field:'staffId', width:100}">Staff ID</th>
             <th lay-data="{field:'nickName', width:150}">Nick Name</th>
             <th lay-data="{field:'realName', width:150}">Real Name</th>
+            <th lay-data="{field:'rider', width:100}">Rider</th>
             <th lay-data="{field:'departmentName', width:200}">
                 Department
             </th>
