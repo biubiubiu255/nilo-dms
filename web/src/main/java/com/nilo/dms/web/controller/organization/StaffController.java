@@ -3,6 +3,7 @@ package com.nilo.dms.web.controller.organization;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.StaffStatusEnum;
 import com.nilo.dms.common.utils.DateUtil;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.service.org.DepartmentService;
 import com.nilo.dms.service.org.StaffService;
 import com.nilo.dms.service.org.model.Department;
@@ -71,8 +72,9 @@ public class StaffController extends BaseController {
     public String editStaff(Model model, Staff staff, String employTimeDate, Integer staffStatus, Integer isRiderCode) {
         try {
             Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-
-
+            if (StringUtil.isEmpty(employTimeDate)) {
+                throw new RuntimeException("Employ Time is Empty.");
+            }
             String companyId = me.getCompanyId();
             staff.setCompanyId(companyId);
             Long employTime = DateUtil.parse(employTimeDate, "yyyy-MM-dd");
@@ -81,7 +83,7 @@ public class StaffController extends BaseController {
             staff.setStatus(statusEnum);
             staff.setIsRider(isRiderCode != null);
             staff.setMerchantId(me.getMerchantId());
-            staffService.updateStaff( staff);
+            staffService.updateStaff(staff);
         } catch (Exception e) {
             logger.error("editStaff Failed. ", e);
             return toJsonErrorMsg(e.getMessage());
@@ -94,6 +96,9 @@ public class StaffController extends BaseController {
     @ResponseBody
     public String addStaff(Model model, Staff staff, String employTimeDate, Integer staffStatus, Integer isRiderCode) {
         try {
+            if (StringUtil.isEmpty(employTimeDate)) {
+                throw new RuntimeException("Employ Time is Empty.");
+            }
             Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
             staff.setCompanyId(me.getCompanyId());
             staff.setMerchantId(me.getMerchantId());
@@ -102,7 +107,7 @@ public class StaffController extends BaseController {
             StaffStatusEnum statusEnum = StaffStatusEnum.getEnum(staffStatus);
             staff.setStatus(statusEnum);
             staff.setIsRider(isRiderCode != null);
-            staffService.addStaff( staff);
+            staffService.addStaff(staff);
         } catch (Exception e) {
             logger.error("editStaff Failed. ", e);
             return toJsonErrorMsg(e.getMessage());

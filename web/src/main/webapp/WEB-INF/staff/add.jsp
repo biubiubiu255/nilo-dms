@@ -11,10 +11,10 @@
         <input type="text" value="${staff.staffId}" name="staffId" hidden="true">
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Status:</label>
+                <label class="layui-form-label"><font color="red">*</font>Status:</label>
                 <div class="layui-input-inline">
                     <lp:enumTag selectId="staffStatus" selectName="staffStatus" className="StaffStatusEnum"
-                                code="" disabled="false"/>
+                                code="" disabled="false" required="true"/>
                 </div>
             </div>
             <div class="layui-inline">
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">Department:</label>
+            <label class="layui-form-label"><font color="red">*</font>Department:</label>
             <div class="layui-input-inline">
                 <select lay-verify="required" name="departmentId">
                     <option value="">Pls select order type...</option>
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">Real Name:</label>
+                <label class="layui-form-label"><font color="red">*</font>Real Name:</label>
                 <div class="layui-input-inline">
                     <input type="text" lay-verify="required" name="realName" value="${staff.realName}" autocomplete="off" class="layui-input">
                 </div>
@@ -58,23 +58,23 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Employ:</label>
+                <label class="layui-form-label"><font color="red">*</font>Employ:</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" lay-verify="required" name="employTimeDate" id="employTime"
+                    <input type="text" class="layui-input" name="employTimeDate" id="employTime"
                            placeholder="Employ Time">
                 </div>
             </div>
             <div class="layui-inline">
                 <label class="layui-form-label">Birthday:</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" lay-verify="required" name="birthday" id="birthday"
+                    <input type="text" class="layui-input" name="birthday" id="birthday"
                            placeholder="Birthday">
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Job:</label>
+                <label class="layui-form-label"><font color="red">*</font>Job:</label>
                 <div class="layui-input-inline">
                     <select name="job" lay-verify="required" lay-search="" style="display: none">
                         <option value="">choose or search....</option>
@@ -88,15 +88,15 @@
 
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">Phone</label>
+                <label class="layui-form-label"><font color="red">*</font>Phone</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="phone" value="${staff.phone}" autocomplete="off" class="layui-input">
+                    <input  lay-verify="required" type="text" name="phone" value="${staff.phone}" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
-                <label class="layui-form-label">Email:</label>
+                <label class="layui-form-label"><font color="red">*</font>Email:</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="email" value="${staff.email}" autocomplete="off" class="layui-input">
+                    <input lay-verify="required" type="text" name="email" value="${staff.email}" autocomplete="off" class="layui-input">
                 </div>
             </div>
 

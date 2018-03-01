@@ -13,6 +13,8 @@ import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.lang.reflect.Field;
@@ -245,7 +248,7 @@ public class DeliveryOrderController extends BaseController {
     }
 
     @RequestMapping(value = "/export.html", method = RequestMethod.GET)
-    public String export(DeliveryOrderParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) {
+    public String export(HttpServletResponse response, DeliveryOrderParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) throws Exception {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
@@ -260,31 +263,67 @@ public class DeliveryOrderController extends BaseController {
         Pagination page = getPage();
         List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
 
-        ExportExcel exportExcel = new ExportExcel();
-
-        List<String> header = Arrays.asList("orderNo","orderType","referenceNo","orderTime","country","orderPlatform","totalPrice","needPayAmount","weight","status");
+        HSSFWorkbook wb = new HSSFWorkbook();
+        ExportExcel exportExcel = new ExportExcel(wb);
+        List<String> header = Arrays.asList("orderNo", "orderType", "referenceNo", "orderTime", "country", "orderPlatform", "totalPrice", "needPayAmount", "weight", "status", "receiverName", "receiverPhone", "receiverAddress");
 
         List<Map<String, String>> data = new ArrayList<>();
-        for(DeliveryOrder order : list) {
+        for (DeliveryOrder order : list) {
             Map<String, String> map = new HashMap<>();
             for (String field : header) {
+
                 String value = null;
                 try {
-                    value = (String) PropertyUtils.getSimpleProperty(order, field);
+                    value = getProperty(order, field);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (InvocationTargetException e) {
                     e.printStackTrace();
                 } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                    value = getProperty(order.getReceiverInfo(), field);
                 }
                 map.put(field, value);
             }
+
+
             data.add(map);
         }
-        exportExcel.fillData(data,header);
-        exportExcel.export("waybill_"+DateUtil.getSysTimeStamp());
+        exportExcel.fillData(data, header);
 
-        return "delivery_order/print";
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        try {
+            wb.write(os);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        byte[] content = os.toByteArray();
+        InputStream is = new ByteArrayInputStream(content);
+        // 设置response参数，可以打开下载页面
+        response.reset();
+        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + new String(
+                ("waybill(" + DateUtil.formatCurrent(DateUtil.SHORT_FORMAT) + ").xls").getBytes(), "utf-8"));
+        ServletOutputStream out = response.getOutputStream();
+        BufferedInputStream bis = null;
+        BufferedOutputStream bos = null;
+        try {
+            bis = new BufferedInputStream(is);
+            bos = new BufferedOutputStream(out);
+            byte[] buff = new byte[2048];
+            int bytesRead;
+            // Simple read/write loop.
+            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+                bos.write(buff, 0, bytesRead);
+            }
+        } catch (final IOException e) {
+            throw e;
+        } finally {
+            if (bis != null)
+                bis.close();
+            if (bos != null)
+                bos.close();
+        }
+        return null;
     }
 }
