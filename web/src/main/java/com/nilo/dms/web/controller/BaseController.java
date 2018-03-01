@@ -46,6 +46,7 @@ import nl.bitwalker.useragentutils.UserAgent;
  */
 public class BaseController {
 
+
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -76,7 +77,6 @@ public class BaseController {
     protected String toJsonErrorMsg(String msg) {
         Map<Object, Object> map = new HashMap<>();
         map.put("result", false);
-        map.put("code", false);
         map.put("msg", msg);
         return JSON.toJSONString(map);
     }
