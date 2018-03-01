@@ -46,14 +46,18 @@ import nl.bitwalker.useragentutils.UserAgent;
  */
 public class BaseController {
 
+
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private StaffDao staffDao;
 
     protected boolean isMobile(HttpServletRequest request) {
+        System.out.println("111");
         String userAgentStr = request.getHeader("user-agent");
+        System.out.println("111");
         UserAgent ua = UserAgent.parseUserAgentString(userAgentStr);
+        System.out.println("");
         return ua.getOperatingSystem().isMobileDevice();
     }
 
