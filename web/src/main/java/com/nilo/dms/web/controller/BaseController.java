@@ -53,6 +53,7 @@ public class BaseController {
 
     protected boolean isMobile(HttpServletRequest request) {
         String userAgentStr = request.getHeader("user-agent");
+        System.out.println("ss");
         UserAgent ua = UserAgent.parseUserAgentString(userAgentStr);
         return ua.getOperatingSystem().isMobileDevice();
     }

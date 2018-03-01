@@ -7,7 +7,7 @@
         return;
     }
 %>
-<html background="public/img/bg.jpg">
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -26,7 +26,7 @@
 
 </head>
 
-<body class="hold-transition" background="/public/img/bg.jpg">
+<body class="hold-transition" style="background: url('/public/img/bg02.jpg'); background-size: cover;">
 <div class="login-box">
     <div class="login-logo">
         DMS
