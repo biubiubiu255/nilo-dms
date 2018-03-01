@@ -99,10 +99,15 @@
         FROM t_sys_notify where merchant_id = #{merchantId} and notify_id=#{notifyId}
     </select>
 
+    <select id="findByBizType" resultMap="notifyDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_notify where merchant_id = #{merchantId} and order_no=#{orderNo} and biz_type=#{bizType}
+    </select>
+
     <select id="queryRetryList" resultMap="notifyDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_sys_notify where status = #{status}
-
     </select>
 </mapper>

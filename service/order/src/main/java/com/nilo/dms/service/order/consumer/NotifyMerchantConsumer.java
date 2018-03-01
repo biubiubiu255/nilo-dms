@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.rocketmq.common.message.MessageExt;
 import com.nilo.dms.common.enums.MethodEnum;
 import com.nilo.dms.common.enums.NotifyStatusEnum;
+import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.utils.HttpUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.NotifyDao;
@@ -38,6 +39,13 @@ public class NotifyMerchantConsumer extends AbstractMQConsumer {
         try {
 
             NotifyRequest request = (NotifyRequest) obj;
+            //到件只通知一次
+            if (StringUtil.equals(request.getBizType(), OptTypeEnum.ARRIVE_SCAN.getCode())) {
+                NotifyDO notifyDO = notifyDao.findByBizType(Long.parseLong(request.getMerchantId()), request.getOrderNo(), OptTypeEnum.ARRIVE_SCAN.getCode());
+                if (notifyDO != null) return;
+
+            }
+
             logger.info("MessageExt:{},Message:{}", messageExt, request);
             Map<String, String> params = new HashMap<>();
             params.put("method", request.getMethod());
