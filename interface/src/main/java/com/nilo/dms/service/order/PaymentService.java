@@ -15,4 +15,6 @@ public interface PaymentService {
     
 	void payRerun(WaybillPaymentRecord waybillPaymentRecord);
 	
+	List<String> getOrderNosByPayOrderId(String paymentOrderId);
+	
 }

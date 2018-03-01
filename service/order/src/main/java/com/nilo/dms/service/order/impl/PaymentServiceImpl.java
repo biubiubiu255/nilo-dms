@@ -1,6 +1,5 @@
 package com.nilo.dms.service.order.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -41,11 +40,11 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public void savePaymentOrder(WaybillPaymentOrder paymentOrder, List<String> waybillNos) {
 
-		int paymentOrderId = paymentDao.insertSelective(paymentOrder);
+		paymentDao.insertSelective(paymentOrder);
 
 		for (String waybillOrderNo : waybillNos) {
 			WaybillPaymentOrderWaybill waybillPaymentOrderWaybill = new WaybillPaymentOrderWaybill();
-			waybillPaymentOrderWaybill.setPaymentOrderId(String.valueOf(paymentOrderId));
+			waybillPaymentOrderWaybill.setPaymentOrderId(paymentOrder.getId());
 			waybillPaymentOrderWaybill.setWaybillOrderNo(waybillOrderNo);
 			paymentOrderWaybillDao.insert(waybillPaymentOrderWaybill);
 		}
@@ -104,4 +103,11 @@ public class PaymentServiceImpl implements PaymentService {
 			deliveryOrderDao.update(deliveryOrderDO);
 		}
 	}
+	
+	@Override
+	public List<String> getOrderNosByPayOrderId(String paymentOrderId){
+		List<String> orderNos = paymentOrderWaybillDao.queryByPaymentOrderId(paymentOrderId);
+		return orderNos;
+	}
+	
 }

@@ -73,6 +73,6 @@
 <select id="queryByPaymentOrderId" resultType="java.lang.String" parameterType="java.lang.String" >
     select waybill_order_no
     from t_waybill_payment_order_waybill
-    where id = #{id,jdbcType=INTEGER}
+    where payment_order_id = #{id,jdbcType=INTEGER}
   </select>
 </mapper>

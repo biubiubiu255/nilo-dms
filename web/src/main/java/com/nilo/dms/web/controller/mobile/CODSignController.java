@@ -55,25 +55,23 @@ public class CODSignController extends BaseController {
 	private String notifyUrl;
 	@Value("#{configProperties['returnUrl']}")
 	private String returnUrl;
-	
+
 	private static final String[] suffixNameAllow = new String[] { ".jpg", ".png" };
-	
+
 	@Autowired
 	private OrderService orderService;
 
 	@Autowired
 	private FileService fileService;
 
-	
 	@Autowired
 	private PaymentService paymentService;
-	
-	
+
 	@RequestMapping(value = "/sign.html")
 	public String sign() {
 		return "mobile/rider/COD/dshkqs";
 	}
-	
+
 	@RequestMapping(value = "/cashSave.html")
 	@ResponseBody
 	public String cashSave(String logisticsNo, Integer paidType) {
@@ -107,13 +105,12 @@ public class CODSignController extends BaseController {
 		} catch (Exception e) {
 			return toJsonErrorMsg(e.getMessage());
 		}
-		
+
 		String merchantId = me.getMerchantId();
 		DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, logisticsNo);
 		// 订单付款标识更新
 		DeliveryOrderDO deliveryOrderDO = new DeliveryOrderDO();
-		
-		
+
 		deliveryOrderDO.setMerchantId(Long.parseLong(merchantId));
 		deliveryOrderDO.setOrderNo(logisticsNo);
 		deliveryOrderDO.setPaidType(paidType);
@@ -125,17 +122,17 @@ public class CODSignController extends BaseController {
 		}
 
 		// 新增payment order记录
-		
+
 		List<String> waybillNos = new ArrayList<String>();
 		waybillNos.add(logisticsNo);
 		WaybillPaymentOrder paymentOrder = new WaybillPaymentOrder();
-		
-		paymentOrder.setId(IdWorker.getInstance().nextId()+"");
+
+		paymentOrder.setId(IdWorker.getInstance().nextId() + "");
 		paymentOrder.setNetworkId(me.getNetworks().get(0));
 		paymentOrder.setPriceAmount(new BigDecimal(deliveryOrder.getNeedPayAmount()));
 		paymentOrder.setRemark(remark);
 		paymentOrder.setWaybillCount(1);
-		
+
 		paymentService.savePaymentOrder(paymentOrder, waybillNos);
 		return toJsonTrueMsg();
 	}
@@ -175,11 +172,11 @@ public class CODSignController extends BaseController {
 		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 		String merchantId = me.getMerchantId();
 		DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
-		
+
 		List<String> waybillNos = new ArrayList<String>();
 		waybillNos.add(orderNo);
 		WaybillPaymentOrder paymentOrder = new WaybillPaymentOrder();
-		paymentOrder.setId(IdWorker.getInstance().nextId()+"");
+		paymentOrder.setId(IdWorker.getInstance().nextId() + "");
 		paymentOrder.setNetworkId(me.getNetworks().get(0));
 		paymentOrder.setPriceAmount(new BigDecimal(deliveryOrder.getNeedPayAmount()));
 		paymentOrder.setWaybillCount(1);
@@ -192,13 +189,13 @@ public class CODSignController extends BaseController {
 		map.put("notifyUrl", notifyUrl);
 		map.put("returnUrl", returnUrl);
 		map.put("merchantOrderNo", paymentOrder.getId());
-		int amount = (int)paymentOrder.getPriceAmount().doubleValue()*100;
-		map.put("amount", amount+"");
+		int amount = (int) paymentOrder.getPriceAmount().doubleValue() * 100;
+		map.put("amount", amount + "");
 		map.put("goods[0].goodsName", orderNo);
 		map.put("goods[0].goodsQuantity", "1");
-		map.put("goods[0].goodsPrice", amount+"");
+		map.put("goods[0].goodsPrice", amount + "");
 		map.put("goods[0].goodsType", "2");
-		map.put("expirationTime", 1000*60*30+"");
+		map.put("expirationTime", 1000 * 60 * 30 + "");
 		map.put("sourceType", "B");
 		map.put("currency", "KES");
 
@@ -242,6 +239,8 @@ public class CODSignController extends BaseController {
 		map.put("orderId", orderId);
 		map.put("signType", signType);
 		map.put("status", status);
+		
+		String logisticsNo = "";
 
 		List<Map.Entry<String, String>> list = new ArrayList<Map.Entry<String, String>>(map.entrySet());
 		Collections.sort(list, new Comparator<Map.Entry<String, String>>() {
@@ -268,22 +267,29 @@ public class CODSignController extends BaseController {
 			WaybillPaymentRecord waybillPaymentRecord = new WaybillPaymentRecord();
 			waybillPaymentRecord.setPaymentOrderId(merchantOrderNo);
 			waybillPaymentRecord.setPaymentOrderId(orderId);
-			if("SUCCESS".equalsIgnoreCase(status)) {
+			if ("SUCCESS".equalsIgnoreCase(status)) {
 				waybillPaymentRecord.setStatus(1);
+			} else {
+				waybillPaymentRecord.setStatus(0);
 			}
 			paymentService.savePaymentOrderRecord(waybillPaymentRecord);
 			paymentService.payRerun(waybillPaymentRecord);
+			List<String> orderNos = paymentService.getOrderNosByPayOrderId(merchantOrderNo);
 			
-			//支付成功
-			if(waybillPaymentRecord.getStatus()==1) {
-				return "redirect:/ toList ";
+			if (orderNos != null) {
+				logisticsNo = orderNos.get(0);
+			}
+
+			// 支付成功
+			if (waybillPaymentRecord.getStatus() == 1) {
+				return "redirect:/mobile/rider/sign/toSign.html?logisticsNo=" + logisticsNo;
 			}
 		} else {
 			// 等待成功
-			return "redirect:/ toList ";
+			return "redirect:/mobile/rider/sign/toSign.html?logisticsNo=" + logisticsNo;
 		}
-		//支付异常
-		return "redirect:/ toList ";
+		// 支付异常
+		return "redirect:/mobile/rider/sign/toSign.html?logisticsNo=" + logisticsNo;
 	}
 
 	@ResponseBody
