@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import com.nilo.dms.common.enums.EnumMessage;
 import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.service.org.model.Staff;
@@ -163,14 +164,20 @@ public class BaseController {
     protected String getProperty(Object obj, String field) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         Object value = PropertyUtils.getSimpleProperty(obj, field);
-
+        if (value == null) {
+            return null;
+        }
         if (value instanceof Long) {
             return "" + (Long) value;
         }
         if (value instanceof Double) {
             return "" + (Double) value;
         }
+        if (value instanceof EnumMessage) {
+            EnumMessage e = (EnumMessage) value;
+            return e.getDesc();
+        }
 
-        return "";
+        return (String) value;
     }
 }
