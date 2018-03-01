@@ -172,6 +172,9 @@
         <if test="referenceNo !=null and referenceNo !='' ">
             and reference_no = #{referenceNo}
         </if>
+        <if test="orderPlatform !=null and orderPlatform !='' ">
+            and order_platform = #{orderPlatform}
+        </if>
         <if test="orderType !=null and orderType.size() > 0">
             <foreach collection="orderType" item="item" index="index" open="and (" separator="or" close=")">
                 order_type=#{item}
@@ -210,6 +213,9 @@
         </if>
         <if test="referenceNo !=null and referenceNo !='' ">
             and reference_no = #{referenceNo}
+        </if>
+        <if test="orderPlatform !=null and orderPlatform !='' ">
+            and order_platform = #{orderPlatform}
         </if>
         <if test="orderType !=null and orderType.size() > 0">
             <foreach collection="orderType" item="item" index="index" open="and (" separator="or" close=")">

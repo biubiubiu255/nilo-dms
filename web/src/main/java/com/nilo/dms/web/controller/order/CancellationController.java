@@ -3,6 +3,7 @@ package com.nilo.dms.web.controller.order;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.DeliveryOrderDao;
+import com.nilo.dms.dao.WaybillPaymentOrderDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
@@ -26,12 +27,15 @@ public class CancellationController extends BaseController {
     @Autowired
     private DeliveryOrderDao deliveryOrderDao;
 
+    @Autowired
+    private WaybillPaymentOrderDao waybillPaymentOrderDao;
+
     @RequestMapping("/listPage.html")
     public String list(Model model) {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        model.addAttribute("riderList",getRiderList(merchantId));
+        model.addAttribute("riderList", getRiderList(merchantId));
         return "delivery_order/cancellation/list";
     }
 
