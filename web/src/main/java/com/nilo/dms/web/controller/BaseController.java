@@ -53,11 +53,8 @@ public class BaseController {
     private StaffDao staffDao;
 
     protected boolean isMobile(HttpServletRequest request) {
-        System.out.println("111");
         String userAgentStr = request.getHeader("user-agent");
-        System.out.println("ss");
         UserAgent ua = UserAgent.parseUserAgentString(userAgentStr);
-        System.out.println("");
         return ua.getOperatingSystem().isMobileDevice();
     }
 
