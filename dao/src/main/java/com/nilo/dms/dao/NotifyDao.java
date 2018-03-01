@@ -18,4 +18,6 @@ public interface NotifyDao extends BaseDao<Long, NotifyDO> {
     Long findCountBy(@Param("merchantId") Long merchantId, @Param("orderNo") String orderNo, @Param("bizType") String bizType,@Param("status") Integer status);
 
     List<NotifyDO> queryRetryList(Integer status);
+
+    NotifyDO findByBizType(@Param("merchantId") Long merchantId,@Param("orderNo") String orderNo,@Param("bizType") String bizType);
 }

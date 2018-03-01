@@ -12,6 +12,7 @@ import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
 import java.util.*;
 
@@ -70,7 +72,6 @@ public class DeliveryOrderController extends BaseController {
 
         Pagination page = getPage();
         List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
-
         return toPaginationLayUIData(page, list);
     }
 
@@ -239,6 +240,50 @@ public class DeliveryOrderController extends BaseController {
         //查询订单详情
         DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
         model.addAttribute("delivery", deliveryOrder);
+
+        return "delivery_order/print";
+    }
+
+    @RequestMapping(value = "/export.html", method = RequestMethod.GET)
+    public String export(DeliveryOrderParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) {
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        parameter.setMerchantId(merchantId);
+        if (orderTypes != null && orderTypes.length > 0) {
+            parameter.setOrderType(Arrays.asList(orderTypes));
+        }
+        if (orderStatus != null && orderStatus.length > 0) {
+            parameter.setStatus(Arrays.asList(orderStatus));
+        }
+
+        Pagination page = getPage();
+        List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
+
+        ExportExcel exportExcel = new ExportExcel();
+
+        List<String> header = Arrays.asList("orderNo","orderType","referenceNo","orderTime","country","orderPlatform","totalPrice","needPayAmount","weight","status");
+
+        List<Map<String, String>> data = new ArrayList<>();
+        for(DeliveryOrder order : list) {
+            Map<String, String> map = new HashMap<>();
+            for (String field : header) {
+                String value = null;
+                try {
+                    value = (String) PropertyUtils.getSimpleProperty(order, field);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                map.put(field, value);
+            }
+            data.add(map);
+        }
+        exportExcel.fillData(data,header);
+        exportExcel.export("waybill_"+DateUtil.getSysTimeStamp());
 
         return "delivery_order/print";
     }

@@ -15,9 +15,19 @@ public class NotifyRequest {
 
     private String method;
 
+    private String bizType;
+
     private String sign;
 
     private String data;
+
+    public String getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
+    }
 
     public String getReferenceNo() {
         return referenceNo;

@@ -11,6 +11,8 @@
                 jdbcType="INTEGER"/>
         <result property="bizType" column="biz_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+        <result property="method" column="method" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
         <result property="notifyId" column="notify_id" javaType="java.lang.String"
                  jdbcType="VARCHAR"/>
         <result property="orderNo" column="order_no" javaType="java.lang.String"
@@ -26,7 +28,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id ,merchant_id,biz_type,notify_id,order_no,reference_no,url,param,result,sign,num,status,created_time , updated_time ,version
+        id ,merchant_id,biz_type,method,notify_id,order_no,reference_no,url,param,result,sign,num,status,created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -34,9 +36,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_sys_notify
-        ( merchant_id,biz_type,notify_id,order_no,reference_no,url,param,result,sign,num,status,created_time , updated_time ,version)
+        ( merchant_id,biz_type,method,notify_id,order_no,reference_no,url,param,result,sign,num,status,created_time , updated_time ,version)
         VALUES
-        (#{merchantId},#{bizType}, #{notifyId},#{orderNo},#{referenceNo},#{url},#{param},#{result},#{sign},#{num},#{status} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{merchantId},#{bizType},#{method}, #{notifyId},#{orderNo},#{referenceNo},#{url},#{param},#{result},#{sign},#{num},#{status} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
     <!-- 动态更新语句 -->
     <update id="update" parameterType="com.nilo.dms.dao.dataobject.NotifyDO" statementType="PREPARED">
@@ -97,10 +99,15 @@
         FROM t_sys_notify where merchant_id = #{merchantId} and notify_id=#{notifyId}
     </select>
 
+    <select id="findByBizType" resultMap="notifyDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_notify where merchant_id = #{merchantId} and order_no=#{orderNo} and biz_type=#{bizType}
+    </select>
+
     <select id="queryRetryList" resultMap="notifyDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_sys_notify where status = #{status}
-
     </select>
 </mapper>

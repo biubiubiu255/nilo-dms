@@ -1,88 +1,84 @@
 package com.nilo.dms.common.utils;
 
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
+public class ExportExcel {
 
-public interface ExportExcel<T> {
+    private HSSFWorkbook wb;
+
+    private HSSFSheet sheet;
+
     /**
-     * 将字节数组写出到servlet输出流
-     *
-     * @param response http回应对象，为excel回应的目的地
-     * @param list     要导出到 excel的数据集合
-     * @param titles   excel的标题 通常取第一行作为excel的标题
      */
-    default void exportExcel(HttpServletResponse response, List<T> list, String[] titles) throws IOException {
-        byte[] bytes = selectExcel(list, titles);
-        response.setContentType("application/x-msdownload");
-        response.setHeader("Content-Disposition", "attachment;filename=" + UUID.randomUUID() + ".xlsx");
-        response.setContentLength(bytes.length);
-        response.getOutputStream().write(bytes);
-        response.getOutputStream().flush();
-        response.getOutputStream().close();
+    public ExportExcel() {
+        this.wb = new HSSFWorkbook();
+        sheet = this.wb.createSheet();
     }
 
     /**
-     * 选择要导出的文件 导出的excel 属于office 2007格式的文件
-     *
-     * @param list   excel文件内容
-     * @param titles excel 文件的标题
-     * @return 已经生成excel文件的字节数组
+     * @param list
      */
-    default byte[] selectExcel(List<T> list, String[] titles) throws IOException {
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet();
-        generateExcelTitle(titles, sheet);
-        eachListAndCreateRow(list, sheet);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        workbook.write(out);
-        return out.toByteArray();
-    }
+    public int fillData(List<Map<String, String>> list, List<String> header) {
 
-    /**
-     * 遍历集合，并创建单元格行
-     *
-     * @param list  数据集合
-     * @param sheet 工作簿
-     */
-    default void eachListAndCreateRow(List<T> list, Sheet sheet) {
-        for (int i = 0, j = 1; i < list.size(); i++, j++) {
-            T t = list.get(i);
-            Row row = sheet.createRow(j);
-            generateExcelForAs(t, row);
+        int rowNum = 0;
+
+        HSSFFont poDateFont = wb.createFont();
+        poDateFont.setFontHeightInPoints((short) 10);
+
+        //文字靠左样式
+        HSSFCellStyle leftStyle = wb.createCellStyle();
+        leftStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+        leftStyle.setFont(poDateFont);
+        leftStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        leftStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        leftStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        leftStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        //header
+        HSSFRow headerRow = sheet.createRow(rowNum);
+        int hCellNum = 0;
+        for (String headerCol : header) {
+            HSSFCell cell = headerRow.createCell(hCellNum);
+            cell.setCellValue(headerCol);
+            cell.setCellStyle(leftStyle);
+            hCellNum++;
         }
-    }
 
-    /**
-     * 生成excel文件的标题
-     */
-    default void generateExcelTitle(String[] titles, Sheet sheet) {
-        Row row = sheet.createRow(0);
-        for (int i = 0; i < titles.length; i++) {
-            row.createCell(i, 1).setCellValue(titles[i]);
+        for (Map<String, String> map : list) {
+            rowNum++;
+            HSSFRow proRow = sheet.createRow(rowNum);
+            int cellNum = 0;
+            for (String headerCol : header) {
+                HSSFCell cell = proRow.createCell(cellNum);
+                cell.setCellValue(map.get(headerCol));
+                cell.setCellStyle(leftStyle);
+                cellNum++;
+            }
         }
+
+        sheet.setRowBreak(rowNum);
+        return rowNum;
     }
 
-    /**
-     * 创建excel内容文件
-     *
-     * @param t   组装excel 文件的内容
-     * @param row 当前excel 工作行
-     */
-    void generateExcelForAs(T t, Row row);
-
-    /**
-     * 当发生错误时如此回应信息
-     */
-    default void errorResponse(HttpServletResponse response) {
-        throw new RuntimeException("Excel Export failed");
+    public void export(String fileName) {
+        FileOutputStream fileOut = null;
+        try {
+            fileOut = new FileOutputStream(fileName);
+            wb.write(fileOut);//把Workbook对象输出到文件workbook.xls中
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileOut != null) {
+                    fileOut.close();
+                }
+            } catch (IOException e) {
+            }
+        }
     }
 }

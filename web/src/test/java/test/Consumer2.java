@@ -1,18 +1,18 @@
 package test;
 
 import com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer;
-import com.alibaba.rocketmq.client.consumer.listener.*;
-import com.alibaba.rocketmq.common.consumer.ConsumeFromWhere;
+import com.alibaba.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
+import com.alibaba.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
+import com.alibaba.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import com.alibaba.rocketmq.common.message.Message;
 import com.alibaba.rocketmq.common.message.MessageExt;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by admin on 2017/10/19.
  */
-public class Consumer {
+public class Consumer2 {
     public static void main(String[] args) {
         DefaultMQPushConsumer consumer =
                 new DefaultMQPushConsumer("notify_cg111");
