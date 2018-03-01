@@ -32,9 +32,9 @@
     		callback: function (data) {
     			if (data.result) {
     		        showInfo(null)
-                    alert("978")
+                    // alert("978")
     		    }else{
-    			    alert("000")
+    			    // alert("000")
                 }
 			}
     	});

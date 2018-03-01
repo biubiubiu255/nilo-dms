@@ -61,7 +61,6 @@ public class SignScanController extends BaseController {
 	@RequestMapping(value = "/save.html")
 	@ResponseBody
 	public String save(MultipartFile file, String logisticsNo, String signer, String remark) {
-		System.out.println("+++++++++++++++++++++++");
 		SignForOrderParam param = new SignForOrderParam();
 		param.setOrderNo(logisticsNo);
 		param.setSignBy(signer);
@@ -70,10 +69,7 @@ public class SignScanController extends BaseController {
 		// 写入图片
 		try {
 			if (file != null) {
-				System.out.print("【========================】" + path);
-
 				fileService.uploadSignImage(me.getMerchantId(), me.getUserId(), logisticsNo, file.getBytes());
-				
 				// imageDO.setImageType(ImageTypeEnum.getEnum().getCode());
 			}
 		} catch (Exception e) {

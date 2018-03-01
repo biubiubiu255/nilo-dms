@@ -29,7 +29,7 @@
 <script src="/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript">
 	//loadLanguage('en');
-	var payType = 'cash';
+	var payType = '0';
 	var payForm = new MobileData({
 		autoLoad : false,
 		formId : 'pay-form'
@@ -40,15 +40,15 @@
 		mbObject : payForm,
 		postUrl : 'http://sandbox.lipapay.com/api/excashier.html'
 	});
-	
+
 	layui.use([ 'upload', 'jquery' ], function() {
 
 		var $ = layui.jquery, upload = layui.upload;
-		
+
 		var isUpPic = false;
 		upload.render({
 			elem : '.xq',
-			url : '/mobile/rider/COD/toPay.html',
+			url : '/mobile/rider/COD/onlineProblemSave.html',
 			auto : false, //选择文件后不自动上传
 			data : {},
 			bindAction : '#commit',
@@ -61,38 +61,64 @@
 				isUpPic = true;
 			},
 			before : function(res) {
-				if (payType == 'online') {
+				if (payType == '1') {
 					ajaxRequest('/mobile/rider/COD/redyToPay.html', {
-						orderNo : '123'
+						orderNo : $("#logisticsNo").val()
 					}, false, function(res) {
 						payForm.setFormFieldValue("version", "1.4");
 						payForm.setFormFieldValue("sign", res.data.sign);
+						payForm.setFormFieldValue("signType", res.data.signType);
+						payForm.setFormFieldValue("merchantId", res.data.merchantId);
+						payForm.setFormFieldValue("notifyUrl", res.data.notifyUrl);
+						payForm.setFormFieldValue("returnUrl", res.data.returnUrl);
+						payForm.setFormFieldValue("merchantOrderNo", res.data.merchantOrderNo);
+						payForm.setFormFieldValue("amount", res.data.amount);
+						payForm.setFormFieldValue("goods[0].goodsName", res.data['goods[0].goodsName']);
+						payForm.setFormFieldValue("goods[0].goodsQuantity", res.data['goods[0].goodsQuantity']);
+						payForm.setFormFieldValue("goods[0].goodsPrice", res.data['goods[0].goodsPrice']);
+						payForm.setFormFieldValue("goods[0].goodsType", res.data['goods[0].goodsType']); 
+						payForm.setFormFieldValue("expirationTime", res.data.expirationTime);
+						payForm.setFormFieldValue("sourceType", res.data.sourceType);
+						payForm.setFormFieldValue("currency", res.data.currency);
+						
 						document.getElementById("pay-form").submit();
 					});
 					return;
-				} else if (payType == 'online remark') {
+				} else if (payType == '2') {
 					if (isUpPic === false) {
 						showWarning("plase chose pic");
 						return;
 					}
+				} else if (payType == '0') {
+					ajaxRequest('/mobile/rider/COD/cashSave.html', {
+						orderNo : $("#logisticsNo").val(),
+						paidType : 0
+					}, false, function(res) {
+						if(res.result){
+							alert('success,plase to sign logistics');
+							javascript: history.go(-1);
+						}else{
+							showWarning("Sorry,cash pay error!");
+						}
+						
+					});
+					return;
 				}
 
 				this.data = {
 					logisticsNo : $("#logisticsNo").val(),
-					signer : $("#signer").val(),
-					idNo : $("#idNo").val(),
-					danxuan : $("input[name='danxuan']").val()
+					paidType : payType
 				};
 				//layui.upload.config.data = {logisticsNo:1,signer:2};
 			},
 			done : function(res) {
 				if (res.result) {
-					showInfo('submit success');
-					$("#remark").val();
-
+					//showWarning("success,plase to sign logistics");
+					alert('success,plase to sign logistics');
+					javascript: history.go(-1);
 				} else {
 					showError(res.msg);
-					$("#remark").val();
+
 				}
 			}
 		});
@@ -118,9 +144,6 @@
 			ajaxRequest('/mobile/rider/COD/getDetail.html', {
 				orderNo : code
 			}, false, function(res) {
-				if (!(res.msg == null)) {
-					showError(data.msg)
-				}
 				mobile.setFormFieldValue("amont", res.data)
 			});
 		}
@@ -128,21 +151,9 @@
 
 		$("#lypic").first().hide();
 
-		
-		$('#toPay').click(function() {
-
-			ajaxRequest('/mobile/rider/COD/redyToPay.html', {
-				orderNo : '123'
-			}, false, function(res) {
-				payForm.setFormFieldValue("version", "1.4");
-				payForm.setFormFieldValue("sign", res.data.sign);
-				document.getElementById("pay-form").submit();
-			});
-		})
-
 		$(":radio").click(function() {
 			payType = $(this).val();
-			if (payType == 'online remark') {
+			if (payType == '2') {
 				$('#picture').show();
 				$('#Memo').show();
 
@@ -159,7 +170,7 @@
 
 		<div class="wap_top">
 			<a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-			<h2>COD Sign</h2>
+			<h2>Payment</h2>
 		</div>
 
 		<div class="formula_modify">
@@ -171,15 +182,15 @@
 							id="logisticsNo" name="logisticsNo"
 							class="input_value i18n-input" /><span class="scanner"
 							data-locale="all_scan"></span></li>
-						<li><input type='text' id="amont" placeholder="Amont" property_name="amont"
-							set_attr="placeholder" class='input_value i18n-input'
-							name='amont' required="required" />
+						<li><input type='text' id="amont" placeholder="Amont"
+							property_name="amont" set_attr="placeholder"
+							class='input_value i18n-input' name='amont' required="required" />
 						<li><label>Pay Type</label>
 							<div style="position: absolute; left: 25%">
-								<input type="radio" name="danxuan" value="cash" />cash
-								&nbsp;&nbsp; <input type="radio" name="danxuan" value="online" />online
-								&nbsp;&nbsp; <input type="radio" name="danxuan"
-									value="online remark" />online remark
+								<input type="radio" name="danxuan" value="0" />Cash
+								&nbsp;&nbsp; <input type="radio" name="danxuan" value="1" />Online
+								&nbsp;&nbsp; <input type="radio" name="danxuan" value="2" />Online
+								Problem
 							</div></li>
 						<!-- <li><label>toPay</label><div style="position:absolute; left: 30%">
                         <button id="toPay">Online payment</button>
@@ -217,7 +228,7 @@
 					value="http://47.89.177.73:8080" /> <input type="hidden"
 					name="merchantOrderNo" value="test" /> <input type="number"
 					name="amount" value="2" hidden="true" /> <input type="hidden"
-					name="goods[0].goodsName" value="test" /> <input type="hidden"
+					name="goods[0].goodsName" value="test1" /> <input type="hidden"
 					name="goods[0].goodsQuantity" value="1" /> <input type="hidden"
 					name="goods[0].goodsPrice" value="22" /> <input type="hidden"
 					name="goods[0].goodsType" value="2" /> <input type="hidden"

@@ -60,8 +60,20 @@ public class DeliveryOrderDO extends BaseDo<Long> {
     private Double accountNo;
 
     private Integer printTimes;
+    
+    private Integer paidType;
+    
+    
 
-    public Double getNeedPayAmount() {
+    public Integer getPaidType() {
+		return paidType;
+	}
+
+	public void setPaidType(Integer paidType) {
+		this.paidType = paidType;
+	}
+
+	public Double getNeedPayAmount() {
         return needPayAmount;
     }
 

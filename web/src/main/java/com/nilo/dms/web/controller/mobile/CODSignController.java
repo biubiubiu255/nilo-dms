@@ -1,8 +1,10 @@
 package com.nilo.dms.web.controller.mobile;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,48 +29,109 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.ImageDao;
+import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
+import com.nilo.dms.service.FileService;
 import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.PaymentService;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.WaybillPaymentOrder;
 import com.nilo.dms.web.controller.BaseController;
 
 @Controller
 @RequestMapping("/mobile/rider/COD")
 public class CODSignController extends BaseController {
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
+	@Value("#{configProperties['temp_photo_file_path']}")
+	private static final String path = "";
+	@Value("#{configProperties['signKey']}")
+	private String signKey;
+	@Value("#{configProperties['lipapayMerchantId']}")
+	private String lipapayMerchantId;
+	
+	private static final String[] suffixNameAllow = new String[] { ".jpg", ".png" };
+	
 	@Autowired
 	private OrderService orderService;
 
-	@RequestMapping(value = "/sign.html")
-	public String sign() {
-		return "mobile/rider/COD/dshkqs";
-	}
+	@Autowired
+	private FileService fileService;
 
 	@Autowired
 	private RiderOptService riderOptService;
 
-	@Value("#{configProperties['temp_photo_file_path']}")
-	private static final String path = "";
-
-	private static final String[] suffixNameAllow = new String[] { ".jpg", ".png" };
-	
-	@Value("#{configProperties['signKey']}")
-    private String signKey;
-
-
-	private final Logger log = LoggerFactory.getLogger(getClass());
-
 	@Autowired
 	private ImageDao imageDao;
-
-	@RequestMapping(value = "/save.html")
+	
+	@Autowired
+	private PaymentService paymentService;
+	
+	
+	@RequestMapping(value = "/sign.html")
+	public String sign() {
+		return "mobile/rider/COD/dshkqs";
+	}
+	
+	@RequestMapping(value = "/cashSave.html")
 	@ResponseBody
+	public String cashSave(String logisticsNo, Integer paidType) {
 
-	public String save(MultipartFile file, String logisticsNo, String signer, String idNo, String danxuan) {
-		System.out.println(logisticsNo);
-		System.out.println(signer);
-		System.out.println(idNo);
-		System.out.println(danxuan);
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		String merchantId = me.getMerchantId();
+		DeliveryOrderDO deliveryOrderDO = new DeliveryOrderDO();
+		deliveryOrderDO.setMerchantId(Long.parseLong(merchantId));
+		deliveryOrderDO.setOrderNo(logisticsNo);
+		deliveryOrderDO.setPaidType(paidType);
+		deliveryOrderDO.setUpdatedBy(me.getUserId());
+		deliveryOrderDO.setUpdatedTime(new Date().getTime());
+		long i = orderService.updatePaidType(deliveryOrderDO);
+		if (i < 1) {
+			return toJsonErrorMsg("cash pay error");
+		}
+		return toJsonTrueMsg();
+	}
+
+	@RequestMapping(value = "/onlineProblemSave.html")
+	@ResponseBody
+	public String onlineProblemSave(MultipartFile file, String logisticsNo, Integer paidType, String remark) {
+
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+
+		// 写入图片 与签收图片一致
+		try {
+			if (file != null) {
+				//fileService.uploadSignImage(me.getMerchantId(), me.getUserId(), logisticsNo, file.getBytes());
+			}
+		} catch (Exception e) {
+			return toJsonErrorMsg(e.getMessage());
+		}
+		// 订单付款标识更新
+		String merchantId = me.getMerchantId();
+		DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, logisticsNo);
+		
+		DeliveryOrderDO deliveryOrderDO = new DeliveryOrderDO();
+		deliveryOrderDO.setMerchantId(Long.parseLong(merchantId));
+		deliveryOrderDO.setOrderNo(logisticsNo);
+		deliveryOrderDO.setPaidType(paidType);
+		deliveryOrderDO.setUpdatedBy(me.getUserId());
+		deliveryOrderDO.setUpdatedTime(new Date().getTime());
+		long i = orderService.updatePaidType(deliveryOrderDO);
+		if (i < 1) {
+			return toJsonErrorMsg("cash pay error");
+		}
+
+		// 新增payment order记录
+		
+		List<String> waybillNos = new ArrayList<String>();
+		waybillNos.add(logisticsNo);
+		WaybillPaymentOrder paymentOrder = new WaybillPaymentOrder();
+		paymentOrder.setNetworkId(me.getNetworks().get(0));
+		paymentOrder.setPriceAmount(new BigDecimal(deliveryOrder.getNeedPayAmount()));
+		paymentOrder.setRemark(remark);
+		paymentOrder.setWaybillCount(1);
+		
+		paymentService.savePaymentOrder(paymentOrder, waybillNos);
 		return toJsonTrueMsg();
 	}
 
@@ -104,18 +167,15 @@ public class CODSignController extends BaseController {
 		if (orderNo == null) {
 			return toJsonErrorMsg("错误信息");
 		}
-		/*Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 		String merchantId = me.getMerchantId();
 		DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+		
+		
 
-		// model.addAttribute("deliveryOrder", deliveryOrder);
-		if (deliveryOrder == null) {
-			return toJsonErrorMsg("orderNo is error");
-		}
-		String receiverName = deliveryOrder.getReceiverInfo().getReceiverName();*/
 		HashMap<String, String> map = new HashMap<String, String>();
-		//map.put("version", "1.4");
-		map.put("merchantId", "test");
+		// map.put("version", "1.4");
+		map.put("merchantId", lipapayMerchantId);
 		map.put("signType", "MD5");
 		map.put("notifyUrl", "http://47.89.177.73:8080");
 		map.put("returnUrl", "http://47.89.177.73:8080");
@@ -140,28 +200,28 @@ public class CODSignController extends BaseController {
 		String plainText = "";
 		for (int i = 0; i < list.size(); i++) {
 			Map.Entry<String, String> mapping = list.get(i);
-			if (i == list.size()-1) {
-				plainText = plainText+mapping.getKey() + "=" + mapping.getValue();
+			if (i == list.size() - 1) {
+				plainText = plainText + mapping.getKey() + "=" + mapping.getValue();
 			} else {
-				plainText = plainText+mapping.getKey() + "=" + mapping.getValue() + "&";
+				plainText = plainText + mapping.getKey() + "=" + mapping.getValue() + "&";
 			}
 		}
-		String sign = DigestUtils.md5Hex(plainText+signKey);
+		String sign = DigestUtils.md5Hex(plainText + signKey);
 		map.put("sign", sign);
 		return toJsonTrueData(map);
 	}
-	
-	@RequestMapping(value = "/payReturn.html" ,method = RequestMethod.GET)
+
+	@RequestMapping(value = "/payReturn.html", method = RequestMethod.GET)
 	public String payReturn() {
 
 		HttpServletRequest request = getRequest();
-		String merchantOrderNo = (String)request.getParameter("merchantOrderNo");
-		String orderId = (String)request.getParameter("orderId");
-		String sign = (String)request.getParameter("sign");
-		String signType = (String)request.getParameter("signType");
-		String status = (String)request.getParameter("status");
-		String merchantId = (String)request.getParameter("merchantId");
-		
+		String merchantOrderNo = (String) request.getParameter("merchantOrderNo");
+		String orderId = (String) request.getParameter("orderId");
+		String sign = (String) request.getParameter("sign");
+		String signType = (String) request.getParameter("signType");
+		String status = (String) request.getParameter("status");
+		String merchantId = (String) request.getParameter("merchantId");
+
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("merchantOrderNo", merchantOrderNo);
 		map.put("merchantId", merchantId);
@@ -180,24 +240,23 @@ public class CODSignController extends BaseController {
 		String plainText = "";
 		for (int i = 0; i < list.size(); i++) {
 			Map.Entry<String, String> mapping = list.get(i);
-			if (i == list.size()-1) {
-				plainText = plainText+mapping.getKey() + "=" + mapping.getValue();
+			if (i == list.size() - 1) {
+				plainText = plainText + mapping.getKey() + "=" + mapping.getValue();
 			} else {
-				plainText = plainText+mapping.getKey() + "=" + mapping.getValue() + "&";
+				plainText = plainText + mapping.getKey() + "=" + mapping.getValue() + "&";
 			}
 		}
-		
-		String generateSign = DigestUtils.md5Hex(plainText+signKey);
-		
-		if(sign!=null&&sign.equalsIgnoreCase(generateSign)) {
-			//支付成功
-			
-			
-		}else {
-			//等待支付
+
+		String generateSign = DigestUtils.md5Hex(plainText + signKey);
+
+		if (sign != null && sign.equalsIgnoreCase(generateSign)) {
+			// 支付成功
+
+		} else {
+			// 等待支付
 		}
-		
-		 return "redirect:/ toList ";
+
+		return "redirect:/ toList ";
 	}
 
 	@ResponseBody
@@ -216,7 +275,7 @@ public class CODSignController extends BaseController {
 			return toJsonErrorMsg("orderNo is error");
 		}
 		String amont = deliveryOrder.getNeedPayAmount().toString();
-		
+
 		return toJsonTrueData(amont);
 
 	}
