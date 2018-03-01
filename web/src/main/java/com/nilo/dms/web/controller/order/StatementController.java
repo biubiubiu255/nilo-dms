@@ -1,11 +1,13 @@
 package com.nilo.dms.web.controller.order;
 
+import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.WaybillStatementDao;
 import com.nilo.dms.dao.dataobject.WaybillStatementDo;
 import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,20 +34,29 @@ public class StatementController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-    public String getList(int sTime, int eTime) {
-
+        public String getList(Integer sTime, Integer eTime) {
+        if (sTime==null || eTime==null) {
+            sTime = 0;
+            eTime = (int)(System.currentTimeMillis()/1000);
+            System.out.println("时间：" + eTime);
+        }
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 
         List<WaybillStatementDo> list = new ArrayList<WaybillStatementDo>();
 
-        list = waybillStatementDao.queryAllWaybillStatement(sTime, eTime);
+        list = waybillStatementDao.queryAllWaybillStatement( sTime, eTime);
+        //list = waybillStatementDao.queryAllWaybillStatement( 1423094400, 1519689600);
 
-        if (list==null) return toJsonErrorMsg("not data");
+        Pagination page = getPage();
 
-        return toJsonTrueData(list);
+        if (list==null) {
+            page.setTotalCount(0);
+            return toPaginationLayUIData(page, null);
+        }
+        page.setTotalCount(list.size());
+        return toPaginationLayUIData(page, list);
     }
-
 
 }

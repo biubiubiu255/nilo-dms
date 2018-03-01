@@ -1,6 +1,8 @@
 
 package com.nilo.dms.common.exception;
 
+import org.junit.Test;
+
 /**
  * Created by ronny on 2017/8/23.
  */
@@ -53,6 +55,7 @@ public enum BizErrorCode implements ErrorCode {
     ORDER_NO_EMPTY("Order No emtpty", "100035"),
     OPT_USER_EMPTY("Operate User emtpty", "100036"),
 
+
     CODE_NOT_EXIST("code:{0} not exist", "100037"),
     STAFF_EXIST("Staff ID:{0} is already exist", "100038"),
     DISABLED_ACCOUNT("Account is disabled.", "1000039"),
@@ -95,6 +98,7 @@ public enum BizErrorCode implements ErrorCode {
     DELIVERY_NO_EXIST("Delivery No exist.", "100069"),
     PACKAGE_EMPTY("Package is empty", "100070"),
 
+    ORDER_NO_ARRIVE("The order has not arrived", "100071");  //订单未到达
     ;
 
     private final String description;
@@ -104,7 +108,7 @@ public enum BizErrorCode implements ErrorCode {
         this.description = description;
         this.code = code;
     }
-
+    
     @Override
     public ExceptionType getType() {
         return ExceptionType.BIZ_VERIFY_ERROR;
@@ -121,3 +125,6 @@ public enum BizErrorCode implements ErrorCode {
     }
 
 }
+
+
+

@@ -7,7 +7,7 @@
         return;
     }
 %>
-<html>
+<html background="public/img/bg.jpg">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -26,7 +26,7 @@
 
 </head>
 
-<body class="hold-transition login-page">
+<body class="hold-transition" background="/public/img/bg.jpg">
 <div class="login-box">
     <div class="login-logo">
         DMS

@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface WaybillStatementDao {
     //不用类的方式，传入xml mapping文件多个参数进去
-    List<WaybillStatementDo> queryAllWaybillStatement(@Param("startTime") int sTime, @Param("endTime") int eTime);
+    List<WaybillStatementDo> queryAllWaybillStatement(@Param("sTime") int sTime, @Param("eTime") int eTime);
 }

@@ -11,16 +11,6 @@
 
 <div class="box-body">
     <div class="layui-form layui-row">
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">Rider:</label>
-            <div class="layui-inline">
-                <select name="rider" lay-verify="required" lay-search="" style="display: none">
-                    <option value="">choose or search....</option>
-                    <c:forEach items="${list}" var="rider">
-                        <option value="${rider.userId}">${rider.name}</option>
-                    </c:forEach>
-                </select>            </div>
-        </div>
         <div class="layui-col-md7 layui-col-lg5">
             <label class="layui-form-label">CreateTime:</label>
             <div class="layui-inline">
@@ -30,30 +20,23 @@
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="toTime" placeholder="To">
             </div>
-        </div>
-        <div class="layui-col-md1">
             <shiro:hasPermission name="600031">
                 <button class="layui-btn layui-btn-normal search">Search</button>
             </shiro:hasPermission>
         </div>
+
     </div>
     <hr>
 
-    <table class="layui-table" lay-data="{ url:'/report/dispatchList.html', page:true,limit:10, id:'${id0}'}"
+    <table class="layui-table" lay-data="{ url:'/report/statement/list.html', method:'post', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed:'left',field:'orderNo', width:200}">OrderNo</th>
-            <th lay-data="{fixed:'left',field:'referenceNo', width:200,templet: '<div>{{d.deliveryOrder.referenceNo}}</div>'}">ReferenceNo</th>
-            <th lay-data="{field:'statusDesc', width:150}">Task Status</th>
-            <th lay-data="{field:'statusDesc', width:150,templet: '<div>{{d.deliveryOrder.statusDesc}}</div>'}">Order Status</th>
-            <th lay-data="{field:'country', width:100,templet: '<div>{{d.deliveryOrder.country}}</div>'}">Country</th>
-            <th lay-data="{field:'weight', width:100,templet: '<div>{{d.deliveryOrder.weight}}</div>'}">Weight</th>
-            <th lay-data="{field:'goodsType', width:120,templet: '<div>{{d.deliveryOrder.goodsType}}</div>'}">GoodsType</th>
-            <th lay-data="{field:'statusDesc', width:300,templet: '<div>{{d.deliveryOrder.senderInfo.address}}</div>'}">Pick Up Address</th>
-            <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.handledTime) }}</div>'}">
-                OptTime
-            </th>
+            <th lay-data="{field:'orderNo', width:130, templet: '<div>{{d.orderNo}}</div>'}">OrderNo</th>
+            <th lay-data="{field:'order_type', width:120, templet: '<div>{{d.order_type}}</div>'}">OrderType</th>
+            <th lay-data="{field:'money', width:100,templet: '<div>{{d.money}}</div>'}">Money</th>
+            <th lay-data="{field:'statement_time', width:172,templet: '<div>{{formatDate(d.statement_time)}}</div>'}">Create Time</th>
+            <th lay-data="{field:'sign_time', width:172,templet: '<div>{{formatDate(d.sign_time)}}</div>'}">Sign Time</th>
         </tr>
         </thead>
     </table>
@@ -96,12 +79,37 @@
             })
 
             var reloadTable = function (item) {
+                var sTime = Date.parse(new Date($("#fromTime").val()))/1000;
+                var eTime = Date.parse(new Date($("#toTime").val()))/1000;
+
+                if (eTime<sTime){
+                    layui.use('layer', function(){
+                        var layer = layui.layer;
+                        layer.alert('The start date must be less than the end date', {
+                            icon: 0,
+                            skin: 'layer-ext-moon'
+                        })
+                    });
+                    return false;
+                }
+                //console.log(sTime.leng + "  " + eTime.len);
+
+                if(String(sTime).length!=10 || String(eTime).length!=10){
+                    layui.use('layer', function(){
+                        var layer = layui.layer;
+                        layer.alert('Please enter the date of the query', {
+                            icon: 0,
+                            skin: 'layer-ext-moon'
+                        })
+                    });
+                    return false;
+                }
 
                 table.reload("${id0}", {
                     where: {
                         rider :$("select[name='rider']").val(),
-                        fromTime:$("#fromTime").val(),
-                        toTime:$("#toTime").val(),
+                        sTime: sTime,
+                        eTime: eTime,
                     }
                 });
             };
