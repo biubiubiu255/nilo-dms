@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.dao.ImageDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
 import com.nilo.dms.service.FileService;
@@ -36,6 +37,7 @@ import com.nilo.dms.service.order.PaymentService;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.WaybillPaymentOrder;
+import com.nilo.dms.service.order.model.WaybillPaymentRecord;
 import com.nilo.dms.web.controller.BaseController;
 
 @Controller
@@ -49,9 +51,13 @@ public class CODSignController extends BaseController {
 	private String signKey;
 	@Value("#{configProperties['lipapayMerchantId']}")
 	private String lipapayMerchantId;
-	
+	@Value("#{configProperties['notifyUrl']}")
+	private String notifyUrl;
+	@Value("#{configProperties['returnUrl']}")
+	private String returnUrl;
+
 	private static final String[] suffixNameAllow = new String[] { ".jpg", ".png" };
-	
+
 	@Autowired
 	private OrderService orderService;
 
@@ -59,20 +65,13 @@ public class CODSignController extends BaseController {
 	private FileService fileService;
 
 	@Autowired
-	private RiderOptService riderOptService;
-
-	@Autowired
-	private ImageDao imageDao;
-	
-	@Autowired
 	private PaymentService paymentService;
-	
-	
+
 	@RequestMapping(value = "/sign.html")
 	public String sign() {
 		return "mobile/rider/COD/dshkqs";
 	}
-	
+
 	@RequestMapping(value = "/cashSave.html")
 	@ResponseBody
 	public String cashSave(String logisticsNo, Integer paidType) {
@@ -101,16 +100,17 @@ public class CODSignController extends BaseController {
 		// 写入图片 与签收图片一致
 		try {
 			if (file != null) {
-				//fileService.uploadSignImage(me.getMerchantId(), me.getUserId(), logisticsNo, file.getBytes());
+				fileService.uploadSignImage(me.getMerchantId(), me.getUserId(), logisticsNo, file.getBytes());
 			}
 		} catch (Exception e) {
 			return toJsonErrorMsg(e.getMessage());
 		}
-		// 订单付款标识更新
+
 		String merchantId = me.getMerchantId();
 		DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, logisticsNo);
-		
+		// 订单付款标识更新
 		DeliveryOrderDO deliveryOrderDO = new DeliveryOrderDO();
+
 		deliveryOrderDO.setMerchantId(Long.parseLong(merchantId));
 		deliveryOrderDO.setOrderNo(logisticsNo);
 		deliveryOrderDO.setPaidType(paidType);
@@ -122,15 +122,17 @@ public class CODSignController extends BaseController {
 		}
 
 		// 新增payment order记录
-		
+
 		List<String> waybillNos = new ArrayList<String>();
 		waybillNos.add(logisticsNo);
 		WaybillPaymentOrder paymentOrder = new WaybillPaymentOrder();
+
+		paymentOrder.setId(IdWorker.getInstance().nextId() + "");
 		paymentOrder.setNetworkId(me.getNetworks().get(0));
 		paymentOrder.setPriceAmount(new BigDecimal(deliveryOrder.getNeedPayAmount()));
 		paymentOrder.setRemark(remark);
 		paymentOrder.setWaybillCount(1);
-		
+
 		paymentService.savePaymentOrder(paymentOrder, waybillNos);
 		return toJsonTrueMsg();
 	}
@@ -170,22 +172,30 @@ public class CODSignController extends BaseController {
 		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 		String merchantId = me.getMerchantId();
 		DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
-		
-		
+
+		List<String> waybillNos = new ArrayList<String>();
+		waybillNos.add(orderNo);
+		WaybillPaymentOrder paymentOrder = new WaybillPaymentOrder();
+		paymentOrder.setId(IdWorker.getInstance().nextId() + "");
+		paymentOrder.setNetworkId(me.getNetworks().get(0));
+		paymentOrder.setPriceAmount(new BigDecimal(deliveryOrder.getNeedPayAmount()));
+		paymentOrder.setWaybillCount(1);
+		paymentService.savePaymentOrder(paymentOrder, waybillNos);
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		// map.put("version", "1.4");
 		map.put("merchantId", lipapayMerchantId);
 		map.put("signType", "MD5");
-		map.put("notifyUrl", "http://47.89.177.73:8080");
-		map.put("returnUrl", "http://47.89.177.73:8080");
-		map.put("merchantOrderNo", "test");
-		map.put("amount", "2");
-		map.put("goods[0].goodsName", "test");
+		map.put("notifyUrl", notifyUrl);
+		map.put("returnUrl", returnUrl);
+		map.put("merchantOrderNo", paymentOrder.getId());
+		int amount = (int) paymentOrder.getPriceAmount().doubleValue() * 100;
+		map.put("amount", amount + "");
+		map.put("goods[0].goodsName", orderNo);
 		map.put("goods[0].goodsQuantity", "1");
-		map.put("goods[0].goodsPrice", "22");
+		map.put("goods[0].goodsPrice", amount + "");
 		map.put("goods[0].goodsType", "2");
-		map.put("expirationTime", "1000000");
+		map.put("expirationTime", 1000 * 60 * 30 + "");
 		map.put("sourceType", "B");
 		map.put("currency", "KES");
 
@@ -214,6 +224,7 @@ public class CODSignController extends BaseController {
 	@RequestMapping(value = "/payReturn.html", method = RequestMethod.GET)
 	public String payReturn() {
 
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 		HttpServletRequest request = getRequest();
 		String merchantOrderNo = (String) request.getParameter("merchantOrderNo");
 		String orderId = (String) request.getParameter("orderId");
@@ -228,6 +239,8 @@ public class CODSignController extends BaseController {
 		map.put("orderId", orderId);
 		map.put("signType", signType);
 		map.put("status", status);
+		
+		String logisticsNo = "";
 
 		List<Map.Entry<String, String>> list = new ArrayList<Map.Entry<String, String>>(map.entrySet());
 		Collections.sort(list, new Comparator<Map.Entry<String, String>>() {
@@ -250,13 +263,33 @@ public class CODSignController extends BaseController {
 		String generateSign = DigestUtils.md5Hex(plainText + signKey);
 
 		if (sign != null && sign.equalsIgnoreCase(generateSign)) {
+			// 支付完成
+			WaybillPaymentRecord waybillPaymentRecord = new WaybillPaymentRecord();
+			waybillPaymentRecord.setPaymentOrderId(merchantOrderNo);
+			waybillPaymentRecord.setPaymentOrderId(orderId);
+			if ("SUCCESS".equalsIgnoreCase(status)) {
+				waybillPaymentRecord.setStatus(1);
+			} else {
+				waybillPaymentRecord.setStatus(0);
+			}
+			paymentService.savePaymentOrderRecord(waybillPaymentRecord);
+			paymentService.payRerun(waybillPaymentRecord);
+			List<String> orderNos = paymentService.getOrderNosByPayOrderId(merchantOrderNo);
+			
+			if (orderNos != null) {
+				logisticsNo = orderNos.get(0);
+			}
+
 			// 支付成功
-
+			if (waybillPaymentRecord.getStatus() == 1) {
+				return "redirect:/mobile/rider/sign/toSign.html?logisticsNo=" + logisticsNo;
+			}
 		} else {
-			// 等待支付
+			// 等待成功
+			return "redirect:/mobile/rider/sign/toSign.html?logisticsNo=" + logisticsNo;
 		}
-
-		return "redirect:/ toList ";
+		// 支付异常
+		return "redirect:/mobile/rider/sign/toSign.html?logisticsNo=" + logisticsNo;
 	}
 
 	@ResponseBody

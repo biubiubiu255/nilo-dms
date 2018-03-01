@@ -31,5 +31,6 @@ public interface DeliveryOrderDao extends BaseDao<Long,DeliveryOrderDO> {
 
     Long queryAllNotCancellationCount(@Param("merchantId")Long merchantId,@Param("userId") String userId);
 
+    List<DeliveryOrderDO> selectByOrderNos(@Param("orderNos")List<String> orderNos);
 
 }

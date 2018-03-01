@@ -16,4 +16,6 @@ public interface WaybillPaymentRecordDao {
     int updateByPrimaryKeySelective(WaybillPaymentRecord record);
 
     int updateByPrimaryKey(WaybillPaymentRecord record);
+    
+    WaybillPaymentRecord selectByPaymentOrderId(String orderId);
 }

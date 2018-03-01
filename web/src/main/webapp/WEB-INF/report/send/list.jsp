@@ -134,29 +134,6 @@
                     }
                 });
             };
-            layui.use('upload', function () {
-                var upload = layui.upload;
-                var load;
-                var uploadInst = upload.render({
-                    elem: '#importDeliveryOrder'
-                    , url: '/order/deliveryOrder/importOrderData.html'
-                    , accept: 'file' //普通文件
-                    , exts: 'xls|xlsx'
-                    , before: function () {
-                        load = layer.load(2);
-                    }
-                    , done: function (res) {
-                        layer.close(load);
-                        if (res.result) {
-                            layer.msg('SUCCESS', {icon: 1, time: 2000}, function () {
-                                reloadTable()
-                            });
-                        } else {
-                            layer.msg(res.msg, {icon: 2, time: 2000});
-                        }
-                    }
-                });
-            });
         });
 
     </script>
