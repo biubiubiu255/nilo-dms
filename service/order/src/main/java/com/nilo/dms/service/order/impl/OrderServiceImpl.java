@@ -5,6 +5,7 @@ import static com.nilo.dms.common.Constant.IS_PACKAGE;
 import java.text.MessageFormat;
 import java.util.*;
 
+import com.nilo.dms.common.enums.*;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.*;
@@ -23,13 +24,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.common.enums.CreateDeliveryRequestStatusEnum;
-import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
-import com.nilo.dms.common.enums.OptTypeEnum;
-import com.nilo.dms.common.enums.SerialTypeEnum;
-import com.nilo.dms.common.enums.ServiceTypeEnum;
-import com.nilo.dms.common.enums.TaskStatusEnum;
-import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.exception.SysErrorCode;
@@ -654,7 +648,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
         try {
             NotifyRequest notify = new NotifyRequest();
-
             MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + optRequest.getMerchantId()),
                     MerchantConfig.class);
             InterfaceConfig interfaceConfig = JSON.parseObject(
@@ -665,14 +658,18 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             notify.setOrderNo(orderNo);
             notify.setReferenceNo(referenceNo);
             notify.setMerchantId(optRequest.getMerchantId());
-            notify.setMethod(interfaceConfig.getOp());
+            notify.setBizType(interfaceConfig.getOp());
+            notify.setMethod(MethodEnum.STATUS_UPDATE.getCode());
             notify.setUrl(interfaceConfig.getUrl());
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("waybill_number", orderNo);
             dataMap.put("status", convertResult);
             UserInfo userInfo = userService.findUserInfoByUserId(optRequest.getMerchantId(), optRequest.getOptBy());
             dataMap.put("opt_by", userInfo.getName());
-            dataMap.put("network", optRequest.getNetworkId());
+            if (StringUtil.isNotEmpty(optRequest.getNetworkId())) {
+                DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + optRequest.getMerchantId(), "" + optRequest.getNetworkId()), DistributionNetworkDO.class);
+                dataMap.put("location", networkDO.getName());
+            }
             dataMap.put("remark", optRequest.getRemark());
             String data = JSON.toJSONString(dataMap);
             notify.setData(data);
@@ -687,7 +684,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         private static Map<DeliveryOrderStatusEnum, String> convertRelation = new HashMap<>();
 
         static {
-
+            convertRelation.put(DeliveryOrderStatusEnum.ARRIVED, "170");
             convertRelation.put(DeliveryOrderStatusEnum.DELIVERY, "180");
             convertRelation.put(DeliveryOrderStatusEnum.SEND, "185");
             convertRelation.put(DeliveryOrderStatusEnum.PICK_UP, "210");

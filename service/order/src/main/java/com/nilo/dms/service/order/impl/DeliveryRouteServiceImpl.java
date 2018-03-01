@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -54,6 +55,16 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
 
     @Override
     public void addRoute(OrderOptRequest request) {
+
+        //查询是否到件过
+        if (request.getOptType() == OptTypeEnum.ARRIVE_SCAN) {
+            Iterator<String> iterator = request.getOrderNo().iterator();
+            while (iterator.hasNext()) {
+                String orderNo = iterator.next();
+                DeliveryOrderRouteDO query = deliveryOrderRouteDao.findByType(Long.parseLong(request.getMerchantId()), orderNo, OptTypeEnum.ARRIVE_SCAN.getCode());
+                if (query != null) iterator.remove();
+            }
+        }
 
         DeliveryRouteMessage message = new DeliveryRouteMessage();
         message.setMerchantId(request.getMerchantId());

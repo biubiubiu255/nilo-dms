@@ -62,6 +62,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
 
             DeliveryOrderRequestDO request = deliveryOrderRequestDao.queryById(message.getRequestId());
             if (request == null) {
+                logger.error("CreateDeliveryOrderConsumer failed.request is empty");
                 return;
             }
             createDeliveryOrder(request, deliveryOrderRequestDao);
@@ -97,7 +98,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     //1、保存订单信息
                     DeliveryOrderDO orderHeader = new DeliveryOrderDO();
                     orderHeader.setOrderNo(orderNo);
-                    orderHeader.setCountry(data.getCountry());
+                    orderHeader.setCountry(data.getReceiverInfo().getReceiverCountry());
                     orderHeader.setMerchantId(merchantId);
                     orderHeader.setOrderPlatform(data.getOrderPlatform());
                     if(data.getOrderTime()!= null) {

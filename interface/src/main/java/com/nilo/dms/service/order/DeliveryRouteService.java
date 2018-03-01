@@ -15,4 +15,5 @@ public interface DeliveryRouteService {
     List<DeliveryRoute> queryRoute(String merchantId, String orderNo);
 
     void addRoute(OrderOptRequest request);
+
 }
