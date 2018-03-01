@@ -99,7 +99,7 @@
                 }
                 layer.prompt({title: 'Selected Order Total Amount:'+totalAmount, formType: 3,}, function(text, index){
                     layer.close(index);
-                    cancellation(arr,text);
+                    cancellation(arr,text,totalAmount);
                 });
 
 
@@ -116,13 +116,13 @@
                 });
             };
 
-            function cancellation(arr,transNo) {
+            function cancellation(arr,transNo,totalAmount) {
                 var load = layer.load(2);
                 $.ajax({
                     type: "POST",
                     url: "/order/cancellation/handle.html",
                     dataType: "json",
-                    data: {orderNos: arr,transNo:transNo},
+                    data: {orderNos: arr,transNo:transNo,priceAmount:totalAmount},
                     success: function (data) {
                         if (data.result) {
                             layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {

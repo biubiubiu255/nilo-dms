@@ -3,11 +3,13 @@ package com.nilo.dms.web.controller.order;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.DateUtil;
+import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.dao.DeliveryOrderDao;
 import com.nilo.dms.dao.WaybillPaymentOrderDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
 import com.nilo.dms.service.order.PaymentService;
 import com.nilo.dms.service.order.model.WaybillPaymentOrder;
+import com.nilo.dms.service.order.model.WaybillPaymentRecord;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,8 @@ public class CancellationController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         WaybillPaymentOrder paymentOrder = new WaybillPaymentOrder();
+        String id = IdWorker.getInstance().nextId() + "";
+        paymentOrder.setId(id);
         paymentOrder.setNetworkId(me.getNetworks().get(0));
         paymentOrder.setPaymentTime(DateUtil.getSysTimeStamp());
         paymentOrder.setPriceAmount(new BigDecimal(priceAmount));
@@ -73,6 +77,23 @@ public class CancellationController extends BaseController {
         paymentOrder.setStatus(1);
         paymentService.savePaymentOrder(paymentOrder, Arrays.asList(orderNos));
 
+
+        WaybillPaymentRecord record = new WaybillPaymentRecord();
+        record.setStatus(1);
+        record.setPaymentOrderId(id);
+        record.setThirdPaySn(transNo);
+        paymentService.savePaymentOrderRecord(record);
+
+        //修改运单已经付款金额
+        for (String orderNo : orderNos) {
+
+            DeliveryOrderDO query = deliveryOrderDao.queryByOrderNo(Long.parseLong(me.getMerchantId()),orderNo);
+            DeliveryOrderDO orderDO = new DeliveryOrderDO();
+            orderDO.setMerchantId(Long.parseLong(me.getMerchantId()));
+            orderDO.setOrderNo(orderNo);
+            orderDO.setAlreadyPaid(query.getNeedPayAmount());
+            deliveryOrderDao.update(orderDO);
+        }
         return toJsonTrueMsg();
     }
 
