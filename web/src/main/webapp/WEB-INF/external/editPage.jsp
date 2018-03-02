@@ -6,12 +6,20 @@
     
         <input type="hidden" name="id" value="${resultDate.id}">
         <div class="layui-form-item">
-            <label class="layui-form-label">OrderNo：${resultDate.orderNo}</label>
+            <label class="layui-form-label">PackageNo：${resultDate.orderNo}</label>
         </div>
+
         <div class="layui-form-item">
-            <label class="layui-form-label">Type</label>
+            <label class="layui-form-label">ClientName</label>
             <div class="layui-input-block">
-                <input type="text" name="type" value="${resultData.type}" autocomplete="off" class="layui-input">
+                <input type="text" name="client_name" autocomplete="off" value="${resultData.clientName}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">ClientName</label>
+            <div class="layui-input-block">
+                <input type="text" name="creator" autocomplete="off" value="${resultData.creator}" class="layui-input">
             </div>
         </div>
 
@@ -23,7 +31,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">Notes</label>
+            <label class="layui-form-label">Remark</label>
             <div class="layui-input-block">
                 <input type="text" name="notes" value="${resultData.notes}" autocomplete="off" class="layui-input">
             </div>

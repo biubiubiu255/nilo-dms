@@ -65,6 +65,8 @@ public class ExternalController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/addInfo.html", method = RequestMethod.POST)
     public String addExternalInfo(WaybillExternalDo external) {
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();  //主要的，主体
+        if (external.getCreator()==null || external.getCreator().equals("")) external.setCreator(me.getUserName());
     	externalService.addExternal(external);
     	return toJsonTrueMsg();
     }

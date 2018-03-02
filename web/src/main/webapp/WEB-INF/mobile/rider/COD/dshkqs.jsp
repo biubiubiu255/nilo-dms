@@ -96,9 +96,12 @@
 						paidType : 0
 					}, false, function(res) {
 						if(res.result){
-							alert('success,plase to sign logistics');
-							alert(logisticsNo);
-							window.location.href="/mobile/rider/sign/toSign.html?logisticsNo="+logisticsNo;
+							// alert('success,plase to sign logistics');
+							showInfo("success,will foward to sign");
+							//alert(logisticsNo);
+                            setTimeout(function(){
+                                window.location.href="/mobile/rider/sign/toSign.html?logisticsNo="+logisticsNo;
+                            }, 2000);
 						}else{
 							showWarning("Sorry,cash pay error!");
 						}

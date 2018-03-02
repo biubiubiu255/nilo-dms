@@ -5,15 +5,10 @@
     <form id="myForm" class="layui-form" action="">
         <!-- <input type="hidden" name="merchantId" value="0"> -->
 
-        <div class="layui-form-item">
-            <label class="layui-form-label">Type</label>
-            <div class="layui-input-block">
-                <input type="text" name="Type" autocomplete="off" class="layui-input">
-            </div>
-        </div>
+
 
         <div class="layui-form-item">
-            <label class="layui-form-label">OrderNo</label>
+            <label class="layui-form-label">PackageNo：</label>
             <div class="layui-input-block">
                 <input type="text" name="OrderNo" autocomplete="off" class="layui-input">
             </div>
@@ -28,19 +23,12 @@
         <div class="layui-form-item">
             <label class="layui-form-label">ClientName</label>
             <div class="layui-input-block">
-                <input type="text" name="client_name" autocomplete="off" class="layui-input">
+                <input type="text" name="client_name" autocomplete="off" class="layui-input" placeholder="cuckoo">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">Creator</label>
-            <div class="layui-input-block">
-                <input type="text" name="creator" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">Notes</label>
+            <label class="layui-form-label">Remark</label>
             <div class="layui-input-block">
                 <input type="text" name="notes" autocomplete="off" class="layui-input">
             </div>

@@ -55,6 +55,7 @@
         mobile.initSubmitForm({
             formId:'delivery-form'
             ,mbObject:mobile
+            ,showMsg : false
             ,postUrl:'/mobile/send/submit.html'
             ,beforeSubmit:function () {
                 var scaned_array = [];
