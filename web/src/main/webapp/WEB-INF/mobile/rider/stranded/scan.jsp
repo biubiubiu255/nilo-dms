@@ -70,6 +70,7 @@
     		callback: function (data) {
                 if (data.result) {
                     showInfo('submit success');
+                    mobile.paginate();
                 } else {
                     showError(data.msg);;
                 }

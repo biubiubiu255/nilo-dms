@@ -52,6 +52,7 @@
                 if (data.result) {
                     showError('Success');
                     del();
+                    mobile.paginate();
                 } else {
                     showError(data.msg)
                 }

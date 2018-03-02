@@ -124,6 +124,7 @@
                 console.log("zzzzzzzzzzzzzzzzzzzzzz")
                 // addTr2('tab', -1);
                 delTr(fuxuan);
+                mobile.paginate();
             }
         });
     }
