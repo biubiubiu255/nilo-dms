@@ -25,6 +25,7 @@ import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.service.org.StaffService;
 import com.nilo.dms.service.org.model.Staff;
 import com.nilo.dms.service.system.RedisUtil;
+import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.service.system.model.InterfaceConfig;
 import com.nilo.dms.service.system.model.MerchantConfig;
@@ -107,7 +108,8 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
                     }
                     case PROBLEM: {
                         AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()),orderNo);
-                        dataMap.put("type", abnormalOrderDO.getAbnormalType());
+                        String abnormalTypeDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.ABNORMAL_ORDER_TYPE, abnormalOrderDO.getAbnormalType());
+                        dataMap.put("type", abnormalTypeDesc);
                         break;
                     }
                     case RECEIVE: {
@@ -130,7 +132,6 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
                 dataMap.put("status", convertResult);
                 dataMap.put("tract_time", DateUtil.getSysTimeStamp());
                 dataMap.put("remark", request.getRemark());
-
                 String data = JSON.toJSONString(dataMap);
                 notify.setData(data);
                 notify.setSign(createSign(merchantConfig.getKey(), data));

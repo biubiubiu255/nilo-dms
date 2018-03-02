@@ -101,19 +101,19 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setCountry(data.getReceiverInfo().getReceiverCountry());
                     orderHeader.setMerchantId(merchantId);
                     orderHeader.setOrderPlatform(data.getOrderPlatform());
-                    if(data.getOrderTime()!= null) {
+                    if (data.getOrderTime() != null) {
                         orderHeader.setOrderTime(data.getOrderTime());
-                    }else{
+                    } else {
                         orderHeader.setOrderTime(DateUtil.getSysTimeStamp());
                     }
 
-                    if(StringUtil.equals(data.getOrderType(),"1")){
+                    if (StringUtil.equals(data.getOrderType(), "1")) {
                         orderHeader.setOrderType("FBK");
                     }
-                    if(StringUtil.equals(data.getOrderType(),"2")){
+                    if (StringUtil.equals(data.getOrderType(), "2")) {
                         orderHeader.setOrderType("GS");
                     }
-                    if(StringUtil.equals(data.getOrderType(),"0")){
+                    if (StringUtil.equals(data.getOrderType(), "0")) {
                         orderHeader.setOrderType("DS");
                     }
 
@@ -135,6 +135,9 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setRelationOrderNo(data.getRelationOrderNo());
                     orderHeader.setDeliveryFee(data.getDeliveryFee());
                     orderHeader.setIsCod(data.getIsCod());
+                    if (data.getNeedPayAmount() != null) {
+                        data.setIsCod("1");
+                    }
                     orderHeader.setNotes(data.getNotes());
                     orderHeader.setRemark(data.getRemark());
 
