@@ -36,7 +36,6 @@
                 <th lay-data="{field:'weight', width:100,edit:'text'}">Weight</th>
                 <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
                 <th lay-data="{field:'orderType', width:100}">OrderType</th>
-                <th lay-data="{field:'country', width:100}">Country</th>
                 <th lay-data="{title:'Opt',fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
             </tr>
             </thead>
