@@ -56,6 +56,7 @@ public class BaseController {
         String userAgentStr = request.getHeader("user-agent");
         UserAgent ua = UserAgent.parseUserAgentString(userAgentStr);
         return ua.getOperatingSystem().isMobileDevice();
+
     }
 
     protected ServletContext getServletContext() {

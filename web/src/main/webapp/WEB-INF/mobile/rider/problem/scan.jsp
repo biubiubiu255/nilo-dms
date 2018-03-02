@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+ <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
@@ -31,10 +31,8 @@
     		postUrl : '/mobile/rider/problem/save.html' ,
     		callback: function (data) {
     			if (data.result) {
-    		        showInfo(null)
-                    // alert("978")
+    		        showInfo("commit sussess");
     		    }else{
-    			    // alert("000")
                 }
 			}
     	});
@@ -77,7 +75,7 @@
 		                   </c:forEach>
                         </select>
                     </li>
-                    <li><input type='text' placeholder="Memo" required="required" property_name="problem_memo" set_attr="placeholder" maxlength='100' class='input_value i18n-input' name='memo' /></li>
+                    <li><input type='text' placeholder="Memo" property_name="problem_memo" set_attr="placeholder" maxlength='100' class='input_value i18n-input' name='memo' /></li>
                 </ul>
                 <div class="clear"></div>
             </div>
@@ -87,7 +85,6 @@
         </form>
 
     </div>
-
 
 
 
