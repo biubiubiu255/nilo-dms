@@ -35,6 +35,7 @@
         mobile.initSubmitForm({
             formId:'packing-form'
             ,mbObject:mobile
+            ,showMsg : false
             ,postUrl:'/mobile/package/submit.html'
             ,beforeSubmit:function () {
                 var scaned_array = [];

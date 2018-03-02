@@ -28,11 +28,13 @@
     	mobile.initSubmitForm({
     		formId: 'problem-form' ,
     		mbObject: mobile ,
+            showMsg : false,
     		postUrl : '/mobile/rider/problem/save.html' ,
     		callback: function (data) {
-    			if (data.result) {
-    		        showInfo("commit sussess");
-    		    }else{
+                if (data.result) {
+                    showInfo('submit success');
+                } else {
+                    showError(data.msg);;
                 }
 			}
     	});

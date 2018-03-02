@@ -46,7 +46,8 @@
         mobile.initSubmitForm({
            formId:'unpackage-form'
             ,mbObject:mobile
-           ,postUrl:'/mobile/network/unpackage/save.html'
+            ,showMsg : false
+            ,postUrl:'/mobile/network/unpackage/save.html'
             ,callback:function (data) {
 
                 if (data.result==true) {

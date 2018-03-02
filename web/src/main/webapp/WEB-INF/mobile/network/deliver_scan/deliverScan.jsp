@@ -32,9 +32,10 @@
         var code_array = [];
         mobile.initSubmitForm({
            formId:'delivery-form'
-            ,mbObject:mobile
+           ,mbObject:mobile
+           ,showMsg : false
            ,postUrl:'/mobile/deliver/submit.html'
-            ,beforeSubmit:function () {
+           ,beforeSubmit:function () {
                var scaned_array = [];
                 var checkboxs = $('#delivery-form').find('input:checked');
                 for(var i=0;i<checkboxs.length;i++){
