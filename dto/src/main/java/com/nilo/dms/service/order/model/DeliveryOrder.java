@@ -80,17 +80,17 @@ public class DeliveryOrder {
 
     private String allocatedRider;
     private DeliveryOrderPaidTypeEnum paidType;
-    
+
 
     public DeliveryOrderPaidTypeEnum getPaidType() {
-		return paidType;
-	}
+        return paidType;
+    }
 
-	public void setPaidType(DeliveryOrderPaidTypeEnum paidType) {
-		this.paidType = paidType;
-	}
+    public void setPaidType(DeliveryOrderPaidTypeEnum paidType) {
+        this.paidType = paidType;
+    }
 
-	public String getAllocatedRider() {
+    public String getAllocatedRider() {
         return allocatedRider;
     }
 
@@ -99,8 +99,9 @@ public class DeliveryOrder {
     }
 
     public Double getNeedPayAmount() {
-        return needPayAmount;
+        return needPayAmount == null ? 0d : needPayAmount;
     }
+
     @JSONField(name = "need_pay_amount")
     public void setNeedPayAmount(Double needPayAmount) {
         this.needPayAmount = needPayAmount;
@@ -155,8 +156,9 @@ public class DeliveryOrder {
     }
 
     public boolean isPrinted() {
-        return printTimes==null?false:true;
+        return printTimes == null ? false : true;
     }
+
     public Integer getPrintTimes() {
         return printTimes;
     }
@@ -208,6 +210,7 @@ public class DeliveryOrder {
     public Double getHigh() {
         return high;
     }
+
     @JSONField(name = "height")
     public void setHigh(Double high) {
         this.high = high;
@@ -232,6 +235,7 @@ public class DeliveryOrder {
     public String getWarehouseId() {
         return warehouseId;
     }
+
     @JSONField(name = "warehouse_id")
     public void setWarehouseId(String warehouseId) {
         this.warehouseId = warehouseId;
@@ -257,6 +261,7 @@ public class DeliveryOrder {
     public String getChannel() {
         return channel;
     }
+
     @JSONField(name = "delivery_type")
     public void setChannel(String channel) {
         this.channel = channel;
@@ -289,6 +294,7 @@ public class DeliveryOrder {
     public String getCarrierName() {
         return carrierName;
     }
+
     @JSONField(name = "carrier_name")
     public void setCarrierName(String carrierName) {
         this.carrierName = carrierName;
@@ -305,6 +311,7 @@ public class DeliveryOrder {
     public Double getDeliveryFee() {
         return deliveryFee;
     }
+
     @JSONField(name = "shipping_fee")
     public void setDeliveryFee(Double deliveryFee) {
         this.deliveryFee = deliveryFee;
@@ -314,6 +321,7 @@ public class DeliveryOrder {
     public String getIsCod() {
         return isCod;
     }
+
     @JSONField(name = "is_pod")
     public void setIsCod(String isCod) {
         this.isCod = isCod;
@@ -347,6 +355,7 @@ public class DeliveryOrder {
     public Double getWeight() {
         return weight;
     }
+
     @JSONField(name = "weight")
     public void setWeight(Double weight) {
         this.weight = weight;
@@ -355,6 +364,7 @@ public class DeliveryOrder {
     public String getGoodsType() {
         return goodsType;
     }
+
     @JSONField(name = "goods_type_id")
     public void setGoodsType(String goodsType) {
         this.goodsType = goodsType;
@@ -363,6 +373,7 @@ public class DeliveryOrder {
     public DeliveryOrderStatusEnum getStatus() {
         return status;
     }
+
     @JSONField(name = "order_status")
     public void setStatus(DeliveryOrderStatusEnum status) {
         this.status = status;
@@ -371,6 +382,7 @@ public class DeliveryOrder {
     public Double getTotalPrice() {
         return totalPrice;
     }
+
     @JSONField(name = "order_amount")
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
@@ -379,6 +391,7 @@ public class DeliveryOrder {
     public SenderInfo getSenderInfo() {
         return senderInfo;
     }
+
     @JSONField(name = "sender_info")
     public void setSenderInfo(SenderInfo senderInfo) {
         this.senderInfo = senderInfo;
@@ -387,6 +400,7 @@ public class DeliveryOrder {
     public String getOrderNo() {
         return orderNo;
     }
+
     @JSONField(name = "waybill_number")
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
@@ -395,6 +409,7 @@ public class DeliveryOrder {
     public String getOrderType() {
         return orderType;
     }
+
     @JSONField(name = "logistics_type")
     public void setOrderType(String orderType) {
         this.orderType = orderType;
@@ -404,6 +419,7 @@ public class DeliveryOrder {
     public String getReferenceNo() {
         return referenceNo;
     }
+
     @JSONField(name = "client_order_sn")
     public void setReferenceNo(String referenceNo) {
         this.referenceNo = referenceNo;
@@ -412,6 +428,7 @@ public class DeliveryOrder {
     public Long getOrderTime() {
         return orderTime;
     }
+
     @JSONField(name = "add_time")
     public void setOrderTime(Long orderTime) {
         this.orderTime = orderTime;
@@ -444,6 +461,7 @@ public class DeliveryOrder {
     public String getOrderPlatform() {
         return orderPlatform;
     }
+
     @JSONField(name = "client_name")
     public void setOrderPlatform(String orderPlatform) {
         this.orderPlatform = orderPlatform;
@@ -452,6 +470,7 @@ public class DeliveryOrder {
     public ReceiverInfo getReceiverInfo() {
         return receiverInfo;
     }
+
     @JSONField(name = "receiver_info")
     public void setReceiverInfo(ReceiverInfo receiverInfo) {
         this.receiverInfo = receiverInfo;
@@ -461,6 +480,7 @@ public class DeliveryOrder {
     public List<GoodsInfo> getGoodsInfoList() {
         return goodsInfoList;
     }
+
     @JSONField(name = "order_items_list")
     public void setGoodsInfoList(List<GoodsInfo> goodsInfoList) {
         this.goodsInfoList = goodsInfoList;

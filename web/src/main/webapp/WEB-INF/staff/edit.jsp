@@ -8,7 +8,7 @@
 %>
 <div class="box-body">
     <form id="myForm" class="layui-form" action="">
-
+        <input type="text" value="${staff.userId}" name="userId" hidden="true">
         <input type="text" value="${staff.staffId}" name="staffId" hidden="true">
         <div class="layui-form-item">
             <div class="layui-inline">

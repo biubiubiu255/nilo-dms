@@ -4,10 +4,8 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.WaybillStatementDao;
 import com.nilo.dms.dao.dataobject.WaybillStatementDo;
-import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,10 +32,10 @@ public class StatementController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-        public String getList(Integer sTime, Integer eTime) {
-        if (sTime==null || eTime==null) {
+    public String getList(Integer sTime, Integer eTime) {
+        if (sTime == null || eTime == null) {
             sTime = 0;
-            eTime = (int)(System.currentTimeMillis()/1000);
+            eTime = (int) (System.currentTimeMillis() / 1000);
             System.out.println("时间：" + eTime);
         }
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
@@ -46,12 +44,12 @@ public class StatementController extends BaseController {
 
         List<WaybillStatementDo> list = new ArrayList<WaybillStatementDo>();
 
-        list = waybillStatementDao.queryAllWaybillStatement( sTime, eTime);
+        list = waybillStatementDao.queryAllWaybillStatement(sTime, eTime);
         //list = waybillStatementDao.queryAllWaybillStatement( 1423094400, 1519689600);
 
         Pagination page = getPage();
 
-        if (list==null) {
+        if (list == null) {
             page.setTotalCount(0);
             return toPaginationLayUIData(page, null);
         }

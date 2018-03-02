@@ -12,6 +12,7 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.dataobject.StaffDO;
+import com.nilo.dms.dao.dataobject.UserInfoDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.LoginInfo;
 import com.nilo.dms.service.model.User;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -117,9 +119,18 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    @Transactional
     public void updateStaff(Staff staff) {
         StaffDO staffDO = convert(staff);
         staffDao.update(staffDO);
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setMerchantId(staff.getMerchantId());
+        userInfo.setUserId(staff.getUserId());
+        userInfo.setName(staff.getRealName());
+        userInfo.setPhone(staff.getPhone());
+        userInfo.setEmail(staff.getEmail());
+        userService.updateUserInfo(userInfo);
     }
 
     @Override
@@ -163,6 +174,7 @@ public class StaffServiceImpl implements StaffService {
         Staff staff = new Staff();
         staff.setMerchantId("" + staffDO.getMerchantId());
         staff.setCompanyId("" + staffDO.getCompanyId());
+        staff.setUserId("" + staffDO.getUserId());
         if (StringUtil.isNotEmpty(staffDO.getDepartmentId())) {
             Department department = departmentService.queryById("" + staffDO.getCompanyId(), staffDO.getDepartmentId());
             staff.setDepartmentName(department.getDepartmentName());
@@ -205,7 +217,9 @@ public class StaffServiceImpl implements StaffService {
         }
         if (staff.isRider() != null) {
             staffDO.setIsRider(staff.isRider() ? 1 : 0);
-
+        }
+        if (StringUtil.isNotEmpty(staff.getUserId())) {
+            staffDO.setUserId(Long.parseLong(staff.getUserId()));
         }
         staffDO.setBirthday(staff.getBirthday());
         staffDO.setEmail(staff.getEmail());

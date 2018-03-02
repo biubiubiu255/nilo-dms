@@ -1,12 +1,10 @@
 package com.nilo.dms.service.order.impl;
 
-import com.nilo.dms.common.enums.DelayStatusEnum;
-import com.nilo.dms.common.enums.OptTypeEnum;
-import com.nilo.dms.common.enums.TaskStatusEnum;
-import com.nilo.dms.common.enums.TaskTypeEnum;
+import com.nilo.dms.common.enums.*;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.DateUtil;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderDelayDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
 import com.nilo.dms.service.order.*;
@@ -210,15 +208,17 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         update.setStatus(DelayStatusEnum.COMPLETE.getCode());
         deliveryOrderDelayDao.update(update);
 
-        AbnormalOrder abnormalOrder = new AbnormalOrder();
-        abnormalOrder.setOrderNo(param.getOrderNo());
-        abnormalOrder.setAbnormalType(param.getAbnormalType());
-        abnormalOrder.setCreatedBy(param.getOptBy());
-        abnormalOrder.setMerchantId(param.getMerchantId());
-        abnormalOrder.setReferenceNo(deliveryOrder.getReferenceNo());
-        abnormalOrder.setRemark(param.getRemark());
-        //新增异常件
-        abnormalOrderService.addAbnormalOrder(abnormalOrder);
+        if (!StringUtil.equals(param.getAbnormalType(), AbnormalHandleTypeEnum.RESEND.getCode())) {
+            AbnormalOrder abnormalOrder = new AbnormalOrder();
+            abnormalOrder.setOrderNo(param.getOrderNo());
+            abnormalOrder.setAbnormalType(param.getAbnormalType());
+            abnormalOrder.setCreatedBy(param.getOptBy());
+            abnormalOrder.setMerchantId(param.getMerchantId());
+            abnormalOrder.setReferenceNo(deliveryOrder.getReferenceNo());
+            abnormalOrder.setRemark(param.getRemark());
+            //新增异常件
+            abnormalOrderService.addAbnormalOrder(abnormalOrder);
+        }
 
     }
 

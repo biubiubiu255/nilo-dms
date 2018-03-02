@@ -63,6 +63,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(abnormalOrder.getOrderNo());
         optRequest.setOrderNo(orderNoList);
+        optRequest.setRemark(abnormalOrder.getRemark());
         orderService.handleOpt(optRequest);
 
     }

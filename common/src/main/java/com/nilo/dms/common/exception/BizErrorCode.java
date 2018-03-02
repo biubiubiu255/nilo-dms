@@ -1,8 +1,6 @@
 
 package com.nilo.dms.common.exception;
 
-import org.junit.Test;
-
 /**
  * Created by ronny on 2017/8/23.
  */
@@ -109,7 +107,7 @@ public enum BizErrorCode implements ErrorCode {
         this.description = description;
         this.code = code;
     }
-    
+
     @Override
     public ExceptionType getType() {
         return ExceptionType.BIZ_VERIFY_ERROR;

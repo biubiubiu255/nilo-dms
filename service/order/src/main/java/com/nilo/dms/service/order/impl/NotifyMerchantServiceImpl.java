@@ -8,9 +8,11 @@ import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.AbnormalOrderDao;
 import com.nilo.dms.dao.NotifyDao;
 import com.nilo.dms.dao.ThirdDriverDao;
 import com.nilo.dms.dao.ThirdExpressDao;
+import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.NotifyDO;
 import com.nilo.dms.service.UserService;
@@ -19,10 +21,9 @@ import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.NotifyMerchantService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
-import com.nilo.dms.service.order.model.NotifyRequest;
-import com.nilo.dms.service.order.model.OrderOptRequest;
-import com.nilo.dms.service.order.model.Task;
+import com.nilo.dms.service.order.model.*;
+import com.nilo.dms.service.org.StaffService;
+import com.nilo.dms.service.org.model.Staff;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.service.system.model.InterfaceConfig;
@@ -57,12 +58,11 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
     @Autowired
     private UserService userService;
     @Autowired
+    private StaffService staffService;
+    @Autowired
     private TaskService taskService;
     @Autowired
-    private ThirdExpressDao thirdExpressDao;
-    @Autowired
-    private ThirdDriverDao thirdDriverDao;
-
+    private AbnormalOrderDao abnormalOrderDao;
     @Override
     public void updateStatus(OrderOptRequest request) {
         OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(request.getMerchantId(),
@@ -106,6 +106,8 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
                         break;
                     }
                     case PROBLEM: {
+                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()),orderNo);
+                        dataMap.put("type", abnormalOrderDO.getAbnormalType());
                         break;
                     }
                     case RECEIVE: {
@@ -127,6 +129,7 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
                 dataMap.put("waybill_number", orderNo);
                 dataMap.put("status", convertResult);
                 dataMap.put("tract_time", DateUtil.getSysTimeStamp());
+                dataMap.put("remark", request.getRemark());
 
                 String data = JSON.toJSONString(dataMap);
                 notify.setData(data);

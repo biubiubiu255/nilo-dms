@@ -10,6 +10,8 @@ public class Staff {
 
     private String merchantId;
 
+    private String userId;
+
     private String staffId;
 
     private String companyId;
@@ -53,6 +55,15 @@ public class Staff {
     private String address;
 
     private Boolean isRider;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public Integer getIsRiderCode() {
         return isRider == true ? 1 : 0;
     }
