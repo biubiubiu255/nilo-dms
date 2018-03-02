@@ -233,7 +233,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         abnormalOrder.setMerchantId("" + abnormalOrderDO.getMerchantId());
         abnormalOrder.setAbnormalNo(abnormalOrderDO.getAbnormalNo());
         abnormalOrder.setAbnormalType(abnormalOrderDO.getAbnormalType());
-        String abnormalTypeDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), "abnormal_order_type", abnormalOrderDO.getAbnormalType());
+        String abnormalTypeDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.ABNORMAL_ORDER_TYPE, abnormalOrderDO.getAbnormalType());
         abnormalOrder.setAbnormalTypeDesc(abnormalTypeDesc == "" ? abnormalOrderDO.getAbnormalType() : abnormalTypeDesc);
         abnormalOrder.setRemark(abnormalOrderDO.getRemark());
         abnormalOrder.setOrderNo(abnormalOrderDO.getOrderNo());

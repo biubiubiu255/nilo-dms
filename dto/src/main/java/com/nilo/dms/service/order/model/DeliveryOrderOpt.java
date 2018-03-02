@@ -18,10 +18,6 @@ public class DeliveryOrderOpt {
 
     private String optBy;
 
-    private Integer fromStatus;
-
-    private Integer toStatus;
-
     private String optName;
 
     private Long createdTime;
@@ -62,14 +58,6 @@ public class DeliveryOrderOpt {
         this.optName = optName;
     }
 
-    public String getFromStatusDesc() {
-        return DeliveryOrderStatusEnum.getEnum(fromStatus).getDesc();
-    }
-
-    public String getToStatusDesc() {
-        return DeliveryOrderStatusEnum.getEnum(toStatus).getDesc();
-    }
-
     public String getOpt() {
         return opt;
     }
@@ -92,22 +80,6 @@ public class DeliveryOrderOpt {
 
     public void setOptBy(String optBy) {
         this.optBy = optBy;
-    }
-
-    public Integer getFromStatus() {
-        return fromStatus;
-    }
-
-    public void setFromStatus(Integer fromStatus) {
-        this.fromStatus = fromStatus;
-    }
-
-    public Integer getToStatus() {
-        return toStatus;
-    }
-
-    public void setToStatus(Integer toStatus) {
-        this.toStatus = toStatus;
     }
 
     public String getId() {

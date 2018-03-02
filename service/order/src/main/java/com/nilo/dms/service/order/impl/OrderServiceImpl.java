@@ -314,7 +314,8 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                     notifyMerchantService.updateStatus(optRequest);
                     // 记录物流轨迹
                     deliveryRouteService.addRoute(optRequest);
-
+                    // 添加操作记录
+                    orderOptLogService.addOptLog(optRequest);
                 } catch (Exception e) {
                     logger.error("handleOpt Failed. Data:{}", optRequest, e);
                     transactionStatus.setRollbackOnly();

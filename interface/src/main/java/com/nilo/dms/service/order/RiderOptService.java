@@ -19,19 +19,11 @@ public interface RiderOptService {
 
     void abnormal(AbnormalParam param);
 
-    /**
-     * 延迟
-     *
-     * @param param
-     */
     void delay(DelayParam param);
 
-    
-    
-    /**
-     * 滞留
-     *
-     * @param param
-     */
     void detain(DelayParam param);
+
+    void resend(DelayParam param);
+
+
 }

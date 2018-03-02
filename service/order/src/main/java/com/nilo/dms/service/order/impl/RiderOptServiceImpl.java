@@ -208,19 +208,28 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         update.setStatus(DelayStatusEnum.COMPLETE.getCode());
         deliveryOrderDelayDao.update(update);
 
-        if (!StringUtil.equals(param.getAbnormalType(), AbnormalHandleTypeEnum.RESEND.getCode())) {
-            AbnormalOrder abnormalOrder = new AbnormalOrder();
-            abnormalOrder.setOrderNo(param.getOrderNo());
-            abnormalOrder.setAbnormalType(param.getAbnormalType());
-            abnormalOrder.setCreatedBy(param.getOptBy());
-            abnormalOrder.setMerchantId(param.getMerchantId());
-            abnormalOrder.setReferenceNo(deliveryOrder.getReferenceNo());
-            abnormalOrder.setRemark(param.getRemark());
-            //新增异常件
-            abnormalOrderService.addAbnormalOrder(abnormalOrder);
-        }
-
+        AbnormalOrder abnormalOrder = new AbnormalOrder();
+        abnormalOrder.setOrderNo(param.getOrderNo());
+        abnormalOrder.setAbnormalType(param.getAbnormalType());
+        abnormalOrder.setCreatedBy(param.getOptBy());
+        abnormalOrder.setMerchantId(param.getMerchantId());
+        abnormalOrder.setReferenceNo(deliveryOrder.getReferenceNo());
+        abnormalOrder.setRemark(param.getRemark());
+        //新增异常件
+        abnormalOrderService.addAbnormalOrder(abnormalOrder);
     }
 
+    @Override
+    @Transactional
+    public void resend(DelayParam param) {
 
+        //查询运单信息
+        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(param.getMerchantId(), param.getOrderNo());
+
+        DeliveryOrderDelayDO update = new DeliveryOrderDelayDO();
+        update.setOrderNo(param.getOrderNo());
+        update.setMerchantId(Long.parseLong(param.getMerchantId()));
+        update.setStatus(DelayStatusEnum.COMPLETE.getCode());
+        deliveryOrderDelayDao.update(update);
+    }
 }

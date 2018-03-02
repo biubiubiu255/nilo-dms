@@ -55,7 +55,7 @@
         <thead>
         <tr>
             <th lay-data="{fixed: 'left',field:'orderNo', width:250}">OrderNo</th>
-            <th lay-data="{field:'delayReason', width:150}">Reason Type</th>
+            <th lay-data="{field:'delayReason', width:300}">Type</th>
             <th lay-data="{field:'statusDesc', width:150}">Status</th>
             <th lay-data="{field:'allowTimes', width:150}">AllowTimes</th>
             <th lay-data="{field:'delayTimes', width:150}">DelayTimes</th>
@@ -70,7 +70,10 @@
 
     <script type="text/html" id="barDemo">
         <shiro:hasPermission name="400072">
-            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="handle">Handle</a>
+            <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="problem">Problem</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="400073">
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="resend">Resend</a>
         </shiro:hasPermission>
     </script>
 </div>
@@ -100,8 +103,11 @@
                     var orderNo = data.orderNo;
                     layer.msg(orderNo);
                 }
-                if (obj.event === 'handle') {
-                    handlerDelay(data.orderNo);
+                if (obj.event === 'problem') {
+                    problem(data.orderNo);
+                }
+                if (obj.event === 'resend') {
+                    resend(data.orderNo);
                 }
             });
 
@@ -125,9 +131,9 @@
             });
         };
 
-        function handlerDelay(orderNo) {
+        function problem(orderNo) {
             $.ajax({
-                url: "/order/delay/detainPage.html",
+                url: "/order/delay/problemPage.html",
                 type: 'GET',
                 data: {"orderNo": orderNo},
                 dataType: 'text',
@@ -141,6 +147,29 @@
                             reloadCurrentPage();
                         }
                     })
+                }
+            });
+        }
+
+        function resend(orderNo) {
+            var load = layer.load(2);
+            $.ajax({
+                url: "/order/delay/resend.html",
+                type: 'POST',
+                data: {"orderNo": orderNo},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.result) {
+                        layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
+                            layer.closeAll();
+                            reloadCurrentPage();
+                        });
+                    } else {
+                        layer.msg(data.msg, {icon: 2, time: 2000});
+                    }
+                },
+                complete: function () {
+                    layer.close(load);
                 }
             });
         }

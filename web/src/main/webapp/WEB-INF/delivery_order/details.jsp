@@ -79,9 +79,9 @@
     <div class="layui-row">
         Trace:
         <hr>
-        <c:forEach items="${orderRouteList}" var="memo" varStatus="status">
-            <span><lp:formatTime time="${memo.createdTime }"
-                           pattern="yyyy-MM-dd hh:mm:ss"/> ${memo.memoEN}</span><br>
+        <c:forEach items="${orderRouteList}" var="route" varStatus="status">
+            <span><lp:formatTime time="${route.createdTime }"
+                           pattern="yyyy-MM-dd hh:mm:ss"/> ${route.opt}</span><br>
         </c:forEach>
     </div>
 </div>

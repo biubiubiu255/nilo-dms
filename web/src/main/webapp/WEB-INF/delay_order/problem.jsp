@@ -16,7 +16,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label layui-form-text">Reason:</label>
+            <label class="layui-form-label layui-form-text">Type:</label>
             <div class="layui-input-inline">
                 <select name="abnormalType" lay-filter="abnormalType" lay-verify="required" lay-search=""
                         style="display: none">
@@ -54,7 +54,7 @@
                 var load = layer.load(2);
                 $.ajax({
                     type: "POST",
-                    url: "/order/delay/detain.html",
+                    url: "/order/delay/problem.html",
                     dataType: "json",
                     data: $("#myForm").serialize(),
                     success: function (data) {
