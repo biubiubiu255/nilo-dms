@@ -42,7 +42,7 @@
             Loading NO: ${loading.loadingNo}
         </div>
         <div class="col-xs-3">
-            Carrier Name: ${loading.carrier}
+            Name: ${loading.carrier}
         </div>
         <div class="col-xs-3">
             Rider :${loading.riderName}

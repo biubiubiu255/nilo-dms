@@ -78,6 +78,16 @@ public class ArriveScanController extends BaseController {
             orderNos.add(details.getOrderNo());
         }
         list = orderService.queryByOrderNos(merchantId, orderNos);
+
+        for (DeliveryOrder o : list) {
+            for (WaybillScanDetailsDO d : scanDetailsDOList) {
+                if (StringUtil.equals(d.getOrderNo(), o.getOrderNo()) && d.getWeight() != null) {
+                    o.setWeight(d.getWeight());
+                    break;
+                }
+            }
+        }
+
         pagination.setTotalCount(list.size());
         return toPaginationLayUIData(pagination, list);
     }
