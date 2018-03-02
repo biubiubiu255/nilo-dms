@@ -147,14 +147,22 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
             default:
                 break;
         }
+
+        for(String orderNo: request.getOrderNo()) {
+            DeliveryOrderOptDO optLog = new DeliveryOrderOptDO();
+            optLog.setMerchantId(Long.parseLong(request.getMerchantId()));
+            optLog.setOptBy(request.getOptBy());
+            optLog.setOpt(request.getOptType().getCode());
+            optLog.setRemark(request.getRemark());
+            optLog.setOrderNo(orderNo);
+            deliveryOrderOptDao.insert(optLog);
+        }
     }
 
     private DeliveryOrderOpt convert(DeliveryOrderOptDO d) {
         DeliveryOrderOpt opt = new DeliveryOrderOpt();
         opt.setOptBy(d.getOptBy());
         opt.setOpt(d.getOpt());
-        opt.setToStatus(d.getToStatus());
-        opt.setFromStatus(d.getFromStatus());
         opt.setMerchantId("" + d.getMerchantId());
         opt.setId("" + d.getId());
         opt.setOrderNo(d.getOrderNo());

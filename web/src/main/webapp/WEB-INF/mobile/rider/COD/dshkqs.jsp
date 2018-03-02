@@ -90,13 +90,18 @@
 						return;
 					}
 				} else if (payType == '0') {
+					var logisticsNo = $("#logisticsNo").val();
 					ajaxRequest('/mobile/rider/COD/cashSave.html', {
-						orderNo : $("#logisticsNo").val(),
+						logisticsNo : logisticsNo,
 						paidType : 0
 					}, false, function(res) {
 						if(res.result){
-							alert('success,plase to sign logistics');
-							javascript: history.go(-1);
+							// alert('success,plase to sign logistics');
+							showInfo("success,will foward to sign");
+							//alert(logisticsNo);
+                            setTimeout(function(){
+                                window.location.href="/mobile/rider/sign/toSign.html?logisticsNo="+logisticsNo;
+                            }, 2000);
 						}else{
 							showWarning("Sorry,cash pay error!");
 						}

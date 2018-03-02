@@ -1,5 +1,6 @@
 package com.nilo.dms.web.controller.order;
 
+import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
@@ -8,6 +9,7 @@ import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +61,18 @@ public class DelayOrderController extends BaseController {
         if (count == null || count == 0) return toPaginationLayUIData(page, delayDOList);
 
         delayDOList = deliveryOrderDelayDao.queryBy(Long.parseLong(merchantId), orderNo, fromTimeLong, toTimeLong, page.getOffset(), page.getLimit());
+
+        //设置类型描述
+        for(DeliveryOrderDelayDO d : delayDOList){
+            String abnormalTypeDesc = SystemCodeUtil.getCodeVal("" + d.getMerchantId(), Constant.DELAY_REASON, d.getDelayReason());
+            d.setDelayReason(abnormalTypeDesc);
+        }
+
         return toPaginationLayUIData(page, delayDOList);
     }
 
-    @RequestMapping(value = "/detainPage.html")
-    public String handlePage(Model model, String orderNo) {
+    @RequestMapping(value = "/problemPage.html")
+    public String problemPage(Model model, String orderNo) {
         //查询上一次dispatch task
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
@@ -71,12 +80,12 @@ public class DelayOrderController extends BaseController {
         DeliveryOrderDelayDO delayDO = deliveryOrderDelayDao.findByOrderNo(Long.parseLong(merchantId), orderNo);
         //查询rider列表
         model.addAttribute("delayDO", delayDO);
-        return "delay_order/handle";
+        return "delay_order/problem";
     }
 
     @ResponseBody
-    @RequestMapping(value = "/detain.html")
-    public String detain(DelayParam param) {
+    @RequestMapping(value = "/problem.html")
+    public String problem(DelayParam param) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 
@@ -92,6 +101,23 @@ public class DelayOrderController extends BaseController {
         return toJsonTrueMsg();
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/resend.html")
+    public String resend(DelayParam param) {
+
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        try {
+            param.setOptBy(me.getUserId());
+            param.setMerchantId(merchantId);
+            riderOptService.resend(param);
+        } catch (Exception e) {
+            return toJsonErrorMsg(e.getMessage());
+        }
+        return toJsonTrueMsg();
+    }
 
 
     @ResponseBody

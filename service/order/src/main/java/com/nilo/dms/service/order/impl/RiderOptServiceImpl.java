@@ -1,12 +1,10 @@
 package com.nilo.dms.service.order.impl;
 
-import com.nilo.dms.common.enums.DelayStatusEnum;
-import com.nilo.dms.common.enums.OptTypeEnum;
-import com.nilo.dms.common.enums.TaskStatusEnum;
-import com.nilo.dms.common.enums.TaskTypeEnum;
+import com.nilo.dms.common.enums.*;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.DateUtil;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderDelayDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
 import com.nilo.dms.service.order.*;
@@ -31,10 +29,8 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
 
     @Autowired
     TaskService taskService;
-
     @Autowired
     OrderService orderService;
-
     @Autowired
     private AbnormalOrderService abnormalOrderService;
 
@@ -221,8 +217,19 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         abnormalOrder.setRemark(param.getRemark());
         //新增异常件
         abnormalOrderService.addAbnormalOrder(abnormalOrder);
-
     }
 
+    @Override
+    @Transactional
+    public void resend(DelayParam param) {
 
+        //查询运单信息
+        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(param.getMerchantId(), param.getOrderNo());
+
+        DeliveryOrderDelayDO update = new DeliveryOrderDelayDO();
+        update.setOrderNo(param.getOrderNo());
+        update.setMerchantId(Long.parseLong(param.getMerchantId()));
+        update.setStatus(DelayStatusEnum.COMPLETE.getCode());
+        deliveryOrderDelayDao.update(update);
+    }
 }

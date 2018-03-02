@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import com.nilo.dms.common.enums.EnumMessage;
 import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.service.org.model.Staff;
@@ -45,6 +46,7 @@ import nl.bitwalker.useragentutils.UserAgent;
  */
 public class BaseController {
 
+
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -54,6 +56,7 @@ public class BaseController {
         String userAgentStr = request.getHeader("user-agent");
         UserAgent ua = UserAgent.parseUserAgentString(userAgentStr);
         return ua.getOperatingSystem().isMobileDevice();
+
     }
 
     protected ServletContext getServletContext() {
@@ -117,7 +120,7 @@ public class BaseController {
         jo.put("code", 0);
         jo.put("msg", 0);
         jo.put("data", data);
-        jo.put("pages",pagination.getTotalCount()/pagination.getLimit());
+        jo.put("pages", pagination.getTotalCount() / pagination.getLimit());
         return jo.toJSONString();
     }
 
@@ -158,5 +161,25 @@ public class BaseController {
         if (field.getType() == Integer.class) {
             PropertyUtils.setProperty(obj, field.getName(), Integer.parseInt(value));
         }
+    }
+
+    protected String getProperty(Object obj, String field) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+
+        Object value = PropertyUtils.getSimpleProperty(obj, field);
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Long) {
+            return "" + (Long) value;
+        }
+        if (value instanceof Double) {
+            return "" + (Double) value;
+        }
+        if (value instanceof EnumMessage) {
+            EnumMessage e = (EnumMessage) value;
+            return e.getDesc();
+        }
+
+        return (String) value;
     }
 }

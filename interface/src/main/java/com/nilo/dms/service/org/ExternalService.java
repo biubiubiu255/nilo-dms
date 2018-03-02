@@ -1,0 +1,27 @@
+package com.nilo.dms.service.org;
+
+import com.nilo.dms.common.Pagination;
+import com.nilo.dms.dao.dataobject.ThirdDriverDO;
+import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.dao.dataobject.WaybillExternalDo;
+
+import java.util.List;
+
+
+public interface ExternalService {
+
+	WaybillExternalDo findSingleByID(int id);
+
+    WaybillExternalDo findSingleByOrder(String orderNo);
+
+	List<WaybillExternalDo>  findExternalAll(Pagination page);
+
+    List<WaybillExternalDo>  findExternalAllFuzzy(WaybillExternalDo external, Pagination page);
+
+	void addExternal(WaybillExternalDo external);
+	
+    void updateExternal(WaybillExternalDo external);
+    
+    void deleteExternal(WaybillExternalDo external);
+
+}

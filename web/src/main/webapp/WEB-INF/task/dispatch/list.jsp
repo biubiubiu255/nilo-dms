@@ -234,17 +234,17 @@
                 dataType: 'text',
                 success: function (data) {
                     //弹出即全屏
-                    var index = layer.open({
+                    var index = parent.layer.open({
                     	title:"Receive",
                         type: 1,
                         content: data,
-                        area: ['700px', '500px'],
+                        area: ['800px', '600px'],
+                        offset: ['100px', '250px'],
                         maxmin: true,
                         end: function () {
                             reloadCurrentPage();
                         }
                     });
-                    layer.full(index);
 
                 }
             });
@@ -258,17 +258,17 @@
                 dataType: 'text',
                 success: function (data) {
                     //弹出即全屏
-                    var index = layer.open({
+                    var index = parent.layer.open({
                     	title:"Abnormal",
                         type: 1,
                         content: data,
-                        area: ['700px', '500px'],
+                        area: ['800px', '600px'],
+                        offset: ['100px', '250px'],
                         maxmin: true,
                         end: function () {
                             reloadCurrentPage();
                         }
                     });
-                    layer.full(index);
                 }
             });
         }
@@ -281,17 +281,17 @@
                 dataType: 'text',
                 success: function (data) {
                     //弹出即全屏
-                    var index = layer.open({
+                    var index = parent.layer.open({
                         type: 1,
                         title:"Delay",
                         content: data,
-                        area: ['700px', '500px'],
+                        area: ['800px', '600px'],
+                        offset: ['100px', '250px'],
                         maxmin: true,
                         end: function () {
                             reloadCurrentPage();
                         }
                     });
-                    layer.full(index);
                 }
             });
         }

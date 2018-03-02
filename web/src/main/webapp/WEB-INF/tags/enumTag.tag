@@ -13,9 +13,15 @@
 <%@ attribute name="showChoose" type="java.lang.Boolean" required="false" description="showChoose" %>
 <%@ attribute name="exclude" type="java.lang.String" required="false" description="exclude" %>
 <%@ attribute name="multi" type="java.lang.Boolean" required="false" description="multi" %>
-
+<%@ attribute name="required" type="java.lang.Boolean" required="false" description="multi" %>
 <%
-    out.print("<select name='" + selectName + "' id='" + selectId + "' " + (disabled != null && disabled ? "disabled " : "") + (multi != null && multi ? " multiple" : "") + ">");
+    if (required == null) required = false;
+    if (required) {
+        out.print("<select lay-verify='required' name='" + selectName + "' id='" + selectId + "' " + (disabled != null && disabled ? "disabled " : "") + (multi != null && multi ? " multiple" : "") + ">");
+
+    } else {
+        out.print("<select name='" + selectName + "' id='" + selectId + "' " + (disabled != null && disabled ? "disabled " : "") + (multi != null && multi ? " multiple" : "") + ">");
+    }
 %>
 <%
     if (StringUtil.isEmpty(code) || showChoose == null) {

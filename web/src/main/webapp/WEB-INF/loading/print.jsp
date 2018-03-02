@@ -1,6 +1,10 @@
+<%@ page import="com.nilo.dms.common.utils.DateUtil" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html>
+<%
+    request.setAttribute("nowDate", DateUtil.formatCurrent("yyyy-MM-dd HH:mm:ss"));
+%>
 <%@ include file="../common/header.jsp" %>
 <script type="text/javascript">window.print();</script>
 <style>
@@ -26,7 +30,7 @@
 
             <h4>Shipment List</h4>
 
-            <h5 style="position:absolute;right: 10px;top: 20px;"> Date ${date_str}</h5>
+            <h5 style="position:absolute;right: 10px;top: 20px;"> Date ${nowDate}</h5>
         </div>
 
         <br><br>
@@ -38,7 +42,7 @@
             Loading NO: ${loading.loadingNo}
         </div>
         <div class="col-xs-3">
-            Carrier Name: ${loading.carrier}
+            Name: ${loading.carrier}
         </div>
         <div class="col-xs-3">
             Rider :${loading.riderName}
@@ -60,6 +64,7 @@
                     <th>Contact No</th>
                     <th>Address</th>
                     <th>Price</th>
+                    <th>Pending Pay</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -69,8 +74,9 @@
 	                        <td>${item.deliveryOrder.receiverInfo.receiverName}</td>
 	                        <td>${item.deliveryOrder.receiverInfo.receiverPhone}</td>
 	                        <td>${item.deliveryOrder.receiverInfo.receiverAddress}</td>
-	                        <td>0</td>
-	                   </tr>
+	                        <td>${item.deliveryOrder.totalPrice}</td>
+                            <td>${item.deliveryOrder.needPayAmount}</td>
+                       </tr>
                    </c:forEach> 
                 </tbody>
             </table>
@@ -80,11 +86,11 @@
     </div>
     <div class="row">
         <div class="col-xs-6">
-            Total Order Amount:${fn:length(loading.detailsList)}
+            Total Order :${fn:length(loading.detailsList)}
         </div>
 
         <div class="col-xs-6">
-            Pending payment :0
+            Pending payment :${totalAmount}
         </div>
         <br><br>
     </div>

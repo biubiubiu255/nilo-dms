@@ -16,8 +16,8 @@ public class ExportExcel {
 
     /**
      */
-    public ExportExcel() {
-        this.wb = new HSSFWorkbook();
+    public ExportExcel(HSSFWorkbook wb) {
+        this.wb = wb;
         sheet = this.wb.createSheet();
     }
 

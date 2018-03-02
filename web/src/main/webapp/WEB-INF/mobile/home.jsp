@@ -39,7 +39,7 @@
 				</div>
 				<ul class="model_banner_ul"
 					style="width: 100%; overflow: hidden; margin: 0px;">
-					<a href="/mobile/rider/sign/sign.html" title="">
+					<a href="/mobile/rider/sign/toSign.html" title="">
 						<li><img src="/mobile/images/icon_1.png" /><br /><label data-locale="sign_scan">Sign Scan</label></li>
 					</a>
 					<a href="/mobile/rider/COD/sign.html" title="">

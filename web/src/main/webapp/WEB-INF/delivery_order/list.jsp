@@ -28,9 +28,9 @@
                                                                          aria-hidden="true"></i>Template
                 </button>
             </shiro:hasPermission> --%>
-                <shiro:hasPermission name="400017">
-                    <button class="layui-btn layui-btn-normal btn-export">Export</button>
-                </shiro:hasPermission>
+            <shiro:hasPermission name="400017">
+                <button class="layui-btn layui-btn-normal btn-export">Export</button>
+            </shiro:hasPermission>
             <shiro:hasPermission name="400016">
                 <button class="layui-btn btn-search">Search
                 </button>
@@ -57,11 +57,13 @@
                     <div class="layui-col-md8 layui-col-lg5">
                         <label class="layui-form-label">CreateTime:</label>
                         <div class="layui-inline">
-                            <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
+                            <input type="text" class="layui-input" name="fromCreatedTime" id="fromCreatedTime"
+                                   placeholder="From">
                         </div>
                         -
                         <div class="layui-inline">
-                            <input type="text" class="layui-input" id="toCreatedTime" placeholder="To">
+                            <input type="text" class="layui-input" name="toCreatedTime" id="toCreatedTime"
+                                   placeholder="To">
                         </div>
                     </div>
                 </div>
@@ -175,11 +177,10 @@
                         orderDetails(orderNo);
                     } else if (obj.event === 'edit') {
                         editOrder(orderNo);
-                    }else if(obj.event==='print'){
+                    } else if (obj.event === 'print') {
                         print(orderNo);
                     }
                 });
-
 
             });
 
@@ -196,13 +197,24 @@
                         orderStatus: $("select[name='orderStatus']").val(),
                         fromCreatedTime: $("#fromCreatedTime").val(),
                         toCreatedTime: $("#toCreatedTime").val(),
+                        platform: $("input[name='platform']").val(),
+
                     }
                 });
             };
 
 
             $(".btn-export").on("click", function () {
-                var url = "/order/deliveryOrder/exportTemplate.html";
+
+                var orderNo = $("input[name='orderNo']").val(),
+                        referenceNo = $("input[name='referenceNo']").val(),
+                        orderTypes = $("select[name='orderType']").val(),
+                        orderStatus = $("select[name='orderStatus']").val(),
+                        fromCreatedTime = $("#fromCreatedTime").val(),
+                        toCreatedTime = $("#toCreatedTime").val(),
+                        platform = $("input[name='platform']").val();
+
+                var url = "/order/deliveryOrder/export.html?orderNo="+orderNo+"&referenceNo="+referenceNo+"&orderTypes="+orderTypes+"&orderStatus="+orderStatus+"&fromCreatedTime="+fromCreatedTime+"&toCreatedTime="+toCreatedTime+"&platform="+platform;
                 window.location.href = url;
             })
 

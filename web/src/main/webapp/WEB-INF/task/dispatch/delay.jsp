@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label layui-form-text">Reason:</label>
+            <label class="layui-form-label layui-form-text">Type:</label>
             <div class="layui-input-block">
                 <select name="reason" lay-verify="required" lay-search="" style="display: none">
                     <option value="">choose or search....</option>

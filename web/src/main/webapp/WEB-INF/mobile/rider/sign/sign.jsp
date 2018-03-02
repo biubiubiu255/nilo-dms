@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -42,15 +43,29 @@
 			<form id="myForm" class="layui-form" action="">
 				<div class="banner_content">
 					<ul class="one_banner">
-
-						<li><input type="text" placeholder="Logistics No" property_name="all_logistics_no" set_attr="placeholder"
-							id="logisticsNo" name="logisticsNo" class="input_value i18n-input" /><span class="scanner" data-locale="all_scan"></span></li>
-						<li><input type='text' placeholder="Signer" id="signer" property_name="sign_scan_signer" set_attr="placeholder"
-							class='input_value i18n-input' name='signer' required="required" />
-						<!-- <span>Aquire</span> --></li>
-						<li><input type='text' placeholder="Remark" id="remark" property_name="sign_scan_remark" set_attr="placeholder"
+						<input type="hidden" name="isPaid" id="isPaid" value="${isPaid}"/>
+						<li><input type="text" placeholder="Logistics No"
+							property_name="all_logistics_no" set_attr="placeholder"
+							id="logisticsNo" name="logisticsNo"
+							class="input_value i18n-input" value="${logisticsNo}" /><span
+							class="scanner" data-locale="all_scan"></span></li>
+						<li><input type='text' placeholder="signer" id="signer"
+							property_name="sign_scan_signer" set_attr="placeholder"
+							class='input_value i18n-input' name='signer' required="required"
+							value="${receiverName}" /> <!-- <span>Aquire</span> --></li>
+						<li><input type='text' placeholder="Remark" id="remark"
+							property_name="sign_scan_remark" set_attr="placeholder"
 							class='input_value i18n-input' name='remark' /></li>
-						<li><label data-locale="sign_scan_Picture">Sign Picture</label>
+						<c:if test="${isPaid == false}">
+							<c:if test="${isCod==1}">
+								<li>Need to pay ${amount} ,already paid ${already}</li>
+							</c:if>
+						</c:if>
+						<c:if test="${isPaid}">
+							<li>Need to pay ${amount} ,already paid by ${paidType}</li>
+						</c:if>
+						<li><label data-locale="sign_scan_Picture">Sign
+								Picture</label>
 							<div class="xq">
 								<img src="/mobile/images/2300.jpg" />
 							</div></li>
@@ -69,8 +84,9 @@
 	</div>
 	<script src="/layui/layui.js" charset="utf-8"></script>
 	<script type="text/javascript">
-        //loadLanguage('en');
-		layui.use(['upload', 'jquery'], function() {
+		//loadLanguage('en');
+
+		layui.use([ 'upload', 'jquery' ], function() {
 
 			var $ = layui.jquery, upload = layui.upload;
 
@@ -91,22 +107,28 @@
 					isUpPic = true;
 				},
 				before : function(res) {
-                    if(isUpPic===false) {
-                    	showWarning("plase chose pic");
-                    	return;
-                    }
+					if ($("#isPaid").val() == 'false') {
+						showWarning("you need to payment first!");
+						return;
+					}
+
+					if (isUpPic === false) {
+						showWarning("plase chose a pic");
+						return;
+					}
 					this.data = {
 						logisticsNo : $("#logisticsNo").val(),
 						signer : $("#signer").val(),
 						remark : $("#remark").val()
 					};
-
+					showMask();
 					//layui.upload.config.data = {logisticsNo:1,signer:2};
 				},
 				done : function(res) {
+					closeMask();
 					if (res.result) {
 						showError('submit success');
-						$("#remark").val();
+						javascript:history.go(-1);
 
 					} else {
 						showError(res.msg);
@@ -126,30 +148,33 @@
 		//android.startScan();
 
 		$(document)
-		.ready(
-				function() {
-					var mobile = new MobileData({
-						autoLoad : false,
-						formId : 'myForm',
-						model : 'customers'
-					});
-					var scan_callback = function(code) {
-						mobile.setFormFieldValue("logisticsNo", code);
-						ajaxRequest('/mobile/rider/sign/getDetail.html',{orderNo: code},false,function(data){
-                            if(!(data.msg==null)){
-                                showError(data.msg)
-                            }
-                            mobile.setFormFieldValue("signer", data.data)
-					       // mobile.setFormFieldValue("signer", code)
-					    });
-					}
-					$.scanner(scan_callback);
+				.ready(
+						function() {
+							var mobile = new MobileData({
+								autoLoad : false,
+								formId : 'myForm',
+								model : 'customers'
+							});
+							var scan_callback = function(code) {
+								window.location.href = "/mobile/rider/sign/toSign.html?logisticsNo="
+										+ code;
+								/* mobile.setFormFieldValue("logisticsNo", code);
+								ajaxRequest('/mobile/rider/sign/getDetail.html', {
+									orderNo : code
+								}, false, function(res) {
+									if (!(data.msg == null)) {
+										showError(data.msg)
+									}
+									mobile.setFormFieldValue("signer", res.data.receiverName)
+									
+									// mobile.setFormFieldValue("signer", code)
+								}); */
+							}
+							$.scanner(scan_callback);
 
-					$("#lypic").first().hide();
+							$("#lypic").first().hide();
 
-				});
-
-
+						});
 	</script>
 </body>
 </html>

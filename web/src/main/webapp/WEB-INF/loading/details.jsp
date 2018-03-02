@@ -5,7 +5,7 @@
 <%
     request.setAttribute("id2", RandomStringUtils.randomAlphabetic(8));
     request.setAttribute("id1", RandomStringUtils.randomAlphabetic(8));
-    request.setAttribute("nextStation", SystemCodeUtil.getSystemCodeList((String)session.getAttribute("merchantId"),"next_station"));
+    request.setAttribute("nextStation", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "next_station"));
 %>
 
 <div class="box-body">
@@ -16,37 +16,24 @@
             <input type="text" id="loadingNo" value="${loading.loadingNo}" autocomplete="off" disabled
                    class="layui-input layui-disabled">
         </div>
+        <label class="layui-form-label" style="width:120px">Loading By</label>
+        <div class="layui-input-inline">
+            <input type="text" name="loadingBy" value="${loading.loadingName}" autocomplete="off"
+                   class="layui-input layui-disabled" disabled>
+        </div>
     </div>
     <form id="myForm" class="layui-form" action="">
         <input type="hidden" name="${loading.loadingNo}">
-        <div class="layui-form-item">
-            <label class="layui-form-label" style="width:120px">Loading By</label>
-            <div class="layui-input-inline">
-                <input type="text" name="loadingBy" value="${loading.loadingName}" autocomplete="off"
-                       class="layui-input layui-disabled" disabled>
-            </div>
 
-            <label class="layui-form-label" style="width:120px">Next Station</label>
-            <div class="layui-input-inline">
-                <select name="nextStation" lay-verify="required" lay-search="" disabled style="display: none">
-                    <option value="">choose or search....</option>
-                    <c:forEach items="${nextStation}" var="station">
-                        <option value="${station.code}"
-                                <c:if test="${station.code == loading.nextStation}">selected</c:if>>${station.value}</option>
-                    </c:forEach>
-                </select>
-            </div>
-        </div>
 
         <div class="layui-form-item">
-
             <label class="layui-form-label" style="width:120px">Rider</label>
             <div class="layui-input-inline">
                 <select name="rider" id="rider" lay-verify="required" lay-search="" disabled style="display: none">
                     <option value="">choose or search....</option>
                     <c:forEach items="${riderList}" var="rider">
                         <option value="${rider.userId}"
-                                <c:if test="${rider.userId == loading.rider}">selected</c:if>> ${rider.staffId}</option>
+                                <c:if test="${rider.userId == loading.rider}">selected</c:if>> ${rider.staffId}-${rider.realName}</option>
                     </c:forEach>
                 </select>
             </div>
@@ -61,22 +48,10 @@
     </form>
     <hr>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label" style="width:120px">OrderNo:</label>
-        <div class="layui-input-inline">
-            <input type="text" id="orderNo" autocomplete="off" placeholder="Scan" class="layui-input layui-disabled"
-                   disabled>
-        </div>
-    </div>
 
     <div style="margin-left:120px;">
         <table class="layui-hide" id="${id2}" style="width:600px;"></table>
     </div>
-    <script type="text/html" id="${id1}">
-        <c:if test="${loading.statusDesc != 'Ship'}">
-            <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">Delete</a>
-        </c:if>
-    </script>
 
     <div class="layui-form-item">
         <div class="layui-input-block" style="margin-left:120px;">
@@ -117,7 +92,6 @@
                         templet: '<div>{{d.deliveryOrder.orderType}}</div>'
                     }
                     , {field: 'weight', title: 'Weight', width: 200, templet: '<div>{{d.deliveryOrder.weight}}</div>'}
-                    , {title: "Operation", width: 100, align: 'center', toolbar: '#${id1}'}
                 ]]
                 , id: '${id2}'
             });
@@ -227,9 +201,9 @@
             });
 
         });
-        
+
         $('.print').on('click', function () {
-        	window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
+            window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
         });
     });
 </script>

@@ -15,10 +15,6 @@
                 jdbcType="VARCHAR"/>
         <result property="optBy" column="opt_by" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="fromStatus" column="from_status" javaType="java.lang.Integer"
-                jdbcType="INTEGER"/>
-        <result property="toStatus" column="to_status" javaType="java.lang.Integer"
-                jdbcType="INTEGER"/>
         <result property="remark" column="remark" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
@@ -27,7 +23,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, order_no ,merchant_id,opt,opt_by, from_status,to_status ,remark, created_time
+        id, order_no ,merchant_id,opt,opt_by ,remark, created_time
     </sql>
     <select id="getStateByOrderNo" resultType="java.lang.Long">
         SELECT status FROM t_waybill WHERE order_no =#{orderNo}
@@ -38,9 +34,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_waybill_log
-        ( order_no ,merchant_id, opt ,  opt_by,from_status,to_status,remark, created_time )
+        ( order_no ,merchant_id, opt ,  opt_by,remark, created_time )
         VALUES
-        ( #{orderNo},#{merchantId},#{opt},#{optBy},#{fromStatus},#{toStatus},#{remark},UNIX_TIMESTAMP(NOW()))
+        ( #{orderNo},#{merchantId},#{opt},#{optBy},#{remark},UNIX_TIMESTAMP(NOW()))
     </insert>
     <select id="queryById" resultMap="orderOptDO" statementType="PREPARED">
         SELECT

@@ -139,6 +139,8 @@
         FROM t_waybill
         WHERE merchant_id = #{merchantId} and order_no=#{orderNo}
     </select>
+    
+    
 
     <select id="queryByOrderNos" resultMap="orderDO" statementType="PREPARED">
         SELECT
@@ -152,6 +154,17 @@
                 #{orderNo}
             </foreach>
         </if>
+    </select>
+    
+    <select id="selectByOrderNos" resultMap="orderDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill
+        WHERE  order_no in
+            <foreach collection="orderNos" item="orderNo" index="index"
+                     open="(" close=")" separator=",">
+                #{orderNo}
+            </foreach>
     </select>
 
     <select id="queryByReferenceNo" resultMap="orderDO" statementType="PREPARED">
@@ -171,6 +184,9 @@
         </if>
         <if test="referenceNo !=null and referenceNo !='' ">
             and reference_no = #{referenceNo}
+        </if>
+        <if test="orderPlatform !=null and orderPlatform !='' ">
+            and order_platform = #{orderPlatform}
         </if>
         <if test="orderType !=null and orderType.size() > 0">
             <foreach collection="orderType" item="item" index="index" open="and (" separator="or" close=")">
@@ -210,6 +226,9 @@
         </if>
         <if test="referenceNo !=null and referenceNo !='' ">
             and reference_no = #{referenceNo}
+        </if>
+        <if test="orderPlatform !=null and orderPlatform !='' ">
+            and order_platform = #{orderPlatform}
         </if>
         <if test="orderType !=null and orderType.size() > 0">
             <foreach collection="orderType" item="item" index="index" open="and (" separator="or" close=")">
@@ -274,6 +293,9 @@
             </if>
             <if test="printTimes != null">
                 print_Times = #{printTimes},
+            </if>
+            <if test="alreadyPaid != null">
+                already_paid = #{alreadyPaid},
             </if>
             updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
         </trim>

@@ -43,8 +43,6 @@
             <th lay-data="{field:'id', width:150}">ID</th>
             <th lay-data="{field:'orderNo', width:200}">OrderNo</th>
             <th lay-data="{field:'opt', width:200}">Opt</th>
-            <th lay-data="{field:'fromStatusDesc', width:200}">From Status</th>
-            <th lay-data="{field:'toStatusDesc', width:200}">To Status</th>
             <th lay-data="{field:'createdTime', width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
                 Opt Time
             </th>

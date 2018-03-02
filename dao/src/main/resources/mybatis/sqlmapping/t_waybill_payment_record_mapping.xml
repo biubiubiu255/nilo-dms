@@ -150,4 +150,13 @@
       created_time = #{createdTime,jdbcType=BIGINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  
+  <!-- add sql -->
+  <select id="selectByPaymentOrderId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_waybill_payment_record
+    where payment_order_id = #{paymentOrderId}
+  </select>
 </mapper>

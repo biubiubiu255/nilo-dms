@@ -1,6 +1,7 @@
 package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
@@ -14,6 +15,7 @@ import com.nilo.dms.service.order.model.Loading;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.order.LoadingController;
 import org.apache.shiro.SecurityUtils;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +25,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Pattern;
+
+
+
+
 
 @Controller
 @RequestMapping("/mobile/deliver")
@@ -48,7 +56,22 @@ public class DeliverScanController extends BaseController {
 
         return "mobile/network/deliver_scan/deliverScan";
     }
+    @Test
+    public void test(){
+        //File file = new File("1.txt");
+        //System.out.println(file.exists());
+        //String path = file.getCanonicalPath();
+        //System.out.println(path);
+        //Properties prop = new Properties();
+        // String path = Thread.currentThread().getContextClassLoader().getResource("").toString();
+        //System.out.println(path);
+        //InputStream stream = this.getClass().getClass().getClassLoader().getResourceAsStream("i18n_en_US.properties");
 
+
+        //prop.load(stream);
+        //String value = prop.getProperty("add_delivery_fee_template");
+        //System.out.println(value);
+    }
     @ResponseBody
     @RequestMapping(value = "/check.html")
     public String check(String code) {
@@ -58,7 +81,7 @@ public class DeliverScanController extends BaseController {
             return toJsonErrorMsg("There is no OrderNo");
         }
         if(!(a==20)){
-            return toJsonErrorMsg("There are restrictions on this order");
+            return toJsonErrorMsg(BizErrorCode.ORDER_NO_ARRIVE.getDescription());
         }
         return toJsonTrueMsg();
     }

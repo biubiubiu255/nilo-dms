@@ -48,7 +48,9 @@
             <input type="hidden" name="image">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="abnormal">Submit</button>
+<%--
                 <button type="button" class="layui-btn" id="uploadAbnormalImage">Upload</button>
+--%>
             </div>
         </div>
         <div class="layui-form-item">

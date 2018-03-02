@@ -81,6 +81,13 @@
         });
 
         $("#orderNo").keydown(function (event) {
+            if ($("#packageNo").val()==""){
+                layui.use('layer', function(){
+                    var layer = layui.layer;
+                    layer.alert('Place unpack', {icon: 0});
+                });
+                return;
+            }
             event = document.all ? window.event : event;
             if ((event.keyCode || event.which) == 13) {
                 scan($("#orderNo").val(), "order");
@@ -128,6 +135,7 @@
                         $("#orderNo").focus();
                         $("#orderNo").val('');
                         //刷新数据
+
                         reloadTable();
                     } else {
                         layer.msg(data.msg, {icon: 2, time: 2000});

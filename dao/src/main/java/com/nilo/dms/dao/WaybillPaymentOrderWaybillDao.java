@@ -1,5 +1,7 @@
 package com.nilo.dms.dao;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.nilo.dms.service.order.model.WaybillPaymentOrderWaybill;
@@ -16,4 +18,7 @@ public interface WaybillPaymentOrderWaybillDao {
     int updateByPrimaryKeySelective(WaybillPaymentOrderWaybill record);
 
     int updateByPrimaryKey(WaybillPaymentOrderWaybill record);
+    
+    List<String> queryByPaymentOrderId(String paymentOrderId);
+    
 }

@@ -180,7 +180,7 @@ function warningTipMsg(msg,callback) {
 }
 
 
-function showInfo(msg){
+function showInfo(msg,  always){
 	$("<div id=\"warning-mask-div\" class=\"mobile-mask\"></div>").css({
         display: "block",
         width: "100%",
@@ -195,7 +195,14 @@ function showInfo(msg){
         zIndex: 10001,
         left: ($(document.body).outerWidth(true) - 250) / 2,
         top: ($(window).height() - 120) / 2
-    });	
+    });
+
+    if (always!==true){
+        setTimeout(function(){
+            $("#warning-mask-div").remove();
+            $("#warning-content-div").remove();
+        }, 2000);
+    }
 }
 
 

@@ -35,15 +35,13 @@ public class StrandedParcelController extends BaseController {
 /*        public String save(@RequestParam("logisticsNo") String orderNo, 
         			@RequestParam("reason") String abnormalType, @RequestParam("memo") String remark) {*/
           public String save(DelayParam param) {
-        	
             Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-
+            //获取merchantId
             String merchantId = me.getMerchantId();
-            
             try {
                 param.setOptBy(me.getUserId());
                 param.setMerchantId(merchantId);
-                riderOptService.detain(param);
+                riderOptService.delay(param);
             } catch (Exception e) {
                 return toJsonErrorMsg(e.getMessage());
             }

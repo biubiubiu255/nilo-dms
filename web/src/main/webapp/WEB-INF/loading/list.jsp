@@ -164,13 +164,13 @@
                 dataType: 'text',
                 success: function (data) {
                     //弹出即全屏
-                    var index = layer.open({
+                    var index = parent.layer.open({
                         type: 1,
                         content: data,
-                        area: ['800px', '800px'],
+                        area: ['800px', '600px'],
+                        offset: ['100px', '250px'],
                         maxmin: true
                     });
-                    layer.full(index);
                 }
             });
         }

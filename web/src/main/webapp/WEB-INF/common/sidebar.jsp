@@ -7,6 +7,7 @@
             
         </div>
         <!-- search form -->
+        <%--
         <div class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="menu_name" class="form-control" placeholder="Search...">
@@ -15,7 +16,8 @@
                 </button>
               </span>
             </div>
-        </div> 
+        </div>
+        --%>
         <!-- /.search form -->
         <ul class="sidebar-menu">
         </ul>

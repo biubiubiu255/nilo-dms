@@ -53,6 +53,7 @@ public enum BizErrorCode implements ErrorCode {
     ORDER_NO_EMPTY("Order No emtpty", "100035"),
     OPT_USER_EMPTY("Operate User emtpty", "100036"),
 
+
     CODE_NOT_EXIST("code:{0} not exist", "100037"),
     STAFF_EXIST("Staff ID:{0} is already exist", "100038"),
     DISABLED_ACCOUNT("Account is disabled.", "1000039"),
@@ -94,7 +95,9 @@ public enum BizErrorCode implements ErrorCode {
     UNPACK_NOT_ALLOW("Delivery No {0} can not unpack.", "100068"),
     DELIVERY_NO_EXIST("Delivery No exist.", "100069"),
     PACKAGE_EMPTY("Package is empty", "100070"),
+    WEIGHT_EMPTY("Weight is empty", "100071"),
 
+    ORDER_NO_ARRIVE("The order has not arrived", "100071");  //订单未到达
     ;
 
     private final String description;
@@ -121,3 +124,6 @@ public enum BizErrorCode implements ErrorCode {
     }
 
 }
+
+
+

@@ -7,8 +7,8 @@ public class WaybillStatementDo extends BaseDo<Long> {
     private String orderNo;
     private String order_type;
     private Double money;
-    private Double statement_time;
-    private String sign_time;
+    private int statement_time;
+    private int sign_time;
     private int status;
 
     public String getOrderNo() {
@@ -35,19 +35,19 @@ public class WaybillStatementDo extends BaseDo<Long> {
         this.money = money;
     }
 
-    public Double getStatement_time() {
+    public int getStatement_time() {
         return statement_time;
     }
 
-    public void setStatement_time(Double statement_time) {
+    public void setStatement_time(int statement_time) {
         this.statement_time = statement_time;
     }
 
-    public String getSign_time() {
+    public int getSign_time() {
         return sign_time;
     }
 
-    public void setSign_time(String sign_time) {
+    public void setSign_time(int sign_time) {
         this.sign_time = sign_time;
     }
 

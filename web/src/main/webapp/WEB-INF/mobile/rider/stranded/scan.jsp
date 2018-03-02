@@ -68,12 +68,14 @@
     		postUrl : '/mobile/rider/stranded/save.html' ,
     		callback: function (data) {
                 if (data.result) {
-                    showInfo('submit success')
+                    //showInfo('submit success')
                 } else {
-                    showError(data.msg);
+                    //showError(data.msg);
                 }
 			}
     	});
+
+
     	
     	//scan
         var scan_callback = function (code) {
