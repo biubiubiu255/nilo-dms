@@ -2,10 +2,13 @@ package com.nilo.dms.web.controller.report;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dao.ThirdExpressDao;
 import com.nilo.dms.dao.dataobject.SendReportDO;
+import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.order.SendReportService;
 import com.nilo.dms.service.order.model.SendOrderParameter;
 import com.nilo.dms.service.order.model.SendReport;
+import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +29,35 @@ public class SendReportController extends BaseController {
     @Autowired
     private SendReportService sendReportService;
 
+    @Autowired
+    private ThirdExpressDao thirdExpressDao;
+
+
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
+        List<ThirdExpressDO> list = thirdExpressDao.findByMerchantIdAll();
+//        for (ThirdExpressDO t:list) {
+//            System.out.println(t);
+//        }
+        model.addAttribute("express",list);
         return "report/send/list";
     }
 
     @ResponseBody
     @RequestMapping(value = "/list.html")
-    public String getOrderList(SendOrderParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) {
+    public String getOrderList(SendOrderParameter parameter, @RequestParam(value = "carrierNames[]", required = false) String[] carrierNames, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) {
 
+
+        if(!(carrierNames==null)){
+            System.out.println("----------------------");
+        }
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
-
+        if (carrierNames != null && carrierNames.length > 0) {
+            parameter.setCarrierName(Arrays.asList(carrierNames));
+        }
         if (orderStatus != null && orderStatus.length > 0) {
             parameter.setStatus(Arrays.asList(orderStatus));
         }

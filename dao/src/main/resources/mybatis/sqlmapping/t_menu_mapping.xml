@@ -28,7 +28,7 @@
 
     <select id="queryBy" resultMap="menuDO" statementType="PREPARED">
         SELECT
-        p.*
+         DISTINCT p.*
         FROM
         t_sys_role_permission rp
         LEFT JOIN t_sys_user_role ur ON ur.role_id = rp.role_id

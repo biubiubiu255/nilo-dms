@@ -1,10 +1,12 @@
 package com.nilo.dms.service.order.impl;
 import java.util.*;
 
+import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.service.order.*;
 import com.nilo.dms.service.order.model.*;
+import com.nilo.dms.service.system.SystemCodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +64,14 @@ public class SendReportServiceImpl implements SendReportService {
 
     private SendReport convert(SendReportDO s) {
         SendReport sendReport = new SendReport();
+        sendReport.setMerchantId("" +s.getMerchantId());
         sendReport.setOrderNo(s.getOrderNo());
         sendReport.setAddress(s.getAddress());
         sendReport.setCarrierName(s.getCarrierName());
+
+        String carrierNameDesc = SystemCodeUtil.getCodeVal("" + s.getMerchantId(), Constant.REPORT_CARRIER_NAME, s.getCarrierName());
+        sendReport.setCarrierNameDesc(carrierNameDesc);
+
         sendReport.setContactNumber(s.getContactNumber());
         sendReport.setDeliveryFee(s.getDeliveryFee());
         sendReport.setName(s.getName());

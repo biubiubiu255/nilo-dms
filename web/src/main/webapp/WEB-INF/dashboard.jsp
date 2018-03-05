@@ -50,7 +50,7 @@
     <div class="pull-right hidden-xs">
         <b>Version</b> 1.0
     </div>
-    <strong>Copyright &copy; 2017-2027 <a href="#">Nilo</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2017-2027 <a href="#">KiliExpress</a>.</strong> All rights reserved.
 </footer>
 
 <!--Bottom Footer-->

@@ -127,9 +127,9 @@
 				done : function(res) {
 					closeMask();
 					if (res.result) {
-						showError('submit success');
+                        $('#lypic').attr('src', "");
+						showInfo('submit success');
 						javascript:history.go(-1);
-
 					} else {
 						showError(res.msg);
 						$("#remark").val();

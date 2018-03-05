@@ -36,15 +36,17 @@
     </resultMap>
 
     <select id="querySendReport" resultMap="sendDO">
-        SELECT a.reference_no,a.next_network_id,a.network_id,a.order_no,a.order_category,a.weight,a.`stop`,carrier_name,a.delivery_fee,a.`status`,a.remark,b.name,b.contact_number,b.address
+        SELECT a.reference_no,a.next_network_id,a.network_id,a.order_no,a.order_category,a.weight,a.`stop`,a.carrier_name,a.delivery_fee,a.`status`,a.remark,b.name,b.contact_number,b.address
         FROM t_waybill a INNER JOIN t_waybill_receiver b
         ON a.order_no=b.order_no
         WHERE 1=1
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>
-        <if test="carrierName !=null and carrierName !='' ">
-            and a.carrier_name = #{carrierName}
+        <if test="carrierName !=null and carrierName.size() > 0">
+            <foreach collection="carrierName" item="item" index="index" open="and (" separator="or" close=")">
+                a.carrier_name=#{item}
+            </foreach>
         </if>
         <if test="status !=null and status.size() > 0 ">
             <foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">
@@ -64,8 +66,10 @@
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>
-        <if test="carrierName !=null and carrierName !='' ">
-            and a.carrier_name = #{carrierName}
+        <if test="carrierName !=null and carrierName.size() > 0">
+            <foreach collection="carrierName" item="item" index="index" open="and (" separator="or" close=")">
+                a.carrier_name=#{item}
+            </foreach>
         </if>
         <if test="status !=null and status.size() > 0 ">
             <foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">

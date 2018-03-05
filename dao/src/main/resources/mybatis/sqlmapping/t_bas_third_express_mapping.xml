@@ -45,7 +45,6 @@
     </select>
 
 
-
 <!--     <select id="findBy" resultMap="userDO">
         SELECT
         <include refid="Base_Column_List"/>

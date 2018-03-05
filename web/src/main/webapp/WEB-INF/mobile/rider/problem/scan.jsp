@@ -32,6 +32,7 @@
     		postUrl : '/mobile/rider/problem/save.html' ,
     		callback: function (data) {
                 if (data.result) {
+                    mobile.paginate();
                     showInfo('submit success');
                 } else {
                     showError(data.msg);;

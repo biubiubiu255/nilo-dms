@@ -3,6 +3,7 @@ package com.nilo.dms.service.order.model;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 
 public class SendReport {
+    private String merchantId;
     private String referenceNo;
     private String nextNetwork;
     private String network;
@@ -11,6 +12,7 @@ public class SendReport {
     private Double weight;
     private String stop;
     private String carrierName;
+    private String carrierNameDesc;
     private Double deliveryFee;
     private DeliveryOrderStatusEnum status;
     private String remark;
@@ -20,6 +22,14 @@ public class SendReport {
     private ReceiverInfo receiverInfo;
 
     private SenderInfo senderInfo;
+
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
+    }
 
     public String getReferenceNo() {
         return referenceNo;
@@ -147,6 +157,14 @@ public class SendReport {
 
     public void setSenderInfo(SenderInfo senderInfo) {
         this.senderInfo = senderInfo;
+    }
+
+    public String getCarrierNameDesc() {
+        return carrierNameDesc;
+    }
+
+    public void setCarrierNameDesc(String carrierNameDesc) {
+        this.carrierNameDesc = carrierNameDesc;
     }
 
     public String getStatusDesc() {

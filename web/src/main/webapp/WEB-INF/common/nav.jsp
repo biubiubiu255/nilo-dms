@@ -6,7 +6,7 @@
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini">DMS</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>Nilo</b>DMS</span>
+        <span class="logo-lg"><b>KiliExpress</b>DMS</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">

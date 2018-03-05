@@ -52,6 +52,6 @@
     <select id="findByType" resultMap="routeDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_waybill_route where merchant_id=#{merchantId} and order_no = #{orderNo} and opt = #{type};
+        FROM t_waybill_route where merchant_id=#{merchantId} and order_no = #{orderNo} and opt = #{type} limit 0;
     </select>
 </mapper>
