@@ -3,23 +3,34 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nilo.dms.dao.WaybillTaskDao">
 
- <resultMap id="WaybillTask111" type="com.nilo.dms.dao.dataobject.WaybillTaskDo">
-      <result property="orderNo" column="order_no" javaType="java.lang.String" jdbcType="VARCHAR"/>
-      <result property="isCOD" column="is_cod" javaType="java.lang.String" jdbcType="VARCHAR"/>
-      <result property="needPayAmount" column="need_pay_amount" javaType="java.lang.Double" jdbcType="DOUBLE"/>
-      <result property="alreadyPaid" column="already_paid" javaType="java.lang.Double" jdbcType="DOUBLE"/>
-      <result property="handledBy" column="handled_by" javaType="java.lang.String" jdbcType="VARCHAR"/>
-      <result property="handledTime" column="handled_time" javaType="java.lang.Long" jdbcType="INTEGER"/>
-      <result property="status" column="status" javaType="java.lang.Integer" jdbcType="INTEGER"/>
- </resultMap>
+	<resultMap id="WaybillTask" type="com.nilo.dms.dao.dataobject.WaybillTaskDo">
+		<result property="orderNo" column="order_no" javaType="java.lang.String"
+			jdbcType="VARCHAR" />
+		<result property="isCOD" column="is_cod" javaType="java.lang.String"
+			jdbcType="VARCHAR" />
+		<result property="needPayAmount" column="need_pay_amount"
+			javaType="java.lang.Double" jdbcType="DOUBLE" />
+		<result property="alreadyPaid" column="already_paid" javaType="java.lang.Double"
+			jdbcType="DOUBLE" />
+		<result property="handledBy" column="handled_by" javaType="java.lang.String"
+			jdbcType="VARCHAR" />
+		<result property="handledTime" column="handled_time" javaType="java.lang.Long"
+			jdbcType="INTEGER" />
+		<result property="status" column="status" javaType="java.lang.Integer"
+			jdbcType="INTEGER" />
+	</resultMap>
 
 
 
- <select id="queryAllWaybillTask" resultMap="WaybillTask111">
-  SELECT a.order_no,a.is_cod,a.need_pay_amount,a.already_paid,b.handled_by,b.handled_time,b.status
-  from t_waybill a INNER JOIN t_waybill_task b
-  on a.order_no = b.order_no
-  where a.is_cod=1 and b.`status`=3 AND need_pay_amount>0
- </select>
+	<select id="queryNeedPayOrderByRider" resultMap="WaybillTask"
+		parameterType="java.lang.String">
+		SELECT
+		a.order_no,a.is_cod,a.need_pay_amount,a.already_paid,b.handled_by,b.handled_time,b.status
+		from t_waybill a INNER JOIN t_waybill_task b
+		on a.order_no = b.order_no
+		where a.is_cod=1 and b.`status`=3 AND need_pay_amount>0 and (a.already_paid 
+		is null or a.already_paid = 0)
+		and handled_by = #{userId}
+	</select>
 
 </mapper>
