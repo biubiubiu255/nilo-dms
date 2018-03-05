@@ -40,6 +40,7 @@
 			mobile.initSubmitForm({
 				formId : 'arrive-form',
 				mbObject : mobile,
+                showMsg : false,
 				postUrl : '/mobile/arrive/submit.html',
 				beforeSubmit : function() {
 					var scaned_array = [];

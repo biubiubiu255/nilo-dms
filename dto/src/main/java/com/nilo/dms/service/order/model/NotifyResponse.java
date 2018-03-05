@@ -1,17 +1,24 @@
 package com.nilo.dms.service.order.model;
 
+import com.nilo.dms.common.utils.StringUtil;
+
 /**
  * Created by admin on 2017/11/6.
  */
 public class NotifyResponse {
 
-    private boolean result;
+    private String status;
 
-    public boolean getResult() {
-        return result;
+    public String getStatus() {
+        return status;
     }
 
-    public void setResult(boolean result) {
-        this.result = result;
+    public void setStatus(String status) {
+        this.status = status;
     }
+
+    public boolean isSuccess() {
+        return StringUtil.equals(this.status, "succ") ? true : false;
+    }
+
 }
