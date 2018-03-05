@@ -3,10 +3,11 @@ package com.nilo.dms.web.controller.report;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.service.order.DeliverReportService;
+import com.nilo.dms.service.order.SignReportService;
 import com.nilo.dms.service.order.model.DeliverOrderParameter;
 import com.nilo.dms.service.order.model.DeliverReport;
-import com.nilo.dms.service.order.model.SendOrderParameter;
-import com.nilo.dms.service.order.model.SendReport;
+import com.nilo.dms.service.order.model.SignOrderParameter;
+import com.nilo.dms.service.order.model.SignReport;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +22,19 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-@RequestMapping("/report/deliver")
-public class DeliverReportController extends BaseController {
+@RequestMapping("/report/sign")
+public class SignReportController extends BaseController {
     @Autowired
-    private DeliverReportService deliverReportService;
+    private SignReportService signReportService;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
-        return "report/deliver/list";
+        return "report/sign/list";
     }
 
     @ResponseBody
     @RequestMapping(value = "/list.html")
-    public String getOrderList(DeliverOrderParameter parameter,@RequestParam(value = "taskStatus[]", required = false) Integer[] taskStatus) {
+    public String getOrderList(SignOrderParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "taskStatus[]", required = false) Integer[] taskStatus) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
@@ -45,8 +46,9 @@ public class DeliverReportController extends BaseController {
         }
 
         Pagination page = getPage();
-        List<DeliverReport> list = deliverReportService.queryDeliverReport(parameter, page);
+        List<SignReport> list = signReportService.querySignReport(parameter, page);
 
         return toPaginationLayUIData(page, list);
+//        return "";
     }
 }
