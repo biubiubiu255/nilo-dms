@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.enums.DeliveryOrderPaidTypeEnum;
 import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.dao.ImageDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
@@ -132,6 +133,9 @@ public class CODSignController extends BaseController {
 		paymentOrder.setPriceAmount(new BigDecimal(deliveryOrder.getNeedPayAmount()));
 		paymentOrder.setRemark(remark);
 		paymentOrder.setWaybillCount(1);
+		paymentOrder.setPaymentTime(System.currentTimeMillis());
+		paymentOrder.setCreatedTime(System.currentTimeMillis());
+		paymentOrder.setCreatedBy(me.getUserId());
 
 		paymentService.savePaymentOrder(paymentOrder, waybillNos);
 		return toJsonTrueMsg();
@@ -171,6 +175,16 @@ public class CODSignController extends BaseController {
 		}
 		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 		String merchantId = me.getMerchantId();
+		
+		DeliveryOrderDO deliveryOrderDO = new DeliveryOrderDO();
+		deliveryOrderDO.setMerchantId(Long.parseLong(merchantId));
+		deliveryOrderDO.setOrderNo(orderNo);
+		deliveryOrderDO.setPaidType(DeliveryOrderPaidTypeEnum.ONLINE.getCode());
+		deliveryOrderDO.setUpdatedBy(me.getUserId());
+		deliveryOrderDO.setUpdatedTime(new Date().getTime());
+		orderService.updatePaidType(deliveryOrderDO);
+		
+		
 		DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
 
 		List<String> waybillNos = new ArrayList<String>();

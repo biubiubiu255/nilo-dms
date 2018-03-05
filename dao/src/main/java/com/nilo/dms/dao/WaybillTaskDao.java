@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface WaybillTaskDao{
 
-    List<WaybillTaskDo> queryAllWaybillTask();
+    List<WaybillTaskDo> queryNeedPayOrderByRider(String userId);
 }

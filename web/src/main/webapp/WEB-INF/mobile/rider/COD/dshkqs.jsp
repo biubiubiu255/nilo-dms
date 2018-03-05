@@ -97,11 +97,7 @@
 					}, false, function(res) {
 						if(res.result){
 							// alert('success,plase to sign logistics');
-							showInfo("success,will foward to sign");
-							//alert(logisticsNo);
-                            setTimeout(function(){
-                                window.location.href="/mobile/rider/sign/toSign.html?logisticsNo="+logisticsNo;
-                            }, 2000);
+                            window.location.href="/mobile/rider/sign/toSign.html?logisticsNo="+logisticsNo;
 						}else{
 							showWarning("Sorry,cash pay error!");
 						}
@@ -115,12 +111,12 @@
 					paidType : payType
 				};
 				//layui.upload.config.data = {logisticsNo:1,signer:2};
+				showMask();
 			},
 			done : function(res) {
+				closeMask();
 				if (res.result) {
-					//showWarning("success,plase to sign logistics");
-					alert('success,plase to sign logistics');
-					javascript: history.go(-1);
+                   window.location.href="/mobile/rider/sign/toSign.html?logisticsNo="+$("#logisticsNo").val();
 				} else {
 					showError(res.msg);
 
@@ -192,7 +188,7 @@
 							class='input_value i18n-input' name='amont' required="required" />
 						<li><label>Pay Type</label>
 							<div style="position: absolute; left: 25%">
-								<input type="radio" name="danxuan" value="0" />Cash
+								<input type="radio" name="danxuan" value="0" checked="checked"/>Cash
 								&nbsp;&nbsp; <input type="radio" name="danxuan" value="1" />Online
 								&nbsp;&nbsp; <input type="radio" name="danxuan" value="2" />Online
 								Problem

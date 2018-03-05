@@ -51,7 +51,7 @@
 					<a href="/mobile/rider/stranded/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="stranded_parcel">Stranded Parcel</label></li>
 					</a>
-					<a href="/mobile/rider/Batch/sign.html" title="">
+					<a href="/mobile/rider/Batch/toPay.html" title="">
 						<li><img src="/mobile/images/icon_5.png" /><br /><label>Batch transfer</label></li>
 					</a>
 				</ul>
