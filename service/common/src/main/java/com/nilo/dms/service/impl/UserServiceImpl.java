@@ -84,7 +84,6 @@ public class UserServiceImpl implements UserService {
         AssertUtil.isNotBlank(user.getLoginInfo().getUserName(), BizErrorCode.USER_NAME_EMPTY);
         AssertUtil.isNotNull(user.getLoginInfo().getUserType(), BizErrorCode.USER_TYPE_EMPTY);
         AssertUtil.isNotBlank(user.getUserInfo().getName(), BizErrorCode.NAME_EMPTY);
-        AssertUtil.isNotBlank(user.getUserInfo().getEmail(), BizErrorCode.EMAIL_EMPTY);
         AssertUtil.isNotBlank(user.getUserInfo().getPhone(), BizErrorCode.PHONE_EMPTY);
 
         //判断userName是否存在

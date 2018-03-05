@@ -20,7 +20,7 @@
             <label class="layui-form-label">Leader :</label>
             <div class="layui-input-block">
 
-                <select name="leaderId" lay-verify="required" lay-search="" style="display: none">
+                <select name="leaderId" lay-search="" style="display: none">
                     <option value="">choose or search....</option>
                     <c:forEach items="${list}" var="staff">
                         <option value="${staff.staffId}">${staff.staffId}-${staff.realName}</option>

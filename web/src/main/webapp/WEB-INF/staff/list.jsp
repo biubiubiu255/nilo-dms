@@ -45,7 +45,6 @@
         <thead>
         <tr>
             <th lay-data="{fixed: 'left',field:'staffId', width:100}">Staff ID</th>
-            <th lay-data="{field:'nickName', width:150}">Nick Name</th>
             <th lay-data="{field:'realName', width:150}">Real Name</th>
             <th lay-data="{field:'rider', width:100}">Rider</th>
             <th lay-data="{field:'departmentName', width:200}">
@@ -55,6 +54,7 @@
                 Status
             </th>
             <th lay-data="{field:'jobDesc', width:200}">Job</th>
+            <th lay-data="{field:'phone', width:200}">Phone</th>
             <th lay-data="{field:'sex', width:120, templet:'<div>{{ formatSex(d.sex) }}</div>'}">Sex</th>
             <th lay-data="{field:'employTime', width:170, templet:'<div>{{ formatDate(d.employTime) }}</div>'}">
                 Employ Time

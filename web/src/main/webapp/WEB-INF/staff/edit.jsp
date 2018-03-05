@@ -11,6 +11,14 @@
         <input type="text" value="${staff.userId}" name="userId" hidden="true">
         <input type="text" value="${staff.staffId}" name="staffId" hidden="true">
         <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">Staff ID:</label>
+                <div class="layui-input-inline">
+                    <input type="text" value="${staff.staffId}" autocomplete="off" disabled
+                           class="layui-input layui-disabled">
+                </div>
+            </div>
             <div class="layui-inline">
                 <label class="layui-form-label"><font color="red">*</font>Status:</label>
                 <div class="layui-input-inline">
@@ -18,14 +26,33 @@
                                 code="${staff.statusCode}" disabled="false" required="true"/>
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">Sex:</label>
-                <div class="layui-input-inline">
-                    <input type="radio" name="sex" value="1" title="Male" checked>
-                    <input type="radio" name="sex" value="2" title="Female">
-                </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><font color="red">*</font>Real Name:</label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" name="realName" value="${staff.realName}" autocomplete="off"
+                       class="layui-input">
+            </div>
+
+            <div class="layui-input-inline">
+                <input type="checkbox" name="isRiderCode" title="Rider" value="1"
+                       lay-skin="primary" <c:if test="${staff.isRiderCode =='1'}">checked</c:if>>
             </div>
         </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><font color="red">*</font>Phone</label>
+            <div class="layui-input-inline">
+                <input type="text" name="phone" value="${staff.phone}" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">Sex:</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="sex" value="1" title="Male" checked>
+                <input type="radio" name="sex" value="2" title="Female">
+            </div>
+        </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label"><font color="red">*</font>Department:</label>
             <div class="layui-input-inline">
@@ -36,28 +63,6 @@
                     </c:forEach>
                 </select>
             </div>
-            <div class="layui-input-inline">
-                <input type="checkbox" name="isRiderCode" title="Rider" value="1"
-                       lay-skin="primary" <c:if test="${staff.isRiderCode =='1'}">checked</c:if>>
-            </div>
-        </div>
-
-
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">Nick Name:</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="nickName" value="${staff.nickName}" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label"><font color="red">*</font>Real Name:</label>
-                <div class="layui-input-inline">
-                    <input type="text" lay-verify="required" name="realName" value="${staff.realName}" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label"><font color="red">*</font>Employ:</label>
                 <div class="layui-input-inline">
@@ -65,13 +70,7 @@
                            placeholder="Employ Time">
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">Birthday:</label>
-                <div class="layui-input-inline">
-                    <input type="text"  class="layui-input" name="birthday" id="birthday"
-                           placeholder="Birthday">
-                </div>
-            </div>
+
 
         </div>
         <div class="layui-form-item">
@@ -88,23 +87,16 @@
                     </select>
                 </div>
             </div>
-        </div>
-
-        <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label"><font color="red">*</font>Phone</label>
+                <label class="layui-form-label">Birthday:</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="phone" value="${staff.phone}" autocomplete="off" class="layui-input">
+                    <input type="text" class="layui-input" name="birthday" id="birthday"
+                           placeholder="Birthday">
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label"><font color="red">*</font>Email:</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="email" value="${staff.email}" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-
         </div>
+
+
         <div class="layui-form-item">
             <label class="layui-form-label">ID Card</label>
             <div class="layui-input-block">
@@ -134,7 +126,7 @@
         layui.use('laydate', function () {
             var layDate = layui.laydate;
             layDate.render({
-                elem: '#employTime', lang: 'en', value: formatDate('${staff.employTime}','YYYY-MM-DD')
+                elem: '#employTime', lang: 'en', value: formatDate('${staff.employTime}', 'YYYY-MM-DD')
             });
             layDate.render({
                 elem: '#birthday', lang: 'en', value: '${staff.birthday}'
