@@ -3,6 +3,7 @@ package com.nilo.dms.dao.dataobject;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 
 public class SendReportDO {
+    private Long merchantId;
     private String referenceNo;
     private String nextNetwork;
     private String network;
@@ -17,6 +18,14 @@ public class SendReportDO {
     private String name;
     private String contactNumber;
     private String address;
+
+    public Long getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
+    }
 
     public String getReferenceNo() {
         return referenceNo;

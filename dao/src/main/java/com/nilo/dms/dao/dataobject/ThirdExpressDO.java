@@ -36,4 +36,13 @@ public class ThirdExpressDO extends BaseDo<Long> {
     public void setMerchantId(Long merchantId) {
         this.merchantId = merchantId;
     }
+
+    @Override
+    public String toString() {
+        return "ThirdExpressDO{" +
+                "expressCode='" + expressCode + '\'' +
+                ", expressName='" + expressName + '\'' +
+                ", merchantId=" + merchantId +
+                '}';
+    }
 }

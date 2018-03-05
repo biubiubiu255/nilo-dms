@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
+<%@ page import="com.nilo.dms.common.Constant" %>
 <html>
 <%@ include file="../../common/header.jsp" %>
 <%
     request.setAttribute("merchantId", (String) session.getAttribute("merchantId"));
     request.setAttribute("id0", RandomStringUtils.randomAlphabetic(8));
-    request.setAttribute("orderTypeList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "delivery_order_type"));
+//    request.setAttribute("carrierNames", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "report_carrier_name"));
 %>
 <body>
 <div class="box-body">
@@ -17,10 +18,11 @@
                 <input type="text" name="orderNo" autocomplete="off" class="layui-input">
             </div>
         </div>
+
         <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">Express:</label>
-            <div class="layui-input-inline">
-                <input type="text" name="express" autocomplete="off" class="layui-input">
+            <label class="layui-form-label">Rider:</label>
+            <div class="layui-form-item layui-inline">
+                <input type="text" name="rider" autocomplete="off" class="layui-input">
             </div>
         </div>
 
@@ -47,18 +49,25 @@
                 </select>
             </div>
         </div>
-        <div class="layui-col-md4 layui-col-lg6">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">Status:</label>
             <div class="layui-form-item layui-inline">
                 <lp:deliveryStatus selectId="orderStatus" selectName="orderStatus" multiple="true"/>
             </div>
         </div>
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">Rider:</label>
-            <div class="layui-form-item layui-inline">
-                <input type="text" name="rider" autocomplete="off" class="layui-input">
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">Express:</label>
+            <div class="layui-form-item layui-inline" style="margin: 0px">
+                <select lay-filter="express" multiple name="express">
+                    <option value="">Pls select Express...</option>
+                    <c:forEach items="${express}" var="e">
+                        <option value=${e.expressName}>${e.expressName}</option>
+                    </c:forEach>
+                </select>
             </div>
         </div>
+    </div>
+    <div class="layui-row">
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">Seller customer:</label>
             <div class="layui-form-item layui-inline">
@@ -83,7 +92,7 @@
             <th lay-data="{field:'orderCategory', width:100}">orderCategory</th>
             <th lay-data="{field:'weight', width:100}">Weight</th>
             <th lay-data="{field:'stop', width:120}">stop</th>
-            <th lay-data="{field:'carrierName', width:150}">carrierName</th>
+            <th lay-data="{field:'carrierNameDesc', width:150}">carrierName</th>
             <th lay-data="{field:'deliveryFee', width:100}">deliveryFee</th>
             <th lay-data="{field:'statusDesc', width:100}">status</th>
             <th lay-data="{field:'remark', width:170}">remark</th>
@@ -123,14 +132,14 @@
                 table.reload("${id0}", {
                     where: {
                         orderNo: $("input[name='orderNo']").val(),
-                        express: $("input[name='express']").val(),
+                        carrierNames: $("select[name='express']").val(),
                         orderTypes: $("select[name='orderType']").val(),
                         orderStatus: $("select[name='orderStatus']").val(),
                         fromCreatedTime: $("#fromCreatedTime").val(),
                         toCreatedTime: $("#toCreatedTime").val(),
                         weight: $("input[name='weight']").val(),
                         rider: $("input[name='rider']").val(),
-                        sellerCustomer: $("input[name='sellerCustomer']").val()
+                        sellerCustomer: $("input[name='sellerCustomer']").val(),
                     }
                 });
             };

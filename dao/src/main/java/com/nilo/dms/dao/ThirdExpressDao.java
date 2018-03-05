@@ -13,7 +13,7 @@ public interface ThirdExpressDao extends BaseDao<Long, ThirdExpressDO> {
     List<ThirdExpressDO> findByMerchantId(Long merchantId);
     
     List<ThirdExpressDO> findByExpress(ThirdExpressDO express);
-    
+
     List<ThirdExpressDO> findByMerchantIdAll();
     
     void addExpress(ThirdExpressDO express);

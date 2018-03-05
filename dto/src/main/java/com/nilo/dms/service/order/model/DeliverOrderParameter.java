@@ -2,12 +2,29 @@ package com.nilo.dms.service.order.model;
 
 import java.util.List;
 
-public class SendOrderParameter {
+public class DeliverOrderParameter {
     private String merchantId;
     private String orderNo;
-    private String nextNetwork;
     private List<Integer> status;
-    private List<String> carrierName;
+    private String carrierName;
+    private String fromCreatedTime;
+    private String toCreatedTime;
+
+    public String getFromCreatedTime() {
+        return fromCreatedTime;
+    }
+
+    public void setFromCreatedTime(String fromCreatedTime) {
+        this.fromCreatedTime = fromCreatedTime;
+    }
+
+    public String getToCreatedTime() {
+        return toCreatedTime;
+    }
+
+    public void setToCreatedTime(String toCreatedTime) {
+        this.toCreatedTime = toCreatedTime;
+    }
 
     public String getMerchantId() {
         return merchantId;
@@ -25,14 +42,6 @@ public class SendOrderParameter {
         this.orderNo = orderNo;
     }
 
-    public String getNextNetwork() {
-        return nextNetwork;
-    }
-
-    public void setNextNetwork(String nextNetwork) {
-        this.nextNetwork = nextNetwork;
-    }
-
     public List<Integer> getStatus() {
         return status;
     }
@@ -41,11 +50,11 @@ public class SendOrderParameter {
         this.status = status;
     }
 
-    public List<String> getCarrierName() {
+    public String getCarrierName() {
         return carrierName;
     }
 
-    public void setCarrierName(List<String> carrierName) {
+    public void setCarrierName(String carrierName) {
         this.carrierName = carrierName;
     }
 }
