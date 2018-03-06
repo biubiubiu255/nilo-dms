@@ -77,7 +77,7 @@
             //监听提交
             form.on('submit(add-user)', function (data) {
                 var load = layer.load(2);
-                if ($("input[name='weight']").first().val()<0) {
+                if ($("input[name='weight']").first().val()<=0) {
                     layer.msg('Incorrect information input', {icon: 0, time: 1000}, function () {
                         layer.closeAll();
                     });

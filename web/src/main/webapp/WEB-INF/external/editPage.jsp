@@ -55,7 +55,7 @@
             form.on('submit(add-driver)', function (data) {
 
                 var load = layer.load(2);
-                if ($("input[name='weight']").first().val()<0) {
+                if ($("input[name='weight']").first().val()<=0) {
                     layer.msg('Incorrect information input', {icon: 0, time: 2000}, function () {
                         layer.closeAll();
                     });
