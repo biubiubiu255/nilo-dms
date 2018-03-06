@@ -5,10 +5,12 @@ import com.nilo.dms.common.BaseDo;
 public class WaybillExternalDo extends BaseDo<Long> {
     private String orderNo;
     private String type;
+    private String channels;
     private Double weight;
     private String clientName;
     private String creator;
     private int createTime;
+    private int receiveTime;
     private String notes;
 
     public String getOrderNo() {
@@ -25,6 +27,14 @@ public class WaybillExternalDo extends BaseDo<Long> {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getChannels() {
+        return channels;
+    }
+
+    public void setChannels(String channels) {
+        this.channels = channels;
     }
 
     public Double getWeight() {
@@ -55,8 +65,16 @@ public class WaybillExternalDo extends BaseDo<Long> {
         return createTime;
     }
 
-    public void getCreateTime(int create_time) {
-        this.createTime = create_time;
+    public void setCreateTime(int createTime) {
+        this.createTime = createTime;
+    }
+
+    public int getReceiveTime() {
+        return receiveTime;
+    }
+
+    public void setReceiveTime(int receiveTime) {
+        this.receiveTime = receiveTime;
     }
 
     public String getNotes() {
@@ -66,18 +84,19 @@ public class WaybillExternalDo extends BaseDo<Long> {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
     @Override
     public String toString() {
-        return "WaybillForeignDo{" +
+        return "WaybillExternalDo{" +
                 "orderNo='" + orderNo + '\'' +
                 ", type='" + type + '\'' +
+                ", channels='" + channels + '\'' +
                 ", weight=" + weight +
                 ", clientName='" + clientName + '\'' +
                 ", creator='" + creator + '\'' +
-                ", create_time=" + createTime +
+                ", createTime=" + createTime +
+                ", receiveTime=" + receiveTime +
                 ", notes='" + notes + '\'' +
                 '}';
     }
-
-
 }

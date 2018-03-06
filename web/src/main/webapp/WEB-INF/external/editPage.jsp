@@ -17,7 +17,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">ClientName</label>
+            <label class="layui-form-label">Creator</label>
             <div class="layui-input-block">
                 <input type="text" name="creator" autocomplete="off" value="${resultData.creator}" class="layui-input">
             </div>
@@ -53,7 +53,15 @@
             form.render();
             //监听提交
             form.on('submit(add-driver)', function (data) {
+
                 var load = layer.load(2);
+                if ($("input[name='weight']").first().val()<0) {
+                    layer.msg('Incorrect information input', {icon: 0, time: 2000}, function () {
+                        layer.closeAll();
+                    });
+                    return ;
+                }
+
                 $.ajax({
                     url: "/waybill/external/editInfo.html",
                     data: $("#myForm").serialize(),
@@ -69,8 +77,8 @@
 /*                                 $(".search").on("click", function () {
 					                reloadTable();
 					            }) */
-					            
-                                table.layui-table.render();
+
+                                //table.render();
                             });
                         } else {
                             //失败，提交表单成功后，释放hold，如果不释放hold，就变成了只能提交一次的表单

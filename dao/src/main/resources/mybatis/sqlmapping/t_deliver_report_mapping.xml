@@ -35,6 +35,21 @@
                 jdbcType="VARCHAR"/>
     </resultMap>
 
+    <resultMap id="receiveDO" type="com.nilo.dms.dao.dataobject.ReceiveReportDO">
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="order_platform" column="order_platform" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="order_type" column="order_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="created_time" column="created_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="name" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
     <select id="queryDeliverReport" resultMap="deliverDO">
         SELECT a.order_no,a.merchant_id,a.reference_no,a.network_id,a.need_pay_amount,a.delivery_fee,a.remark,b.handled_by,b.created_time,b.status,b.handled_time,c.name,c.contact_number,c.address
         FROM t_waybill a INNER JOIN t_waybill_task b
@@ -84,4 +99,31 @@
         </if>
         order by null
     </select>
+
+    <select id="queryReportReceive" resultMap="receiveDO">
+        SELECT a.order_no,a.merchant_id,a.order_platform,a.order_type,a.created_time,b.name
+        FROM t_waybill a INNER JOIN t_waybill_receiver b
+        on a.order_no = b.order_no
+        WHERE a.merchant_id=#{merchantId} AND ( a.status=? )
+
+        <if test="sTime !=0 and eTime !=0 ">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+        </if>
+
+        <if test="fromCreatedTime !=null ">
+            and b.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ b.created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status !=null and status.size() > 0 ">
+            <foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">
+                b.status=#{item}
+            </foreach>
+        </if>
+        order by created_time desc
+        limit #{offset} , #{limit}
+    </select>
+
 </mapper>

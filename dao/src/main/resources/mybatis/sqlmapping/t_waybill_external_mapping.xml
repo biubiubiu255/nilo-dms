@@ -6,10 +6,12 @@
  <resultMap id="WaybillExternal" type="com.nilo.dms.dao.dataobject.WaybillExternalDo">
       <result property="orderNo" column="order_no" javaType="java.lang.String" jdbcType="VARCHAR"/>
       <result property="type" column="type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <result property="channels" column="channels" javaType="java.lang.String" jdbcType="VARCHAR"/>
       <result property="weight" column="weight" javaType="java.lang.Double" jdbcType="DOUBLE"/>
       <result property="clientName" column="client_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
       <result property="creator" column="creator" javaType="java.lang.String" jdbcType="VARCHAR"/>
       <result property="createTime" column="create_time" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+      <result property="receiveTime" column="receive_time" javaType="java.lang.Integer" jdbcType="INTEGER"/>
       <result property="notes" column="notes" javaType="java.lang.String" jdbcType="VARCHAR"/>
  </resultMap>
 
@@ -19,9 +21,9 @@
         keyProperty="id">
 
     INSERT INTO t_waybill_external
-    (type,order_no, client_name, weight, creator, create_time, notes, status)
+    (type,channels,order_no, client_name, weight, creator, create_time, receive_time, notes, status)
     VALUES
-    (#{type},#{orderNo}, #{clientName}, #{weight}, #{creator},UNIX_TIMESTAMP(NOW()), #{notes}, 0)
+    (#{type},#{channels},#{orderNo}, #{clientName}, #{weight}, #{creator},UNIX_TIMESTAMP(NOW()), #{receiveTime}, #{notes}, 0)
 </insert>
 
 
