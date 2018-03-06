@@ -67,7 +67,7 @@ public class NotifyMerchantConsumer extends AbstractMQConsumer {
             response = HttpUtil.post(request.getUrl(), params);
             NotifyResponse notifyResponse = JSON.parseObject(response, NotifyResponse.class);
             if (notifyResponse == null || !notifyResponse.isSuccess()) {
-                throw new IllegalStateException("NotifyMerchant failed." + response);
+                logger.info("Notify Failed. Response:", response);
             }
 
             NotifyDO update = new NotifyDO();

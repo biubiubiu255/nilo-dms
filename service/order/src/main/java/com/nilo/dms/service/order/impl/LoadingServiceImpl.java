@@ -21,10 +21,7 @@ import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.Loading;
-import com.nilo.dms.service.order.model.LoadingDetails;
-import com.nilo.dms.service.order.model.OrderOptRequest;
-import com.nilo.dms.service.order.model.Task;
+import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import org.slf4j.Logger;
@@ -253,13 +250,11 @@ public class LoadingServiceImpl implements LoadingService {
 
     @Override
     @Transactional
-    public void ship(String merchantId, String loadingNo, String optBy) {
+    public void ship(ShipParameter parameter) {
 
-        LoadingDO loadingDO = loadingDao.queryByLoadingNo(Long.parseLong(merchantId), loadingNo);
-
-        //快递员信息
-        User rider = userService.findByUserId(merchantId, loadingDO.getRider());
-
+        Long merchantId = Long.parseLong(parameter.getMerchantId());
+        String loadingNo = parameter.getLoadingNo();
+        LoadingDO loadingDO = loadingDao.queryByLoadingNo(merchantId, loadingNo);
         if (loadingDO == null) {
             throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
         }
@@ -271,13 +266,15 @@ public class LoadingServiceImpl implements LoadingService {
             throw new DMSException(BizErrorCode.LOADING_EMPTY, loadingNo);
         }
 
+        List<String> orderNoList = new ArrayList<>();
+
         for (LoadingDetailsDO details : detailsDO) {
 
             //添加发运任务
             Task task = new Task();
-            task.setMerchantId(merchantId);
+            task.setMerchantId("" + merchantId);
             task.setStatus(TaskStatusEnum.CREATE);
-            task.setCreatedBy(optBy);
+            task.setCreatedBy(parameter.getOptBy());
             task.setOrderNo(details.getOrderNo());
             task.setHandledBy(loadingDO.getRider());
             if (StringUtil.isNotEmpty(loadingDO.getNextStation())) {
@@ -287,23 +284,23 @@ public class LoadingServiceImpl implements LoadingService {
             }
             taskService.addTask(task);
 
-            //修改订单状态为发运
-            OrderOptRequest optRequest = new OrderOptRequest();
-            optRequest.setMerchantId(merchantId);
-            optRequest.setOptBy(optBy);
-            if (StringUtil.isNotEmpty(loadingDO.getNextStation())) {
-                optRequest.setOptType(OptTypeEnum.SEND);
-            } else {
-                optRequest.setOptType(OptTypeEnum.DELIVERY);
-            }
-            List<String> orderNoList = new ArrayList<>();
             orderNoList.add(details.getOrderNo());
-            optRequest.setOrderNo(orderNoList);
-            optRequest.setRider(loadingDO.getRider());
-            optRequest.setNetworkId(loadingDO.getNextStation());
-            orderService.handleOpt(optRequest);
-
         }
+
+        //修改订单状态为发运
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setMerchantId("" + merchantId);
+        optRequest.setOptBy(parameter.getOptBy());
+        if (StringUtil.isNotEmpty(loadingDO.getNextStation())) {
+            optRequest.setOptType(OptTypeEnum.SEND);
+        } else {
+            optRequest.setOptType(OptTypeEnum.DELIVERY);
+        }
+        optRequest.setOrderNo(orderNoList);
+        optRequest.setRider(loadingDO.getRider());
+        optRequest.setNetworkId(parameter.getNetworkId());
+        orderService.handleOpt(optRequest);
+
         // 更新发运状态
         LoadingDO update = new LoadingDO();
         update.setId(loadingDO.getId());

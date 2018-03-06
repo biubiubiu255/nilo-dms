@@ -12,6 +12,7 @@ import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.Loading;
+import com.nilo.dms.service.order.model.ShipParameter;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.order.LoadingController;
 import org.apache.shiro.SecurityUtils;
@@ -123,7 +124,13 @@ public class DeliverScanController extends BaseController {
             }
 
         }
-        loadingService.ship(merchantId, loadingNo, me.getUserId());
+
+        ShipParameter parameter = new ShipParameter();
+        parameter.setMerchantId(merchantId);
+        parameter.setOptBy(me.getUserId());
+        parameter.setLoadingNo(loadingNo);
+        parameter.setNetworkId("" + me.getNetworks().get(0));
+        loadingService.ship(parameter);
         return toJsonTrueMsg();
 
     }

@@ -10,8 +10,6 @@ import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
 import com.nilo.dms.dao.NotifyDao;
-import com.nilo.dms.dao.ThirdDriverDao;
-import com.nilo.dms.dao.ThirdExpressDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.NotifyDO;
@@ -21,9 +19,11 @@ import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.NotifyMerchantService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.*;
+import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.NotifyRequest;
+import com.nilo.dms.service.order.model.OrderOptRequest;
+import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.service.org.StaffService;
-import com.nilo.dms.service.org.model.Staff;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
@@ -59,11 +59,10 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
     @Autowired
     private UserService userService;
     @Autowired
-    private StaffService staffService;
-    @Autowired
     private TaskService taskService;
     @Autowired
     private AbnormalOrderDao abnormalOrderDao;
+
     @Override
     public void updateStatus(OrderOptRequest request) {
         OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(request.getMerchantId(),
@@ -98,6 +97,10 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
                     case DELIVERY: {
                         Task task = taskService.queryTaskByTypeAndOrderNo(request.getMerchantId(), TaskTypeEnum.DELIVERY.getCode(), orderNo);
                         UserInfo userInfo = userService.findUserInfoByUserId(request.getMerchantId(), task.getHandledBy());
+
+                        DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + request.getMerchantId(), "" + request.getNetworkId()), DistributionNetworkDO.class);
+                        dataMap.put("location", networkDO.getName());
+
                         dataMap.put("rider_name", userInfo.getName());
                         dataMap.put("rider_phone", userInfo.getPhone());
                         break;
@@ -107,7 +110,7 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
                         break;
                     }
                     case PROBLEM: {
-                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()),orderNo);
+                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
                         String abnormalTypeDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.ABNORMAL_ORDER_TYPE, abnormalOrderDO.getAbnormalType());
                         dataMap.put("type", abnormalTypeDesc);
                         break;
