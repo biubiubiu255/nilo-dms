@@ -129,7 +129,7 @@
 					if (res.result) {
                         $('#lypic').attr('src', "");
 						showInfo('submit success');
-						javascript:history.go(-1);
+						window.location.href="/mobile/home.html";
 					} else {
 						showError(res.msg);
 						$("#remark").val();

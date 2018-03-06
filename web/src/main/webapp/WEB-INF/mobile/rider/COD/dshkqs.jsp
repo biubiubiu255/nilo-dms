@@ -82,6 +82,7 @@
 						payForm.setFormFieldValue("currency", res.data.currency);
 						
 						document.getElementById("pay-form").submit();
+						showMask();
 					});
 					return;
 				} else if (payType == '2') {
