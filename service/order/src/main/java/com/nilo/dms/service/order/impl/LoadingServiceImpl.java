@@ -257,9 +257,6 @@ public class LoadingServiceImpl implements LoadingService {
 
         LoadingDO loadingDO = loadingDao.queryByLoadingNo(Long.parseLong(merchantId), loadingNo);
 
-        //快递员信息
-        User rider = userService.findByUserId(merchantId, loadingDO.getRider());
-
         if (loadingDO == null) {
             throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
         }
@@ -270,6 +267,8 @@ public class LoadingServiceImpl implements LoadingService {
         if (detailsDO == null || detailsDO.size() == 0) {
             throw new DMSException(BizErrorCode.LOADING_EMPTY, loadingNo);
         }
+
+        List<String> orderNoList = new ArrayList<>();
 
         for (LoadingDetailsDO details : detailsDO) {
 
@@ -287,23 +286,23 @@ public class LoadingServiceImpl implements LoadingService {
             }
             taskService.addTask(task);
 
-            //修改订单状态为发运
-            OrderOptRequest optRequest = new OrderOptRequest();
-            optRequest.setMerchantId(merchantId);
-            optRequest.setOptBy(optBy);
-            if (StringUtil.isNotEmpty(loadingDO.getNextStation())) {
-                optRequest.setOptType(OptTypeEnum.SEND);
-            } else {
-                optRequest.setOptType(OptTypeEnum.DELIVERY);
-            }
-            List<String> orderNoList = new ArrayList<>();
             orderNoList.add(details.getOrderNo());
-            optRequest.setOrderNo(orderNoList);
-            optRequest.setRider(loadingDO.getRider());
-            optRequest.setNetworkId(loadingDO.getNextStation());
-            orderService.handleOpt(optRequest);
-
         }
+
+        //修改订单状态为发运
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setMerchantId(merchantId);
+        optRequest.setOptBy(optBy);
+        if (StringUtil.isNotEmpty(loadingDO.getNextStation())) {
+            optRequest.setOptType(OptTypeEnum.SEND);
+        } else {
+            optRequest.setOptType(OptTypeEnum.DELIVERY);
+        }
+        optRequest.setOrderNo(orderNoList);
+        optRequest.setRider(loadingDO.getRider());
+        optRequest.setNetworkId(loadingDO.getNextStation());
+        orderService.handleOpt(optRequest);
+
         // 更新发运状态
         LoadingDO update = new LoadingDO();
         update.setId(loadingDO.getId());
