@@ -14,7 +14,7 @@ public class UserInfo implements Serializable {
     private String merchantId;
     private String userId;
     private String name;
-    private String email;
+    private String email="";
     private String phone;
     private Long createdTime;
 

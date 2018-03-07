@@ -15,10 +15,12 @@
     <div class="layui-row">
 
         <div class="layui-col-md5">
-            <shiro:hasPermission name="400041">
+            <shiro:hasPermission name="4000102">
                 <button class="layui-btn layui-btn-normal batch">Cancellation</button>
             </shiro:hasPermission>
-            <button class="layui-btn btn-search">Search</button>
+            <shiro:hasPermission name="4000101">
+                <button class="layui-btn btn-search">Search</button>
+            </shiro:hasPermission>
         </div>
 
     </div>

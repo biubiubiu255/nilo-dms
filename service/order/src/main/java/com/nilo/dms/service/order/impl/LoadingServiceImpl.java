@@ -175,17 +175,6 @@ public class LoadingServiceImpl implements LoadingService {
         if (loadingDetailsDO != null) {
             throw new DMSException(BizErrorCode.DELIVERY_NO_EXIST);
         }
-        //修改订单信息
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setMerchantId(merchantId);
-        optRequest.setOptBy(optBy);
-        optRequest.setOptType(OptTypeEnum.LOADING);
-        List<String> orderNoList = new ArrayList<>();
-        orderNoList.add(orderNo);
-        optRequest.setOrderNo(orderNoList);
-
-        //loading不更新订单状态
-        //orderService.handleOpt(optRequest);
 
         //添加订单到发运明细中
         LoadingDetailsDO detailsDO = new LoadingDetailsDO();
@@ -231,18 +220,6 @@ public class LoadingServiceImpl implements LoadingService {
         if (!exist) {
             throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
         }
-
-        //修改订单状态
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setMerchantId(merchantId);
-        optRequest.setOptBy(optBy);
-        optRequest.setOptType(OptTypeEnum.LOADING_CANCEL);
-        List<String> orderNoList = new ArrayList<>();
-        orderNoList.add(orderNo);
-        optRequest.setOrderNo(orderNoList);
-
-        //loading 不更新状态
-        //orderService.handleOpt(optRequest);
 
         loadingDetailsDao.deleteBy(loadingNo, orderNo);
 

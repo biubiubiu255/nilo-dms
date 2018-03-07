@@ -63,6 +63,8 @@ public abstract class AbstractOrderOpt {
                         break;
                     }
                 }
+            } else {
+                allow = true;
             }
 
             if (notAllowStatus != null) {

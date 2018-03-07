@@ -21,27 +21,32 @@
         <div class="layui-col-md8 layui-col-lg5">
             <label class="layui-form-label">CreateTime:</label>
             <div class="layui-inline">
-                <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
+                <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="sTime">
             </div>
             -
             <div class="layui-inline">
-                <input type="text" class="layui-input" id="toCreatedTime" placeholder="To">
+                <input type="text" class="layui-input" id="toCreatedTime" placeholder="To" name="eTime">
             </div>
         </div>
     </div>
+
+    <!-- 搜索栏的第二行 -->
+
     <div class="layui-form layui-row">
         <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">Status:</label>
-            <div class="layui-form-item layui-inline">
-                <lp:taskStatus selectId="taskStatus" selectName="taskStatus" multiple="true"/>
+            <div class="layui-inline">
+                <input type="text" class="layui-input" id="toMonth" placeholder="To" name="month">
             </div>
         </div>
         <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">Rider:</label>
+            <label class="layui-form-label">Client Name:</label>
             <div class="layui-form-item layui-inline">
-                <input type="text" name="rider" autocomplete="off" class="layui-input">
+                <input type="text" name="clientName" autocomplete="off" class="layui-input">
             </div>
         </div>
+
+        <!-- 搜索按钮 -->
         <div class="layui-col-md1">
             <button class="layui-btn layui-btn-normal search">Search</button>
         </div>
@@ -49,23 +54,16 @@
     <hr>
 
     <table class="layui-table"
-           lay-data="{ url:'/report/deliver/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
+           lay-data="{ url:'/report/receive/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:200}">orderNo</th>
-            <th lay-data="{field:'referenceNo', width:200}">referenceNo</th>
-            <th lay-data="{field:'statusDesc', width:100}">status</th>
-            <th lay-data="{field:'networkDesc', width:100}">network</th>
-            <%--<th lay-data="{field:'handledBy', width:100}">handledBy</th>--%>
-            <th lay-data="{field:'createdTime',width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">createdTime</th>
-            <th lay-data="{field:'handledTime', width:170, templet:'<div>{{ formatDate(d.handledTime) }}</div>'}">handledTime</th>
-            <th lay-data="{field:'name', width:100}">name</th>
-            <th lay-data="{field:'contactNumber', width:120}">contactNumber</th>
-            <th lay-data="{field:'address', width:150}">address</th>
-            <th lay-data="{field:'needPayAmount', width:100}">needPayAmount</th>
-            <th lay-data="{field:'deliveryFee', width:100}">deliveryFee</th>
-            <th lay-data="{field:'remark', width:170}">remark</th>
+            <th lay-data="{fixed: 'left',field:'orderNo', width:200}"><O></O>rderNo</th>
+            <th lay-data="{field:'order_type', width:200}">OrderType</th>
+            <th lay-data="{field:'order_platform', width:200}">OrderPlatform</th>
+            <th lay-data="{field:'name', width:200}">Signer</th>
+            <th lay-data="{field:'created_time', width:200, templet:'<div>{{ formatDate(d.created_time) }}</div>'}">CreatedTime</th>
+            <th lay-data="{field:'receive_time', width:200, templet:'<div>{{ formatDate(d.receive_time) }}</div>'}">ReceiveTime</th>
         </tr>
         </thead>
     </table>
@@ -84,6 +82,14 @@
                     elem: '#toCreatedTime'
                     , lang: 'en'
                 });
+
+                layDate.render({
+                    elem: '#toMonth'
+                    , lang: 'en'
+                    , type: 'month'
+                    , format: 'yyyyMM'
+                });
+
             });
             var table;
             layui.use('table', function () {
@@ -96,13 +102,17 @@
             })
 
             function reloadTable() {
+               var sTime = $("input[name='sTime']").val()=="" ? "" : Date.parse(new Date($("input[name='sTime']").val()))/1000;
+               var eTime = $("input[name='eTime']").val()=="" ? "" : Date.parse(new Date($("input[name='eTime']").val()))/1000;
+
+
                 table.reload("${id0}", {
                     where: {
                         orderNo: $("input[name='orderNo']").val(),
-                        taskStatus: $("select[name='taskStatus']").val(),
-                        fromCreatedTime: $("#fromCreatedTime").val(),
-                        toCreatedTime: $("#toCreatedTime").val(),
-                        rider: $("input[name='rider']").val(),
+                        sTime: sTime,
+                        eTime: eTime,
+                        mother: $("input[name='month']").val(),
+                        clientName: $("input[name='clientName']").val()
                     }
                 });
             };

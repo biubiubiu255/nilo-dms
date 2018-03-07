@@ -1,18 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
+<%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
 <%@ page import="com.nilo.dms.common.Constant" %>
 <%
-    request.setAttribute(Constant.PRBOLEM_REASON, SystemCodeUtil.getSystemCodeList((String)session.getAttribute("merchantId"),Constant.PRBOLEM_REASON));
+    request.setAttribute(Constant.PRBOLEM_REASON, SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.PRBOLEM_REASON));
 %>
+
 <div class="box-body">
     <form id="myForm" class="layui-form" action="">
-        <input type="hidden" name="orderNo" value="${delayDO.orderNo}">
+        <input type="hidden" name="abnormalNo" value="${abnormalNo}">
         <div class="layui-form-item">
             <label class="layui-form-label">OrderNo:</label>
-            <div class="layui-input-block">
-                <label class="layui-form-label">${delayDO.orderNo}</label>
+            <div class="layui-input-inline">
+                <input type="text" name="orderNo" autocomplete="off" lay-verify="required" placeholder="OrderNo" class="layui-input">
             </div>
         </div>
 
@@ -55,7 +56,7 @@
                 var load = layer.load(2);
                 $.ajax({
                     type: "POST",
-                    url: "/order/delay/problem.html",
+                    url: "/order/abnormalOrder/add.html",
                     dataType: "json",
                     data: $("#myForm").serialize(),
                     success: function (data) {

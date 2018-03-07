@@ -4,10 +4,12 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.AbnormalHandleTypeEnum;
 import com.nilo.dms.common.enums.AbnormalOrderStatusEnum;
+import com.nilo.dms.common.enums.AbnormalTypeEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
 import com.nilo.dms.service.order.AbnormalOrderService;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.TaskService;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,14 +33,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/order/abnormalOrder")
 public class AbnormalOrderController extends BaseController {
-    @Autowired
-    private RiderOptService riderOptService;
 
     @Autowired
     private AbnormalOrderService abnormalOrderService;
-
-    @Autowired
-    private TaskService taskService;
 
     @RequestMapping(value = "/list.html", method = RequestMethod.GET)
     public String list(Model model) {
@@ -46,7 +44,7 @@ public class AbnormalOrderController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-    public String getOrderList(QueryAbnormalOrderParameter parameter, String type, String all) {
+    public String getOrderList(QueryAbnormalOrderParameter parameter, String all) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
@@ -58,34 +56,35 @@ public class AbnormalOrderController extends BaseController {
         if (StringUtil.isNotEmpty(all)) {
             status.add(AbnormalOrderStatusEnum.COMPLETE.getCode());
         }
-        if (StringUtil.isNotEmpty(type)) {
-            List<String> types = new ArrayList<>();
-            types.add(type);
-            parameter.setAbnormalType(types);
-        }
+
+        parameter.setAbnormalType(Arrays.asList(AbnormalTypeEnum.PROBLEM.getCode()));
         parameter.setStatus(status);
         Pagination page = getPage();
         List<AbnormalOrder> list = abnormalOrderService.queryAbnormalBy(parameter, page);
         return toPaginationLayUIData(page, list);
     }
 
+    @RequestMapping(value = "/addPage.html")
+    public String addPage(Model model, String orderNo) {
+        return "abnormal_order/add";
+    }
 
     @ResponseBody
-    @RequestMapping(value = "/abnormal.html")
-    public String abnormal(AbnormalOrder abnormalOrder) {
+    @RequestMapping(value = "/add.html", method = RequestMethod.POST)
+    public String addAbnormal(String orderNo, String reason, String remark) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
-
-            AbnormalParam param = new AbnormalParam();
-            abnormalOrder.setCreatedBy(me.getUserId());
+            AbnormalOrder abnormalOrder = new AbnormalOrder();
             abnormalOrder.setMerchantId(merchantId);
-            param.setAbnormalOrder(abnormalOrder);
-            param.setOptBy(me.getUserId());
-            riderOptService.abnormal(param);
-
+            abnormalOrder.setAbnormalType(AbnormalTypeEnum.PROBLEM);
+            abnormalOrder.setCreatedBy(me.getUserId());
+            abnormalOrder.setRemark(remark);
+            abnormalOrder.setOrderNo(orderNo);
+            abnormalOrder.setReason(reason);
+            abnormalOrderService.addAbnormalOrder(abnormalOrder);
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());
         }
@@ -93,44 +92,17 @@ public class AbnormalOrderController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/handleAbnormal.html")
-    public String handleAbnormal(AbnormalOptRequest request, String returnToMerchantFlag, String handleTypeCode) {
+    @RequestMapping(value = "/delete.html", method = RequestMethod.POST)
+    public String delete(String abnormalNo) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
-
-            AssertUtil.isNotBlank(handleTypeCode, BizErrorCode.HANDLE_TYPE_EMPTY);
-
-            request.setMerchantId(merchantId);
-            if (StringUtil.equals(returnToMerchantFlag, "Y")) {
-                request.setReturnToMerchant(true);
-            }
-            request.setHandleType(AbnormalHandleTypeEnum.getEnum(handleTypeCode));
-            request.setOptBy(me.getUserId());
-            abnormalOrderService.handleAbnormal(request);
+            abnormalOrderService.delete(abnormalNo, merchantId);
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());
         }
         return toJsonTrueMsg();
     }
-
-    @RequestMapping(value = "/handlePage.html")
-    public String handlePage(Model model, String abnormalNo, String orderNo, String referenceNo) {
-        model.addAttribute("abnormalNo", abnormalNo);
-        model.addAttribute("orderNo", orderNo);
-        model.addAttribute("referenceNo", referenceNo);
-
-        //查询上一次dispatch task
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        Task task = taskService.queryTaskByTypeAndOrderNo(merchantId, TaskTypeEnum.DELIVERY.getCode(), orderNo);
-        if (task != null) {
-            model.addAttribute("rider", task.getHandledBy());
-        }
-        return "abnormal_order/handle";
-    }
-
 }

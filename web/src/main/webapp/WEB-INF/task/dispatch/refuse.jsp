@@ -3,7 +3,7 @@
 <%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
 <%
-    request.setAttribute("abnormalTypeList", SystemCodeUtil.getSystemCodeList((String)session.getAttribute("merchantId"),"abnormal_order_type"));
+    request.setAttribute("refuse_reason", SystemCodeUtil.getSystemCodeList((String)session.getAttribute("merchantId"),"refuse_reason"));
 %>
 <style>
     .layui-upload-img{width: 92px; height: 92px; margin: 0 10px 10px 0;}
@@ -27,11 +27,11 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label layui-form-text">Type:</label>
+            <label class="layui-form-label layui-form-text">Reason:</label>
             <div class="layui-input-block">
-                <select name="abnormalType" lay-verify="required" lay-search="" style="display: none">
+                <select name="reason" lay-verify="required" lay-search="" style="display: none">
                     <option value="">choose or search....</option>
-                    <c:forEach items="${abnormalTypeList}" var="r">
+                    <c:forEach items="${refuse_reason}" var="r">
                         <option value="${r.code}">${r.value}</option>
                     </c:forEach>
                 </select>
@@ -70,7 +70,7 @@
                 var load = layer.load(2);
                 $.ajax({
                     type: "POST",
-                    url: "/order/abnormalOrder/abnormal.html",
+                    url: "/task/dispatch/refuse.html",
                     dataType: "json",
                     data: $("#myForm").serialize(),
                     success: function (data) {

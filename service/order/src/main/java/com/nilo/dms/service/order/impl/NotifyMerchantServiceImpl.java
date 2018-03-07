@@ -111,8 +111,14 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
                     }
                     case PROBLEM: {
                         AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
-                        String abnormalTypeDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.ABNORMAL_ORDER_TYPE, abnormalOrderDO.getAbnormalType());
-                        dataMap.put("type", abnormalTypeDesc);
+                        String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.PRBOLEM_REASON, abnormalOrderDO.getReason());
+                        dataMap.put("type", reason);
+                        break;
+                    }
+                    case REFUSE: {
+                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
+                        String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.REFUSE_REASON, abnormalOrderDO.getReason());
+                        dataMap.put("type", reason);
                         break;
                     }
                     case RECEIVE: {
@@ -142,6 +148,7 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
 
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -151,10 +158,10 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
         static {
             convertRelation.put(DeliveryOrderStatusEnum.ARRIVED, "170");
             convertRelation.put(DeliveryOrderStatusEnum.DELIVERY, "180");
-            convertRelation.put(DeliveryOrderStatusEnum.SEND, "185");
-            convertRelation.put(DeliveryOrderStatusEnum.PICK_UP, "210");
             convertRelation.put(DeliveryOrderStatusEnum.RECEIVED, "190");
             convertRelation.put(DeliveryOrderStatusEnum.PROBLEM, "197");
+            convertRelation.put(DeliveryOrderStatusEnum.REFUSE, "195");
+
         }
 
         public static String convert(DeliveryOrderStatusEnum status) {

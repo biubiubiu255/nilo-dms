@@ -7,8 +7,6 @@ import com.nilo.dms.common.BaseDo;
  */
 public class AbnormalOrderDO extends BaseDo<Long> {
 
-    private String referenceNo;
-
     private String orderNo;
 
     private Long merchantId;
@@ -17,48 +15,18 @@ public class AbnormalOrderDO extends BaseDo<Long> {
 
     private String abnormalType;
 
-    private String handleType;
-
-    private String handleBy;
-
-    private String handleRemark;
-
-    private Long handleTime;
-
     private String remark;
 
     private Integer status;
 
-    public Long getHandleTime() {
-        return handleTime;
+    private String reason;
+
+    public String getReason() {
+        return reason;
     }
 
-    public void setHandleTime(Long handleTime) {
-        this.handleTime = handleTime;
-    }
-
-    public String getHandleType() {
-        return handleType;
-    }
-
-    public void setHandleType(String handleType) {
-        this.handleType = handleType;
-    }
-
-    public String getHandleBy() {
-        return handleBy;
-    }
-
-    public void setHandleBy(String handleBy) {
-        this.handleBy = handleBy;
-    }
-
-    public String getHandleRemark() {
-        return handleRemark;
-    }
-
-    public void setHandleRemark(String handleRemark) {
-        this.handleRemark = handleRemark;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public Integer getStatus() {
@@ -67,14 +35,6 @@ public class AbnormalOrderDO extends BaseDo<Long> {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public String getReferenceNo() {
-        return referenceNo;
-    }
-
-    public void setReferenceNo(String referenceNo) {
-        this.referenceNo = referenceNo;
     }
 
     public String getOrderNo() {

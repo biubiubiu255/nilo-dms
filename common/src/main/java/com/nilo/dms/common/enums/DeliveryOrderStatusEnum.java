@@ -9,21 +9,11 @@ import java.util.Map;
 public enum DeliveryOrderStatusEnum implements EnumMessage{
 
     CREATE(0, "Create"),
-    DISPATCH_TO_DMS(1, "Delivered to DMS"),
-    ALLOCATED(2, "Allocated"),
-    GO_PICK_UP(4, "Goto Pickup"),
-    PICK_UP(5, "Pickup"),
-    PICK_UP_FAILED(6, "Pickup failed"),
     ARRIVED(20, "Arrived"),
-    LOADING(25, "Loading"),
     DELIVERY(30, "Delivery"),
-    SEND(31, "Send"),
-    DETAIN(35, "Detain"),
     PROBLEM(40, "Problem"),
-
-    RECEIVED(50, "Received"), //change this value
-
-    CANCELED(60, "Canceled"),;
+    REFUSE(60, "Refuse"),
+    RECEIVED(50, "Received"),; //change this value
 
     private Integer code;
     private String desc;

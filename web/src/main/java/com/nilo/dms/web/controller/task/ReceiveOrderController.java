@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nilo.dms.service.order.model.AbnormalParam;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -78,7 +79,26 @@ public class ReceiveOrderController extends BaseController {
         }
         return toJsonTrueMsg();
     }
+    @ResponseBody
+    @RequestMapping(value = "/refuse.html")
+    public String refuse(String orderNo, String reason, String remark) {
 
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        try {
+            AbnormalParam param = new AbnormalParam();
+            param.setMerchantId(merchantId);
+            param.setOptBy(me.getUserId());
+            param.setOrderNo(orderNo);
+            param.setRemark(remark);
+            param.setReason(reason);
+            riderOptService.refuse(param);
+        } catch (Exception e) {
+            return toJsonErrorMsg(e.getMessage());
+        }
+        return toJsonTrueMsg();
+    }
     @RequestMapping(value = "/importSignData.html", method = RequestMethod.POST)
     @ResponseBody
     public String importSignData(Model model, @RequestParam("file") CommonsMultipartFile file) {

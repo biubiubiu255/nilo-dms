@@ -10,21 +10,21 @@
         <div class="layui-form-item">
             <label class="layui-form-label">International order：</label>
             <div class="layui-input-block">
-                <input type="text" name="OrderNo" autocomplete="off" class="layui-input" lay-verify="number" placeholder="Please enter the international tracking number">
+                <input type="text" name="OrderNo" autocomplete="off" class="layui-input" lay-verify="required" placeholder="Please enter the international tracking number">
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">International channels：</label>
             <div class="layui-input-block">
-                <input type="text" name="channels" autocomplete="off" class="layui-input" lay-verify="number" placeholder="Please enter the International channels">
+                <input type="text" name="channels" autocomplete="off" class="layui-input" lay-verify="required" placeholder="Please enter the International channels">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">Weight</label>
+            <label class="layui-form-label">Weight(KG)</label>
             <div class="layui-input-block">
-                <input type="text" name="weight" autocomplete="off" class="layui-input" lay-verify="required" placeholder="Please input package weight">
+                <input type="text" name="weight" autocomplete="off" class="layui-input" lay-verify="required" placeholder="Please enter package weight">
             </div>
         </div>
         <div class="layui-form-item">
@@ -35,16 +35,16 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">Remark</label>
-            <div class="layui-input-block">
-                <input type="text" name="notes" autocomplete="off" class="layui-input" placeholder="Please enter notes, maybe not">
+            <label class="layui-form-label">Delivery time</label>
+            <div class="layui-inline">
+                <input type="text" class="layui-input" id="fromTime" placeholder="Please select date" lay-verify="required" name="receive_time">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">Delivery time</label>
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="fromTime" placeholder="Please enter delivery time" lay-verify="required" name="receive_time">
+            <label class="layui-form-label">Remark</label>
+            <div class="layui-input-block">
+                <textarea name="notes" placeholder="Please enter notes, maybe not" class="layui-textarea"></textarea>
             </div>
         </div>
 
@@ -54,20 +54,42 @@
                 <button type="reset" class="layui-btn layui-btn-primary reset">Reset</button>
             </div>
         </div>
-        
+
+
+
     </form>
 </div>
 
 <script type="text/javascript">
     $(function () {
-        layui.use('laydate', function () {
+        layui.use(['laydate', 'jquery'], function () {
+            var J_$ = layui.jquery;
             var layDate = layui.laydate;
             var d = new Date();
             var now = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+            $("#fromTime").change(function(){
+                alert("sdf");
+            });
             layDate.render({
                 elem: '#fromTime',
                 lang: 'en',
-                type: 'datetime'
+                type: 'datetime',
+                showBottom: true,
+                btns: ['clear', 'confirm'],
+                ready: function(value, date, endDate){
+
+
+                },
+                change: function(value, date, endDate){
+                    console.log(value); //得到日期生成的值，如：2017-08-18
+                    J_$(".laydate-btns-time")[0].click();
+                    $(".laydate-time-list").unbind("click").bind("click", "" ,function(){
+                        //J_$(".laydate-btns-confirm")[0].click();
+                    });
+
+
+                }
+
             });
         });
 

@@ -22,7 +22,7 @@ public enum OptTypeEnum implements EnumMessage{
     RECEIVE("receive", "Receive"),
     PACKAGE("package", "Package"),
     UNPACK ("unpack", "Unpack"),
-
+    REFUSE("refuse", "Refuse"),
     PROBLEM("problem", "Problem"),
     ;
     private String code;

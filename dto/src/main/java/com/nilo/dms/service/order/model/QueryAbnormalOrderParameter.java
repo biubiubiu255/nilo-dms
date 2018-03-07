@@ -16,9 +16,17 @@ public class QueryAbnormalOrderParameter {
 
     private List<Integer> status;
 
-    private String referenceNo;
-
     private List<String> abnormalType;
+
+    private String reason;
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
     public String getMerchantId() {
         return merchantId;
@@ -58,14 +66,6 @@ public class QueryAbnormalOrderParameter {
 
     public void setStatus(List<Integer> status) {
         this.status = status;
-    }
-
-    public String getReferenceNo() {
-        return referenceNo;
-    }
-
-    public void setReferenceNo(String referenceNo) {
-        this.referenceNo = referenceNo;
     }
 
     public List<String> getAbnormalType() {

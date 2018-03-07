@@ -59,7 +59,6 @@
             <th lay-data="{field:'employTime', width:170, templet:'<div>{{ formatDate(d.employTime) }}</div>'}">
                 Employ Time
             </th>
-            <th lay-data="{field:'age', width:100}">Age</th>
             <th lay-data="{title:'Opt',fixed: 'right', width:280, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
         </thead>

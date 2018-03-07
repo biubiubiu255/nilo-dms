@@ -5,7 +5,6 @@
 <%@ include file="../../common/header.jsp" %>
 <%
     request.setAttribute("id0", RandomStringUtils.randomAlphabetic(8));
-    request.setAttribute("abnormalTypeList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "abnormal_order_type"));
 
 %>
 <body>

@@ -5,7 +5,7 @@
 <%@ page import="com.nilo.dms.common.Constant" %>
 
 <%
-    request.setAttribute("abnormalTypeList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.ABNORMAL_ORDER_TYPE));
+    request.setAttribute("refuse_reason", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.REFUSE_REASON));
 %>
 
 
