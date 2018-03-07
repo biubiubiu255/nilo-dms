@@ -196,8 +196,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         }
 
         //修改任务状态
-        Task task = new Task();
-        task.setTaskId(param.getTaskId());
+        Task task = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(),TaskTypeEnum.DELIVERY.getCode(),param.getOrderNo());
         task.setStatus(TaskStatusEnum.COMPLETE);
         task.setHandledTime(DateUtil.getSysTimeStamp());
         taskService.updateTask(task);
@@ -207,9 +206,6 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
     @Override
     @Transactional
     public void resend(DelayParam param) {
-
-        //查询运单信息
-        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(param.getMerchantId(), param.getOrderNo());
 
         DeliveryOrderDelayDO update = new DeliveryOrderDelayDO();
         update.setOrderNo(param.getOrderNo());
