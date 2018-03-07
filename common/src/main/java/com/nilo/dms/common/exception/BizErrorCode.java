@@ -97,8 +97,8 @@ public enum BizErrorCode implements ErrorCode {
     PACKAGE_EMPTY("Package is empty", "100070"),
     WEIGHT_EMPTY("Weight is empty", "100071"),
 
-    ORDER_NO_ARRIVE("The order has not arrived", "100071");  //订单未到达
-    ;
+    ORDER_NO_ARRIVE("The order has not arrived", "100071"),  //订单未到达
+    STAFF_NOT_EXIST("Staff not exist", "100072"),;
 
     private final String description;
     private final String code;

@@ -17,11 +17,9 @@ public interface RiderOptService {
 
     void signForOrder(SignForOrderParam param);
 
-    void abnormal(AbnormalParam param);
+    void refuse(AbnormalParam param);
 
     void delay(DelayParam param);
-
-    void detain(DelayParam param);
 
     void resend(DelayParam param);
 

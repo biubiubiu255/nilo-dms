@@ -13,7 +13,7 @@ public interface StaffDao extends BaseDao<Long, StaffDO> {
 
     List<StaffDO> queryBy(@Param("companyId") Long companyId, @Param("departmentId") String departmentId, @Param("staffId") String staffId, @Param("name") String name,@Param("offset")int offset, @Param("limit")int limit);
 
-    StaffDO queryByStaffId(@Param("companyId") Long companyId, @Param("staffId") String staffId);
+    StaffDO queryByStaffId( @Param("staffId") String staffId);
 
     List<StaffDO> queryAllBy(@Param("companyId") Long companyId, @Param("departmentId") String departmentId );
 

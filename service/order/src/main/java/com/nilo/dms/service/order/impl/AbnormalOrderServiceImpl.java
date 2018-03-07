@@ -8,7 +8,9 @@ import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
+import com.nilo.dms.dao.DeliveryOrderDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
+import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
 import com.nilo.dms.service.system.MerchantService;
 import com.nilo.dms.service.order.AbnormalOrderService;
 import com.nilo.dms.service.order.DeliveryFeeDetailsService;
@@ -28,26 +30,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.nilo.dms.common.enums.AbnormalTypeEnum.PROBLEM;
+import static com.nilo.dms.common.enums.AbnormalTypeEnum.REFUSE;
+
 /**
  * Created by admin on 2017/11/9.
  */
 @Service
 public class AbnormalOrderServiceImpl implements AbnormalOrderService {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
     @Autowired
     private AbnormalOrderDao abnormalOrderDao;
-
     @Autowired
     private OrderService orderService;
-
     @Autowired
-    private MerchantService merchantService;
+    private DeliveryOrderDao deliveryOrderDao;
 
     @Override
     @Transactional
     public void addAbnormalOrder(AbnormalOrder abnormalOrder) {
+
+
+        DeliveryOrderDO orderDO = deliveryOrderDao
+                .queryByOrderNo(Long.parseLong(abnormalOrder.getMerchantId()), abnormalOrder.getOrderNo());
+        if (orderDO == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, abnormalOrder.getOrderNo());
 
         String abnormalNo = SystemConfig.getNextSerialNo(abnormalOrder.getMerchantId(), SerialTypeEnum.ABNORMAL_DELIVERY_ORDER_NO.getCode());
         abnormalOrder.setAbnormalNo(abnormalNo);
@@ -59,7 +65,17 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setMerchantId(abnormalOrder.getMerchantId());
         optRequest.setOptBy(abnormalOrder.getCreatedBy());
-        optRequest.setOptType(OptTypeEnum.PROBLEM);
+
+        switch (abnormalOrder.getAbnormalType()) {
+            case PROBLEM: {
+                optRequest.setOptType(OptTypeEnum.PROBLEM);
+                break;
+            }
+            case REFUSE: {
+                optRequest.setOptType(OptTypeEnum.REFUSE);
+                break;
+            }
+        }
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(abnormalOrder.getOrderNo());
         optRequest.setOrderNo(orderNoList);
@@ -69,13 +85,23 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
     }
 
     @Override
+    public void delete(String abnormalNo, String merchantId) {
+
+        AbnormalOrderDO abnormalOrder = new AbnormalOrderDO();
+        abnormalOrder.setMerchantId(Long.parseLong(merchantId));
+        abnormalOrder.setAbnormalNo(abnormalNo);
+        abnormalOrder.setStatus(AbnormalOrderStatusEnum.DELETE.getCode());
+        abnormalOrderDao.update(abnormalOrder);
+    }
+
+    @Override
     public List<AbnormalOrder> queryAbnormalBy(QueryAbnormalOrderParameter parameter, Pagination pagination) {
         Map<String, Object> map = new HashMap<>();
         map.put("orderNo", parameter.getOrderNo());
         map.put("merchantId", parameter.getMerchantId());
         map.put("abnormalType", parameter.getAbnormalType());
         map.put("status", parameter.getStatus());
-        map.put("referenceNo", parameter.getReferenceNo());
+        map.put("reason", parameter.getReason());
 
         if (StringUtil.isEmpty(parameter.getFromCreatedTime()) || StringUtil.isEmpty(parameter.getToCreatedTime())) {
             if (StringUtil.isEmpty(parameter.getFromCreatedTime())) {
@@ -129,96 +155,35 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         }
         String orderNo = abnormalOrderDO.getOrderNo();
 
-
         switch (request.getHandleType()) {
             case RESEND: {
-                handlerAbnormalOpt(request, orderNo);
                 break;
             }
             case RETURN: {
-                handlerAbnormalOpt(request, orderNo);
                 break;
             }
         }
 
     }
 
-
-    private void handlerAbnormalOpt(AbnormalOptRequest request, String orderNo) {
-
-        if (request.getHandleType() == AbnormalHandleTypeEnum.RETURN) {
-            //处理订单状态
-            OrderOptRequest optRequest = new OrderOptRequest();
-            optRequest.setOptType(OptTypeEnum.PROBLEM);
-            optRequest.setOptBy(request.getOptBy());
-            optRequest.setMerchantId(request.getMerchantId());
-            List<String> orderList = new ArrayList<>();
-            orderList.add(orderNo);
-            optRequest.setOrderNo(orderList);
-            optRequest.setRemark(request.getRemark());
-            orderService.handleOpt(optRequest);
-        }
-
-        //修改异常件状态及处理结果
-        AbnormalOrderDO abnormalOrderDO = new AbnormalOrderDO();
-        abnormalOrderDO.setMerchantId(Long.parseLong(request.getMerchantId()));
-        abnormalOrderDO.setAbnormalNo(request.getAbnormalNo());
-        abnormalOrderDO.setStatus(AbnormalOrderStatusEnum.COMPLETE.getCode());
-        abnormalOrderDO.setHandleBy(request.getOptBy());
-        abnormalOrderDO.setHandleRemark(request.getRemark());
-        abnormalOrderDO.setHandleType(request.getHandleType().getCode());
-        abnormalOrderDO.setHandleTime(DateUtil.getSysTimeStamp());
-        abnormalOrderDao.update(abnormalOrderDO);
-    }
-
-
-    private void returnToMerchant(String merchantId, String orderNo) {
-
-        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
-        deliveryOrder.setServiceType(ServiceTypeEnum.NORMAL);
-        deliveryOrder.setStatus(DeliveryOrderStatusEnum.CREATE);
-        deliveryOrder.setReferenceNo(deliveryOrder.getOrderNo());
-        deliveryOrder.setOrderType("RM");
-
-        SenderInfo senderInfo = new SenderInfo();
-        senderInfo.setSenderName("System");
-
-
-        MerchantInfo merchantInfo = merchantService.findById(merchantId);
-        ReceiverInfo receiverInfo = new ReceiverInfo();
-        receiverInfo.setReceiverName(merchantInfo.getContactName());
-        receiverInfo.setReceiverCountry(merchantInfo.getCountry());
-        receiverInfo.setReceiverProvince("2");
-        receiverInfo.setReceiverCity("3");
-        receiverInfo.setReceiverArea("4");
-        receiverInfo.setReceiverAddress(merchantInfo.getAddress());
-        receiverInfo.setReceiverPhone(merchantInfo.getContactPhone());
-
-        deliveryOrder.setSenderInfo(senderInfo);
-        deliveryOrder.setReceiverInfo(receiverInfo);
-        orderService.createDeliveryOrder(deliveryOrder);
-
-    }
 
     private AbnormalOrderDO convertTo(AbnormalOrder abnormalOrder) {
         if (abnormalOrder == null) {
             return null;
         }
         AbnormalOrderDO abnormalOrderDO = new AbnormalOrderDO();
-        abnormalOrderDO.setReferenceNo(abnormalOrder.getReferenceNo());
         if (abnormalOrder.getStatus() != null) {
             abnormalOrderDO.setStatus(abnormalOrder.getStatus().getCode());
         }
         abnormalOrderDO.setCreatedBy(abnormalOrder.getCreatedBy());
         abnormalOrderDO.setMerchantId(Long.parseLong(abnormalOrder.getMerchantId()));
         abnormalOrderDO.setAbnormalNo(abnormalOrder.getAbnormalNo());
-        abnormalOrderDO.setAbnormalType(abnormalOrder.getAbnormalType());
-        if (abnormalOrder.getHandleType() != null) {
-            abnormalOrderDO.setHandleType(abnormalOrder.getHandleType().getCode());
+        if (abnormalOrder.getAbnormalType() != null) {
+            abnormalOrderDO.setAbnormalType(abnormalOrder.getAbnormalType().getCode());
         }
         abnormalOrderDO.setRemark(abnormalOrder.getRemark());
         abnormalOrderDO.setOrderNo(abnormalOrder.getOrderNo());
-
+        abnormalOrderDO.setReason(abnormalOrder.getReason());
         return abnormalOrderDO;
     }
 
@@ -227,26 +192,26 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
             return null;
         }
         AbnormalOrder abnormalOrder = new AbnormalOrder();
-        abnormalOrder.setReferenceNo(abnormalOrderDO.getReferenceNo());
         abnormalOrder.setStatus(AbnormalOrderStatusEnum.getEnum(abnormalOrderDO.getStatus()));
         abnormalOrder.setCreatedBy(abnormalOrderDO.getCreatedBy());
         abnormalOrder.setMerchantId("" + abnormalOrderDO.getMerchantId());
         abnormalOrder.setAbnormalNo(abnormalOrderDO.getAbnormalNo());
-        abnormalOrder.setAbnormalType(abnormalOrderDO.getAbnormalType());
-        String abnormalTypeDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.ABNORMAL_ORDER_TYPE, abnormalOrderDO.getAbnormalType());
-        abnormalOrder.setAbnormalTypeDesc(abnormalTypeDesc == "" ? abnormalOrderDO.getAbnormalType() : abnormalTypeDesc);
+
+        AbnormalTypeEnum type = AbnormalTypeEnum.getEnum(abnormalOrderDO.getAbnormalType());
+        abnormalOrder.setAbnormalType(type);
+        String reasonDesc = "";
+        if (type == PROBLEM) {
+            reasonDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.PRBOLEM_REASON, abnormalOrderDO.getReason());
+        } else {
+            reasonDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.REFUSE_REASON, abnormalOrderDO.getReason());
+        }
+        abnormalOrder.setReasonDesc(reasonDesc);
         abnormalOrder.setRemark(abnormalOrderDO.getRemark());
         abnormalOrder.setOrderNo(abnormalOrderDO.getOrderNo());
-
         abnormalOrder.setCreatedTime(abnormalOrderDO.getCreatedTime());
         abnormalOrder.setUpdatedTime(abnormalOrderDO.getUpdatedTime());
+        abnormalOrder.setReason(abnormalOrderDO.getReason());
 
-        if (StringUtil.isNotEmpty(abnormalOrderDO.getHandleType())) {
-            abnormalOrder.setHandleType(AbnormalHandleTypeEnum.getEnum(abnormalOrderDO.getHandleType()));
-        }
-        abnormalOrder.setHandleBy(abnormalOrderDO.getHandleBy());
-        abnormalOrder.setHandleRemark(abnormalOrderDO.getHandleRemark());
-        abnormalOrder.setHandleTime(abnormalOrderDO.getHandleTime());
 
         return abnormalOrder;
     }

@@ -2,13 +2,12 @@ package com.nilo.dms.service.order.model;
 
 import com.nilo.dms.common.enums.AbnormalHandleTypeEnum;
 import com.nilo.dms.common.enums.AbnormalOrderStatusEnum;
+import com.nilo.dms.common.enums.AbnormalTypeEnum;
 
 /**
  * Created by admin on 2017/11/9.
  */
 public class AbnormalOrder {
-
-    private String referenceNo;
 
     private String orderNo;
 
@@ -22,47 +21,17 @@ public class AbnormalOrder {
 
     private String image;
 
-    private String abnormalType;
+    private String reason;
 
-    private String abnormalTypeDesc;
+    private String reasonDesc;
 
-    private AbnormalHandleTypeEnum handleType;
+    private AbnormalTypeEnum abnormalType;
 
     private AbnormalOrderStatusEnum status;
 
     private Long createdTime;
 
     private Long updatedTime;
-
-    private String handleBy;
-
-    private String handleRemark;
-
-    private Long handleTime;
-
-    public Long getHandleTime() {
-        return handleTime;
-    }
-
-    public void setHandleTime(Long handleTime) {
-        this.handleTime = handleTime;
-    }
-
-    public String getHandleBy() {
-        return handleBy;
-    }
-
-    public void setHandleBy(String handleBy) {
-        this.handleBy = handleBy;
-    }
-
-    public String getHandleRemark() {
-        return handleRemark;
-    }
-
-    public void setHandleRemark(String handleRemark) {
-        this.handleRemark = handleRemark;
-    }
 
     public Long getCreatedTime() {
         return createdTime;
@@ -86,14 +55,6 @@ public class AbnormalOrder {
 
     public void setStatus(AbnormalOrderStatusEnum status) {
         this.status = status;
-    }
-
-    public String getReferenceNo() {
-        return referenceNo;
-    }
-
-    public void setReferenceNo(String referenceNo) {
-        this.referenceNo = referenceNo;
     }
 
     public String getOrderNo() {
@@ -144,35 +105,31 @@ public class AbnormalOrder {
         this.image = image;
     }
 
-    public String getAbnormalType() {
+    public AbnormalTypeEnum getAbnormalType() {
         return abnormalType;
     }
 
-    public void setAbnormalType(String abnormalType) {
+    public void setAbnormalType(AbnormalTypeEnum abnormalType) {
         this.abnormalType = abnormalType;
-    }
-
-    public AbnormalHandleTypeEnum getHandleType() {
-        return handleType;
-    }
-
-    public void setHandleType(AbnormalHandleTypeEnum handleType) {
-        this.handleType = handleType;
-    }
-
-    public String getHandleTypeDesc() {
-        return this.handleType== null?"":this.handleType.getDesc();
     }
 
     public String getStatusDesc() {
         return this.status.getDesc();
     }
 
-    public String getAbnormalTypeDesc() {
-        return abnormalTypeDesc;
+    public String getReason() {
+        return reason;
     }
 
-    public void setAbnormalTypeDesc(String abnormalTypeDesc) {
-        this.abnormalTypeDesc = abnormalTypeDesc;
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getReasonDesc() {
+        return reasonDesc;
+    }
+
+    public void setReasonDesc(String reasonDesc) {
+        this.reasonDesc = reasonDesc;
     }
 }

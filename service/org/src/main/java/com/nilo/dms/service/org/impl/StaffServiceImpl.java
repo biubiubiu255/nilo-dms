@@ -68,7 +68,7 @@ public class StaffServiceImpl implements StaffService {
             staff.setStaffId(staffID);
         }
         //查询staffID是否已经存在
-        StaffDO queryStaff = staffDao.queryByStaffId(Long.parseLong(staff.getCompanyId()), staff.getStaffId());
+        StaffDO queryStaff = staffDao.queryByStaffId(staff.getStaffId());
         if (queryStaff != null) {
             throw new DMSException(BizErrorCode.STAFF_EXIST, staff.getStaffId());
         }
@@ -121,12 +121,16 @@ public class StaffServiceImpl implements StaffService {
     @Override
     @Transactional
     public void updateStaff(Staff staff) {
+
+        StaffDO query = staffDao.queryByStaffId(staff.getStaffId());
+        if (query == null) throw new DMSException(BizErrorCode.STAFF_NOT_EXIST);
+
         StaffDO staffDO = convert(staff);
         staffDao.update(staffDO);
 
         UserInfo userInfo = new UserInfo();
         userInfo.setMerchantId(staff.getMerchantId());
-        userInfo.setUserId(staff.getUserId());
+        userInfo.setUserId("" + query.getUserId());
         userInfo.setName(staff.getRealName());
         userInfo.setPhone(staff.getPhone());
         userInfo.setEmail(staff.getEmail());
@@ -136,7 +140,7 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public Staff findByStaffId(String companyId, String staffId) {
 
-        StaffDO staffDO = staffDao.queryByStaffId(Long.parseLong(companyId), staffId);
+        StaffDO staffDO = staffDao.queryByStaffId(staffId);
         return convert(staffDO);
     }
 

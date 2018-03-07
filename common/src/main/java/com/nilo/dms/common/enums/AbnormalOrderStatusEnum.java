@@ -7,10 +7,9 @@ import java.util.Map;
  * Created by ronny on 2017/9/15.
  */
 public enum AbnormalOrderStatusEnum implements EnumMessage{
-
-    CREATE(1, "Pending"),
-    CANCELED(2, "Canceled"),
-    COMPLETE(3, "Complete"),
+    DELETE(0, "Delete"),
+    CREATE(1, "Create"),
+    COMPLETE(2, "Complete"),
     ;
     private Integer code;
     private String desc;

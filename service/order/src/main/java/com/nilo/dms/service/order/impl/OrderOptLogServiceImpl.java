@@ -116,7 +116,7 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
         OptTypeEnum optTypeEnum = request.getOptType();
 
         switch (optTypeEnum) {
-            case PACKAGE: {
+            /*case PACKAGE: {
                 for(String orderNo : request.getOrderNo()) {
                     DeliveryOrder deliveryOrder = orderService.queryByOrderNo(request.getMerchantId(), orderNo);
                     WaybillLogPackageDO packageDO = new WaybillLogPackageDO();
@@ -143,7 +143,7 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
                     waybillLogUnPackDao.insert(unPackDO);
                 }
                 break;
-            }
+            }*/
             default:
                 break;
         }
