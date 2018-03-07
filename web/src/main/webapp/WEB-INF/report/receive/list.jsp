@@ -18,33 +18,43 @@
             </div>
         </div>
 
-        <div class="layui-col-md8 layui-col-lg5">
-            <label class="layui-form-label">CreateTime:</label>
+
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">CreatedTime:</label>
             <div class="layui-inline">
-                <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="sTime">
+                <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="createdTime_s">
             </div>
             -
             <div class="layui-inline">
-                <input type="text" class="layui-input" id="toCreatedTime" placeholder="To" name="eTime">
+                <input type="text" class="layui-input" id="toCreatedTime" placeholder="To" name="createdTime_e">
             </div>
         </div>
+
+
     </div>
 
     <!-- 搜索栏的第二行 -->
 
     <div class="layui-form layui-row">
+
         <div class="layui-col-md4 layui-col-lg4">
-            <label class="layui-form-label">Status:</label>
+            <label class="layui-form-label">ReceiveTime:</label>
             <div class="layui-inline">
-                <input type="text" class="layui-input" id="toMonth" placeholder="To" name="month">
+                <input type="text" class="layui-input" id="fromReceiveTime" placeholder="From" name="receiveTime_s">
+            </div>
+            -
+            <div class="layui-inline">
+                <input type="text" class="layui-input" id="toReceiveTime" placeholder="To" name="receiveTime_e">
             </div>
         </div>
+
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">Client Name:</label>
             <div class="layui-form-item layui-inline">
                 <input type="text" name="clientName" autocomplete="off" class="layui-input">
             </div>
         </div>
+
 
         <!-- 搜索按钮 -->
         <div class="layui-col-md1">
@@ -61,9 +71,11 @@
             <th lay-data="{fixed: 'left',field:'orderNo', width:200}"><O></O>rderNo</th>
             <th lay-data="{field:'order_type', width:200}">OrderType</th>
             <th lay-data="{field:'order_platform', width:200}">OrderPlatform</th>
-            <th lay-data="{field:'name', width:200}">Signer</th>
-            <th lay-data="{field:'created_time', width:200, templet:'<div>{{ formatDate(d.created_time) }}</div>'}">CreatedTime</th>
+            <th lay-data="{field:'weight', width:100}">Weight</th>
+            <th lay-data="{field:'name', width:100}">DriverName</th>
             <th lay-data="{field:'receive_time', width:200, templet:'<div>{{ formatDate(d.receive_time) }}</div>'}">ReceiveTime</th>
+            <th lay-data="{field:'created_time', width:200, templet:'<div>{{ formatDate(d.created_time) }}</div>'}">CreatedTime</th>
+            <th lay-data="{field:'created_time', width:200, templet:'<div>{{ showImageView(d.orderNo) }}</div>'}">View</th>
         </tr>
         </thead>
     </table>
@@ -84,12 +96,22 @@
                 });
 
                 layDate.render({
+                    elem: '#fromReceiveTime'
+                    , lang: 'en'
+                });
+                layDate.render({
+                    elem: '#toReceiveTime'
+                    , lang: 'en'
+                });
+                /*
+                layDate.render({
                     elem: '#toMonth'
                     , lang: 'en'
                     , type: 'month'
                     , format: 'yyyyMM'
                 });
 
+                */
             });
             var table;
             layui.use('table', function () {
@@ -102,15 +124,24 @@
             })
 
             function reloadTable() {
-               var sTime = $("input[name='sTime']").val()=="" ? "" : Date.parse(new Date($("input[name='sTime']").val()))/1000;
-               var eTime = $("input[name='eTime']").val()=="" ? "" : Date.parse(new Date($("input[name='eTime']").val()))/1000;
-
-
+               var sTime_creat = $("input[name='createdTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val()))/1000;
+               var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
+               var sTime_receive = $("input[name='receiveTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='receiveTime_s']").val()))/1000;
+               var eTime_receive = $("input[name='receiveTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='receiveTime_e']").val()))/1000+86400;
+               if ((sTime_creat!="" && eTime_creat=="") || (eTime_creat!="" && sTime_creat=="") || (sTime_receive!="" && eTime_receive=="") || (eTime_receive!="" && sTime_receive=="")){
+                   layui.use('layer', function () {
+                       var layer = layui.layer;
+                       layer.msg('Please select the full date', {icon: 0, time: 2000});
+                   });
+                   return ;
+               }
                 table.reload("${id0}", {
                     where: {
                         orderNo: $("input[name='orderNo']").val(),
-                        sTime: sTime,
-                        eTime: eTime,
+                        sTime_creat: sTime_creat,
+                        eTime_creat: eTime_creat,
+                        sTime_receive: sTime_receive,
+                        eTime_receive: eTime_receive,
                         mother: $("input[name='month']").val(),
                         clientName: $("input[name='clientName']").val()
                     }

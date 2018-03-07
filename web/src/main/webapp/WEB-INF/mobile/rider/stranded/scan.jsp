@@ -4,6 +4,10 @@
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
 <%@ page import="com.nilo.dms.common.Constant" %>
 
+
+<script type="text/javascript" src="/layui/layer.mobil/layer.js"></script>
+
+
 <%
     request.setAttribute("delayReason", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.DELAY_REASON));
 %>
@@ -69,8 +73,8 @@
     		postUrl : '/mobile/rider/stranded/save.html' ,
     		callback: function (data) {
                 if (data.result) {
-                    showInfo('submit success',2000);
-                    mobile.paginate();
+                    showInfo('submit success');
+                    //mobile.paginate();
                 } else {
                     showError(data.msg);;
                 }

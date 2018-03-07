@@ -87,6 +87,7 @@
                 if (obj.event === 'delete') {
                     delUser(data);
                 }
+
             });
 
             $(".search").on("click", function () {
@@ -171,12 +172,17 @@
                         title: title,
                         area: ['800px'],
                         offset: ['100px', '250px'],
-                        content: data
+                        content: data ,
+                        end: function () {
+                            reloadCurrentPage();
+                        }
                     });
                 }
             });
 
         }
+
+
     });
 </script>
 </body>

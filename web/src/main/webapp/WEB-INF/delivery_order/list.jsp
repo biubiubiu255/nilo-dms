@@ -289,7 +289,10 @@
                     shadeClose: true,
                     area: ['800px', '600px'],
                     content: "/order/deliveryOrder/edit/" + orderNo + ".html",
-                    maxmin: true
+                    maxmin: true,
+                    end: function () {
+                        reloadCurrentPage();
+                    }
                 });
                 layer.full(index);
             }

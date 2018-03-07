@@ -12,7 +12,7 @@ import java.util.Map;
  * Created by admin on 2017/9/19.
  */
 @Repository
-public interface SendReportDao extends BaseDao<Long,SendReportDO> {
-    List<SendReportDO> querySendReport(Map map);
-    Long queryCountBy(Map map);
+public interface ReceiveReportDao extends BaseDao<Long,SendReportDO> {
+    List<ReceiveReportDO> queryReportReceive(Map map);
+    Integer queryReportReceiveCount(Map map);
 }

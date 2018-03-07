@@ -2,6 +2,7 @@ package com.nilo.dms.web.controller.report;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dao.ReceiveReportDao;
 import com.nilo.dms.dao.SendReportDao;
 import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.ThirdExpressDao;
@@ -30,7 +31,7 @@ import java.util.Map;
 public class ReceiveReportController extends BaseController {
 
     @Autowired
-    private SendReportService sendReportService;
+    private ReceiveReportDao receiveReportDao;
 
     @Autowired
     private SendReportDao sendReportDao;
@@ -48,7 +49,8 @@ public class ReceiveReportController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-    public String getOrderList(String orderNo, Integer sTime, Integer eTime, String mother, String clientName) {
+    public String getOrderList(String orderNo, Integer sTime_creat, Integer eTime_creat, Integer sTime_receive,
+                               Integer eTime_receive, String mother, String clientName) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
@@ -58,8 +60,10 @@ public class ReceiveReportController extends BaseController {
         Map<String, Object> map = new HashMap<String, Object>();
 
         map.put("merchantId", merchantId);
-        map.put("sTime", sTime);
-        map.put("eTime", eTime);
+        map.put("sTime_creat", sTime_creat);
+        map.put("eTime_creat", eTime_creat);
+        map.put("sTime_receive", sTime_receive);
+        map.put("eTime_receive", eTime_receive);
         map.put("mother", mother);
         map.put("orderNo", orderNo);
         map.put("clientName", clientName);
@@ -67,8 +71,8 @@ public class ReceiveReportController extends BaseController {
         map.put("offset", page.getOffset());
         map.put("limit", page.getLimit());
 
-        List<ReceiveReportDO> list = sendReportDao.queryReportReceive(map);
-        page.setTotalCount(sendReportDao.queryReportReceiveCount(map));
+        List<ReceiveReportDO> list = receiveReportDao.queryReportReceive(map);
+        page.setTotalCount(receiveReportDao.queryReportReceiveCount(map));
         //page.setTotalCount(commonDao.lastFoundRows());
         return toPaginationLayUIData(page, list);
 }
