@@ -112,6 +112,9 @@ public class PaymentServiceImpl implements PaymentService {
 
 		// 更新订单已付金额
 		List<String> orderNos = paymentOrderWaybillDao.queryByPaymentOrderId(waybillPaymentRecord.getPaymentOrderId());
+		if(null==orderNos||orderNos.size()==0) {
+			return;
+		}
 		List<DeliveryOrderDO> deliveryOrderDOList = deliveryOrderDao.selectByOrderNos(orderNos);
 		for (DeliveryOrderDO deliveryOrderDO : deliveryOrderDOList) {
 			deliveryOrderDO.setAlreadyPaid(deliveryOrderDO.getNeedPayAmount());
