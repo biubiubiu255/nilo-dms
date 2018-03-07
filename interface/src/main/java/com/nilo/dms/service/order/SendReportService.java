@@ -12,4 +12,5 @@ import java.util.List;
  */
 public interface SendReportService {
     List<SendReport> querySendReport(SendOrderParameter parameter, Pagination pagination);
+
 }

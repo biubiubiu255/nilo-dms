@@ -2,6 +2,7 @@ package com.nilo.dms.dao;
 
 import com.nilo.dms.common.BaseDao;
 import com.nilo.dms.dao.dataobject.DeliverReportDO;
+import com.nilo.dms.dao.dataobject.ReceiveReportDO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
