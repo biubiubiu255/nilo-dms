@@ -5,7 +5,7 @@
 <%@ page import="com.nilo.dms.common.Constant" %>
 
 <%
-    request.setAttribute("refuse_reason", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.REFUSE_REASON));
+    request.setAttribute("delayReason", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.DELAY_REASON));
 %>
 
 
@@ -33,7 +33,7 @@
                         <%--<label>Reason</label>--%>
                         <select required="required" class='input_value' name='reason'>
                             <option value="">Please select a reason</option>
-	                       <c:forEach var="values" items="${abnormalTypeList}" >
+	                       <c:forEach var="values" items="${delayReason}" >
 	                           <option value="${values.code}">${values.value }</option>
 		                   </c:forEach>
                         </select>
@@ -69,7 +69,7 @@
     		postUrl : '/mobile/rider/stranded/save.html' ,
     		callback: function (data) {
                 if (data.result) {
-                    showInfo('submit success');
+                    showInfo('submit success',2000);
                     mobile.paginate();
                 } else {
                     showError(data.msg);;
