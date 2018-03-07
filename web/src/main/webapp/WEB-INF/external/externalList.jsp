@@ -40,7 +40,7 @@
             <th lay-data="{field:'clientName', width:150, align:'center',templet: '<div>{{d.clientName}}</div>'}">ClientName</th>
             <th lay-data="{field:'channels', width:150, align:'center',templet: '<div>{{d.channels}}</div>'}">Channels</th>
             <th lay-data="{field:'creator', width:150, align:'center',templet: '<div>{{d.creator}}</div>'}">Creator</th>
-            <th lay-data="{field:'weight', width:150, align:'center',templet: '<div>{{d.weight}}</div>'}">Weight</th>
+            <th lay-data="{field:'weight', width:150, align:'center',templet: '<div>{{d.weight}}</div>'}">Weight(KG)</th>
             <th lay-data="{field:'receiveTime', width:170, templet:'<div>{{ formatDate(d.receiveTime) }}</div>'}">receiveTime</th>
             <th lay-data="{field:'CreateTime', width:170, templet:'<div>{{ formatDate(d.createTime) }}</div>'}">CreateTime</th>
             <th lay-data="{title:'Opt',fixed: 'right', width:172, align:'center', toolbar: '#barDemo'}"></th>

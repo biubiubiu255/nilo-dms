@@ -35,6 +35,25 @@
                 jdbcType="VARCHAR"/>
     </resultMap>
 
+    <resultMap id="receiveDO" type="com.nilo.dms.dao.dataobject.ReceiveReportDO">
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="order_platform" column="order_platform" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="order_type" column="order_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="created_time" column="created_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="receive_time" column="updated_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="name" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+
     <select id="querySendReport" resultMap="sendDO">
         SELECT a.reference_no,a.next_network_id,a.network_id,a.order_no,a.order_category,a.weight,a.`stop`,a.carrier_name,a.delivery_fee,a.`status`,a.remark,b.name,b.contact_number,b.address
         FROM t_waybill a INNER JOIN t_waybill_receiver b
@@ -79,4 +98,73 @@
         order by null
 
     </select>
+
+
+
+    <!-- Receive Report 查询语句 -->
+
+    <select id="queryReportReceive" resultMap="receiveDO">
+        SELECT a.order_no,a.merchant_id,a.order_platform,a.order_type,a.created_time, a.updated_time, b.name
+        FROM t_waybill a INNER JOIN t_waybill_receiver b
+        on a.order_no = b.order_no
+        WHERE a.merchant_id=#{merchantId} AND ( a.status=50 )
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test="sTime !=null and eTime !=null and  sTime != '' and eTime != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.created_time<![CDATA[<]]>#{eTime} AND a.created_time>#{sTime})
+        </if>
+
+        <if test="mother !=null and mother != ''">
+            AND
+            DATE_FORMAT(FROM_UNIXTIME(a.created_time),"%Y%m") = #{mother}
+        </if>
+
+        <if test="clientName != null and clientName != ''">
+            AND
+            b.name = #{clientName}
+        </if>
+
+        order by a.created_time desc
+        limit #{offset} , #{limit}
+
+
+    </select>
+
+    <!-- 查询上条查询条件下影响的全部条数 -->
+    <select id="queryReportReceiveCount" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM t_waybill a INNER JOIN t_waybill_receiver b
+        on a.order_no = b.order_no
+        WHERE a.merchant_id=#{merchantId} AND ( a.status=50 )
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test="sTime !=null and eTime !=null and  sTime != '' and eTime != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.created_time<![CDATA[<]]>#{eTime} AND a.created_time>#{sTime})
+        </if>
+
+        <if test="mother !=null and mother != ''">
+            AND
+            DATE_FORMAT(FROM_UNIXTIME(a.created_time),"%Y%m") = #{mother}
+        </if>
+
+        <if test="clientName != null and clientName != ''">
+            AND
+            b.name = #{clientName}
+        </if>
+
+    </select>
+
 </mapper>

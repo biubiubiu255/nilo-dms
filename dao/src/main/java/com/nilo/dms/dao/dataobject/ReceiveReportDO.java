@@ -5,7 +5,8 @@ public class ReceiveReportDO {
     private String orderNo;
     private String order_platform;
     private String order_type;
-    private Integer created_time;
+    private int created_time;
+    private int receive_time;
     private String name;
 
     public Long getMerchantId() {
@@ -40,12 +41,20 @@ public class ReceiveReportDO {
         this.order_type = order_type;
     }
 
-    public Integer getCreated_time() {
+    public int getCreated_time() {
         return created_time;
     }
 
-    public void setCreated_time(Integer created_time) {
+    public void setCreated_time(int created_time) {
         this.created_time = created_time;
+    }
+
+    public int getReceive_time() {
+        return receive_time;
+    }
+
+    public void setReceive_time(int receive_time) {
+        this.receive_time = receive_time;
     }
 
     public String getName() {
@@ -64,6 +73,7 @@ public class ReceiveReportDO {
                 ", order_platform='" + order_platform + '\'' +
                 ", order_type='" + order_type + '\'' +
                 ", created_time=" + created_time +
+                ", receive_time=" + receive_time +
                 ", name='" + name + '\'' +
                 '}';
     }

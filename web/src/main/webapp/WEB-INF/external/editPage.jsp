@@ -24,7 +24,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">Weight</label>
+            <label class="layui-form-label">Weight(KG)</label>
             <div class="layui-input-block">
                 <input type="text" name="weight" value="${resultData.weight}" autocomplete="off" class="layui-input">
             </div>
