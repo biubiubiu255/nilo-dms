@@ -138,7 +138,7 @@ public class ApiController extends BaseController {
 			
 			//返回数据
 			PaymentResponse paymentResponse = new PaymentResponse();
-			paymentResponse.setStatus("1");
+			paymentResponse.setStatus("SUCCESS");
 			paymentResponse.setErrorCode("100");
 			paymentResponse.setMerchantId(paymentResult.getMerchantId());
 			paymentResponse.setSignType("MD5");
