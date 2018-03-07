@@ -281,6 +281,7 @@ public class CODSignController extends BaseController {
 			WaybillPaymentRecord waybillPaymentRecord = new WaybillPaymentRecord();
 			waybillPaymentRecord.setPaymentOrderId(merchantOrderNo);
 			waybillPaymentRecord.setThirdPaySn(orderId);
+			waybillPaymentRecord.setCreatedTime(System.currentTimeMillis());
 			if ("SUCCESS".equalsIgnoreCase(status)) {
 				waybillPaymentRecord.setStatus(1);
 			} else {

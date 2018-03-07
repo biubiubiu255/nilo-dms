@@ -133,7 +133,7 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
 
                 dataMap.put("waybill_number", orderNo);
                 dataMap.put("status", convertResult);
-                dataMap.put("tract_time", DateUtil.getSysTimeStamp());
+                dataMap.put("track_time", DateUtil.getSysTimeStamp());
                 dataMap.put("remark", request.getRemark());
                 String data = JSON.toJSONString(dataMap);
                 notify.setData(data);

@@ -82,6 +82,7 @@
 						payForm.setFormFieldValue("currency", res.data.currency);
 						
 						document.getElementById("pay-form").submit();
+						showMask();
 					});
 					return;
 				} else if (payType == '2') {
@@ -96,7 +97,7 @@
 						paidType : 0
 					}, false, function(res) {
 						if(res.result){
-							// alert('success,plase to sign logistics');
+							alert('successful,will go to  the sign page');
                             window.location.href="/mobile/rider/sign/toSign.html?logisticsNo="+logisticsNo;
 						}else{
 							showWarning("Sorry,cash pay error!");
@@ -116,6 +117,7 @@
 			done : function(res) {
 				closeMask();
 				if (res.result) {
+				   alert('successful,will go to  the sign page');
                    window.location.href="/mobile/rider/sign/toSign.html?logisticsNo="+$("#logisticsNo").val();
 				} else {
 					showError(res.msg);
