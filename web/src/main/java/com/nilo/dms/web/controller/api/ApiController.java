@@ -122,6 +122,7 @@ public class ApiController extends BaseController {
 	public String paymentNotify(PaymentResult paymentResult) {
 
 		String plainText = paymentResult.toString();
+		log.info("paymentNotify Data:{}", plainText);
 		String generateSign = DigestUtils.md5Hex(plainText + signKey);
 		if (paymentResult.getSign() != null && paymentResult.getSign().equalsIgnoreCase(generateSign)) {
 			

@@ -32,7 +32,7 @@
                     <li>
                         <%--<label>Reason</label>--%>
                         <select required="required" class='input_value' name='reason'>
-                            <option value="">Please enter a reason</option>
+                            <option value="">Please select a reason</option>
 	                       <c:forEach var="values" items="${abnormalTypeList}" >
 	                           <option value="${values.code}">${values.value }</option>
 		                   </c:forEach>
