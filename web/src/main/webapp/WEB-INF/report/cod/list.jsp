@@ -20,7 +20,7 @@
 
 
         <div class="layui-col-md4 layui-col-lg4">
-            <label class="layui-form-label">ScanTime:</label>
+            <label class="layui-form-label">CreatedTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="createdTime_s">
             </div>
@@ -37,26 +37,23 @@
 
     <div class="layui-form layui-row">
 
-        <div class="layui-col-md4 layui-col-lg5">
-            <label class="layui-form-label">Rider:</label>
-            <div class="layui-inline">
-                <select name="scanNetwork" lay-verify="required" lay-search="" style="display: none">
-                    <option value="">choose or search....</option>
-                    <c:forEach items="${list}" var="rider">
-                        <option value="${rider.name}">${rider.name}</option>
-                    </c:forEach>
-                </select></div>
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">ScanNetwork:</label>
+            <div class="layui-form-item layui-inline">
+                <input type="text" name="scanNetwork" autocomplete="off" class="layui-input">
+            </div>
         </div>
 
+
         <!-- 搜索按钮 -->
-        <div class="layui-col-md1 layui-col-lg5">
+        <div class="layui-col-md1">
             <button class="layui-btn layui-btn-normal search">Search</button>
         </div>
     </div>
     <hr>
 
     <table class="layui-table"
-           lay-data="{ url:'/report/arrive/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
+           lay-data="{ url:'/report/cod/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
@@ -66,7 +63,7 @@
             <th lay-data="{field:'scanNetwork', width:200}">ScanNetwork</th>
             <th lay-data="{field:'scanTime', width:200, templet:'<div>{{ formatDate(d.scanTime) }}</div>'}">ScanTime</th>
             <th lay-data="{field:'weight', width:100}">weight</th>
-            <th lay-data="{field:'phone', width:200}">Phone</th>
+            <th lay-data="{field:'phone', width:100}">Phone</th>
             <th lay-data="{field:'address', width:200}">address</th>
         </tr>
         </thead>
@@ -122,7 +119,7 @@
                         orderNo: $("input[name='orderNo']").val(),
                         sTime_creat: sTime_creat,
                         eTime_creat: eTime_creat,
-                        scanNetwork: $("select[name='scanNetwork']").val()
+                        scanNetwork: $("input[name='scanNetwork']").val()
                     }
                 });
             };

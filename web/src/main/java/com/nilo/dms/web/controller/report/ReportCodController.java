@@ -2,10 +2,9 @@ package com.nilo.dms.web.controller.report;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.dao.*;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.CommonDao;
+import com.nilo.dms.dao.WaybillArriveDao;
 import com.nilo.dms.dao.dataobject.ReportArriveDO;
-import com.nilo.dms.dao.dataobject.ReportReceiveDO;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +19,16 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/report/arrive")
-public class ReportArriveController extends BaseController {
+@RequestMapping("/report/cod")
+public class ReportCodController extends BaseController {
     @Autowired
     private WaybillArriveDao waybillArriveDao;
-
-    @Autowired
-    private DistributionNetworkDao distributionNetworkDao;
 
     @Autowired
     private CommonDao commonDao;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        List<DistributionNetworkDO> list = distributionNetworkDao.findAllBy(Long.valueOf(me.getMerchantId()));
-        model.addAttribute("list", list);
         return "report/arrive/list";
     }
 
