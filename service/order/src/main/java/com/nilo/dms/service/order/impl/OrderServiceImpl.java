@@ -338,6 +338,14 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             orderNos.add(details.getOrderNo());
         }
 
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setMerchantId(merchantId);
+        optRequest.setOptBy(arriveBy);
+        optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
+        optRequest.setOrderNo(orderNos);
+        optRequest.setNetworkId(networkId);
+        handleOpt(optRequest);
+
         // 更新重量
         for (WaybillScanDetailsDO details : scanDetailList) {
             if (details.getWeight() == null) {
@@ -354,16 +362,9 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             orderDO.setOrderNo(details.getOrderNo());
             orderDO.setWeight(details.getWeight());
             orderDO.setMerchantId(Long.parseLong(merchantId));
+            orderDO.setNetworkId(Integer.parseInt(networkId));
             deliveryOrderDao.update(orderDO);
         }
-
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setMerchantId(merchantId);
-        optRequest.setOptBy(arriveBy);
-        optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
-        optRequest.setOrderNo(orderNos);
-        optRequest.setNetworkId(networkId);
-        handleOpt(optRequest);
 
         this.addNetworkTask(orderNos, arriveBy, merchantId);
 

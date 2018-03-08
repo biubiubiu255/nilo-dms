@@ -149,11 +149,13 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
             }*/
             case ARRIVE_SCAN: {
                 for (String orderNo : request.getOrderNo()) {
+                    DeliveryOrder deliveryOrder = orderService.queryByOrderNo(request.getMerchantId(), orderNo);
                     WaybillLogArriveDO arriveDO = new WaybillLogArriveDO();
                     arriveDO.setOptTime(DateUtil.getSysTimeStamp());
                     arriveDO.setOptBy(request.getOptBy());
                     arriveDO.setNetworkId(Integer.parseInt(request.getNetworkId()));
                     arriveDO.setOrderNo(orderNo);
+                    arriveDO.setLastNetworkId(deliveryOrder.getNetworkId());
                     arriveDO.setMerchantId(Long.parseLong(request.getMerchantId()));
                     waybillLogArriveDao.insert(arriveDO);
                 }
