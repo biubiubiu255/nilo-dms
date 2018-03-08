@@ -76,7 +76,7 @@
                     showInfo('submit success');
                     //mobile.paginate();
                 } else {
-                    showError(data.msg);;
+                    showError(data.msg);
                 }
 			}
     	});
