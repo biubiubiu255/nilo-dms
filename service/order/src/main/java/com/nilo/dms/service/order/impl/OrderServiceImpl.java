@@ -353,10 +353,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                 if (queryWeight.getWeight() == 0) {
                     throw new DMSException(BizErrorCode.WEIGHT_EMPTY);
                 }
-                continue;
-            }
-            if (details.getWeight() == 0) {
-                throw new DMSException(BizErrorCode.WEIGHT_EMPTY);
             }
             DeliveryOrderDO orderDO = new DeliveryOrderDO();
             orderDO.setOrderNo(details.getOrderNo());
