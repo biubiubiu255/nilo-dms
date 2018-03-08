@@ -260,7 +260,9 @@
     <update id="update" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderDO" statementType="PREPARED">
         update t_waybill
         <trim prefix="set" suffixOverrides="," suffix="where merchant_id=#{merchantId} and order_no=#{orderNo}">
-
+            <if test="networkId != null ">
+                network_Id = #{networkId},
+            </if>
             <if test="status != null ">
                 status = #{status},
             </if>
@@ -315,7 +317,7 @@
         FROM t_waybill w left join t_waybill_task t on w.order_no = t.order_no
         left join t_sys_user_info l on t.handled_by = l.id
 
-        WHERE w.merchant_id=#{merchantId} and w.status='50' and is_cod = 1 and already_paid = null and order_type != 'PG'
+        WHERE w.merchant_id=#{merchantId} and w.status='50' and is_cod = 1 and already_paid = 0 and order_type != 'PG'
         and need_pay_amount >0 and t.task_type = 'delivery'
         <if test="userId != null">
             and t.handled_by = #{userId}
@@ -329,7 +331,7 @@
         FROM t_waybill w left join t_waybill_task t on w.order_no = t.order_no
         left join t_sys_user_info l on t.handled_by = l.id
 
-        WHERE w.merchant_id=#{merchantId} and w.status='50' and is_cod = 1 and already_paid = null and order_type != 'PG'
+        WHERE w.merchant_id=#{merchantId} and w.status='50' and is_cod = 1 and already_paid = 0 and order_type != 'PG'
         and need_pay_amount >0 and t.task_type = 'delivery'
         <if test="userId != null">
             and t.handled_by = #{userId}

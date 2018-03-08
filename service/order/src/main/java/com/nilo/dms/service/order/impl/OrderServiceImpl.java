@@ -338,25 +338,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             orderNos.add(details.getOrderNo());
         }
 
-        // 更新重量
-        for (WaybillScanDetailsDO details : scanDetailList) {
-            if (details.getWeight() == null) {
-                DeliveryOrderDO queryWeight = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), details.getOrderNo());
-                if (queryWeight.getWeight() == 0) {
-                    throw new DMSException(BizErrorCode.WEIGHT_EMPTY);
-                }
-                continue;
-            }
-            if (details.getWeight() == 0) {
-                throw new DMSException(BizErrorCode.WEIGHT_EMPTY);
-            }
-            DeliveryOrderDO orderDO = new DeliveryOrderDO();
-            orderDO.setOrderNo(details.getOrderNo());
-            orderDO.setWeight(details.getWeight());
-            orderDO.setMerchantId(Long.parseLong(merchantId));
-            deliveryOrderDao.update(orderDO);
-        }
-
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setMerchantId(merchantId);
         optRequest.setOptBy(arriveBy);
@@ -364,6 +345,22 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         optRequest.setOrderNo(orderNos);
         optRequest.setNetworkId(networkId);
         handleOpt(optRequest);
+
+        // 更新重量
+        for (WaybillScanDetailsDO details : scanDetailList) {
+            if (details.getWeight() == null) {
+                DeliveryOrderDO queryWeight = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), details.getOrderNo());
+                if (queryWeight.getWeight() == 0) {
+                    throw new DMSException(BizErrorCode.WEIGHT_EMPTY);
+                }
+            }
+            DeliveryOrderDO orderDO = new DeliveryOrderDO();
+            orderDO.setOrderNo(details.getOrderNo());
+            orderDO.setWeight(details.getWeight());
+            orderDO.setMerchantId(Long.parseLong(merchantId));
+            orderDO.setNetworkId(Integer.parseInt(networkId));
+            deliveryOrderDao.update(orderDO);
+        }
 
         this.addNetworkTask(orderNos, arriveBy, merchantId);
 

@@ -4,7 +4,7 @@
 <mapper namespace="com.nilo.dms.dao.WaybillLogArriveDao">
 
     <!-- 实体bean与数据字段对应关系 -->
-    <resultMap id="package" type="com.nilo.dms.dao.dataobject.WaybillLogPackageDO">
+    <resultMap id="arriveLog" type="com.nilo.dms.dao.dataobject.WaybillLogArriveDO">
         <result property="id" column="id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="orderNo" column="order_no" javaType="java.lang.String"
@@ -18,23 +18,25 @@
                 jdbcType="INTEGER"/>
         <result property="networkId" column="network_Id" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
+        <result property="lastNetworkId" column="last_network_Id" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
 
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, order_no ,merchant_id,opt_by,opt_time,network_id, created_time
+        id, order_no ,merchant_id,opt_by,opt_time,network_id,last_network_Id, created_time
     </sql>
 
     <!-- 插入语句 -->
-    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.WaybillLogPackageDO" statementType="PREPARED"
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.WaybillLogArriveDO" statementType="PREPARED"
             useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO t_waybill_log_package
-        ( order_no ,merchant_id,opt_by,opt_time,network_id, created_time )
+        INSERT INTO t_waybill_log_arrive
+        ( order_no ,merchant_id,opt_by,opt_time,network_id,last_network_Id, created_time )
         VALUES
-        ( #{orderNo},#{merchantId},#{optBy},#{optTime},#{networkId},UNIX_TIMESTAMP(NOW()))
+        ( #{orderNo},#{merchantId},#{optBy},#{optTime},#{networkId},#{lastNetworkId},UNIX_TIMESTAMP(NOW()))
     </insert>
 
 </mapper>

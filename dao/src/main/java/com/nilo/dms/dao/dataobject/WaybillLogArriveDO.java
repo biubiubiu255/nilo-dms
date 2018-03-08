@@ -17,6 +17,16 @@ public class WaybillLogArriveDO extends BaseDo<Long> {
 
     private Integer networkId;
 
+    private Integer lastNetworkId;
+
+    public Integer getLastNetworkId() {
+        return lastNetworkId;
+    }
+
+    public void setLastNetworkId(Integer lastNetworkId) {
+        this.lastNetworkId = lastNetworkId;
+    }
+
     public String getOrderNo() {
         return orderNo;
     }
