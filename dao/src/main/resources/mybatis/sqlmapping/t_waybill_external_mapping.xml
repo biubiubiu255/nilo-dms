@@ -67,7 +67,7 @@
 
 <!-- 动态更新语句 -->
 <update id="updateExternal" parameterType="com.nilo.dms.dao.dataobject.WaybillExternalDo" statementType="PREPARED">
-    update t_waybill_external set type = #{type}, weight = #{weight}, notes = #{notes}
+    update t_waybill_external set weight = #{weight}, notes = #{notes}
     where id = #{id}
 </update>
 

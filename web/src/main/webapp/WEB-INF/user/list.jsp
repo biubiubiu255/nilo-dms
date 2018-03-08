@@ -212,7 +212,10 @@
                         title: title,
                         area: ['800px'],
                         offset: ['100px', '250px'],
-                        content: data
+                        content: data,
+                        end: function () {
+                            reloadCurrentPage();
+                        }
                     });
                 }
             });
@@ -232,7 +235,10 @@
                         title: title,
                         area: ['800px'],
                         offset: ['100px', '250px'],
-                        content: data
+                        content: data ,
+                        end: function () {
+                            reloadCurrentPage();
+                        }
                     });
                 }
             });

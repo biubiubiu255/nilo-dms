@@ -8,6 +8,8 @@ public class ReceiveReportDO {
     private int created_time;
     private int receive_time;
     private String name;
+    private Double weight;
+
 
     public Long getMerchantId() {
         return merchantId;
@@ -39,6 +41,14 @@ public class ReceiveReportDO {
 
     public void setOrder_type(String order_type) {
         this.order_type = order_type;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 
     public int getCreated_time() {
@@ -75,6 +85,7 @@ public class ReceiveReportDO {
                 ", created_time=" + created_time +
                 ", receive_time=" + receive_time +
                 ", name='" + name + '\'' +
+                ", weight=" + weight +
                 '}';
     }
 }

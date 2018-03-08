@@ -5,37 +5,35 @@
     <form id="myForm" class="layui-form" action="">
         <!-- <input type="hidden" name="merchantId" value="0"> -->
 
-
-
         <div class="layui-form-item">
-            <label class="layui-form-label">International order：</label>
+            <label class="layui-form-label"><font color="red">*</font>International order</label>
             <div class="layui-input-block">
                 <input type="text" name="OrderNo" autocomplete="off" class="layui-input" lay-verify="required" placeholder="Please enter the international tracking number">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">International channels：</label>
+            <label class="layui-form-label"><font color="red">*</font>International channels</label>
             <div class="layui-input-block">
                 <input type="text" name="channels" autocomplete="off" class="layui-input" lay-verify="required" placeholder="Please enter the International channels">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">Weight(KG)</label>
+            <label class="layui-form-label"><font color="red">*</font>Weight(KG)</label>
             <div class="layui-input-block">
                 <input type="text" name="weight" autocomplete="off" class="layui-input" lay-verify="required" placeholder="Please enter package weight">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">ClientName</label>
+            <label class="layui-form-label"><font color="red">*</font>ClientName</label>
             <div class="layui-input-block">
                 <input type="text" name="clientName" autocomplete="off" class="layui-input" value="cuckoo" lay-verify="required" placeholder="Please enter the merchant name">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">Delivery time</label>
+            <label class="layui-form-label"><font color="red">*</font>Delivery time</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromTime" placeholder="Please select date" lay-verify="required" name="receive_time">
             </div>
@@ -66,26 +64,26 @@
             var J_$ = layui.jquery;
             var layDate = layui.laydate;
             var d = new Date();
-            var now = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-            $("#fromTime").change(function(){
-                alert("sdf");
-            });
+            //var now = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+            var now = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+            //J_$("#fromTime").val(now);
             layDate.render({
                 elem: '#fromTime',
                 lang: 'en',
-                type: 'datetime',
+                value: formatDate(Date.parse(new Date())/1000),
+                theme: '#393D49',
                 showBottom: true,
                 btns: ['clear', 'confirm'],
                 ready: function(value, date, endDate){
-
-
                 },
                 change: function(value, date, endDate){
+/*
                     console.log(value); //得到日期生成的值，如：2017-08-18
                     J_$(".laydate-btns-time")[0].click();
                     $(".laydate-time-list").unbind("click").bind("click", "" ,function(){
                         //J_$(".laydate-btns-confirm")[0].click();
                     });
+                    */
 
 
                 }
@@ -129,5 +127,8 @@
             });
         });
     });
+
+
+
 
 </script>

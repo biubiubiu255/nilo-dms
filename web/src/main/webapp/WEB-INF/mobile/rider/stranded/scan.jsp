@@ -4,8 +4,12 @@
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
 <%@ page import="com.nilo.dms.common.Constant" %>
 
+
+<script type="text/javascript" src="/layui/layer.mobil/layer.js"></script>
+
+
 <%
-    request.setAttribute("refuse_reason", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.REFUSE_REASON));
+    request.setAttribute("delayReason", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.DELAY_REASON));
 %>
 
 
@@ -32,8 +36,8 @@
                     <li>
                         <%--<label>Reason</label>--%>
                         <select required="required" class='input_value' name='reason'>
-                            <option value="">Please enter a reason</option>
-	                       <c:forEach var="values" items="${abnormalTypeList}" >
+                            <option value="">Please select a reason</option>
+	                       <c:forEach var="values" items="${delayReason}" >
 	                           <option value="${values.code}">${values.value }</option>
 		                   </c:forEach>
                         </select>
@@ -70,7 +74,7 @@
     		callback: function (data) {
                 if (data.result) {
                     showInfo('submit success');
-                    mobile.paginate();
+                    //mobile.paginate();
                 } else {
                     showError(data.msg);;
                 }
