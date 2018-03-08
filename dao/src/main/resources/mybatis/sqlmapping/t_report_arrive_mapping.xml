@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.WaybillArriveDao">
+
+    <resultMap id="ArriveDo" type="com.nilo.dms.dao.dataobject.ReportArriveDO">
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="lastNetwork" column="last_network" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="scanNetwork" column="scan_network" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="scanTime" column="opt_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="recipients" column="address_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="address" column="address" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="phone" column="contact_number" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryReportArrive" resultMap="ArriveDo">
+
+        SELECT a.order_no, a.opt_time,  b.name op_name, c.weight, d.name last_network, e.name scan_network, f.contact_number, f.name address_name, f.address
+
+        FROM  t_waybill_log_arrive a
+
+        INNER JOIN t_sys_user_info b ON a.opt_by = b.id
+
+        INNER JOIN t_waybill c ON a.order_no = c.order_no
+
+        INNER JOIN t_bas_network d ON a.last_network_id = d.id
+
+        INNER JOIN t_bas_network e ON a.network_id = d.id
+
+        INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no
+
+        WHERE a.merchant_id=#{merchantId}
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test="sTime_creat !=null and eTime_creat !=null and  sTime_creat != '' and eTime_creat != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.opt_time<![CDATA[<]]>#{eTime_creat} AND a.opt_time>#{sTime_creat})
+        </if>
+
+        <if test="scanNetwork != null and scanNetwork != ''">
+            AND
+            e.name = #{scanNetwork}
+        </if>
+
+        order by a.created_time desc
+
+        limit #{offset} , #{limit}
+
+
+    </select>
+
+
+    <select id="queryReportArriveCount" resultType="java.lang.Integer">
+
+        SELECT
+
+        count(*)
+
+        FROM  t_waybill_log_arrive a
+
+        INNER JOIN t_sys_user_info b ON a.opt_by = b.id
+
+        INNER JOIN t_waybill c ON a.order_no = c.order_no
+
+        INNER JOIN t_bas_network d ON a.last_network_id = d.id
+
+        INNER JOIN t_bas_network e ON a.network_id = d.id
+
+        INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no
+
+        WHERE a.merchant_id=#{merchantId}
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test="sTime_creat !=null and eTime_creat !=null and  sTime_creat != '' and eTime_creat != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.opt_time<![CDATA[<]]>#{eTime_creat} AND a.opt_time>#{sTime_creat})
+        </if>
+
+        <if test="scanNetwork != null and scanNetwork != ''">
+            AND
+            e.name = #{scanNetwork}
+        </if>
+
+    </select>
+</mapper>

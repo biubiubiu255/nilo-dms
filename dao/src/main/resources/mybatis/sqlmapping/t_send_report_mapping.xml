@@ -35,7 +35,7 @@
                 jdbcType="VARCHAR"/>
     </resultMap>
 
-    <resultMap id="receiveDO" type="com.nilo.dms.dao.dataobject.ReceiveReportDO">
+    <resultMap id="receiveDO" type="com.nilo.dms.dao.dataobject.ReportReceiveDO">
         <result property="orderNo" column="order_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
