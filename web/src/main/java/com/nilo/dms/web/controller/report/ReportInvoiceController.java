@@ -3,9 +3,7 @@ package com.nilo.dms.web.controller.report;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.CommonDao;
-import com.nilo.dms.dao.WaybillArriveDao;
 import com.nilo.dms.dao.WaybillCodDao;
-import com.nilo.dms.dao.dataobject.ReportArriveDO;
 import com.nilo.dms.dao.dataobject.ReportCodDO;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
@@ -21,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/report/cod")
-public class ReportCodController extends BaseController {
+@RequestMapping("/report/invoice")
+public class ReportInvoiceController extends BaseController {
     @Autowired
     private WaybillCodDao waybillCodDao;
 

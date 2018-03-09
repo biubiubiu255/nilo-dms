@@ -48,18 +48,28 @@
             </div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg3" style="width: 20.5%">
             <label class="layui-form-label">Client Name:</label>
             <div class="layui-form-item layui-inline">
                 <input type="text" name="clientName" autocomplete="off" class="layui-input">
             </div>
-        </div>
 
+        </div>
 
         <!-- 搜索按钮 -->
-        <div class="layui-col-md1">
+
+        <div class="layui-col-md">
             <button class="layui-btn layui-btn-normal search">Search</button>
+            <shiro:hasPermission name="400017">
+                <button class="layui-btn layui-btn-normal btn-export">Export</button>
+            </shiro:hasPermission>
         </div>
+
+
+
+
+
+
     </div>
     <hr>
 
@@ -147,6 +157,23 @@
                     }
                 });
             };
+
+            //导出按钮
+
+            $(".btn-export").on("click", function () {
+
+                var orderNo = $("input[name='orderNo']").val(),
+                    referenceNo = $("input[name='referenceNo']").val(),
+                    orderTypes = $("select[name='orderType']").val(),
+                    orderStatus = $("select[name='orderStatus']").val(),
+                    fromCreatedTime = $("#fromCreatedTime").val(),
+                    toCreatedTime = $("#toCreatedTime").val(),
+                    platform = $("input[name='platform']").val();
+
+                var url = "/order/deliveryOrder/export.html?orderNo="+orderNo+"&referenceNo="+referenceNo+"&orderTypes="+orderTypes+"&orderStatus="+orderStatus+"&fromCreatedTime="+fromCreatedTime+"&toCreatedTime="+toCreatedTime+"&platform="+platform;
+                window.location.href = url;
+            });
+
         });
 
     </script>
