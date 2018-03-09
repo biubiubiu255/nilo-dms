@@ -1,14 +1,16 @@
 package com.nilo.dms.service.order.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.nilo.dms.common.utils.model.Excel;
 
 /**
  * Created by ronny on 2017/9/27.
  */
 public class ReceiverInfo {
 
+    @Excel(name = "Receiver Name",order = 10)
     private String receiverName;
-
+    @Excel(name = "Receiver Phone",order = 11)
     private String receiverPhone;
 
     private String receiverCountry;

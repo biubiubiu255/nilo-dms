@@ -1,7 +1,11 @@
 package com.nilo.dms.common.utils;
 
+import com.nilo.dms.common.enums.EnumMessage;
+import org.apache.commons.beanutils.PropertyUtils;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by admin on 2017/11/18.
@@ -17,6 +21,31 @@ public class BeanUtils {
         } else {
             return (T) anno;
         }
+    }
+
+
+    public static String getProperty(Object obj, String field) {
+
+        Object value = null;
+        try {
+            value = PropertyUtils.getSimpleProperty(obj, field);
+        } catch (Exception e) {
+        }
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Long) {
+            return "" + (Long) value;
+        }
+        if (value instanceof Double) {
+            return "" + (Double) value;
+        }
+        if (value instanceof EnumMessage) {
+            EnumMessage e = (EnumMessage) value;
+            return e.getDesc();
+        }
+
+        return (String) value;
     }
 
     public static <T> T readField(Object owner, String name, Class<T> type) {

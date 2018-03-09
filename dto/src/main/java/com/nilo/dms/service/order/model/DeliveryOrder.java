@@ -3,6 +3,7 @@ package com.nilo.dms.service.order.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.nilo.dms.common.enums.*;
+import com.nilo.dms.common.utils.model.Excel;
 
 import java.util.List;
 
@@ -11,8 +12,9 @@ import java.util.List;
  */
 public class DeliveryOrder {
 
+    @Excel(name = "OrderNo", order = 1)
     private String orderNo;
-
+    @Excel(name = "Type", order = 2)
     private String orderType;
 
     private String orderTypeDesc;
@@ -36,6 +38,7 @@ public class DeliveryOrder {
 
     private Double totalPrice;
 
+    @Excel(subType = true)
     private ReceiverInfo receiverInfo;
 
     private SenderInfo senderInfo;
