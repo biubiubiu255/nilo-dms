@@ -1,6 +1,6 @@
 package com.nilo.dms.dao.dataobject;
 
-public class ReceiveReportDO {
+public class ReportReceiveDO {
     private Long merchantId;
     private String orderNo;
     private String order_platform;
@@ -77,7 +77,7 @@ public class ReceiveReportDO {
 
     @Override
     public String toString() {
-        return "ReceiveReportDO{" +
+        return "ReportReceiveDO{" +
                 "merchantId=" + merchantId +
                 ", orderNo='" + orderNo + '\'' +
                 ", order_platform='" + order_platform + '\'' +
