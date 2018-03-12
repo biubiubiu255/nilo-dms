@@ -10,11 +10,15 @@ import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.GoodsInfo;
 import com.nilo.dms.service.order.model.ReceiverInfo;
 import com.nilo.dms.service.order.model.SenderInfo;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
@@ -34,85 +38,31 @@ public class TestController extends BaseController {
     @RequestMapping(value = "/test2.html")
     public String test1(String content) {
 
-        for (int i = 1; i < 30; i++) {
-
-            DeliveryOrder data = new DeliveryOrder();
-            data.setReferenceNo("90000000" + i);
-            data.setMerchantId("1");
-            data.setOrderTime(DateUtil.getSysTimeStamp());
-            data.setTotalPrice(123.2d);
-            data.setWeight(i + 12.2d);
-            data.setCountry("CN");
-            data.setOrderPlatform("Test");
-            data.setOrderType("FBK");
-            data.setOrderCategory("FBK");
-            data.setServiceType(ServiceTypeEnum.ARRIVE_TODAY);
-            data.setGoodsType("3C");
-            data.setCarrierName("G4S");
-            data.setCarrierId("111");
-            data.setChannel("1");
-            data.setChannelStation("Kenya *** Shop");
-            data.setIsCod("0");
-            data.setNotes("notes notes");
-            data.setRemark("remark remark");
-            data.setDeliveryFee(200.0);
-            data.setWarehouseId("KE01");
-            data.setStop("G4S");
-            data.setStopId("222");
-
-            ReceiverInfo receiverInfo = new ReceiverInfo();
-            receiverInfo.setReceiverCountry("CN");
-            receiverInfo.setReceiverPhone("18012341234");
-            receiverInfo.setReceiverAddress("Mei Xi Hu");
-            receiverInfo.setReceiverName("ronny");
-            receiverInfo.setReceiverProvince("42");
-            receiverInfo.setReceiverCity("4201");
-            receiverInfo.setReceiverArea("420102");
-
-            data.setReceiverInfo(receiverInfo);
-
-            SenderInfo senderInfo = new SenderInfo();
-            senderInfo.setSenderArea("430104");
-            senderInfo.setSenderPhone("18012340000");
-            senderInfo.setSenderAddress("Mei Xi Hu Office");
-            senderInfo.setSenderCity("4301");
-            senderInfo.setSenderProvince("43");
-            senderInfo.setSenderCountry("CN");
-            senderInfo.setSenderName("ronny2");
-
-            data.setSenderInfo(senderInfo);
-
-            List<GoodsInfo> list = new ArrayList<>();
-            GoodsInfo g = new GoodsInfo();
-            g.setUnitPrice(1112.2d);
-            g.setGoodsDesc("Test Product1");
-            g.setGoodsId("1");
-            g.setQuality("Good");
-            g.setQty(2);
-
-            GoodsInfo g1 = new GoodsInfo();
-            g1.setUnitPrice(3333.4d);
-            g1.setGoodsDesc("Test Product2 ");
-            g1.setGoodsId("2");
-            g1.setQuality("Good");
-            g1.setQty(3);
-
-            list.add(g);
-            list.add(g1);
-
-            data.setGoodsInfoList(list);
-
-            String jsonData = JSON.toJSONString(data);
-            orderService.addCreateDeliveryOrderRequest("1", jsonData, DigestUtils.md5Hex("12345678" + jsonData + "12345678"));
-
-        }
-
         return "index";
     }
+
 
     @RequestMapping(value = "/notify.html")
     @ResponseBody
     public String notify(String content) {
         return toJsonTrueMsg();
+    }
+
+    private List<DeliveryOrder> getList() {
+        List<DeliveryOrder> list = new ArrayList<>();
+
+        DeliveryOrder d1 = new DeliveryOrder();
+        d1.setOrderNo("1");
+        d1.setWeight(11.1d);
+        d1.setOrderType("FBK");
+        list.add(d1);
+
+        DeliveryOrder d2 = new DeliveryOrder();
+        d2.setOrderNo("2");
+        d2.setWeight(21.1d);
+        d2.setOrderType("FBK");
+        list.add(d2);
+
+        return list;
     }
 }
