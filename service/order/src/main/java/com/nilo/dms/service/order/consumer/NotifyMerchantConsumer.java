@@ -16,6 +16,7 @@ import com.nilo.dms.service.mq.consumer.AbstractMQConsumer;
 import com.nilo.dms.service.mq.model.ConsumerDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.util.HtmlUtils;
 
 import java.util.HashMap;
@@ -29,15 +30,16 @@ public class NotifyMerchantConsumer extends AbstractMQConsumer {
 
     private static Logger logger = LoggerFactory.getLogger(NotifyMerchantConsumer.class);
 
+    @Autowired
+    private NotifyDao notifyDao;
+
     @Override
     public void handleMessage(MessageExt messageExt, Object obj) throws Exception {
 
-        String msgId = messageExt.getMsgId();
+        String msgId = messageExt.getKeys();
 
-        NotifyDao notifyDao = SpringContext.getBean("notifyDao", NotifyDao.class);
         String response = "";
         try {
-
             NotifyRequest request = (NotifyRequest) obj;
 
             logger.info("MessageExt:{},Message:{}", messageExt, request);
