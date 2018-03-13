@@ -38,9 +38,9 @@ public class RouteConsumer extends AbstractMQConsumer {
     @Override
     public void handleMessage(MessageExt messageExt, Object obj) throws Exception {
 
+        DeliveryRouteMessage message = null;
         try {
-            DeliveryRouteMessage message = (DeliveryRouteMessage) obj;
-            logger.info("MessageExt:{},DeliveryRouteMessage:{}", messageExt, message);
+            message = (DeliveryRouteMessage) obj;
 
             OptTypeEnum optTypeEnum = OptTypeEnum.getEnum(message.getOptType());
 
@@ -76,7 +76,7 @@ public class RouteConsumer extends AbstractMQConsumer {
             }
         } catch (Exception e) {
             //不进行重复消费
-            logger.error("RouteConsume Failed. ", e);
+            logger.error("RouteConsume Failed. RouteMessage:{}", message, e);
         }
     }
 

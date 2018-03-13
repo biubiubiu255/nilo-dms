@@ -9,4 +9,4 @@ bin
 .settings
 .svn
 logs
-
+logback.xml

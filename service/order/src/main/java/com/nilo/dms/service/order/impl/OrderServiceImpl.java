@@ -52,7 +52,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     @Autowired
     private DeliveryRouteService deliveryRouteService;
     @Autowired
-    private NotifyMerchantService notifyMerchantService;
+    private NotifyService notifyService;
     @Autowired
     private OrderOptLogService orderOptLogService;
     @Autowired
@@ -311,7 +311,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                         sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);
                     }
                     //通知上游系统状态变更
-                    notifyMerchantService.updateStatus(optRequest);
+                    notifyService.updateStatus(optRequest);
                     // 记录物流轨迹
                     deliveryRouteService.addRoute(optRequest);
                     // 添加操作记录
@@ -332,7 +332,14 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
         if (scanDetailList == null || scanDetailList.size() == 0) throw new DMSException(BizErrorCode.ARRIVE_EMPTY);
 
-
+        for (WaybillScanDetailsDO details : scanDetailList) {
+            if (details.getWeight() == null) {
+                DeliveryOrderDO queryWeight = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), details.getOrderNo());
+                if (queryWeight.getWeight() == 0) {
+                    throw new DMSException(BizErrorCode.WEIGHT_EMPTY);
+                }
+            }
+        }
         List<String> orderNos = new ArrayList<>();
         for (WaybillScanDetailsDO details : scanDetailList) {
             orderNos.add(details.getOrderNo());
@@ -348,12 +355,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
         // 更新重量
         for (WaybillScanDetailsDO details : scanDetailList) {
-            if (details.getWeight() == null) {
-                DeliveryOrderDO queryWeight = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), details.getOrderNo());
-                if (queryWeight.getWeight() == 0) {
-                    throw new DMSException(BizErrorCode.WEIGHT_EMPTY);
-                }
-            }
             DeliveryOrderDO orderDO = new DeliveryOrderDO();
             orderDO.setOrderNo(details.getOrderNo());
             orderDO.setWeight(details.getWeight());

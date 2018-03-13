@@ -50,9 +50,6 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
     private DeliveryOrderRequestDao deliveryOrderRequestDao;
     @Autowired
     private TransactionTemplate transactionTemplate;
-    @Autowired
-    @Qualifier("notifyMerchantProducer")
-    private AbstractMQProducer notifyMerchantProducer;
 
     @Override
     public void handleMessage(MessageExt messageExt, Object obj) throws Exception {
@@ -199,9 +196,6 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     s.setAreaId(senderInfo.getAreaId());
                     deliveryOrderSenderDao.insert(s);
 
-                    //添加成功，通知商户
-                    notifyMerchantCreateResult("" + data.getMerchantId(), orderNo, data.getReferenceNo(), true, "Success");
-
                     //更新状态
                     DeliveryOrderRequestDO update = new DeliveryOrderRequestDO();
                     update.setId(deliveryOrderRequestDO.getId());
@@ -209,52 +203,19 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     update.setMsg("SUCCESS");
                     deliveryOrderRequestDao.update(update);
                 } catch (Exception e) {
-                    notifyMerchantCreateResult("" + data.getMerchantId(), orderNo, data.getReferenceNo(), false, e.getMessage());
+                    transactionStatus.setRollbackOnly();
                     //更新状态
                     DeliveryOrderRequestDO update = new DeliveryOrderRequestDO();
                     update.setId(deliveryOrderRequestDO.getId());
                     update.setStatus(CreateDeliveryRequestStatusEnum.FAILED.getCode());
                     update.setMsg(e.getMessage());
                     deliveryOrderRequestDao.update(update);
-
-                    transactionStatus.setRollbackOnly();
                     throw e;
                 }
                 return null;
             }
         });
 
-    }
-
-    private void notifyMerchantCreateResult(String merchantId, String orderNo, String referenceNo, boolean result, String msg) {
-
-
-        NotifyRequest notify = new NotifyRequest();
-        try {
-            MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + merchantId), MerchantConfig.class);
-            InterfaceConfig interfaceConfig = JSON.parseObject(RedisUtil.hget(Constant.INTERFACE_CONF + merchantId, "create_order_notify"), InterfaceConfig.class);
-            if (interfaceConfig == null) {
-                return;
-            }
-            notify.setReferenceNo(referenceNo);
-            notify.setOrderNo(orderNo);
-            notify.setMerchantId(merchantId);
-            notify.setMethod(interfaceConfig.getOp());
-            notify.setUrl(interfaceConfig.getUrl());
-            Map<String, Object> dataMap = new HashMap<>();
-            dataMap.put("orderNo", orderNo);
-            dataMap.put("referenceNo", referenceNo);
-            dataMap.put("msg", msg);
-            Map<Object, Object> map = new HashMap<>();
-            map.put("result", result);
-            map.put("data", dataMap);
-            String data = JSON.toJSONString(map);
-            notify.setData(data);
-            notify.setSign(createSign(merchantConfig.getKey(), data));
-            notifyMerchantProducer.sendMessage(notify);
-        } catch (Exception e) {
-
-        }
     }
 
     private String createSign(String key, String data) {
