@@ -35,45 +35,11 @@ public class ReportCodController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-    public String getOrderList(String orderNo, Integer sTime_creat, Integer eTime_creat, String scanNetwork) {
-        Pagination page = getPage();
-        //page.setTotalCount(commonDao.lastFoundRows());
-        return toPaginationLayUIData(page, getList(orderNo,sTime_creat,eTime_creat,scanNetwork,page));
+    @RequestMapping(value = "/list.html")
+    public String getOrderList(Model model,String orderNo, Integer sTime_creat, Integer eTime_creat, String scanNetwork) {
+        return "";
+        //return toPaginationLayUIData(page, list);
     }
 
-    private List<ReportArriveDO> getList(String orderNo, Integer sTime_creat, Integer eTime_creat, String scanNetwork, Pagination page ){
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("merchantId", merchantId);
-        map.put("sTime_creat", sTime_creat);
-        map.put("eTime_creat", eTime_creat);
-        map.put("orderNo", orderNo);
-        map.put("scanNetwork", scanNetwork);
-        map.put("offset", page.getOffset());
-        map.put("limit", page.getLimit());
-        List<ReportArriveDO> list = waybillArriveDao.queryReportArrive(map);
-        page.setTotalCount(waybillArriveDao.queryReportArriveCount(map));
-        return list;
-    }
-
-    /**
-     * 返回iReport报表视图
-     *
-     * @param model
-     * @return
-     */
-    @RequestMapping(value = "/cod_report.html", method = RequestMethod.GET)
-    public String report(Model model,String orderNo, Integer sTime_creat, Integer eTime_creat, String scanNetwork) {
-        Pagination page = getPage();
-        // 报表数据源
-        JRDataSource jrDataSource = new JRBeanCollectionDataSource(getList(orderNo,sTime_creat,eTime_creat,scanNetwork,page));
-        // 动态指定报表模板url
-        model.addAttribute("url", "/WEB-INF/jasper/cod.jasper");
-        model.addAttribute("format", "pdf"); // 报表格式
-        model.addAttribute("jrMainDataSource", jrDataSource);
-        return "iReportView"; // 对应jasper-defs.xml中的bean id
-    }
 }
+

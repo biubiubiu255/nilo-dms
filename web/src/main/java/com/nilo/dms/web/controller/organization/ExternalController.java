@@ -70,7 +70,8 @@ public class ExternalController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/addInfo.html", method = RequestMethod.POST)
     public String addExternalInfo(WaybillExternalDo external, @RequestParam("receive_time") String time) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date date = simpleDateFormat.parse(time);
             external.setReceiveTime((int)(date.getTime()/1000));

@@ -45,7 +45,7 @@
         </div>
     </div>
     <hr>
-
+    <iframe scrolling="no" frameborder="0" src="/report/cod/list .html" id="ifm" width="100%" height="100%" style="padding: 0px;"></iframe>
 
     <%@ include file="../../common/footer.jsp" %>
     <script src="${ctx}/dist/js/ajaxfileupload.js"></script>
@@ -62,16 +62,6 @@
                     elem: '#toCreatedTime'
                     , lang: 'en'
                 });
-
-                /*
-                 layDate.render({
-                 elem: '#toMonth'
-                 , lang: 'en'
-                 , type: 'month'
-                 , format: 'yyyyMM'
-                 });
-
-                 */
             });
 
             $(".search").on("click", function () {
@@ -88,13 +78,17 @@
                     });
                     return;
                 }
-                var url = "/report/cod/cod_report.html";
+                var url = "/report/cod/list.html";
+                var param = "?orderNo=" + $("input[name='orderNo']").val()+"&scanNetwork=" + $("input[name='scanNetwork']").val();
+                document.getElementById("ifm").src = url + param;
+                /*
                 parent.addTabs({
                     id: '400099001',
                     title: 'COD Report',
                     close: true,
                     url: url
                 });
+                */
 
             };
         });

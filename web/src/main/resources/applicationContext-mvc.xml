@@ -28,7 +28,7 @@
             <value>0</value>
         </property>
         <property name="location">
-            <value>WEB-INF/jasper/jasper-defs.xml</value>
+            <value>/WEB-INF/jasper/jasper-defs.xml</value>
         </property>
     </bean>
 
