@@ -45,7 +45,7 @@
         </div>
     </div>
     <hr>
-    <iframe scrolling="no" frameborder="0" src="/report/cod/list .html" id="ifm" width="100%" height="100%" style="padding: 0px;"></iframe>
+    <iframe scrolling="no" frameborder="0" src="/report/cod/list.html" id="ifm" width="100%" height="100%" style="padding: 0px;"></iframe>
 
     <%@ include file="../../common/footer.jsp" %>
     <script src="${ctx}/dist/js/ajaxfileupload.js"></script>
