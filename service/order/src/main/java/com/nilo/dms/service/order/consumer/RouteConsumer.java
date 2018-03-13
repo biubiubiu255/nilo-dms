@@ -17,6 +17,7 @@ import com.nilo.dms.service.mq.consumer.AbstractMQConsumer;
 import com.nilo.dms.service.mq.model.ConsumerDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -28,10 +29,15 @@ public class RouteConsumer extends AbstractMQConsumer {
 
     private static Logger logger = LoggerFactory.getLogger(RouteConsumer.class);
 
+    @Autowired
+    private DeliveryOrderRouteDao deliveryOrderRouteDao;
+    @Autowired
+    private UserInfoDao userInfoDao;
+
+
     @Override
     public void handleMessage(MessageExt messageExt, Object obj) throws Exception {
 
-        DeliveryOrderRouteDao deliveryOrderRouteDao = SpringContext.getBean("deliveryOrderRouteDao", DeliveryOrderRouteDao.class);
         try {
             DeliveryRouteMessage message = (DeliveryRouteMessage) obj;
             logger.info("MessageExt:{},DeliveryRouteMessage:{}", messageExt, message);
@@ -51,7 +57,6 @@ public class RouteConsumer extends AbstractMQConsumer {
                         break;
                     }
                     case DELIVERY: {
-                        UserInfoDao userInfoDao = SpringContext.getBean("userInfoDao", UserInfoDao.class);
                         UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(message.getMerchantId()), Long.parseLong(message.getRider()));
                         orderRouteDO.setOptBy(message.getRider());
                         orderRouteDO.setPhone(userInfoDO.getPhone());
