@@ -90,8 +90,10 @@ public class NotifyRequest {
         return "NotifyRequest{" +
                 "merchantId='" + merchantId + '\'' +
                 ", orderNo='" + orderNo + '\'' +
+                ", referenceNo='" + referenceNo + '\'' +
                 ", url='" + url + '\'' +
                 ", method='" + method + '\'' +
+                ", bizType='" + bizType + '\'' +
                 ", sign='" + sign + '\'' +
                 ", data='" + data + '\'' +
                 '}';

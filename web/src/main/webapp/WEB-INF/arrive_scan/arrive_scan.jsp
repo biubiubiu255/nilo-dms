@@ -139,7 +139,9 @@
                 dataType: "json",
                 data: {orderNo: orderNo, weight: weight, scanNo: '${scanNo}'},
                 success: function (data) {
-                    layer.msg(data.msg, {icon: 2, time: 2000});
+                    if (!data.result) {
+                        layer.msg(data.msg, {icon: 2, time: 2000});
+                    }
                 },
                 complete: function () {
                 }

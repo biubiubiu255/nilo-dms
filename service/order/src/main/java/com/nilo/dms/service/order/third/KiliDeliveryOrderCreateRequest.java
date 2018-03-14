@@ -5,12 +5,13 @@ import java.util.List;
 /**
  * Created by admin on 2017/12/18.
  */
+
 @Message(message = MessageProtocol.XML, xmlMapping = "oxm/kili_delivery_create.xml")
 public class KiliDeliveryOrderCreateRequest {
 
     private String orderNo;
 
-    private String orderPlatform;
+    public String orderPlatform;
 
     private List<KiliGoodsInfo> goodsList;
 

@@ -48,37 +48,33 @@
             </div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg3" style="width: 20.5%">
             <label class="layui-form-label">Client Name:</label>
             <div class="layui-form-item layui-inline">
                 <input type="text" name="clientName" autocomplete="off" class="layui-input">
             </div>
-        </div>
 
+        </div>
 
         <!-- 搜索按钮 -->
-        <div class="layui-col-md1">
+
+        <div class="layui-col-md">
             <button class="layui-btn layui-btn-normal search">Search</button>
+            <shiro:hasPermission name="400017">
+                <button class="layui-btn layui-btn-normal btn-export">Export</button>
+            </shiro:hasPermission>
         </div>
+
+
+
+
+
+
     </div>
     <hr>
 
-    <table class="layui-table"
-           lay-data="{ url:'/report/receive/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
-           lay-filter="demo">
-        <thead>
-        <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:200}"><O></O>rderNo</th>
-            <th lay-data="{field:'order_type', width:200}">OrderType</th>
-            <th lay-data="{field:'order_platform', width:200}">OrderPlatform</th>
-            <th lay-data="{field:'weight', width:100}">Weight</th>
-            <th lay-data="{field:'name', width:100}">DriverName</th>
-            <th lay-data="{field:'receive_time', width:200, templet:'<div>{{ formatDate(d.receive_time) }}</div>'}">ReceiveTime</th>
-            <th lay-data="{field:'created_time', width:200, templet:'<div>{{ formatDate(d.created_time) }}</div>'}">CreatedTime</th>
-            <th lay-data="{field:'created_time', width:200, templet:'<div>{{ showImageView(d.orderNo) }}</div>'}">View</th>
-        </tr>
-        </thead>
-    </table>
+    <iframe scrolling="no" frameborder="0" src="/report/receive/list.html" id="ifm" width="100%" height="100%" style="padding: 0px;"></iframe>
+
     <%@ include file="../../common/footer.jsp" %>
     <script src="${ctx}/dist/js/ajaxfileupload.js"></script>
     <script type="text/javascript">
@@ -135,18 +131,36 @@
                    });
                    return ;
                }
-                table.reload("${id0}", {
-                    where: {
-                        orderNo: $("input[name='orderNo']").val(),
-                        sTime_creat: sTime_creat,
-                        eTime_creat: eTime_creat,
-                        sTime_receive: sTime_receive,
-                        eTime_receive: eTime_receive,
-                        mother: $("input[name='month']").val(),
-                        clientName: $("input[name='clientName']").val()
-                    }
-                });
+                var param =  {
+                    orderNo: $("input[name='orderNo']").val(),
+                    sTime_creat: sTime_creat,
+                    eTime_creat: eTime_creat,
+                    sTime_receive: sTime_receive,
+                    eTime_receive: eTime_receive,
+                    mother: $("input[name='month']").val(),
+                    clientName: $("input[name='clientName']").val()
+                };
+                var url = "/report/receive/list.html";
+                param = jQuery.param( param )
+                document.getElementById("ifm").src = url + "?" + param;
             };
+
+            //导出按钮
+
+            $(".btn-export").on("click", function () {
+
+                var orderNo = $("input[name='orderNo']").val(),
+                    referenceNo = $("input[name='referenceNo']").val(),
+                    orderTypes = $("select[name='orderType']").val(),
+                    orderStatus = $("select[name='orderStatus']").val(),
+                    fromCreatedTime = $("#fromCreatedTime").val(),
+                    toCreatedTime = $("#toCreatedTime").val(),
+                    platform = $("input[name='platform']").val();
+
+                var url = "/order/deliveryOrder/export.html?orderNo="+orderNo+"&referenceNo="+referenceNo+"&orderTypes="+orderTypes+"&orderStatus="+orderStatus+"&fromCreatedTime="+fromCreatedTime+"&toCreatedTime="+toCreatedTime+"&platform="+platform;
+                window.location.href = url;
+            });
+
         });
 
     </script>

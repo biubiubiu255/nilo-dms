@@ -1,14 +1,16 @@
 package com.nilo.dms.common.utils;
 
+import com.nilo.dms.common.utils.model.Excel;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
-public class ExportExcel {
+public class ExportExcel<T> {
 
     private HSSFWorkbook wb;
 
@@ -21,10 +23,75 @@ public class ExportExcel {
         sheet = this.wb.createSheet();
     }
 
-    /**
-     * @param list
-     */
-    public int fillData(List<Map<String, String>> list, List<String> header) {
+    class KeyComparator implements Comparator<Integer> {
+        @Override
+        public int compare(Integer str1, Integer str2) {
+            return str1.compareTo(str2);
+        }
+    }
+
+    class ExcelCellBean {
+        String name;
+        String field;
+        boolean subType;
+        String subFieldName;
+        Class subClass;
+    }
+
+    private Map<Integer, ExcelCellBean> buildSortMap(Class t, Map<Integer, ExcelCellBean> sortMap, boolean subType, String subName) {
+
+        Field[] fields = t.getDeclaredFields();
+        for (Field field : fields) {
+            Excel excel = field.getAnnotation(Excel.class);
+            if (excel != null) {
+                if (!excel.subType()) {
+                    ExcelCellBean b = new ExcelCellBean();
+                    b.field = field.getName();
+                    b.name = excel.name();
+                    if (subType) {
+                        b.subType = true;
+                        b.subFieldName = subName;
+                        b.subClass = t;
+                    }
+                    sortMap.put(excel.order(), b);
+                } else {
+                    Class fieldClass = field.getType();
+                    sortMap = buildSortMap(fieldClass, sortMap, true, field.getName());
+                }
+            }
+        }
+        return sortMap;
+    }
+
+
+    public int fillData(List<T> list, Class<T> t) {
+        Map<Integer, ExcelCellBean> sortMap = new TreeMap<Integer, ExcelCellBean>(
+                new KeyComparator());
+        //根据注解构建需要导出的字段
+        sortMap = buildSortMap(t, sortMap, false, null);
+
+        List<String> header = new ArrayList<>();
+        for (Map.Entry<Integer, ExcelCellBean> entry : sortMap.entrySet()) {
+            ExcelCellBean c = entry.getValue();
+            header.add(c.name);
+        }
+
+        List<Map<String, String>> listMap = new ArrayList<>();
+
+        for (T data : list) {
+            Map<String, String> map = new HashMap<>();
+            for (Map.Entry<Integer, ExcelCellBean> entry : sortMap.entrySet()) {
+                ExcelCellBean c = entry.getValue();
+                if (!c.subType) {
+                    String value = BeanUtils.getProperty(data, c.field);
+                    map.put(c.name, value);
+                } else {
+                    String value = BeanUtils.getProperty(BeanUtils.readField(data, c.subFieldName, c.subClass), c.field);
+                    map.put(c.name, value);
+                }
+            }
+            listMap.add(map);
+        }
 
         int rowNum = 0;
 
@@ -49,7 +116,7 @@ public class ExportExcel {
             hCellNum++;
         }
 
-        for (Map<String, String> map : list) {
+        for (Map<String, String> map : listMap) {
             rowNum++;
             HSSFRow proRow = sheet.createRow(rowNum);
             int cellNum = 0;

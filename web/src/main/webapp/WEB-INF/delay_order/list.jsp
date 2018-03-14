@@ -37,7 +37,7 @@
                             </div>
                         </div>
                         <div class="layui-col-md1 layui-col-lg1">
-                            <shiro:hasPermission name="400022">
+                            <shiro:hasPermission name="400071">
                                 <button class="layui-btn layui-btn-normal search">Search</button>
                             </shiro:hasPermission>
                         </div>

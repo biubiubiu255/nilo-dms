@@ -38,7 +38,7 @@
         </div>
     </div>
     <div class="layui-form layui-row">
-        <div class="layui-col-md4 layui-col-lg4">
+        <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">OrderType:</label>
             <div class="layui-form-item layui-inline" style="margin: 0px">
                 <select lay-filter="orderType" multiple name="orderType">
@@ -49,13 +49,13 @@
                 </select>
             </div>
         </div>
-        <div class="layui-col-md4 layui-col-lg4">
+        <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">Status:</label>
             <div class="layui-form-item layui-inline">
                 <lp:deliveryStatus selectId="orderStatus" selectName="orderStatus" multiple="true"/>
             </div>
         </div>
-        <div class="layui-col-md4 layui-col-lg4">
+        <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">Express:</label>
             <div class="layui-form-item layui-inline" style="margin: 0px">
                 <select lay-filter="express" multiple name="express">
@@ -68,8 +68,8 @@
         </div>
     </div>
     <div class="layui-row">
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">Seller customer:</label>
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">Seller Customer:</label>
             <div class="layui-form-item layui-inline">
                 <input type="text" name="sellerCustomer" autocomplete="off" class="layui-input">
             </div>
@@ -80,28 +80,8 @@
     </div>
     <hr>
 
-    <table class="layui-table"
-           lay-data="{ url:'/report/send/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
-           lay-filter="demo">
-        <thead>
-        <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:200}">orderNo</th>
-            <th lay-data="{field:'referenceNo', width:200}">referenceNo</th>
-            <th lay-data="{field:'nextNetwork', width:100}">nextNetwork</th>
-            <th lay-data="{field:'network', width:100}">network</th>
-            <th lay-data="{field:'orderCategory', width:100}">orderCategory</th>
-            <th lay-data="{field:'weight', width:100}">Weight</th>
-            <th lay-data="{field:'stop', width:120}">stop</th>
-            <th lay-data="{field:'carrierNameDesc', width:150}">carrierName</th>
-            <th lay-data="{field:'deliveryFee', width:100}">deliveryFee</th>
-            <th lay-data="{field:'statusDesc', width:100}">status</th>
-            <th lay-data="{field:'remark', width:170}">remark</th>
-            <th lay-data="{field:'name', width:100}">name</th>
-            <th lay-data="{field:'contactNumber', width:120}">contactNumber</th>
-            <th lay-data="{field:'address', width:150}">address</th>
-        </tr>
-        </thead>
-    </table>
+    <iframe scrolling="no" frameborder="0" src="/report/send/list.html" id="ifm" width="100%" height="100%" style="padding: 0px;"></iframe>
+
     <%@ include file="../../common/footer.jsp" %>
     <script src="${ctx}/dist/js/ajaxfileupload.js"></script>
     <script type="text/javascript">
@@ -129,8 +109,8 @@
             })
 
             function reloadTable() {
-                table.reload("${id0}", {
-                    where: {
+
+                var param = {
                         orderNo: $("input[name='orderNo']").val(),
                         carrierNames: $("select[name='express']").val(),
                         orderTypes: $("select[name='orderType']").val(),
@@ -140,8 +120,11 @@
                         weight: $("input[name='weight']").val(),
                         rider: $("input[name='rider']").val(),
                         sellerCustomer: $("input[name='sellerCustomer']").val(),
-                    }
-                });
+                    };
+                var url = "/report/send/list.html";
+                param = jQuery.param( param )
+                document.getElementById("ifm").src = url + "?" + param;
+
             };
         });
 

@@ -7,6 +7,8 @@ import com.nilo.dms.dao.SendReportDao;
 import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.dataobject.ReportReceiveDO;
 import com.nilo.dms.web.controller.BaseController;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,9 +42,8 @@ public class ReportReceiveController extends BaseController {
         return "report/receive/list";
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-    public String getOrderList(String orderNo, Integer sTime_creat, Integer eTime_creat, Integer sTime_receive,
+    @RequestMapping(value = "/list.html")
+    public String getOrderList(Model model, String orderNo, Integer sTime_creat, Integer eTime_creat, Integer sTime_receive,
                                Integer eTime_receive, String mother, String clientName) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
@@ -67,6 +68,12 @@ public class ReportReceiveController extends BaseController {
         List<ReportReceiveDO> list = reportReceiveDao.queryReportReceive(map);
         page.setTotalCount(reportReceiveDao.queryReportReceiveCount(map));
         //page.setTotalCount(commonDao.lastFoundRows());
-        return toPaginationLayUIData(page, list);
+
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
+        // 动态指定报表模板url
+        model.addAttribute("url", "/WEB-INF/jasper/report/receive.jasper");
+        model.addAttribute("format", "pdf"); // 报表格式
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView"; // 对应jasper-defs.xml中的bean id
 }
 }

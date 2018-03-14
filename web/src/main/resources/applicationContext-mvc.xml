@@ -21,6 +21,17 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
+
+    <!-- 注册XmlViewResolver，用于iReport & JasperReports报表生成 -->
+    <bean id="jasperReportResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
+        <property name="order">
+            <value>0</value>
+        </property>
+        <property name="location">
+            <value>/WEB-INF/jasper/jasper-defs.xml</value>
+        </property>
+    </bean>
+
     <mvc:annotation-driven>
         <!-- 编码转换 -->
         <mvc:message-converters>

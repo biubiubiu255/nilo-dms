@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by admin on 2017/11/15.
  */
-public interface NotifyMerchantService {
+public interface NotifyService {
 
     void updateStatus(OrderOptRequest request);
 

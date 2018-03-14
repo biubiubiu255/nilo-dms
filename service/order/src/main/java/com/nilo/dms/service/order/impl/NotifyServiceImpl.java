@@ -16,14 +16,13 @@ import com.nilo.dms.dao.dataobject.NotifyDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
-import com.nilo.dms.service.order.NotifyMerchantService;
+import com.nilo.dms.service.order.NotifyService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.NotifyRequest;
 import com.nilo.dms.service.order.model.OrderOptRequest;
 import com.nilo.dms.service.order.model.Task;
-import com.nilo.dms.service.org.StaffService;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
@@ -45,15 +44,15 @@ import java.util.Map;
  * Created by admin on 2018/3/1.
  */
 @Service
-public class NotifyMerchantServiceImpl implements NotifyMerchantService {
+public class NotifyServiceImpl implements NotifyService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private NotifyDao notifyDao;
     @Autowired
-    @Qualifier("notifyMerchantProducer")
-    private AbstractMQProducer notifyMerchantProducer;
+    @Qualifier("notifyDataBusProducer")
+    private AbstractMQProducer notifyDataBusProducer;
     @Autowired
     private OrderService orderService;
     @Autowired
@@ -144,7 +143,7 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
                 String data = JSON.toJSONString(dataMap);
                 notify.setData(data);
                 notify.setSign(createSign(merchantConfig.getKey(), data));
-                notifyMerchantProducer.sendMessage(notify);
+                notifyDataBusProducer.sendMessage(notify);
 
             }
         } catch (Exception e) {

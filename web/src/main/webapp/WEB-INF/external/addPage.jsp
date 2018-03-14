@@ -70,7 +70,7 @@
             layDate.render({
                 elem: '#fromTime',
                 lang: 'en',
-                value: formatDate(Date.parse(new Date())/1000),
+                value: formatDate(Date.parse(new Date())/1000, "YYYY-MM-DD"),
                 theme: '#393D49',
                 showBottom: true,
                 btns: ['clear', 'confirm'],
