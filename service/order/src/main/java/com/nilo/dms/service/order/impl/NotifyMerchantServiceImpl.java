@@ -91,7 +91,7 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
                             if (notifyDO != null) return;
                         }
                         DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + request.getMerchantId(), "" + request.getNetworkId()), DistributionNetworkDO.class);
-                        dataMap.put("location", networkDO.getName());
+                        dataMap.put("location", networkDO==null?"":networkDO.getName());
                         break;
                     }
                     case DELIVERY: {
@@ -99,7 +99,7 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
                         UserInfo userInfo = userService.findUserInfoByUserId(request.getMerchantId(), task.getHandledBy());
 
                         DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + request.getMerchantId(), "" + request.getNetworkId()), DistributionNetworkDO.class);
-                        dataMap.put("location", networkDO.getName());
+                        dataMap.put("location", networkDO==null?"":networkDO.getName());
 
                         dataMap.put("rider_name", userInfo.getName());
                         dataMap.put("rider_phone", userInfo.getPhone());
