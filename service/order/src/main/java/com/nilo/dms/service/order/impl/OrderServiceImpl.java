@@ -385,12 +385,13 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     @Override
     @Transactional
-    public void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId) {
+    public void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId,String networkId) {
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setMerchantId(merchantId);
         optRequest.setOptBy(arriveBy);
         optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
         optRequest.setOrderNo(waybillNos);
+        optRequest.setNetworkId(networkId);
         handleOpt(optRequest);
 
         this.addNetworkTask(waybillNos, arriveBy, merchantId);
@@ -537,7 +538,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             }
         }
         //1、到件
-        waybillNoListArrive(unpackRequest.getOrderNos(), unpackRequest.getOptBy(), unpackRequest.getMerchantId());
+        waybillNoListArrive(unpackRequest.getOrderNos(), unpackRequest.getOptBy(), unpackRequest.getMerchantId(),""+unpackRequest.getNetworkId());
 
         // 2、添加操作日志
         OrderOptRequest optRequest = new OrderOptRequest();
