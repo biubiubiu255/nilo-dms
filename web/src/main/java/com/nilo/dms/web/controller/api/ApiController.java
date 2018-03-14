@@ -102,7 +102,7 @@ public class ApiController extends BaseController {
 		}
 		case ARRIVE_SCAN: {
 			List<String> list = JSONArray.parseArray(data, String.class);
-			orderService.waybillNoListArrive(list, "api", merchantId);
+			orderService.waybillNoListArrive(list, "api", merchantId,"0");
 			break;
 		}
 		case SIGN: {
