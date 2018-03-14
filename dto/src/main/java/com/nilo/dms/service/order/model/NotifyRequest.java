@@ -7,6 +7,8 @@ public class NotifyRequest {
 
     private String merchantId;
 
+    private String appKey;
+
     private String orderNo;
 
     private String referenceNo;

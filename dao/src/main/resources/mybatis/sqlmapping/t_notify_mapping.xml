@@ -7,18 +7,12 @@
     <resultMap id="notifyDO" type="com.nilo.dms.dao.dataobject.NotifyDO">
         <result property="id" column="id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="merchantId" column="merchant_Id" javaType="java.lang.Long"
-                jdbcType="INTEGER"/>
         <result property="bizType" column="biz_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="method" column="method" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="notifyId" column="notify_id" javaType="java.lang.String"
                  jdbcType="VARCHAR"/>
-        <result property="orderNo" column="order_no" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="referenceNo" column="reference_no" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
@@ -28,7 +22,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id ,merchant_id,biz_type,method,notify_id,order_no,reference_no,url,param,result,sign,num,status,created_time , updated_time ,version
+        id ,biz_type,method,notify_id,url,param,result,sign,num,status,created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -36,9 +30,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_sys_notify
-        ( merchant_id,biz_type,method,notify_id,order_no,reference_no,url,param,result,sign,num,status,created_time , updated_time ,version)
+        ( biz_type,method,notify_id,url,param,result,sign,num,status,created_time , updated_time ,version)
         VALUES
-        (#{merchantId},#{bizType},#{method}, #{notifyId},#{orderNo},#{referenceNo},#{url},#{param},#{result},#{sign},#{num},#{status} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{bizType},#{method}, #{notifyId},#{url},#{param},#{result},#{sign},#{num},#{status} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
     <!-- 动态更新语句 -->
     <update id="update" parameterType="com.nilo.dms.dao.dataobject.NotifyDO" statementType="PREPARED">
@@ -58,52 +52,12 @@
     </update>
 
 
-    <select id="findBy" resultMap="notifyDO" statementType="PREPARED">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_sys_notify where merchant_id = #{merchantId}
-        <if test="orderNo != null and orderNo != ''">
-            and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
-        </if>
-        <if test="bizType != null and bizType != ''">
-            and biz_type =  #{bizType}
-        </if>
-        <if test="status !=null">
-            and status =  #{status}
-        </if>
-
-        order by created_time desc
-        limit #{offset} , #{limit}
-    </select>
-
-    <select id="findCountBy" statementType="PREPARED" resultType="java.lang.Long">
-        SELECT count(1)
-        FROM t_sys_notify where merchant_id = #{merchantId}
-        <if test="orderNo != null and orderNo != ''">
-            and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
-        </if>
-        <if test="bizType != null and bizType != ''">
-            and biz_type =  #{bizType}
-        </if>
-        <if test="status !=null">
-            and status =  #{status}
-        </if>
-
-        order by null
-    </select>
-
-
     <select id="findByNotifyId" resultMap="notifyDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_sys_notify where merchant_id = #{merchantId} and notify_id=#{notifyId}
+        FROM t_sys_notify where notify_id=#{notifyId}
     </select>
 
-    <select id="findByBizType" resultMap="notifyDO" statementType="PREPARED">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_sys_notify where merchant_id = #{merchantId} and order_no=#{orderNo} and biz_type=#{bizType}
-    </select>
 
     <select id="queryRetryList" resultMap="notifyDO" statementType="PREPARED">
         SELECT

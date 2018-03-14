@@ -15,10 +15,6 @@ public class NotifyDO extends BaseDo<Long> {
 
     private String notifyId;
 
-    private String orderNo;
-
-    private String referenceNo;
-
     private String url;
 
     private String param;
@@ -37,14 +33,6 @@ public class NotifyDO extends BaseDo<Long> {
 
     public void setMethod(String method) {
         this.method = method;
-    }
-
-    public String getReferenceNo() {
-        return referenceNo;
-    }
-
-    public void setReferenceNo(String referenceNo) {
-        this.referenceNo = referenceNo;
     }
 
     public String getSign() {
@@ -77,14 +65,6 @@ public class NotifyDO extends BaseDo<Long> {
 
     public void setNotifyId(String notifyId) {
         this.notifyId = notifyId;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
     }
 
     public String getUrl() {
