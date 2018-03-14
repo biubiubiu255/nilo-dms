@@ -9,6 +9,8 @@ import com.nilo.dms.service.order.model.DeliverReport;
 import com.nilo.dms.service.order.model.SignOrderParameter;
 import com.nilo.dms.service.order.model.SignReport;
 import com.nilo.dms.web.controller.BaseController;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,9 +34,8 @@ public class SignReportController extends BaseController {
         return "report/sign/list";
     }
 
-    @ResponseBody
     @RequestMapping(value = "/list.html")
-    public String getOrderList(SignOrderParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "taskStatus[]", required = false) Integer[] taskStatus) {
+    public String getOrderList(Model model, SignOrderParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "taskStatus[]", required = false) Integer[] taskStatus) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
@@ -48,7 +49,14 @@ public class SignReportController extends BaseController {
         Pagination page = getPage();
         List<SignReport> list = signReportService.querySignReport(parameter, page);
 
-        return toPaginationLayUIData(page, list);
-//        return "";
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
+        // 动态指定报表模板url
+        model.addAttribute("url", "/WEB-INF/jasper/report/sign.jasper");
+        model.addAttribute("format", "pdf"); // 报表格式
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView"; // 对应jasper-defs.xml中的bean id
+
+        //return toPaginationLayUIData(page, list);
+
     }
 }

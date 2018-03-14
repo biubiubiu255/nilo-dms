@@ -54,10 +54,11 @@ public class MobileArriveScanController extends BaseController {
 		// 获取merchantId
 		String merchantId = me.getMerchantId();
 		String arriveBy = me.getUserId();
+		String netWorkId = ""+me.getNetworks().get(0);
 		try {
 			String[] logisticsNoArray = scanedCodes.split(",");
 			if (null != logisticsNoArray && logisticsNoArray.length > 0) {
-				orderService.waybillNoListArrive(Arrays.asList(logisticsNoArray), arriveBy, merchantId);
+				orderService.waybillNoListArrive(Arrays.asList(logisticsNoArray), arriveBy, merchantId,netWorkId);
 			}
 		}catch (Exception e){
 			return toJsonErrorMsg(e.getMessage());

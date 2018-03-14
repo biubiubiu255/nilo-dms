@@ -108,7 +108,8 @@ public class MobileUnPackController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         String arriveByString = me.getUserId();
         String merchantId = me.getMerchantId();
-        orderService.waybillNoListArrive(Arrays.asList(new String[]{logisticsNo}), merchantId, me.getUserId());
+        String netWorkId = ""+me.getNetworks().get(0);
+        orderService.waybillNoListArrive(Arrays.asList(new String[]{logisticsNo}), merchantId, me.getUserId(),netWorkId);
         return toJsonTrueMsg();
     }
 

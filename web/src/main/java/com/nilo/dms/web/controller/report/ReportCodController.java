@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,10 +33,31 @@ public class ReportCodController extends BaseController {
         return "report/cod/list";
     }
 
-    @ResponseBody
+
     @RequestMapping(value = "/list.html")
     public String getOrderList(Model model,String orderNo, Integer sTime_creat, Integer eTime_creat, String scanNetwork) {
-        return "";
+        Pagination page = getPage();
+        //page.setTotalCount(commonDao.lastFoundRows());
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("merchantId", merchantId);
+        map.put("sTime_creat", sTime_creat);
+        map.put("eTime_creat", eTime_creat);
+        map.put("orderNo", orderNo);
+        map.put("scanNetwork", scanNetwork);
+        map.put("offset", page.getOffset());
+        map.put("limit", page.getLimit());
+        List<ReportArriveDO> list = waybillArriveDao.queryReportArrive(map);
+        //page.setTotalCount(waybillArriveDao.queryReportArriveCount(map));
+
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
+        // 动态指定报表模板url
+        model.addAttribute("url", "/WEB-INF/jasper/report/cod.jasper");
+        model.addAttribute("format", "pdf"); // 报表格式
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView"; // 对应jasper-defs.xml中的bean id
         //return toPaginationLayUIData(page, list);
     }
 

@@ -29,7 +29,7 @@ public class ReportInvoiceController extends BaseController {
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
-        return "report/cod/list";
+        return "report/cod/list_old";
     }
 
     @ResponseBody

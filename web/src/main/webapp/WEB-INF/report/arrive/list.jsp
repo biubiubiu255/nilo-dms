@@ -55,22 +55,8 @@
     </div>
     <hr>
 
-    <table class="layui-table"
-           lay-data="{ url:'/report/arrive/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
-           lay-filter="demo">
-        <thead>
-        <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:200}"><O></O>rderNo</th>
-            <th lay-data="{field: 'recipients', width:100}">Recipients</th>
-            <th lay-data="{field:'lastNetwork' , width:200}">LastNetwork</th>
-            <th lay-data="{field:'scanNetwork', width:200}">ScanNetwork</th>
-            <th lay-data="{field:'scanTime', width:200, templet:'<div>{{ formatDate(d.scanTime) }}</div>'}">ScanTime</th>
-            <th lay-data="{field:'weight', width:100}">weight</th>
-            <th lay-data="{field:'phone', width:200}">Phone</th>
-            <th lay-data="{field:'address', width:200}">address</th>
-        </tr>
-        </thead>
-    </table>
+    <iframe scrolling="no" frameborder="0" src="/report/arrive/list.html" id="ifm" width="100%" height="100%" style="padding: 0px;"></iframe>
+
     <%@ include file="../../common/footer.jsp" %>
     <script src="${ctx}/dist/js/ajaxfileupload.js"></script>
     <script type="text/javascript">
@@ -117,14 +103,17 @@
                    });
                    return ;
                }
-                table.reload("${id0}", {
-                    where: {
+
+                var param = {
                         orderNo: $("input[name='orderNo']").val(),
                         sTime_creat: sTime_creat,
                         eTime_creat: eTime_creat,
                         scanNetwork: $("select[name='scanNetwork']").val()
-                    }
-                });
+                    };
+                var url = "/report/arrive/list.html";
+                param = jQuery.param( param )
+                document.getElementById("ifm").src = url + "?" + param;
+
             };
         });
 

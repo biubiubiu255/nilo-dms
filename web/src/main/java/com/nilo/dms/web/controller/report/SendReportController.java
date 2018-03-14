@@ -6,11 +6,15 @@ import com.nilo.dms.dao.ThirdExpressDao;
 import com.nilo.dms.dao.dataobject.SendReportDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.order.SendReportService;
+import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.SendOrderParameter;
 import com.nilo.dms.service.order.model.SendReport;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.web.controller.BaseController;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,11 +48,9 @@ public class SendReportController extends BaseController {
         return "report/send/list";
     }
 
-    @ResponseBody
+
     @RequestMapping(value = "/list.html")
-    public String getOrderList(SendOrderParameter parameter, @RequestParam(value = "carrierNames[]", required = false) String[] carrierNames, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) {
-
-
+    public String getOrderList(Model model, SendOrderParameter parameter, @RequestParam(value = "carrierNames[]", required = false) String[] carrierNames, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) {
         if(!(carrierNames==null)){
             System.out.println("----------------------");
         }
@@ -65,6 +68,25 @@ public class SendReportController extends BaseController {
         Pagination page = getPage();
         List<SendReport> list = sendReportService.querySendReport(parameter, page);
 
-        return toPaginationLayUIData(page, list);
+        List<DeliveryOrder> listF = new ArrayList<DeliveryOrder>();
+        DeliveryOrder deliver = null;
+        for (SendReport d: list) {
+            deliver = new DeliveryOrder();
+            BeanUtils.copyProperties(d, deliver);
+            deliver.setNextNetworkDesc(d.getNextNetwork());
+            deliver.setNetworkDesc(d.getNetwork());
+            deliver.setAllocatedRider(d.getName());
+            listF.add(deliver);
+        }
+
+        System.out.println(" = " + listF.size());
+        System.out.println(" = " + listF.get(0).getOrderNo());
+
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(listF);
+        // 动态指定报表模板url
+        model.addAttribute("url", "/WEB-INF/jasper/report/send.jasper");
+        model.addAttribute("format", "pdf"); // 报表格式
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView"; // 对应jasper-defs.xml中的bean id
     }
 }
