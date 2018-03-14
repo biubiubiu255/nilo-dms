@@ -209,6 +209,7 @@
   				<a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a>
 					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>
 				</div>
+				// now
 				--%>
             <div class="bottom_a_button11"><a href="javascript:void(0);" class="submit"  data-locale="all_submit"></a></div>
             <div class="bottom_a_button22"><a href="javascript:void(0);"><span class="scanner">scan</span></a></div>
