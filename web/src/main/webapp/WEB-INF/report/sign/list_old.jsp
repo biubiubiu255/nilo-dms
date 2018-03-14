@@ -40,8 +40,26 @@
     </div>
     <hr>
 
-    <iframe scrolling="no" frameborder="0" src="/report/sign/list.html" id="ifm" width="100%" height="100%" style="padding: 0px;"></iframe>
-
+    <table class="layui-table"
+           lay-data="{ url:'/report/sign/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
+           lay-filter="demo">
+        <thead>
+        <tr>
+            <th lay-data="{fixed: 'left',field:'orderNo', width:200}">orderNo</th>
+            <th lay-data="{field:'referenceNo', width:200}">referenceNo</th>
+            <th lay-data="{field:'weight', width:100}">weight</th>
+            <th lay-data="{field:'needPayAmount', width:100}">needPayAmount</th>
+            <th lay-data="{field:'alreadyPaid', width:100}">alreadyPaid</th>
+            <th lay-data="{field:'handledBy', width:100}">handledBy</th>
+            <th lay-data="{field:'handledTime', width:170, templet:'<div>{{ formatDate(d.handledTime) }}</div>'}">handledTime</th>
+            <th lay-data="{field:'sName', width:100}">sName</th>
+            <th lay-data="{field:'rName', width:100}">rName</th>
+            <th lay-data="{field:'contactNumber', width:170}">contactNumber</th>
+            <th lay-data="{field:'address', width:100}">address</th>
+            <th lay-data="{field:'remark', width:150}">remark</th>
+        </tr>
+        </thead>
+    </table>
     <%@ include file="../../common/footer.jsp" %>
     <script src="${ctx}/dist/js/ajaxfileupload.js"></script>
     <script type="text/javascript">
@@ -65,24 +83,24 @@
             });
 
             $(".search").on("click", function () {
+                $.get()
                 reloadTable();
             })
 
             function reloadTable() {
-                var param = {
-                    orderNo: $("input[name='orderNo']").val(),
-                    carrierNames: $("select[name='express']").val(),
-                    orderTypes: $("select[name='orderType']").val(),
-                    orderStatus: $("select[name='orderStatus']").val(),
-                    fromHandledTime: $("#fromHandledTime").val(),
-                    toHandledTime: $("#toHandledTime").val(),
-                    weight: $("input[name='weight']").val(),
-                    rider: $("input[name='rider']").val(),
-                    sellerCustomer: $("input[name='sellerCustomer']").val()
-                };
-                var url = "/report/sign/list.html";
-                param = jQuery.param( param )
-                document.getElementById("ifm").src = url + "?" + param;
+                table.reload("${id0}", {
+                    where: {
+                        orderNo: $("input[name='orderNo']").val(),
+                        carrierNames: $("select[name='express']").val(),
+                        orderTypes: $("select[name='orderType']").val(),
+                        orderStatus: $("select[name='orderStatus']").val(),
+                        fromHandledTime: $("#fromHandledTime").val(),
+                        toHandledTime: $("#toHandledTime").val(),
+                        weight: $("input[name='weight']").val(),
+                        rider: $("input[name='rider']").val(),
+                        sellerCustomer: $("input[name='sellerCustomer']").val(),
+                    }
+                });
             };
         });
 

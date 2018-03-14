@@ -83,7 +83,7 @@
         
 
         $("#test").click(function() {
-			scan_callback('Kili201802000035');
+			scan_callback('Kili201801000417');
 		});
         $("#test2").click(function() {
 			scan_callback('NILO18020596390');
@@ -144,7 +144,7 @@
      */
     function getOrderList(orderNo) {
     	
-    	ajaxRequest('/mobile/network/unpackage/scanList.html', 'scanNo=&packageNo='+orderNo, false, function(result) {
+    	ajaxRequest('/mobile/network/unpackage/scanList.html', 'scanNo=239748252390526976&packageNo='+orderNo, false, function(result) {
     		//if (result.data.length=0) showWarning("No subparcels were found");
     		//alert(result.data.length);
     		//alert(result.data.length);
@@ -204,16 +204,13 @@
 					</ul>
 
 				</div>
-
-<!-- 				<div class="bottom_a_button">
-
-  				a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a> 
-					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>   
-					<span class="scanner"><a onclick="javascript:void(0);"style="margin-bottom: 50px" data-locale="all_scan">scan</a></span>
-
-					<a onclick="javascript:void(0);" class="submit" data-locale="all_submit">submit</a>
-					
-				</div> -->
+				<%--
+ 				<div class="bottom_a_button">
+  				<a class="scan" style="margin-bottom: 100px" id="test2">模拟扫描小包</a>
+					<a class="scan" style="margin-bottom: 150px" id="test">扫描大包</a>
+				</div>
+				// now
+				--%>
             <div class="bottom_a_button11"><a href="javascript:void(0);" class="submit"  data-locale="all_submit"></a></div>
             <div class="bottom_a_button22"><a href="javascript:void(0);"><span class="scanner">scan</span></a></div>
 			</form>
