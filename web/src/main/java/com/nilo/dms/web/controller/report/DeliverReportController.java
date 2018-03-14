@@ -8,6 +8,8 @@ import com.nilo.dms.service.order.model.DeliverReport;
 import com.nilo.dms.service.order.model.SendOrderParameter;
 import com.nilo.dms.service.order.model.SendReport;
 import com.nilo.dms.web.controller.BaseController;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,9 +33,9 @@ public class DeliverReportController extends BaseController {
         return "report/deliver/list";
     }
 
-    @ResponseBody
+
     @RequestMapping(value = "/list.html")
-    public String getOrderList(DeliverOrderParameter parameter,@RequestParam(value = "taskStatus[]", required = false) Integer[] taskStatus) {
+    public String getOrderList(Model model, DeliverOrderParameter parameter,@RequestParam(value = "taskStatus[]", required = false) Integer[] taskStatus) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
@@ -43,10 +45,15 @@ public class DeliverReportController extends BaseController {
         if (taskStatus != null && taskStatus.length > 0) {
             parameter.setStatus(Arrays.asList(taskStatus));
         }
-
         Pagination page = getPage();
         List<DeliverReport> list = deliverReportService.queryDeliverReport(parameter, page);
 
-        return toPaginationLayUIData(page, list);
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
+        System.out.println(" = " + list.size());
+        // 动态指定报表模板url
+        model.addAttribute("url", "/WEB-INF/jasper/report/deliver.jasper");
+        model.addAttribute("format", "pdf"); // 报表格式
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView"; // 对应jasper-defs.xml中的bean id
     }
 }

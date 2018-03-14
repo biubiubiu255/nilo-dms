@@ -38,39 +38,10 @@
         </div>
     </div>
     <hr>
-
-    <table class="layui-table" lay-data="{ url:'/report/dispatchList.html', page:true,limit:10, id:'${id0}'}"
-           lay-filter="demo">
-        <thead>
-        <tr>
-            <th lay-data="{fixed:'left',field:'orderNo', width:200}">OrderNo</th>
-            <th lay-data="{fixed:'left',field:'referenceNo', width:200,templet: '<div>{{d.deliveryOrder.referenceNo}}</div>'}">
-                ReferenceNo
-            </th>
-            <th lay-data="{field:'statusDesc', width:150}">Task Status</th>
-            <th lay-data="{field:'statusDesc1', width:150,templet: '<div>{{d.deliveryOrder.statusDesc}}</div>'}">Order
-                Status
-            </th>
-            <th lay-data="{field:'handledName', width:100}">Rider</th>
-            <th lay-data="{field:'orderType', width:150,templet: '<div>{{d.deliveryOrder.orderType}}</div>'}">Order
-                Type
-            </th>
-            <th lay-data="{field:'country', width:100,templet: '<div>{{d.deliveryOrder.country}}</div>'}">Country</th>
-            <th lay-data="{field:'weight', width:100,templet: '<div>{{d.deliveryOrder.weight}}</div>'}">Rider</th>
-            <th lay-data="{field:'createdTime', width:170,templet: '<div>{{formatDate(d.createdTime)}}</div>'}">Dispatch
-                Time
-            </th>
-            <th lay-data="{field:'handledTime', width:170, templet:'<div>{{ formatDate(d.handledTime) }}</div>'}">
-                Handled Time
-            </th>
-            <th lay-data="{field:'address', width:300,templet: '<div>{{d.deliveryOrder.receiverInfo.address}}</div>'}">
-                Receiver Address
-            </th>
-
-        </tr>
-        </thead>
-    </table>
 </div>
+
+    <iframe scrolling="no" frameborder="0" src="/report/dispatch/list.html" id="ifm" width="100%" height="100%" style="padding: 0px;"></iframe>
+
 
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
@@ -109,14 +80,14 @@
             })
 
             var reloadTable = function (item) {
-
-                table.reload("${id0}", {
-                    where: {
-                        rider: $("select[name='rider']").val(),
-                        fromTime: $("#fromTime").val(),
-                        toTime: $("#toTime").val(),
-                    }
-                });
+                var param = {
+                    rider: $("select[name='rider']").val(),
+                    fromTime: $("#fromTime").val(),
+                    toTime: $("#toTime").val(),
+                };
+                var url = "/report/dispatch/list.html";
+                param = jQuery.param( param )
+                document.getElementById("ifm").src = url + "?" + param;
             };
 
         });
