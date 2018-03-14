@@ -5,7 +5,7 @@
 <%@ page import="com.nilo.dms.common.Constant" %>
 
 <%
-    request.setAttribute("abnormalTypeList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.ABNORMAL_ORDER_TYPE));
+    request.setAttribute(Constant.REFUSE_REASON, SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.REFUSE_REASON));
 %>
 
 
@@ -60,7 +60,7 @@
 
 <div class="wap_content">
     <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-        <h2 data-locale="Problem_title">Problem</h2>
+        <h2 data-locale="refuse">Refuse</h2>
     </div>
 
     <div class="formula_modify">
@@ -72,8 +72,8 @@
                     <li>
                         <%--<label>Reason</label>--%>
                         <select required="required" class='input_value' name='reason'>
-                            <option value="">Please enter a reason</option>
-	                       <c:forEach var="values" items="${abnormalTypeList}" varStatus="status">
+                            <option value="">Please select a reason</option>
+	                       <c:forEach var="values" items="${refuse_reason}" varStatus="status">
 	                           <option value="${values.code}">${values.value }</option>
 		                   </c:forEach>
                         </select>

@@ -95,9 +95,9 @@ public class PaymentResult {
 
 	@Override
 	public String toString() {
-		return "amount=" + amount + "& merchantId=" + merchantId + "& merchantOrderNo=" + merchantOrderNo
-				+ "& orderId=" + orderId + "& orgTransId=" + orgTransId + "& paymentChannel=" + paymentChannel
-				+ "& paymentMethod=" + paymentMethod + "& signType=" + signType + "& status=" + status ;
+		return "amount=" + amount + "&merchantId=" + merchantId + "&merchantOrderNo=" + merchantOrderNo
+				+ "&orderId=" + orderId + "&orgTransId=" + orgTransId + "&paymentChannel=" + paymentChannel
+				+ "&paymentMethod=" + paymentMethod + "&signType=" + signType + "&status=" + status ;
 	}
 	
 

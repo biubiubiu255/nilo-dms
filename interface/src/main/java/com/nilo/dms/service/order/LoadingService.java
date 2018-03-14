@@ -2,6 +2,7 @@ package com.nilo.dms.service.order;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.service.order.model.Loading;
+import com.nilo.dms.service.order.model.ShipParameter;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface LoadingService {
 
     void deleteLoadingDetails(String merchantId, String loadingNo, String orderNo, String optBy);
 
-    void ship(String merchantId, String loadingNo, String optBy);
+    void ship(ShipParameter parameter);
 
     void deleteLoading(String merchantId, String loadingNo, String optBy);
 

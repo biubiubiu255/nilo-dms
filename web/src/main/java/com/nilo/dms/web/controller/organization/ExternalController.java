@@ -10,15 +10,20 @@ import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.org.ExternalService;
 import com.nilo.dms.service.system.DistributionNetworkService;
 import com.nilo.dms.web.controller.BaseController;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -64,14 +69,23 @@ public class ExternalController extends BaseController {
     //添加用户参数，以及写入
     @ResponseBody
     @RequestMapping(value = "/addInfo.html", method = RequestMethod.POST)
-    public String addExternalInfo(WaybillExternalDo external) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();  //主要的，主体
-        if (external.getCreator()==null || external.getCreator().equals("")) external.setCreator(me.getUserName());
-    	externalService.addExternal(external);
-    	return toJsonTrueMsg();
+    public String addExternalInfo(WaybillExternalDo external, @RequestParam("receive_time") String time) {
+        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = simpleDateFormat.parse(time);
+            external.setReceiveTime((int)(date.getTime()/1000));
+            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();  //主要的，主体
+            if (external.getCreator()==null || external.getCreator().equals("")) external.setCreator(me.getUserName());
+            externalService.addExternal(external);
+            return toJsonTrueMsg();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return toJsonErrorMsg("pleace input date");
+        }
+
     }
-    
-    
+
     //更新方法
     @RequestMapping(value = "/editInfoPage.html", method = RequestMethod.GET)
     public String editExpressInfoPage(WaybillExternalDo external, Model model) {

@@ -46,7 +46,7 @@
 						<li><img src="/mobile/images/icon_2.png" /><br /><label >Payment</label></li>
 					</a>
 					<a href="/mobile/rider/problem/scan.html" title="">
-						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="problem">Problem</label></li>
+						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="refuse">Refuse</label></li>
 					</a>
 					<a href="/mobile/rider/stranded/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="stranded_parcel">Stranded Parcel</label></li>

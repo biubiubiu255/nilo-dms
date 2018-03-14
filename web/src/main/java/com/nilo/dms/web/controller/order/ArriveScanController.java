@@ -115,6 +115,9 @@ public class ArriveScanController extends BaseController {
     @RequestMapping(value = "/updateWeight.html")
     public String updateWeight(String orderNo, String scanNo, Double weight) {
 
+        if (weight == null ||weight ==0) {
+            return toJsonErrorMsg(BizErrorCode.WEIGHT_EMPTY.getDescription());
+        }
 
         WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
         scanDetailsDO.setScanNo(scanNo);

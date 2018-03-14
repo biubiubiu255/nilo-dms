@@ -284,11 +284,9 @@ public class DeliveryOrderController extends BaseController {
                 }
                 map.put(field, value);
             }
-
-
             data.add(map);
         }
-        exportExcel.fillData(data, header);
+        exportExcel.fillData(list, DeliveryOrder.class);
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {

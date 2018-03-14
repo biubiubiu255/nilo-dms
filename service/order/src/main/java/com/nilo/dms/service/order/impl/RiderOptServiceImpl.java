@@ -139,15 +139,25 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
 
     @Override
     @Transactional
-    public void abnormal(AbnormalParam param) {
+    public void refuse(AbnormalParam param) {
         //根据订单号查询任务
-        Task t = taskService.queryTaskByTypeAndOrderNo(param.getAbnormalOrder().getMerchantId(), null, param.getAbnormalOrder().getOrderNo());
+        Task t = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(), null, param.getOrderNo());
         if (t == null || t.getStatus() == TaskStatusEnum.COMPLETE) {
-            throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getAbnormalOrder().getOrderNo());
+            throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getOrderNo());
         }
 
+        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(param.getMerchantId(), param.getOrderNo());
+        if (deliveryOrder == null) {
+            throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, param.getOrderNo());
+        }
         //新增异常件
-        AbnormalOrder abnormalOrder = param.getAbnormalOrder();
+        AbnormalOrder abnormalOrder = new AbnormalOrder();
+        abnormalOrder.setMerchantId(param.getMerchantId());
+        abnormalOrder.setAbnormalType(AbnormalTypeEnum.REFUSE);
+        abnormalOrder.setOrderNo(param.getOrderNo());
+        abnormalOrder.setRemark(param.getRemark());
+        abnormalOrder.setReason(param.getReason());
+        abnormalOrder.setCreatedBy(param.getOptBy());
         abnormalOrderService.addAbnormalOrder(abnormalOrder);
         //修改任务状态
         Task task = new Task();
@@ -155,7 +165,6 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         task.setStatus(TaskStatusEnum.COMPLETE);
         task.setHandledTime(DateUtil.getSysTimeStamp());
         taskService.updateTask(task);
-
 
     }
 
@@ -187,8 +196,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         }
 
         //修改任务状态
-        Task task = new Task();
-        task.setTaskId(param.getTaskId());
+        Task task = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(),TaskTypeEnum.DELIVERY.getCode(),param.getOrderNo());
         task.setStatus(TaskStatusEnum.COMPLETE);
         task.setHandledTime(DateUtil.getSysTimeStamp());
         taskService.updateTask(task);
@@ -197,34 +205,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
 
     @Override
     @Transactional
-    public void detain(DelayParam param) {
-
-        //查询运单信息
-        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(param.getMerchantId(), param.getOrderNo());
-
-        DeliveryOrderDelayDO update = new DeliveryOrderDelayDO();
-        update.setOrderNo(param.getOrderNo());
-        update.setMerchantId(Long.parseLong(param.getMerchantId()));
-        update.setStatus(DelayStatusEnum.COMPLETE.getCode());
-        deliveryOrderDelayDao.update(update);
-
-        AbnormalOrder abnormalOrder = new AbnormalOrder();
-        abnormalOrder.setOrderNo(param.getOrderNo());
-        abnormalOrder.setAbnormalType(param.getAbnormalType());
-        abnormalOrder.setCreatedBy(param.getOptBy());
-        abnormalOrder.setMerchantId(param.getMerchantId());
-        abnormalOrder.setReferenceNo(deliveryOrder.getReferenceNo());
-        abnormalOrder.setRemark(param.getRemark());
-        //新增异常件
-        abnormalOrderService.addAbnormalOrder(abnormalOrder);
-    }
-
-    @Override
-    @Transactional
     public void resend(DelayParam param) {
-
-        //查询运单信息
-        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(param.getMerchantId(), param.getOrderNo());
 
         DeliveryOrderDelayDO update = new DeliveryOrderDelayDO();
         update.setOrderNo(param.getOrderNo());

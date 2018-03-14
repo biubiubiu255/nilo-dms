@@ -14,6 +14,8 @@ public interface AbnormalOrderService {
 
     void addAbnormalOrder(AbnormalOrder abnormalOrder);
 
+    void delete(String abnormalNo,String merchantId);
+
     List<AbnormalOrder> queryAbnormalBy(QueryAbnormalOrderParameter parameter, Pagination pagination);
 
     AbnormalOrder queryByOrderNo(String merchantId, String orderNo);

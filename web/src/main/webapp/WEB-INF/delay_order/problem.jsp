@@ -2,8 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
+<%@ page import="com.nilo.dms.common.Constant" %>
 <%
-    request.setAttribute("abnormalTypeList", SystemCodeUtil.getSystemCodeList((String)session.getAttribute("merchantId"),"abnormal_order_type"));
+    request.setAttribute(Constant.PRBOLEM_REASON, SystemCodeUtil.getSystemCodeList((String)session.getAttribute("merchantId"),Constant.PRBOLEM_REASON));
 %>
 <div class="box-body">
     <form id="myForm" class="layui-form" action="">
@@ -16,12 +17,12 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label layui-form-text">Type:</label>
+            <label class="layui-form-label layui-form-text">Reason:</label>
             <div class="layui-input-inline">
-                <select name="abnormalType" lay-filter="abnormalType" lay-verify="required" lay-search=""
+                <select name="reason" lay-filter="reason" lay-verify="required" lay-search=""
                         style="display: none">
                     <option value="">Select type....</option>
-                    <c:forEach items="${abnormalTypeList}" var="r">
+                    <c:forEach items="${problem_reason}" var="r">
                         <option value=${r.code}>${r.value}</option>
                     </c:forEach>
                 </select>

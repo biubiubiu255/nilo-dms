@@ -44,4 +44,14 @@ public class PhoneMessage {
     public void setContent(String content) {
         this.content = content;
     }
+
+    @Override
+    public String toString() {
+        return "PhoneMessage{" +
+                "msgType='" + msgType + '\'' +
+                ", merchantId='" + merchantId + '\'' +
+                ", phoneNum='" + phoneNum + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }

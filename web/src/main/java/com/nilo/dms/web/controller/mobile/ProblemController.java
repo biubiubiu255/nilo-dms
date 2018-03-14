@@ -41,27 +41,19 @@ public class ProblemController extends BaseController {
     @RequestMapping(value = "/save.html", method = RequestMethod.POST)
     @ResponseBody
     public String save(@RequestParam("logisticsNo") String orderNo, 
-    			@RequestParam("reason") String abnormalType, @RequestParam("memo") String remark) {
+    			@RequestParam("reason") String reason, @RequestParam("memo") String remark) {
 
-
-
-        System.out.println("+++++++++++++++++++++++++++++");
-        AbnormalOrder abnormalOrder = new AbnormalOrder();
-        abnormalOrder.setOrderNo(orderNo);
-        abnormalOrder.setAbnormalType(abnormalType);
-        abnormalOrder.setRemark(remark);
-        
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
             AbnormalParam param = new AbnormalParam();
-            abnormalOrder.setCreatedBy(me.getUserId());
-            abnormalOrder.setMerchantId(merchantId);
-            param.setAbnormalOrder(abnormalOrder);
+            param.setMerchantId(merchantId);
             param.setOptBy(me.getUserId());
-            riderOptService.abnormal(param);
-
+            param.setRemark(remark);
+            param.setOrderNo(orderNo);
+            param.setReason(reason);
+            riderOptService.refuse(param);
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());
         }

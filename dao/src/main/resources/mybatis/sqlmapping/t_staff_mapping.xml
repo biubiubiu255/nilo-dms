@@ -156,7 +156,7 @@
     <select id="queryByStaffId" resultMap="staffDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_bas_staff where company_id =#{companyId} and staff_id = #{staffId}
+        FROM t_bas_staff where staff_id = #{staffId}
     </select>
 
     <select id="queryAllBy" resultMap="staffDO" statementType="PREPARED">

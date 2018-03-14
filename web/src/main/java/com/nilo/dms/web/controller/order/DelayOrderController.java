@@ -2,10 +2,12 @@ package com.nilo.dms.web.controller.order;
 
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.enums.AbnormalTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderDelayDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
+import com.nilo.dms.service.order.AbnormalOrderService;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.common.Principal;
@@ -30,7 +32,8 @@ import java.util.List;
 public class DelayOrderController extends BaseController {
     @Autowired
     private RiderOptService riderOptService;
-
+    @Autowired
+    private AbnormalOrderService abnormalOrderService;
     @Autowired
     private DeliveryOrderDelayDao deliveryOrderDelayDao;
 
@@ -63,7 +66,7 @@ public class DelayOrderController extends BaseController {
         delayDOList = deliveryOrderDelayDao.queryBy(Long.parseLong(merchantId), orderNo, fromTimeLong, toTimeLong, page.getOffset(), page.getLimit());
 
         //设置类型描述
-        for(DeliveryOrderDelayDO d : delayDOList){
+        for (DeliveryOrderDelayDO d : delayDOList) {
             String abnormalTypeDesc = SystemCodeUtil.getCodeVal("" + d.getMerchantId(), Constant.DELAY_REASON, d.getDelayReason());
             d.setDelayReason(abnormalTypeDesc);
         }
@@ -88,13 +91,17 @@ public class DelayOrderController extends BaseController {
     public String problem(DelayParam param) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
-            param.setOptBy(me.getUserId());
-            param.setMerchantId(merchantId);
-            riderOptService.detain(param);
+            AbnormalOrder abnormalOrder = new AbnormalOrder();
+            abnormalOrder.setCreatedBy(me.getUserId());
+            abnormalOrder.setMerchantId(merchantId);
+            abnormalOrder.setReason(param.getReason());
+            abnormalOrder.setOrderNo(param.getOrderNo());
+            abnormalOrder.setRemark(param.getRemark());
+            abnormalOrder.setAbnormalType(AbnormalTypeEnum.PROBLEM);
+            abnormalOrderService.addAbnormalOrder(abnormalOrder);
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());
         }

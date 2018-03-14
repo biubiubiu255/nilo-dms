@@ -35,6 +35,7 @@
                 jdbcType="VARCHAR"/>
     </resultMap>
 
+
     <select id="queryDeliverReport" resultMap="deliverDO">
         SELECT a.order_no,a.merchant_id,a.reference_no,a.network_id,a.need_pay_amount,a.delivery_fee,a.remark,b.handled_by,b.created_time,b.status,b.handled_time,c.name,c.contact_number,c.address
         FROM t_waybill a INNER JOIN t_waybill_task b
@@ -84,4 +85,5 @@
         </if>
         order by null
     </select>
+
 </mapper>

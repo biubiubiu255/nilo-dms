@@ -8,6 +8,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.SortedMap;
@@ -20,12 +21,12 @@ import java.util.Properties;
 public class TestDemo {
     public static void main(String[] args) throws Exception {
 
-        //String str = "{\"orderNo\":\"NILO18020826619\",\"opt_by\":\"ronny.zeng\",\"status\":\"180\",\"network\":\"\"}";
+        String str = "{\"carrier\":\"Exdous\",\"consignee\":\"Sudi\",\"operateTime\":\"2018-01-12 10:16:54\",\"orderInfo\":[{\"orderNo\":\"10000000507156\",\"status\":\"10\"}],\"orderNo\":\"10000000507156\",\"orderPrice\":\"0\",\"remark\":\"Sudi\",\"rider\":\"200012\",\"transId\":\"\"}";
 
 
         //DeliveryOrder order = JSON.parseObject(str,DeliveryOrder.class);
 
-        //System.out.println(DigestUtils.md5Hex("12345678" + str + "12345678").toUpperCase());
+        System.out.println(DigestUtils.md5Hex("12345678" + str + "12345678").toUpperCase());
 
 /*        Properties prop = new Properties();
 

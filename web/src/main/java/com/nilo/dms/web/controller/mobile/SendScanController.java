@@ -1,16 +1,18 @@
 package com.nilo.dms.web.controller.mobile;
 
-import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.*;
+import com.nilo.dms.dao.DeliveryOrderOptDao;
+import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.ThirdDriverDao;
+import com.nilo.dms.dao.ThirdExpressDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
-import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.Loading;
+import com.nilo.dms.service.order.model.ShipParameter;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -59,10 +61,10 @@ public class SendScanController extends BaseController {
     public String check(String code) {
 
         Long a = deliveryOrderOptDao.getStateByOrderNo(code);
-        if (a==null){
+        if (a == null) {
             return toJsonErrorMsg("There is no OrderNo");
         }
-        if(!(a==20)){
+        if (!(a == 20)) {
             return toJsonErrorMsg("There are restrictions on this order");
         }
         return toJsonTrueMsg();
@@ -80,30 +82,31 @@ public class SendScanController extends BaseController {
         List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
 
         List<NextStation> list = new ArrayList<>();
-        for(ThirdExpressDO e : expressDOList){
+        for (ThirdExpressDO e : expressDOList) {
             NextStation s = new NextStation();
             s.setCode(e.getExpressCode());
             s.setName(e.getExpressName());
             s.setType("T");
             list.add(s);
         }
-        for(DistributionNetworkDO n:networkDOList){
+        for (DistributionNetworkDO n : networkDOList) {
             NextStation s = new NextStation();
-            s.setCode(""+n.getId());
+            s.setCode("" + n.getId());
             s.setName(n.getName());
             s.setType("N");
             list.add(s);
         }
-        model.addAttribute("nextStation",list);
-        model.addAttribute("thirdCarrier",expressDOList);
+        model.addAttribute("nextStation", list);
+        model.addAttribute("thirdCarrier", expressDOList);
         return "mobile/network/send_scan/sendScan";
     }
+
     @RequestMapping(value = "/getDriver.html")
     @ResponseBody
     public String getDriver(String code) {
         List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(code);
         List<Driver> list = new ArrayList<>();
-        for(ThirdDriverDO d : thirdDriver){
+        for (ThirdDriverDO d : thirdDriver) {
             Driver driver = new Driver();
             driver.setCode(d.getDriverId());
             driver.setName(d.getDriverName());
@@ -128,9 +131,10 @@ public class SendScanController extends BaseController {
 //        }
         return toJsonTrueData(list);
     }
+
     @RequestMapping(value = "/submit.html")
     @ResponseBody
-    public String submit(String scaned_codes[],String nextStation,String carrier,String sendDriver,String plateNo,String logisticsNo ) {
+    public String submit(String scaned_codes[], String nextStation, String carrier, String sendDriver, String plateNo, String logisticsNo) {
 //        System.out.println(scaned_codes);
 //        System.out.println(nextStation);
 //        System.out.println(carrier);
@@ -147,12 +151,12 @@ public class SendScanController extends BaseController {
         String merchantId = me.getMerchantId();
         String loadingNo = "";
         try {
-            if(StringUtil.isEmpty(sendDriver)){
+            if (StringUtil.isEmpty(sendDriver)) {
                 throw new IllegalArgumentException("Rider or Driver is empty.");
             }
             loading.setMerchantId(merchantId);
             loading.setLoadingBy(me.getUserId());
-            if(StringUtil.isNotEmpty(sendDriver)) {
+            if (StringUtil.isNotEmpty(sendDriver)) {
                 loading.setRider(sendDriver);
             }
             loadingNo = loadingService.addLoading(loading);
@@ -162,43 +166,54 @@ public class SendScanController extends BaseController {
         }
 
         DeliveryOrder order = null;
-        for (int i=0; i<scaned_codes.length; i++){
+        for (int i = 0; i < scaned_codes.length; i++) {
             try {
                 loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i], me.getUserId());
                 //order = orderService.queryByOrderNo(merchantId, scaned_codes);
 
-            }catch (Exception e) {
+            } catch (Exception e) {
                 log.error("loadingScan failed. orderNo:{}", scaned_codes[i], e);
                 return toJsonErrorMsg(e.getMessage());
             }
 
         }
-        loadingService.ship(merchantId, loadingNo, me.getUserId());
+
+        ShipParameter parameter = new ShipParameter();
+        parameter.setMerchantId(merchantId);
+        parameter.setOptBy(me.getUserId());
+        parameter.setLoadingNo(loadingNo);
+        parameter.setNetworkId("" + me.getNetworks().get(0));
+        loadingService.ship(parameter);
         return toJsonTrueMsg();
     }
-    private  boolean isInteger(String str) {
+
+    private boolean isInteger(String str) {
         Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
         return pattern.matcher(str).matches();
     }
-    public static class Driver{
+
+    public static class Driver {
         private String code;
         private String name;
 
         public String getCode() {
             return code;
         }
+
         public void setCode(String code) {
             this.code = code;
         }
+
         public String getName() {
             return name;
         }
+
         public void setName(String name) {
             this.name = name;
         }
     }
 
-    public static class NextStation{
+    public static class NextStation {
         private String code;
         private String name;
         private String type;

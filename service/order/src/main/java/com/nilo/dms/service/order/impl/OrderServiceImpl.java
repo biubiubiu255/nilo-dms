@@ -52,7 +52,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     @Autowired
     private DeliveryRouteService deliveryRouteService;
     @Autowired
-    private NotifyMerchantService notifyMerchantService;
+    private NotifyService notifyService;
     @Autowired
     private OrderOptLogService orderOptLogService;
     @Autowired
@@ -311,7 +311,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                         sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);
                     }
                     //通知上游系统状态变更
-                    notifyMerchantService.updateStatus(optRequest);
+                    notifyService.updateStatus(optRequest);
                     // 记录物流轨迹
                     deliveryRouteService.addRoute(optRequest);
                     // 添加操作记录
@@ -332,29 +332,17 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
         if (scanDetailList == null || scanDetailList.size() == 0) throw new DMSException(BizErrorCode.ARRIVE_EMPTY);
 
-
-        List<String> orderNos = new ArrayList<>();
-        for (WaybillScanDetailsDO details : scanDetailList) {
-            orderNos.add(details.getOrderNo());
-        }
-
-        // 更新重量
         for (WaybillScanDetailsDO details : scanDetailList) {
             if (details.getWeight() == null) {
                 DeliveryOrderDO queryWeight = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), details.getOrderNo());
                 if (queryWeight.getWeight() == 0) {
                     throw new DMSException(BizErrorCode.WEIGHT_EMPTY);
                 }
-                continue;
             }
-            if (details.getWeight() == 0) {
-                throw new DMSException(BizErrorCode.WEIGHT_EMPTY);
-            }
-            DeliveryOrderDO orderDO = new DeliveryOrderDO();
-            orderDO.setOrderNo(details.getOrderNo());
-            orderDO.setWeight(details.getWeight());
-            orderDO.setMerchantId(Long.parseLong(merchantId));
-            deliveryOrderDao.update(orderDO);
+        }
+        List<String> orderNos = new ArrayList<>();
+        for (WaybillScanDetailsDO details : scanDetailList) {
+            orderNos.add(details.getOrderNo());
         }
 
         OrderOptRequest optRequest = new OrderOptRequest();
@@ -364,6 +352,16 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         optRequest.setOrderNo(orderNos);
         optRequest.setNetworkId(networkId);
         handleOpt(optRequest);
+
+        // 更新重量
+        for (WaybillScanDetailsDO details : scanDetailList) {
+            DeliveryOrderDO orderDO = new DeliveryOrderDO();
+            orderDO.setOrderNo(details.getOrderNo());
+            orderDO.setWeight(details.getWeight());
+            orderDO.setMerchantId(Long.parseLong(merchantId));
+            orderDO.setNetworkId(Integer.parseInt(networkId));
+            deliveryOrderDao.update(orderDO);
+        }
 
         this.addNetworkTask(orderNos, arriveBy, merchantId);
 
@@ -504,7 +502,9 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         // 添加操作日志
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOrderNo(packageRequest.getOrderNos());
+/*
         optRequest.setOptType(OptTypeEnum.PACKAGE);
+*/
         optRequest.setOptBy(packageRequest.getOptBy());
         optRequest.setNetworkId("" + packageRequest.getNetworkId());
         optRequest.setMerchantId(packageRequest.getMerchantId());
@@ -542,7 +542,9 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         // 2、添加操作日志
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOrderNo(unpackRequest.getOrderNos());
+/*
         optRequest.setOptType(OptTypeEnum.UNPACK);
+*/
         optRequest.setOptBy(unpackRequest.getOptBy());
         optRequest.setNetworkId("" + unpackRequest.getNetworkId());
         optRequest.setMerchantId(unpackRequest.getMerchantId());

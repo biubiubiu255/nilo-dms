@@ -10,20 +10,19 @@ import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
 import com.nilo.dms.dao.NotifyDao;
-import com.nilo.dms.dao.ThirdDriverDao;
-import com.nilo.dms.dao.ThirdExpressDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.NotifyDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
-import com.nilo.dms.service.order.NotifyMerchantService;
+import com.nilo.dms.service.order.NotifyService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.*;
-import com.nilo.dms.service.org.StaffService;
-import com.nilo.dms.service.org.model.Staff;
+import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.NotifyRequest;
+import com.nilo.dms.service.order.model.OrderOptRequest;
+import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
@@ -45,25 +44,24 @@ import java.util.Map;
  * Created by admin on 2018/3/1.
  */
 @Service
-public class NotifyMerchantServiceImpl implements NotifyMerchantService {
+public class NotifyServiceImpl implements NotifyService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private NotifyDao notifyDao;
     @Autowired
-    @Qualifier("notifyMerchantProducer")
-    private AbstractMQProducer notifyMerchantProducer;
+    @Qualifier("notifyDataBusProducer")
+    private AbstractMQProducer notifyDataBusProducer;
     @Autowired
     private OrderService orderService;
     @Autowired
     private UserService userService;
     @Autowired
-    private StaffService staffService;
-    @Autowired
     private TaskService taskService;
     @Autowired
     private AbnormalOrderDao abnormalOrderDao;
+
     @Override
     public void updateStatus(OrderOptRequest request) {
         OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(request.getMerchantId(),
@@ -98,6 +96,10 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
                     case DELIVERY: {
                         Task task = taskService.queryTaskByTypeAndOrderNo(request.getMerchantId(), TaskTypeEnum.DELIVERY.getCode(), orderNo);
                         UserInfo userInfo = userService.findUserInfoByUserId(request.getMerchantId(), task.getHandledBy());
+
+                        DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + request.getMerchantId(), "" + request.getNetworkId()), DistributionNetworkDO.class);
+                        dataMap.put("location", networkDO.getName());
+
                         dataMap.put("rider_name", userInfo.getName());
                         dataMap.put("rider_phone", userInfo.getPhone());
                         break;
@@ -107,9 +109,15 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
                         break;
                     }
                     case PROBLEM: {
-                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()),orderNo);
-                        String abnormalTypeDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.ABNORMAL_ORDER_TYPE, abnormalOrderDO.getAbnormalType());
-                        dataMap.put("type", abnormalTypeDesc);
+                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
+                        String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.PRBOLEM_REASON, abnormalOrderDO.getReason());
+                        dataMap.put("type", reason);
+                        break;
+                    }
+                    case REFUSE: {
+                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
+                        String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.REFUSE_REASON, abnormalOrderDO.getReason());
+                        dataMap.put("type", reason);
                         break;
                     }
                     case RECEIVE: {
@@ -130,15 +138,16 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
 
                 dataMap.put("waybill_number", orderNo);
                 dataMap.put("status", convertResult);
-                dataMap.put("tract_time", DateUtil.getSysTimeStamp());
+                dataMap.put("track_time", DateUtil.getSysTimeStamp());
                 dataMap.put("remark", request.getRemark());
                 String data = JSON.toJSONString(dataMap);
                 notify.setData(data);
                 notify.setSign(createSign(merchantConfig.getKey(), data));
-                notifyMerchantProducer.sendMessage(notify);
+                notifyDataBusProducer.sendMessage(notify);
 
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -148,10 +157,10 @@ public class NotifyMerchantServiceImpl implements NotifyMerchantService {
         static {
             convertRelation.put(DeliveryOrderStatusEnum.ARRIVED, "170");
             convertRelation.put(DeliveryOrderStatusEnum.DELIVERY, "180");
-            convertRelation.put(DeliveryOrderStatusEnum.SEND, "185");
-            convertRelation.put(DeliveryOrderStatusEnum.PICK_UP, "210");
             convertRelation.put(DeliveryOrderStatusEnum.RECEIVED, "190");
             convertRelation.put(DeliveryOrderStatusEnum.PROBLEM, "197");
+            convertRelation.put(DeliveryOrderStatusEnum.REFUSE, "195");
+
         }
 
         public static String convert(DeliveryOrderStatusEnum status) {

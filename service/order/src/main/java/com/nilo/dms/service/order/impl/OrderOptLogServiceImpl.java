@@ -5,9 +5,11 @@ import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
+import com.nilo.dms.dao.WaybillLogArriveDao;
 import com.nilo.dms.dao.WaybillLogPackageDao;
 import com.nilo.dms.dao.WaybillLogUnPackDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
+import com.nilo.dms.dao.dataobject.WaybillLogArriveDO;
 import com.nilo.dms.dao.dataobject.WaybillLogPackageDO;
 import com.nilo.dms.dao.dataobject.WaybillLogUnPackDO;
 import com.nilo.dms.service.UserService;
@@ -38,7 +40,8 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
     private UserService userService;
     @Autowired
     private OrderService orderService;
-
+    @Autowired
+    private WaybillLogArriveDao waybillLogArriveDao;
     @Autowired
     private WaybillLogUnPackDao waybillLogUnPackDao;
     @Autowired
@@ -116,7 +119,7 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
         OptTypeEnum optTypeEnum = request.getOptType();
 
         switch (optTypeEnum) {
-            case PACKAGE: {
+            /*case PACKAGE: {
                 for(String orderNo : request.getOrderNo()) {
                     DeliveryOrder deliveryOrder = orderService.queryByOrderNo(request.getMerchantId(), orderNo);
                     WaybillLogPackageDO packageDO = new WaybillLogPackageDO();
@@ -143,12 +146,26 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
                     waybillLogUnPackDao.insert(unPackDO);
                 }
                 break;
+            }*/
+            case ARRIVE_SCAN: {
+                for (String orderNo : request.getOrderNo()) {
+                    DeliveryOrder deliveryOrder = orderService.queryByOrderNo(request.getMerchantId(), orderNo);
+                    WaybillLogArriveDO arriveDO = new WaybillLogArriveDO();
+                    arriveDO.setOptTime(DateUtil.getSysTimeStamp());
+                    arriveDO.setOptBy(request.getOptBy());
+                    arriveDO.setNetworkId(Integer.parseInt(request.getNetworkId()));
+                    arriveDO.setOrderNo(orderNo);
+                    arriveDO.setLastNetworkId(deliveryOrder.getNetworkId());
+                    arriveDO.setMerchantId(Long.parseLong(request.getMerchantId()));
+                    waybillLogArriveDao.insert(arriveDO);
+                }
+                break;
             }
             default:
                 break;
         }
 
-        for(String orderNo: request.getOrderNo()) {
+        for (String orderNo : request.getOrderNo()) {
             DeliveryOrderOptDO optLog = new DeliveryOrderOptDO();
             optLog.setMerchantId(Long.parseLong(request.getMerchantId()));
             optLog.setOptBy(request.getOptBy());

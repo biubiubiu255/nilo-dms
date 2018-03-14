@@ -1,6 +1,7 @@
 package com.nilo.dms.service.order.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -66,5 +67,17 @@ public class DeliveryRouteMessage {
 
     public void setOptBy(String optBy) {
         this.optBy = optBy;
+    }
+
+    @Override
+    public String toString() {
+        return "DeliveryRouteMessage{" +
+                "merchantId='" + merchantId + '\'' +
+                ", orderNo=" + Arrays.toString(orderNo) +
+                ", optType='" + optType + '\'' +
+                ", optBy='" + optBy + '\'' +
+                ", rider='" + rider + '\'' +
+                ", networkId='" + networkId + '\'' +
+                '}';
     }
 }

@@ -76,7 +76,7 @@
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-warm layui-btn-mini" lay-event="delay">Delay</a>
     <a class="layui-btn layui-btn-warm layui-btn-mini" lay-event="receive">Receive</a>
-    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="abnormal">Abnormal</a>
+    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="abnormal">Refuse</a>
 </script>
 
 <%@ include file="../../common/footer.jsp" %>

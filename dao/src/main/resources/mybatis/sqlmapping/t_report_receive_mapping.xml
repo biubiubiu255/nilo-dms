@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.ReportReceiveDao">
+
+    <resultMap id="receiveDO" type="com.nilo.dms.dao.dataobject.ReportReceiveDO">
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="order_platform" column="order_platform" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="order_type" column="order_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="created_time" column="created_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="receive_time" column="updated_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="name" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <!-- Receive Report 查询语句 -->
+
+    <select id="queryReportReceive" resultMap="receiveDO">
+
+        SELECT a.order_no,a.merchant_id,a.order_platform,a.order_type,a.created_time, a.updated_time, a.weight, d.name
+
+        FROM t_waybill a
+
+        INNER JOIN
+
+        t_waybill_receiver b
+
+        on a.order_no = b.order_no
+
+        INNER JOIN t_waybill_task c
+        on b.order_no = c.order_no
+
+        INNER JOIN t_sys_user_info d
+
+        on c.handled_by=d.id
+
+        WHERE a.merchant_id=#{merchantId} AND ( a.status=50 )
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test="sTime_creat !=null and eTime_creat !=null and  sTime_creat != '' and eTime_creat != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.updated_time<![CDATA[<]]>#{eTime_creat} AND a.updated_time>#{sTime_creat})
+        </if>
+
+        <if test="sTime_receive !=null and eTime_receive !=null and  sTime_receive != '' and eTime_receive != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.updated_time<![CDATA[<]]>#{eTime_receive} AND a.updated_time>#{sTime_receive})
+        </if>
+
+        <if test="mother !=null and mother != ''">
+            AND
+            DATE_FORMAT(FROM_UNIXTIME(a.updated_time),"%Y%m") = #{mother}
+        </if>
+
+        <if test="clientName != null and clientName != ''">
+            AND
+            a.order_platform = #{clientName}
+        </if>
+
+        order by a.created_time desc
+        limit #{offset} , #{limit}
+
+
+    </select>
+
+    <!-- 查询上条查询条件下影响的全部条数 -->
+    <select id="queryReportReceiveCount" resultType="java.lang.Integer">
+
+        SELECT
+
+        count(*)
+
+        FROM t_waybill a
+
+        INNER JOIN
+
+        t_waybill_receiver b
+
+        on a.order_no = b.order_no
+
+        INNER JOIN t_waybill_task c
+        on b.order_no = c.order_no
+
+        INNER JOIN t_sys_user_info d
+
+        on c.handled_by=d.id
+
+        WHERE a.merchant_id=#{merchantId} AND ( a.status=50 )
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test="sTime !=null and eTime !=null and  sTime != '' and eTime != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.updated_time<![CDATA[<]]>#{eTime} AND a.updated_time>#{sTime})
+        </if>
+
+        <if test="mother !=null and mother != ''">
+            AND
+            DATE_FORMAT(FROM_UNIXTIME(a.updated_time),"%Y%m") = #{mother}
+        </if>
+
+        <if test="clientName != null and clientName != ''">
+            AND
+            a.order_platform = #{clientName}
+        </if>
+
+    </select>
+
+</mapper>

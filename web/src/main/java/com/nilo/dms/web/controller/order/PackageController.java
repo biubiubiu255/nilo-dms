@@ -76,7 +76,9 @@ public class PackageController extends BaseController {
         parameter.setIsPackage(IS_PACKAGE);
         List<Integer> status = new ArrayList<>();
         status.add(DeliveryOrderStatusEnum.ARRIVED.getCode());
+/*
         status.add(DeliveryOrderStatusEnum.SEND.getCode());
+*/
         parameter.setStatus(status);
         List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
         return toPaginationLayUIData(page, list);

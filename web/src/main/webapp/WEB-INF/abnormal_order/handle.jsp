@@ -2,8 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
+<%@ page import="com.nilo.dms.common.Constant" %>
 <%
-    request.setAttribute("abnormalTypeList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.ABNORMAL_ORDER_TYPE));
 %>
 
 <div class="box-body">

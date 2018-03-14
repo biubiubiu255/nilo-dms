@@ -116,7 +116,7 @@ public class DispatchTaskController extends BaseController {
         model.addAttribute("orderNo", orderNo);
         model.addAttribute("taskId", taskId);
         model.addAttribute("referenceNo", referenceNo);
-        return "task/dispatch/abnormal";
+        return "task/dispatch/refuse";
     }
 
     @RequestMapping(value = "/delayPage.html", method = RequestMethod.GET)

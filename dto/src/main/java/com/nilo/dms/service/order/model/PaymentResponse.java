@@ -70,8 +70,8 @@ public class PaymentResponse {
 
 	@Override
 	public String toString() {
-		return "errorCode=" + errorCode + "& merchantId=" + merchantId + "& merchantOrderNo="
-				+ merchantOrderNo + "& orderId=" + orderId + "& signType=" + signType + "& status=" + status ;
+		return "errorCode=" + errorCode + "&merchantId=" + merchantId + "&merchantOrderNo="
+				+ merchantOrderNo + "&orderId=" + orderId + "&signType=" + signType + "&status=" + status ;
 	}
 
 }
