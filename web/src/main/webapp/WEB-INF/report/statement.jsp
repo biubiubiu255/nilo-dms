@@ -27,20 +27,11 @@
 
     </div>
     <hr>
-
-    <table class="layui-table" lay-data="{ url:'/report/statement/list.html', method:'post', page:true,limit:10, id:'${id0}'}"
-           lay-filter="demo">
-        <thead>
-        <tr>
-            <th lay-data="{field:'orderNo', width:130, templet: '<div>{{d.orderNo}}</div>'}">OrderNo</th>
-            <th lay-data="{field:'order_type', width:120, templet: '<div>{{d.order_type}}</div>'}">OrderType</th>
-            <th lay-data="{field:'money', width:100,templet: '<div>{{d.money}}</div>'}">Money</th>
-            <th lay-data="{field:'statement_time', width:172,templet: '<div>{{formatDate(d.statement_time)}}</div>'}">Create Time</th>
-            <th lay-data="{field:'sign_time', width:172,templet: '<div>{{formatDate(d.sign_time)}}</div>'}">Sign Time</th>
-        </tr>
-        </thead>
-    </table>
 </div>
+
+
+    <iframe scrolling="no" frameborder="0" src="/report/statement/list.html" id="ifm" width="100%" height="100%" style="padding: 0px;"></iframe>
+
 
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
@@ -104,14 +95,14 @@
                     });
                     return false;
                 }
-
-                table.reload("${id0}", {
-                    where: {
+                var param = {
                         rider :$("select[name='rider']").val(),
                         sTime: sTime,
                         eTime: eTime,
-                    }
-                });
+                    };
+                var url = "/report/statement/list.html";
+                param = jQuery.param( param )
+                document.getElementById("ifm").src = url + "?" + param;
             };
 
         });

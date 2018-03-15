@@ -1,10 +1,12 @@
-package com.nilo.dms.web.controller.order;
+package com.nilo.dms.web.controller.report;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.WaybillStatementDao;
 import com.nilo.dms.dao.dataobject.WaybillStatementDo;
 import com.nilo.dms.web.controller.BaseController;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,9 +32,8 @@ public class StatementController extends BaseController {
         return "report/statement";
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-    public String getList(Integer sTime, Integer eTime) {
+    @RequestMapping(value = "/list.html")
+    public String getList(Model model, Integer sTime, Integer eTime) {
         if (sTime == null || eTime == null) {
             sTime = 0;
             eTime = (int) (System.currentTimeMillis() / 1000);
@@ -54,7 +55,14 @@ public class StatementController extends BaseController {
             return toPaginationLayUIData(page, null);
         }
         page.setTotalCount(list.size());
-        return toPaginationLayUIData(page, list);
+
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
+
+        // 动态指定报表模板url
+        model.addAttribute("url", "/WEB-INF/jasper/report/statement.jasper");
+        model.addAttribute("format", "pdf"); // 报表格式
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView"; // 对应jasper-defs.xml中的bean id
     }
 
 }

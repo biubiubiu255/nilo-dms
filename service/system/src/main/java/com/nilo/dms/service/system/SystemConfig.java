@@ -18,8 +18,6 @@ import java.util.Set;
  */
 public class SystemConfig {
 
-    private static final int expireTime = 24 * 60 * 60;
-
     /**
      * 客户配置
      */

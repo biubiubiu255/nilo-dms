@@ -36,49 +36,49 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Leelawadee UI" size="14" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[orderNo]]></text>
+				<text><![CDATA[OrderNo]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="112" y="2" width="68" height="20" uuid="36e72e0d-2146-4016-b4bf-bc1afd1c381f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Leelawadee UI" size="14" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[weight]]></text>
+				<text><![CDATA[Weight]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="436" y="2" width="100" height="20" uuid="5d1bad0a-6281-4810-b9be-6e451a46e28c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Leelawadee UI" size="14" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[recipients]]></text>
+				<text><![CDATA[Recipients]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="545" y="2" width="100" height="20" uuid="c4b6d370-f97f-4382-a543-2b860fafe503"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Leelawadee UI" size="14" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[address]]></text>
+				<text><![CDATA[Address]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="653" y="2" width="100" height="20" uuid="ad305bb7-b6ec-40ec-8729-6f4ded0351c4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Leelawadee UI" size="14" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false"/>
 				</textElement>
-				<text><![CDATA[phone]]></text>
+				<text><![CDATA[Phone]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="286" y="2" width="133" height="20" uuid="85a689fe-5a19-4b9f-acac-4841884b684e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Leelawadee UI" size="14" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[scanTime]]></text>
+				<text><![CDATA[ScanTime]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="192" y="2" width="85" height="20" uuid="a8207dbe-5af9-43b0-bcbe-7f79108cde3d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Leelawadee UI" size="14" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[scanNetwork]]></text>
+				<text><![CDATA[ScanNetwork]]></text>
 			</staticText>
 		</band>
 	</columnHeader>

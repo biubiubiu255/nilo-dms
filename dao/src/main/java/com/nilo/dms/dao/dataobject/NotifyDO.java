@@ -7,17 +7,11 @@ import com.nilo.dms.common.BaseDo;
  */
 public class NotifyDO extends BaseDo<Long> {
 
-    private Long merchantId;
-
     private String bizType;
 
     private String method;
 
     private String notifyId;
-
-    private String orderNo;
-
-    private String referenceNo;
 
     private String url;
 
@@ -39,28 +33,12 @@ public class NotifyDO extends BaseDo<Long> {
         this.method = method;
     }
 
-    public String getReferenceNo() {
-        return referenceNo;
-    }
-
-    public void setReferenceNo(String referenceNo) {
-        this.referenceNo = referenceNo;
-    }
-
     public String getSign() {
         return sign;
     }
 
     public void setSign(String sign) {
         this.sign = sign;
-    }
-
-    public Long getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(Long merchantId) {
-        this.merchantId = merchantId;
     }
 
     public String getBizType() {
@@ -77,14 +55,6 @@ public class NotifyDO extends BaseDo<Long> {
 
     public void setNotifyId(String notifyId) {
         this.notifyId = notifyId;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
     }
 
     public String getUrl() {

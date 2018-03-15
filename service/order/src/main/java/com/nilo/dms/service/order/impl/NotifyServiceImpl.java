@@ -9,8 +9,10 @@ import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
+import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.NotifyDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
+import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.NotifyDO;
 import com.nilo.dms.service.UserService;
@@ -19,10 +21,7 @@ import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.NotifyService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
-import com.nilo.dms.service.order.model.NotifyRequest;
-import com.nilo.dms.service.order.model.OrderOptRequest;
-import com.nilo.dms.service.order.model.Task;
+import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
@@ -36,7 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,6 +62,8 @@ public class NotifyServiceImpl implements NotifyService {
     private TaskService taskService;
     @Autowired
     private AbnormalOrderDao abnormalOrderDao;
+    @Autowired
+    private DeliveryOrderOptDao deliveryOrderOptDao;
 
     @Override
     public void updateStatus(OrderOptRequest request) {
@@ -85,9 +88,9 @@ public class NotifyServiceImpl implements NotifyService {
                 switch (request.getOptType()) {
                     case ARRIVE_SCAN: {
                         //到件只通知一次
-                        if (StringUtil.equals(request.getOptType().getCode(), OptTypeEnum.ARRIVE_SCAN.getCode())) {
-                            NotifyDO notifyDO = notifyDao.findByBizType(Long.parseLong(request.getMerchantId()), orderNo, OptTypeEnum.ARRIVE_SCAN.getCode());
-                            if (notifyDO != null) return;
+                        List<DeliveryOrderOptDO> list = deliveryOrderOptDao.queryByOrderNos(Long.parseLong(request.getMerchantId()), Arrays.asList(orderNo));
+                        if (list == null || list.size() > 0) {
+                            return;
                         }
                         DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + request.getMerchantId(), "" + request.getNetworkId()), DistributionNetworkDO.class);
                         dataMap.put("location", networkDO==null?"":networkDO.getName());
@@ -129,13 +132,10 @@ public class NotifyServiceImpl implements NotifyService {
 
                 DeliveryOrder deliveryOrder = orderService.queryByOrderNo(request.getMerchantId(), orderNo);
 
-                notify.setOrderNo(orderNo);
-                notify.setReferenceNo(deliveryOrder.getReferenceNo());
-                notify.setMerchantId(request.getMerchantId());
                 notify.setBizType(request.getOptType().getCode());
                 notify.setMethod(MethodEnum.STATUS_UPDATE.getCode());
                 notify.setUrl(interfaceConfig.getUrl());
-
+                notify.setAppKey("dms");
                 dataMap.put("waybill_number", orderNo);
                 dataMap.put("status", convertResult);
                 dataMap.put("track_time", DateUtil.getSysTimeStamp());

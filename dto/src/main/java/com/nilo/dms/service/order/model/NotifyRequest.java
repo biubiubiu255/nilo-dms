@@ -5,11 +5,7 @@ package com.nilo.dms.service.order.model;
  */
 public class NotifyRequest {
 
-    private String merchantId;
-
-    private String orderNo;
-
-    private String referenceNo;
+    private String appKey;
 
     private String url;
 
@@ -21,20 +17,20 @@ public class NotifyRequest {
 
     private String data;
 
+    public String getAppKey() {
+        return appKey;
+    }
+
+    public void setAppKey(String appKey) {
+        this.appKey = appKey;
+    }
+
     public String getBizType() {
         return bizType;
     }
 
     public void setBizType(String bizType) {
         this.bizType = bizType;
-    }
-
-    public String getReferenceNo() {
-        return referenceNo;
-    }
-
-    public void setReferenceNo(String referenceNo) {
-        this.referenceNo = referenceNo;
     }
 
     public String getSign() {
@@ -69,28 +65,9 @@ public class NotifyRequest {
         this.method = method;
     }
 
-    public String getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(String merchantId) {
-        this.merchantId = merchantId;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
-    }
-
     @Override
     public String toString() {
         return "NotifyRequest{" +
-                "merchantId='" + merchantId + '\'' +
-                ", orderNo='" + orderNo + '\'' +
-                ", referenceNo='" + referenceNo + '\'' +
                 ", url='" + url + '\'' +
                 ", method='" + method + '\'' +
                 ", bizType='" + bizType + '\'' +

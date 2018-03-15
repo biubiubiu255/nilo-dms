@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="arrive" language="groovy" pageWidth="930" pageHeight="842" columnWidth="890" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f5de8763-b931-485a-a58a-6ddcd0a8982c">
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="12"/>
+	<property name="ireport.y" value="0"/>
+	<field name="orderNo" class="java.lang.String"/>
+	<field name="recipients" class="java.lang.String"/>
+	<field name="lastNetwork" class="java.lang.String"/>
+	<field name="scanNetwork" class="java.lang.String"/>
+	<field name="scanTime" class="java.lang.String"/>
+	<field name="weight" class="java.lang.String"/>
+	<field name="phone" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="334" y="17" width="213" height="43" uuid="0b7a914f-be22-4ca7-a450-d73c232490cc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font fontName="Microsoft JhengHei Light" size="26" isBold="true" isItalic="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[Arrive Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="22" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement x="13" y="2" width="100" height="20" uuid="43e09c46-cb85-4793-b4d9-0eca7f079b97"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[OrderNo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="128" y="2" width="75" height="20" uuid="03452865-2fef-4b23-998a-1437a202b93b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Recipients]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="216" y="2" width="100" height="20" uuid="f7a49c8d-9a0e-42dd-87e0-a5aec9fdb77b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LastNetwork]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="2" width="100" height="20" uuid="77eb32fd-9864-41f6-8e0c-655176a16255"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ScanNetwork]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="451" y="2" width="134" height="20" uuid="639b0f40-c4c2-4c46-aba0-5f1914779b6a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ScanTime]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="601" y="2" width="60" height="20" uuid="ee58945b-9459-4a33-b14d-60af4ab7caa1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Weight]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="676" y="2" width="79" height="20" uuid="9411e1a5-e85f-4a5c-b039-f9fcedc976ca"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Phone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="769" y="2" width="105" height="20" uuid="925e298c-aba8-4bbb-9e60-3b47c59282b2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Address]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="46" splitType="Stretch">
+			<textField>
+				<reportElement x="13" y="2" width="100" height="20" uuid="802fdd36-a986-4d39-bb72-69d31a1f4496"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{orderNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="128" y="2" width="75" height="20" uuid="4bdc2f36-7f78-4489-bf89-2617350c73f8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{recipients}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="216" y="2" width="100" height="20" uuid="5b9594ec-86b4-4b50-8e82-8358c349ab24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{lastNetwork}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="334" y="2" width="100" height="20" uuid="e30b24a3-46c0-453b-a8dc-472e787738e8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{scanNetwork}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="451" y="2" width="134" height="20" uuid="f91df46c-a6fb-4a00-bc25-dc35cc92b42c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{scanTime}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="601" y="2" width="60" height="20" uuid="ad390442-6d79-47da-ba1a-35c0eec548cb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="676" y="2" width="79" height="20" uuid="b57af3c0-c9ee-4ef3-a6eb-59f5313f4d27"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="769" y="2" width="105" height="20" uuid="8cd4fad0-ebca-46f7-a34c-7e8679c46c30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

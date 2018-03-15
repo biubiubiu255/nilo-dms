@@ -48,27 +48,8 @@
     </div>
     <hr>
 
-    <table class="layui-table"
-           lay-data="{ url:'/report/deliver/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
-           lay-filter="demo">
-        <thead>
-        <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:200}">orderNo</th>
-            <th lay-data="{field:'referenceNo', width:200}">referenceNo</th>
-            <th lay-data="{field:'statusDesc', width:100}">status</th>
-            <th lay-data="{field:'networkDesc', width:100}">network</th>
-            <%--<th lay-data="{field:'handledBy', width:100}">handledBy</th>--%>
-            <th lay-data="{field:'createdTime',width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">createdTime</th>
-            <th lay-data="{field:'handledTime', width:170, templet:'<div>{{ formatDate(d.handledTime) }}</div>'}">handledTime</th>
-            <th lay-data="{field:'name', width:100}">name</th>
-            <th lay-data="{field:'contactNumber', width:120}">contactNumber</th>
-            <th lay-data="{field:'address', width:150}">address</th>
-            <th lay-data="{field:'needPayAmount', width:100}">needPayAmount</th>
-            <th lay-data="{field:'deliveryFee', width:100}">deliveryFee</th>
-            <th lay-data="{field:'remark', width:170}">remark</th>
-        </tr>
-        </thead>
-    </table>
+    <iframe scrolling="no" frameborder="0" src="/report/deliver/list.html" id="ifm" width="100%" height="100%" style="padding: 0px;"></iframe>
+
     <%@ include file="../../common/footer.jsp" %>
     <script src="${ctx}/dist/js/ajaxfileupload.js"></script>
     <script type="text/javascript">
@@ -96,15 +77,18 @@
             })
 
             function reloadTable() {
-                table.reload("${id0}", {
-                    where: {
+
+               var param =  {
                         orderNo: $("input[name='orderNo']").val(),
                         taskStatus: $("select[name='taskStatus']").val(),
                         fromCreatedTime: $("#fromCreatedTime").val(),
                         toCreatedTime: $("#toCreatedTime").val(),
                         rider: $("input[name='rider']").val(),
-                    }
-                });
+                    };
+                var url = "/report/deliver/list.html";
+                param = jQuery.param( param )
+                document.getElementById("ifm").src = url + "?" + param;
+
             };
         });
 

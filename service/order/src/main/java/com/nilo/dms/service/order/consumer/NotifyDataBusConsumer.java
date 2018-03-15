@@ -2,23 +2,18 @@ package com.nilo.dms.service.order.consumer;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.rocketmq.common.message.MessageExt;
-import com.nilo.dms.common.enums.MethodEnum;
 import com.nilo.dms.common.enums.NotifyStatusEnum;
-import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.utils.HttpUtil;
 import com.nilo.dms.common.utils.IdWorker;
-import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.NotifyDao;
 import com.nilo.dms.dao.dataobject.NotifyDO;
-import com.nilo.dms.service.order.model.NotifyRequest;
-import com.nilo.dms.service.order.model.NotifyResponse;
-import com.nilo.dms.service.system.SpringContext;
 import com.nilo.dms.service.mq.consumer.AbstractMQConsumer;
 import com.nilo.dms.service.mq.model.ConsumerDesc;
+import com.nilo.dms.service.order.model.NotifyRequest;
+import com.nilo.dms.service.order.model.NotifyResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.util.HtmlUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +35,6 @@ public class NotifyDataBusConsumer extends AbstractMQConsumer {
         String msgId = messageExt.getKeys();
         NotifyRequest request = null;
         String response = "";
-        boolean success = false;
         try {
 
             request = (NotifyRequest) obj;
@@ -49,16 +43,15 @@ public class NotifyDataBusConsumer extends AbstractMQConsumer {
             params.put("method", request.getMethod());
             params.put("sign", request.getSign());
             params.put("data", request.getData());
-            params.put("request_id", "" + IdWorker.getInstance().nextId());
-            params.put("app_key", "dms");
+            params.put("request_id", msgId);
+            params.put("app_key", request.getAppKey());
 
             response = HttpUtil.post(request.getUrl(), params);
             NotifyResponse notifyResponse = JSON.parseObject(response, NotifyResponse.class);
             if (notifyResponse != null && notifyResponse.isSuccess()) {
-                success = true;
-                saveNotify(request, msgId, response, success);
+                saveNotify(request, msgId, response, true);
             } else {
-                saveNotify(request, msgId, response, success);
+                saveNotify(request, msgId, response, false);
                 logger.error("Notify Failed. NotifyID:{}, Response:{} , NotifyRequest:{}", msgId, response, request);
             }
         } catch (Exception e) {
@@ -73,16 +66,13 @@ public class NotifyDataBusConsumer extends AbstractMQConsumer {
 
     private void saveNotify(NotifyRequest request, String notifyId, String response, boolean success) {
 
-        NotifyDO query = notifyDao.findByNotifyId(Long.parseLong(request.getMerchantId()), notifyId);
+        NotifyDO query = notifyDao.findByNotifyId(notifyId);
         if (query == null) {
             NotifyDO notifyDO = new NotifyDO();
             notifyDO.setUrl(request.getUrl());
-            notifyDO.setOrderNo(request.getOrderNo());
-            notifyDO.setReferenceNo(request.getReferenceNo());
             notifyDO.setStatus(success ? NotifyStatusEnum.SUCCESS.getCode() : NotifyStatusEnum.Failed.getCode());
             notifyDO.setBizType(request.getBizType());
             notifyDO.setMethod(request.getMethod());
-            notifyDO.setMerchantId(Long.parseLong(request.getMerchantId()));
             notifyDO.setNum(1);
             notifyDO.setNotifyId(notifyId);
             notifyDO.setParam(request.getData());
@@ -97,6 +87,7 @@ public class NotifyDataBusConsumer extends AbstractMQConsumer {
             update.setResult(response);
             notifyDao.update(update);
         }
+
 
     }
 

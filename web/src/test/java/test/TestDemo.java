@@ -21,7 +21,7 @@ import java.util.Properties;
 public class TestDemo {
     public static void main(String[] args) throws Exception {
 
-        String str = "{\"carrier\":\"Exdous\",\"consignee\":\"Sudi\",\"operateTime\":\"2018-01-12 10:16:54\",\"orderInfo\":[{\"orderNo\":\"10000000507156\",\"status\":\"10\"}],\"orderNo\":\"10000000507156\",\"orderPrice\":\"0\",\"remark\":\"Sudi\",\"rider\":\"200012\",\"transId\":\"\"}";
+        String str = "{\"carrier\":\"Nilo\",\"consignee\":\"steve\",\"operateTime\":\"2018-03-09 10:07:48\",\"orderInfo\":[{\"orderNo\":\"10000000507156\",\"status\":\"10\"}],\"orderNo\":\"10000000507156\",\"orderPrice\":\"0\",\"remark\":\"steve\",\"rider\":\"40004\",\"transId\":\"\"}";
 
 
         //DeliveryOrder order = JSON.parseObject(str,DeliveryOrder.class);
