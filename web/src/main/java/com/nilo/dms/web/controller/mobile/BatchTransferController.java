@@ -55,12 +55,15 @@ public class BatchTransferController extends BaseController {
 	@RequestMapping(value = "/readyToPay.html")
 	@ResponseBody
 	public String readyToPay(Model model, String[] orderNos) {
-		if (orderNos == null) {
-			return toJsonErrorMsg("no order no");
+		if (orderNos == null || orderNos.length==0) {
+			return toJsonErrorMsg("please select an order");
 		}
 		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 		String merchantId = me.getMerchantId();
 		List<String> waybillNos = Arrays.asList(orderNos);
+		if(waybillNos.size()==0) {
+			return toJsonErrorMsg("please select an order");
+		}
 		WaybillPaymentOrder paymentOrder = paymentService.savePaymentOrderByWaybill(Long.parseLong(merchantId),
 				me.getNetworks().get(0),me.getUserId(), waybillNos);
 
