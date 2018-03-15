@@ -43,8 +43,8 @@ public class NotifyDataBusConsumer extends AbstractMQConsumer {
             params.put("method", request.getMethod());
             params.put("sign", request.getSign());
             params.put("data", request.getData());
-            params.put("request_id", "" + IdWorker.getInstance().nextId());
-            params.put("app_key", "dms");
+            params.put("request_id", msgId);
+            params.put("app_key", request.getAppKey());
 
             response = HttpUtil.post(request.getUrl(), params);
             NotifyResponse notifyResponse = JSON.parseObject(response, NotifyResponse.class);
@@ -73,7 +73,6 @@ public class NotifyDataBusConsumer extends AbstractMQConsumer {
             notifyDO.setStatus(success ? NotifyStatusEnum.SUCCESS.getCode() : NotifyStatusEnum.Failed.getCode());
             notifyDO.setBizType(request.getBizType());
             notifyDO.setMethod(request.getMethod());
-            notifyDO.setMerchantId(Long.parseLong(request.getMerchantId()));
             notifyDO.setNum(1);
             notifyDO.setNotifyId(notifyId);
             notifyDO.setParam(request.getData());
