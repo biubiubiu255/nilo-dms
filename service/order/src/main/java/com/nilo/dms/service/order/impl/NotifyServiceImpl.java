@@ -132,13 +132,10 @@ public class NotifyServiceImpl implements NotifyService {
 
                 DeliveryOrder deliveryOrder = orderService.queryByOrderNo(request.getMerchantId(), orderNo);
 
-                notify.setOrderNo(orderNo);
-                notify.setReferenceNo(deliveryOrder.getReferenceNo());
-                notify.setMerchantId(request.getMerchantId());
                 notify.setBizType(request.getOptType().getCode());
                 notify.setMethod(MethodEnum.STATUS_UPDATE.getCode());
                 notify.setUrl(interfaceConfig.getUrl());
-
+                notify.setAppKey("dms");
                 dataMap.put("waybill_number", orderNo);
                 dataMap.put("status", convertResult);
                 dataMap.put("track_time", DateUtil.getSysTimeStamp());

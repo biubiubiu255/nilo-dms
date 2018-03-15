@@ -7,8 +7,6 @@ import com.nilo.dms.common.BaseDo;
  */
 public class NotifyDO extends BaseDo<Long> {
 
-    private Long merchantId;
-
     private String bizType;
 
     private String method;
@@ -41,14 +39,6 @@ public class NotifyDO extends BaseDo<Long> {
 
     public void setSign(String sign) {
         this.sign = sign;
-    }
-
-    public Long getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(Long merchantId) {
-        this.merchantId = merchantId;
     }
 
     public String getBizType() {
