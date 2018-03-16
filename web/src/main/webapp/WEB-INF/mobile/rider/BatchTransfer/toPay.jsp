@@ -67,6 +67,10 @@
 		$("input:checkbox[name='fuxuan']:checked").each(function() { // 遍历name=fuxuan的多选框
 			submit_array.push($(this).val());// 每一个被选中项的值
 		});
+		if(submit_array.length==0){
+			showError("please select an order");
+			return ;
+		}
 
 		/* var checkboxs = $("[name=fuxuan]").find(
 				'input:checked');
