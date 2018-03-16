@@ -12,6 +12,7 @@ public class ReportCodDO {
     private int signTime;
     private String signName;
 
+
     public String getSignName() {
         return signName;
     }
