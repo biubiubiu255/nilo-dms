@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ExternalServiceImpl implements ExternalService {
@@ -57,6 +58,13 @@ public class ExternalServiceImpl implements ExternalService {
 		return list;
 	}
 
+	@Override
+	public List<WaybillExternalDo> findExternalAllCons(Map map, Pagination page) {
+		List<WaybillExternalDo> list = new ArrayList<WaybillExternalDo>();
+		list = waybillExternalDao.queryExternalAllCONS(map);
+		page.setTotalCount(list.size());
+		return list;
+	}
 
 	@Override
 	public void addExternal(WaybillExternalDo external) {

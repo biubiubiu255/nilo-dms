@@ -6,6 +6,7 @@ import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.dao.dataobject.WaybillExternalDo;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface ExternalService {
@@ -17,6 +18,8 @@ public interface ExternalService {
 	List<WaybillExternalDo>  findExternalAll(Pagination page);
 
     List<WaybillExternalDo>  findExternalAllFuzzy(WaybillExternalDo external, Pagination page);
+
+    List<WaybillExternalDo>  findExternalAllCons(Map map, Pagination page);
 
 	void addExternal(WaybillExternalDo external);
 	
