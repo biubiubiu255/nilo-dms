@@ -89,7 +89,7 @@ public class NotifyServiceImpl implements NotifyService {
                     case ARRIVE_SCAN: {
                         //到件只通知一次
                         List<DeliveryOrderOptDO> list = deliveryOrderOptDao.queryByOrderNos(Long.parseLong(request.getMerchantId()), Arrays.asList(orderNo));
-                        if (list != null && list.size() > 0) {
+                        if (list == null || list.size() > 0) {
                             return;
                         }
                         DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + request.getMerchantId(), "" + request.getNetworkId()), DistributionNetworkDO.class);
