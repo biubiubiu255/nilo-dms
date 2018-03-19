@@ -64,6 +64,33 @@
         order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
     </select>
 
+    <select id="queryExternalAllCONS" resultMap="WaybillExternal" statementType="PREPARED">
+
+        SELECT
+        *
+        FROM t_waybill_external
+
+        where status = 0
+
+        <if test="orderNo != null and orderNo != ''">
+            AND order_no = #{orderNo}
+        </if>
+
+        <if test="client_name != null and client_name != ''">
+            AND client_name = #{client_name}
+        </if>
+
+        <if test="sTime_create !=null and eTime_create !=null and  sTime_create != '' and eTime_create != ''">
+            AND
+            (create_time<![CDATA[<]]>#{eTime_create} AND create_time>#{sTime_create})
+        </if>
+
+        order by create_time desc
+
+        limit #{offset} , #{limit}
+
+    </select>
+
 
 <!-- 动态更新语句 -->
 <update id="updateExternal" parameterType="com.nilo.dms.dao.dataobject.WaybillExternalDo" statementType="PREPARED">

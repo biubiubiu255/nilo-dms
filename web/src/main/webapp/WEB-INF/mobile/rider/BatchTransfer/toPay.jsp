@@ -72,6 +72,7 @@
 			return ;
 		}
 
+
 		/* var checkboxs = $("[name=fuxuan]").find(
 				'input:checked');
 		var checkboxs = $('#arrive-form').find(
