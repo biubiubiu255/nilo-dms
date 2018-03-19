@@ -5,22 +5,44 @@
 	<property name="ireport.y" value="0"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="order_type" class="java.lang.String"/>
-	<field name="money" class="java.lang.String"/>
+	<field name="money" class="java.lang.Double"/>
 	<field name="statement_time" class="java.lang.String"/>
 	<field name="sign_time" class="java.lang.String"/>
+	<variable name="money_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{money}]]></variableExpression>
+	</variable>
+	<variable name="orderNo_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{orderNo}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="79" splitType="Stretch">
 			<staticText>
-				<reportElement x="187" y="21" width="291" height="43" uuid="a5e8697a-c25a-4f6e-80c4-42627f01438c"/>
+				<reportElement x="187" y="7" width="291" height="43" uuid="a5e8697a-c25a-4f6e-80c4-42627f01438c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
 					<font fontName="微软雅黑" size="26" isBold="true" isItalic="true"/>
 					<paragraph lineSpacing="1_1_2"/>
 				</textElement>
 				<text><![CDATA[Statement Report]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="538" y="54" width="62" height="23" uuid="10c1d824-75a3-4aae-b9a6-d3a96be8df0a"/>
+				<text><![CDATA[Total Money:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="563" y="34" width="37" height="20" uuid="c81dfaf3-3b61-480c-b039-745208497995"/>
+				<text><![CDATA[Count:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="600" y="54" width="60" height="20" uuid="95046c87-5929-4b3a-bd7b-0b095e406acc"/>
+				<textFieldExpression><![CDATA[$V{money_1}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="600" y="34" width="60" height="20" uuid="3138022d-4524-4509-ae14-5e25b56bf35b"/>
+				<textFieldExpression><![CDATA[$V{orderNo_1}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>

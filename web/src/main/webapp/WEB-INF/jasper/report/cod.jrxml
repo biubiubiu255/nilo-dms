@@ -4,15 +4,17 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="orderNo" class="java.lang.String"/>
-	<field name="weight" class="java.lang.String"/>
+	<field name="weight" class="java.lang.Double"/>
 	<field name="scanNetwork" class="java.lang.String"/>
 	<field name="scanTime" class="java.lang.String"/>
 	<field name="recipients" class="java.lang.String"/>
 	<field name="address" class="java.lang.String"/>
 	<field name="phone" class="java.lang.String"/>
-	<variable name="SUM" class="java.math.BigDecimal">
+	<variable name="weight_1" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{weight}]]></variableExpression>
-		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="orderNo_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{orderNo}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -27,6 +29,22 @@
 				</textElement>
 				<text><![CDATA[COD Report]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="651" y="48" width="37" height="20" uuid="07450f8b-a24c-4783-8395-1f7bffdbb093"/>
+				<text><![CDATA[Count:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="626" y="68" width="62" height="23" uuid="4fb5e9d7-23b8-4837-b07c-765c9598bebc"/>
+				<text><![CDATA[Total weight:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="698" y="68" width="62" height="20" uuid="eb25b066-2895-414c-b118-510dfb10956f"/>
+				<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="698" y="48" width="62" height="20" uuid="048f6131-a5f2-47de-88e0-3415eb2d03be"/>
+				<textFieldExpression><![CDATA[$V{orderNo_1}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<columnHeader>
@@ -83,7 +101,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="46" splitType="Stretch">
+		<band height="32" splitType="Stretch">
 			<textField>
 				<reportElement x="112" y="0" width="68" height="20" uuid="35c203fa-8c65-4ce2-9620-722871564814"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">

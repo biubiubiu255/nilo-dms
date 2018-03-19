@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sign" language="groovy" pageWidth="1300" pageHeight="842" columnWidth="1260" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="abbb5591-3eef-4ff8-af13-2d294816bebb">
-	<property name="ireport.zoom" value="0.6830134553650705"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.1"/>
+	<property name="ireport.x" value="353"/>
 	<property name="ireport.y" value="0"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="referenceNo" class="java.lang.String"/>
-	<field name="weight" class="java.lang.String"/>
+	<field name="weight" class="java.lang.Double"/>
 	<field name="needPayAmount" class="java.lang.String"/>
-	<field name="alreadyPaid" class="java.lang.String"/>
+	<field name="alreadyPaid" class="java.lang.Double"/>
 	<field name="handledBy" class="java.lang.String"/>
 	<field name="handledTime" class="java.lang.String"/>
 	<field name="sName" class="java.lang.String"/>
@@ -15,6 +15,15 @@
 	<field name="contactNumber" class="java.lang.String"/>
 	<field name="address" class="java.lang.String"/>
 	<field name="remark" class="java.lang.String"/>
+	<variable name="weight_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight}]]></variableExpression>
+	</variable>
+	<variable name="orderNo_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{orderNo}]]></variableExpression>
+	</variable>
+	<variable name="alreadyPaid_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{alreadyPaid}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -28,6 +37,30 @@
 				</textElement>
 				<text><![CDATA[Sign Report]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="1090" y="33" width="62" height="23" uuid="3b5376e0-2df0-4fd5-82ad-b84a74ff450a"/>
+				<text><![CDATA[Total weight:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1115" y="13" width="37" height="20" uuid="8672da76-3ddf-49d2-8a7d-5934bb178e78"/>
+				<text><![CDATA[Count:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="1160" y="33" width="100" height="20" uuid="51e46c4f-8f00-49b2-b535-f1cce3459190"/>
+				<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="1160" y="13" width="100" height="20" uuid="a3ccdd97-dbb2-4f37-a6cb-b8da2cdb2b67"/>
+				<textFieldExpression><![CDATA[$V{orderNo_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1090" y="54" width="62" height="23" uuid="84cd7c58-9eff-4043-a922-bad4bf4b4777"/>
+				<text><![CDATA[Total Money:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="1160" y="56" width="100" height="20" uuid="8b05146b-751d-4a49-b666-0fa5b3369120"/>
+				<textFieldExpression><![CDATA[$V{alreadyPaid_1}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>

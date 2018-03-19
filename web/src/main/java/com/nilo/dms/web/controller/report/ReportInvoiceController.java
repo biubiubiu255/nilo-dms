@@ -43,6 +43,8 @@ public class ReportInvoiceController extends BaseController {
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
 
+        //new java.lang.Double().doubleValue()
+
         Map<String, Object> map = new HashMap<String, Object>();
 
         // 原对象 ReportCodDO() 所需参数

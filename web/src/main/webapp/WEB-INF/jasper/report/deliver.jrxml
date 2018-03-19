@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="deliver" language="groovy" pageWidth="1300" pageHeight="842" columnWidth="1260" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5ce4bf46-9a1d-4946-b6d3-e4595cd5d8be">
-	<property name="ireport.zoom" value="0.6209213230591552"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="517"/>
 	<property name="ireport.y" value="0"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="referenceNo" class="java.lang.String"/>
@@ -12,9 +12,12 @@
 	<field name="name" class="java.lang.String"/>
 	<field name="contactNumber" class="java.lang.String"/>
 	<field name="address" class="java.lang.String"/>
-	<field name="needPayAmount" class="java.lang.String"/>
+	<field name="needPayAmount" class="java.lang.Double"/>
 	<field name="deliveryFee" class="java.lang.String"/>
 	<field name="remark" class="java.lang.String"/>
+	<variable name="needPayAmount_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{needPayAmount}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -28,6 +31,18 @@
 				</textElement>
 				<text><![CDATA[Deliver Report]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="1097" y="56" width="62" height="23" uuid="ddc49653-e9b9-40f0-a356-48df54e71eec"/>
+				<text><![CDATA[Total weight:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1122" y="36" width="37" height="20" uuid="e8b840e6-a7f9-492b-9e78-11626235f575"/>
+				<text><![CDATA[Count:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="885" y="36" width="100" height="20" uuid="1fcb227f-e7de-4b68-b3a2-4ac65bddd7dc"/>
+				<textFieldExpression><![CDATA[$V{needPayAmount_1}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>

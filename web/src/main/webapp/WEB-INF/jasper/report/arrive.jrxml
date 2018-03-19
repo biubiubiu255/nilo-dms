@@ -8,9 +8,15 @@
 	<field name="lastNetwork" class="java.lang.String"/>
 	<field name="scanNetwork" class="java.lang.String"/>
 	<field name="scanTime" class="java.lang.String"/>
-	<field name="weight" class="java.lang.String"/>
+	<field name="weight" class="java.lang.Double"/>
 	<field name="phone" class="java.lang.String"/>
 	<field name="address" class="java.lang.String"/>
+	<variable name="weight_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight}]]></variableExpression>
+	</variable>
+	<variable name="orderNo_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{orderNo}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -24,6 +30,22 @@
 				</textElement>
 				<text><![CDATA[Arrive Report]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="755" y="56" width="62" height="23" uuid="26ddaf84-38f9-449c-a6b6-5bd1caaa7a50"/>
+				<text><![CDATA[Total weight:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="780" y="36" width="37" height="20" uuid="9b946a68-2e72-4000-aa64-fecac3a92660"/>
+				<text><![CDATA[Count:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="827" y="56" width="63" height="20" uuid="c9aeab66-1964-476d-845b-34224b9389dc"/>
+				<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="827" y="36" width="63" height="20" uuid="ee67ef29-2ad4-492e-8f2a-578205d59e2b"/>
+				<textFieldExpression><![CDATA[$V{orderNo_1}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
