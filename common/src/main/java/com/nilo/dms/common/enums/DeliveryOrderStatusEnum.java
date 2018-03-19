@@ -13,7 +13,9 @@ public enum DeliveryOrderStatusEnum implements EnumMessage{
     DELIVERY(30, "Delivery"),
     PROBLEM(40, "Problem"),
     REFUSE(60, "Refuse"),
-    RECEIVED(50, "Received"),; //change this value
+    RECEIVED(50, "Received"),
+    CANCEL(90, "Cancel"),
+    ; //change this value
 
     private Integer code;
     private String desc;
