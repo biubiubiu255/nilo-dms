@@ -64,7 +64,6 @@
 			},
 			before : function(res) {
                 payType = $("input[name='danxuan']:checked").val();
-                alert('payType=='+payType)
 				if (payType == '1') {
 					ajaxRequest('/mobile/rider/COD/redyToPay.html', {
 						orderNo : $("#logisticsNo").val()
