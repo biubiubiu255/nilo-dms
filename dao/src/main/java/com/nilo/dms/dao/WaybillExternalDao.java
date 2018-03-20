@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface WaybillExternalDao {
@@ -18,6 +19,8 @@ public interface WaybillExternalDao {
     List<WaybillExternalDo> queryExternalAll();
 
     List<WaybillExternalDo> queryExternalAllM(WaybillExternalDo external);
+
+    List<WaybillExternalDo> queryExternalAllCONS(Map map);
 
     void addWaybillExternal(WaybillExternalDo external);
 

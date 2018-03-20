@@ -33,7 +33,7 @@
             <thead>
             <tr>
                 <th lay-data="{field:'orderNo', width:200}">OrderNo</th>
-                <th lay-data="{field:'weight', width:100,edit:'text'}">Weight</th>
+                <th lay-data="{field:'weight', width:100,edit:'text'}">Weight(KG)</th>
                 <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
                 <th lay-data="{field:'orderType', width:100}">OrderType</th>
                 <th lay-data="{title:'Opt',fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
@@ -111,6 +111,17 @@
             });
         };
         $(".arrive").on("click", function () {
+
+            var check = true;
+            $("td[data-field='weight'] div").each(function (key, value) {
+                if (!isMoreThan0(this.innerHTML)) {
+                    check = false;
+                    layer.msg("Weight needs more than 0", {icon: 2, time: 2000});
+                }
+            });
+
+            if (!check) return;
+
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
@@ -131,6 +142,14 @@
                 }
             });
         })
+        function isMoreThan0(obj) {
+            reg = /^\d+(\.\d+)?$/;
+            if (!reg.test(obj) || obj <= 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
 
         var updateWeight = function (orderNo, weight) {
             $.ajax({

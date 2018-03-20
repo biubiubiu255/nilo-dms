@@ -29,7 +29,9 @@
 <script src="/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript">
 	//loadLanguage('en');
-	var payType = '0';
+
+    $('radio:first').attr('checked', 'checked');
+    var payType = $('input:radio:checked').val();
 	var payForm = new MobileData({
 		autoLoad : false,
 		formId : 'pay-form'
@@ -61,6 +63,7 @@
 				isUpPic = true;
 			},
 			before : function(res) {
+                payType = $("input[name='danxuan']:checked").val();
 				if (payType == '1') {
 					ajaxRequest('/mobile/rider/COD/redyToPay.html', {
 						orderNo : $("#logisticsNo").val()

@@ -8,19 +8,45 @@
 <body>
 <div class="box-body">
 
-    <div class="layui-form layui-row">
-        <div class="layui-col-md4 layui-col-lg3">
-            external：
-            <div class="layui-inline">
-                <input class="layui-input" id="searchVal" autocomplete="off">
+    <div class="layui-row">
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">International Order:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="internationalNo" autocomplete="off" class="layui-input">
             </div>
         </div>
+
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">ReceiveTime:</label>
+            <div class="layui-inline">
+                <input type="text" class="layui-input" id="fromCreateTime" placeholder="From" name="createTime_s">
+            </div>
+            -
+            <div class="layui-inline">
+                <input type="text" class="layui-input" id="toCreateTime" placeholder="To" name="createTime_e">
+            </div>
+        </div>
+
+
+    </div>
+    <!-- 搜索栏的第二行 -->
+    <div class="layui-form layui-row">
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">ClientName:</label>
+            <div class="layui-form-item layui-inline">
+                <input type="text" name="clientName" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <!-- 搜索按钮 -->
         <div class="layui-col-md1">
             <shiro:hasPermission name="300021">
                 <button class="layui-btn layui-btn-normal search">Search</button>
             </shiro:hasPermission>
         </div>
     </div>
+
+
+
     <hr>
     <div class="layui-row">
         <div class="layui-col-md3">
@@ -72,7 +98,20 @@
         }
     }
 
+
     $(function () {
+
+        layui.use(['element', 'form', 'laydate'], function () {
+            var layDate = layui.laydate;
+            layDate.render({
+                elem: '#fromCreateTime'
+                , lang: 'en'
+            });
+            layDate.render({
+                elem: '#toCreateTime'
+                , lang: 'en'
+            });
+        });
 
         var table;
         layui.use('table', function () {
@@ -98,9 +137,14 @@
         });
 
         var reloadTable = function (item) {
+            var sTime_create = $("input[name='createTime_s']").val() == "" ? "" : Date.parse(new Date($("input[name='createTime_s']").val())) / 1000;
+            var eTime_create = $("input[name='createTime_e']").val() == "" ? "" : Date.parse(new Date($("input[name='createTime_e']").val())) / 1000 + 86400;
             table.reload("${id0}", {
                 where: {
-                	orderNo: $("#searchVal").val()
+                    orderNo: $("input[name='internationalNo']").val() ,
+                    clientName: $("input[name='clientName']").val() ,
+                    sTime_create: sTime_create ,
+                    eTime_create: eTime_create
                 }
             });
         };

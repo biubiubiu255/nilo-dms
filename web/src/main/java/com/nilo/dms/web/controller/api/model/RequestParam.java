@@ -9,6 +9,9 @@ import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.service.system.model.MerchantConfig;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 /**
  * Created by admin on 2017/9/28.
  */
@@ -88,10 +91,14 @@ public class RequestParam {
         if (diff > 10 * 60) {
             throw new DMSException(BizErrorCode.TIMESTAMP_ERROR);
         }*/
-
+        try {
+            data = URLDecoder.decode(data, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("UrlDecode Error");
+        }
         //校验sign
         MerchantConfig merchantConfig = SystemConfig.getMerchantConfigByCode(this.app_key);
-        if(merchantConfig== null) throw new DMSException(BizErrorCode.APP_KEY_NOT_EXIST,this.app_key);
+        if (merchantConfig == null) throw new DMSException(BizErrorCode.APP_KEY_NOT_EXIST, this.app_key);
         this.app_id = merchantConfig.getMerchantId();
         boolean check = checkSign(merchantConfig.getKey(), data, sign);
         AssertUtil.isTrue(check, BizErrorCode.SING_ERROR);

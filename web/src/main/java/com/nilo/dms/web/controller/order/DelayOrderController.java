@@ -3,6 +3,7 @@ package com.nilo.dms.web.controller.order;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.AbnormalTypeEnum;
+import com.nilo.dms.common.enums.DelayStatusEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderDelayDao;
@@ -94,6 +95,7 @@ public class DelayOrderController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
+
             AbnormalOrder abnormalOrder = new AbnormalOrder();
             abnormalOrder.setCreatedBy(me.getUserId());
             abnormalOrder.setMerchantId(merchantId);
@@ -102,6 +104,12 @@ public class DelayOrderController extends BaseController {
             abnormalOrder.setRemark(param.getRemark());
             abnormalOrder.setAbnormalType(AbnormalTypeEnum.PROBLEM);
             abnormalOrderService.addAbnormalOrder(abnormalOrder);
+
+            DeliveryOrderDelayDO update = new DeliveryOrderDelayDO();
+            update.setOrderNo(param.getOrderNo());
+            update.setMerchantId(Long.parseLong(merchantId));
+            update.setStatus(DelayStatusEnum.COMPLETE.getCode());
+            deliveryOrderDelayDao.update(update);
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());
         }

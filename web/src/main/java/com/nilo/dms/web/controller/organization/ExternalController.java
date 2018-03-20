@@ -22,9 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/waybill/external")
@@ -35,7 +33,7 @@ public class ExternalController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/externalList.html", method = RequestMethod.POST)
-    public String expressList(WaybillExternalDo external) {
+    public String expressList(WaybillExternalDo external, Integer  sTime_create, Integer eTime_create) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();  //主要的，主体
         //获取merchantId
@@ -45,10 +43,17 @@ public class ExternalController extends BaseController {
 
         System.out.println("【参数输出！】" + external.toString());
 
-        if (external.getOrderNo()==null || external.getOrderNo().equals("")) {
-            external.setOrderNo("");
-		}
-        list = externalService.findExternalAllFuzzy(external, page);
+        //list = externalService.findExternalAllFuzzy(external, page);
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        map.put("orderNo", external.getOrderNo());
+        map.put("client_name", external.getClientName());
+        map.put("sTime_create", sTime_create);
+        map.put("eTime_create", eTime_create);
+        map.put("offset", page.getOffset());
+        map.put("limit", page.getLimit());
+        list = externalService.findExternalAllCons(map, page);
         return toPaginationLayUIData(page, list);  //Pagination 页码
     }
      

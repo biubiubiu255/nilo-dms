@@ -118,6 +118,7 @@
             <th lay-data="{field:'orderPlatform', width:120}">Platform</th>
             <th lay-data="{field:'totalPrice', width:120}">Order Amount</th>
             <th lay-data="{field:'needPayAmount', width:120}">Need Pay</th>
+            <th lay-data="{field:'parentNo', width:100}">PackageNo</th>
             <th lay-data="{field:'receiverInfo', width:150,templet: '<div>{{d.receiverInfo.receiverName}}</div>' }">
                 Receiver
                 Name
