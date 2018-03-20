@@ -33,7 +33,7 @@
             <thead>
             <tr>
                 <th lay-data="{field:'orderNo', width:200}">OrderNo</th>
-                <th lay-data="{field:'weight', width:100,edit:'text'}">Weight</th>
+                <th lay-data="{field:'weight', width:100,edit:'text'}">Weight(KG)</th>
                 <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
                 <th lay-data="{field:'orderType', width:100}">OrderType</th>
                 <th lay-data="{title:'Opt',fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
@@ -143,8 +143,8 @@
             });
         })
         function isMoreThan0(obj) {
-            reg = /^[-+]?\d+$/;
-            if (!reg.test(obj) || obj < 0) {
+            reg = /^\d+(\.\d+)?$/;
+            if (!reg.test(obj) || obj <= 0) {
                 return false;
             } else {
                 return true;
