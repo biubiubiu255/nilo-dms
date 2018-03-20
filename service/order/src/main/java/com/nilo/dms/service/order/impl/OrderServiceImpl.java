@@ -385,7 +385,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
 
     @Override
     @Transactional
-    public void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId,String networkId) {
+    public void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId, String networkId) {
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setMerchantId(merchantId);
         optRequest.setOptBy(arriveBy);
@@ -470,7 +470,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         r.setAddress(networkDO.getAddress());
         r.setArea(networkDO.getArea());
         r.setCity(networkDO.getCity());
-        r.setContactNumber(networkDO.getContactName());
+        r.setContactNumber(networkDO.getContactPhone());
         r.setCountry(networkDO.getCountry());
         r.setName(networkDO.getContactName());
         r.setProvince(networkDO.getProvince());
@@ -485,7 +485,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         s.setAddress(receiverNetwork.getAddress());
         s.setArea(receiverNetwork.getArea());
         s.setCity(receiverNetwork.getCity());
-        s.setContactNumber(receiverNetwork.getContactName());
+        s.setContactNumber(receiverNetwork.getContactPhone());
         s.setCountry(receiverNetwork.getCountry());
         s.setName(receiverNetwork.getContactName());
         s.setProvince(receiverNetwork.getProvince());
@@ -503,9 +503,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         // 添加操作日志
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOrderNo(packageRequest.getOrderNos());
-/*
         optRequest.setOptType(OptTypeEnum.PACKAGE);
-*/
         optRequest.setOptBy(packageRequest.getOptBy());
         optRequest.setNetworkId("" + packageRequest.getNetworkId());
         optRequest.setMerchantId(packageRequest.getMerchantId());
@@ -538,14 +536,12 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             }
         }
         //1、到件
-        waybillNoListArrive(unpackRequest.getOrderNos(), unpackRequest.getOptBy(), unpackRequest.getMerchantId(),""+unpackRequest.getNetworkId());
+        waybillNoListArrive(unpackRequest.getOrderNos(), unpackRequest.getOptBy(), unpackRequest.getMerchantId(), "" + unpackRequest.getNetworkId());
 
         // 2、添加操作日志
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOrderNo(unpackRequest.getOrderNos());
-/*
         optRequest.setOptType(OptTypeEnum.UNPACK);
-*/
         optRequest.setOptBy(unpackRequest.getOptBy());
         optRequest.setNetworkId("" + unpackRequest.getNetworkId());
         optRequest.setMerchantId(unpackRequest.getMerchantId());
