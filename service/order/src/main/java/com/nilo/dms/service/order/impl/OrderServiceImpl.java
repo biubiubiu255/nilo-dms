@@ -336,7 +336,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             if (details.getWeight() == null) {
                 DeliveryOrderDO queryWeight = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), details.getOrderNo());
                 if (queryWeight.getWeight() == 0) {
-                    throw new DMSException(BizErrorCode.WEIGHT_EMPTY);
+                    throw new DMSException(BizErrorCode.WEIGHT_MORE_THAN_0);
                 }
             }
         }

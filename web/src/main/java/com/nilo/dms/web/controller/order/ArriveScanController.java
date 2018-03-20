@@ -13,6 +13,7 @@ import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.web.controller.BaseController;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,16 +114,21 @@ public class ArriveScanController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/updateWeight.html")
-    public String updateWeight(String orderNo, String scanNo, Double weight) {
+    public String updateWeight(String orderNo, String scanNo, String weight) {
 
-        if (weight == null ||weight ==0) {
-            return toJsonErrorMsg(BizErrorCode.WEIGHT_EMPTY.getDescription());
+        if (!NumberUtils.isNumber(weight)) {
+            return toJsonErrorMsg(BizErrorCode.WEIGHT_MORE_THAN_0.getDescription());
+        }
+        Double w = Double.parseDouble(weight);
+        if (w <= 0) {
+            return toJsonErrorMsg(BizErrorCode.WEIGHT_MORE_THAN_0.getDescription());
+
         }
 
         WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
         scanDetailsDO.setScanNo(scanNo);
         scanDetailsDO.setOrderNo(orderNo);
-        scanDetailsDO.setWeight(weight);
+        scanDetailsDO.setWeight(w);
         waybillScanDetailsDao.update(scanDetailsDO);
         return toJsonTrueMsg();
     }

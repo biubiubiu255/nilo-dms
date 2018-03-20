@@ -111,6 +111,17 @@
             });
         };
         $(".arrive").on("click", function () {
+
+            var check = true;
+            $("td[data-field='weight'] div").each(function (key, value) {
+                if (!isMoreThan0(this.innerHTML)) {
+                    check = false;
+                    layer.msg("Weight needs more than 0", {icon: 2, time: 2000});
+                }
+            });
+
+            if (!check) return;
+
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
@@ -131,6 +142,14 @@
                 }
             });
         })
+        function isMoreThan0(obj) {
+            reg = /^[-+]?\d+$/;
+            if (!reg.test(obj) || obj < 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
 
         var updateWeight = function (orderNo, weight) {
             $.ajax({
