@@ -106,6 +106,13 @@ public class PdaController extends BaseController {
 		return toJsonTrueData(pdaWaybill);
 	}
 	@ResponseBody
+	@RequestMapping(value = "/arrvieWeighing.html")
+	public String arrvieWeighing(String waybillNos,Double Weight,Double Length,Double Width,Double Height ) {
+
+		return "";
+	}
+
+	@ResponseBody
 	@RequestMapping(value = "/getThirdExpress.html")
 	public String getThirdExpress(Model model, HttpServletRequest request) {
 		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
