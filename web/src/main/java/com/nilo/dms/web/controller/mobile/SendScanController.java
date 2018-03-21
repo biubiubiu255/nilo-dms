@@ -187,10 +187,10 @@ public class SendScanController extends BaseController {
         return toJsonTrueMsg();
     }
 
-    private boolean isInteger(String str) {
-        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-        return pattern.matcher(str).matches();
-    }
+//    private boolean isInteger(String str) {
+//        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+//        return pattern.matcher(str).matches();
+//    }
 
     public static class Driver {
         private String code;

@@ -4,18 +4,35 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.nilo.dms.common.exception.BizErrorCode;
+import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.common.exception.SysErrorCode;
+import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.ThirdDriverDao;
+import com.nilo.dms.dao.ThirdExpressDao;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.StaffDO;
+import com.nilo.dms.dao.dataobject.ThirdDriverDO;
+import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.model.LoginInfo;
+import com.nilo.dms.service.model.User;
 import com.nilo.dms.service.model.pda.PdaRider;
 import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.service.order.model.Loading;
 import com.nilo.dms.service.order.model.ShipParameter;
+import com.nilo.dms.web.controller.mobile.SendScanController;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,6 +44,10 @@ import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.web.controller.BaseController;
 
+import javax.servlet.http.HttpServletRequest;
+
+import static org.apache.shiro.web.filter.mgt.DefaultFilter.user;
+
 @Controller
 @RequestMapping("/pda")
 public class PdaController extends BaseController {
@@ -37,6 +58,14 @@ public class PdaController extends BaseController {
 	private OrderService orderService;
     @Autowired
     private LoadingService loadingService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private ThirdExpressDao thirdExpressDao;
+	@Autowired
+	private DistributionNetworkDao distributionNetworkDao;
+	@Autowired
+	private ThirdDriverDao thirdDriverDao;
 
 	@Autowired
 	private DeliveryOrderOptDao deliveryOrderOptDao;
@@ -76,7 +105,67 @@ public class PdaController extends BaseController {
 		pdaWaybill.setGoodsTypeDes(delivery.getGoodsType());
 		return toJsonTrueData(pdaWaybill);
 	}
+	@ResponseBody
+	@RequestMapping(value = "/getThirdExpress.html")
+	public String getThirdExpress(Model model, HttpServletRequest request) {
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		//获取merchantId
+		String merchantId = me.getMerchantId();
 
+		//第三方快递公司及自提点
+		List<ThirdExpressDO> expressDOList = thirdExpressDao.findByMerchantId(Long.parseLong(merchantId));
+		List<SendScanController.NextStation> list = new ArrayList<>();
+		for (ThirdExpressDO e : expressDOList) {
+			SendScanController.NextStation s = new SendScanController.NextStation();
+			s.setCode(e.getExpressCode());
+			s.setName(e.getExpressName());
+			s.setType("T");
+			list.add(s);
+		}
+		return toJsonTrueData(list);
+	}
+	@ResponseBody
+	@RequestMapping(value = "/getNextStation.html")
+	public String getNextStation(Model model, HttpServletRequest request) {
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		//获取merchantId
+		String merchantId = me.getMerchantId();
+
+		//第三方快递公司及自提点
+		List<ThirdExpressDO> expressDOList = thirdExpressDao.findByMerchantId(Long.parseLong(merchantId));
+		List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
+
+		List<SendScanController.NextStation> list = new ArrayList<>();
+		for (ThirdExpressDO e : expressDOList) {
+			SendScanController.NextStation s = new SendScanController.NextStation();
+			s.setCode(e.getExpressCode());
+			s.setName(e.getExpressName());
+			s.setType("T");
+			list.add(s);
+		}
+		for (DistributionNetworkDO n : networkDOList) {
+			SendScanController.NextStation s = new SendScanController.NextStation();
+			s.setCode("" + n.getId());
+			s.setName(n.getName());
+			s.setType("N");
+			list.add(s);
+		}
+		return toJsonTrueData(list);
+	}
+
+	@RequestMapping(value = "/getDriver.html")
+	@ResponseBody
+	public String getDriver(String code) {
+		List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(code);
+		List<SendScanController.Driver> list = new ArrayList<>();
+		for (ThirdDriverDO d : thirdDriver) {
+			SendScanController.Driver driver = new SendScanController.Driver();
+			driver.setCode(d.getDriverId());
+			driver.setName(d.getDriverName());
+			list.add(driver);
+		}
+		return toJsonTrueData(list);
+	}
 	@ResponseBody
 	@RequestMapping(value = "/getRider.html")
 	public String getRider() {
@@ -100,7 +189,10 @@ public class PdaController extends BaseController {
 	}
     @RequestMapping(value = "/riderDelivery.html")
     @ResponseBody
-    public String riderDelivery(String scaned_codes[],String rider,String logisticsNo ) {
+    public String riderDelivery(String waybillnos,String rider,String logisticsNo ) {
+
+
+		String [] scaned_codes = waybillnos.split(",");
         Loading loading = new Loading();
         loading.setRider(rider);
 
@@ -142,9 +234,85 @@ public class PdaController extends BaseController {
         parameter.setLoadingNo(loadingNo);
         parameter.setNetworkId("" + me.getNetworks().get(0));
         loadingService.ship(parameter);
-        return toJsonTrueData(loadingNo);
 
+        return toJsonTrueData(loadingNo);
     }
+
+	@RequestMapping(value = "/sendNext.html")
+	@ResponseBody
+	public String SendNext(String waybillnos, String nextStation, String carrier, String sendDriver, String plateNo, String logisticsNo) {
+		String [] scaned_codes = waybillnos.split(",");
+
+		Loading loading = new Loading();
+		loading.setNextStation(nextStation);
+		loading.setRider(sendDriver);
+		loading.setCarrier(carrier);
+		loading.setTruckNo(plateNo);
+
+		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		//获取merchantId
+		String merchantId = me.getMerchantId();
+		String loadingNo = "";
+		try {
+			if (StringUtil.isEmpty(sendDriver)) {
+				throw new IllegalArgumentException("PdaRider or Driver is empty.");
+			}
+			loading.setMerchantId(merchantId);
+			loading.setLoadingBy(me.getUserId());
+			if (StringUtil.isNotEmpty(sendDriver)) {
+				loading.setRider(sendDriver);
+			}
+			loadingNo = loadingService.addLoading(loading);
+		} catch (Exception e) {
+			log.error("addLoading failed. loading:{}", loading, e);
+			return toJsonErrorMsg(e.getMessage());
+		}
+
+		DeliveryOrder order = null;
+		for (int i = 0; i < scaned_codes.length; i++) {
+			try {
+				loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i], me.getUserId());
+			} catch (Exception e) {
+				log.error("loadingScan failed. orderNo:{}", scaned_codes[i], e);
+				return toJsonErrorMsg(e.getMessage());
+			}
+
+		}
+
+		ShipParameter parameter = new ShipParameter();
+		parameter.setMerchantId(merchantId);
+		parameter.setOptBy(me.getUserId());
+		parameter.setLoadingNo(loadingNo);
+		parameter.setNetworkId("" + me.getNetworks().get(0));
+		loadingService.ship(parameter);
+		return toJsonTrueData(loadingNo);
+	}
+	@RequestMapping(value = "/editPassword.html")
+	@ResponseBody
+	public String editPassword(String oldPassword,String newPassword,String againPassword ) {
+		try {
+			AssertUtil.isNotNull(user, SysErrorCode.REQUEST_IS_NULL);
+			AssertUtil.isNotBlank(oldPassword, SysErrorCode.REQUEST_IS_NULL);
+			Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+			String userId = me.getUserId();
+			//校验旧密码
+			User user = userService.findByUserId(me.getMerchantId(), userId);
+			if (!StringUtils.equals(DigestUtils.sha1Hex(oldPassword), user.getLoginInfo().getPassword())) {
+				throw new DMSException(BizErrorCode.OLD_PASSWORD_ERROR);
+			}
+
+			LoginInfo loginInfo = new LoginInfo();
+			loginInfo.setUserId(userId);
+			loginInfo.setMerchantId(me.getMerchantId());
+			loginInfo.setPassword(DigestUtils.sha1Hex(newPassword));
+			userService.updateLoginInfo(loginInfo);
+		} catch (Exception e) {
+			logger.error("changePassword failed. ", e);
+			return toJsonErrorMsg("Failed:" + e.getMessage());
+		}
+		return toJsonTrueMsg();
+	}
+
 	@RequestMapping(value = "/submit.html")
 	@ResponseBody
 	public String submit(String scanedCodes,String logisticsNos) {
