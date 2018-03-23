@@ -75,6 +75,20 @@ public class PdaController extends BaseController {
 		return "mobile/network/arrive_scan/arriveScan";
 	}
 
+
+	@ResponseBody
+	@RequestMapping(value = "/sendCheck.html")
+	public String sendCheck(String waybillno) {
+
+		Long a = deliveryOrderOptDao.getStateByOrderNo(waybillno);
+		if (a==null){
+			return toJsonErrorMsg("There is no OrderNo");
+		}
+		if(!(a==20)){
+			return toJsonErrorMsg(BizErrorCode.ORDER_NO_ARRIVE.getDescription());
+		}
+		return toJsonTrueMsg();
+	}
 	@ResponseBody
 	@RequestMapping(value = "/arrive.html")
 	public String arrive(String waybillNo) {
@@ -96,9 +110,9 @@ public class PdaController extends BaseController {
 		pdaWaybill.setReceiverProvince(delivery.getReceiverInfo().getReceiverProvince());
 		pdaWaybill.setNetworkName(delivery.getNetworkDesc());
 		
-		pdaWaybill.setWeight(delivery.getWeight()==null?"0":delivery.getWeight().toString());
-		pdaWaybill.setWidth(delivery.getWidth()==null?"0":delivery.getWidth().toString());
-		pdaWaybill.setLength(delivery.getLength()==null?"0":delivery.getLength().toString());
+		//pdaWaybill.setWeight(delivery.getWeight()==null?"0":delivery.getWeight().toString());
+		//pdaWaybill.setWidth(delivery.getWidth()==null?"0":delivery.getWidth().toString());
+		//pdaWaybill.setLength(delivery.getLength()==null?"0":delivery.getLength().toString());
 
 		pdaWaybill.setIsCod(delivery.getIsCod());
 		pdaWaybill.setStatusDes(delivery.getStatusDesc());
