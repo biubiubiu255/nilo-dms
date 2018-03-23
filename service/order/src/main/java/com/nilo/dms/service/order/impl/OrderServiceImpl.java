@@ -450,15 +450,22 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     	List<String> waybillNos = new ArrayList<>();
     	waybillNos.add(waybillNo);
     	
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setMerchantId(merchantId);
-        optRequest.setOptBy(arriveBy);
-        optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
-        optRequest.setOrderNo(waybillNos);
-        optRequest.setNetworkId(networkId);
-        handleOpt(optRequest);
+    	DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
+        if (orderDO == null) {
+            throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, waybillNo);
+        }
+        // 没有入库操作时，先进行入库到件操作
+        if(orderDO.getStatus()!=DeliveryOrderStatusEnum.ARRIVED.getCode()) {
+        	OrderOptRequest optRequest = new OrderOptRequest();
+            optRequest.setMerchantId(merchantId);
+            optRequest.setOptBy(arriveBy);
+            optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
+            optRequest.setOrderNo(waybillNos);
+            optRequest.setNetworkId(networkId);
+            handleOpt(optRequest);
 
-        this.addNetworkTask(waybillNos, arriveBy, merchantId);
+            this.addNetworkTask(waybillNos, arriveBy, merchantId);
+        }
         
         DeliveryOrderDO deliveryOrderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
         
