@@ -92,6 +92,19 @@ public class PdaController extends BaseController {
 		pdaWaybill.setGoodsTypeDes(delivery.getGoodsType());
 		return pdaWaybill;
 	}
+	@ResponseBody
+	@RequestMapping(value = "/sendCheck.html")
+	public String sendCheck(String waybillno) {
+
+		Long a = deliveryOrderOptDao.getStateByOrderNo(waybillno);
+		if (a==null){
+			return toJsonErrorMsg("There is no OrderNo");
+		}
+		if(!(a==20)){
+			return toJsonErrorMsg(BizErrorCode.ORDER_NO_ARRIVE.getDescription());
+		}
+		return toJsonTrueMsg();
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/arrive.html")
