@@ -121,7 +121,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setMerchantId(param.getMerchantId());
         optRequest.setOptBy(param.getOptBy());
-        optRequest.setOptType(OptTypeEnum.RECEIVE);
+        optRequest.setOptType(OptTypeEnum.SIGN);
         optRequest.setRemark(param.getRemark());
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(param.getOrderNo());

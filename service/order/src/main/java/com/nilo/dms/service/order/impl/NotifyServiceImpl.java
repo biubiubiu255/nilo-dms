@@ -117,15 +117,17 @@ public class NotifyServiceImpl implements NotifyService {
                         dataMap.put("type", reason);
                         break;
                     }
+
                     case REFUSE: {
                         AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
                         String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.REFUSE_REASON, abnormalOrderDO.getReason());
                         dataMap.put("type", reason);
                         break;
                     }
-                    case RECEIVE: {
+                    case SIGN: {
                         break;
                     }
+
                     default:
                         break;
                 }

@@ -4,7 +4,9 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.WaybillCodDao;
+import com.nilo.dms.dao.WaybillInvoiceDao;
 import com.nilo.dms.dao.dataobject.ReportCodDO;
+import com.nilo.dms.dao.dataobject.ReportInvoiceDO;
 import com.nilo.dms.dao.dataobject.ReportInvoiceQueryDO;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.ibatis.annotations.Param;
@@ -24,7 +26,7 @@ import java.util.Map;
 @RequestMapping("/report/invoice")
 public class ReportInvoiceController extends BaseController {
     @Autowired
-    private WaybillCodDao waybillCodDao;
+    private WaybillInvoiceDao waybillInvoiceDao;
 
     @Autowired
     private CommonDao commonDao;
@@ -52,8 +54,11 @@ public class ReportInvoiceController extends BaseController {
         // Param: payType
         // Param: orderPlatform
 
-        List<ReportCodDO> list = waybillCodDao.queryReportCod(param, page.getOffset(), page.getOffset() );
-        page.setTotalCount(waybillCodDao.queryReportCodCount(map));
+
+        List<ReportInvoiceDO> list = waybillInvoiceDao.queryReportInvoiceInput(param);
+
+        //List<ReportCodDO> list = waybillInvoiceDao.queryReportCod(param, page.getOffset(), page.getOffset() );
+        //page.setTotalCount(waybillCodDao.queryReportCodCount(map));
         //page.setTotalCount(commonDao.lastFoundRows());
         return toPaginationLayUIData(page, list);
 }

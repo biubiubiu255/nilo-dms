@@ -54,14 +54,14 @@
 	<columnHeader>
 		<band height="46" splitType="Stretch">
 			<staticText>
-				<reportElement x="13" y="2" width="100" height="20" uuid="43e09c46-cb85-4793-b4d9-0eca7f079b97"/>
+				<reportElement x="13" y="2" width="123" height="20" uuid="43e09c46-cb85-4793-b4d9-0eca7f079b97"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[OrderNo]]></text>
+				<text><![CDATA[Waybill No.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="128" y="2" width="75" height="20" uuid="03452865-2fef-4b23-998a-1437a202b93b"/>
+				<reportElement x="601" y="2" width="75" height="20" uuid="03452865-2fef-4b23-998a-1437a202b93b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true"/>
 				</textElement>
@@ -89,39 +89,39 @@
 				<text><![CDATA[ScanTime]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="601" y="2" width="60" height="20" uuid="ee58945b-9459-4a33-b14d-60af4ab7caa1"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="微软雅黑" size="13" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Weight]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="676" y="2" width="79" height="20" uuid="9411e1a5-e85f-4a5c-b039-f9fcedc976ca"/>
+				<reportElement x="684" y="2" width="79" height="20" uuid="9411e1a5-e85f-4a5c-b039-f9fcedc976ca"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Phone]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="769" y="2" width="105" height="20" uuid="925e298c-aba8-4bbb-9e60-3b47c59282b2"/>
+				<reportElement x="769" y="2" width="121" height="20" uuid="925e298c-aba8-4bbb-9e60-3b47c59282b2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="146" y="2" width="60" height="20" uuid="ee58945b-9459-4a33-b14d-60af4ab7caa1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Weight]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="46" splitType="Stretch">
 			<textField>
-				<reportElement x="13" y="2" width="100" height="20" uuid="802fdd36-a986-4d39-bb72-69d31a1f4496"/>
+				<reportElement x="13" y="2" width="123" height="20" uuid="802fdd36-a986-4d39-bb72-69d31a1f4496"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{orderNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="128" y="2" width="75" height="20" uuid="4bdc2f36-7f78-4489-bf89-2617350c73f8"/>
+				<reportElement x="601" y="2" width="75" height="20" uuid="4bdc2f36-7f78-4489-bf89-2617350c73f8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
@@ -146,28 +146,28 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{scanTime}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.valueOf($F{scanTime})*1000))]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="601" y="2" width="60" height="20" uuid="ad390442-6d79-47da-ba1a-35c0eec548cb"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="微软雅黑"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="676" y="2" width="79" height="20" uuid="b57af3c0-c9ee-4ef3-a6eb-59f5313f4d27"/>
+				<reportElement x="684" y="2" width="79" height="20" uuid="b57af3c0-c9ee-4ef3-a6eb-59f5313f4d27"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="769" y="2" width="105" height="20" uuid="8cd4fad0-ebca-46f7-a34c-7e8679c46c30"/>
+				<reportElement x="769" y="2" width="121" height="20" uuid="8cd4fad0-ebca-46f7-a34c-7e8679c46c30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="146" y="2" width="60" height="20" uuid="ad390442-6d79-47da-ba1a-35c0eec548cb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

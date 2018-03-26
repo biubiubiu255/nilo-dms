@@ -12,7 +12,7 @@
 <div class="box-body">
     <div class="layui-row">
         <div class="layui-col-md4 layui-col-lg4">
-            <label class="layui-form-label">OrderNo:</label>
+            <label class="layui-form-label">Waybil No:</label>
             <div class="layui-input-inline">
                 <input type="text" name="orderNo" autocomplete="off" class="layui-input">
             </div>
@@ -38,7 +38,7 @@
     <div class="layui-form layui-row">
 
         <div class="layui-col-md4 layui-col-lg5">
-            <label class="layui-form-label">Rider:</label>
+            <label class="layui-form-label">ScanNetwork:</label>
             <div class="layui-inline">
                 <select name="scanNetwork" lay-verify="required" lay-search="" style="display: none">
                     <option value="">choose or search....</option>

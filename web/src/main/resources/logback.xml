@@ -23,10 +23,10 @@
         </encoder>
     </appender>
 
-    <logger name="com.nilo.dms.dao" level="INFO"/>
-    <logger name="com.nilo.dms" level="INFO"/>
+    <logger name="com.nilo.dms.dao" level="DEBUG"/>
+    <logger name="com.nilo.dms" level="DEBUG"/>
 
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="ROLLING-FILE"/>
     </root>

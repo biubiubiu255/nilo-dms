@@ -3,26 +3,28 @@ package com.nilo.dms.dao.dataobject;
 public class ReportCodDO {
     private Long merchantId;
     private String orderNo;
-    private Double weight;
-    private Double money;
-    private String driver;
-    private String payType;
-    private String orderPlatform;
-    private int createTime;
-    private int signTime;
-    private String signName;
-
-
-    public String getSignName() {
-        return signName;
-    }
-
-    public void setSignName(String signName) {
-        this.signName = signName;
-    }
-
-    private String platform;
-    private String phone;
+    private String orderOriginal;  //订单来源
+    private String country;        //来源国家
+    private String reference_no;   //客户订单号
+    private String order_type;     //订单类型
+    private String orderPlatform;  //客户类型
+    private String serice_type;    //killmall服务类型
+    private String pay_type;       //支付类型
+    private String pay_method;     //支付方法
+    private Double pay_price;      //COD价格
+    private int create_time;       //创建时间
+    private int arrive_time;       //收件时间
+    private int sign_time;         //签收时间
+    private int send_time;         //发送时间
+    private int dispatcher_time;   //派送时间
+    private String order_status;   //订单状态
+    private String send_company;   //派件公司
+    private String driver;         //快递员
+    private String cycle;          //COD汇款周期
+    private String payStatus;      //支付状态
+    private String pay_orderNo;    //支付订单号
+    private String out_warm;       //超时预警
+    private Double weight;         //货物重量
 
     public Long getMerchantId() {
         return merchantId;
@@ -40,12 +42,132 @@ public class ReportCodDO {
         this.orderNo = orderNo;
     }
 
-    public Double getWeight() {
-        return weight;
+    public String getOrderOriginal() {
+        return orderOriginal;
     }
 
-    public void setWeight(Double weight) {
-        this.weight = weight;
+    public void setOrderOriginal(String orderOriginal) {
+        this.orderOriginal = orderOriginal;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getReference_no() {
+        return reference_no;
+    }
+
+    public void setReference_no(String reference_no) {
+        this.reference_no = reference_no;
+    }
+
+    public String getOrder_type() {
+        return order_type;
+    }
+
+    public void setOrder_type(String order_type) {
+        this.order_type = order_type;
+    }
+
+    public String getOrderPlatform() {
+        return orderPlatform;
+    }
+
+    public void setOrderPlatform(String orderPlatform) {
+        this.orderPlatform = orderPlatform;
+    }
+
+    public String getSerice_type() {
+        return serice_type;
+    }
+
+    public void setSerice_type(String serice_type) {
+        this.serice_type = serice_type;
+    }
+
+    public String getPay_type() {
+        return pay_type;
+    }
+
+    public void setPay_type(String pay_type) {
+        this.pay_type = pay_type;
+    }
+
+    public String getPay_method() {
+        return pay_method;
+    }
+
+    public void setPay_method(String pay_method) {
+        this.pay_method = pay_method;
+    }
+
+    public Double getPay_price() {
+        return pay_price;
+    }
+
+    public void setPay_price(Double pay_price) {
+        this.pay_price = pay_price;
+    }
+
+    public int getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(int create_time) {
+        this.create_time = create_time;
+    }
+
+    public int getArrive_time() {
+        return arrive_time;
+    }
+
+    public void setArrive_time(int arrive_time) {
+        this.arrive_time = arrive_time;
+    }
+
+    public int getSign_time() {
+        return sign_time;
+    }
+
+    public void setSign_time(int sign_time) {
+        this.sign_time = sign_time;
+    }
+
+    public int getSend_time() {
+        return send_time;
+    }
+
+    public void setSend_time(int send_time) {
+        this.send_time = send_time;
+    }
+
+    public int getDispatcher_time() {
+        return dispatcher_time;
+    }
+
+    public void setDispatcher_time(int dispatcher_time) {
+        this.dispatcher_time = dispatcher_time;
+    }
+
+    public String getStatus() {
+        return order_status;
+    }
+
+    public void setStatus(String status) {
+        this.order_status = status;
+    }
+
+    public String getSend_company() {
+        return send_company;
+    }
+
+    public void setSend_company(String send_company) {
+        this.send_company = send_company;
     }
 
     public String getDriver() {
@@ -56,53 +178,44 @@ public class ReportCodDO {
         this.driver = driver;
     }
 
-    public String getPayType() {
-        return payType;
+    public String getCycle() {
+        return cycle;
     }
 
-    public void setPayType(String payType) {
-        this.payType = payType;
+    public void setCycle(String cycle) {
+        this.cycle = cycle;
     }
 
-    public int getCreateTime() {
-        return createTime;
+    public String getPayStatus() {
+        return payStatus;
     }
 
-    public void setCreateTime(int createTime) {
-        this.createTime = createTime;
+    public void setPayStatus(String payStatus) {
+        this.payStatus = payStatus;
     }
 
-    public int getSignTime() {
-        return signTime;
+    public String getPay_orderNo() {
+        return pay_orderNo;
     }
 
-    public void setSignTime(int signTime) {
-        this.signTime = signTime;
+    public void setPay_orderNo(String pay_orderNo) {
+        this.pay_orderNo = pay_orderNo;
     }
 
-    public String getPlatform() {
-        return platform;
+    public String getOut_warm() {
+        return out_warm;
     }
 
-    public void setPlatform(String platform) {
-        this.platform = platform;
+    public void setOut_warm(String out_warm) {
+        this.out_warm = out_warm;
     }
 
-
-    public String getPhone() {
-        return phone;
+    public Double getWeight() {
+        return weight;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Double getMoney() {
-        return money;
-    }
-
-    public void setMoney(Double money) {
-        this.money = money;
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 
     @Override
@@ -110,15 +223,28 @@ public class ReportCodDO {
         return "ReportCodDO{" +
                 "merchantId=" + merchantId +
                 ", orderNo='" + orderNo + '\'' +
-                ", weight=" + weight +
-                ", money=" + money +
+                ", orderOriginal='" + orderOriginal + '\'' +
+                ", country='" + country + '\'' +
+                ", reference_no='" + reference_no + '\'' +
+                ", order_type='" + order_type + '\'' +
+                ", orderPlatform='" + orderPlatform + '\'' +
+                ", serice_type='" + serice_type + '\'' +
+                ", pay_type='" + pay_type + '\'' +
+                ", pay_method='" + pay_method + '\'' +
+                ", pay_price=" + pay_price +
+                ", create_time=" + create_time +
+                ", arrive_time=" + arrive_time +
+                ", sign_time=" + sign_time +
+                ", send_time=" + send_time +
+                ", dispatcher_time=" + dispatcher_time +
+                ", status='" + order_status + '\'' +
+                ", send_company='" + send_company + '\'' +
                 ", driver='" + driver + '\'' +
-                ", payType='" + payType + '\'' +
-                ", createTime=" + createTime +
-                ", signTime=" + signTime +
-                ", signName=" + signName +
-                ", platform='" + platform + '\'' +
-                ", phone='" + phone + '\'' +
+                ", cycle='" + cycle + '\'' +
+                ", payStatus='" + payStatus + '\'' +
+                ", pay_orderNo='" + pay_orderNo + '\'' +
+                ", out_warm='" + out_warm + '\'' +
+                ", weight=" + weight +
                 '}';
     }
 }
