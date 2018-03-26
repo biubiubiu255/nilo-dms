@@ -210,7 +210,7 @@
                 success: function (data) {
                     parent.layer.open({
                         type: 1,
-                        title: "Allocate Rider",
+                        title: "Allocate PdaRider",
                         area: ['800px', '600px'],
                         offset: ['100px', '250px'],
                         content: data,

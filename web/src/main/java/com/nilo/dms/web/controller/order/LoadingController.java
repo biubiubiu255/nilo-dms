@@ -144,7 +144,7 @@ public class LoadingController extends BaseController {
         String loadingNo = "";
         try {
             if (StringUtil.isEmpty(deliveryRider) && StringUtil.isEmpty(sendDriver)) {
-                throw new IllegalArgumentException("Rider or Driver is empty.");
+                throw new IllegalArgumentException("PdaRider or Driver is empty.");
             }
             loading.setMerchantId(merchantId);
             loading.setLoadingBy(me.getUserId());

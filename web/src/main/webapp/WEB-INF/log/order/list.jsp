@@ -16,7 +16,7 @@
                 <input class="layui-input" name="orderNo" autocomplete="off">
             </div>
         </div>
-        <div class="layui-col-md7 layui-col-lg4">
+        <div class="layui-col-md7 layui-col-lg6">
             <label class="layui-form-label">CreateTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromTime" placeholder="From">

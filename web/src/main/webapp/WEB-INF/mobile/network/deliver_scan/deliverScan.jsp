@@ -55,7 +55,6 @@
                 }
             }
         });
-
         var scan_callback = function (code) {
             mobile.setFormFieldValue('logisticsNo',code);
             if(!isEmpty(code_array[code])){
@@ -113,7 +112,7 @@
                         <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
                         <option value="" data-locale="delivery_scan_rider">choose a rider</option>
                         <c:forEach items="${riderList}" var="rider">
-                            <option value="${rider.userId}"> ${rider.staffId}</option>
+                            <option value="${rider.userId}"> ${rider.staffId}-${rider.realName} </option>
                         </c:forEach>
                     </select>
                     </li>
