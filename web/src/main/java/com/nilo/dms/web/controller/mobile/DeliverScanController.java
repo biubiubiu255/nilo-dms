@@ -8,6 +8,7 @@ import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.service.model.pda.PdaRider;
 import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
@@ -32,10 +33,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-
-
-
-
 @Controller
 @RequestMapping("/mobile/deliver")
 public class DeliverScanController extends BaseController {
@@ -54,11 +51,12 @@ public class DeliverScanController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         model.addAttribute("riderList", getRiderList(merchantId));
-
         return "mobile/network/deliver_scan/deliverScan";
     }
+
+
     @Test
-    public void test(){
+        public void test(){
         //File file = new File("1.txt");
         //System.out.println(file.exists());
         //String path = file.getCanonicalPath();
@@ -99,7 +97,7 @@ public class DeliverScanController extends BaseController {
         String loadingNo = "";
         try {
             if(StringUtil.isEmpty(rider)){
-                throw new IllegalArgumentException("Rider or Driver is empty.");
+                throw new IllegalArgumentException("PdaRider or Driver is empty.");
             }
             loading.setMerchantId(merchantId);
             loading.setLoadingBy(me.getUserId());

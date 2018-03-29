@@ -9,10 +9,11 @@
 <div class="box-body">
 	<div class="layui-row">
         <div class="layui-col-md3">
-            
+            <shiro:hasPermission name="500013">
             <button type="button" class="layui-btn" id="importSignData">
                 <i class="layui-icon">&#xe67c;</i>Import
             </button>
+            </shiro:hasPermission>
             <button class="layui-btn btn-search">Search</button>
         </div>
     </div>

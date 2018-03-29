@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.WaybillLogWeightDao">
+
+	<!-- 实体bean与数据字段对应关系 -->
+	<resultMap id="weightLog"
+		type="com.nilo.dms.service.order.model.WaybillLogWeight">
+		<result property="id" column="id" javaType="java.lang.Long"
+			jdbcType="INTEGER" />
+		<result property="orderNo" column="order_no" javaType="java.lang.String"
+			jdbcType="VARCHAR" />
+		<result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+			jdbcType="INTEGER" />
+
+		<result property="optBy" column="opt_by" javaType="java.lang.String"
+			jdbcType="VARCHAR" />
+		<result property="optTime" column="opt_time" javaType="java.lang.Long"
+			jdbcType="INTEGER" />
+		<result property="networkId" column="network_Id" javaType="java.lang.Integer"
+			jdbcType="INTEGER" />
+		<result property="oldWeight" column="old_weight" javaType="java.lang.Double"
+			jdbcType="NUMERIC" />
+		<result property="oldHigh" column="old_high" javaType="java.lang.Double"
+			jdbcType="NUMERIC" />
+		<result property="oldWidth" column="old_width" javaType="java.lang.Double"
+			jdbcType="NUMERIC" />
+		<result property="oldLength" column="old_length" javaType="java.lang.Double"
+			jdbcType="NUMERIC" />
+		<result property="weight" column="weight" javaType="java.lang.Double"
+			jdbcType="NUMERIC" />
+		<result property="high" column="high" javaType="java.lang.Double"
+			jdbcType="NUMERIC" />
+		<result property="width" column="width" javaType="java.lang.Double"
+			jdbcType="NUMERIC" />
+		<result property="length" column="length" javaType="java.lang.Double"
+			jdbcType="NUMERIC" />
+
+		<result property="createdTime" column="created_time" javaType="java.lang.Long"
+			jdbcType="INTEGER" />
+
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, order_no
+		,merchant_id,opt_by,opt_time,network_id,last_network_Id,old_weight,old_high,old_width,old_length,weight,high,width,length,
+		created_time
+	</sql>
+
+	<!-- 插入语句 -->
+	<insert id="insert" parameterType="com.nilo.dms.service.order.model.WaybillLogWeight"
+		statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
+		INSERT
+		INTO t_waybill_log_weight
+		( order_no
+		,merchant_id,opt_by,opt_time,network_id,old_weight,old_high,old_width,old_length,weight,high,width,length,
+		created_time )
+		VALUES
+		(
+		#{orderNo},#{merchantId},#{optBy},#{optTime},#{networkId},#{oldWeight},#{oldHigh},#{oldWidth},#{oldLength},#{weight},#{high},#{width},#{length},UNIX_TIMESTAMP(NOW()))
+	</insert>
+
+</mapper>

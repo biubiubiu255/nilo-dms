@@ -44,6 +44,11 @@
             }
             ,callback:function (data) {
                 if (data.result) {
+                    if(!(typeof (android) == 'undefined')){
+                    	var password = mobile.getFormField('againPassword').val();
+                        android.editPassword(password);
+                    }
+
                     showInfo('Success');
                     // var url = "http://127.0.0.1:8080/mobile/login.html";
                     // window.location.href = url;

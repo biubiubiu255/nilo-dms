@@ -152,7 +152,7 @@ public class SendScanController extends BaseController {
         String loadingNo = "";
         try {
             if (StringUtil.isEmpty(sendDriver)) {
-                throw new IllegalArgumentException("Rider or Driver is empty.");
+                throw new IllegalArgumentException("PdaRider or Driver is empty.");
             }
             loading.setMerchantId(merchantId);
             loading.setLoadingBy(me.getUserId());
@@ -187,10 +187,10 @@ public class SendScanController extends BaseController {
         return toJsonTrueMsg();
     }
 
-    private boolean isInteger(String str) {
-        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-        return pattern.matcher(str).matches();
-    }
+//    private boolean isInteger(String str) {
+//        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+//        return pattern.matcher(str).matches();
+//    }
 
     public static class Driver {
         private String code;

@@ -38,7 +38,10 @@ public interface OrderService {
     List<DeliveryOrder> queryByPackageNo(String merchantNo,String packageNo);
     
     void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId, String netWork);
-    
+
     long updatePaidType(DeliveryOrderDO deliveryOrderDO);
+
+	void waybillArrvieWeighing(String waybillNo, Double weight, Double length, Double width, Double height,
+			String arriveBy, String merchantId, String networkId);
     
 }

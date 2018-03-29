@@ -31,7 +31,7 @@
                             <input class="layui-input" name="loadingNo" autocomplete="off">
                         </div>
                     </div>
-                    <div class="layui-col-md4 layui-col-lg3">
+                    <div class="layui-col-md4 layui-col-lg5">
                         <label class="layui-form-label" style="width:110px">Status:</label>
                         <div class="layui-form-item layui-inline" style="margin: 0px">
                             <select lay-filter="loadingStatus" name="loadingStatus">
