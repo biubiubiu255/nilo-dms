@@ -10,7 +10,7 @@
 <div class="box-body">
     <form id="myForm" class="layui-form" action="">
         <input type="hidden" name="scanNo" value="${scanNo}" autocomplete="off"
-               class="layui-input" >
+               class="layui-input">
 
         <div class="layui-form-item">
 
@@ -21,7 +21,7 @@
             </div>
             <label class="layui-form-label" style="width:120px">Next Station</label>
             <div class="layui-input-inline">
-                <select name="nextNetworkId" lay-search="" lay-filter="nextNetworkId">
+                <select name="nextNetworkId" lay-search="" lay-filter="nextNetworkId" lay-verify="required">
                     <option value="">choose or search....</option>
                     <c:forEach items="${nextStation}" var="station">
                         <option value="${station.code}" type="${station.type}">${station.name}</option>
@@ -30,26 +30,26 @@
             </div>
             <label class="layui-form-label" style="width:120px">Weight</label>
             <div class="layui-input-inline">
-                <input type="text" name="weight" value="" autocomplete="off"
-                       class="layui-input" >
+                <input type="number" name="weight" value="" autocomplete="off"
+                       class="layui-input" lay-verify="required">
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label" style="width:120px">Length</label>
             <div class="layui-input-inline">
-                <input type="text" name="length" value="" autocomplete="off"
-                       class="layui-input" >
+                <input type="number" name="length" value="" autocomplete="off"
+                       class="layui-input">
             </div>
             <label class="layui-form-label" style="width:120px">Width</label>
             <div class="layui-input-inline">
-                <input type="text" name="width" value="" autocomplete="off"
-                       class="layui-input" >
+                <input type="number" name="width" value="" autocomplete="off"
+                       class="layui-input">
             </div>
             <label class="layui-form-label" style="width:120px">Height</label>
             <div class="layui-input-inline">
-                <input type="text" name="high" value="" autocomplete="off"
-                       class="layui-input" >
+                <input type="number" name="high" value="" autocomplete="off"
+                       class="layui-input">
             </div>
         </div>
 
@@ -122,7 +122,7 @@
                     url: "/order/package/packageScan.html",
                     dataType: "json",
                     data: {
-                        orderNo: orderNo,scanNo:'${scanNo}'
+                        orderNo: orderNo, scanNo: '${scanNo}'
                     },
                     success: function (data) {
                         if (data.result) {
@@ -162,6 +162,16 @@
 
         $('.package').on('click', function () {
 
+            var nextStation = $("select[name='nextNetworkId']").val();
+            var weight = $("input[name='weight']").val();
+            if (nextStation=='') {
+                layer.msg("Pls select Next Station", {icon: 2, time: 2000});
+                return;
+            }
+            if (weight=='') {
+                layer.msg("Pls input Weight", {icon: 2, time: 2000});
+                return;
+            }
             var load = layer.load(2);
             $.ajax({
                 type: "POST",

@@ -7,12 +7,19 @@
     <resultMap id="notifyDO" type="com.nilo.dms.dao.dataobject.NotifyDO">
         <result property="id" column="id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="bizType" column="biz_type" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="method" column="method" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
+
         <result property="notifyId" column="notify_id" javaType="java.lang.String"
-                 jdbcType="VARCHAR"/>
+                jdbcType="VARCHAR"/>
+        <result property="url" column="url" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="param" column="param" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="result" column="result" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="num" column="num" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
@@ -22,7 +29,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id ,biz_type,method,notify_id,url,param,result,sign,num,status,created_time , updated_time ,version
+        id ,notify_id,url,param,result,num,status,created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -30,9 +37,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_sys_notify
-        ( biz_type,method,notify_id,url,param,result,sign,num,status,created_time , updated_time ,version)
+        ( notify_id,url,param,result,num,status,created_time , updated_time ,version)
         VALUES
-        (#{bizType},#{method}, #{notifyId},#{url},#{param},#{result},#{sign},#{num},#{status} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{notifyId},#{url},#{param},#{result},#{num},#{status} ,UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
     <!-- 动态更新语句 -->
     <update id="update" parameterType="com.nilo.dms.dao.dataobject.NotifyDO" statementType="PREPARED">
@@ -52,16 +59,14 @@
     </update>
 
 
-    <select id="findByNotifyId" resultMap="notifyDO" statementType="PREPARED">
+    <select id="queryByNotifyId" resultMap="notifyDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_sys_notify where notify_id=#{notifyId}
     </select>
 
 
-    <select id="queryRetryList" resultMap="notifyDO" statementType="PREPARED">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_sys_notify where status = #{status}
+    <select id="queryFailed" resultMap="notifyDO" statementType="PREPARED">
+        SELECT <include refid="Base_Column_List"/> FROM t_sys_notify WHERE  FROM_UNIXTIME(created_time,'%Y%m%d') = date_format(now(),'%Y%m%d') and status = 0
     </select>
 </mapper>

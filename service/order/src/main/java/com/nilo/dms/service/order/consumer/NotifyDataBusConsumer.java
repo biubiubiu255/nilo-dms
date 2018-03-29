@@ -38,15 +38,7 @@ public class NotifyDataBusConsumer extends AbstractMQConsumer {
         try {
 
             request = (NotifyRequest) obj;
-
-            Map<String, String> params = new HashMap<>();
-            params.put("method", request.getMethod());
-            params.put("sign", request.getSign());
-            params.put("data", request.getData());
-            params.put("request_id", msgId);
-            params.put("app_key", request.getAppKey());
-
-            response = HttpUtil.post(request.getUrl(), params);
+            response = HttpUtil.post(request.getUrl(), request.getParam());
             NotifyResponse notifyResponse = JSON.parseObject(response, NotifyResponse.class);
             if (notifyResponse != null && notifyResponse.isSuccess()) {
                 saveNotify(request, msgId, response, true);
@@ -66,29 +58,24 @@ public class NotifyDataBusConsumer extends AbstractMQConsumer {
 
     private void saveNotify(NotifyRequest request, String notifyId, String response, boolean success) {
 
-        NotifyDO query = notifyDao.findByNotifyId(notifyId);
+        NotifyDO query = notifyDao.queryByNotifyId(notifyId);
         if (query == null) {
             NotifyDO notifyDO = new NotifyDO();
             notifyDO.setUrl(request.getUrl());
-            notifyDO.setStatus(success ? NotifyStatusEnum.SUCCESS.getCode() : NotifyStatusEnum.Failed.getCode());
-            notifyDO.setBizType(request.getBizType());
-            notifyDO.setMethod(request.getMethod());
+            notifyDO.setStatus(success ? 1 : 0);
             notifyDO.setNum(1);
             notifyDO.setNotifyId(notifyId);
-            notifyDO.setParam(request.getData());
-            notifyDO.setSign(request.getSign());
+            notifyDO.setParam(request.getParam().toString());
             notifyDO.setResult(response);
             notifyDao.insert(notifyDO);
         } else {
             NotifyDO update = new NotifyDO();
             update.setNotifyId(notifyId);
-            update.setStatus(success ? NotifyStatusEnum.SUCCESS.getCode() : NotifyStatusEnum.Failed.getCode());
+            update.setStatus(success ? 1 : 0);
             update.setNum(query.getNum() + 1);
             update.setResult(response);
             notifyDao.update(update);
         }
-
-
     }
 
 }

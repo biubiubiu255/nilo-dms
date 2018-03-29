@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public interface NotifyDao extends BaseDao<Long, NotifyDO> {
 
-    NotifyDO findByNotifyId(@Param("notifyId") String notifyId);
+    NotifyDO queryByNotifyId(@Param("notifyId") String notifyId);
 
-    List<NotifyDO> queryRetryList(Integer status);
+    List<NotifyDO> queryFailed();
 
 }

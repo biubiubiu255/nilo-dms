@@ -93,7 +93,7 @@ public enum BizErrorCode implements ErrorCode {
     NEW_PASSWORD_NOT_EQUAL("New Password not equal.", "100066"),
     PACKAGE_NOT_ALLOW("Delivery No {0} can not package.", "100067"),
     UNPACK_NOT_ALLOW("Delivery No {0} can not unpack.", "100068"),
-    DELIVERY_NO_EXIST("Delivery No exist.", "100069"),
+    DELIVERY_NO_EXIST("Delivery No {0}  exist.", "100069"),
     PACKAGE_EMPTY("Package is empty", "100070"),
     WEIGHT_MORE_THAN_0("Weight needs more than 0 ", "100071"),
 

@@ -29,7 +29,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label" style="width:120px">OrderNo:</label>
         <div class="layui-input-inline">
-            <input type="text" id="orderNo" autocomplete="off" placeholder="Scan OrderNo." class="layui-input">
+            <input type="text" id="orderNo" autocomplete="off" placeholder="Scan OrderNo." class="layui-input layui-disabled" disabled>
         </div>
     </div>
     <div style="margin-left:120px;">
@@ -84,7 +84,7 @@
             if ($("#packageNo").val()==""){
                 layui.use('layer', function(){
                     var layer = layui.layer;
-                    layer.alert('Place unpack', {icon: 0});
+                    layer.alert('Pls scan Package No.', {icon: 0});
                 });
                 return;
             }
@@ -134,8 +134,9 @@
                     if (data.result) {
                         $("#orderNo").focus();
                         $("#orderNo").val('');
+                        $("#orderNo").removeClass("layui-disabled");
+                        $("#orderNo").attr("disabled", false);
                         //刷新数据
-
                         reloadTable();
                     } else {
                         layer.msg(data.msg, {icon: 2, time: 2000});

@@ -97,6 +97,29 @@ public class UnPackController extends BaseController {
             list.add(i);
         }
 
+        //扫描的运单不在打包中
+        for (WaybillScanDetailsDO d : scanDetailsDOList) {
+            if (StringUtil.equals(packageNo, d.getOrderNo())) {
+                continue;
+            }
+
+            boolean exist = false;
+            for (DeliveryOrder o : orderList) {
+                if (StringUtil.equals(o.getOrderNo(), d.getOrderNo())) {
+                    exist = true;
+                }
+            }
+            if (!exist) {
+                DeliveryOrder order = orderService.queryByOrderNo(merchantId, d.getOrderNo());
+                UnpackInfo i = new UnpackInfo();
+                i.setOrderNo(order.getOrderNo());
+                i.setOrderType(order.getOrderType());
+                i.setReferenceNo(order.getReferenceNo());
+                i.setWeight(d.getWeight());
+                list.add(i);
+            }
+        }
+
         pagination.setTotalCount(list.size());
         return toPaginationLayUIData(pagination, list);
     }
@@ -113,6 +136,10 @@ public class UnPackController extends BaseController {
         if (StringUtil.equals(type, PACKAGE) && !deliveryOrder.isPackage()) {
             throw new DMSException(BizErrorCode.PACKAGE_NO_ERROR);
         }
+
+        WaybillScanDetailsDO query = waybillScanDetailsDao.queryBy(orderNo, scanNo);
+        if (query != null) throw new DMSException(BizErrorCode.DELIVERY_NO_EXIST, orderNo);
+
         WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
         scanDetailsDO.setScanNo(scanNo);
         scanDetailsDO.setOrderNo(orderNo);
@@ -122,12 +149,12 @@ public class UnPackController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/unpack.html")
-    public String unpack( String scanNo) {
+    public String unpack(String scanNo) {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
-        if(scanDetailList==null ||scanDetailList.size()==0){
+        if (scanDetailList == null || scanDetailList.size() == 0) {
             throw new DMSException(BizErrorCode.PACKAGE_EMPTY);
         }
         List<String> orderNos = new ArrayList<>();
@@ -143,7 +170,7 @@ public class UnPackController extends BaseController {
 
         return toJsonTrueMsg();
     }
-    
+
     public static class UnpackInfo {
         private String orderNo;
         private Double weight;
@@ -191,5 +218,4 @@ public class UnPackController extends BaseController {
             this.arrived = arrived;
         }
     }
-
 }

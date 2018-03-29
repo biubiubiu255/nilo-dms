@@ -9,12 +9,10 @@ import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
+import com.nilo.dms.dao.DeliveryOrderDao;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.NotifyDao;
-import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
-import com.nilo.dms.dao.dataobject.NotifyDO;
+import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
@@ -35,10 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 通知上游系统服务
@@ -55,7 +50,7 @@ public class NotifyServiceImpl implements NotifyService {
     @Qualifier("notifyDataBusProducer")
     private AbstractMQProducer notifyDataBusProducer;
     @Autowired
-    private OrderService orderService;
+    private DeliveryOrderDao deliveryOrderDao;
     @Autowired
     private UserService userService;
     @Autowired
@@ -82,7 +77,6 @@ public class NotifyServiceImpl implements NotifyService {
 
             for (String orderNo : request.getOrderNo()) {
 
-                NotifyRequest notify = new NotifyRequest();
                 Map<String, Object> dataMap = new HashMap<>();
 
                 switch (request.getOptType()) {
@@ -93,7 +87,7 @@ public class NotifyServiceImpl implements NotifyService {
                             return;
                         }
                         DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + request.getMerchantId(), "" + request.getNetworkId()), DistributionNetworkDO.class);
-                        dataMap.put("location", networkDO==null?"":networkDO.getName());
+                        dataMap.put("location", networkDO == null ? "" : networkDO.getName());
                         break;
                     }
                     case DELIVERY: {
@@ -101,7 +95,7 @@ public class NotifyServiceImpl implements NotifyService {
                         UserInfo userInfo = userService.findUserInfoByUserId(request.getMerchantId(), task.getHandledBy());
 
                         DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + request.getMerchantId(), "" + request.getNetworkId()), DistributionNetworkDO.class);
-                        dataMap.put("location", networkDO==null?"":networkDO.getName());
+                        dataMap.put("location", networkDO == null ? "" : networkDO.getName());
 
                         dataMap.put("rider_name", userInfo.getName());
                         dataMap.put("rider_phone", userInfo.getPhone());
@@ -130,19 +124,26 @@ public class NotifyServiceImpl implements NotifyService {
                         break;
                 }
 
-                DeliveryOrder deliveryOrder = orderService.queryByOrderNo(request.getMerchantId(), orderNo);
-
-                notify.setBizType(request.getOptType().getCode());
-                notify.setMethod(MethodEnum.STATUS_UPDATE.getCode());
-                notify.setUrl(interfaceConfig.getUrl());
-                notify.setAppKey("dms");
+                //请求参数
+                DeliveryOrderDO deliveryOrder = deliveryOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
                 dataMap.put("waybill_number", orderNo);
+                dataMap.put("client_order_sn", deliveryOrder.getReferenceNo());
                 dataMap.put("status", convertResult);
                 dataMap.put("track_time", DateUtil.getSysTimeStamp());
                 dataMap.put("remark", request.getRemark());
                 String data = JSON.toJSONString(dataMap);
-                notify.setData(data);
-                notify.setSign(createSign(merchantConfig.getKey(), data));
+
+                Map<String, String> param = new HashMap<>();
+                param.put("method", MethodEnum.STATUS_UPDATE.getCode());
+                param.put("app_key", "dms");
+                param.put("data", data);
+                param.put("sign", createSign(merchantConfig.getKey(), data));
+                param.put("request_id", UUID.randomUUID().toString());
+                param.put("timestamp", "" + DateUtil.getSysTimeStamp());
+
+                NotifyRequest notify = new NotifyRequest();
+                notify.setUrl(interfaceConfig.getUrl());
+                notify.setParam(param);
                 notifyDataBusProducer.sendMessage(notify);
 
             }

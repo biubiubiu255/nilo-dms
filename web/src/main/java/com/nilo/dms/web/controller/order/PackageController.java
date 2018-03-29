@@ -121,11 +121,15 @@ public class PackageController extends BaseController {
         String merchantId = me.getMerchantId();
         DeliveryOrder order = null;
         try {
+            order = orderService.queryByOrderNo(merchantId, orderNo);
+
+            if (order == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
+
             WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
             scanDetailsDO.setScanNo(scanNo);
             scanDetailsDO.setOrderNo(orderNo);
             waybillScanDetailsDao.insert(scanDetailsDO);
-            order = orderService.queryByOrderNo(merchantId, orderNo);
+
         } catch (Exception e) {
             log.error("loadingScan failed. orderNo:{}", orderNo, e);
             return toJsonErrorMsg(e.getMessage());
@@ -144,7 +148,7 @@ public class PackageController extends BaseController {
         try {
 
             List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
-            if(scanDetailList==null ||scanDetailList.size()==0){
+            if (scanDetailList == null || scanDetailList.size() == 0) {
                 throw new DMSException(BizErrorCode.PACKAGE_EMPTY);
             }
             List<String> orderNos = new ArrayList<>();
