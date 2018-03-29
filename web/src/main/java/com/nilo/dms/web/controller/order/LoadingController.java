@@ -1,20 +1,10 @@
 package com.nilo.dms.web.controller.order;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.nilo.dms.dao.*;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
-import com.nilo.dms.dao.dataobject.StaffDO;
-import com.nilo.dms.dao.dataobject.ThirdDriverDO;
-import com.nilo.dms.dao.dataobject.ThirdExpressDO;
-import com.nilo.dms.service.order.model.LoadingDetails;
-import com.nilo.dms.service.order.model.ShipParameter;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,10 +18,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.ThirdDriverDao;
+import com.nilo.dms.dao.ThirdExpressDao;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.ThirdDriverDO;
+import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.OrderService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.Loading;
+import com.nilo.dms.service.order.model.LoadingDetails;
+import com.nilo.dms.service.order.model.NextStation;
+import com.nilo.dms.service.order.model.ShipParameter;
 import com.nilo.dms.web.controller.BaseController;
 
 /**
@@ -252,7 +249,7 @@ public class LoadingController extends BaseController {
     public String getNextStationDriver(String code) {
 
         List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(code);
-        List<Driver> list = new ArrayList<>();
+        /*List<Driver> list = new ArrayList<>();
         Driver driver = new Driver();
         for (ThirdDriverDO d : thirdDriver) {
             driver = new Driver();
@@ -260,11 +257,11 @@ public class LoadingController extends BaseController {
             driver.setName(d.getDriverName());
             list.add(driver);
         }
-
-        return toJsonTrueData(list);
+*/
+        return toJsonTrueData(thirdDriver);
     }
 
-    public static class Driver {
+    /*public static class Driver {
         private String code;
         private String name;
 
@@ -283,9 +280,9 @@ public class LoadingController extends BaseController {
         public void setName(String name) {
             this.name = name;
         }
-    }
+    }*/
 
-    public static class NextStation {
+    /*public static class NextStation {
         private String code;
         private String name;
         private String type;
@@ -313,5 +310,5 @@ public class LoadingController extends BaseController {
         public void setType(String type) {
             this.type = type;
         }
-    }
+    }*/
 }
