@@ -303,7 +303,7 @@
                         $("#sendDriver").prepend("<option value='0'>choose or search....</option>");
                         var driver = data.data;
                         for (var i = 0; i < driver.length; i++) {
-                            $("#sendDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
+                            $("#sendDriver").append("<option value='" + driver[i].id + "'>" + driver[i].driverName + "</option>");
                         }
                         form.render();
                     }

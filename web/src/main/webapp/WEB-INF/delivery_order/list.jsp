@@ -113,7 +113,7 @@
             <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.orderTime) }}</div>'}">
                 OrderTime
             </th>
-            <th lay-data="{field:'weight', width:100}">Weight</th>
+           
             <th lay-data="{field:'goodsType', width:120}">GoodsType</th>
             <th lay-data="{field:'orderPlatform', width:120}">Platform</th>
             <th lay-data="{field:'totalPrice', width:120}">Order Amount</th>
