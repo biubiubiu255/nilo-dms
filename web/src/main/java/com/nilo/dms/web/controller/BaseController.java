@@ -77,21 +77,21 @@ public class BaseController {
 
     protected String toJsonErrorMsg(String msg) {
         Map<Object, Object> map = new HashMap<>();
-        map.put("result", false);
+        map.put("result", "fail");
         map.put("msg", msg);
         return JSON.toJSONString(map);
     }
 
     protected String toJsonTrueMsg() {
         Map<Object, Object> map = new HashMap<>();
-        map.put("result", true);
+        map.put("result", "succ");
         return JSON.toJSONString(map);
     }
 
     protected String toJsonTrueData(Object obj) {
         Map<Object, Object> map = new HashMap<>();
-        map.put("result", true);
-        map.put("data", obj);
+        map.put("result", "succ");
+        map.put("response", obj);
         return JSON.toJSONString(map);
     }
 
