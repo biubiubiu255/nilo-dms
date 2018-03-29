@@ -128,6 +128,10 @@ public class PdaController extends BaseController {
 	@RequestMapping(value = "/arrvieWeighing.html")
 	public String arrvieWeighing(String waybillNo, Double weight, Double length, Double width, Double height) {
 
+		if(length==0){
+			length = null;
+		}
+
 		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 
 		String arriveBy = me.getUserId();
