@@ -4,17 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.enums.MethodEnum;
-import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
-import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.NotifyDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
 import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
-import com.nilo.dms.dao.dataobject.NotifyDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
@@ -159,7 +156,7 @@ public class NotifyServiceImpl implements NotifyService {
         static {
             convertRelation.put(DeliveryOrderStatusEnum.ARRIVED, "170");
             convertRelation.put(DeliveryOrderStatusEnum.DELIVERY, "180");
-            convertRelation.put(DeliveryOrderStatusEnum.RECEIVED, "190");
+            convertRelation.put(DeliveryOrderStatusEnum.SIGN, "190");
             convertRelation.put(DeliveryOrderStatusEnum.PROBLEM, "197");
             convertRelation.put(DeliveryOrderStatusEnum.REFUSE, "195");
 

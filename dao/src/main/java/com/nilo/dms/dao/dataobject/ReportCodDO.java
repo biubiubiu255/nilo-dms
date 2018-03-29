@@ -1,5 +1,8 @@
 package com.nilo.dms.dao.dataobject;
 
+import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
+import org.apache.commons.lang3.math.NumberUtils;
+
 public class ReportCodDO {
     private Long merchantId;
     private String orderNo;
@@ -17,14 +20,18 @@ public class ReportCodDO {
     private int sign_time;         //签收时间
     private int send_time;         //发送时间
     private int dispatcher_time;   //派送时间
+    private int payBackDate;       //回款日期
     private String order_status;   //订单状态
+    private String order_problem_status;   //订单状态
     private String send_company;   //派件公司
-    private String driver;         //快递员
+    private String rider;         //快递员
     private String cycle;          //COD汇款周期
     private String payStatus;      //支付状态
     private String pay_orderNo;    //支付订单号
     private String out_warm;       //超时预警
     private Double weight;         //货物重量
+    private String  columnStr;     //返回当前查询的所有列
+    private Integer delay;         //是否是滞留件
 
     public Long getMerchantId() {
         return merchantId;
@@ -154,12 +161,39 @@ public class ReportCodDO {
         this.dispatcher_time = dispatcher_time;
     }
 
-    public String getStatus() {
+    public int getPayBackDate() {
+        return payBackDate;
+    }
+
+    public void setPayBackDate(int payBackDate) {
+        this.payBackDate = payBackDate;
+    }
+
+    public String getOrder_status() {
+        return order_status;
+    }
+    public String getOrder_status_desc() {
+
+        if (order_status!=null && !order_status.equals("") && NumberUtils.isNumber(order_status)){
+            if (DeliveryOrderStatusEnum.getEnum(Integer.valueOf(order_status))!=null)
+            {
+                order_status = DeliveryOrderStatusEnum.getEnum(Integer.valueOf(order_status)).getDesc();
+            }
+        }
         return order_status;
     }
 
-    public void setStatus(String status) {
-        this.order_status = status;
+    public void setOrder_status(String order_status) {
+        this.order_status = order_status;
+    }
+
+    public String getOrder_problem_status() {
+        return order_problem_status;
+    }
+
+    public void setOrder_problem_status(String order_problem_status) {
+
+        this.order_problem_status = order_problem_status;
     }
 
     public String getSend_company() {
@@ -170,12 +204,12 @@ public class ReportCodDO {
         this.send_company = send_company;
     }
 
-    public String getDriver() {
-        return driver;
+    public String getRider() {
+        return rider;
     }
 
-    public void setDriver(String driver) {
-        this.driver = driver;
+    public void setRider(String rider) {
+        this.rider = rider;
     }
 
     public String getCycle() {
@@ -218,6 +252,22 @@ public class ReportCodDO {
         this.weight = weight;
     }
 
+    public String getColumnStr() {
+        return columnStr;
+    }
+
+    public void setColumnStr(String columnStr) {
+        this.columnStr = columnStr;
+    }
+
+    public Integer getDelay() {
+        return delay;
+    }
+
+    public void setDelay(Integer delay) {
+        this.delay = delay;
+    }
+
     @Override
     public String toString() {
         return "ReportCodDO{" +
@@ -237,14 +287,18 @@ public class ReportCodDO {
                 ", sign_time=" + sign_time +
                 ", send_time=" + send_time +
                 ", dispatcher_time=" + dispatcher_time +
-                ", status='" + order_status + '\'' +
+                ", payBackDate=" + payBackDate +
+                ", order_status='" + order_status + '\'' +
+                ", order_problem_status='" + order_problem_status + '\'' +
                 ", send_company='" + send_company + '\'' +
-                ", driver='" + driver + '\'' +
+                ", rider='" + rider + '\'' +
                 ", cycle='" + cycle + '\'' +
                 ", payStatus='" + payStatus + '\'' +
                 ", pay_orderNo='" + pay_orderNo + '\'' +
                 ", out_warm='" + out_warm + '\'' +
                 ", weight=" + weight +
+                ", columnStr='" + columnStr + '\'' +
+                ", delay=" + delay +
                 '}';
     }
 }

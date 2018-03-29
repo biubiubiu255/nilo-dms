@@ -36,11 +36,15 @@
                 jdbcType="INTEGER"/>
         <result property="dispatcher_time" column="delivery_time" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
+
+        <result property="payBackDate" column="payment_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+
         <result property="order_status" column="order_status" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="send_company" column="task_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="driver" column="driver" javaType="java.lang.String"
+        <result property="rider" column="rider" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="cycle" column="cycle_time" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
@@ -52,6 +56,12 @@
                 jdbcType="VARCHAR"/>
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
+        <result property="order_problem_status" column="abnormal_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="delay" column="delay_reason" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+
+
     </resultMap>
 
     <select id="queryReportCod" resultMap="ReportCodDo">
@@ -66,9 +76,11 @@
 
         , g.created_time as sign_name
 
-        , h.created_time as delivery_time, h.task_type, i.name driver
+        , h.created_time as delivery_time, h.task_type, i.name rider
 
-        , if((g.created_time-d.payment_time)/3600>24, 1, 0) as is_out, (g.created_time-d.payment_time)/3600 as cycle_time
+        , if((g.created_time-d.payment_time)/3600>24*#{out_warm}, 1, 0) as is_out, (g.created_time-d.payment_time)/3600 as cycle_time
+
+        , j.abnormal_type , k.delay_reason
 
         FROM
 
@@ -106,6 +118,14 @@
         LEFT JOIN t_sys_user_info i
 
         on h.handled_by = i.id AND h.task_type='delivery'
+
+        LEFT JOIN t_waybill_abnormal j
+
+        on a.order_no = j.order_no
+
+        LEFT JOIN t_waybill_delay k
+
+        on a.order_no = k.order_no
 
 
         WHERE a.merchant_id=#{merchantId} AND is_cod = 1
@@ -147,15 +167,16 @@
             h.task_type = #{send_company}
         </if>
 
-        <if test="driver !=null  and driver !='' ">
+        <if test="rider !=null  and rider !='' ">
             AND
-            i.name = #{driver}
+            i.name = #{rider}
         </if>
 
         <if test="payStatus !=null  and payStatus !='' ">
             AND
             d.status = #{payStatus}
         </if>
+
         <if test="arrive_time_start !=null and arrive_time_start !='' and  arrive_time_end != null and arrive_time_end != ''">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
@@ -176,6 +197,12 @@
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
             (g.created_time<![CDATA[<]]>#{sign_name_end} AND e.created_time>#{sign_name_start})
+        </if>
+
+        <if test="payBack_time_start !=null and payBack_time_start !='' and  payBack_time_end != null and payBack_time_end != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (d.payment_time<![CDATA[<]]>#{payBack_time_end} AND d.payment_time>#{payBack_time_start})
         </if>
 
         limit #{offset} , #{limit}
@@ -224,6 +251,14 @@
 
         on h.handled_by = i.id AND h.task_type='delivery'
 
+        LEFT JOIN t_waybill_abnormal j
+
+        on a.order_no = j.order_no
+
+        LEFT JOIN t_waybill_delay k
+
+        on a.order_no = k.order_no
+
 
         WHERE a.merchant_id=#{merchantId} AND is_cod = 1
 
@@ -264,15 +299,16 @@
             h.task_type = #{send_company}
         </if>
 
-        <if test="driver !=null  and driver !='' ">
+        <if test="rider !=null  and rider !='' ">
             AND
-            i.name = #{driver}
+            i.name = #{rider}
         </if>
 
         <if test="payStatus !=null  and payStatus !='' ">
             AND
             d.status = #{payStatus}
         </if>
+
         <if test="arrive_time_start !=null and arrive_time_start !='' and  arrive_time_end != null and arrive_time_end != ''">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
@@ -282,24 +318,24 @@
         <if test="send_time_start !=null and send_time_start !='' and  send_time_end != null and send_time_end != ''">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            (f.created_time<![CDATA[<]]>#{arrive_time_end} AND e.created_time>#{arrive_time_start})
-        </if>
-        <if test="arrive_time_start !=null and arrive_time_start !='' and  arrive_time_end != null and arrive_time_end != ''">
-            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
-            AND
-            (e.created_time<![CDATA[<]]>#{arrive_time_end} AND e.created_time>#{arrive_time_start})
+            (f.created_time<![CDATA[<]]>#{send_time_end} AND e.created_time>#{send_time_start})
         </if>
         <if test="delivery_time_start !=null and delivery_time_start !='' and  delivery_time_end != null and delivery_time_end != ''">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            (h.created_time<![CDATA[<]]>#{arrive_time_end} AND e.created_time>#{arrive_time_start})
+            (h.created_time<![CDATA[<]]>#{delivery_time_end} AND e.created_time>#{delivery_time_start})
         </if>
         <if test="sign_name_start !=null and sign_name_start !='' and  sign_name_end != null and sign_name_end != ''">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            (g.created_time<![CDATA[<]]>#{arrive_time_end} AND e.created_time>#{arrive_time_start})
+            (g.created_time<![CDATA[<]]>#{sign_name_end} AND e.created_time>#{sign_name_start})
         </if>
 
-        limit #{offset} , #{limit}
+        <if test="payBack_time_start !=null and payBack_time_start !='' and  payBack_time_end != null and payBack_time_end != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (d.payment_time<![CDATA[<]]>#{payBack_time_end} AND d.payment_time>#{payBack_time_start})
+        </if>
+
     </select>
 </mapper>

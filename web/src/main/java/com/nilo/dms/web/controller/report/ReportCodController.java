@@ -7,6 +7,8 @@ import com.nilo.dms.dao.WaybillArriveDao;
 import com.nilo.dms.dao.WaybillCodDao;
 import com.nilo.dms.dao.dataobject.ReportArriveDO;
 import com.nilo.dms.dao.dataobject.ReportCodDO;
+import com.nilo.dms.service.order.ReportService;
+import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.model.ReportCodQuery;
 import com.nilo.dms.web.controller.BaseController;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +29,9 @@ import java.util.Map;
 @Controller
 @RequestMapping("/report/cod")
 public class ReportCodController extends BaseController {
+
     @Autowired
-    private WaybillCodDao waybillCodDao;
+    private ReportService reportService;
 
     @Autowired
     private CommonDao commonDao;
@@ -37,20 +41,12 @@ public class ReportCodController extends BaseController {
         return "report/cod/list";
     }
 
-
     @RequestMapping(value = "/list.html")
-    public String getOrderList(Model model, Integer exportType, ReportCodQuery reportCodQuery) {
-    //public String getOrderList(Model model, ReportCodQuery reportCodQuery) {
+    public String getOrderList(Model model, Integer exportType, ReportCodQuery reportCodQuery, HttpServletRequest request) {
         Pagination page = getPage();
         //page.setTotalCount(commonDao.lastFoundRows());
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        reportCodQuery.setMerchantId(Long.valueOf(merchantId));
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        reportCodQuery.setLimit(page.getLimit());
-        reportCodQuery.setOffset(page.getOffset());
+        reportCodQuery.setMerchantId(Long.valueOf(me.getMerchantId()));
         String fileType;
         switch (exportType){
             case 0 :
@@ -59,13 +55,22 @@ public class ReportCodController extends BaseController {
             case 1 :
                         fileType = "xls";
                 break;
+            case 2 :
+                fileType = "json";
+                break;
             default:
                         fileType = "pdf";
         }
 
         System.out.println("fileTypeis = " + fileType);
 
-        List<ReportCodDO> list = waybillCodDao.queryReportCod(reportCodQuery);
+        List<ReportCodDO> list = reportService.qeueryCodList(reportCodQuery, page);
+
+        if (fileType.equals("json")){
+            request.setAttribute("toDate", toPaginationLayUIData(getPage(), list));
+            return "common/toResponseBody";
+        }
+
 
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
         // 动态指定报表模板url

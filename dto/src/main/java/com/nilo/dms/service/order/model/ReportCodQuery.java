@@ -1,29 +1,54 @@
 package com.nilo.dms.service.order.model;
 
+
+
 /**
  * Created by wenzhuo-company on 2018/3/21.
  */
 public class ReportCodQuery {
 
     private Long merchantId;
+    @ReportColumnName(alias = "CustomerType")
     private String orderOriginal;
     private String country;
+    @ReportColumnName(alias = "OrderNo")
     private String order_no;
+    @ReportColumnName(alias = "OrderType")
     private String order_type;
+    @ReportColumnName(alias = "CustomerOrder")
     private String reference_no;
+    @ReportColumnName(alias = "ServiceType")
     private String serice_type;
-    private String send_company;
-    private String driver;
+    @ReportColumnName(alias = "SendCompany")
+    private String  send_company;
+    @ReportColumnName(alias = "Rider")
+    private String  rider;
+    @ReportColumnName(alias = "OrderStatus")
     private Integer order_status;
     private Integer payStatus;
+    @ReportColumnName(alias = "ArrayTime")
     private Integer arrive_time_start;
+    @ReportColumnName(alias = "ArrayTime")
     private Integer arrive_time_end;
+    @ReportColumnName(alias = "SendTime")
     private Integer send_time_start;
+    @ReportColumnName(alias = "SendTime")
     private Integer send_time_end;
+    @ReportColumnName(alias = "DeliveryTime")
     private Integer delivery_time_start;
+    @ReportColumnName(alias = "DeliveryTime")
     private Integer delivery_time_end;
+    @ReportColumnName(alias = "SignTime")
     private Integer sign_name_start;
+    @ReportColumnName(alias = "SignTime")
     private Integer sign_name_end;
+    @ReportColumnName(alias = "OutWarmDay")
+    private Integer out_warm;
+    @ReportColumnName(alias = "PayBack Date")
+    private Integer payBack_time_start;
+    @ReportColumnName(alias = "PayBack Date")
+    private Integer payBack_time_end;
+    private String  columnStr;
 
     protected Integer offset;
     protected Integer limit;
@@ -92,12 +117,12 @@ public class ReportCodQuery {
         this.send_company = send_company;
     }
 
-    public String getDriver() {
-        return driver;
+    public String getRider() {
+        return rider;
     }
 
-    public void setDriver(String driver) {
-        this.driver = driver;
+    public void setRider(String rider) {
+        this.rider = rider;
     }
 
     public Integer getOrder_status() {
@@ -180,6 +205,38 @@ public class ReportCodQuery {
         this.sign_name_end = sign_name_end;
     }
 
+    public Integer getOut_warm() {
+        return out_warm;
+    }
+
+    public void setOut_warm(Integer out_warm) {
+        this.out_warm = out_warm;
+    }
+
+    public Integer getPayBack_time_start() {
+        return payBack_time_start;
+    }
+
+    public void setPayBack_time_start(Integer payBack_time_start) {
+        this.payBack_time_start = payBack_time_start;
+    }
+
+    public Integer getPayBack_time_end() {
+        return payBack_time_end;
+    }
+
+    public void setPayBack_time_end(Integer payBack_time_end) {
+        this.payBack_time_end = payBack_time_end;
+    }
+
+    public String getColumnStr() {
+        return columnStr;
+    }
+
+    public void setColumnStr(String columnStr) {
+        this.columnStr = columnStr;
+    }
+
     public Integer getOffset() {
         return offset;
     }
@@ -207,7 +264,7 @@ public class ReportCodQuery {
                 ", reference_no='" + reference_no + '\'' +
                 ", serice_type='" + serice_type + '\'' +
                 ", send_company='" + send_company + '\'' +
-                ", driver='" + driver + '\'' +
+                ", rider='" + rider + '\'' +
                 ", order_status=" + order_status +
                 ", payStatus=" + payStatus +
                 ", arrive_time_start=" + arrive_time_start +
@@ -218,6 +275,10 @@ public class ReportCodQuery {
                 ", delivery_time_end=" + delivery_time_end +
                 ", sign_name_start=" + sign_name_start +
                 ", sign_name_end=" + sign_name_end +
+                ", out_warm=" + out_warm +
+                ", payBack_time_start=" + payBack_time_start +
+                ", payBack_time_end=" + payBack_time_end +
+                ", columnStr='" + columnStr + '\'' +
                 ", offset=" + offset +
                 ", limit=" + limit +
                 '}';

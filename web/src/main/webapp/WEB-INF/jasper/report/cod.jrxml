@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cod" language="groovy" pageWidth="1450" pageHeight="1000" columnWidth="1410" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="70cf3c91-4a95-426b-8148-0315f7c746c8">
-	<property name="ireport.zoom" value="1.6934217901613358"/>
-	<property name="ireport.x" value="531"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cod" language="groovy" pageWidth="1500" pageHeight="1000" columnWidth="1460" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="70cf3c91-4a95-426b-8148-0315f7c746c8">
+	<property name="ireport.zoom" value="1.399522140629203"/>
+	<property name="ireport.x" value="789"/>
 	<property name="ireport.y" value="0"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="orderOriginal" class="java.lang.String"/>
@@ -18,7 +18,7 @@
 	<field name="send_time" class="java.lang.String"/>
 	<field name="dispatcher_time" class="java.lang.String"/>
 	<field name="send_company" class="java.lang.String"/>
-	<field name="driver" class="java.lang.String"/>
+	<field name="rider" class="java.lang.String"/>
 	<field name="cycle" class="java.lang.String"/>
 	<field name="payStatus" class="java.lang.String"/>
 	<field name="pay_orderNo" class="java.lang.String"/>
@@ -75,21 +75,21 @@
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="微软雅黑" size="10" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[OrderOriginal]]></text>
+				<text><![CDATA[CustomerType]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="153" y="0" width="38" height="20" uuid="7beba2f8-0027-47bb-a1e7-5129fb376e0c"/>
+				<reportElement x="156" y="0" width="38" height="20" uuid="7beba2f8-0027-47bb-a1e7-5129fb376e0c"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="微软雅黑" size="10" isBold="true" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Country]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="191" y="0" width="84" height="20" uuid="a56495ea-66cb-4b06-b82e-f4adf16ad584"/>
+				<reportElement x="196" y="0" width="84" height="20" uuid="a56495ea-66cb-4b06-b82e-f4adf16ad584"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="微软雅黑" size="10" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[ReferenceNo]]></text>
+				<text><![CDATA[CustomerOrderNo]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="281" y="0" width="43" height="20" uuid="680bd64b-16c8-4bb5-9b2c-f998555c194c"/>
@@ -127,7 +127,7 @@
 				<text><![CDATA[ArriveTime]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="661" y="0" width="100" height="20" uuid="1111e85e-3cd5-4c39-8635-f839e7fa142e"/>
+				<reportElement x="861" y="0" width="100" height="20" uuid="1111e85e-3cd5-4c39-8635-f839e7fa142e"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="微软雅黑" size="10" isBold="true" isItalic="true"/>
 				</textElement>
@@ -141,7 +141,7 @@
 				<text><![CDATA[SendTime]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="861" y="0" width="100" height="20" uuid="2c089272-8b7b-4224-bac3-9a0d5d215492"/>
+				<reportElement x="661" y="0" width="100" height="20" uuid="2c089272-8b7b-4224-bac3-9a0d5d215492"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="微软雅黑" size="10" isBold="true" isItalic="true"/>
 				</textElement>
@@ -152,7 +152,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="微软雅黑" size="10" isBold="true" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[Driver]]></text>
+				<text><![CDATA[Rider]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="1071" y="0" width="51" height="20" uuid="accbc3e0-70a3-403d-97e6-a7303f1bdb82"/>
@@ -196,6 +196,13 @@
 				</textElement>
 				<text><![CDATA[SendCompany]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="1410" y="0" width="50" height="20" uuid="c0fd129e-03d0-484a-8717-25f8a608f407"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[price]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -215,14 +222,14 @@
 				<textFieldExpression><![CDATA[$F{orderOriginal}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="153" y="0" width="38" height="20" uuid="b2ff3581-30a5-4c33-98b8-a8312dce2803"/>
+				<reportElement x="156" y="0" width="38" height="20" uuid="b2ff3581-30a5-4c33-98b8-a8312dce2803"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="微软雅黑" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{country}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="191" y="0" width="84" height="20" uuid="2c01d249-8d36-43e9-b2f5-70f482c17cb6"/>
+				<reportElement x="196" y="0" width="84" height="20" uuid="2c01d249-8d36-43e9-b2f5-70f482c17cb6"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="微软雅黑" size="10"/>
 				</textElement>
@@ -240,7 +247,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="微软雅黑" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA["toDay"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["ordinary express"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="393" y="0" width="68" height="20" uuid="0e7c366d-a099-4595-8e17-20ddd0fa1f40"/>
@@ -264,7 +271,7 @@
 				<textFieldExpression><![CDATA[$F{arrive_time}.equals("0") ? "null" : new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.valueOf($F{arrive_time})*1000))]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="661" y="0" width="100" height="20" uuid="b62c9dee-0606-45be-88cb-4692c9804dd5"/>
+				<reportElement x="861" y="0" width="100" height="20" uuid="b62c9dee-0606-45be-88cb-4692c9804dd5"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="微软雅黑" size="10"/>
 				</textElement>
@@ -278,18 +285,11 @@
 				<textFieldExpression><![CDATA[$F{send_time}.equals("0") ? "null" : new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.valueOf($F{send_time})*1000))]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="861" y="0" width="100" height="20" uuid="752a5106-beca-48ae-991b-9303d8ffb952"/>
+				<reportElement x="661" y="0" width="100" height="20" uuid="752a5106-beca-48ae-991b-9303d8ffb952"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="微软雅黑" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dispatcher_time}.equals("0") ? "null" : new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.valueOf($F{dispatcher_time})*1000))]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="961" y="0" width="51" height="20" uuid="2d75984f-831e-4d3e-a0cf-8483c5186eb2"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="微软雅黑" size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{driver}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1071" y="0" width="51" height="20" uuid="26b48904-863d-4c80-8c4f-8c27a4d49d23"/>
@@ -332,6 +332,14 @@
 					<font fontName="微软雅黑" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{send_company}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1411" y="0" width="49" height="20" uuid="54e93b85-9100-4209-a77d-000280aab8d0"/>
+				<textFieldExpression><![CDATA[$F{pay_price}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="961" y="0" width="51" height="20" uuid="23c3c84c-1870-4481-ae53-07690866c20c"/>
+				<textFieldExpression><![CDATA[$F{rider}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
