@@ -56,8 +56,6 @@ public class DeliveryOrderDO extends BaseDo<Long> {
 
     private Double needPayAmount;
     private Double alreadyPaid;
-    private Double billNo;
-    private Double accountNo;
 
     private Integer printTimes;
     
@@ -87,22 +85,6 @@ public class DeliveryOrderDO extends BaseDo<Long> {
 
     public void setAlreadyPaid(Double alreadyPaid) {
         this.alreadyPaid = alreadyPaid;
-    }
-
-    public Double getBillNo() {
-        return billNo;
-    }
-
-    public void setBillNo(Double billNo) {
-        this.billNo = billNo;
-    }
-
-    public Double getAccountNo() {
-        return accountNo;
-    }
-
-    public void setAccountNo(Double accountNo) {
-        this.accountNo = accountNo;
     }
 
     public Integer getPrintTimes() {

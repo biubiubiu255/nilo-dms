@@ -140,8 +140,6 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
 
                     orderHeader.setNeedPayAmount(data.getNeedPayAmount());
                     orderHeader.setAlreadyPaid(data.getAlreadyPaid());
-                    orderHeader.setBillNo(data.getBillNo());
-                    orderHeader.setAccountNo(data.getAccountNo());
 
                     deliveryOrderDao.insert(orderHeader);
 
