@@ -96,7 +96,11 @@ public class ThirdExpressController extends BaseController {
     @RequestMapping(value = "/addExpressInfo.html", method = RequestMethod.POST)
     public String addExpressInfo(ThirdExpressDO express) {
     //public void Test_addExpressInfo(@RequestParam("express_name") String eName, @RequestParam("express_code") String eCode) {
-    	
+
+        Pagination page = getPage();
+        //page.setTotalCount(commonDao.lastFoundRows());
+        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        express.setMerchantId(Long.valueOf(me.getMerchantId()));
     	userService.addExpress(express);
  
         //System.out.println(express.getExpressName());

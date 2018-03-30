@@ -17,7 +17,7 @@ public class GoodsInfo {
     public String getGoodsId() {
         return goodsId;
     }
-    @JSONField(name = "sku")
+    @JSONField(name = "id")
     public void setGoodsId(String goodsId) {
         this.goodsId = goodsId;
     }

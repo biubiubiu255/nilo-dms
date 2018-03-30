@@ -628,7 +628,7 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
                 OrderOptRequest optRequest = new OrderOptRequest();
                 optRequest.setMerchantId(unpackRequest.getMerchantId());
                 optRequest.setOptBy(unpackRequest.getOptBy());
-                optRequest.setOptType(OptTypeEnum.RECEIVE);
+                optRequest.setOptType(OptTypeEnum.SIGN);
                 optRequest.setOrderNo(Arrays.asList(new String[]{orderNo}));
                 optRequest.setNetworkId("" + unpackRequest.getNetworkId());
                 handleOpt(optRequest);

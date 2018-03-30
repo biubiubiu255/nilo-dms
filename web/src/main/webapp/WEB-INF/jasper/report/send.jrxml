@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="send" language="groovy" pageWidth="1020" pageHeight="842" columnWidth="980" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e362acee-0251-408b-a3bc-85b7fc1b2573">
-	<property name="ireport.zoom" value="0.7513148009015782"/>
+	<property name="ireport.zoom" value="1.3310000000000013"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="referenceNo" class="java.lang.String"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="orderCategory" class="java.lang.String"/>
-	<field name="weight" class="java.lang.String"/>
+	<field name="weight" class="java.lang.Double"/>
 	<field name="stop" class="java.lang.String"/>
 	<field name="carrierName" class="java.lang.String"/>
 	<field name="deliveryFee" class="java.lang.String"/>
@@ -15,6 +15,12 @@
 	<field name="nextNetworkDesc" class="java.lang.String"/>
 	<field name="networkDesc" class="java.lang.String"/>
 	<field name="allocatedRider" class="java.lang.String"/>
+	<variable name="weight_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight}]]></variableExpression>
+	</variable>
+	<variable name="orderNo_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{orderNo}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -28,6 +34,22 @@
 				</textElement>
 				<text><![CDATA[Send Report]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="861" y="35" width="37" height="20" uuid="760c3e52-1e83-46f3-80e6-a0a5d7b844da"/>
+				<text><![CDATA[Count:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="836" y="55" width="62" height="21" uuid="858f8953-8168-43e0-8a19-c149288374ef"/>
+				<text><![CDATA[Total weight:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="898" y="55" width="82" height="20" uuid="e397f4c7-d33e-4954-9120-3657d3f1a6b7"/>
+				<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="898" y="35" width="100" height="20" uuid="d5e5a03f-4bb3-4f86-8dfa-270c833b4ac9"/>
+				<textFieldExpression><![CDATA[$V{orderNo_1}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -40,7 +62,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[OrderNo]]></text>
+				<text><![CDATA[Waybill No.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="128" y="2" width="100" height="20" uuid="1ea2fd6c-8cde-4a34-8e41-bbea6d35f438"/>

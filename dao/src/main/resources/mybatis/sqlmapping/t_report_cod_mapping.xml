@@ -4,100 +4,209 @@
 <mapper namespace="com.nilo.dms.dao.WaybillCodDao">
 
     <resultMap id="ReportCodDo" type="com.nilo.dms.dao.dataobject.ReportCodDO">
-        <result property="orderNo" column="order_no" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
         <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="weight" column="weight" javaType="java.lang.Double"
-                jdbcType="DOUBLE"/>
-        <result property="money" column="money" javaType="java.lang.Double"
-                jdbcType="DOUBLE"/>
-        <result property="rider" column="name" javaType="java.lang.String"
+            <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderOriginal" column="order_platform" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="country" column="country" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="reference_no" column="reference_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="order_type" column="order_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="orderPlatform" column="order_platform" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-         <result property="payType" column="payment_method" javaType="java.lang.String"
+        <result property="serice_type" column="service_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="createTime" column="created_time" javaType="java.lang.Integer"
+        <result property="pay_type" column="payment_channel" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="pay_method" column="payment_method" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="pay_price" column="price_amount" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="create_time" column="order_time" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
-        <result property="signTime" column="updated_time" javaType="java.lang.Integer"
+        <result property="arrive_time" column="arrive_time" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
-        <result property="signName" column="sign_name" javaType="java.lang.String"
+        <result property="sign_time" column="sign_name" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="send_time" column="send_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="dispatcher_time" column="delivery_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+
+        <result property="payBackDate" column="payment_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+
+        <result property="order_status" column="order_status" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="phone" column="phone" javaType="java.lang.String"
+        <result property="send_company" column="task_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+        <result property="rider" column="rider" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="cycle" column="cycle_time" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="payStatus" column="pay_status" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="pay_orderNo" column="payment_order_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="out_warm" column="is_out" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="order_problem_status" column="abnormal_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="delay" column="delay_reason" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+
+
     </resultMap>
 
     <select id="queryReportCod" resultMap="ReportCodDo">
 
+    SELECT
 
-        SELECT a.order_no,a.merchant_id,a.order_platform,a.created_time, a.updated_time, a.weight, c.name, e.payment_method, f.name sign_name, f.contact_number phone, g.price_amount money
+        a.order_no, a.order_type, a.reference_no, a.order_time, a.country, a.order_platform, a.status as order_status
 
-        FROM t_waybill a
+        , a.service_type, a.weight ,b.payment_order_id, c.payment_channel, c.payment_method
 
-        INNER JOIN t_waybill_task b
+        , d.price_amount, d.payment_time, d.status as pay_status, e.created_time as arrive_time, f.created_time as send_time
 
-        on a.order_no = b.order_no
+        , g.created_time as sign_name
 
-        INNER JOIN t_waybill_receiver f
+        , h.created_time as delivery_time, h.task_type, i.name rider
 
-        on a.order_no = f.order_no
+        , if((g.created_time-d.payment_time)/3600>24*#{out_warm}, 1, 0) as is_out, (g.created_time-d.payment_time)/3600 as cycle_time
 
-        INNER JOIN t_sys_user_info c
+        , j.abnormal_type , k.delay_reason
 
-        on b.handled_by=c.id
+        FROM
 
-        LEFT JOIN t_waybill_payment_order_waybill d
+        t_waybill a
 
-        on a.order_no=d.waybill_order_no
+        LEFT JOIN (select * from t_waybill_payment_order_waybill group by waybill_order_no) b
 
-        LEFT JOIN t_waybill_payment_record e
+        on a.order_no = b.waybill_order_no
 
-        on d.payment_order_id = e.third_pay_sn
+        LEFT JOIN t_waybill_payment_record c
 
-        LEFT JOIN t_waybill_payment_order g
+        on b.payment_order_id = c.payment_order_id
 
-        on d.payment_order_id = e.id
+        LEFT JOIN t_waybill_payment_order  d
+
+        on b.payment_order_id = d.id AND d.status=1
+
+        LEFT JOIN (select * from t_waybill_log group by order_no)  e
+
+        on a.order_no = e.order_no AND e.opt='arrive_scan'
+
+        LEFT JOIN (select * from t_waybill_log group by order_no)  f
+
+        on a.order_no = f.order_no AND f.opt='send'
+
+
+        LEFT JOIN (select * from t_waybill_log group by order_no)  g
+
+        on a.order_no = g.order_no AND g.opt='receive'
+
+        LEFT JOIN (select * from t_waybill_task group by order_no) h
+
+        on a.order_no = h.order_no
+
+        LEFT JOIN t_sys_user_info i
+
+        on h.handled_by = i.id AND h.task_type='delivery'
+
+        LEFT JOIN t_waybill_abnormal j
+
+        on a.order_no = j.order_no
+
+        LEFT JOIN t_waybill_delay k
+
+        on a.order_no = k.order_no
+
 
         WHERE a.merchant_id=#{merchantId} AND is_cod = 1
 
-        <if test="orderNo !=null  and orderNo !='' ">
+        <if test="orderOriginal !=null  and orderOriginal !='' ">
             AND
-            a.order_no = #{orderNo}
+            a.order_platform = #{orderOriginal}
+        </if>
+
+        <if test="country !=null  and country !='' ">
+            AND
+            a.country = #{country}
+        </if>
+        <if test="order_no !=null  and order_no !='' ">
+            AND
+            a.order_no = #{order_no}
+        </if>
+        <if test="order_type !=null  and order_type !='' ">
+            AND
+            a.order_type = #{order_type}
+        </if>
+        <if test="reference_no !=null  and reference_no !='' ">
+            AND
+            a.reference_no = #{reference_no}
+        </if>
+
+        <if test="serice_type !=null  and serice_type !='' ">
+            AND
+            a.serice_type = #{serice_type}
+        </if>
+
+        <if test="order_status !=null  and order_status !='' ">
+            AND
+            a.status = #{order_status}
+        </if>
+
+        <if test="send_company !=null  and send_company !='' ">
+            AND
+            h.task_type = #{send_company}
         </if>
 
         <if test="rider !=null  and rider !='' ">
             AND
-            c.name = #{rider}
+            i.name = #{rider}
         </if>
 
-        <if test="eTime_creat !=null and sTime_creat !=null and  eTime_creat != '' and sTime_creat != ''">
+        <if test="payStatus !=null  and payStatus !='' ">
+            AND
+            d.status = #{payStatus}
+        </if>
+
+        <if test="arrive_time_start !=null and arrive_time_start !='' and  arrive_time_end != null and arrive_time_end != ''">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            (a.created_time<![CDATA[<]]>#{eTime_creat} AND a.created_time>#{sTime_creat})
+            (e.created_time<![CDATA[<]]>#{arrive_time_end} AND e.created_time>#{arrive_time_start})
         </if>
-        <if test="sTime_sign !=null and eTime_sign !=null and  sTime_sign != '' and eTime_sign != ''">
+
+        <if test="send_time_start !=null and send_time_start !='' and  send_time_end != null and send_time_end != ''">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            (a.updated_time<![CDATA[<]]>#{eTime_sign} AND a.updated_time>#{sTime_sign})
+            (f.created_time<![CDATA[<]]>#{send_time_end} AND e.created_time>#{send_time_start})
         </if>
-
-        <if test="payType != null and payType != ''">
+        <if test="delivery_time_start !=null and delivery_time_start !='' and  delivery_time_end != null and delivery_time_end != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            e.payment_method = #{payType}
+            (h.created_time<![CDATA[<]]>#{delivery_time_end} AND e.created_time>#{delivery_time_start})
         </if>
-
-        <if test="orderPlatform != null and orderPlatform != ''">
+        <if test="sign_name_start !=null and sign_name_start !='' and  sign_name_end != null and sign_name_end != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            a.order_platform = #{orderPlatform}
+            (g.created_time<![CDATA[<]]>#{sign_name_end} AND e.created_time>#{sign_name_start})
         </if>
 
-        order by a.created_time desc
+        <if test="payBack_time_start !=null and payBack_time_start !='' and  payBack_time_end != null and payBack_time_end != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (d.payment_time<![CDATA[<]]>#{payBack_time_end} AND d.payment_time>#{payBack_time_start})
+        </if>
 
         limit #{offset} , #{limit}
-
     </select>
-
 
     <select id="queryReportCodCount" resultType="java.lang.Integer">
 
@@ -105,53 +214,127 @@
 
         count(*)
 
-        FROM t_waybill a
+        FROM
 
-        INNER JOIN t_waybill_task b
+        t_waybill a
 
-        on a.order_no = b.order_no
+        LEFT JOIN (select * from t_waybill_payment_order_waybill group by waybill_order_no) b
 
-        INNER JOIN t_waybill_receiver f
+        on a.order_no = b.waybill_order_no
 
-        on a.order_no = f.order_no
+        LEFT JOIN t_waybill_payment_record c
 
-        INNER JOIN t_sys_user_info c
+        on b.payment_order_id = c.payment_order_id
 
-        on b.handled_by=c.id
+        LEFT JOIN t_waybill_payment_order  d
 
-        LEFT JOIN t_waybill_payment_order_waybill d
+        on b.payment_order_id = d.id AND d.status=1
 
-        on a.order_no=d.waybill_order_no
+        LEFT JOIN (select * from t_waybill_log group by order_no)  e
 
-        LEFT JOIN t_waybill_payment_record e
+        on a.order_no = e.order_no AND e.opt='arrive_scan'
 
-        on d.payment_order_id = e.third_pay_sn
+        LEFT JOIN (select * from t_waybill_log group by order_no)  f
 
-        LEFT JOIN t_waybill_payment_order g
+        on a.order_no = f.order_no AND f.opt='send'
 
-        on d.payment_order_id = e.id
+
+        LEFT JOIN (select * from t_waybill_log group by order_no)  g
+
+        on a.order_no = g.order_no AND g.opt='receive'
+
+        LEFT JOIN (select * from t_waybill_task group by order_no) h
+
+        on a.order_no = h.order_no
+
+        LEFT JOIN t_sys_user_info i
+
+        on h.handled_by = i.id AND h.task_type='delivery'
+
+        LEFT JOIN t_waybill_abnormal j
+
+        on a.order_no = j.order_no
+
+        LEFT JOIN t_waybill_delay k
+
+        on a.order_no = k.order_no
+
 
         WHERE a.merchant_id=#{merchantId} AND is_cod = 1
 
-        <if test="orderNo !=null  and orderNo !='' ">
+        <if test="orderOriginal !=null  and orderOriginal !='' ">
             AND
-            a.order_no = #{orderNo}
+            a.order_platform = #{orderOriginal}
+        </if>
+
+        <if test="country !=null  and country !='' ">
+            AND
+            a.country = #{country}
+        </if>
+        <if test="order_no !=null  and order_no !='' ">
+            AND
+            a.order_no = #{order_no}
+        </if>
+        <if test="order_type !=null  and order_type !='' ">
+            AND
+            a.order_type = #{order_type}
+        </if>
+        <if test="reference_no !=null  and reference_no !='' ">
+            AND
+            a.reference_no = #{reference_no}
+        </if>
+
+        <if test="serice_type !=null  and serice_type !='' ">
+            AND
+            a.serice_type = #{serice_type}
+        </if>
+
+        <if test="order_status !=null  and order_status !='' ">
+            AND
+            a.status = #{order_status}
+        </if>
+
+        <if test="send_company !=null  and send_company !='' ">
+            AND
+            h.task_type = #{send_company}
         </if>
 
         <if test="rider !=null  and rider !='' ">
             AND
-            c.name = #{rider}
+            i.name = #{rider}
         </if>
 
-        <if test="createTime !=null and createTime !=null and  createTime != '' and createTime != ''">
+        <if test="payStatus !=null  and payStatus !='' ">
+            AND
+            d.status = #{payStatus}
+        </if>
+
+        <if test="arrive_time_start !=null and arrive_time_start !='' and  arrive_time_end != null and arrive_time_end != ''">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            (a.created_time<![CDATA[<]]>#{createTime} AND a.created_time>#{createTime})
+            (e.created_time<![CDATA[<]]>#{arrive_time_end} AND e.created_time>#{arrive_time_start})
         </if>
 
-        <if test="payType != null and payType != ''">
+        <if test="send_time_start !=null and send_time_start !='' and  send_time_end != null and send_time_end != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            e.payment_method = #{payType}
+            (f.created_time<![CDATA[<]]>#{send_time_end} AND e.created_time>#{send_time_start})
+        </if>
+        <if test="delivery_time_start !=null and delivery_time_start !='' and  delivery_time_end != null and delivery_time_end != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (h.created_time<![CDATA[<]]>#{delivery_time_end} AND e.created_time>#{delivery_time_start})
+        </if>
+        <if test="sign_name_start !=null and sign_name_start !='' and  sign_name_end != null and sign_name_end != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (g.created_time<![CDATA[<]]>#{sign_name_end} AND e.created_time>#{sign_name_start})
+        </if>
+
+        <if test="payBack_time_start !=null and payBack_time_start !='' and  payBack_time_end != null and payBack_time_end != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (d.payment_time<![CDATA[<]]>#{payBack_time_end} AND d.payment_time>#{payBack_time_start})
         </if>
 
     </select>

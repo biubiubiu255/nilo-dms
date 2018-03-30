@@ -33,7 +33,7 @@ public class DefaultExceptionHandler implements HandlerExceptionResolver {
         /*  使用FastJson提供的FastJsonJsonView视图返回，不需要捕获异常   */
             FastJsonJsonView view = new FastJsonJsonView();
             Map<String, Object> result = new HashMap<String, Object>();
-            result.put("status", "fail");
+            result.put("result", false);
             result.put("msg", ex.getMessage());
             view.setAttributesMap(result);
             mv.setView(view);

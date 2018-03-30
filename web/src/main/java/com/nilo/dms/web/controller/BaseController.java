@@ -77,7 +77,6 @@ public class BaseController {
 
     protected String toJsonErrorMsg(String msg) {
         Map<Object, Object> map = new HashMap<>();
-        map.put("status", "fail");
         map.put("result", false);
         map.put("msg", msg);
         return JSON.toJSONString(map);
@@ -85,16 +84,13 @@ public class BaseController {
 
     protected String toJsonTrueMsg() {
         Map<Object, Object> map = new HashMap<>();
-        map.put("status", "succ");
         map.put("result", true);
         return JSON.toJSONString(map);
     }
 
     protected String toJsonTrueData(Object obj) {
         Map<Object, Object> map = new HashMap<>();
-        map.put("status", "succ");
         map.put("result", true);
-        map.put("response", obj);
         map.put("data", obj);
         return JSON.toJSONString(map);
     }
