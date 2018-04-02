@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cod" language="groovy" pageWidth="1500" pageHeight="1000" columnWidth="1460" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="70cf3c91-4a95-426b-8148-0315f7c746c8">
-	<property name="ireport.zoom" value="1.399522140629203"/>
-	<property name="ireport.x" value="789"/>
+	<property name="ireport.zoom" value="0.7899937629182421"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="POJO_COLMUN" class="java.lang.String"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="orderOriginal" class="java.lang.String"/>
 	<field name="country" class="java.lang.String"/>
@@ -58,6 +59,10 @@
 			<textField evaluationTime="Report">
 				<reportElement x="1369" y="71" width="41" height="20" uuid="4eac1132-1bd3-4e7b-8c8d-2b9a16278412"/>
 				<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="31" y="71" width="500" height="20" uuid="40a9514f-8d39-46bd-90ca-446062969bfd"/>
+				<textFieldExpression><![CDATA[$P{POJO_COLMUN}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

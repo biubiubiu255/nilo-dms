@@ -88,7 +88,7 @@
 
         LEFT JOIN (select * from t_waybill_payment_order_waybill group by waybill_order_no) b
 
-        on a.order_no = b.waybill_order_no
+        on a.order_no = b.waybill_order_no0
 
         LEFT JOIN t_waybill_payment_record c
 

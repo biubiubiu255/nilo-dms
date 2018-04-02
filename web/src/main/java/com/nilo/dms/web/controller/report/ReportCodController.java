@@ -78,31 +78,16 @@ public class ReportCodController extends BaseController {
             request.setAttribute("toDate", toPaginationLayUIData(page, list));
             return "common/toResponseBody";
         }
-
-
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
-        //InputStream input = new ByteArrayInputStream("{\"country\": \"aaabbb\"}".getBytes());
-        System.out.println("本次测试 = " + toJsonTrueData(list));
-        //InputStream input = new ByteArrayInputStream(toJsonTrueData(list).getBytes());
-        //InputStream input = new ByteArrayInputStream("{\"country\": \"aaa\" , \"dataa\": [{ \"qq\":\"ok\" },{ \"qq\":\"no\" }] }".getBytes());
-        //InputStream input = new ByteArrayInputStream("{\"sales\": {\"item\": [{\"price\": \"2500\"}]}}".getBytes());
-        //File file = new File("C:\\Users\\wenzhuo-company\\Desktop\\test.json");
-
-        InputStream input = new ByteArrayInputStream(readToString("C:\\Users\\wenzhuo-company\\Desktop\\test.json").getBytes());
-        JRDataSource jrDataSource1 = null;
-        try {
-            jrDataSource1 = new JsonDataSource(input);
-        } catch (JRException e) {
-            e.printStackTrace();
-        }
-
         // 动态指定报表模板url
-        model.addAttribute("url", "/WEB-INF/jasper/report/test2.jasper");
+        model.addAttribute("url", "/WEB-INF/jasper/report/cod.jasper");
         model.addAttribute("format", fileType); // 报表格式
         //model.addAttribute("net.sf.jasperreports.json.source", jrDataSource);
         //model.addAttribute("net.sf.jasperreports.json.source", input);
        // model.addAttribute("JSON_INPUT_STREAM", toJsonTrueData(list));
-        model.addAttribute("jrMainDataSource", jrDataSource1);
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        System.out.println("本次测试 = " + ReportUtil.queryDOtoStr(reportCodQuery));
+        model.addAttribute("POJO_COLMUN", ReportUtil.queryDOtoStr(reportCodQuery));
         return "iReportView"; // 对应jasper-defs.xml中的bean id
         //return toPaginationLayUIData(page, list);
     }
