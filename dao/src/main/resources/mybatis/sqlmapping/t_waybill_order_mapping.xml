@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.HandleRiderDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="order" type="com.nilo.dms.dao.dataobject.WaybillOrderDO">
+        <result property="merchantId" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="reference_no" column="reference_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="next_network_id" column="next_network_id" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="network_id" column="network_id" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="reference_no" column="reference_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="country" column="country" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="order_platform" column="order_platform" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="channel" column="channel" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="goods_type" column="goods_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="is_cod" column="is_cod" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="parent_no" column="parent_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="created_by" column="created_by" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="notes" column="notes" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="created_time" column="created_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="updated_time" column="updated_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+    </resultMap>
+
+
+    <select id="queryOrderByNos" resultMap="order" statementType="PREPARED">
+        SELECT
+        *
+        FROM
+        t_waybill
+        WHERE 1
+        <if test="orderNo != null and orderNo != '' ">
+            and order_no = #{orderNo}
+        </if>
+        <if test="orderNo != null and orderNo != '' ">
+            and status = #{status}
+        </if>
+
+    </select>
+
+</mapper>
