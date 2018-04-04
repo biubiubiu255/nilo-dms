@@ -1,7 +1,7 @@
 // JavaScript Document
 function MobileData(DataJson){
 	DataJson = $.extend({},MobileData.defaults, DataJson); 	
-	if(isEmpty(DataJson.controller)){
+	/*if(isEmpty(DataJson.controller)){
         DataJson.controller='../controller/basecontroller.php';
     }
     //find url setting
@@ -10,7 +10,8 @@ function MobileData(DataJson){
 	    if(DataJson.viewModel != ''){
 		    DataJson.findUrl='../controller/basecontroller.php?model='+DataJson.viewModel+'&action=Find';	
 	    }
-    }
+    }*/
+    DataJson.controller='';
 	this.requestIng = false;
 	this.DataJson = DataJson;
 	this.isComboSelect = DataJson.isComboSelect;

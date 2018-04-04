@@ -4,15 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.enums.MethodEnum;
-import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
-import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
 import com.nilo.dms.dao.DeliveryOrderDao;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.NotifyDao;
 import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
+import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
@@ -111,15 +112,17 @@ public class NotifyServiceImpl implements NotifyService {
                         dataMap.put("type", reason);
                         break;
                     }
+
                     case REFUSE: {
                         AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
                         String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.REFUSE_REASON, abnormalOrderDO.getReason());
                         dataMap.put("type", reason);
                         break;
                     }
-                    case RECEIVE: {
+                    case SIGN: {
                         break;
                     }
+
                     default:
                         break;
                 }
@@ -158,7 +161,7 @@ public class NotifyServiceImpl implements NotifyService {
         static {
             convertRelation.put(DeliveryOrderStatusEnum.ARRIVED, "170");
             convertRelation.put(DeliveryOrderStatusEnum.DELIVERY, "180");
-            convertRelation.put(DeliveryOrderStatusEnum.RECEIVED, "190");
+            convertRelation.put(DeliveryOrderStatusEnum.SIGN, "190");
             convertRelation.put(DeliveryOrderStatusEnum.PROBLEM, "197");
             convertRelation.put(DeliveryOrderStatusEnum.REFUSE, "195");
 

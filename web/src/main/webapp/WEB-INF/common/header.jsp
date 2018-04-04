@@ -27,5 +27,8 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="${ctx}/dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="${ctx}/dist/css/skins/all-skins.min.css">
+    <script src="${ctx}/public/js/jquery-2.2.3.min.js"></script>
+    <script src="${ctx}/public/js/iwens.js"></script>
+
 
 </head>

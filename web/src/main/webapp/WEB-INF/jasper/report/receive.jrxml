@@ -9,7 +9,13 @@
 	<field name="created_time" class="java.lang.String"/>
 	<field name="receive_time" class="java.lang.String"/>
 	<field name="name" class="java.lang.String"/>
-	<field name="weight" class="java.lang.String"/>
+	<field name="weight" class="java.lang.Double"/>
+	<variable name="weight_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{weight}]]></variableExpression>
+	</variable>
+	<variable name="orderNo_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{orderNo}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -23,13 +29,29 @@
 				</textElement>
 				<text><![CDATA[Receive Report]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="723" y="56" width="62" height="23" uuid="491f8a24-bd0a-4b07-bfab-32a03346262a"/>
+				<text><![CDATA[Total weight:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="748" y="36" width="37" height="20" uuid="07f5f3d6-f5a9-4ece-b3e9-d90cb9d4f8c3"/>
+				<text><![CDATA[Count:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="795" y="56" width="65" height="20" uuid="2dc049b4-daf4-468a-aca3-423be8325d60"/>
+				<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="795" y="36" width="65" height="20" uuid="fb71dc65-ade3-497a-9ca2-7b0c90655459"/>
+				<textFieldExpression><![CDATA[$V{orderNo_1}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="15" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="46" splitType="Stretch">
+		<band height="36" splitType="Stretch">
 			<staticText>
 				<reportElement x="10" y="2" width="100" height="20" uuid="40f4fe55-63f8-4792-bdd7-59fb56d912cb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">

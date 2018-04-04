@@ -4,8 +4,12 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.WaybillCodDao;
+import com.nilo.dms.dao.WaybillInvoiceDao;
 import com.nilo.dms.dao.dataobject.ReportCodDO;
+import com.nilo.dms.dao.dataobject.ReportInvoiceDO;
+import com.nilo.dms.dao.dataobject.ReportInvoiceQueryDO;
 import com.nilo.dms.web.controller.BaseController;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +26,7 @@ import java.util.Map;
 @RequestMapping("/report/invoice")
 public class ReportInvoiceController extends BaseController {
     @Autowired
-    private WaybillCodDao waybillCodDao;
+    private WaybillInvoiceDao waybillInvoiceDao;
 
     @Autowired
     private CommonDao commonDao;
@@ -34,32 +38,27 @@ public class ReportInvoiceController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-    public String getOrderList(String orderNo, String rider, String payMethod, String orderPlatform, Integer sTime_creat, Integer eTime_creat, Integer sTime_sign,
-                               Integer eTime_sign) {
+    public String getOrderList(ReportInvoiceQueryDO param) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
 
+        //new java.lang.Double().doubleValue()
+
         Map<String, Object> map = new HashMap<String, Object>();
 
-        map.put("merchantId", merchantId);
-        map.put("orderNo", orderNo);
-        //map.put("sTime_creat", sTime_creat);
-        //map.put("eTime_creat", eTime_creat);
-        map.put("sTime_creat", sTime_creat);
-        map.put("eTime_creat", eTime_creat);
-        map.put("sTime_sign", sTime_sign);
-        map.put("eTime_sign", eTime_sign);
-        map.put("rider", rider);
-        map.put("payType", payMethod);
-        map.put("orderPlatform", orderPlatform);
-        map.put("offset", page.getOffset());
-        map.put("limit", page.getLimit());
+        // 原对象 ReportCodDO() 所需参数
+        // Param: rider
+        // Param: payType
+        // Param: orderPlatform
 
-        List<ReportCodDO> list = waybillCodDao.queryReportCod(map);
-        page.setTotalCount(waybillCodDao.queryReportCodCount(map));
+
+        List<ReportInvoiceDO> list = waybillInvoiceDao.queryReportInvoiceInput(param);
+
+        //List<ReportCodDO> list = waybillInvoiceDao.queryReportCod(param, page.getOffset(), page.getOffset() );
+        //page.setTotalCount(waybillCodDao.queryReportCodCount(map));
         //page.setTotalCount(commonDao.lastFoundRows());
         return toPaginationLayUIData(page, list);
 }

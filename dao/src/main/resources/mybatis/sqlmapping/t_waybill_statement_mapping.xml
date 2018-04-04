@@ -13,11 +13,11 @@
  </resultMap>
 
  <select id="queryAllWaybillStatement" resultMap="WaybillStatement" >
-  SELECT id, order_type, order_no, money, statement_time, sign_time, status
-  from t_waybill_statement
-  where `status`= 1
-  AND  statement_time > #{sTime}
-  AND  statement_time <![CDATA[<]]>  #{eTime}
- </select>
+    SELECT id, order_type, order_no, money, statement_time, sign_time, status
+    from t_waybill_statement
+    where `status`= 1
+    AND  statement_time > #{sTime}
+    AND  statement_time <![CDATA[<]]>  #{eTime}
+</select>
 
 </mapper>
