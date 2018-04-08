@@ -6,6 +6,7 @@ import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.enums.MethodEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
 import com.nilo.dms.dao.DeliveryOrderDao;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
@@ -147,7 +148,7 @@ public class NotifyServiceImpl implements NotifyService {
                         case DELIVERY:
                         case SEND: {
                             String data = "{\"data\":{\"orderinfo\":[{\"CustomerID\":\"KILIMALL\",　\"WarehouseID\":\"KE01\",\"OrderNo\":" + deliveryOrder.getReferenceNo() + "}]}}";
-                            param.put("data", URLEncoder.encode(data,"utf-8"));
+                            param.put("data", URLEncoder.encode(data, "utf-8"));
                             param.put("sign", createSign(merchantConfig.getKey(), data));
                             param.put("op", "confirmSOData");
                             NotifyRequest notify = new NotifyRequest();
@@ -158,7 +159,7 @@ public class NotifyServiceImpl implements NotifyService {
                         }
                         case REFUSE: {
                             String data = "{\"orderInfo\":[{\"orderNo\":" + deliveryOrder.getReferenceNo() + ",\"status\":\"20\"}]}";
-                            param.put("data", URLEncoder.encode(data,"utf-8"));
+                            param.put("data", URLEncoder.encode(data, "utf-8"));
                             param.put("sign", createSign(merchantConfig.getKey(), data));
                             param.put("op", "confirmorder");
                             NotifyRequest notify = new NotifyRequest();
@@ -167,9 +168,9 @@ public class NotifyServiceImpl implements NotifyService {
                             notifyDataBusProducer.sendMessage(notify);
                             break;
                         }
-                        case RECEIVE: {
+                        case SIGN: {
                             String data = "{\"orderInfo\":[{\"orderNo\":" + deliveryOrder.getReferenceNo() + ",\"status\":\"10\"}]}";
-                            param.put("data", URLEncoder.encode(data,"utf-8"));
+                            param.put("data", URLEncoder.encode(data, "utf-8"));
                             param.put("sign", createSign(merchantConfig.getKey(), data));
                             param.put("op", "confirmorder");
                             NotifyRequest notify = new NotifyRequest();
