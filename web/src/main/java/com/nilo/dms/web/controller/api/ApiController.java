@@ -71,8 +71,6 @@ public class ApiController extends BaseController {
 
 		param.checkParam();
 
-		Map<String, String> resultData = new HashMap<>();
-
 		MethodEnum method = param.getMethod();
 		String data = param.getData();
 		String sign = param.getSign();
@@ -114,7 +112,7 @@ public class ApiController extends BaseController {
 		default:
 			break;
 		}
-		return toJsonTrueData(resultData);
+		return toJsonTrueMsg();
 	}
 
 	@RequestMapping(value = "api/paymentNotify.html", method = RequestMethod.POST)
