@@ -66,12 +66,6 @@
                 jdbcType="VARCHAR"/>
 
 
-        <result property="length" column="length" javaType="java.lang.Double"
-                jdbcType="DECIMAL"/>
-        <result property="width" column="width" javaType="java.lang.Double"
-                jdbcType="DECIMAL"/>
-        <result property="high" column="high" javaType="java.lang.Double"
-                jdbcType="DECIMAL"/>
         <result property="isPackage" column="is_Package" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="networkId" column="network_id" javaType="java.lang.Integer"
