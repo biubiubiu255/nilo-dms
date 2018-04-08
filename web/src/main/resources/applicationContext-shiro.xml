@@ -26,6 +26,7 @@
                 /account/verify.html = anon
                 /api.html = anon
                 /api/login.html = anon
+
                 /api/paymentNotify.html = anon
                 /websocket.html = anon
                 /notify.html = anon

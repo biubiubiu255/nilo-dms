@@ -7,17 +7,21 @@ import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.ReportArriveDO;
 import com.nilo.dms.dao.dataobject.ReportReceiveDO;
 import com.nilo.dms.web.controller.BaseController;
+import com.sun.net.httpserver.HttpServer;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +47,8 @@ public class ReportArriveController extends BaseController {
     }
 
     @RequestMapping(value = "/list.html")
-    public String getOrderList(Model model, String orderNo, Integer sTime_creat, Integer eTime_creat, String scanNetwork) {
+    public String getOrderList(Model model, String orderNo, Integer sTime_creat, Integer eTime_creat,
+                               String scanNetwork, Integer exportType, HttpServletRequest request) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
@@ -60,15 +65,37 @@ public class ReportArriveController extends BaseController {
         map.put("offset", page.getOffset());
         map.put("limit", page.getLimit());
 
+
         List<ReportArriveDO> list = waybillArriveDao.queryReportArrive(map);
         page.setTotalCount(waybillArriveDao.queryReportArriveCount(map));
         //page.setTotalCount(commonDao.lastFoundRows());
 
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
         System.out.println(" = " + list.size());
+
+        String fileType;
+        switch (exportType){
+            case 0 :
+                fileType = "pdf";
+                break;
+            case 1 :
+                fileType = "xls";
+                break;
+            case 2 :
+                fileType = "json";
+                break;
+            default:
+                fileType = "pdf";
+        }
+
+        if (fileType.equals("json")){
+            request.setAttribute("toDate", toPaginationLayUIData(getPage(), list));
+            return "common/toResponseBody";
+        }
+
         // 动态指定报表模板url
         model.addAttribute("url", "/WEB-INF/jasper/report/arrive.jasper");
-        model.addAttribute("format", "pdf"); // 报表格式
+        model.addAttribute("format", fileType); // 报表格式
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView"; // 对应jasper-defs.xml中的bean id
 }

@@ -48,7 +48,6 @@ public class FileServiceImpl implements FileService {
         imageDO.setImageName("dms/sign/" + imageName);
         imageDO.setImageType(ImageTypeEnum.RECEIVE.getCode());
         imageDao.insert(imageDO);
-
     }
 
     @Override

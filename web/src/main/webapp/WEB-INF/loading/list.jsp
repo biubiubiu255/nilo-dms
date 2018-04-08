@@ -56,19 +56,18 @@
         <tr>
             <th lay-data="{fixed: 'left',field:'loadingNo', width:200}">LoadingNo</th>
             <th lay-data="{field:'statusDesc', width:150}">Status</th>
-            
-            
-            <th lay-data="{field:'riderName', width:150}">Rider/Driver</th>
+            <th lay-data="{field:'nextStation', width:150}">NextStation</th>
+            <%--
+                        <th lay-data="{field:'carrier', width:150}">Carrier</th>
+            --%>
+            <th lay-data="{field:'riderName', width:150,templet: '<div>{{d.riderName}}</div>'}">Rider</th>
             <%--
                         <th lay-data="{field:'truckType', width:150}">TruckType</th>
             --%>
-            <th lay-data="{field:'loadingName', width:150}">LoadingBy</th>
-            <th lay-data="{field:'nextStation', width:150}">NextStation</th>
-            
-            <th lay-data="{field:'carrier', width:150}">Carrier</th>
-            <%-- <th lay-data="{field:'loadingFromTime', width:170, templet:'<div>{{ formatDate(d.loadingFromTime) }}</div>'}">
+            <th lay-data="{field:'loadingName', width:150,templet: '<div>{{d.loadingName}}</div>'}">LoadingBy</th>
+            <th lay-data="{field:'loadingFromTime', width:170, templet:'<div>{{ formatDate(d.loadingFromTime) }}</div>'}">
                 LoadingFromTime
-            </th> --%>
+            </th>
             <th lay-data="{field:'loadingToTime', width:170, templet:'<div>{{ formatDate(d.loadingToTime) }}</div>'}">
                 LoadingToTime
             </th>

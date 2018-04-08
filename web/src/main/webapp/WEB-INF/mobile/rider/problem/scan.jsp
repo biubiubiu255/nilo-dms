@@ -30,6 +30,7 @@
     		mbObject: mobile ,
             showMsg : false,
     		postUrl : '/mobile/rider/problem/save.html' ,
+            autoLoad : false,
     		callback: function (data) {
                 if (data.result) {
                     mobile.paginate();

@@ -66,7 +66,7 @@ public class RouteConsumer extends AbstractMQConsumer {
                         orderRouteDO.setOptBy(message.getNetworkId());
                         break;
                     }
-                    case RECEIVE: {
+                    case SIGN: {
                         break;
                     }
                     default:
