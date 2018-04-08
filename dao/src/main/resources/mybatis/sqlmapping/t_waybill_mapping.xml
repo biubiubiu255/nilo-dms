@@ -119,7 +119,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, merchant_id,network_Id,order_no,parent_No,need_pay_amount,paid_type,already_paid,order_type,service_Type,reference_No,weight,high,width,length,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,is_Cod,notes,remark,width,length,high,network_id,next_network_id,is_Package,print_times,created_time,created_by , updated_time ,version
+        id, merchant_id,network_Id,order_no,parent_No,need_pay_amount,paid_type,already_paid,order_type,service_Type,reference_No,weight,high,width,length,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,is_Cod,notes,remark,network_id,next_network_id,is_Package,print_times,created_time,created_by , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -127,9 +127,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_waybill
-        ( merchant_id,order_no,parent_No,need_pay_amount,already_paid ,order_type, service_type,reference_No , weight,high,width,length,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,is_Cod,notes,remark, width,length,network_id,next_network_id ,is_Package,print_times,created_time ,created_by, updated_time ,version)
+        ( merchant_id,order_no,parent_No,need_pay_amount,already_paid ,order_type, service_type,reference_No , weight,high,width,length,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,is_Cod,notes,remark,network_id,next_network_id ,is_Package,print_times,created_time ,created_by, updated_time ,version)
         VALUES
-        ( #{merchantId},#{orderNo}, #{parentNo},#{needPayAmount},#{alreadyPaid},#{orderType},#{serviceType}, #{referenceNo},#{weight},#{high},#{width},#{length},#{goodsType},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status},#{warehouseId},#{stopId},#{stop},#{channel},#{channelStation},#{orderCategory},#{carrierId},#{carrierName},#{relationOrderNo},#{isCod},#{notes},#{remark},#{width},#{length},#{networkId},#{nextNetworkId},#{isPackage},#{printTimes},UNIX_TIMESTAMP(NOW()),#{createdBy},UNIX_TIMESTAMP(NOW()),UUID())
+        ( #{merchantId},#{orderNo}, #{parentNo},#{needPayAmount},#{alreadyPaid},#{orderType},#{serviceType}, #{referenceNo},#{weight},#{high},#{width},#{length},#{goodsType},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status},#{warehouseId},#{stopId},#{stop},#{channel},#{channelStation},#{orderCategory},#{carrierId},#{carrierName},#{relationOrderNo},#{isCod},#{notes},#{remark},#{networkId},#{nextNetworkId},#{isPackage},#{printTimes},UNIX_TIMESTAMP(NOW()),#{createdBy},UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
 
