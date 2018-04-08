@@ -118,6 +118,9 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
                     orderHeader.setTotalPrice(data.getTotalPrice());
                     orderHeader.setWeight(data.getWeight());
+                    orderHeader.setLength(data.getLen());
+                    orderHeader.setWidth(data.getWidth());
+                    orderHeader.setHigh(data.getHigh());
                     orderHeader.setGoodsType(data.getGoodsType());
 
 

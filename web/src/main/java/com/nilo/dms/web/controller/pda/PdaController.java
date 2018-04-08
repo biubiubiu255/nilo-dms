@@ -85,7 +85,7 @@ public class PdaController extends BaseController {
 
 		pdaWaybill.setWeight(delivery.getWeight() == null ? "0" : delivery.getWeight().toString());
 		pdaWaybill.setWidth(delivery.getWidth() == null ? "0" : delivery.getWidth().toString());
-		pdaWaybill.setLength(delivery.getLength() == null ? "0" : delivery.getLength().toString());
+		pdaWaybill.setLength(delivery.getLen() == null ? "0" : delivery.getLen().toString());
 
 		pdaWaybill.setIsCod(delivery.getIsCod());
 		pdaWaybill.setStatusDes(delivery.getStatusDesc());

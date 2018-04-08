@@ -66,7 +66,7 @@ public class DeliveryOrder {
     private String remark;
 
     private Double high;
-    private Double length;
+    private Double len;
     private Double width;
     private boolean isPackage;
     private String parentNo;
@@ -219,12 +219,13 @@ public class DeliveryOrder {
         this.high = high;
     }
 
-    public Double getLength() {
-        return length;
+    public Double getLen() {
+        return len;
     }
 
-    public void setLength(Double length) {
-        this.length = length;
+    @JSONField(name = "lenth")
+    public void setLen(Double len) {
+        this.len = len;
     }
 
     public Double getWidth() {
