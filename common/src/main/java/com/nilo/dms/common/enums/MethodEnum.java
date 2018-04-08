@@ -12,7 +12,7 @@ public enum MethodEnum {
     WAYBILL_TRACE("nos.waybill.trace","waybill.trace"),
     STATUS_UPDATE("nos.waybill.status","waybill.status"),
 
-    ARRIVE_SCAN("arrive_scan", "arrive_scan"),
+    ARRIVE_SCAN("nos.waybill.arrive", "Arrive Scan"),
     SIGN("sign", "sign"),
     ;
     private String code;

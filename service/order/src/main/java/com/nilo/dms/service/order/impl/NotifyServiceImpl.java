@@ -4,22 +4,24 @@ import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.enums.MethodEnum;
-import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
 import com.nilo.dms.dao.DeliveryOrderDao;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
-import com.nilo.dms.dao.NotifyDao;
-import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
+import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
+import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.NotifyService;
-import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.*;
+import com.nilo.dms.service.order.model.NotifyRequest;
+import com.nilo.dms.service.order.model.OrderOptRequest;
+import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
@@ -31,8 +33,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -44,8 +48,6 @@ public class NotifyServiceImpl implements NotifyService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private NotifyDao notifyDao;
     @Autowired
     @Qualifier("notifyDataBusProducer")
     private AbstractMQProducer notifyDataBusProducer;
@@ -59,6 +61,12 @@ public class NotifyServiceImpl implements NotifyService {
     private AbnormalOrderDao abnormalOrderDao;
     @Autowired
     private DeliveryOrderOptDao deliveryOrderOptDao;
+    @Value("#{configProperties['kili_dispatch']}")
+    private String kili_dispatch;
+    @Value("#{configProperties['kili_refuse']}")
+    private String kili_refuse;
+    @Value("#{configProperties['kili_sign']}")
+    private String kili_sign;
 
     @Override
     public void updateStatus(OrderOptRequest request) {
@@ -96,7 +104,6 @@ public class NotifyServiceImpl implements NotifyService {
 
                         DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + request.getMerchantId(), "" + request.getNetworkId()), DistributionNetworkDO.class);
                         dataMap.put("location", networkDO == null ? "" : networkDO.getName());
-
                         dataMap.put("rider_name", userInfo.getName());
                         dataMap.put("rider_phone", userInfo.getPhone());
                         break;
@@ -126,6 +133,53 @@ public class NotifyServiceImpl implements NotifyService {
 
                 //请求参数
                 DeliveryOrderDO deliveryOrder = deliveryOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
+                //kilimall 临时方案
+                if (StringUtil.equals(deliveryOrder.getOrderPlatform(), "kilimall")) {
+
+                    Map<String, String> param = new HashMap<>();
+                    switch (request.getOptType()) {
+                        case DELIVERY:
+                        case SEND: {
+                            String data = "{\"data\":{\"orderinfo\":[{\"CustomerID\":\"KILIMALL\",　\"WarehouseID\":\"KE01\",\"OrderNo\":" + deliveryOrder.getReferenceNo() + "}]}}";
+                            param.put("data", URLEncoder.encode(data,"utf-8"));
+                            param.put("sign", createSign(merchantConfig.getKey(), data));
+                            param.put("op", "confirmSOData");
+                            NotifyRequest notify = new NotifyRequest();
+                            notify.setUrl(kili_dispatch);
+                            notify.setParam(param);
+                            notifyDataBusProducer.sendMessage(notify);
+                            break;
+                        }
+                        case REFUSE: {
+                            String data = "{\"orderInfo\":[{\"orderNo\":" + deliveryOrder.getReferenceNo() + ",\"status\":\"20\"}]}";
+                            param.put("data", URLEncoder.encode(data,"utf-8"));
+                            param.put("sign", createSign(merchantConfig.getKey(), data));
+                            param.put("op", "confirmorder");
+                            NotifyRequest notify = new NotifyRequest();
+                            notify.setUrl(kili_refuse);
+                            notify.setParam(param);
+                            notifyDataBusProducer.sendMessage(notify);
+                            break;
+                        }
+                        case RECEIVE: {
+                            String data = "{\"orderInfo\":[{\"orderNo\":" + deliveryOrder.getReferenceNo() + ",\"status\":\"10\"}]}";
+                            param.put("data", URLEncoder.encode(data,"utf-8"));
+                            param.put("sign", createSign(merchantConfig.getKey(), data));
+                            param.put("op", "confirmorder");
+                            NotifyRequest notify = new NotifyRequest();
+                            notify.setUrl(kili_sign);
+                            notify.setParam(param);
+                            notifyDataBusProducer.sendMessage(notify);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+
+
+                    return;
+                }
+
                 dataMap.put("waybill_number", orderNo);
                 dataMap.put("client_order_sn", deliveryOrder.getReferenceNo());
                 dataMap.put("status", convertResult);
