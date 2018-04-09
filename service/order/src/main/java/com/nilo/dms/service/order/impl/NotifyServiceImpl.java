@@ -10,13 +10,9 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
 import com.nilo.dms.dao.DeliveryOrderDao;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
+import com.nilo.dms.dao.NotifyDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
-import com.nilo.dms.dao.NotifyDao;
-import com.nilo.dms.dao.dataobject.*;
-import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
 import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.service.UserService;
@@ -148,8 +144,8 @@ public class NotifyServiceImpl implements NotifyService {
 
                         case DELIVERY:
                         case SEND: {
-                            String data = "{\"data\":{\"orderinfo\":[{\"DeliveryNo\":" + deliveryOrder.getOrderNo() + ",\"CustomerID\":\"KILIMALL\",　\"WarehouseID\":\"KE01\",\"OrderNo\":" + deliveryOrder.getReferenceNo() + ",\"OrderType\":" + orderType +
-                                    "}]}}";
+                            String data = "{\"data\":{\"orderinfo\":[{\"DeliveryNo\":\"" + deliveryOrder.getOrderNo() + "\",\"CustomerID\":\"KILIMALL\",\"WarehouseID\":\"KE01\",\"OrderNo\":\"" + deliveryOrder.getReferenceNo() + "\",\"OrderType\":\"" + orderType +
+                                    "\"}]}}";
                             param.put("data", URLEncoder.encode(data, "utf-8"));
                             param.put("sign", createSign(merchantConfig.getKey(), data));
                             param.put("op", "confirmSOData");
@@ -160,7 +156,7 @@ public class NotifyServiceImpl implements NotifyService {
                             break;
                         }
                         case REFUSE: {
-                            String data = "{\"orderInfo\":[{\"orderNo\":" + deliveryOrder.getReferenceNo() + ",\"status\":\"20\"}]}";
+                            String data = "{\"orderInfo\":[{\"orderNo\":\"" + deliveryOrder.getReferenceNo() + "\",\"status\":\"20\"}]}";
                             param.put("data", URLEncoder.encode(data, "utf-8"));
                             param.put("sign", createSign(merchantConfig.getKey(), data));
                             param.put("op", "confirmorder");
@@ -171,7 +167,7 @@ public class NotifyServiceImpl implements NotifyService {
                             break;
                         }
                         case SIGN: {
-                            String data = "{\"orderInfo\":[{\"orderNo\":" + deliveryOrder.getReferenceNo() + ",\"status\":\"10\"}]}";
+                            String data = "{\"orderInfo\":[{\"orderNo\":\"" + deliveryOrder.getReferenceNo() + "\",\"status\":\"10\"}]}";
                             param.put("data", URLEncoder.encode(data, "utf-8"));
                             param.put("sign", createSign(merchantConfig.getKey(), data));
                             param.put("op", "confirmorder");
