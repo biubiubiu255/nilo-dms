@@ -144,9 +144,9 @@
         <shiro:hasPermission name="400014">
             <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">Detail</a>
         </shiro:hasPermission>
-        <shiro:hasPermission name="400015">
+       <%-- <shiro:hasPermission name="400015">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
-        </shiro:hasPermission>
+        </shiro:hasPermission>--%>
         <shiro:hasPermission name="400017">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="print">Print</a>
         </shiro:hasPermission>
@@ -256,13 +256,13 @@
                     dataType: 'text',
                     success: function (data) {
                         //弹出即全屏
-                        var index = layer.open({
+                        var index = parent.layer.open({
                             type: 1,
                             content: data,
-                            area: ['800px', '600px'],
+                            area: ['800px'],
+                            offset: ['100px', '250px'],
                             maxmin: true
                         });
-                        layer.full(index);
                     }
                 });
             }

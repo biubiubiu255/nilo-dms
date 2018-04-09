@@ -24,12 +24,12 @@
         <div class="layui-form-item">
             <label class="layui-form-label" style="width:120px">Length</label>
             <div class="layui-input-inline">
-                <input type="text" name="length" value="${packageInfo.length}" autocomplete="off"
+                <input type="text" name="length" value="${packageInfo.len}" autocomplete="off"
                        class="layui-input" disabled>
             </div>
             <label class="layui-form-label" style="width:120px">Width</label>
             <div class="layui-input-inline">
-                <input type="text" name="width" value="${packageInfo.length}" autocomplete="off"
+                <input type="text" name="width" value="${packageInfo.width}" autocomplete="off"
                        class="layui-input" disabled>
             </div>
             <label class="layui-form-label" style="width:120px">Height</label>

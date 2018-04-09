@@ -84,7 +84,8 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
             DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + routeDO.getMerchantId(), "" + routeDO.getOptNetwork()), DistributionNetworkDO.class);
             route.setNetworkDesc(networkDO.getName());
         }
-        if (StringUtil.isNotEmpty(routeDO.getOptBy())) {
+        route.setOptByName(routeDO.getOptBy());
+        if (StringUtil.isNotEmpty(routeDO.getOptBy()) && !StringUtil.equals(routeDO.getOptBy(), "api")) {
             UserInfo userInfo = userService.findUserInfoByUserId("" + routeDO.getMerchantId(), routeDO.getOptBy());
             if (userInfo != null) route.setOptByName(userInfo.getName());
         }
