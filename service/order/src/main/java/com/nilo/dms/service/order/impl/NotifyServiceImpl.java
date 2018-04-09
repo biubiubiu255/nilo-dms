@@ -142,12 +142,14 @@ public class NotifyServiceImpl implements NotifyService {
                 DeliveryOrderDO deliveryOrder = deliveryOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
                 //kilimall 临时方案
                 if (StringUtil.equals(deliveryOrder.getOrderPlatform(), "kilimall")) {
-
+                    String orderType = StringUtil.equals(deliveryOrder.getOrderType(), "FBK") ? "SELL" : "YK";
                     Map<String, String> param = new HashMap<>();
                     switch (request.getOptType()) {
+
                         case DELIVERY:
                         case SEND: {
-                            String data = "{\"data\":{\"orderinfo\":[{\"CustomerID\":\"KILIMALL\",　\"WarehouseID\":\"KE01\",\"OrderNo\":" + deliveryOrder.getReferenceNo() + "}]}}";
+                            String data = "{\"data\":{\"orderinfo\":[{\"DeliveryNo\":" + deliveryOrder.getOrderNo() + ",\"CustomerID\":\"KILIMALL\",　\"WarehouseID\":\"KE01\",\"OrderNo\":" + deliveryOrder.getReferenceNo() + ",\"OrderType\":" + orderType +
+                                    "}]}}";
                             param.put("data", URLEncoder.encode(data, "utf-8"));
                             param.put("sign", createSign(merchantConfig.getKey(), data));
                             param.put("op", "confirmSOData");
