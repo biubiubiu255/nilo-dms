@@ -40,8 +40,8 @@ public enum BizErrorCode implements ErrorCode {
     REQUEST_ID_EMPTY("request id is empty", "100026"),
     SERVICE_ID_EMPTY("service id is empty", "100027"),
 
-    ORDER_NOT_EXIST("DELIVERY order {0} is not exist.", "100028"),
-    ORDER_STATUS_LIMITED("DELIVERY order {0} status is limited", "100029"),
+    ORDER_NOT_EXIST("Waybill Number {0} is not exist.", "100028"),
+    ORDER_STATUS_LIMITED("Waybill Number {0} status is limited", "100029"),
     TASK_NOT_EXIST("Task {0}  not exist.", "100030"),
     TASK_NOT_ALLOW("Task {0}  not allow.", "100031"),
 

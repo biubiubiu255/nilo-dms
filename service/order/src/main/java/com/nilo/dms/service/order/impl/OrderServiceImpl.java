@@ -1,14 +1,26 @@
 package com.nilo.dms.service.order.impl;
 
-import static com.nilo.dms.common.Constant.IS_PACKAGE;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
+import com.nilo.dms.common.Constant;
+import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.enums.*;
+import com.nilo.dms.common.exception.BizErrorCode;
+import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.common.exception.SysErrorCode;
+import com.nilo.dms.common.utils.AssertUtil;
+import com.nilo.dms.common.utils.DateUtil;
+import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.*;
+import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.mq.producer.AbstractMQProducer;
+import com.nilo.dms.service.order.*;
+import com.nilo.dms.service.order.model.*;
+import com.nilo.dms.service.system.RedisUtil;
+import com.nilo.dms.service.system.SystemCodeUtil;
+import com.nilo.dms.service.system.SystemConfig;
+import com.nilo.dms.service.system.model.OrderHandleConfig;
+import com.nilo.dms.service.system.model.SMSConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,65 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.alibaba.fastjson.JSON;
-import com.nilo.dms.common.Constant;
-import com.nilo.dms.common.Pagination;
-import com.nilo.dms.common.enums.CreateDeliveryRequestStatusEnum;
-import com.nilo.dms.common.enums.DeliveryOrderPaidTypeEnum;
-import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
-import com.nilo.dms.common.enums.OptTypeEnum;
-import com.nilo.dms.common.enums.SerialTypeEnum;
-import com.nilo.dms.common.enums.ServiceTypeEnum;
-import com.nilo.dms.common.enums.TaskStatusEnum;
-import com.nilo.dms.common.enums.TaskTypeEnum;
-import com.nilo.dms.common.exception.BizErrorCode;
-import com.nilo.dms.common.exception.DMSException;
-import com.nilo.dms.common.exception.SysErrorCode;
-import com.nilo.dms.common.utils.AssertUtil;
-import com.nilo.dms.common.utils.DateUtil;
-import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DeliveryOrderDao;
-import com.nilo.dms.dao.DeliveryOrderGoodsDao;
-import com.nilo.dms.dao.DeliveryOrderReceiverDao;
-import com.nilo.dms.dao.DeliveryOrderRequestDao;
-import com.nilo.dms.dao.DeliveryOrderSenderDao;
-import com.nilo.dms.dao.DistributionNetworkDao;
-import com.nilo.dms.dao.UserNetworkDao;
-import com.nilo.dms.dao.WaybillLogWeightDao;
-import com.nilo.dms.dao.WaybillScanDetailsDao;
-import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderGoodsDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderReceiverDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderRequestDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderSenderDO;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
-import com.nilo.dms.dao.dataobject.UserNetworkDO;
-import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
-import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.mq.producer.AbstractMQProducer;
-import com.nilo.dms.service.order.AbstractOrderOpt;
-import com.nilo.dms.service.order.DeliveryRouteService;
-import com.nilo.dms.service.order.NotifyService;
-import com.nilo.dms.service.order.OrderOptLogService;
-import com.nilo.dms.service.order.OrderService;
-import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.CreateDeliverOrderMessage;
-import com.nilo.dms.service.order.model.DeliveryOrder;
-import com.nilo.dms.service.order.model.DeliveryOrderParameter;
-import com.nilo.dms.service.order.model.GoodsInfo;
-import com.nilo.dms.service.order.model.OrderOptRequest;
-import com.nilo.dms.service.order.model.PackageRequest;
-import com.nilo.dms.service.order.model.PhoneMessage;
-import com.nilo.dms.service.order.model.ReceiverInfo;
-import com.nilo.dms.service.order.model.SenderInfo;
-import com.nilo.dms.service.order.model.Task;
-import com.nilo.dms.service.order.model.UnpackRequest;
-import com.nilo.dms.service.order.model.WaybillLogWeight;
-import com.nilo.dms.service.system.RedisUtil;
-import com.nilo.dms.service.system.SystemCodeUtil;
-import com.nilo.dms.service.system.SystemConfig;
-import com.nilo.dms.service.system.model.OrderHandleConfig;
-import com.nilo.dms.service.system.model.SMSConfig;
+import java.util.*;
+
+import static com.nilo.dms.common.Constant.IS_PACKAGE;
 
 /**
  * Created by ronny on 2017/9/15.
@@ -409,8 +365,6 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             deliveryOrderDao.update(orderDO);
         }
 
-        this.addNetworkTask(orderNos, arriveBy, merchantId);
-
     }
 
     @Override
@@ -439,24 +393,21 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         optRequest.setOrderNo(waybillNos);
         optRequest.setNetworkId(networkId);
         handleOpt(optRequest);
-
-        this.addNetworkTask(waybillNos, arriveBy, merchantId);
-
     }
-    
+
     @Override
     @Transactional
-    public void waybillArrvieWeighing(String waybillNo, Double weight, Double length,Double width,Double height,String arriveBy, String merchantId, String networkId) {
-    	List<String> waybillNos = new ArrayList<>();
-    	waybillNos.add(waybillNo);
-    	
-    	DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
+    public void waybillArrvieWeighing(String waybillNo, Double weight, Double length, Double width, Double height, String arriveBy, String merchantId, String networkId) {
+        List<String> waybillNos = new ArrayList<>();
+        waybillNos.add(waybillNo);
+
+        DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
         if (orderDO == null) {
             throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, waybillNo);
         }
         // 没有入库操作时，先进行入库到件操作
-        if(orderDO.getStatus()!=DeliveryOrderStatusEnum.ARRIVED.getCode()) {
-        	OrderOptRequest optRequest = new OrderOptRequest();
+        if (orderDO.getStatus() != DeliveryOrderStatusEnum.ARRIVED.getCode()) {
+            OrderOptRequest optRequest = new OrderOptRequest();
             optRequest.setMerchantId(merchantId);
             optRequest.setOptBy(arriveBy);
             optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
@@ -464,11 +415,10 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
             optRequest.setNetworkId(networkId);
             handleOpt(optRequest);
 
-            this.addNetworkTask(waybillNos, arriveBy, merchantId);
         }
-        
+
         DeliveryOrderDO deliveryOrderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
-        
+
         WaybillLogWeight waybillLogWeight = new WaybillLogWeight();
         waybillLogWeight.setNetworkId(Integer.parseInt(networkId));
         waybillLogWeight.setCreatedBy(arriveBy);
@@ -476,56 +426,25 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
         waybillLogWeight.setMerchantId(Long.parseLong(merchantId));
         waybillLogWeight.setOptTime(DateUtil.getSysTimeStamp());
         waybillLogWeight.setOptBy(arriveBy);
-        
+
         waybillLogWeight.setOldHigh(deliveryOrderDO.getHigh());
         waybillLogWeight.setOldLength(deliveryOrderDO.getLength());
         waybillLogWeight.setOldWeight(deliveryOrderDO.getWeight());
         waybillLogWeight.setOldWidth(deliveryOrderDO.getWidth());
-        
+
         waybillLogWeight.setHigh(height);
         waybillLogWeight.setLength(length);
         waybillLogWeight.setWeight(weight);
         waybillLogWeight.setWidth(width);
-        
+
         deliveryOrderDO.setHigh(height);
         deliveryOrderDO.setLength(length);
         deliveryOrderDO.setWeight(weight);
         deliveryOrderDO.setWidth(width);
-        
-        
+
+
         deliveryOrderDao.update(deliveryOrderDO);
         waybillLogWeightDao.insert(waybillLogWeight);
-
-    }
-
-
-    /**
-     * 根据运单号list、收件人更新网点自提任务
-     *
-     * @param waybillNos
-     * @param arriveBy
-     * @param merchantId
-     */
-    private void addNetworkTask(List<String> waybillNos, String arriveBy, String merchantId) {
-
-        List<UserNetworkDO> userNetworkDOList = userNetworkDao.queryByUserId(Long.parseLong(arriveBy)); // 网点到件的运单为自提，添加网点任务
-        if (userNetworkDOList == null || userNetworkDOList.size() == 0) {
-            return;
-        }
-        for (String waybillNo : waybillNos) {
-            DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
-            if (StringUtil.equalsIgnoreCase(orderDO.getChannel(), "Y")
-                    && !StringUtil.equalsIgnoreCase(orderDO.getIsPackage(), "Y")) {
-                Task task = new Task();
-                task.setMerchantId(merchantId);
-                task.setStatus(TaskStatusEnum.CREATE);
-                task.setCreatedBy(arriveBy);
-                task.setOrderNo(waybillNo);
-                task.setHandledBy("" + userNetworkDOList.get(0).getDistributionNetworkId());
-                task.setTaskType(TaskTypeEnum.SELF_DELIVERY);
-                taskService.addTask(task);
-            }
-        }
 
     }
 
