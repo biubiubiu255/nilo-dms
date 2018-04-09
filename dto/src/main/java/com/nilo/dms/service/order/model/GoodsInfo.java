@@ -17,7 +17,8 @@ public class GoodsInfo {
     public String getGoodsId() {
         return goodsId;
     }
-    @JSONField(name = "id")
+
+    @JSONField(name = "sku")
     public void setGoodsId(String goodsId) {
         this.goodsId = goodsId;
     }
@@ -25,6 +26,7 @@ public class GoodsInfo {
     public String getGoodsDesc() {
         return goodsDesc;
     }
+
     @JSONField(name = "goods_name")
     public void setGoodsDesc(String goodsDesc) {
         this.goodsDesc = goodsDesc;
@@ -33,6 +35,7 @@ public class GoodsInfo {
     public Integer getQty() {
         return qty;
     }
+
     @JSONField(name = "goods_num")
     public void setQty(Integer qty) {
         this.qty = qty;
@@ -49,6 +52,7 @@ public class GoodsInfo {
     public Double getUnitPrice() {
         return unitPrice;
     }
+
     @JSONField(name = "goods_price")
     public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
