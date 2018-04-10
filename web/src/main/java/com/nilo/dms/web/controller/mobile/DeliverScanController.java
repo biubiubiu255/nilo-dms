@@ -4,12 +4,12 @@ import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.service.order.model.Loading;
 import com.nilo.dms.service.order.model.ShipParameter;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class DeliverScanController extends BaseController {
     @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         model.addAttribute("riderList", getRiderList(merchantId));
@@ -80,7 +80,7 @@ public class DeliverScanController extends BaseController {
         Loading loading = new Loading();
         loading.setRider(rider);
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         String loadingNo = "";

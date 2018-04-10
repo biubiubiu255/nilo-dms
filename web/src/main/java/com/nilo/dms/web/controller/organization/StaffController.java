@@ -1,16 +1,16 @@
 package com.nilo.dms.web.controller.organization;
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.StaffStatusEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.org.DepartmentService;
 import com.nilo.dms.service.org.StaffService;
 import com.nilo.dms.service.org.model.Department;
 import com.nilo.dms.service.org.model.Staff;
-import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +31,7 @@ public class StaffController extends BaseController {
 
     @RequestMapping(value = "/list.html", method = RequestMethod.GET)
     public String listGet(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         List<Department> list = departmentService.queryAll(me.getCompanyId());
         model.addAttribute("departmentList", list);
 
@@ -41,7 +41,7 @@ public class StaffController extends BaseController {
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
     @ResponseBody
     public String list(Model model, String departmentId, String staffId, String name) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         Pagination page = getPage();
         List<Staff> list = staffService.findBy(me.getCompanyId(), departmentId, staffId, name, page);
         return toPaginationLayUIData(page, list);
@@ -49,7 +49,7 @@ public class StaffController extends BaseController {
 
     @RequestMapping(value = "/editStaffPage.html", method = RequestMethod.GET)
     public String editStaffPage(Model model, String staffId) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         String companyId = me.getCompanyId();
         Staff staff = staffService.findByStaffId(companyId, staffId);
         model.addAttribute("staff", staff);
@@ -61,7 +61,7 @@ public class StaffController extends BaseController {
 
     @RequestMapping(value = "/addStaffPage.html", method = RequestMethod.GET)
     public String addStaffPage(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         List<Department> list = departmentService.queryAll(me.getCompanyId());
         model.addAttribute("departmentList", list);
         return "staff/add";
@@ -71,7 +71,7 @@ public class StaffController extends BaseController {
     @ResponseBody
     public String editStaff(Model model, Staff staff, String employTimeDate, Integer staffStatus, Integer isRiderCode) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             if (StringUtil.isEmpty(employTimeDate)) {
                 throw new RuntimeException("Employ Time is Empty.");
             }
@@ -99,7 +99,7 @@ public class StaffController extends BaseController {
             if (StringUtil.isEmpty(employTimeDate)) {
                 throw new RuntimeException("Employ Time is Empty.");
             }
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             staff.setCompanyId(me.getCompanyId());
             staff.setMerchantId(me.getMerchantId());
             Long employTime = DateUtil.parse(employTimeDate, "yyyy-MM-dd");
@@ -119,7 +119,7 @@ public class StaffController extends BaseController {
     @ResponseBody
     public String regular(String staffId) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
 
             Staff staff = new Staff();
             staff.setMerchantId(me.getMerchantId());
@@ -138,7 +138,7 @@ public class StaffController extends BaseController {
     @ResponseBody
     public String resigned(String staffId) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
 
             Staff staff = new Staff();
             staff.setMerchantId(me.getMerchantId());

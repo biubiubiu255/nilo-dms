@@ -6,13 +6,13 @@ import com.nilo.dms.common.enums.TaskStatusEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.dataobject.StaffDO;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.service.order.model.TaskParameter;
 import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class DispatchTaskController extends BaseController {
     @RequestMapping(value = "/list.html")
     public String getDispatchList(String orderNo, @RequestParam(value = "taskStatus[]", required = false) Integer[] taskStatus) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         //查询配送任务
@@ -76,7 +76,7 @@ public class DispatchTaskController extends BaseController {
 
     @RequestMapping(value = "/print.html")
     public String print(Model model, HttpServletRequest request) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         String[] orderNos = request.getParameter("orderNos").split(",");
@@ -92,7 +92,7 @@ public class DispatchTaskController extends BaseController {
 
     @RequestMapping(value = "/transferPage.html")
     public String transferPage(Model model, String taskId) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 
@@ -130,7 +130,7 @@ public class DispatchTaskController extends BaseController {
     @RequestMapping(value = "/transfer.html")
     public String transfer(String userId, String orderNo, String taskId, String remark) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {

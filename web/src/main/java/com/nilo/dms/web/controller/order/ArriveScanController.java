@@ -10,11 +10,11 @@ import com.nilo.dms.dao.WaybillScanDao;
 import com.nilo.dms.dao.WaybillScanDetailsDao;
 import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class ArriveScanController extends BaseController {
 
     @RequestMapping(value = "/scanPage.html", method = RequestMethod.GET)
     public String arriveScanPage(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
 
         //获取merchantId
         String merchantId = me.getMerchantId();
@@ -63,7 +63,7 @@ public class ArriveScanController extends BaseController {
     @RequestMapping(value = "/scanList.html")
     public String scanList(String scanNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<Waybill> list = new ArrayList<>();
@@ -96,7 +96,7 @@ public class ArriveScanController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/scan.html")
     public String scan(String orderNo, String scanNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 
@@ -149,11 +149,18 @@ public class ArriveScanController extends BaseController {
     @RequestMapping(value = "/arrive.html")
     public String arrive(String scanNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
-            waybillService.arrive(merchantId, scanNo, "" + me.getNetworks().get(0), me.getUserId());
+            List<WaybillScanDetailsDO> scanDetailsDOList = waybillScanDetailsDao.queryByScanNo(scanNo);
+            if (scanDetailsDOList == null) throw new DMSException(BizErrorCode.ARRIVE_EMPTY);
+
+            List<String> orderNos = new ArrayList<>();
+            for (WaybillScanDetailsDO details : scanDetailsDOList) {
+                orderNos.add(details.getOrderNo());
+            }
+            waybillService.arrive(orderNos, merchantId, me.getFirstNetwork(), me.getUserId());
         } catch (Exception e) {
             log.error("arrive failed. scanNo:{}", scanNo, e);
             return toJsonErrorMsg(e.getMessage());

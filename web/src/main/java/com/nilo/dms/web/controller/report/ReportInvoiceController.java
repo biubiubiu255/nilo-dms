@@ -8,6 +8,7 @@ import com.nilo.dms.dao.WaybillInvoiceDao;
 import com.nilo.dms.dao.dataobject.ReportCodDO;
 import com.nilo.dms.dao.dataobject.ReportInvoiceDO;
 import com.nilo.dms.dao.dataobject.ReportInvoiceQueryDO;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
@@ -40,7 +41,7 @@ public class ReportInvoiceController extends BaseController {
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
     public String getOrderList(ReportInvoiceQueryDO param) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();

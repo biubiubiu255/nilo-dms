@@ -13,6 +13,7 @@ import com.nilo.dms.dao.UserNetworkDao;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.RoleService;
 import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.model.LoginInfo;
 import com.nilo.dms.service.model.Role;
 import com.nilo.dms.service.model.User;
@@ -65,7 +66,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
     public String getUserList(String username) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
@@ -86,7 +87,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/addPage.html", method = RequestMethod.GET)
     public String addPage(Model model) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<Role> roleList = roleService.findBy(merchantId,"",RoleStatusEnum.NORMAL);
@@ -107,7 +108,7 @@ public class UserController extends BaseController {
         try {
             AssertUtil.isNotNull(userInfo, SysErrorCode.REQUEST_IS_NULL);
 
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             userInfo.setMerchantId(merchantId);
@@ -138,7 +139,7 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/editPage.html", method = RequestMethod.GET)
     public String editPage(Model model, String userId) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         User user = userService.findByUserId(merchantId, userId);
@@ -169,7 +170,7 @@ public class UserController extends BaseController {
         try {
             AssertUtil.isNotNull(userInfo, SysErrorCode.REQUEST_IS_NULL);
 
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             userInfo.setMerchantId(merchantId);
@@ -197,7 +198,7 @@ public class UserController extends BaseController {
             AssertUtil.isNotBlank(oldPassword, SysErrorCode.REQUEST_IS_NULL);
             AssertUtil.isEquals(newPassword, newPassword2,BizErrorCode.NEW_PASSWORD_NOT_EQUAL);
 
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             String userId = me.getUserId();
             //校验旧密码
             User user = userService.findByUserId(me.getMerchantId(), userId);
@@ -223,7 +224,7 @@ public class UserController extends BaseController {
     public String resetPassword(String userId) {
         try {
             AssertUtil.isNotNull(userId, BizErrorCode.USER_ID_ILLEGAL);
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             String merchantId = me.getMerchantId();
             //更新密码
             LoginInfo loginInfo = new LoginInfo();
@@ -254,7 +255,7 @@ public class UserController extends BaseController {
     public String delUser(String userId) {
         try {
             AssertUtil.isNotNull(userId, BizErrorCode.USER_ID_ILLEGAL);
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             String merchantId = me.getMerchantId();
             LoginInfo loginInfo = new LoginInfo();
             loginInfo.setUserId(userId);
@@ -272,7 +273,7 @@ public class UserController extends BaseController {
     public String activeUser(String userId) {
         try {
             AssertUtil.isNotNull(userId, BizErrorCode.USER_ID_ILLEGAL);
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             String merchantId = me.getMerchantId();
             LoginInfo loginInfo = new LoginInfo();
             loginInfo.setUserId(userId);

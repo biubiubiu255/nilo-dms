@@ -1,12 +1,12 @@
 package com.nilo.dms.web.controller.config;
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.RouteConfigStatusEnum;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.system.config.RouteConfigService;
 import com.nilo.dms.service.system.model.RouteConfig;
-import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +35,7 @@ public class RouteConfigController extends BaseController {
     @RequestMapping("/getList.html")
     public String getList() {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<RouteConfig> list = routeConfigService.queryAllBy(merchantId);
@@ -48,7 +48,7 @@ public class RouteConfigController extends BaseController {
     @RequestMapping(value = "/editPage.html", method = RequestMethod.GET)
     public String updateRulePage(String optType, Model model) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         RouteConfig routeConfig = routeConfigService.queryBy(merchantId, optType);
@@ -61,7 +61,7 @@ public class RouteConfigController extends BaseController {
     @RequestMapping(value = "/edit.html", method = RequestMethod.POST)
     public String updateConfig(String optTypeEdit, String routeDescC, String routeDescE, String remark) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             RouteConfig config = new RouteConfig();
@@ -88,7 +88,7 @@ public class RouteConfigController extends BaseController {
     @RequestMapping(value = "/add.html", method = RequestMethod.POST)
     public String addConfig(String optTypeAdd, String routeDescC, String routeDescE, String remark) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             RouteConfig config = new RouteConfig();
@@ -109,7 +109,7 @@ public class RouteConfigController extends BaseController {
     @RequestMapping(value = "/active.html", method = RequestMethod.POST)
     public String active(String optType) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             RouteConfig config = new RouteConfig();
@@ -127,7 +127,7 @@ public class RouteConfigController extends BaseController {
     @RequestMapping(value = "/delete.html", method = RequestMethod.POST)
     public String delete(String optType) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             RouteConfig config = new RouteConfig();

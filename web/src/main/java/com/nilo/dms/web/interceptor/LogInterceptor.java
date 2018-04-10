@@ -9,12 +9,11 @@ import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.common.utils.WebUtil;
 import com.nilo.dms.service.LogService;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.model.Log;
-import com.nilo.dms.service.model.User;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.service.system.model.LogConfig;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -103,7 +102,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter implements Initial
         Log log = new Log();
 
 
-        Principal principal = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal principal = SessionLocal.getPrincipal();
         String userName = principal.getUserName();
         String merchantId = principal.getMerchantId();
 

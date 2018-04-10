@@ -2,7 +2,6 @@ package com.nilo.dms.service.order.consumer;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.rocketmq.common.message.MessageExt;
-import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.CreateDeliveryRequestStatusEnum;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.utils.DateUtil;
@@ -10,23 +9,15 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.service.order.model.*;
-import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.mq.consumer.AbstractMQConsumer;
 import com.nilo.dms.service.mq.model.*;
-import com.nilo.dms.service.mq.producer.AbstractMQProducer;
-import com.nilo.dms.service.system.model.InterfaceConfig;
-import com.nilo.dms.service.system.model.MerchantConfig;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by admin on 2017/10/18.
@@ -39,7 +30,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
     private DeliveryOrderGoodsDao deliveryOrderGoodsDao;
 
     @Autowired
-    private DeliveryOrderDao deliveryOrderDao;
+    private WaybillDao waybillDao;
 
     @Autowired
     private DeliveryOrderReceiverDao deliveryOrderReceiverDao;
@@ -80,7 +71,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
 
 
         //判断是否已存在
-        DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(deliveryOrderRequestDO.getMerchantId(), deliveryOrderRequestDO.getOrderNo());
+        WaybillDO orderDO = waybillDao.queryByOrderNo(deliveryOrderRequestDO.getMerchantId(), deliveryOrderRequestDO.getOrderNo());
         if (orderDO != null) {
             return;
         }
@@ -93,7 +84,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                 try {
 
                     //1、保存订单信息
-                    DeliveryOrderDO orderHeader = new DeliveryOrderDO();
+                    WaybillDO orderHeader = new WaybillDO();
                     orderHeader.setOrderNo(orderNo);
                     orderHeader.setCountry(data.getReceiverInfo().getReceiverCountry());
                     orderHeader.setMerchantId(merchantId);
@@ -120,7 +111,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setWeight(data.getWeight());
                     orderHeader.setLength(data.getLen());
                     orderHeader.setWidth(data.getWidth());
-                    orderHeader.setHigh(data.getHigh());
+                    orderHeader.setHeight(data.getHeight());
                     orderHeader.setGoodsType(data.getGoodsType());
 
 
@@ -146,7 +137,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setBillNo(data.getBillNo());
                     orderHeader.setAccountNo(data.getAccountNo());
 
-                    deliveryOrderDao.insert(orderHeader);
+                    waybillDao.insert(orderHeader);
 
                     //2、保存订单商品明细信息
                     if (data.getGoodsInfoList() != null) {

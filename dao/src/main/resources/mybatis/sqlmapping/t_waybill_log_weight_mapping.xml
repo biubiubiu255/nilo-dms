@@ -29,7 +29,7 @@
 			jdbcType="NUMERIC" />
 		<result property="weight" column="weight" javaType="java.lang.Double"
 			jdbcType="NUMERIC" />
-		<result property="high" column="high" javaType="java.lang.Double"
+		<result property="height" column="height" javaType="java.lang.Double"
 			jdbcType="NUMERIC" />
 		<result property="width" column="width" javaType="java.lang.Double"
 			jdbcType="NUMERIC" />
@@ -43,7 +43,7 @@
 
 	<sql id="Base_Column_List">
 		id, order_no
-		,merchant_id,opt_by,opt_time,network_id,last_network_Id,old_weight,old_high,old_width,old_length,weight,high,width,length,
+		,merchant_id,opt_by,opt_time,network_id,last_network_Id,old_weight,old_high,old_width,old_length,weight,height,width,length,
 		created_time
 	</sql>
 
@@ -53,11 +53,11 @@
 		INSERT
 		INTO t_waybill_log_weight
 		( order_no
-		,merchant_id,opt_by,opt_time,network_id,old_weight,old_high,old_width,old_length,weight,high,width,length,
+		,merchant_id,opt_by,opt_time,network_id,old_weight,old_high,old_width,old_length,weight,height,width,length,
 		created_time )
 		VALUES
 		(
-		#{orderNo},#{merchantId},#{optBy},#{optTime},#{networkId},#{oldWeight},#{oldHigh},#{oldWidth},#{oldLength},#{weight},#{high},#{width},#{length},UNIX_TIMESTAMP(NOW()))
+		#{orderNo},#{merchantId},#{optBy},#{optTime},#{networkId},#{oldWeight},#{oldHigh},#{oldWidth},#{oldLength},#{weight},#{height},#{width},#{length},UNIX_TIMESTAMP(NOW()))
 	</insert>
 
 </mapper>

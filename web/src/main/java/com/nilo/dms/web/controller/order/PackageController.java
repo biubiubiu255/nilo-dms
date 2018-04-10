@@ -13,13 +13,13 @@ import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
 import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.PackageRequest;
 import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.service.order.model.WaybillParameter;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,7 @@ public class PackageController extends BaseController {
     @RequestMapping(value = "/list.html")
     public String list(String packageNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
@@ -85,7 +85,7 @@ public class PackageController extends BaseController {
 
     @RequestMapping(value = "/packagePage.html", method = RequestMethod.GET)
     public String packagePage(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
@@ -115,7 +115,7 @@ public class PackageController extends BaseController {
     @RequestMapping(value = "/packageScan.html")
     public String packageScan(String orderNo, String scanNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Waybill order = null;
@@ -140,7 +140,7 @@ public class PackageController extends BaseController {
     @RequestMapping(value = "/addPackage.html")
     public String addLoading(PackageRequest packageRequest, String scanNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         String orderNo = "";
@@ -171,7 +171,7 @@ public class PackageController extends BaseController {
 
     @RequestMapping(value = "/{orderNo}.html", method = RequestMethod.GET)
     public String details(Model model, @PathVariable String orderNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 
@@ -186,7 +186,7 @@ public class PackageController extends BaseController {
 
     @RequestMapping(value = "/print/{orderNo}.html", method = RequestMethod.GET)
     public String print(Model model, @PathVariable String orderNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Waybill packageInfo = waybillService.queryByOrderNo(merchantId, orderNo);

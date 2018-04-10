@@ -4,6 +4,7 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.WaybillStatementDao;
 import com.nilo.dms.dao.dataobject.WaybillStatementDo;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.web.controller.BaseController;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -39,7 +40,7 @@ public class StatementController extends BaseController {
             eTime = (int) (System.currentTimeMillis() / 1000);
             System.out.println("时间：" + eTime);
         }
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 

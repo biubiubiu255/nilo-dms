@@ -1,18 +1,13 @@
 package com.nilo.dms.web.controller.mobile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.nilo.dms.common.Principal;
+import com.nilo.dms.dao.dataobject.WaybillTaskDo;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.order.PaymentService;
+import com.nilo.dms.service.order.model.WaybillPaymentOrder;
+import com.nilo.dms.service.order.model.WaybillPaymentRecord;
+import com.nilo.dms.web.controller.BaseController;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -21,12 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.nilo.dms.common.Principal;
-import com.nilo.dms.dao.dataobject.WaybillTaskDo;
-import com.nilo.dms.service.order.PaymentService;
-import com.nilo.dms.service.order.model.WaybillPaymentOrder;
-import com.nilo.dms.service.order.model.WaybillPaymentRecord;
-import com.nilo.dms.web.controller.BaseController;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+import java.util.Map.Entry;
 
 @Controller
 @RequestMapping("/mobile/rider/Batch")
@@ -46,7 +38,7 @@ public class BatchTransferController extends BaseController {
 
 	@RequestMapping(value = "/toPay.html")
 	public String toPay(Model model) {
-		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		Principal me = SessionLocal.getPrincipal();
 		List<WaybillTaskDo> list = paymentService.queryNeedPayOrderByRider(me.getUserId());
 		model.addAttribute("list", list);
 		return "mobile/rider/BatchTransfer/toPay";
@@ -58,7 +50,7 @@ public class BatchTransferController extends BaseController {
 		if (orderNos == null || orderNos.length==0) {
 			return toJsonErrorMsg("please select an order");
 		}
-		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		Principal me = SessionLocal.getPrincipal();
 		String merchantId = me.getMerchantId();
 		List<String> waybillNos = Arrays.asList(orderNos);
 		if(waybillNos.size()==0) {
@@ -109,7 +101,7 @@ public class BatchTransferController extends BaseController {
 	@RequestMapping(value = "/payReturn.html", method = RequestMethod.GET)
 	public String payReturn() {
 
-		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+		Principal me = SessionLocal.getPrincipal();
 		HttpServletRequest request = getRequest();
 		String merchantOrderNo = (String) request.getParameter("merchantOrderNo");
 		String orderId = (String) request.getParameter("orderId");

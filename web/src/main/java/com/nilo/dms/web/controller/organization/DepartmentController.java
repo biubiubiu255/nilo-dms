@@ -1,15 +1,15 @@
 package com.nilo.dms.web.controller.organization;
 
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.DepartmentStatusEnum;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.model.ZTree;
 import com.nilo.dms.service.org.DepartmentService;
 import com.nilo.dms.service.org.StaffService;
 import com.nilo.dms.service.org.model.Department;
 import com.nilo.dms.service.org.model.Staff;
-import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,14 +37,14 @@ public class DepartmentController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/departmentTree.html", method = RequestMethod.POST)
     public String updateCompany() {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         List<ZTree> tree = departmentService.getTree(me.getCompanyId());
         return toJsonTrueData(tree);
     }
 
     @RequestMapping(value = "/addDepartmentPage.html", method = RequestMethod.GET)
     public String addDepartmentPage(Model model, String departmentId) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         String companyId = me.getCompanyId();
         List<Staff> list = staffService.findAllStaffBy(companyId, null);
         model.addAttribute("list", list);
@@ -61,7 +61,7 @@ public class DepartmentController extends BaseController {
 
     @RequestMapping(value = "/editDepartmentPage.html", method = RequestMethod.GET)
     public String editDepartmentPage(Model model, String departmentId) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         String companyId = me.getCompanyId();
         List<Staff> list = staffService.findAllStaffBy(companyId, null);
         model.addAttribute("list", list);
@@ -77,7 +77,7 @@ public class DepartmentController extends BaseController {
     @RequestMapping(value = "/addDepartment.html", method = RequestMethod.POST)
     @ResponseBody
     public String addDepartment(Model model, String leaderId, String desc, String parentDepartmentId, String departmentName) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         String companyId = me.getCompanyId();
         try {
             Department addDept = new Department();
@@ -99,7 +99,7 @@ public class DepartmentController extends BaseController {
     @RequestMapping(value = "/editDepartment.html", method = RequestMethod.POST)
     @ResponseBody
     public String editDepartment(Model model, String departmentId, String departmentName, String desc, String leaderId) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         String companyId = me.getCompanyId();
         try {
 
@@ -120,7 +120,7 @@ public class DepartmentController extends BaseController {
     @RequestMapping(value = "/delDepartment.html", method = RequestMethod.POST)
     @ResponseBody
     public String delDepartment(Model model, String departmentId) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         String companyId = me.getCompanyId();
         try {
 

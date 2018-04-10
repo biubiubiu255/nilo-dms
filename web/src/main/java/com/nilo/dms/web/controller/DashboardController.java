@@ -2,14 +2,14 @@ package com.nilo.dms.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.TaskStatusEnum;
 import com.nilo.dms.service.MenuService;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.model.Menu;
 import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.service.order.model.TaskParameter;
-import com.nilo.dms.common.Principal;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +31,7 @@ public class DashboardController extends BaseController {
     public String dashboard(Model model) {
 
         List<Menu> list = (List<Menu>) getSessionAttr("userMenu");
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         if (list == null) {
             //根据权限过滤菜单
             list = menuService.getWebMenu(me.getUserId());

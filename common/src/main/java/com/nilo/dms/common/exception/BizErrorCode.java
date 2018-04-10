@@ -98,7 +98,10 @@ public enum BizErrorCode implements ErrorCode {
     WEIGHT_MORE_THAN_0("Weight needs more than 0 ", "100071"),
 
     ORDER_NO_ARRIVE("The order has not arrived", "100071"),  //订单未到达
-    STAFF_NOT_EXIST("Staff not exist", "100072"),;
+    STAFF_NOT_EXIST("Staff not exist", "100072"),
+    PASSWORD_ERROR("Password Error.", "100073"),
+
+    ;
 
     private final String description;
     private final String code;

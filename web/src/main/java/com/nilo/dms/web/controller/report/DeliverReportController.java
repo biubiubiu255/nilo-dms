@@ -2,6 +2,7 @@ package com.nilo.dms.web.controller.report;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.DeliverReportService;
 import com.nilo.dms.service.order.model.DeliverOrderParameter;
 import com.nilo.dms.service.order.model.DeliverReport;
@@ -37,7 +38,7 @@ public class DeliverReportController extends BaseController {
     @RequestMapping(value = "/list.html")
     public String getOrderList(Model model, DeliverOrderParameter parameter,@RequestParam(value = "taskStatus[]", required = false) Integer[] taskStatus) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);

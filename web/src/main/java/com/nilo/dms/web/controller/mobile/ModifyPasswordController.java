@@ -6,19 +6,16 @@ import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.exception.SysErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.model.LoginInfo;
 import com.nilo.dms.service.model.User;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static org.apache.shiro.web.filter.mgt.DefaultFilter.user;
 
@@ -37,7 +34,7 @@ public class ModifyPasswordController extends BaseController {
         try {
             AssertUtil.isNotNull(user, SysErrorCode.REQUEST_IS_NULL);
             AssertUtil.isNotBlank(oldPassword, SysErrorCode.REQUEST_IS_NULL);
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             String userId = me.getUserId();
             //校验旧密码
             User user = userService.findByUserId(me.getMerchantId(), userId);

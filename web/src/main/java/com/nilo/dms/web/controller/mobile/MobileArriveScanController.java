@@ -2,9 +2,9 @@ package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,10 +45,8 @@ public class MobileArriveScanController extends BaseController {
     @RequestMapping(value = "/submit.html")
     @ResponseBody
     public String submit(String scanedCodes, String logisticsNos) {
-//		for (int i=0;i<logisticsNos.length;i++){
-//			System.out.println(logisticsNos[i]);
-//		}
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+
+        Principal me = SessionLocal.getPrincipal();
         // 获取merchantId
         String merchantId = me.getMerchantId();
         String arriveBy = me.getUserId();
@@ -56,7 +54,7 @@ public class MobileArriveScanController extends BaseController {
         try {
             String[] logisticsNoArray = scanedCodes.split(",");
             if (null != logisticsNoArray && logisticsNoArray.length > 0) {
-                waybillService.waybillNoListArrive(Arrays.asList(logisticsNoArray), arriveBy, merchantId, netWorkId);
+                waybillService.arrive(Arrays.asList(logisticsNoArray), arriveBy, merchantId, netWorkId);
             }
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());

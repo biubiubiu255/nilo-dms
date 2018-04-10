@@ -5,6 +5,7 @@ import com.nilo.dms.common.enums.TaskStatusEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.service.order.model.TaskParameter;
@@ -38,7 +39,7 @@ public class DispatchReportController extends BaseController {
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         model.addAttribute("list", getRiderList(merchantId));
@@ -49,7 +50,7 @@ public class DispatchReportController extends BaseController {
     @RequestMapping(value = "/list.html")
     public String getOrderList(Model model, String rider, String fromTime, String toTime) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 

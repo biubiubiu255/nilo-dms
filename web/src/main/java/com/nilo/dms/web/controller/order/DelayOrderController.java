@@ -2,19 +2,20 @@ package com.nilo.dms.web.controller.order;
 
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.AbnormalTypeEnum;
 import com.nilo.dms.common.enums.DelayStatusEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderDelayDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.AbnormalOrderService;
 import com.nilo.dms.service.order.RiderOptService;
-import com.nilo.dms.service.order.model.*;
-import com.nilo.dms.common.Principal;
+import com.nilo.dms.service.order.model.AbnormalOrder;
+import com.nilo.dms.service.order.model.DelayParam;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,7 +48,7 @@ public class DelayOrderController extends BaseController {
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
     public String getOrderList(String orderNo, String fromTime, String toTime) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 
@@ -78,7 +79,7 @@ public class DelayOrderController extends BaseController {
     @RequestMapping(value = "/problemPage.html")
     public String problemPage(Model model, String orderNo) {
         //查询上一次dispatch task
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         DeliveryOrderDelayDO delayDO = deliveryOrderDelayDao.findByOrderNo(Long.parseLong(merchantId), orderNo);
@@ -91,7 +92,7 @@ public class DelayOrderController extends BaseController {
     @RequestMapping(value = "/problem.html")
     public String problem(DelayParam param) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
@@ -120,7 +121,7 @@ public class DelayOrderController extends BaseController {
     @RequestMapping(value = "/resend.html")
     public String resend(DelayParam param) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
 
         //获取merchantId
         String merchantId = me.getMerchantId();
@@ -139,7 +140,7 @@ public class DelayOrderController extends BaseController {
     @RequestMapping(value = "/delay.html")
     public String delay(DelayParam param) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {

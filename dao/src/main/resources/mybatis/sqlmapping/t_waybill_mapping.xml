@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.nilo.dms.dao.DeliveryOrderDao">
+<mapper namespace="com.nilo.dms.dao.WaybillDao">
 
     <!-- 实体bean与数据字段对应关系 -->
-    <resultMap id="orderDO" type="com.nilo.dms.dao.dataobject.DeliveryOrderDO">
+    <resultMap id="orderDO" type="com.nilo.dms.dao.dataobject.WaybillDO">
         <result property="id" column="id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
@@ -31,7 +31,7 @@
                 jdbcType="VARCHAR"/>
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DECIMAL"/>
-        <result property="high" column="high" javaType="java.lang.Double"
+        <result property="height" column="height" javaType="java.lang.Double"
                 jdbcType="DECIMAL"/>
         <result property="width" column="width" javaType="java.lang.Double"
                 jdbcType="DECIMAL"/>
@@ -113,17 +113,17 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, merchant_id,network_Id,order_no,parent_No,need_pay_amount,paid_type,already_paid,order_type,service_Type,reference_No,weight,high,width,length,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,is_Cod,notes,remark,network_id,next_network_id,is_Package,print_times,created_time,created_by , updated_time ,version
+        id, merchant_id,network_Id,order_no,parent_No,need_pay_amount,paid_type,already_paid,order_type,service_Type,reference_No,weight,height,width,length,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,is_Cod,notes,remark,network_id,next_network_id,is_Package,print_times,created_time,created_by , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
-    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderDO" statementType="PREPARED"
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.WaybillDO" statementType="PREPARED"
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_waybill
-        ( merchant_id,order_no,parent_No,need_pay_amount,already_paid ,order_type, service_type,reference_No , weight,high,width,length,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,is_Cod,notes,remark,network_id,next_network_id ,is_Package,print_times,created_time ,created_by, updated_time ,version)
+        ( merchant_id,order_no,parent_No,need_pay_amount,already_paid ,order_type, service_type,reference_No , weight,height,width,length,goods_type,order_time,country ,total_price,order_platform,status,warehouse_Id,stop_Id,stop,channel,channel_Station,order_Category,carrier_Id,carrier_Name ,relation_Order_No,is_Cod,notes,remark,network_id,next_network_id ,is_Package,print_times,created_time ,created_by, updated_time ,version)
         VALUES
-        ( #{merchantId},#{orderNo}, #{parentNo},#{needPayAmount},#{alreadyPaid},#{orderType},#{serviceType}, #{referenceNo},#{weight},#{high},#{width},#{length},#{goodsType},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status},#{warehouseId},#{stopId},#{stop},#{channel},#{channelStation},#{orderCategory},#{carrierId},#{carrierName},#{relationOrderNo},#{isCod},#{notes},#{remark},#{networkId},#{nextNetworkId},#{isPackage},#{printTimes},UNIX_TIMESTAMP(NOW()),#{createdBy},UNIX_TIMESTAMP(NOW()),UUID())
+        ( #{merchantId},#{orderNo}, #{parentNo},#{needPayAmount},#{alreadyPaid},#{orderType},#{serviceType}, #{referenceNo},#{weight},#{height},#{width},#{length},#{goodsType},#{orderTime},#{country},#{totalPrice},#{orderPlatform},#{status},#{warehouseId},#{stopId},#{stop},#{channel},#{channelStation},#{orderCategory},#{carrierId},#{carrierName},#{relationOrderNo},#{isCod},#{notes},#{remark},#{networkId},#{nextNetworkId},#{isPackage},#{printTimes},UNIX_TIMESTAMP(NOW()),#{createdBy},UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
 
@@ -251,7 +251,7 @@
 
 
     <!-- 动态更新语句 -->
-    <update id="update" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderDO" statementType="PREPARED">
+    <update id="update" parameterType="com.nilo.dms.dao.dataobject.WaybillDO" statementType="PREPARED">
         update t_waybill
         <trim prefix="set" suffixOverrides="," suffix="where merchant_id=#{merchantId} and order_no=#{orderNo}">
             <if test="networkId != null ">
@@ -266,32 +266,14 @@
             <if test="weight != null">
                 weight = #{weight},
             </if>
-            <if test="high != null">
-                high = #{high},
+            <if test="height != null">
+                height = #{height},
             </if>
             <if test="width != null">
                 width = #{width},
             </if>
             <if test="length != null">
                 length = #{length},
-            </if>
-            <if test="referenceNo != null and referenceNo !='' ">
-                reference_no = #{referenceNo},
-            </if>
-            <if test="country != null and country !='' ">
-                country = #{country},
-            </if>
-            <if test="orderPlatform != null and orderPlatform !='' ">
-                order_Platform = #{orderPlatform},
-            </if>
-            <if test="serviceType != null and serviceType !='' ">
-                service_Type = #{serviceType},
-            </if>
-            <if test="totalPrice != null ">
-                total_Price = #{totalPrice},
-            </if>
-            <if test="goodsType != null and goodsType !='' ">
-                goods_Type = #{goodsType},
             </if>
             <if test="parentNo != null">
                 parent_No = #{parentNo},

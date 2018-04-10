@@ -9,15 +9,15 @@ import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.Waybill;
-import com.nilo.dms.service.order.model.WaybillParameter;
 import com.nilo.dms.service.order.model.OrderOptRequest;
 import com.nilo.dms.service.order.model.Task;
+import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.service.order.model.WaybillParameter;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ public class DoorToDoorController extends BaseController {
     @RequestMapping(value = "/list.html")
     public String getOrderList(WaybillParameter parameter) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
@@ -84,7 +84,7 @@ public class DoorToDoorController extends BaseController {
 
     @RequestMapping(value = "/allocatePage.html")
     public String allocatePage(Model model, HttpServletRequest request, @RequestParam(value = "orderNos[]") String[] orderNos) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         request.getSession().setAttribute("orderNos", orderNos);
@@ -97,7 +97,7 @@ public class DoorToDoorController extends BaseController {
     public String allocate(String userId, String remark, HttpServletRequest request) {
 
         String[] orderNos = (String[]) request.getSession().getAttribute("orderNos");
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         String merchantId = me.getMerchantId();
         try {
             if (orderNos == null) {
@@ -132,7 +132,7 @@ public class DoorToDoorController extends BaseController {
 
     @RequestMapping(value = "/print.html")
     public String print(Model model, HttpServletRequest request, String orderNos) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<Waybill> list = waybillService.queryByOrderNos(merchantId, Arrays.asList(orderNos.split(",")));
@@ -148,7 +148,7 @@ public class DoorToDoorController extends BaseController {
 
     @RequestMapping(value = "/printAgain.html")
     public String printAgain(Model model, HttpServletRequest request, String orderNos) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<Waybill> list = waybillService.queryByOrderNos(merchantId, Arrays.asList(orderNos.split(",")));

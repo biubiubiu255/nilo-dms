@@ -27,11 +27,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-websocket</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.nilo.dms</groupId>
-            <artifactId>dms-facade</artifactId>
-            <version>1.0.0</version>
-        </dependency>
     </dependencies>
 
 

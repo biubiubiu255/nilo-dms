@@ -3,32 +3,23 @@ package com.nilo.dms.web.controller.report;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.CommonDao;
-import com.nilo.dms.dao.WaybillArriveDao;
-import com.nilo.dms.dao.WaybillCodDao;
-import com.nilo.dms.dao.dataobject.ReportArriveDO;
 import com.nilo.dms.dao.dataobject.ReportCodDO;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.ReportService;
-import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.model.ReportCodQuery;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.report.model.ReportUtil;
 import net.sf.jasperreports.engine.JRDataSource;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.data.JsonDataSource;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/report/cod")
@@ -49,7 +40,7 @@ public class ReportCodController extends BaseController {
     public String getOrderList(Model model, Integer exportType, ReportCodQuery reportCodQuery, HttpServletRequest request) {
         Pagination page = getPage();
         //page.setTotalCount(commonDao.lastFoundRows());
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         reportCodQuery.setMerchantId(Long.valueOf(me.getMerchantId()));
         String fileType;
         switch (exportType){

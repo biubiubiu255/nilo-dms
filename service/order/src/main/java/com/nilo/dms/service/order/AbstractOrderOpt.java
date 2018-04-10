@@ -1,14 +1,12 @@
 package com.nilo.dms.service.order;
 
-import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.exception.SysErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
-import com.nilo.dms.dao.DeliveryOrderDao;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
-import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
+import com.nilo.dms.dao.WaybillDao;
+import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.service.order.model.OrderOptRequest;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.service.system.model.OrderHandleConfig;
@@ -29,7 +27,7 @@ public abstract class AbstractOrderOpt {
     DeliveryOrderOptDao deliveryOrderOptDao;
 
     @Autowired
-    DeliveryOrderDao deliveryOrderDao;
+    WaybillDao waybillDao;
 
     protected void checkOtpParam(OrderOptRequest optRequest) {
         AssertUtil.isNotNull(optRequest, SysErrorCode.REQUEST_IS_NULL);
@@ -50,7 +48,7 @@ public abstract class AbstractOrderOpt {
 
         for (String orderNo : optRequest.getOrderNo()) {
 
-            DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(optRequest.getMerchantId()), orderNo);
+            WaybillDO orderDO = waybillDao.queryByOrderNo(Long.parseLong(optRequest.getMerchantId()), orderNo);
             if (orderDO == null) {
                 throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
             }

@@ -2,13 +2,13 @@ package com.nilo.dms.web.controller.log;
 
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.OrderOptLogService;
 import com.nilo.dms.service.order.model.DeliveryOrderOpt;
-import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,7 +40,7 @@ public class OrderLogController extends BaseController {
     @ResponseBody
     @RequestMapping("/getLogList.html")
     public String getUserList(String orderNo, String fromTime, String toTime) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Long fromTimeLong = null, toTimeLong = null;

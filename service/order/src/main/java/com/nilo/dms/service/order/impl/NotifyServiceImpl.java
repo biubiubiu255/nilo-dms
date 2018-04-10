@@ -8,11 +8,11 @@ import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
-import com.nilo.dms.dao.DeliveryOrderDao;
+import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.NotifyDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
+import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.service.UserService;
@@ -55,7 +55,7 @@ public class NotifyServiceImpl implements NotifyService {
     @Qualifier("notifyDataBusProducer")
     private AbstractMQProducer notifyDataBusProducer;
     @Autowired
-    private DeliveryOrderDao deliveryOrderDao;
+    private WaybillDao waybillDao;
     @Autowired
     private UserService userService;
     @Autowired
@@ -135,7 +135,7 @@ public class NotifyServiceImpl implements NotifyService {
                 }
 
                 //请求参数
-                DeliveryOrderDO deliveryOrder = deliveryOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
+                WaybillDO deliveryOrder = waybillDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
                 //kilimall 临时方案
                 if (StringUtil.equals(deliveryOrder.getOrderPlatform(), "kilimall")) {
                     String orderType = StringUtil.equals(deliveryOrder.getOrderType(), "FBK") ? "SELL" : "YK";

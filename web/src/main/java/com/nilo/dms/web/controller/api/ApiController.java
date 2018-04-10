@@ -74,7 +74,11 @@ public class ApiController extends BaseController {
                     JSONObject object = array.getJSONObject(i);
                     String orderNo = object.getString("waybill_number");
                     Double weight = object.getDouble("weight");
-                    waybillService.updateWeight(merchantId, orderNo, weight);
+                    WaybillHeader header = new WaybillHeader();
+                    header.setMerchantId(merchantId);
+                    header.setOrderNo(orderNo);
+                    header.setWeight(weight);
+                    waybillService.updateWaybill(header);
                 }
 
                 break;
@@ -96,7 +100,7 @@ public class ApiController extends BaseController {
             }
             case ARRIVE_SCAN: {
                 List<String> list = JSONArray.parseArray(data, String.class);
-                waybillService.waybillNoListArrive(list, "api", merchantId, "1");
+                waybillService.arrive(list, "api", merchantId, "1");
                 break;
             }
             case SIGN: {

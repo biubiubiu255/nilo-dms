@@ -62,7 +62,6 @@ public class DeliveryFeeDetailsServiceImpl implements DeliveryFeeDetailsService 
         DeliveryFeeTemplateDO param = new DeliveryFeeTemplateDO();
         param.setMerchantId(Long.parseLong(order.getMerchantId()));
         param.setCountry(order.getCountry());
-        param.setServiceProduct(order.getServiceType().getCode());
         param.setOrigin(order.getSenderInfo().getSenderCity());
         param.setDestination(order.getReceiverInfo().getReceiverCity());
 

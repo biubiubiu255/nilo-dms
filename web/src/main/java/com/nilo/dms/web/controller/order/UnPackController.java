@@ -10,11 +10,11 @@ import com.nilo.dms.dao.WaybillScanDao;
 import com.nilo.dms.dao.WaybillScanDetailsDao;
 import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.service.order.model.UnpackRequest;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class UnPackController extends BaseController {
 
     @RequestMapping(value = "/unpackScanPage.html", method = RequestMethod.GET)
     public String unpackScanPage(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 
@@ -67,7 +67,7 @@ public class UnPackController extends BaseController {
     @RequestMapping(value = "/scanList.html")
     public String scanList(String scanNo, String packageNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<UnpackInfo> list = new ArrayList<>();
@@ -123,7 +123,7 @@ public class UnPackController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/scan.html")
     public String scanner(String orderNo, String scanNo, String type) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 
@@ -146,7 +146,7 @@ public class UnPackController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/unpack.html")
     public String unpack(String scanNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);

@@ -1,5 +1,6 @@
 package com.nilo.dms.web.controller.organization;
 
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.org.CompanyService;
 import com.nilo.dms.service.org.model.Company;
 import com.nilo.dms.common.Principal;
@@ -21,7 +22,7 @@ public class CompanyController extends BaseController {
 
     @RequestMapping(value = "/details.html", method = RequestMethod.GET)
     public String details(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Company company = companyService.findByMerchantId(merchantId);
@@ -32,7 +33,7 @@ public class CompanyController extends BaseController {
 
     @RequestMapping(value = "/editPage.html")
     public String editPage(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Company company = companyService.findByMerchantId(merchantId);
@@ -44,7 +45,7 @@ public class CompanyController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/updateCompany.html", method = RequestMethod.POST)
     public String updateCompany(Company company) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Company query = companyService.findByMerchantId(merchantId);

@@ -9,12 +9,12 @@ import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.WaybillScanDetailsDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.order.PackageController.NextStation;
 import com.nilo.dms.web.controller.order.UnPackController.UnpackInfo;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class MobileUnPackController extends BaseController {
 
     @RequestMapping(value = "/unpack.html")
     public String toPackage(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
@@ -69,7 +69,7 @@ public class MobileUnPackController extends BaseController {
     @RequestMapping(value = "/scanList.html")
     public String scanList(String scanNo, String packageNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<UnpackInfo> list = new ArrayList<>();
@@ -105,11 +105,10 @@ public class MobileUnPackController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/save.html")
     public String save(@RequestParam("logisticsNo") String logisticsNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        String arriveByString = me.getUserId();
+        Principal me = SessionLocal.getPrincipal();
         String merchantId = me.getMerchantId();
         String netWorkId = "" + me.getNetworks().get(0);
-        waybillService.waybillNoListArrive(Arrays.asList(new String[]{logisticsNo}), merchantId, me.getUserId(), netWorkId);
+        waybillService.arrive(Arrays.asList(new String[]{logisticsNo}), merchantId, me.getUserId(), netWorkId);
         return toJsonTrueMsg();
     }
 

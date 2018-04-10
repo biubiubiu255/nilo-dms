@@ -8,9 +8,9 @@ import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
-import com.nilo.dms.dao.DeliveryOrderDao;
+import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
+import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.service.order.AbnormalOrderService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.*;
@@ -38,14 +38,14 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
     @Autowired
     private WaybillService waybillService;
     @Autowired
-    private DeliveryOrderDao deliveryOrderDao;
+    private WaybillDao waybillDao;
 
     @Override
     @Transactional
     public void addAbnormalOrder(AbnormalOrder abnormalOrder) {
 
 
-        DeliveryOrderDO orderDO = deliveryOrderDao
+        WaybillDO orderDO = waybillDao
                 .queryByOrderNo(Long.parseLong(abnormalOrder.getMerchantId()), abnormalOrder.getOrderNo());
         if (orderDO == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, abnormalOrder.getOrderNo());
 

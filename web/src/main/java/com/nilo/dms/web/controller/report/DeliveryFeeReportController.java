@@ -6,6 +6,7 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryFeeDetailsDao;
 import com.nilo.dms.dao.dataobject.DeliveryFeeDetailsDO;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class DeliveryFeeReportController extends BaseController {
     @RequestMapping(value = "/deliveryFeeList.html")
     public String getOrderList(String orderNo, String bizType, String fromTime, String toTime) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 

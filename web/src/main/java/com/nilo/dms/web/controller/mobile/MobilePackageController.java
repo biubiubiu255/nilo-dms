@@ -5,12 +5,12 @@ import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.PackageRequest;
 import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.service.order.model.WaybillParameter;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class MobilePackageController extends BaseController {
 
     @RequestMapping(value = "/packing.html")
     public String toPackage(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         // 获取merchantId
         String merchantId = me.getMerchantId();
         List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
@@ -75,7 +75,7 @@ public class MobilePackageController extends BaseController {
 
     @RequestMapping(value = "/list.html")
     public String toList(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         // 获取merchantId
         String merchantId = me.getMerchantId();
         List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
@@ -98,7 +98,7 @@ public class MobilePackageController extends BaseController {
     @RequestMapping(value = "/pageList.html")
     public String pageList(String parameters) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
@@ -116,7 +116,7 @@ public class MobilePackageController extends BaseController {
     @ResponseBody
     public String submit(String scaned_codes[], int nextStation, Double weight, Double length, Double width,
                          Double high) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         // 获取merchantId
         String merchantId = me.getMerchantId();
         String orderNo = "";

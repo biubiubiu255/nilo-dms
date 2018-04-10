@@ -58,7 +58,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Autowired
     private DeliveryOrderGoodsDao deliveryOrderGoodsDao;
     @Autowired
-    private DeliveryOrderDao deliveryOrderDao;
+    private WaybillDao waybillDao;
     @Autowired
     private DeliveryOrderReceiverDao deliveryOrderReceiverDao;
     @Autowired
@@ -119,84 +119,34 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
     @Override
-    public String createWaybill(final Waybill data) {
-        // 数据校验
-        verifyDeliveryOrderParam(data);
+    public void updateWaybill(WaybillHeader header) {
 
-        String orderNo = transactionTemplate.execute(new TransactionCallback<String>() {
-            @Override
-            public String doInTransaction(TransactionStatus transactionStatus) {
-                String orderNo = "";
-                Long merchant = Long.parseLong(data.getMerchantId());
-                try {
-                    // 1、保存订单信息
-                    data.setStatus(DeliveryOrderStatusEnum.CREATE);
-                    DeliveryOrderDO orderHeader = convert(data);
-                    // 获取订单号
-                    orderNo = SystemConfig.getNextSerialNo(data.getMerchantId(),
-                            SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
-                    orderHeader.setOrderNo(orderNo);
-                    deliveryOrderDao.insert(orderHeader);
+        AssertUtil.isNotNull(header, SysErrorCode.REQUEST_IS_NULL);
+        AssertUtil.isNotNull(header.getMerchantId(), BizErrorCode.MERCHANT_ID_EMPTY);
+        AssertUtil.isNotNull(header.getOrderNo(), BizErrorCode.ORDER_NO_EMPTY);
+        //校验是否存在
+        WaybillDO query = waybillDao.queryByOrderNo(Long.parseLong(header.getMerchantId()), header.getOrderNo());
+        if (query == null) {
+            throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, header.getOrderNo());
+        }
+        //更新运单信息(暂只更新父包裹ID,状态，网点，重量、长宽高，支付类型,打印次数，已支付金额)
+        WaybillDO update = new WaybillDO();
+        update.setMerchantId(Long.parseLong(header.getMerchantId()));
+        update.setOrderNo(header.getOrderNo());
+        update.setParentNo(header.getParentNo());
+        update.setWeight(header.getWeight());
+        update.setLength(header.getLen());
+        update.setWidth(header.getWidth());
+        update.setHeight(header.getHeight());
+        update.setNetworkId(header.getNetworkId());
+        update.setNextNetworkId(header.getNextNetworkId());
+        if (header.getPaidType() != null) {
+            update.setPaidType(header.getPaidType().getCode());
+        }
+        header.setPrintTimes(header.getPrintTimes());
+        header.setAlreadyPaid(header.getAlreadyPaid());
+        waybillDao.update(update);
 
-                    // 2、保存订单商品明细信息
-                    for (GoodsInfo g : data.getGoodsInfoList()) {
-                        DeliveryOrderGoodsDO goods = new DeliveryOrderGoodsDO();
-                        goods.setMerchantId(merchant);
-                        goods.setOrderNo(orderNo);
-                        goods.setGoodsDesc(g.getGoodsDesc());
-                        goods.setQty(g.getQty());
-                        goods.setUnitPrice(g.getUnitPrice());
-                        goods.setGoodsId(g.getGoodsId());
-                        goods.setQuality(g.getQuality());
-                        deliveryOrderGoodsDao.insert(goods);
-                    }
-
-                    // 3、保存收货人信息
-                    ReceiverInfo receiverInfo = data.getReceiverInfo();
-                    DeliveryOrderReceiverDO r = new DeliveryOrderReceiverDO();
-                    r.setOrderNo(orderNo);
-                    r.setMerchantId(merchant);
-                    r.setAddress(receiverInfo.getReceiverAddress());
-                    r.setArea(receiverInfo.getReceiverArea());
-                    r.setCity(receiverInfo.getReceiverCity());
-                    r.setContactNumber(receiverInfo.getReceiverPhone());
-                    r.setCountry(receiverInfo.getReceiverCountry());
-                    r.setName(receiverInfo.getReceiverName());
-                    r.setProvince(receiverInfo.getReceiverProvince());
-                    deliveryOrderReceiverDao.insert(r);
-
-                    // 3、保存寄件人信息
-                    SenderInfo senderInfo = data.getSenderInfo();
-                    DeliveryOrderSenderDO s = new DeliveryOrderSenderDO();
-                    s.setMerchantId(merchant);
-                    s.setOrderNo(orderNo);
-                    s.setAddress(senderInfo.getSenderAddress());
-                    s.setArea(senderInfo.getSenderArea());
-                    s.setCity(senderInfo.getSenderCity());
-                    s.setContactNumber(senderInfo.getSenderPhone());
-                    s.setCountry(senderInfo.getSenderCountry());
-                    s.setName(senderInfo.getSenderName());
-                    s.setProvince(senderInfo.getSenderProvince());
-                    deliveryOrderSenderDao.insert(s);
-                } catch (Exception e) {
-                    logger.error("createWaybill Failed. Data:{}", data, e);
-                    transactionStatus.setRollbackOnly();
-                    throw e;
-                }
-                return orderNo;
-            }
-        });
-
-        return orderNo;
-    }
-
-    @Override
-    public void updateWeight(String merchantId, String orderNo, Double weight) {
-        DeliveryOrderDO orderDO = new DeliveryOrderDO();
-        orderDO.setMerchantId(Long.parseLong(merchantId));
-        orderDO.setOrderNo(orderNo);
-        orderDO.setWeight(weight);
-        deliveryOrderDao.update(orderDO);
     }
 
     @Override
@@ -231,24 +181,24 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         map.put("limit", pagination.getLimit());
 
         // 查询记录
-        Long count = deliveryOrderDao.queryCountBy(map);
-        List<DeliveryOrderDO> queryList = deliveryOrderDao.queryDeliveryOrderListBy(map);
+        Long count = waybillDao.queryCountBy(map);
+        List<WaybillDO> queryList = waybillDao.queryDeliveryOrderListBy(map);
         pagination.setTotalCount(count == null ? 0 : count);
 
         return batchQuery(queryList, Long.parseLong(parameter.getMerchantId()));
     }
 
-    private List<Waybill> batchQuery(List<DeliveryOrderDO> deliveryOrderDOs, Long merchantId) {
+    private List<Waybill> batchQuery(List<WaybillDO> waybillDOs, Long merchantId) {
 
         List<Waybill> list = new ArrayList<>();
         // 构建订单号集合
         List<String> orderNos = new ArrayList<>();
-        for (DeliveryOrderDO o : deliveryOrderDOs) {
+        for (WaybillDO o : waybillDOs) {
             orderNos.add(o.getOrderNo());
         }
         List<DeliveryOrderSenderDO> senderDO = deliveryOrderSenderDao.queryByOrderNos(merchantId, orderNos);
         List<DeliveryOrderReceiverDO> receiverDO = deliveryOrderReceiverDao.queryByOrderNos(merchantId, orderNos);
-        for (DeliveryOrderDO o : deliveryOrderDOs) {
+        for (WaybillDO o : waybillDOs) {
             Waybill order = convert(o);
             for (DeliveryOrderSenderDO s : senderDO) {
                 if (StringUtil.equals(o.getOrderNo(), s.getOrderNo())) {
@@ -269,7 +219,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
 
     @Override
     public Waybill queryByOrderNo(String merchantId, String orderNo) {
-        DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
+        WaybillDO orderDO = waybillDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
         if (orderDO == null) {
             return null;
         }
@@ -290,7 +240,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         if (orderNos == null || orderNos.size() == 0) {
             return null;
         }
-        List<DeliveryOrderDO> orderDOs = deliveryOrderDao.queryByOrderNos(Long.parseLong(merchantId), orderNos);
+        List<WaybillDO> orderDOs = waybillDao.queryByOrderNos(Long.parseLong(merchantId), orderNos);
         if (orderDOs == null) {
             return null;
         }
@@ -312,7 +262,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
                     OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(optRequest.getMerchantId(),
                             optRequest.getOptType().getCode());
                     for (String orderNo : optRequest.getOrderNo()) {
-                        DeliveryOrderDO orderDO = deliveryOrderDao
+                        WaybillDO orderDO = waybillDao
                                 .queryByOrderNo(Long.parseLong(optRequest.getMerchantId()), orderNo);
                         if (handleConfig.getUpdateStatus() != null) {
                             // 更新订单状态
@@ -338,6 +288,10 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
     @Override
+    public void arrive(List<String> waybillNos, String merchantId, String networkId, String arriveBy) {
+
+    }
+
     @Transactional
     public void arrive(String merchantId, String scanNo, String networkId, String arriveBy) {
         List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(scanNo);
@@ -345,7 +299,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
 
         for (WaybillScanDetailsDO details : scanDetailList) {
             if (details.getWeight() == null) {
-                DeliveryOrderDO queryWeight = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), details.getOrderNo());
+                WaybillDO queryWeight = waybillDao.queryByOrderNo(Long.parseLong(merchantId), details.getOrderNo());
                 if (queryWeight.getWeight() == 0) {
                     throw new DMSException(BizErrorCode.WEIGHT_MORE_THAN_0);
                 }
@@ -366,12 +320,12 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
 
         // 更新重量
         for (WaybillScanDetailsDO details : scanDetailList) {
-            DeliveryOrderDO orderDO = new DeliveryOrderDO();
+            WaybillDO orderDO = new WaybillDO();
             orderDO.setOrderNo(details.getOrderNo());
             orderDO.setWeight(details.getWeight());
             orderDO.setMerchantId(Long.parseLong(merchantId));
             orderDO.setNetworkId(Integer.parseInt(networkId));
-            deliveryOrderDao.update(orderDO);
+            waybillDao.update(orderDO);
         }
 
     }
@@ -380,19 +334,18 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Transactional
     public void print(String merchantId, List<String> orderNos) {
         for (String o : orderNos) {
-            DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), o);
+            WaybillDO orderDO = waybillDao.queryByOrderNo(Long.parseLong(merchantId), o);
             if (orderDO == null) {
                 throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, o);
             }
-            DeliveryOrderDO update = new DeliveryOrderDO();
+            WaybillDO update = new WaybillDO();
             update.setOrderNo(o);
             update.setMerchantId(Long.parseLong(merchantId));
             update.setPrintTimes(orderDO.getPrintTimes() + 1);
-            deliveryOrderDao.update(update);
+            waybillDao.update(update);
         }
     }
 
-    @Override
     @Transactional
     public void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId, String networkId) {
         OrderOptRequest optRequest = new OrderOptRequest();
@@ -404,13 +357,12 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         handleOpt(optRequest);
     }
 
-    @Override
     @Transactional
     public void waybillArrvieWeighing(String waybillNo, Double weight, Double length, Double width, Double height, String arriveBy, String merchantId, String networkId) {
         List<String> waybillNos = new ArrayList<>();
         waybillNos.add(waybillNo);
 
-        DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
+        WaybillDO orderDO = waybillDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
         if (orderDO == null) {
             throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, waybillNo);
         }
@@ -426,7 +378,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
 
         }
 
-        DeliveryOrderDO deliveryOrderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
+        WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.parseLong(merchantId), waybillNo);
 
         WaybillLogWeight waybillLogWeight = new WaybillLogWeight();
         waybillLogWeight.setNetworkId(Integer.parseInt(networkId));
@@ -436,23 +388,23 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         waybillLogWeight.setOptTime(DateUtil.getSysTimeStamp());
         waybillLogWeight.setOptBy(arriveBy);
 
-        waybillLogWeight.setOldHigh(deliveryOrderDO.getHigh());
-        waybillLogWeight.setOldLength(deliveryOrderDO.getLength());
-        waybillLogWeight.setOldWeight(deliveryOrderDO.getWeight());
-        waybillLogWeight.setOldWidth(deliveryOrderDO.getWidth());
+        waybillLogWeight.setOldHigh(waybillDO.getHeight());
+        waybillLogWeight.setOldLength(waybillDO.getLength());
+        waybillLogWeight.setOldWeight(waybillDO.getWeight());
+        waybillLogWeight.setOldWidth(waybillDO.getWidth());
 
         waybillLogWeight.setHigh(height);
         waybillLogWeight.setLength(length);
         waybillLogWeight.setWeight(weight);
         waybillLogWeight.setWidth(width);
 
-        deliveryOrderDO.setHigh(height);
-        deliveryOrderDO.setLength(length);
-        deliveryOrderDO.setWeight(weight);
-        deliveryOrderDO.setWidth(width);
+        waybillDO.setHeight(height);
+        waybillDO.setLength(length);
+        waybillDO.setWeight(weight);
+        waybillDO.setWidth(width);
 
 
-        deliveryOrderDao.update(deliveryOrderDO);
+        waybillDao.update(waybillDO);
         waybillLogWeightDao.insert(waybillLogWeight);
 
     }
@@ -472,9 +424,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         }
 
         // 1、保存订单信息
-        DeliveryOrderDO orderHeader = new DeliveryOrderDO();
+        WaybillDO orderHeader = new WaybillDO();
         orderHeader.setMerchantId(merchant);
-        orderHeader.setHigh(packageRequest.getHigh());
+        orderHeader.setHeight(packageRequest.getHigh());
         orderHeader.setWidth(packageRequest.getWidth());
         orderHeader.setWeight(packageRequest.getWeight());
         orderHeader.setLength(packageRequest.getLength());
@@ -488,7 +440,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
                 SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
         orderHeader.setOrderNo(orderNo);
         orderHeader.setCreatedBy(packageRequest.getOptBy());
-        deliveryOrderDao.insert(orderHeader);
+        waybillDao.insert(orderHeader);
 
         // 发件网点信息
         DistributionNetworkDO networkDO = distributionNetworkDao.queryById(new Long(packageRequest.getNetworkId()));
@@ -521,11 +473,11 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
 
         // 关联包裹与子运单
         for (String o : packageRequest.getOrderNos()) {
-            DeliveryOrderDO update = new DeliveryOrderDO();
+            WaybillDO update = new WaybillDO();
             update.setMerchantId(merchant);
             update.setOrderNo(o);
             update.setParentNo(orderNo);
-            deliveryOrderDao.update(update);
+            waybillDao.update(update);
         }
 
         // 添加操作日志
@@ -577,22 +529,22 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
 
         for (String o : unpackRequest.getOrderNos()) {
             //3、清除 大包号
-            DeliveryOrderDO update = new DeliveryOrderDO();
+            WaybillDO update = new WaybillDO();
             update.setMerchantId(Long.parseLong(unpackRequest.getMerchantId()));
             update.setOrderNo(o);
             update.setParentNo("");
-            deliveryOrderDao.update(update);
+            waybillDao.update(update);
         }
     }
 
     @Override
     public List<Waybill> queryByPackageNo(String merchantNo, String packageNo) {
-        List<DeliveryOrderDO> queryList = deliveryOrderDao.queryByPackageNo(Long.parseLong(merchantNo), packageNo);
+        List<WaybillDO> queryList = waybillDao.queryByPackageNo(Long.parseLong(merchantNo), packageNo);
 
         List<Waybill> list = new ArrayList<>();
         if (queryList == null)
             return list;
-        for (DeliveryOrderDO d : queryList) {
+        for (WaybillDO d : queryList) {
             list.add(convert(d));
         }
         return list;
@@ -602,15 +554,15 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         long affected = 0;
         // 更新订单信息，循环10次，10次未更新成功，则跳出
         for (int i = 0; i < 10; i++) {
-            DeliveryOrderDO query = deliveryOrderDao.queryByOrderNo(Long.parseLong(optRequest.getMerchantId()),
+            WaybillDO query = waybillDao.queryByOrderNo(Long.parseLong(optRequest.getMerchantId()),
                     orderNo);
-            DeliveryOrderDO update = new DeliveryOrderDO();
+            WaybillDO update = new WaybillDO();
             update.setMerchantId(query.getMerchantId());
             update.setOrderNo(orderNo);
             update.setStatus(handleConfig.getUpdateStatus());
             update.setVersion(query.getVersion());
             // 更新订单信息
-            affected = deliveryOrderDao.update(update);
+            affected = waybillDao.update(update);
             if (affected > 0) {
                 // 记录操作日志
                 break;
@@ -623,7 +575,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         }
     }
 
-    private void sendPhoneSMS(String merchantId, String optType, DeliveryOrderDO query) {
+    private void sendPhoneSMS(String merchantId, String optType, WaybillDO query) {
         try {
             SMSConfig smsConfig = JSON.parseObject(RedisUtil.hget(Constant.SMS_CONF + merchantId, optType),
                     SMSConfig.class);
@@ -648,7 +600,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
 
-    private Waybill convert(DeliveryOrderDO d) {
+    private Waybill convert(WaybillDO d) {
         Waybill waybill = new Waybill();
         waybill.setOrderNo(d.getOrderNo());
         waybill.setReferenceNo(d.getReferenceNo());
@@ -663,7 +615,6 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         waybill.setNeedPayAmount(d.getNeedPayAmount());
         waybill.setAlreadyPaid(d.getAlreadyPaid());
         waybill.setStatus(DeliveryOrderStatusEnum.getEnum(d.getStatus()));
-        waybill.setServiceType(ServiceTypeEnum.getEnum(d.getServiceType()));
         waybill.setWeight(d.getWeight());
         waybill.setGoodsType(d.getGoodsType());
         String orderTypeDesc = SystemCodeUtil.getCodeVal("" + d.getMerchantId(), Constant.DELIVERY_ORDER_TYPE,
@@ -689,7 +640,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         waybill.setParentNo(d.getParentNo());
         waybill.setLen(d.getLength());
         waybill.setWidth(d.getWidth());
-        waybill.setHigh(d.getHigh());
+        waybill.setHeight(d.getHeight());
         waybill.setNetworkId(d.getNetworkId());
         waybill.setNextNetworkId(d.getNextNetworkId());
         if (d.getNetworkId() != null) {
@@ -754,9 +705,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         return list;
     }
 
-    private DeliveryOrderDO convert(Waybill d) {
+    private WaybillDO convert(Waybill d) {
 
-        DeliveryOrderDO orderHeader = new DeliveryOrderDO();
+        WaybillDO orderHeader = new WaybillDO();
         orderHeader.setCountry(d.getCountry());
         orderHeader.setMerchantId(Long.parseLong(d.getMerchantId()));
         orderHeader.setOrderPlatform(d.getOrderPlatform());
@@ -767,7 +718,6 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         orderHeader.setWeight(d.getWeight());
         orderHeader.setGoodsType(d.getGoodsType());
         orderHeader.setTotalPrice(d.getTotalPrice());
-        orderHeader.setServiceType(d.getServiceType().getCode());
         orderHeader.setWarehouseId(d.getWarehouseId());
         orderHeader.setStop(d.getStop());
         orderHeader.setStopId(d.getStopId());
@@ -802,10 +752,4 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         AssertUtil.isNotBlank(data.getReceiverInfo().getReceiverAddress(), BizErrorCode.RECEIVE_ADDRESS_EMPTY);
     }
 
-    @Override
-    public long updatePaidType(DeliveryOrderDO deliveryOrderDO) {
-
-        return deliveryOrderDao.update(deliveryOrderDO);
-
-    }
 }

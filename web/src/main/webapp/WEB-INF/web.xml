@@ -12,7 +12,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath*:spring/*.xml,classpath:applicationContext-shiro.xml</param-value>
+        <param-value>classpath*:spring/*.xml</param-value>
     </context-param>
 
     <!-- Spring 监听启动 -->
@@ -47,14 +47,16 @@
         <servlet-name>DruidStatView</servlet-name>
         <url-pattern>/druid/*</url-pattern>
     </servlet-mapping>
+
     <filter>
-        <filter-name>shiroFilter</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <filter-name>sessionFilter</filter-name>
+        <filter-class>com.nilo.dms.web.interceptor.SessionFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>shiroFilter</filter-name>
+        <filter-name>sessionFilter</filter-name>
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
+
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>

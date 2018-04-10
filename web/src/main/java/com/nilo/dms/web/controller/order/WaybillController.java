@@ -6,6 +6,7 @@ import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.*;
 import com.nilo.dms.common.utils.model.CellData;
 import com.nilo.dms.common.utils.model.ExcelData;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.DeliveryRouteService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.*;
@@ -58,7 +59,7 @@ public class WaybillController extends BaseController {
     @RequestMapping(value = "/list.html")
     public String getOrderList(WaybillParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
@@ -82,7 +83,7 @@ public class WaybillController extends BaseController {
 
 
             //保存上传的问题件
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             String fileSaveName = IdWorker.getInstance().nextId() + ".xlsx";
@@ -207,7 +208,7 @@ public class WaybillController extends BaseController {
 
     @RequestMapping(value = "/{orderNo}.html", method = RequestMethod.GET)
     public String details(Model model, @PathVariable String orderNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         //查询订单详情
@@ -221,7 +222,7 @@ public class WaybillController extends BaseController {
 
     @RequestMapping(value = "/edit/{orderNo}.html", method = RequestMethod.GET)
     public String edit(Model model, @PathVariable String orderNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         //查询订单详情
@@ -233,7 +234,7 @@ public class WaybillController extends BaseController {
 
     @RequestMapping(value = "/print/{orderNo}.html", method = RequestMethod.GET)
     public String print(Model model, @PathVariable String orderNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         //查询订单详情
@@ -245,7 +246,7 @@ public class WaybillController extends BaseController {
 
     @RequestMapping(value = "/export.html", method = RequestMethod.GET)
     public String export(HttpServletResponse response, WaybillParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) throws Exception {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);

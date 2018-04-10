@@ -2,14 +2,14 @@ package com.nilo.dms.web.controller.system;
 
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DictionaryTypeDao;
 import com.nilo.dms.dao.dataobject.DictionaryTypeDO;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.system.DictionaryService;
 import com.nilo.dms.service.system.model.Dictionary;
-import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class CodeController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/getList.html", method = RequestMethod.POST)
     public String getList(String type, String desc) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<String> typeList = new ArrayList<>();
@@ -64,7 +64,7 @@ public class CodeController extends BaseController {
     @RequestMapping(value = "/getCodeList.html")
     @ResponseBody
     public String editCodeGet(String type) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<Dictionary> list = dictionaryService.queryBy(merchantId, type);
@@ -77,7 +77,7 @@ public class CodeController extends BaseController {
     @ResponseBody
     public String editCode(Dictionary dictionary) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             dictionary.setMerchantId(merchantId);
@@ -99,7 +99,7 @@ public class CodeController extends BaseController {
     @ResponseBody
     public String addCode(Model model, Dictionary dictionary) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             dictionary.setMerchantId(merchantId);
@@ -115,7 +115,7 @@ public class CodeController extends BaseController {
     @ResponseBody
     public String delCode(String type, String code) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             Dictionary dictionary = new Dictionary();
@@ -134,7 +134,7 @@ public class CodeController extends BaseController {
     @ResponseBody
     public String updateCode(Model model, Dictionary dictionary) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             dictionary.setMerchantId(merchantId);

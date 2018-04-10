@@ -1,12 +1,11 @@
 package com.nilo.dms.dao.dataobject;
 
 import com.nilo.dms.common.BaseDo;
-import com.nilo.dms.common.enums.*;
 
 /**
  * Created by admin on 2017/9/19.
  */
-public class DeliveryOrderDO extends BaseDo<Long> {
+public class WaybillDO extends BaseDo<Long> {
 
     private String orderNo;
 
@@ -46,7 +45,7 @@ public class DeliveryOrderDO extends BaseDo<Long> {
     private String notes;
     private String remark;
 
-    private Double high;
+    private Double height;
     private Double length;
     private Double width;
     private String isPackage;
@@ -129,12 +128,12 @@ public class DeliveryOrderDO extends BaseDo<Long> {
         this.nextNetworkId = nextNetworkId;
     }
 
-    public Double getHigh() {
-        return high;
+    public Double getHeight() {
+        return height;
     }
 
-    public void setHigh(Double high) {
-        this.high = high;
+    public void setHeight(Double height) {
+        this.height = height;
     }
 
     public Double getLength() {

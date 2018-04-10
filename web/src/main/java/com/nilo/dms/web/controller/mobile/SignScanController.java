@@ -3,12 +3,12 @@ package com.nilo.dms.web.controller.mobile;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.PaidTypeEnum;
 import com.nilo.dms.service.FileService;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.service.order.model.SignForOrderParam;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class SignScanController extends BaseController {
         String orderNo = getRequest().getParameter("logisticsNo");
         //如果转输了运单号
         if (orderNo != null) {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             String merchantId = me.getMerchantId();
             Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
             if (deliveryOrder != null) {
@@ -104,7 +104,7 @@ public class SignScanController extends BaseController {
         param.setOrderNo(logisticsNo);
         param.setSignBy(signer);
         param.setRemark(remark);
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         // 写入图片
         try {
             if (file != null) {
@@ -136,7 +136,7 @@ public class SignScanController extends BaseController {
         if (orderNo == null) {
             return toJsonErrorMsg("错误信息");
         }
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         String merchantId = me.getMerchantId();
         Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
 

@@ -3,7 +3,6 @@ package com.nilo.dms.service.order;
 import java.util.List;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
 import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.service.order.model.Waybill;
 
@@ -14,9 +13,7 @@ public interface WaybillService {
 
     String createWaybillRequest(String merchantId, String data, String sign);
 
-    String createWaybill(Waybill data);
-
-    void updateWeight(String merchantId,String orderNo, Double weight);
+    void updateWaybill(WaybillHeader header);
 
     List<Waybill> queryWaybillBy(WaybillParameter parameter, Pagination pagination);
 
@@ -26,7 +23,7 @@ public interface WaybillService {
 
     void handleOpt(OrderOptRequest optRequest);
 
-    void arrive(String merchantId, String scanNo, String networkId, String arriveBy);
+    void arrive(List<String> waybillNos, String merchantId, String networkId, String arriveBy);
 
     void print(String merchantId, List<String> orderNos);
 
@@ -35,12 +32,5 @@ public interface WaybillService {
     void unpack(UnpackRequest unpackRequest);
 
     List<Waybill> queryByPackageNo(String merchantNo, String packageNo);
-
-    void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId, String netWork);
-
-    long updatePaidType(DeliveryOrderDO deliveryOrderDO);
-
-    void waybillArrvieWeighing(String waybillNo, Double weight, Double length, Double width, Double height,
-                               String arriveBy, String merchantId, String networkId);
 
 }

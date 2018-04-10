@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.model.AbnormalParam;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.shiro.SecurityUtils;
@@ -63,7 +64,7 @@ public class ReceiveOrderController extends BaseController {
     @RequestMapping(value = "/receive.html")
     public String receive(String orderNo, String signBy, String remark) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
@@ -83,7 +84,7 @@ public class ReceiveOrderController extends BaseController {
     @RequestMapping(value = "/refuse.html")
     public String refuse(String orderNo, String reason, String remark) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
@@ -105,7 +106,7 @@ public class ReceiveOrderController extends BaseController {
     	List<Map<String, String>> resultList = new ArrayList<>();
         try {
             //保存上传的问题件
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
 

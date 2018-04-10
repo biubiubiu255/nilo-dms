@@ -1,12 +1,12 @@
 package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.DeliveryRouteService;
 import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.DeliveryRoute;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class RouteController extends BaseController {
     @ResponseBody
     public String query(String orderNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 
