@@ -9,12 +9,10 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <Pattern>%d{HH:mm:ss.SSS}  %-5level %logger{64} - %msg%n</Pattern>
-            <!--<pattern>%black(控制台-) %red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)</pattern>-->
-        <charset>UTF-8</charset>
-    </encoder>
+        </encoder>
     </appender>
 
-    <appender name="CONSOLE-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/${APP_NAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>${LOG_HOME}/${APP_NAME}.%d{yyyy-MM-dd}.log</FileNamePattern>
@@ -25,45 +23,11 @@
         </encoder>
     </appender>
 
-
-    <!-- appender与过滤器整合，一个appender可含一个或多个filter，有多个filter时，按照配置先后顺序执行 -->
-    <appender name="CONSOLE-TEST" class="ch.qos.logback.core.FileAppender">
-
-
-        <!-- levelfilter:级别过滤器。根据日志级别进行过滤。如果日志级别等于配置级别level，则执行onMatch的；否则执行onMismatch -->
-<!--        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
-            &lt;!&ndash; onMatch、onMismatch里内容要大写 &ndash;&gt;
-            &lt;!&ndash; DENY：日志将立即被抛弃，不再经过其他过滤器，本appender也不进行处理 &ndash;&gt;
-            &lt;!&ndash; ACCEPT：日志被立即处理，不再经过其他过滤器&ndash;&gt;
-            &lt;!&ndash; NEUTRAL：下一个过滤器继续过滤，若为最后一个过滤器且通过，则appender进行处理&ndash;&gt;
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>-->
-
-        <!-- ThresholdFilter临界值过滤器，过滤掉低于指定临界值的日志-->
-        <!-- 当日志级别等于或高于临界值时，过滤器返回NEUTRAL；当日志级别低于临界值时，日志会被拒绝。 -->
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
-        </filter>
-
-        <encoder>
-            <!-- pattern部分见我的博客 -->
-            <pattern>%black(控制台-) %red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-        <!-- prudent=true表示日志写入线程安全，会降低效率，默认为false -->
-        <prudent>false</prudent>
-    </appender>
-
-
-
     <logger name="com.nilo.dms.dao" level="DEBUG"/>
     <logger name="com.nilo.dms" level="INFO"/>
 
     <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="CONSOLE-TEST"/>
         <appender-ref ref="ROLLING-FILE"/>
     </root>
 

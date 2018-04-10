@@ -36,7 +36,7 @@ import java.util.Map;
  * Created by ronny on 2017/9/15.
  */
 @Controller
-@RequestMapping("/waybill/send_nextStation")
+@RequestMapping("/waybill/send_next_station")
 public class SendNextStationController extends BaseController {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
