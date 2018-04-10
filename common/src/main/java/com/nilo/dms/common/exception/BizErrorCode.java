@@ -99,6 +99,10 @@ public enum BizErrorCode implements ErrorCode {
 
     ORDER_NO_ARRIVE("The order has not arrived", "100071"),  //订单未到达
     STAFF_NOT_EXIST("Staff not exist", "100072"),
+
+    HandleNO_NOT_EXIST("The loading list does not exist", "100073"),
+    //STAFF_NOT_EXIST("Staff not exist", "100074"),
+
     PASSWORD_ERROR("Password Error.", "100073"),
 
     ;
