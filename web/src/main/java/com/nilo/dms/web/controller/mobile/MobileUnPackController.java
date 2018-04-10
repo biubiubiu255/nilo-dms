@@ -100,15 +100,11 @@ public class MobileUnPackController extends BaseController {
 
     }
 
-
     @Transactional
     @ResponseBody
     @RequestMapping(value = "/save.html")
     public String save(@RequestParam("logisticsNo") String logisticsNo) {
-        Principal me = SessionLocal.getPrincipal();
-        String merchantId = me.getMerchantId();
-        String netWorkId = "" + me.getNetworks().get(0);
-        waybillService.arrive(Arrays.asList(new String[]{logisticsNo}), merchantId, me.getUserId(), netWorkId);
+        waybillService.arrive(Arrays.asList(new String[]{logisticsNo}));
         return toJsonTrueMsg();
     }
 
