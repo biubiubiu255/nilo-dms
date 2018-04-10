@@ -2,7 +2,7 @@
 <%@ page import="com.nilo.dms.common.utils.DateUtil" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" session="false" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<%@ taglib prefix="shiro" uri="/shiro.tag" %>
 <html>
 <%@ include file="../common/header.jsp" %>
 <%

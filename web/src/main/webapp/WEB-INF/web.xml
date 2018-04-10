@@ -73,7 +73,12 @@
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
+    <jsp-config>
+        <taglib>
+            <taglib-uri>/shiro.tag</taglib-uri>
+            <taglib-location>/WEB-INF/tags/shiro.tld</taglib-location>
+        </taglib>
+    </jsp-config>
     <session-config>
         <session-timeout>120</session-timeout>
     </session-config>
