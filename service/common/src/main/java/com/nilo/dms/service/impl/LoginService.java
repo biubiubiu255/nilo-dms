@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.nilo.dms.dto.common.User;
 import org.springframework.stereotype.Service;
-import com.nilo.dms.service.model.User;
 @Service
 public class LoginService {
 	/**

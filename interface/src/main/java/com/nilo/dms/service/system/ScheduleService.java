@@ -1,7 +1,7 @@
 package com.nilo.dms.service.system;
 
 import com.nilo.dms.common.enums.ScheduleStatusEnum;
-import com.nilo.dms.service.system.model.ScheduleJob;
+import com.nilo.dms.dto.system.ScheduleJob;
 
 import java.util.List;
 

@@ -1,13 +1,10 @@
 package com.nilo.dms.service.impl;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.dao.CommonDao;
-import com.nilo.dms.dao.LogConfigDao;
 import com.nilo.dms.dao.LogDao;
-import com.nilo.dms.dao.dataobject.LogConfigDO;
 import com.nilo.dms.dao.dataobject.LogDO;
+import com.nilo.dms.dto.common.Log;
 import com.nilo.dms.service.LogService;
-import com.nilo.dms.service.model.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

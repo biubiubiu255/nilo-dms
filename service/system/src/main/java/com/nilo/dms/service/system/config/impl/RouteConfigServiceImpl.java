@@ -5,10 +5,9 @@ import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.RouteConfigStatusEnum;
 import com.nilo.dms.dao.RouteConfigDao;
 import com.nilo.dms.dao.dataobject.RouteConfigDO;
+import com.nilo.dms.dto.system.RouteConfig;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.config.RouteConfigService;
-import com.nilo.dms.service.system.model.BizFeeConfig;
-import com.nilo.dms.service.system.model.RouteConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

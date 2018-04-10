@@ -11,8 +11,8 @@ import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.MerchantInfoDao;
 import com.nilo.dms.dao.dataobject.MerchantInfoDO;
+import com.nilo.dms.dto.system.MerchantInfo;
 import com.nilo.dms.service.system.MerchantService;
-import com.nilo.dms.service.system.model.MerchantInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

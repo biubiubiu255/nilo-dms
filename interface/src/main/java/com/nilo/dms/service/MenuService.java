@@ -1,7 +1,7 @@
 package com.nilo.dms.service;
 
 
-import com.nilo.dms.service.model.Menu;
+import com.nilo.dms.dto.common.Menu;
 
 import java.util.List;
 

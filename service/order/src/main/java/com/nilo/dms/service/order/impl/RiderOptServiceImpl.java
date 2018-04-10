@@ -6,7 +6,7 @@ import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.dao.DeliveryOrderDelayDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
-import com.nilo.dms.dto.order.Waybill;
+import com.nilo.dms.dto.order.*;
 import com.nilo.dms.service.order.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +41,6 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
     public void goToPickup(String merchantId, String orderNo, String optBy, String taskId) {
 
         OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setMerchantId(merchantId);
-        optRequest.setOptBy(optBy);
         optRequest.setOptType(OptTypeEnum.GO_TO_PICK_UP);
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(orderNo);
@@ -63,8 +61,6 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
     public void pickup(String merchantId, String orderNo, String optBy, String taskId) {
 
         OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setMerchantId(merchantId);
-        optRequest.setOptBy(optBy);
         optRequest.setOptType(OptTypeEnum.PICK_UP);
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(orderNo);
@@ -83,8 +79,6 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
     public void pickupFailed(String merchantId, String orderNo, String reason, String optBy, String taskId) {
 
         OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setMerchantId(merchantId);
-        optRequest.setOptBy(optBy);
         optRequest.setOptType(OptTypeEnum.PICK_UP_FAILED);
         optRequest.setRemark(reason);
         List<String> orderNoList = new ArrayList<>();
@@ -118,8 +112,6 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         }
 
         OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setMerchantId(param.getMerchantId());
-        optRequest.setOptBy(param.getOptBy());
         optRequest.setOptType(OptTypeEnum.SIGN);
         optRequest.setRemark(param.getRemark());
         List<String> orderNoList = new ArrayList<>();

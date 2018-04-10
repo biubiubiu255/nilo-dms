@@ -1,7 +1,7 @@
 package com.nilo.dms.service;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.model.Log;
+import com.nilo.dms.dto.common.Log;
 
 import java.util.List;
 

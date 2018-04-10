@@ -2,10 +2,10 @@ package com.nilo.dms.web.controller.report;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dto.order.DeliveryOrderOpt;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.OrderOptLogService;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.DeliveryOrderOpt;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.dto.order.WaybillParameter;
 import com.nilo.dms.web.controller.BaseController;
@@ -67,8 +67,6 @@ public class DeliveryDetailsController extends BaseController {
         //订单操作记录
         List<DeliveryOrderOpt> optList = orderOptLogService.queryByOrderNos(merchantId, orderNos);
         //订单轨迹信息
-
-
         return toPaginationLayUIData(page, list);
     }
 }

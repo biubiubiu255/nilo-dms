@@ -3,7 +3,6 @@ package com.nilo.dms.dto.order;
 import com.nilo.dms.common.enums.LoadingStatusEnum;
 import com.nilo.dms.common.enums.LoadingTypeEnum;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.service.model.User;
 
 import java.util.List;
 

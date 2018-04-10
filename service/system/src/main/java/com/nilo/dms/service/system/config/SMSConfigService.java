@@ -1,7 +1,8 @@
 package com.nilo.dms.service.system.config;
 
 
-import com.nilo.dms.service.system.model.SMSConfig;
+
+import com.nilo.dms.dto.system.SMSConfig;
 
 import java.util.List;
 

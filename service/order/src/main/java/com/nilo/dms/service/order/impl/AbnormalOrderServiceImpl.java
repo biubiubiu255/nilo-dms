@@ -11,9 +11,12 @@ import com.nilo.dms.dao.AbnormalOrderDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
+import com.nilo.dms.dto.order.AbnormalOptRequest;
+import com.nilo.dms.dto.order.AbnormalOrder;
+import com.nilo.dms.dto.order.OrderOptRequest;
+import com.nilo.dms.dto.order.QueryAbnormalOrderParameter;
 import com.nilo.dms.service.order.AbnormalOrderService;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +60,6 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
 
         //操作运单状态为问题件
         OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setMerchantId(abnormalOrder.getMerchantId());
-        optRequest.setOptBy(abnormalOrder.getCreatedBy());
 
         switch (abnormalOrder.getAbnormalType()) {
             case PROBLEM: {

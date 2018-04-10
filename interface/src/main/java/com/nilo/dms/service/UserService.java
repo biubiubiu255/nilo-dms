@@ -3,9 +3,9 @@ package com.nilo.dms.service;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
-import com.nilo.dms.service.model.LoginInfo;
-import com.nilo.dms.service.model.User;
-import com.nilo.dms.service.model.UserInfo;
+import com.nilo.dms.dto.common.LoginInfo;
+import com.nilo.dms.dto.common.User;
+import com.nilo.dms.dto.common.UserInfo;
 
 import java.util.List;
 
@@ -33,20 +33,20 @@ public interface UserService {
 
     List<User> findUserPageBy(String merchantId, String userName, Pagination pagination);
 
-	List<UserInfo> findUserInfoByUserIds(String merchantId, List<String> userId);
+    List<UserInfo> findUserInfoByUserIds(String merchantId, List<String> userId);
 
-	//List<User> findByUserIds(String merchantId, List<String> userId);
+    //List<User> findByUserIds(String merchantId, List<String> userId);
 
-	List<User> findByUserIds(String merchantId, List<String> userId);
-	
-	List<ThirdExpressDO> findUserPageByExpresses(String merchantId, ThirdExpressDO express, Pagination pagination);
-	
-	List<ThirdExpressDO> findExpressesAll(Pagination page);
-	
-	void addExpress(ThirdExpressDO express);
-	
+    List<User> findByUserIds(String merchantId, List<String> userId);
+
+    List<ThirdExpressDO> findUserPageByExpresses(String merchantId, ThirdExpressDO express, Pagination pagination);
+
+    List<ThirdExpressDO> findExpressesAll(Pagination page);
+
+    void addExpress(ThirdExpressDO express);
+
     void updateExpress(ThirdExpressDO express);
-    
+
     void deleteExpress(ThirdExpressDO express);
 
 }

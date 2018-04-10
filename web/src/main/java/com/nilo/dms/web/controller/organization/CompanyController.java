@@ -1,8 +1,8 @@
 package com.nilo.dms.web.controller.organization;
 
+import com.nilo.dms.dto.org.Company;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.org.CompanyService;
-import com.nilo.dms.service.org.model.Company;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;

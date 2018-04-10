@@ -6,9 +6,9 @@ import com.nilo.dms.common.enums.InterfaceStatusEnum;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.InterfaceConfigDao;
 import com.nilo.dms.dao.dataobject.InterfaceConfigDO;
+import com.nilo.dms.dto.system.InterfaceConfig;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.config.InterfaceConfigService;
-import com.nilo.dms.service.system.model.InterfaceConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -6,7 +6,6 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AreaDao;
 import com.nilo.dms.dao.dataobject.AreaDO;
 import com.nilo.dms.dao.dataobject.MenuDO;
-import com.nilo.dms.service.model.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

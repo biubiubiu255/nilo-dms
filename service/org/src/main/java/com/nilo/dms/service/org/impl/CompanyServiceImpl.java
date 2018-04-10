@@ -3,8 +3,8 @@ package com.nilo.dms.service.org.impl;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.CompanyDao;
 import com.nilo.dms.dao.dataobject.CompanyDO;
+import com.nilo.dms.dto.org.Company;
 import com.nilo.dms.service.org.CompanyService;
-import com.nilo.dms.service.org.model.Company;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

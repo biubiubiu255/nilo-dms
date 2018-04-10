@@ -1,9 +1,9 @@
 package com.nilo.dms.service.order;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.order.model.AbnormalOptRequest;
-import com.nilo.dms.service.order.model.AbnormalOrder;
-import com.nilo.dms.service.order.model.QueryAbnormalOrderParameter;
+import com.nilo.dms.dto.order.AbnormalOptRequest;
+import com.nilo.dms.dto.order.AbnormalOrder;
+import com.nilo.dms.dto.order.QueryAbnormalOrderParameter;
 
 import java.util.List;
 

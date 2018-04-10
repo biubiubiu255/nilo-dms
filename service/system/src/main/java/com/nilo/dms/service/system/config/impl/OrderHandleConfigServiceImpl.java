@@ -9,9 +9,9 @@ import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.OrderHandleConfigDao;
 import com.nilo.dms.dao.dataobject.OrderHandleConfigDO;
+import com.nilo.dms.dto.system.OrderHandleConfig;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.config.OrderHandleConfigService;
-import com.nilo.dms.service.system.model.OrderHandleConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

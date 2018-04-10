@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.nilo.dms.dto.common.ReceiverData;
+import com.nilo.dms.dto.order.SignForOrderParam;
+import com.nilo.dms.dto.order.Task;
+import com.nilo.dms.dto.util.CellData;
+import com.nilo.dms.dto.util.ExcelData;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.dto.order.AbnormalParam;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -25,13 +30,8 @@ import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.FileUtil;
 import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.common.utils.ReadExcel;
-import com.nilo.dms.common.utils.model.CellData;
-import com.nilo.dms.common.utils.model.ExcelData;
-import com.nilo.dms.service.model.ReceiverData;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.SignForOrderParam;
-import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.web.controller.BaseController;
 
 /**

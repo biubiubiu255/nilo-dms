@@ -2,7 +2,7 @@ package com.nilo.dms.service.system;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.MerchantStatusEnum;
-import com.nilo.dms.service.system.model.MerchantInfo;
+import com.nilo.dms.dto.system.MerchantInfo;
 
 import java.util.List;
 

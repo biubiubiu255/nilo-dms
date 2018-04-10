@@ -1,8 +1,8 @@
 package com.nilo.dms.service.order;
 
-import com.nilo.dms.service.order.model.AbnormalParam;
-import com.nilo.dms.service.order.model.DelayParam;
-import com.nilo.dms.service.order.model.SignForOrderParam;
+import com.nilo.dms.dto.order.AbnormalParam;
+import com.nilo.dms.dto.order.DelayParam;
+import com.nilo.dms.dto.order.SignForOrderParam;
 
 /**
  * Created by admin on 2017/10/30.

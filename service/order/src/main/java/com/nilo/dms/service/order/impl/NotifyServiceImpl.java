@@ -15,8 +15,10 @@ import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dto.order.DeliveryOrderOpt;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.dto.common.UserInfo;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.NotifyService;
 import com.nilo.dms.service.order.TaskService;
@@ -73,15 +75,19 @@ public class NotifyServiceImpl implements NotifyService {
 
     @Override
     public void updateStatus(OrderOptRequest request) {
-        OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(request.getMerchantId(),
+
+        String merchantId = SessionLocal.getPrincipal().getMerchantId();
+        String network = SessionLocal.getPrincipal().getFirstNetwork();
+
+        OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(merchantId,
                 request.getOptType().getCode());
         String convertResult = StatusConvert.convert(DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
         if (convertResult == null) return;
         try {
-            MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + request.getMerchantId()),
+            MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + merchantId),
                     MerchantConfig.class);
             InterfaceConfig interfaceConfig = JSON.parseObject(
-                    RedisUtil.hget(Constant.INTERFACE_CONF + request.getMerchantId(), "update_status"), InterfaceConfig.class);
+                    RedisUtil.hget(Constant.INTERFACE_CONF + merchantId, "update_status"), InterfaceConfig.class);
             if (interfaceConfig == null) {
                 return;
             }
@@ -93,36 +99,36 @@ public class NotifyServiceImpl implements NotifyService {
                 switch (request.getOptType()) {
                     case ARRIVE_SCAN: {
                         //到件只通知一次
-                        List<DeliveryOrderOptDO> list = deliveryOrderOptDao.queryByOrderNos(Long.parseLong(request.getMerchantId()), Arrays.asList(orderNo));
+                        List<DeliveryOrderOpt> list = deliveryOrderOptDao.queryByOrderNos(Long.parseLong(merchantId), Arrays.asList(orderNo));
                         if (list == null || list.size() > 0) {
                             return;
                         }
-                        DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + request.getMerchantId(), "" + request.getNetworkId()), DistributionNetworkDO.class);
+                        DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, "" + network), DistributionNetworkDO.class);
                         dataMap.put("location", networkDO == null ? "" : networkDO.getName());
                         break;
                     }
                     case DELIVERY: {
-                        Task task = taskService.queryTaskByTypeAndOrderNo(request.getMerchantId(), TaskTypeEnum.DELIVERY.getCode(), orderNo);
-                        UserInfo userInfo = userService.findUserInfoByUserId(request.getMerchantId(), task.getHandledBy());
+                        Task task = taskService.queryTaskByTypeAndOrderNo(merchantId, TaskTypeEnum.DELIVERY.getCode(), orderNo);
+                        UserInfo userInfo = userService.findUserInfoByUserId(merchantId, task.getHandledBy());
 
-                        DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + request.getMerchantId(), "" + request.getNetworkId()), DistributionNetworkDO.class);
+                        DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, "" + network), DistributionNetworkDO.class);
                         dataMap.put("location", networkDO == null ? "" : networkDO.getName());
                         dataMap.put("rider_name", userInfo.getName());
                         dataMap.put("rider_phone", userInfo.getPhone());
                         break;
                     }
                     case SEND: {
-                        Task task = taskService.queryTaskByTypeAndOrderNo(request.getMerchantId(), TaskTypeEnum.DELIVERY.getCode(), orderNo);
+                        Task task = taskService.queryTaskByTypeAndOrderNo(merchantId, TaskTypeEnum.DELIVERY.getCode(), orderNo);
                         break;
                     }
                     case PROBLEM: {
-                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
+                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
                         String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.PRBOLEM_REASON, abnormalOrderDO.getReason());
                         dataMap.put("type", reason);
                         break;
                     }
                     case REFUSE: {
-                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
+                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
                         String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.REFUSE_REASON, abnormalOrderDO.getReason());
                         dataMap.put("type", reason);
                         break;
@@ -135,7 +141,7 @@ public class NotifyServiceImpl implements NotifyService {
                 }
 
                 //请求参数
-                WaybillDO deliveryOrder = waybillDao.queryByOrderNo(Long.parseLong(request.getMerchantId()), orderNo);
+                WaybillDO deliveryOrder = waybillDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
                 //kilimall 临时方案
                 if (StringUtil.equals(deliveryOrder.getOrderPlatform(), "kilimall")) {
                     String orderType = StringUtil.equals(deliveryOrder.getOrderType(), "FBK") ? "SELL" : "YK";

@@ -248,17 +248,19 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             public Void doInTransaction(TransactionStatus transactionStatus) {
                 try {
 
-                    OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(optRequest.getMerchantId(),
+                    String merchantId = SessionLocal.getPrincipal().getMerchantId();
+
+                    OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(merchantId,
                             optRequest.getOptType().getCode());
                     for (String orderNo : optRequest.getOrderNo()) {
                         WaybillDO orderDO = waybillDao
-                                .queryByOrderNo(Long.parseLong(optRequest.getMerchantId()), orderNo);
+                                .queryByOrderNo(Long.parseLong(merchantId), orderNo);
                         if (handleConfig.getUpdateStatus() != null) {
                             // 更新订单状态
                             updateDeliveryOrderStatus(optRequest, orderNo, handleConfig);
                         }
                         // 短信消息
-                        sendPhoneSMS(optRequest.getMerchantId(), optRequest.getOptType().getCode(), orderDO);
+                        sendPhoneSMS(merchantId, optRequest.getOptType().getCode(), orderDO);
                     }
                     //通知上游系统状态变更
                     notifyService.updateStatus(optRequest);
@@ -281,11 +283,8 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
 
         Principal principal = SessionLocal.getPrincipal();
         OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setMerchantId(principal.getMerchantId());
-        optRequest.setOptBy(principal.getUserId());
         optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
         optRequest.setOrderNo(waybillNos);
-        optRequest.setNetworkId(principal.getFirstNetwork());
         handleOpt(optRequest);
     }
 
@@ -380,9 +379,6 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOrderNo(packageRequest.getOrderNos());
         optRequest.setOptType(OptTypeEnum.PACKAGE);
-        optRequest.setOptBy(packageRequest.getOptBy());
-        optRequest.setNetworkId("" + packageRequest.getNetworkId());
-        optRequest.setMerchantId(packageRequest.getMerchantId());
         orderOptLogService.addOptLog(optRequest);
         return orderNo;
     }
@@ -401,11 +397,8 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             }
             if (waybill.isPackage()) {
                 OrderOptRequest optRequest = new OrderOptRequest();
-                optRequest.setMerchantId(unpackRequest.getMerchantId());
-                optRequest.setOptBy(unpackRequest.getOptBy());
                 optRequest.setOptType(OptTypeEnum.SIGN);
                 optRequest.setOrderNo(Arrays.asList(new String[]{orderNo}));
-                optRequest.setNetworkId("" + unpackRequest.getNetworkId());
                 handleOpt(optRequest);
                 iterator.remove();
             }
@@ -441,7 +434,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         long affected = 0;
         // 更新订单信息，循环10次，10次未更新成功，则跳出
         for (int i = 0; i < 10; i++) {
-            WaybillDO query = waybillDao.queryByOrderNo(Long.parseLong(optRequest.getMerchantId()),
+            WaybillDO query = waybillDao.queryByOrderNo(Long.parseLong(SessionLocal.getPrincipal().getMerchantId()),
                     orderNo);
             WaybillDO update = new WaybillDO();
             update.setMerchantId(query.getMerchantId());

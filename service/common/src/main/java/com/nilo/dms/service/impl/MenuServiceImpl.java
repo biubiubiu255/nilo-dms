@@ -3,8 +3,8 @@ package com.nilo.dms.service.impl;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.MenuDao;
 import com.nilo.dms.dao.dataobject.MenuDO;
+import com.nilo.dms.dto.common.Menu;
 import com.nilo.dms.service.MenuService;
-import com.nilo.dms.service.model.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

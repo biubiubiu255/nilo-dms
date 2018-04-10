@@ -5,10 +5,10 @@ import com.nilo.dms.common.enums.DistributionStatusEnum;
 import com.nilo.dms.common.enums.DistributionTypeEnum;
 import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dto.system.DistributionNetwork;
+import com.nilo.dms.dto.system.MerchantInfo;
 import com.nilo.dms.service.system.MerchantService;
 import com.nilo.dms.service.system.DistributionNetworkService;
-import com.nilo.dms.service.system.model.DistributionNetwork;
-import com.nilo.dms.service.system.model.MerchantInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

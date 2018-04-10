@@ -12,10 +12,9 @@ import com.nilo.dms.dao.LoadingDao;
 import com.nilo.dms.dao.LoadingDetailsDao;
 import com.nilo.dms.dao.dataobject.LoadingDO;
 import com.nilo.dms.dao.dataobject.LoadingDetailsDO;
-import com.nilo.dms.dto.order.LoadingDetails;
-import com.nilo.dms.dto.order.ShipParameter;
+import com.nilo.dms.dto.common.UserInfo;
+import com.nilo.dms.dto.order.*;
 import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.TaskService;
@@ -262,8 +261,6 @@ public class LoadingServiceImpl implements LoadingService {
 
         //修改订单状态为发运
         OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setMerchantId("" + merchantId);
-        optRequest.setOptBy(parameter.getOptBy());
         if (StringUtil.isNotEmpty(loadingDO.getNextStation())) {
             optRequest.setOptType(OptTypeEnum.SEND);
         } else {
@@ -271,7 +268,6 @@ public class LoadingServiceImpl implements LoadingService {
         }
         optRequest.setOrderNo(orderNoList);
         optRequest.setRider(loadingDO.getRider());
-        optRequest.setNetworkId(parameter.getNetworkId());
         waybillService.handleOpt(optRequest);
 
         // 更新发运状态

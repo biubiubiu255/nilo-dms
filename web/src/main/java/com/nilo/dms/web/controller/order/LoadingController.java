@@ -9,6 +9,7 @@ import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.dto.order.Loading;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.dto.order.LoadingDetails;
 import com.nilo.dms.dto.order.ShipParameter;
@@ -25,7 +26,6 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.model.Loading;
 import com.nilo.dms.web.controller.BaseController;
 
 /**

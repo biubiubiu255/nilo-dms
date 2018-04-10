@@ -2,11 +2,11 @@ package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.PaidTypeEnum;
+import com.nilo.dms.dto.order.SignForOrderParam;
 import com.nilo.dms.service.FileService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.SignForOrderParam;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;

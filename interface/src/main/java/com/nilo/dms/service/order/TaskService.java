@@ -1,8 +1,8 @@
 package com.nilo.dms.service.order;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.order.model.Task;
-import com.nilo.dms.service.order.model.TaskParameter;
+import com.nilo.dms.dto.order.Task;
+import com.nilo.dms.dto.order.TaskParameter;
 
 import java.util.List;
 

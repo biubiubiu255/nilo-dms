@@ -1,9 +1,9 @@
 package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dto.order.AbnormalParam;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.RiderOptService;
-import com.nilo.dms.service.order.model.AbnormalParam;
 import com.nilo.dms.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

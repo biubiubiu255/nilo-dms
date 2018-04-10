@@ -1,7 +1,7 @@
 package com.nilo.dms.service.order;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.order.model.Loading;
+import com.nilo.dms.dto.order.Loading;
 import com.nilo.dms.dto.order.ShipParameter;
 
 import java.util.List;

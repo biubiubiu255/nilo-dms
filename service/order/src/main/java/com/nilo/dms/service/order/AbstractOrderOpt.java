@@ -7,9 +7,10 @@ import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.WaybillDO;
-import com.nilo.dms.service.order.model.OrderOptRequest;
+import com.nilo.dms.dto.order.OrderOptRequest;
+import com.nilo.dms.dto.system.OrderHandleConfig;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.system.SystemConfig;
-import com.nilo.dms.service.system.model.OrderHandleConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +33,14 @@ public abstract class AbstractOrderOpt {
     protected void checkOtpParam(OrderOptRequest optRequest) {
         AssertUtil.isNotNull(optRequest, SysErrorCode.REQUEST_IS_NULL);
         AssertUtil.isNotNull(optRequest.getOptType(), BizErrorCode.OPT_TYP_EMPTY);
-        AssertUtil.isNotBlank(optRequest.getMerchantId(), BizErrorCode.MERCHANT_ID_EMPTY);
         AssertUtil.isNotNull(optRequest.getOrderNo(), BizErrorCode.ORDER_NO_EMPTY);
-        AssertUtil.isNotBlank(optRequest.getOptBy(), BizErrorCode.OPT_USER_EMPTY);
     }
 
     protected void checkOptType(OrderOptRequest optRequest) {
 
-        OrderHandleConfig config = SystemConfig.getOrderHandleConfig(optRequest.getMerchantId(), optRequest.getOptType().getCode());
+        String merchantId = SessionLocal.getPrincipal().getMerchantId();
+
+        OrderHandleConfig config = SystemConfig.getOrderHandleConfig(merchantId, optRequest.getOptType().getCode());
         if (config == null) {
             throw new DMSException(BizErrorCode.HANDLE_TYPE_NOT_CONFIG, optRequest.getOptType().getCode());
         }
@@ -48,7 +49,7 @@ public abstract class AbstractOrderOpt {
 
         for (String orderNo : optRequest.getOrderNo()) {
 
-            WaybillDO orderDO = waybillDao.queryByOrderNo(Long.parseLong(optRequest.getMerchantId()), orderNo);
+            WaybillDO orderDO = waybillDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
             if (orderDO == null) {
                 throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
             }

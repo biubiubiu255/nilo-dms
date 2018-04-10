@@ -8,7 +8,7 @@ import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
-import com.nilo.dms.dto.order.Waybill;
+import com.nilo.dms.dto.order.*;
 import com.nilo.dms.service.mq.consumer.AbstractMQConsumer;
 import com.nilo.dms.service.mq.model.*;
 import org.apache.commons.codec.digest.DigestUtils;

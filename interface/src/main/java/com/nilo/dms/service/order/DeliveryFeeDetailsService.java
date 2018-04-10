@@ -1,7 +1,7 @@
 package com.nilo.dms.service.order;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.order.model.DeliveryFeeDetails;
+import com.nilo.dms.dto.order.DeliveryFeeDetails;
 
 import java.util.List;
 

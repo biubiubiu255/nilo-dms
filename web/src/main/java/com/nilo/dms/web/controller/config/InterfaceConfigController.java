@@ -3,9 +3,9 @@ package com.nilo.dms.web.controller.config;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dto.system.InterfaceConfig;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.system.config.InterfaceConfigService;
-import com.nilo.dms.service.system.model.InterfaceConfig;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

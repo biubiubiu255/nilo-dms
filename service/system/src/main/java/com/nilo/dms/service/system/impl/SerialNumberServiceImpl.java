@@ -7,9 +7,9 @@ import com.nilo.dms.common.exception.SysErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.dao.SerialNumberRuleDao;
 import com.nilo.dms.dao.dataobject.SerialNumberRuleDO;
+import com.nilo.dms.dto.system.SerialNumberRule;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SerialNumberService;
-import com.nilo.dms.service.system.model.SerialNumberRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

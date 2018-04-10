@@ -4,8 +4,8 @@
  */
 package com.nilo.dms.common.utils;
 
-import com.nilo.dms.common.utils.model.CellData;
-import com.nilo.dms.common.utils.model.ExcelData;
+import com.nilo.dms.dto.util.CellData;
+import com.nilo.dms.dto.util.ExcelData;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;

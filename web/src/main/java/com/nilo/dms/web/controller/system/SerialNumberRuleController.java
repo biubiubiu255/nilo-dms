@@ -2,9 +2,9 @@ package com.nilo.dms.web.controller.system;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dto.system.SerialNumberRule;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.system.SerialNumberService;
-import com.nilo.dms.service.system.model.SerialNumberRule;
 import com.nilo.dms.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

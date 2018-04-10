@@ -1,6 +1,5 @@
 package com.nilo.dms.common.utils;
 
-import com.nilo.dms.common.utils.model.ExcelData;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -47,7 +46,7 @@ public class FileUtil {
         }
     }
 
-    public static void saveFile(InputStream in, String path,String fileName) throws Exception {
+    public static void saveFile(InputStream in, String path, String fileName) throws Exception {
         DataOutputStream out = null;
         try {
             File checkFile = new File(path + File.separator + fileName);

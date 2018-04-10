@@ -2,9 +2,9 @@ package com.nilo.dms.web.controller.config;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dto.system.ScheduleJob;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.system.ScheduleService;
-import com.nilo.dms.service.system.model.ScheduleJob;
 import com.nilo.dms.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -1,28 +1,26 @@
 package com.nilo.dms.service.order.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.nilo.dms.common.Constant;
-import com.nilo.dms.common.enums.OptTypeEnum;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderRouteDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderRouteDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderSenderDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dto.common.UserInfo;
+import com.nilo.dms.dto.order.DeliveryRoute;
+import com.nilo.dms.dto.order.DeliveryRouteMessage;
+import com.nilo.dms.dto.order.OrderOptRequest;
 import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.model.UserInfo;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.DeliveryRouteService;
-import com.nilo.dms.service.order.model.DeliveryRoute;
-import com.nilo.dms.service.order.model.DeliveryRouteMessage;
-import com.nilo.dms.service.order.model.OrderOptRequest;
 import com.nilo.dms.service.system.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -56,13 +54,15 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
     @Override
     public void addRoute(OrderOptRequest request) {
 
+        Principal principal = SessionLocal.getPrincipal();
+
         DeliveryRouteMessage message = new DeliveryRouteMessage();
-        message.setMerchantId(request.getMerchantId());
         message.setOrderNo(request.getOrderNo().toArray(new String[request.getOrderNo().size()]));
         message.setOptType(request.getOptType().getCode());
-        message.setOptBy(request.getOptBy());
         message.setRider(request.getRider());
-        message.setNetworkId(request.getNetworkId());
+        message.setMerchantId(principal.getMerchantId());
+        message.setOptBy(principal.getUserId());
+        message.setNetworkId(principal.getFirstNetwork());
         try {
             routeProducer.sendMessage(message);
         } catch (Exception e) {

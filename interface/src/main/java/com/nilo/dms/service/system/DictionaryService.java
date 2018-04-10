@@ -1,7 +1,7 @@
 package com.nilo.dms.service.system;
 
 
-import com.nilo.dms.service.system.model.Dictionary;
+import com.nilo.dms.dto.system.Dictionary;
 
 import java.util.List;
 

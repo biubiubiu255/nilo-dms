@@ -9,12 +9,11 @@ import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.MerchantConfigDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.MerchantConfigDO;
+import com.nilo.dms.dto.system.*;
 import com.nilo.dms.service.system.DictionaryService;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.config.*;
-import com.nilo.dms.service.system.model.Dictionary;
 import com.nilo.dms.service.system.*;
-import com.nilo.dms.service.system.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

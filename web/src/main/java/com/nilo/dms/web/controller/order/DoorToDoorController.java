@@ -8,13 +8,13 @@ import com.nilo.dms.common.enums.TaskStatusEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.dto.common.UserInfo;
+import com.nilo.dms.dto.order.OrderOptRequest;
+import com.nilo.dms.dto.order.Task;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.OrderOptRequest;
-import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.dto.order.WaybillParameter;
 import com.nilo.dms.web.controller.BaseController;
@@ -105,8 +105,6 @@ public class DoorToDoorController extends BaseController {
             }
             //操作订单
             OrderOptRequest optRequest = new OrderOptRequest();
-            optRequest.setMerchantId(merchantId);
-            optRequest.setOptBy(me.getUserId());
             optRequest.setOptType(OptTypeEnum.ALLOCATE);
             optRequest.setOrderNo(Arrays.asList(orderNos));
             waybillService.handleOpt(optRequest);
