@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.nilo.dms.service.order.WaybillService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -30,12 +31,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.DeliveryOrderPaidTypeEnum;
 import com.nilo.dms.common.utils.IdWorker;
-import com.nilo.dms.dao.ImageDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
 import com.nilo.dms.service.FileService;
-import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.PaymentService;
-import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.WaybillPaymentOrder;
 import com.nilo.dms.service.order.model.WaybillPaymentRecord;
@@ -60,7 +58,7 @@ public class CODSignController extends BaseController {
 	private static final String[] suffixNameAllow = new String[] { ".jpg", ".png" };
 
 	@Autowired
-	private OrderService orderService;
+	private WaybillService waybillService;
 
 	@Autowired
 	private FileService fileService;
@@ -85,7 +83,7 @@ public class CODSignController extends BaseController {
 		deliveryOrderDO.setPaidType(paidType);
 		deliveryOrderDO.setUpdatedBy(me.getUserId());
 		deliveryOrderDO.setUpdatedTime(new Date().getTime());
-		long i = orderService.updatePaidType(deliveryOrderDO);
+		long i = waybillService.updatePaidType(deliveryOrderDO);
 		if (i < 1) {
 			return toJsonErrorMsg("cash pay error");
 		}
@@ -108,7 +106,7 @@ public class CODSignController extends BaseController {
 		}
 
 		String merchantId = me.getMerchantId();
-		DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, logisticsNo);
+		DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, logisticsNo);
 		// 订单付款标识更新
 		DeliveryOrderDO deliveryOrderDO = new DeliveryOrderDO();
 
@@ -117,7 +115,7 @@ public class CODSignController extends BaseController {
 		deliveryOrderDO.setPaidType(paidType);
 		deliveryOrderDO.setUpdatedBy(me.getUserId());
 		deliveryOrderDO.setUpdatedTime(new Date().getTime());
-		long i = orderService.updatePaidType(deliveryOrderDO);
+		long i = waybillService.updatePaidType(deliveryOrderDO);
 		if (i < 1) {
 			return toJsonErrorMsg("cash pay error");
 		}
@@ -182,10 +180,10 @@ public class CODSignController extends BaseController {
 		deliveryOrderDO.setPaidType(DeliveryOrderPaidTypeEnum.ONLINE.getCode());
 		deliveryOrderDO.setUpdatedBy(me.getUserId());
 		deliveryOrderDO.setUpdatedTime(new Date().getTime());
-		orderService.updatePaidType(deliveryOrderDO);
+		waybillService.updatePaidType(deliveryOrderDO);
 		
 		
-		DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+		DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
 
 		List<String> waybillNos = new ArrayList<String>();
 		waybillNos.add(orderNo);
@@ -315,7 +313,7 @@ public class CODSignController extends BaseController {
 		}
 		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 		String merchantId = me.getMerchantId();
-		DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+		DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
 
 		// model.addAttribute("deliveryOrder", deliveryOrder);
 		if (deliveryOrder == null) {

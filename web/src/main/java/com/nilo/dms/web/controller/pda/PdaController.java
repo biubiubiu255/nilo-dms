@@ -27,7 +27,6 @@ import com.nilo.dms.web.controller.mobile.SendScanController;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +35,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.druid.sql.visitor.functions.Hex;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.service.model.pda.PdaWaybill;
-import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.web.controller.BaseController;
 
@@ -55,7 +53,7 @@ public class PdaController extends BaseController {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private OrderService orderService;
+	private WaybillService waybillService;
 	@Autowired
 	private LoadingService loadingService;
 	@Autowired
@@ -76,7 +74,7 @@ public class PdaController extends BaseController {
 	}
 
 	private PdaWaybill queryByOrderNo(String merchantId, String waybillNo) {
-		DeliveryOrder delivery = orderService.queryByOrderNo(merchantId, waybillNo);
+		DeliveryOrder delivery = waybillService.queryByOrderNo(merchantId, waybillNo);
 		PdaWaybill pdaWaybill = new PdaWaybill();
 		pdaWaybill.setWaybillNo(waybillNo);
 		pdaWaybill.setReceiverCountry(delivery.getReceiverInfo().getReceiverCountry());
@@ -117,7 +115,7 @@ public class PdaController extends BaseController {
 		String merchantId = me.getMerchantId();
 		String netWorkId = me.getNetworks().get(0) + "";
 
-		orderService.waybillNoListArrive(waybillNos, arriveBy, merchantId, netWorkId);
+		waybillService.waybillNoListArrive(waybillNos, arriveBy, merchantId, netWorkId);
 
 		PdaWaybill pdaWaybill = this.queryByOrderNo(merchantId, waybillNo);
 
@@ -134,7 +132,7 @@ public class PdaController extends BaseController {
 		String merchantId = me.getMerchantId();
 		String netWorkId = me.getNetworks().get(0) + "";
 
-		orderService.waybillArrvieWeighing(waybillNo, weight, length, width, height,arriveBy, merchantId, netWorkId);
+		waybillService.waybillArrvieWeighing(waybillNo, weight, length, width, height,arriveBy, merchantId, netWorkId);
 		PdaWaybill pdaWaybill = this.queryByOrderNo(merchantId, waybillNo);
 
 		return toJsonTrueData(pdaWaybill);
@@ -256,7 +254,7 @@ public class PdaController extends BaseController {
 		for (int i = 0; i < scaned_codes.length; i++) {
 			try {
 				loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i], me.getUserId());
-				// order = orderService.queryByOrderNo(merchantId, scaned_codes);
+				// order = waybillService.queryByOrderNo(merchantId, scaned_codes);
 
 			} catch (Exception e) {
 				log.error("loadingScan failed. orderNo:{}", scaned_codes[i], e);
@@ -366,7 +364,7 @@ public class PdaController extends BaseController {
 		try {
 			String[] logisticsNoArray = scanedCodes.split(",");
 			if (null != logisticsNoArray && logisticsNoArray.length > 0) {
-				orderService.waybillNoListArrive(Arrays.asList(logisticsNoArray), arriveBy, merchantId, netWorkId);
+				waybillService.waybillNoListArrive(Arrays.asList(logisticsNoArray), arriveBy, merchantId, netWorkId);
 			}
 		} catch (Exception e) {
 			return toJsonErrorMsg(e.getMessage());

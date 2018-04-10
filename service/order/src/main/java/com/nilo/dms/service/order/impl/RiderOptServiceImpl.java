@@ -4,7 +4,6 @@ import com.nilo.dms.common.enums.*;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.DateUtil;
-import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderDelayDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
 import com.nilo.dms.service.order.*;
@@ -30,7 +29,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
     @Autowired
     TaskService taskService;
     @Autowired
-    OrderService orderService;
+    WaybillService waybillService;
     @Autowired
     private AbnormalOrderService abnormalOrderService;
 
@@ -48,7 +47,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(orderNo);
         optRequest.setOrderNo(orderNoList);
-        orderService.handleOpt(optRequest);
+        waybillService.handleOpt(optRequest);
 
         Task task = new Task();
         task.setTaskId(taskId);
@@ -70,7 +69,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(orderNo);
         optRequest.setOrderNo(orderNoList);
-        orderService.handleOpt(optRequest);
+        waybillService.handleOpt(optRequest);
 
         Task task = new Task();
         task.setTaskId(taskId);
@@ -91,7 +90,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(orderNo);
         optRequest.setOrderNo(orderNoList);
-        orderService.handleOpt(optRequest);
+        waybillService.handleOpt(optRequest);
 
         Task task = new Task();
         task.setTaskId(taskId);
@@ -126,7 +125,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(param.getOrderNo());
         optRequest.setOrderNo(orderNoList);
-        orderService.handleOpt(optRequest);
+        waybillService.handleOpt(optRequest);
 
         if (t != null) {
             Task task = new Task();
@@ -146,7 +145,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
             throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getOrderNo());
         }
 
-        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(param.getMerchantId(), param.getOrderNo());
+        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(param.getMerchantId(), param.getOrderNo());
         if (deliveryOrder == null) {
             throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, param.getOrderNo());
         }
@@ -196,7 +195,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         }
 
         //修改任务状态
-        Task task = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(),TaskTypeEnum.DELIVERY.getCode(),param.getOrderNo());
+        Task task = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(), TaskTypeEnum.DELIVERY.getCode(), param.getOrderNo());
         task.setStatus(TaskStatusEnum.COMPLETE);
         task.setHandledTime(DateUtil.getSysTimeStamp());
         taskService.updateTask(task);

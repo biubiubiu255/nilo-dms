@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.DeliveryFeeDetailsStatusEnum;
-import com.nilo.dms.common.enums.ServiceTypeEnum;
 import com.nilo.dms.dao.DeliveryFeeDetailsDao;
 import com.nilo.dms.dao.DeliveryFeeFactorDao;
 import com.nilo.dms.dao.DeliveryFeeTemplateDao;
@@ -12,7 +11,7 @@ import com.nilo.dms.dao.dataobject.DeliveryFeeDetailsDO;
 import com.nilo.dms.dao.dataobject.DeliveryFeeFactorDO;
 import com.nilo.dms.dao.dataobject.DeliveryFeeTemplateDO;
 import com.nilo.dms.service.order.DeliveryFeeDetailsService;
-import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.fee.*;
 import com.nilo.dms.service.order.model.DeliveryFeeDetails;
 import com.nilo.dms.service.order.model.DeliveryOrder;
@@ -38,7 +37,7 @@ public class DeliveryFeeDetailsServiceImpl implements DeliveryFeeDetailsService 
     private DeliveryFeeDetailsDao deliveryFeeDetailsDao;
 
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
 
     @Autowired
     private DeliveryFeeTemplateDao deliveryFeeTemplateDao;
@@ -57,7 +56,7 @@ public class DeliveryFeeDetailsServiceImpl implements DeliveryFeeDetailsService 
         Double bizFeeTimes = bizFeeConfig.getFee();
 
         //get order details
-        DeliveryOrder order = orderService.queryByOrderNo(merchantId, orderNo);
+        DeliveryOrder order = waybillService.queryByOrderNo(merchantId, orderNo);
 
         //查找计费模板
         DeliveryFeeTemplateDO param = new DeliveryFeeTemplateDO();

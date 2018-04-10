@@ -13,7 +13,7 @@ import com.nilo.dms.service.order.model.UnpackRequest;
 /**
  * Created by ronny on 2017/9/15.
  */
-public interface OrderService {
+public interface WaybillService {
 
     String addCreateDeliveryOrderRequest(String merchantId, String data, String sign);
 

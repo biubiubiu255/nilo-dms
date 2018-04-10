@@ -39,7 +39,7 @@ import static com.nilo.dms.common.Constant.IS_PACKAGE;
  * Created by ronny on 2017/9/15.
  */
 @Service
-public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
+public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

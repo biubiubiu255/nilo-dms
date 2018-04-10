@@ -13,9 +13,7 @@ import com.nilo.dms.dao.dataobject.TaskDO;
 import com.nilo.dms.dao.dataobject.TaskTransferDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.UserInfo;
-import com.nilo.dms.service.order.model.TaskMessage;
-import com.nilo.dms.service.mq.producer.AbstractMQProducer;
-import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.Task;
@@ -23,7 +21,6 @@ import com.nilo.dms.service.order.model.TaskParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -38,7 +35,7 @@ import java.util.*;
 public class TaskServiceImpl implements TaskService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -158,7 +155,7 @@ public class TaskServiceImpl implements TaskService {
         List<String> userIdList = new ArrayList<>();
         userIdList.addAll(userIds);
         //查询所有订单信息
-        List<DeliveryOrder> deliveryOrderList = orderService.queryByOrderNos(parameter.getMerchantId(), orderNos);
+        List<DeliveryOrder> deliveryOrderList = waybillService.queryByOrderNos(parameter.getMerchantId(), orderNos);
         //查询所有用户信息
         List<UserInfo> userInfoList = userService.findUserInfoByUserIds(parameter.getMerchantId(), userIdList);
 

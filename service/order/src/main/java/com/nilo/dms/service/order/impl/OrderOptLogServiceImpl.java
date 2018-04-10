@@ -15,10 +15,9 @@ import com.nilo.dms.dao.dataobject.WaybillLogUnPackDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.User;
 import com.nilo.dms.service.order.OrderOptLogService;
-import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.DeliveryOrderOpt;
-import com.nilo.dms.service.order.model.DeliveryRoute;
 import com.nilo.dms.service.order.model.OrderOptRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,7 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
     @Autowired
     private UserService userService;
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
     @Autowired
     private WaybillLogArriveDao waybillLogArriveDao;
     @Autowired
@@ -80,7 +79,7 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
 
         List<String> orderNoList = new ArrayList<>();
         orderNoList.addAll(orderNos);
-        List<DeliveryOrder> orderList = orderService.queryByOrderNos(merchantId, orderNoList);
+        List<DeliveryOrder> orderList = waybillService.queryByOrderNos(merchantId, orderNoList);
 
 
         for (DeliveryOrderOptDO d : list) {
@@ -121,7 +120,7 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
         switch (optTypeEnum) {
             case PACKAGE: {
                 for(String orderNo : request.getOrderNo()) {
-                    DeliveryOrder deliveryOrder = orderService.queryByOrderNo(request.getMerchantId(), orderNo);
+                    DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(request.getMerchantId(), orderNo);
                     WaybillLogPackageDO packageDO = new WaybillLogPackageDO();
                     packageDO.setOptTime(DateUtil.getSysTimeStamp());
                     packageDO.setOptBy(request.getOptBy());
@@ -135,7 +134,7 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
             }
             case UNPACK: {
                 for(String orderNo : request.getOrderNo()) {
-                    DeliveryOrder deliveryOrder = orderService.queryByOrderNo(request.getMerchantId(), orderNo);
+                    DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(request.getMerchantId(), orderNo);
                     WaybillLogUnPackDO unPackDO = new WaybillLogUnPackDO();
                     unPackDO.setOptTime(DateUtil.getSysTimeStamp());
                     unPackDO.setOptBy(request.getOptBy());
@@ -149,7 +148,7 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
             }
             case ARRIVE_SCAN: {
                 for (String orderNo : request.getOrderNo()) {
-                    DeliveryOrder deliveryOrder = orderService.queryByOrderNo(request.getMerchantId(), orderNo);
+                    DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(request.getMerchantId(), orderNo);
                     WaybillLogArriveDO arriveDO = new WaybillLogArriveDO();
                     arriveDO.setOptTime(DateUtil.getSysTimeStamp());
                     arriveDO.setOptBy(request.getOptBy());

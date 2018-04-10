@@ -11,16 +11,11 @@ import com.nilo.dms.dao.AbnormalOrderDao;
 import com.nilo.dms.dao.DeliveryOrderDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
-import com.nilo.dms.service.system.MerchantService;
 import com.nilo.dms.service.order.AbnormalOrderService;
-import com.nilo.dms.service.order.DeliveryFeeDetailsService;
-import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
-import com.nilo.dms.service.system.model.MerchantInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.nilo.dms.common.enums.AbnormalTypeEnum.PROBLEM;
-import static com.nilo.dms.common.enums.AbnormalTypeEnum.REFUSE;
 
 /**
  * Created by admin on 2017/11/9.
@@ -42,7 +36,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
     @Autowired
     private AbnormalOrderDao abnormalOrderDao;
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
     @Autowired
     private DeliveryOrderDao deliveryOrderDao;
 
@@ -80,7 +74,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         orderNoList.add(abnormalOrder.getOrderNo());
         optRequest.setOrderNo(orderNoList);
         optRequest.setRemark(abnormalOrder.getRemark());
-        orderService.handleOpt(optRequest);
+        waybillService.handleOpt(optRequest);
 
     }
 

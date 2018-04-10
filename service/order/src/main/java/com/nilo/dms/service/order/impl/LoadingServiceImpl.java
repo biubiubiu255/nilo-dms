@@ -1,7 +1,5 @@
 package com.nilo.dms.service.order.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.*;
 import com.nilo.dms.common.exception.BizErrorCode;
@@ -12,17 +10,14 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.LoadingDao;
 import com.nilo.dms.dao.LoadingDetailsDao;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.LoadingDO;
 import com.nilo.dms.dao.dataobject.LoadingDetailsDO;
 import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.model.User;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.model.*;
-import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +46,7 @@ public class LoadingServiceImpl implements LoadingService {
     @Autowired
     private TaskService taskService;
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
     @Autowired
     private UserService userService;
 
@@ -152,7 +147,7 @@ public class LoadingServiceImpl implements LoadingService {
             inx++;
             LoadingDetails details = convert(detailsDO);
             details.setNum(inx);
-            details.setDeliveryOrder(orderService.queryByOrderNo(merchantId, details.getOrderNo()));
+            details.setDeliveryOrder(waybillService.queryByOrderNo(merchantId, details.getOrderNo()));
             detailsList.add(details);
         }
         loading.setDetailsList(detailsList);
@@ -276,7 +271,7 @@ public class LoadingServiceImpl implements LoadingService {
         optRequest.setOrderNo(orderNoList);
         optRequest.setRider(loadingDO.getRider());
         optRequest.setNetworkId(parameter.getNetworkId());
-        orderService.handleOpt(optRequest);
+        waybillService.handleOpt(optRequest);
 
         // 更新发运状态
         LoadingDO update = new LoadingDO();
