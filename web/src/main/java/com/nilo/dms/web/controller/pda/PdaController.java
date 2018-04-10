@@ -39,7 +39,7 @@ import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.service.model.pda.PdaWaybill;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -74,7 +74,7 @@ public class PdaController extends BaseController {
 	}
 
 	private PdaWaybill queryByOrderNo(String merchantId, String waybillNo) {
-		DeliveryOrder delivery = waybillService.queryByOrderNo(merchantId, waybillNo);
+		Waybill delivery = waybillService.queryByOrderNo(merchantId, waybillNo);
 		PdaWaybill pdaWaybill = new PdaWaybill();
 		pdaWaybill.setWaybillNo(waybillNo);
 		pdaWaybill.setReceiverCountry(delivery.getReceiverInfo().getReceiverCountry());
@@ -250,7 +250,7 @@ public class PdaController extends BaseController {
 			return toJsonErrorMsg(e.getMessage());
 		}
 
-		DeliveryOrder order = null;
+		Waybill order = null;
 		for (int i = 0; i < scaned_codes.length; i++) {
 			try {
 				loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i], me.getUserId());
@@ -304,7 +304,7 @@ public class PdaController extends BaseController {
 			return toJsonErrorMsg(e.getMessage());
 		}
 
-		DeliveryOrder order = null;
+		Waybill order = null;
 		for (int i = 0; i < scaned_codes.length; i++) {
 			try {
 				loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i], me.getUserId());

@@ -16,7 +16,7 @@ import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.User;
 import com.nilo.dms.service.order.OrderOptLogService;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.service.order.model.DeliveryOrderOpt;
 import com.nilo.dms.service.order.model.OrderOptRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +79,7 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
 
         List<String> orderNoList = new ArrayList<>();
         orderNoList.addAll(orderNos);
-        List<DeliveryOrder> orderList = waybillService.queryByOrderNos(merchantId, orderNoList);
+        List<Waybill> orderList = waybillService.queryByOrderNos(merchantId, orderNoList);
 
 
         for (DeliveryOrderOptDO d : list) {
@@ -91,7 +91,7 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
                 }
             }
 
-            for (DeliveryOrder o : orderList) {
+            for (Waybill o : orderList) {
                 if (StringUtil.equals(o.getOrderNo(), d.getOrderNo())) {
                     opt.setDeliveryOrder(o);
                     break;
@@ -120,12 +120,12 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
         switch (optTypeEnum) {
             case PACKAGE: {
                 for(String orderNo : request.getOrderNo()) {
-                    DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(request.getMerchantId(), orderNo);
+                    Waybill waybill = waybillService.queryByOrderNo(request.getMerchantId(), orderNo);
                     WaybillLogPackageDO packageDO = new WaybillLogPackageDO();
                     packageDO.setOptTime(DateUtil.getSysTimeStamp());
                     packageDO.setOptBy(request.getOptBy());
                     packageDO.setNetworkId(Integer.parseInt(request.getNetworkId()));
-                    packageDO.setParentNo(deliveryOrder.getParentNo());
+                    packageDO.setParentNo(waybill.getParentNo());
                     packageDO.setOrderNo(orderNo);
                     packageDO.setMerchantId(Long.parseLong(request.getMerchantId()));
                     waybillLogPackageDao.insert(packageDO);
@@ -134,12 +134,12 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
             }
             case UNPACK: {
                 for(String orderNo : request.getOrderNo()) {
-                    DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(request.getMerchantId(), orderNo);
+                    Waybill waybill = waybillService.queryByOrderNo(request.getMerchantId(), orderNo);
                     WaybillLogUnPackDO unPackDO = new WaybillLogUnPackDO();
                     unPackDO.setOptTime(DateUtil.getSysTimeStamp());
                     unPackDO.setOptBy(request.getOptBy());
                     unPackDO.setNetworkId(Integer.parseInt(request.getNetworkId()));
-                    unPackDO.setParentNo(deliveryOrder.getParentNo());
+                    unPackDO.setParentNo(waybill.getParentNo());
                     unPackDO.setOrderNo(orderNo);
                     unPackDO.setMerchantId(Long.parseLong(request.getMerchantId()));
                     waybillLogUnPackDao.insert(unPackDO);
@@ -148,13 +148,13 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
             }
             case ARRIVE_SCAN: {
                 for (String orderNo : request.getOrderNo()) {
-                    DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(request.getMerchantId(), orderNo);
+                    Waybill waybill = waybillService.queryByOrderNo(request.getMerchantId(), orderNo);
                     WaybillLogArriveDO arriveDO = new WaybillLogArriveDO();
                     arriveDO.setOptTime(DateUtil.getSysTimeStamp());
                     arriveDO.setOptBy(request.getOptBy());
                     arriveDO.setNetworkId(Integer.parseInt(request.getNetworkId()));
                     arriveDO.setOrderNo(orderNo);
-                    arriveDO.setLastNetworkId(deliveryOrder.getNetworkId());
+                    arriveDO.setLastNetworkId(waybill.getNetworkId());
                     arriveDO.setMerchantId(Long.parseLong(request.getMerchantId()));
                     waybillLogArriveDao.insert(arriveDO);
                 }

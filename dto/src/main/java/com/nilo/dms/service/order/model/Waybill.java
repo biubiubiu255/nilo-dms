@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by ronny on 2017/9/15.
  */
-public class DeliveryOrder {
+public class Waybill {
 
     @Excel(name = "OrderNo", order = 1)
     private String orderNo;
@@ -82,14 +82,14 @@ public class DeliveryOrder {
     private Integer printTimes;
 
     private String allocatedRider;
-    private DeliveryOrderPaidTypeEnum paidType;
+    private PaidTypeEnum paidType;
 
 
-    public DeliveryOrderPaidTypeEnum getPaidType() {
+    public PaidTypeEnum getPaidType() {
         return paidType;
     }
 
-    public void setPaidType(DeliveryOrderPaidTypeEnum paidType) {
+    public void setPaidType(PaidTypeEnum paidType) {
         this.paidType = paidType;
     }
 

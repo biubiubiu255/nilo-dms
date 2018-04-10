@@ -1,7 +1,7 @@
 package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.common.enums.DeliveryOrderPaidTypeEnum;
+import com.nilo.dms.common.enums.PaidTypeEnum;
 import com.nilo.dms.service.FileService;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.WaybillService;
@@ -86,7 +86,7 @@ public class SignScanController extends BaseController {
                 //已支付的类型，如果是在线支付，需要AlreadyPaid有值才能签收，其他支付类型，认为已收款。可以签收
                 if (deliveryOrder.getPaidType() != null) {
                     model.addAttribute("paidType", deliveryOrder.getPaidType().getDesc());
-                    if (deliveryOrder.getPaidType().getCode() != DeliveryOrderPaidTypeEnum.ONLINE.getCode()) {
+                    if (deliveryOrder.getPaidType().getCode() != PaidTypeEnum.ONLINE.getCode()) {
                         isPaid = true;
                     }
                 }
@@ -174,7 +174,7 @@ public class SignScanController extends BaseController {
             //已支付的类型，如果是在线支付，需要AlreadyPaid有值才能签收，其他支付类型，认为已收款。可以签收
             if (deliveryOrder.getPaidType() != null) {
                 map.put("paidType", deliveryOrder.getPaidType().getDesc());
-                if (deliveryOrder.getPaidType().getCode() != DeliveryOrderPaidTypeEnum.ONLINE.getCode()) {
+                if (deliveryOrder.getPaidType().getCode() != PaidTypeEnum.ONLINE.getCode()) {
                     isPaid = true;
                 }
             }

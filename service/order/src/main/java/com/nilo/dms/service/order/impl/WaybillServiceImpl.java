@@ -88,10 +88,10 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
 
         try {
 
-            DeliveryOrder order = JSON.parseObject(data, DeliveryOrder.class);
+            Waybill order = JSON.parseObject(data, Waybill.class);
             String orderNo = order.getOrderNo();
 
-            DeliveryOrder query = queryByOrderNo(merchantId, orderNo);
+            Waybill query = queryByOrderNo(merchantId, orderNo);
             if (query != null) return orderNo;
 
             // 校验订单参数
@@ -119,7 +119,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
     @Override
-    public String createDeliveryOrder(final DeliveryOrder data) {
+    public String createDeliveryOrder(final Waybill data) {
         // 数据校验
         verifyDeliveryOrderParam(data);
 
@@ -200,7 +200,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
     @Override
-    public List<DeliveryOrder> queryDeliveryOrderBy(DeliveryOrderParameter parameter, Pagination pagination) {
+    public List<Waybill> queryDeliveryOrderBy(DeliveryOrderParameter parameter, Pagination pagination) {
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderNo", parameter.getOrderNo());
@@ -238,9 +238,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         return batchQuery(queryList, Long.parseLong(parameter.getMerchantId()));
     }
 
-    private List<DeliveryOrder> batchQuery(List<DeliveryOrderDO> deliveryOrderDOs, Long merchantId) {
+    private List<Waybill> batchQuery(List<DeliveryOrderDO> deliveryOrderDOs, Long merchantId) {
 
-        List<DeliveryOrder> list = new ArrayList<>();
+        List<Waybill> list = new ArrayList<>();
         // 构建订单号集合
         List<String> orderNos = new ArrayList<>();
         for (DeliveryOrderDO o : deliveryOrderDOs) {
@@ -249,7 +249,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         List<DeliveryOrderSenderDO> senderDO = deliveryOrderSenderDao.queryByOrderNos(merchantId, orderNos);
         List<DeliveryOrderReceiverDO> receiverDO = deliveryOrderReceiverDao.queryByOrderNos(merchantId, orderNos);
         for (DeliveryOrderDO o : deliveryOrderDOs) {
-            DeliveryOrder order = convert(o);
+            Waybill order = convert(o);
             for (DeliveryOrderSenderDO s : senderDO) {
                 if (StringUtil.equals(o.getOrderNo(), s.getOrderNo())) {
                     order.setSenderInfo(convert(s));
@@ -268,12 +268,12 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
     @Override
-    public DeliveryOrder queryByOrderNo(String merchantId, String orderNo) {
+    public Waybill queryByOrderNo(String merchantId, String orderNo) {
         DeliveryOrderDO orderDO = deliveryOrderDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
         if (orderDO == null) {
             return null;
         }
-        DeliveryOrder order = convert(orderDO);
+        Waybill order = convert(orderDO);
         Long merchantIdL = Long.parseLong(merchantId);
         DeliveryOrderSenderDO senderDO = deliveryOrderSenderDao.queryByOrderNo(merchantIdL, order.getOrderNo());
         DeliveryOrderReceiverDO receiverDO = deliveryOrderReceiverDao.queryByOrderNo(merchantIdL, order.getOrderNo());
@@ -286,7 +286,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
     @Override
-    public List<DeliveryOrder> queryByOrderNos(String merchantId, List<String> orderNos) {
+    public List<Waybill> queryByOrderNos(String merchantId, List<String> orderNos) {
         if (orderNos == null || orderNos.size() == 0) {
             return null;
         }
@@ -465,8 +465,8 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
 
         // 判断是否允许打包
         for (String o : packageRequest.getOrderNos()) {
-            DeliveryOrder deliveryOrder = queryByOrderNo(packageRequest.getMerchantId(), o);
-            if (StringUtil.isNotEmpty(deliveryOrder.getParentNo()) || deliveryOrder.getStatus() != DeliveryOrderStatusEnum.ARRIVED) {
+            Waybill waybill = queryByOrderNo(packageRequest.getMerchantId(), o);
+            if (StringUtil.isNotEmpty(waybill.getParentNo()) || waybill.getStatus() != DeliveryOrderStatusEnum.ARRIVED) {
                 throw new DMSException(BizErrorCode.PACKAGE_NOT_ALLOW, o);
             }
         }
@@ -548,11 +548,11 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         // 判断是否允许拆包
         for (; iterator.hasNext(); ) {
             String orderNo = iterator.next();
-            DeliveryOrder deliveryOrder = queryByOrderNo(unpackRequest.getMerchantId(), orderNo);
-            if (StringUtil.isEmpty(deliveryOrder.getParentNo()) && !deliveryOrder.isPackage()) {
+            Waybill waybill = queryByOrderNo(unpackRequest.getMerchantId(), orderNo);
+            if (StringUtil.isEmpty(waybill.getParentNo()) && !waybill.isPackage()) {
                 throw new DMSException(BizErrorCode.PACKAGE_NOT_ALLOW, orderNo);
             }
-            if (deliveryOrder.isPackage()) {
+            if (waybill.isPackage()) {
                 OrderOptRequest optRequest = new OrderOptRequest();
                 optRequest.setMerchantId(unpackRequest.getMerchantId());
                 optRequest.setOptBy(unpackRequest.getOptBy());
@@ -586,10 +586,10 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
     @Override
-    public List<DeliveryOrder> queryByPackageNo(String merchantNo, String packageNo) {
+    public List<Waybill> queryByPackageNo(String merchantNo, String packageNo) {
         List<DeliveryOrderDO> queryList = deliveryOrderDao.queryByPackageNo(Long.parseLong(merchantNo), packageNo);
 
-        List<DeliveryOrder> list = new ArrayList<>();
+        List<Waybill> list = new ArrayList<>();
         if (queryList == null)
             return list;
         for (DeliveryOrderDO d : queryList) {
@@ -648,62 +648,62 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
 
-    private DeliveryOrder convert(DeliveryOrderDO d) {
-        DeliveryOrder deliveryOrder = new DeliveryOrder();
-        deliveryOrder.setOrderNo(d.getOrderNo());
-        deliveryOrder.setReferenceNo(d.getReferenceNo());
-        deliveryOrder.setCreatedTime(d.getCreatedTime());
-        deliveryOrder.setUpdatedTime(d.getUpdatedTime());
-        deliveryOrder.setCountry(d.getCountry());
-        deliveryOrder.setMerchantId("" + d.getMerchantId());
-        deliveryOrder.setOrderTime(d.getOrderTime());
-        deliveryOrder.setOrderType(d.getOrderType());
-        deliveryOrder.setOrderPlatform(d.getOrderPlatform());
-        deliveryOrder.setTotalPrice(d.getTotalPrice());
-        deliveryOrder.setNeedPayAmount(d.getNeedPayAmount());
-        deliveryOrder.setAlreadyPaid(d.getAlreadyPaid());
-        deliveryOrder.setStatus(DeliveryOrderStatusEnum.getEnum(d.getStatus()));
-        deliveryOrder.setServiceType(ServiceTypeEnum.getEnum(d.getServiceType()));
-        deliveryOrder.setWeight(d.getWeight());
-        deliveryOrder.setGoodsType(d.getGoodsType());
+    private Waybill convert(DeliveryOrderDO d) {
+        Waybill waybill = new Waybill();
+        waybill.setOrderNo(d.getOrderNo());
+        waybill.setReferenceNo(d.getReferenceNo());
+        waybill.setCreatedTime(d.getCreatedTime());
+        waybill.setUpdatedTime(d.getUpdatedTime());
+        waybill.setCountry(d.getCountry());
+        waybill.setMerchantId("" + d.getMerchantId());
+        waybill.setOrderTime(d.getOrderTime());
+        waybill.setOrderType(d.getOrderType());
+        waybill.setOrderPlatform(d.getOrderPlatform());
+        waybill.setTotalPrice(d.getTotalPrice());
+        waybill.setNeedPayAmount(d.getNeedPayAmount());
+        waybill.setAlreadyPaid(d.getAlreadyPaid());
+        waybill.setStatus(DeliveryOrderStatusEnum.getEnum(d.getStatus()));
+        waybill.setServiceType(ServiceTypeEnum.getEnum(d.getServiceType()));
+        waybill.setWeight(d.getWeight());
+        waybill.setGoodsType(d.getGoodsType());
         String orderTypeDesc = SystemCodeUtil.getCodeVal("" + d.getMerchantId(), Constant.DELIVERY_ORDER_TYPE,
                 d.getOrderType());
-        deliveryOrder.setOrderTypeDesc(orderTypeDesc);
+        waybill.setOrderTypeDesc(orderTypeDesc);
 
-        deliveryOrder.setWarehouseId(d.getWarehouseId());
-        deliveryOrder.setStop(d.getStop());
-        deliveryOrder.setStopId(d.getStopId());
-        deliveryOrder.setChannel(d.getChannel());
-        deliveryOrder.setChannelStation(d.getChannelStation());
-        deliveryOrder.setOrderCategory(d.getOrderCategory());
-        deliveryOrder.setCarrierId(d.getCarrierId());
-        deliveryOrder.setCarrierName(d.getCarrierName());
-        deliveryOrder.setRelationOrderNo(d.getRelationOrderNo());
-        deliveryOrder.setDeliveryFee(d.getDeliveryFee());
-        deliveryOrder.setIsCod(d.getIsCod());
-        deliveryOrder.setNotes(d.getNotes());
-        deliveryOrder.setRemark(d.getRemark());
-        deliveryOrder.setNeedPayAmount(d.getNeedPayAmount());
-        deliveryOrder.setPaidType(DeliveryOrderPaidTypeEnum.getEnum(d.getPaidType()));
+        waybill.setWarehouseId(d.getWarehouseId());
+        waybill.setStop(d.getStop());
+        waybill.setStopId(d.getStopId());
+        waybill.setChannel(d.getChannel());
+        waybill.setChannelStation(d.getChannelStation());
+        waybill.setOrderCategory(d.getOrderCategory());
+        waybill.setCarrierId(d.getCarrierId());
+        waybill.setCarrierName(d.getCarrierName());
+        waybill.setRelationOrderNo(d.getRelationOrderNo());
+        waybill.setDeliveryFee(d.getDeliveryFee());
+        waybill.setIsCod(d.getIsCod());
+        waybill.setNotes(d.getNotes());
+        waybill.setRemark(d.getRemark());
+        waybill.setNeedPayAmount(d.getNeedPayAmount());
+        waybill.setPaidType(PaidTypeEnum.getEnum(d.getPaidType()));
 
-        deliveryOrder.setParentNo(d.getParentNo());
-        deliveryOrder.setLen(d.getLength());
-        deliveryOrder.setWidth(d.getWidth());
-        deliveryOrder.setHigh(d.getHigh());
-        deliveryOrder.setNetworkId(d.getNetworkId());
-        deliveryOrder.setNextNetworkId(d.getNextNetworkId());
+        waybill.setParentNo(d.getParentNo());
+        waybill.setLen(d.getLength());
+        waybill.setWidth(d.getWidth());
+        waybill.setHigh(d.getHigh());
+        waybill.setNetworkId(d.getNetworkId());
+        waybill.setNextNetworkId(d.getNextNetworkId());
         if (d.getNetworkId() != null) {
             DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + d.getMerchantId(), "" + d.getNetworkId()), DistributionNetworkDO.class);
-            deliveryOrder.setNetworkDesc(networkDO.getName());
+            waybill.setNetworkDesc(networkDO.getName());
         }
         if (d.getNextNetworkId() != null) {
             DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + d.getMerchantId(), "" + d.getNextNetworkId()), DistributionNetworkDO.class);
-            deliveryOrder.setNextNetworkDesc(networkDO.getName());
+            waybill.setNextNetworkDesc(networkDO.getName());
         }
-        deliveryOrder.setPackage(StringUtil.equalsIgnoreCase(d.getIsPackage(), Constant.IS_PACKAGE));
-        deliveryOrder.setCreatedBy(d.getCreatedBy());
-        deliveryOrder.setPrintTimes(d.getPrintTimes());
-        return deliveryOrder;
+        waybill.setPackage(StringUtil.equalsIgnoreCase(d.getIsPackage(), Constant.IS_PACKAGE));
+        waybill.setCreatedBy(d.getCreatedBy());
+        waybill.setPrintTimes(d.getPrintTimes());
+        return waybill;
     }
 
     private SenderInfo convert(DeliveryOrderSenderDO s) {
@@ -754,7 +754,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         return list;
     }
 
-    private DeliveryOrderDO convert(DeliveryOrder d) {
+    private DeliveryOrderDO convert(Waybill d) {
 
         DeliveryOrderDO orderHeader = new DeliveryOrderDO();
         orderHeader.setCountry(d.getCountry());
@@ -786,7 +786,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         return orderHeader;
     }
 
-    private void verifyDeliveryOrderParam(DeliveryOrder data) {
+    private void verifyDeliveryOrderParam(Waybill data) {
 
         AssertUtil.isNotNull(data, SysErrorCode.REQUEST_IS_NULL);
 

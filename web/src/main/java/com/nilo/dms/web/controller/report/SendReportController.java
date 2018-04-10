@@ -3,13 +3,11 @@ package com.nilo.dms.web.controller.report;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.ThirdExpressDao;
-import com.nilo.dms.dao.dataobject.SendReportDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.order.SendReportService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.service.order.model.SendOrderParameter;
 import com.nilo.dms.service.order.model.SendReport;
-import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.web.controller.BaseController;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -21,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,10 +65,10 @@ public class SendReportController extends BaseController {
         Pagination page = getPage();
         List<SendReport> list = sendReportService.querySendReport(parameter, page);
 
-        List<DeliveryOrder> listF = new ArrayList<DeliveryOrder>();
-        DeliveryOrder deliver = null;
+        List<Waybill> listF = new ArrayList<Waybill>();
+        Waybill deliver = null;
         for (SendReport d: list) {
-            deliver = new DeliveryOrder();
+            deliver = new Waybill();
             BeanUtils.copyProperties(d, deliver);
             deliver.setNextNetworkDesc(d.getNextNetwork());
             deliver.setNetworkDesc(d.getNetwork());

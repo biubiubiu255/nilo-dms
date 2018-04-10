@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public enum DeliveryOrderPaidTypeEnum implements EnumMessage{
+public enum PaidTypeEnum implements EnumMessage{
 
 	CASH(0, "Cash"),
 	ONLINE(1, "Online"),
@@ -14,16 +14,16 @@ public enum DeliveryOrderPaidTypeEnum implements EnumMessage{
     private Integer code;
     private String desc;
 
-    private static Map<Integer, DeliveryOrderPaidTypeEnum> map = new HashMap<Integer, DeliveryOrderPaidTypeEnum>(20);
+    private static Map<Integer, PaidTypeEnum> map = new HashMap<Integer, PaidTypeEnum>(20);
 
     static {
-        DeliveryOrderPaidTypeEnum[] enums = DeliveryOrderPaidTypeEnum.values();
-        for (DeliveryOrderPaidTypeEnum e : enums) {
+        PaidTypeEnum[] enums = PaidTypeEnum.values();
+        for (PaidTypeEnum e : enums) {
             map.put(e.getCode(), e);
         }
     }
 
-    private DeliveryOrderPaidTypeEnum(Integer code, String desc) {
+    private PaidTypeEnum(Integer code, String desc) {
         this.code = code;
         this.desc = desc;
     }
@@ -44,7 +44,7 @@ public enum DeliveryOrderPaidTypeEnum implements EnumMessage{
         this.desc = desc;
     }
 
-    public static DeliveryOrderPaidTypeEnum getEnum(Integer code) {
+    public static PaidTypeEnum getEnum(Integer code) {
         return map.get(code);
     }
 

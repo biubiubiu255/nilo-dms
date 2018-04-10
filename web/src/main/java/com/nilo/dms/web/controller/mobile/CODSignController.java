@@ -14,6 +14,7 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 
 import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.order.model.Waybill;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -29,12 +30,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.common.enums.DeliveryOrderPaidTypeEnum;
+import com.nilo.dms.common.enums.PaidTypeEnum;
 import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
 import com.nilo.dms.service.FileService;
 import com.nilo.dms.service.order.PaymentService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.WaybillPaymentOrder;
 import com.nilo.dms.service.order.model.WaybillPaymentRecord;
 import com.nilo.dms.web.controller.BaseController;
@@ -106,7 +106,7 @@ public class CODSignController extends BaseController {
 		}
 
 		String merchantId = me.getMerchantId();
-		DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, logisticsNo);
+		Waybill waybill = waybillService.queryByOrderNo(merchantId, logisticsNo);
 		// 订单付款标识更新
 		DeliveryOrderDO deliveryOrderDO = new DeliveryOrderDO();
 
@@ -128,7 +128,7 @@ public class CODSignController extends BaseController {
 
 		paymentOrder.setId(IdWorker.getInstance().nextId() + "");
 		paymentOrder.setNetworkId(me.getNetworks().get(0));
-		paymentOrder.setPriceAmount(new BigDecimal(deliveryOrder.getNeedPayAmount()));
+		paymentOrder.setPriceAmount(new BigDecimal(waybill.getNeedPayAmount()));
 		paymentOrder.setRemark(remark);
 		paymentOrder.setWaybillCount(1);
 		paymentOrder.setPaymentTime(System.currentTimeMillis());
@@ -177,20 +177,20 @@ public class CODSignController extends BaseController {
 		DeliveryOrderDO deliveryOrderDO = new DeliveryOrderDO();
 		deliveryOrderDO.setMerchantId(Long.parseLong(merchantId));
 		deliveryOrderDO.setOrderNo(orderNo);
-		deliveryOrderDO.setPaidType(DeliveryOrderPaidTypeEnum.ONLINE.getCode());
+		deliveryOrderDO.setPaidType(PaidTypeEnum.ONLINE.getCode());
 		deliveryOrderDO.setUpdatedBy(me.getUserId());
 		deliveryOrderDO.setUpdatedTime(new Date().getTime());
 		waybillService.updatePaidType(deliveryOrderDO);
 		
 		
-		DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
+		Waybill waybill = waybillService.queryByOrderNo(merchantId, orderNo);
 
 		List<String> waybillNos = new ArrayList<String>();
 		waybillNos.add(orderNo);
 		WaybillPaymentOrder paymentOrder = new WaybillPaymentOrder();
 		paymentOrder.setId(IdWorker.getInstance().nextId() + "");
 		paymentOrder.setNetworkId(me.getNetworks().get(0));
-		paymentOrder.setPriceAmount(new BigDecimal(deliveryOrder.getNeedPayAmount()));
+		paymentOrder.setPriceAmount(new BigDecimal(waybill.getNeedPayAmount()));
 		paymentOrder.setWaybillCount(1);
 		paymentService.savePaymentOrder(paymentOrder, waybillNos);
 
@@ -313,13 +313,13 @@ public class CODSignController extends BaseController {
 		}
 		Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
 		String merchantId = me.getMerchantId();
-		DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
+		Waybill waybill = waybillService.queryByOrderNo(merchantId, orderNo);
 
-		// model.addAttribute("deliveryOrder", deliveryOrder);
-		if (deliveryOrder == null) {
+		// model.addAttribute("waybill", waybill);
+		if (waybill == null) {
 			return toJsonErrorMsg("orderNo is error");
 		}
-		String amont = deliveryOrder.getNeedPayAmount().toString();
+		String amont = waybill.getNeedPayAmount().toString();
 
 		return toJsonTrueData(amont);
 

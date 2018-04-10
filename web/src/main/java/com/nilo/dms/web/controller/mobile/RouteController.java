@@ -45,7 +45,7 @@ public class RouteController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
 
-        //DeliveryOrder queryByOrderNo = waybillService.queryByOrderNo(merchantId, orderNo);
+        //Waybill queryByOrderNo = waybillService.queryByOrderNo(merchantId, orderNo);
 
         List<DeliveryRoute> queryRoute = deliveryRouteService.queryRoute(merchantId, orderNo);
 

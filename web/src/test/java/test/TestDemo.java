@@ -47,7 +47,7 @@ public class TestDemo {
         String str = "{\"carrier\":\"Nilo\",\"consignee\":\"steve\",\"operateTime\":\"2018-03-09 10:07:48\",\"orderInfo\":[{\"orderNo\":\"10000000507156\",\"status\":\"10\"}],\"orderNo\":\"10000000507156\",\"orderPrice\":\"0\",\"remark\":\"steve\",\"rider\":\"40004\",\"transId\":\"\"}";
 
 
-        //DeliveryOrder order = JSON.parseObject(str,DeliveryOrder.class);
+        //Waybill order = JSON.parseObject(str,Waybill.class);
 
         System.out.println(DigestUtils.md5Hex("12345678" + str + "12345678").toUpperCase());
 
