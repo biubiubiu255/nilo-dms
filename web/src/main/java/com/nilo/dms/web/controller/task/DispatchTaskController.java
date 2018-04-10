@@ -1,16 +1,16 @@
 package com.nilo.dms.web.controller.task;
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.TaskStatusEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.dataobject.StaffDO;
-import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.TaskService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.service.order.model.TaskParameter;
-import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -42,7 +41,7 @@ public class DispatchTaskController extends BaseController {
     private TaskService taskService;
 
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model, HttpServletRequest request) {
@@ -84,7 +83,7 @@ public class DispatchTaskController extends BaseController {
         //查询订单详情
         List<DeliveryOrder> list = new ArrayList<>();
         for (int i = 0; i < orderNos.length; i++) {
-            DeliveryOrder order = orderService.queryByOrderNo(merchantId, orderNos[i]);
+            DeliveryOrder order = waybillService.queryByOrderNo(merchantId, orderNos[i]);
             list.add(order);
         }
         model.addAttribute("list", list);

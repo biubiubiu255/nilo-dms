@@ -6,16 +6,12 @@ import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.WaybillScanDao;
 import com.nilo.dms.dao.WaybillScanDetailsDao;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
-import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
-import com.nilo.dms.service.order.model.DeliveryOrderParameter;
-import com.nilo.dms.service.order.model.PackageRequest;
 import com.nilo.dms.service.order.model.UnpackRequest;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
@@ -41,7 +37,7 @@ public class UnPackController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
     @Autowired
     private WaybillScanDao waybillScanDao;
     @Autowired
@@ -80,7 +76,7 @@ public class UnPackController extends BaseController {
         if (StringUtil.isEmpty(scanNo)) return toPaginationLayUIData(pagination, list);
 
         List<WaybillScanDetailsDO> scanDetailsDOList = waybillScanDetailsDao.queryByScanNo(scanNo);
-        List<DeliveryOrder> orderList = orderService.queryByPackageNo(merchantId, packageNo);
+        List<DeliveryOrder> orderList = waybillService.queryByPackageNo(merchantId, packageNo);
         if (orderList == null) throw new DMSException(BizErrorCode.PACKAGE_NO_ERROR);
         for (DeliveryOrder o : orderList) {
             UnpackInfo i = new UnpackInfo();
@@ -110,7 +106,7 @@ public class UnPackController extends BaseController {
                 }
             }
             if (!exist) {
-                DeliveryOrder order = orderService.queryByOrderNo(merchantId, d.getOrderNo());
+                DeliveryOrder order = waybillService.queryByOrderNo(merchantId, d.getOrderNo());
                 UnpackInfo i = new UnpackInfo();
                 i.setOrderNo(order.getOrderNo());
                 i.setOrderType(order.getOrderType());
@@ -131,7 +127,7 @@ public class UnPackController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
 
-        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         if (deliveryOrder == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
         if (StringUtil.equals(type, PACKAGE) && !deliveryOrder.isPackage()) {
             throw new DMSException(BizErrorCode.PACKAGE_NO_ERROR);
@@ -166,7 +162,7 @@ public class UnPackController extends BaseController {
         request.setOptBy(me.getUserId());
         request.setNetworkId(me.getNetworks().get(0));
         request.setOrderNos(orderNos);
-        orderService.unpack(request);
+        waybillService.unpack(request);
 
         return toJsonTrueMsg();
     }

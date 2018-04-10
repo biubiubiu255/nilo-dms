@@ -1,9 +1,12 @@
 package com.nilo.dms.web.controller.report;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.order.*;
-import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.service.order.OrderOptLogService;
+import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.DeliveryOrderOpt;
+import com.nilo.dms.service.order.model.DeliveryOrderParameter;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +28,12 @@ import java.util.List;
 @RequestMapping("/report")
 public class DeliveryDetailsController extends BaseController {
 
-    @Autowired
-    private TaskService taskService;
 
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
 
     @Autowired
     private OrderOptLogService orderOptLogService;
-
-    @Autowired
-    private DeliveryRouteService deliveryRouteService;
-
-    @Autowired
-    private AbnormalOrderService abnormalOrderService;
 
 
     @RequestMapping(value = "/deliveryDetailsReport.html", method = RequestMethod.GET)
@@ -48,29 +43,29 @@ public class DeliveryDetailsController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/deliveryDetailsList.html")
-    public String getOrderList(DeliveryOrderParameter parameter, @RequestParam(value = "orderTypes[]",required=false)String[] orderTypes, @RequestParam(value = "orderStatus[]",required=false)Integer[] orderStatus) {
+    public String getOrderList(DeliveryOrderParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
-        if(orderTypes!= null && orderTypes.length >0){
+        if (orderTypes != null && orderTypes.length > 0) {
             parameter.setOrderType(Arrays.asList(orderTypes));
         }
-        if(orderStatus!= null && orderStatus.length >0){
+        if (orderStatus != null && orderStatus.length > 0) {
             parameter.setStatus(Arrays.asList(orderStatus));
         }
         Pagination page = getPage();
 
         //订单信息
-        List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
+        List<DeliveryOrder> list = waybillService.queryDeliveryOrderBy(parameter, page);
         //所有订单号
         List<String> orderNos = new ArrayList<String>();
-        for(DeliveryOrder order : list){
+        for (DeliveryOrder order : list) {
             orderNos.add(order.getOrderNo());
         }
         //订单操作记录
-        List<DeliveryOrderOpt> optList = orderOptLogService.queryByOrderNos(merchantId,orderNos);
+        List<DeliveryOrderOpt> optList = orderOptLogService.queryByOrderNos(merchantId, orderNos);
         //订单轨迹信息
 
 

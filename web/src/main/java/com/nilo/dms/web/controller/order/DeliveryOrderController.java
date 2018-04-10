@@ -2,19 +2,15 @@ package com.nilo.dms.web.controller.order;
 
 import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.common.enums.ClientTypeEnum;
-import com.nilo.dms.common.enums.FetchTypeEnum;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.*;
 import com.nilo.dms.common.utils.model.CellData;
 import com.nilo.dms.common.utils.model.ExcelData;
 import com.nilo.dms.service.order.DeliveryRouteService;
-import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.*;
-import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +44,7 @@ public class DeliveryOrderController extends BaseController {
     private String savePath;
 
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
 
     @Autowired
     private DeliveryRouteService deliveryRouteService;
@@ -74,7 +70,7 @@ public class DeliveryOrderController extends BaseController {
         }
 
         Pagination page = getPage();
-        List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
+        List<DeliveryOrder> list = waybillService.queryDeliveryOrderBy(parameter, page);
         return toPaginationLayUIData(page, list);
     }
 
@@ -157,7 +153,7 @@ public class DeliveryOrderController extends BaseController {
             }
             for (Map.Entry<String, DeliveryOrder> entry : deliveryOrderMap.entrySet()) {
 
-                orderService.addCreateDeliveryOrderRequest(merchantId, JSON.toJSONString(entry.getValue()), "import");
+                waybillService.addCreateDeliveryOrderRequest(merchantId, JSON.toJSONString(entry.getValue()), "import");
             }
         } catch (Exception e) {
             log.error("import OrderData failed.", e);
@@ -215,7 +211,7 @@ public class DeliveryOrderController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         //查询订单详情
-        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         List<DeliveryRoute> orderRouteList = deliveryRouteService.queryRoute(merchantId, orderNo);
         model.addAttribute("deliveryOrder", deliveryOrder);
         model.addAttribute("orderRouteList", orderRouteList);
@@ -229,7 +225,7 @@ public class DeliveryOrderController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         //查询订单详情
-        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         model.addAttribute("delivery", deliveryOrder);
 
         return "delivery_order/edit";
@@ -241,7 +237,7 @@ public class DeliveryOrderController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         //查询订单详情
-        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         model.addAttribute("delivery", deliveryOrder);
 
         return "delivery_order/print";
@@ -261,7 +257,7 @@ public class DeliveryOrderController extends BaseController {
         }
 
         Pagination page = getPage();
-        List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
+        List<DeliveryOrder> list = waybillService.queryDeliveryOrderBy(parameter, page);
 
         HSSFWorkbook wb = new HSSFWorkbook();
         ExportExcel exportExcel = new ExportExcel(wb);

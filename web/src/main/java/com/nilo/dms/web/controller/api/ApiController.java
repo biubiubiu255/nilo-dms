@@ -1,18 +1,19 @@
 package com.nilo.dms.web.controller.api;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.nilo.dms.common.enums.MethodEnum;
+import com.nilo.dms.common.enums.OptTypeEnum;
+import com.nilo.dms.common.exception.BizErrorCode;
+import com.nilo.dms.common.utils.AssertUtil;
+import com.nilo.dms.service.order.PaymentService;
+import com.nilo.dms.service.order.RiderOptService;
+import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.order.model.*;
+import com.nilo.dms.web.controller.BaseController;
+import com.nilo.dms.web.controller.api.model.RequestParam;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,24 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.nilo.dms.common.Principal;
-import com.nilo.dms.common.enums.MethodEnum;
-import com.nilo.dms.common.enums.OptTypeEnum;
-import com.nilo.dms.common.exception.BizErrorCode;
-import com.nilo.dms.common.utils.AssertUtil;
-import com.nilo.dms.service.order.OrderService;
-import com.nilo.dms.service.order.PaymentService;
-import com.nilo.dms.service.order.RiderOptService;
-import com.nilo.dms.service.order.model.OrderOptRequest;
-import com.nilo.dms.service.order.model.PaymentResponse;
-import com.nilo.dms.service.order.model.PaymentResult;
-import com.nilo.dms.service.order.model.SignForOrderParam;
-import com.nilo.dms.service.order.model.WaybillPaymentRecord;
-import com.nilo.dms.web.controller.BaseController;
-import com.nilo.dms.web.controller.api.model.RequestParam;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by ronny on 2017/8/30.
@@ -50,7 +35,7 @@ public class ApiController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
 
     @Autowired
     private PaymentService paymentService;
@@ -80,7 +65,7 @@ public class ApiController extends BaseController {
 
         switch (method) {
             case CREATE_WAYBILL: {
-                orderService.addCreateDeliveryOrderRequest(merchantId, data, sign);
+                waybillService.addCreateDeliveryOrderRequest(merchantId, data, sign);
                 break;
             }
             case UPDATE_WEIGHT: {
@@ -89,7 +74,7 @@ public class ApiController extends BaseController {
                     JSONObject object = array.getJSONObject(i);
                     String orderNo = object.getString("waybill_number");
                     Double weight = object.getDouble("weight");
-                    orderService.updateWeight(merchantId, orderNo, weight);
+                    waybillService.updateWeight(merchantId, orderNo, weight);
                 }
 
                 break;
@@ -103,7 +88,7 @@ public class ApiController extends BaseController {
                 optRequest.setMerchantId(merchantId);
                 optRequest.setOptBy("api");
                 optRequest.setOptType(OptTypeEnum.CANCEL);
-                orderService.handleOpt(optRequest);
+                waybillService.handleOpt(optRequest);
                 break;
             }
             case WAYBILL_TRACE: {
@@ -111,7 +96,7 @@ public class ApiController extends BaseController {
             }
             case ARRIVE_SCAN: {
                 List<String> list = JSONArray.parseArray(data, String.class);
-                orderService.waybillNoListArrive(list, "api", merchantId, "1");
+                waybillService.waybillNoListArrive(list, "api", merchantId, "1");
                 break;
             }
             case SIGN: {

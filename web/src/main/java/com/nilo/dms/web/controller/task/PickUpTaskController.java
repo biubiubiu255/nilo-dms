@@ -1,15 +1,16 @@
 package com.nilo.dms.web.controller.task;
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.TaskStatusEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.dao.UserInfoDao;
-import com.nilo.dms.dao.dataobject.UserInfoDO;
-import com.nilo.dms.service.order.OrderService;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.*;
-import com.nilo.dms.common.Principal;
+import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Task;
+import com.nilo.dms.service.order.model.TaskParameter;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -42,7 +43,7 @@ public class PickUpTaskController extends BaseController {
     private TaskService taskService;
 
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
 
     @Autowired
     private RiderOptService riderOptService;
@@ -136,7 +137,7 @@ public class PickUpTaskController extends BaseController {
         //查询订单详情
         List<DeliveryOrder> list = new ArrayList<>();
         for (int i = 0; i < orderNos.length; i++) {
-            DeliveryOrder order = orderService.queryByOrderNo(merchantId, orderNos[i]);
+            DeliveryOrder order = waybillService.queryByOrderNo(merchantId, orderNos[i]);
             list.add(order);
         }
         model.addAttribute("list", list);

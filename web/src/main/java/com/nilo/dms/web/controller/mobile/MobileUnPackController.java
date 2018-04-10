@@ -9,7 +9,7 @@ import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.WaybillScanDetailsDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
-import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.order.PackageController.NextStation;
@@ -37,7 +37,7 @@ public class MobileUnPackController extends BaseController {
     private DistributionNetworkDao distributionNetworkDao;
 
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
 
     @Autowired
     private WaybillScanDetailsDao waybillScanDetailsDao;
@@ -78,7 +78,7 @@ public class MobileUnPackController extends BaseController {
         if (StringUtil.isEmpty(scanNo)) return toPaginationLayUIData(pagination, list);
 
         List<WaybillScanDetailsDO> scanDetailsDOList = waybillScanDetailsDao.queryByScanNo(scanNo);
-        List<DeliveryOrder> orderList = orderService.queryByPackageNo(merchantId, packageNo);
+        List<DeliveryOrder> orderList = waybillService.queryByPackageNo(merchantId, packageNo);
         if (orderList == null) throw new DMSException(BizErrorCode.PACKAGE_NO_ERROR);
         for (DeliveryOrder o : orderList) {
             UnpackInfo i = new UnpackInfo();
@@ -108,8 +108,8 @@ public class MobileUnPackController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         String arriveByString = me.getUserId();
         String merchantId = me.getMerchantId();
-        String netWorkId = ""+me.getNetworks().get(0);
-        orderService.waybillNoListArrive(Arrays.asList(new String[]{logisticsNo}), merchantId, me.getUserId(),netWorkId);
+        String netWorkId = "" + me.getNetworks().get(0);
+        waybillService.waybillNoListArrive(Arrays.asList(new String[]{logisticsNo}), merchantId, me.getUserId(), netWorkId);
         return toJsonTrueMsg();
     }
 

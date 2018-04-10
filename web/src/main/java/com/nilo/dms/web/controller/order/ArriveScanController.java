@@ -10,7 +10,7 @@ import com.nilo.dms.dao.WaybillScanDao;
 import com.nilo.dms.dao.WaybillScanDetailsDao;
 import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
-import com.nilo.dms.service.order.OrderService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -36,7 +36,7 @@ public class ArriveScanController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
     @Autowired
     private WaybillScanDao waybillScanDao;
     @Autowired
@@ -78,7 +78,7 @@ public class ArriveScanController extends BaseController {
         for (WaybillScanDetailsDO details : scanDetailsDOList) {
             orderNos.add(details.getOrderNo());
         }
-        list = orderService.queryByOrderNos(merchantId, orderNos);
+        list = waybillService.queryByOrderNos(merchantId, orderNos);
 
         for (DeliveryOrder o : list) {
             for (WaybillScanDetailsDO d : scanDetailsDOList) {
@@ -100,7 +100,7 @@ public class ArriveScanController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
 
-        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         if (deliveryOrder == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
 
         WaybillScanDetailsDO query = waybillScanDetailsDao.queryBy(orderNo, scanNo);
@@ -153,7 +153,7 @@ public class ArriveScanController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
-            orderService.arrive(merchantId, scanNo, "" + me.getNetworks().get(0), me.getUserId());
+            waybillService.arrive(merchantId, scanNo, "" + me.getNetworks().get(0), me.getUserId());
         } catch (Exception e) {
             log.error("arrive failed. scanNo:{}", scanNo, e);
             return toJsonErrorMsg(e.getMessage());

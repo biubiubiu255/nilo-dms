@@ -6,15 +6,18 @@ import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.IdWorker;
-import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.*;
-import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.WaybillScanDao;
+import com.nilo.dms.dao.WaybillScanDetailsDao;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.WaybillScanDO;
+import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
 import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.impl.UserServiceImpl;
 import com.nilo.dms.service.model.UserInfo;
-import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.OrderService;
-import com.nilo.dms.service.order.model.*;
+import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.DeliveryOrderParameter;
+import com.nilo.dms.service.order.model.PackageRequest;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -27,12 +30,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static com.nilo.dms.common.Constant.IS_PACKAGE;
 
@@ -46,7 +45,7 @@ public class PackageController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
     @Autowired
     private DistributionNetworkDao distributionNetworkDao;
     @Autowired
@@ -80,7 +79,7 @@ public class PackageController extends BaseController {
         status.add(DeliveryOrderStatusEnum.SEND.getCode());
 */
         parameter.setStatus(status);
-        List<DeliveryOrder> list = orderService.queryDeliveryOrderBy(parameter, page);
+        List<DeliveryOrder> list = waybillService.queryDeliveryOrderBy(parameter, page);
         return toPaginationLayUIData(page, list);
     }
 
@@ -121,7 +120,7 @@ public class PackageController extends BaseController {
         String merchantId = me.getMerchantId();
         DeliveryOrder order = null;
         try {
-            order = orderService.queryByOrderNo(merchantId, orderNo);
+            order = waybillService.queryByOrderNo(merchantId, orderNo);
 
             if (order == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
 
@@ -162,7 +161,7 @@ public class PackageController extends BaseController {
                 packageRequest.setNetworkId(me.getNetworks().get(0));
             }
 
-            orderNo = orderService.addPackage(packageRequest);
+            orderNo = waybillService.addPackage(packageRequest);
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());
         }
@@ -176,9 +175,9 @@ public class PackageController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
 
-        DeliveryOrder packageInfo = orderService.queryByOrderNo(merchantId, orderNo);
+        DeliveryOrder packageInfo = waybillService.queryByOrderNo(merchantId, orderNo);
         UserInfo userInfo = userService.findUserInfoByUserId(merchantId, packageInfo.getCreatedBy());
-        List<DeliveryOrder> list = orderService.queryByPackageNo(merchantId, orderNo);
+        List<DeliveryOrder> list = waybillService.queryByPackageNo(merchantId, orderNo);
         model.addAttribute("list", list);
         model.addAttribute("packageInfo", packageInfo);
         model.addAttribute("packageBy", userInfo.getName());
@@ -190,8 +189,8 @@ public class PackageController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        DeliveryOrder packageInfo = orderService.queryByOrderNo(merchantId, orderNo);
-        List<DeliveryOrder> list = orderService.queryByPackageNo(merchantId, orderNo);
+        DeliveryOrder packageInfo = waybillService.queryByOrderNo(merchantId, orderNo);
+        List<DeliveryOrder> list = waybillService.queryByPackageNo(merchantId, orderNo);
         model.addAttribute("list", list);
         model.addAttribute("packageInfo", packageInfo);
         return "package/print";
