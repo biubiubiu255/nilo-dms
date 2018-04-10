@@ -12,13 +12,13 @@ import com.nilo.dms.service.order.model.Waybill;
  */
 public interface WaybillService {
 
-    String addCreateDeliveryOrderRequest(String merchantId, String data, String sign);
+    String createWaybillRequest(String merchantId, String data, String sign);
 
-    String createDeliveryOrder(Waybill data);
+    String createWaybill(Waybill data);
 
     void updateWeight(String merchantId,String orderNo, Double weight);
 
-    List<Waybill> queryDeliveryOrderBy(DeliveryOrderParameter parameter, Pagination pagination);
+    List<Waybill> queryWabillBy(DeliveryOrderParameter parameter, Pagination pagination);
 
     Waybill queryByOrderNo(String merchantId, String orderNo);
 

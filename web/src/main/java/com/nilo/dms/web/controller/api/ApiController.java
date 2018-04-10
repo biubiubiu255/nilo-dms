@@ -65,7 +65,7 @@ public class ApiController extends BaseController {
 
         switch (method) {
             case CREATE_WAYBILL: {
-                waybillService.addCreateDeliveryOrderRequest(merchantId, data, sign);
+                waybillService.createWaybillRequest(merchantId, data, sign);
                 break;
             }
             case UPDATE_WEIGHT: {

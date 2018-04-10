@@ -84,7 +84,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Qualifier("createDeliveryOrderProducer")
     private AbstractMQProducer createDeliveryOrderProducer;
 
-    public String addCreateDeliveryOrderRequest(String merchantId, String data, String sign) {
+    public String createWaybillRequest(String merchantId, String data, String sign) {
 
         try {
 
@@ -119,7 +119,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
     @Override
-    public String createDeliveryOrder(final Waybill data) {
+    public String createWaybill(final Waybill data) {
         // 数据校验
         verifyDeliveryOrderParam(data);
 
@@ -179,7 +179,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
                     s.setProvince(senderInfo.getSenderProvince());
                     deliveryOrderSenderDao.insert(s);
                 } catch (Exception e) {
-                    logger.error("createDeliveryOrder Failed. Data:{}", data, e);
+                    logger.error("createWaybill Failed. Data:{}", data, e);
                     transactionStatus.setRollbackOnly();
                     throw e;
                 }
@@ -200,7 +200,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
     @Override
-    public List<Waybill> queryDeliveryOrderBy(DeliveryOrderParameter parameter, Pagination pagination) {
+    public List<Waybill> queryWabillBy(DeliveryOrderParameter parameter, Pagination pagination) {
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderNo", parameter.getOrderNo());
