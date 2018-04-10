@@ -85,7 +85,8 @@
 
     <div class="layui-form-item">
         <div class="layui-input-block" style="margin-left:120px;">
-            <button class="layui-btn package">Submit</button>
+            <button class="layui-btn package" value="submit">Submit</button>
+            <button class="layui-btn package" value="submitShip">Submit Ship</button>
         </div>
     </div>
 
@@ -160,8 +161,8 @@
             });
         };
 
-        $('.package').on('click', function () {
-
+        $('.package').on('click', function (e) {
+            var subtype = e.currentTarget.value;
             var nextStation = $("select[name='nextNetworkId']").val();
             var weight = $("input[name='weight']").val();
             if (nextStation=='') {
@@ -181,7 +182,18 @@
                 success: function (data) {
                     if (data.result) {
                         layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
-                            location.reload();
+                            if(subtype=="submitShip"){
+                                $.get("/waybill/send_nextSation/editPage.html?tempScanNo=${scanNo}", function (data) {
+                                    var index = parent.layer.open({
+                                        type: 1,
+                                        content: data,
+                                        area: ['900px', '600px'],
+                                        offset: ['100px', '250px'],
+                                        maxmin: true
+                                    });
+                                });
+                            }
+                            //location.reload();
                         });
                     } else {
                         layer.msg(data.msg, {icon: 2, time: 2000});
