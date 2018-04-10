@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
-<%@ page import="com.nilo.dms.service.model.User" %>
+<%@ page import="com.nilo.dms.dto.common.User" %>
 <html>
 <%@ include file="../../common/header.jsp" %>
 <%
