@@ -18,7 +18,7 @@ public interface WaybillService {
 
     void updateWeight(String merchantId,String orderNo, Double weight);
 
-    List<Waybill> queryWabillBy(DeliveryOrderParameter parameter, Pagination pagination);
+    List<Waybill> queryWaybillBy(DeliveryOrderParameter parameter, Pagination pagination);
 
     Waybill queryByOrderNo(String merchantId, String orderNo);
 
