@@ -33,7 +33,7 @@ import java.util.*;
  * Created by ronny on 2017/9/15.
  */
 @Controller
-@RequestMapping("/order/waybill")
+@RequestMapping("/waybill")
 public class WaybillController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
