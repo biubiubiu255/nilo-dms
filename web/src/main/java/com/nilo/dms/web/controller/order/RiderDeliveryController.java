@@ -6,32 +6,29 @@ import com.nilo.dms.common.enums.HandleRiderStatusEnum;
 import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
-import com.nilo.dms.common.utils.BeanUtils;
-import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.*;
-import com.nilo.dms.dao.dataobject.*;
-import com.nilo.dms.service.UserService;
+import com.nilo.dms.dao.HandleRiderDao;
+import com.nilo.dms.dao.WaybillDao;
+import com.nilo.dms.dao.dataobject.RiderDeliveryDO;
+import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
+import com.nilo.dms.dao.dataobject.StaffDO;
+import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.service.order.RiderDeliveryService;
-import com.nilo.dms.service.order.model.Loading;
-import com.nilo.dms.service.order.model.LoadingDetails;
-import com.nilo.dms.service.order.model.ShipParameter;
-import com.nilo.dms.service.org.model.Staff;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ronny on 2017/9/15.
@@ -57,7 +54,7 @@ public class RiderDeliveryController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-    public String list(RiderDeliveryDO riderDeliveryDO){
+    public String list(RiderDeliveryDO riderDeliveryDO) {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         Pagination page = getPage();
         List<RiderDeliveryDO> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
@@ -126,7 +123,7 @@ public class RiderDeliveryController extends BaseController {
         Pagination page = getPage();
 
         WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.valueOf(merchantId), orderNo);
-        if (waybillDO==null){
+        if (waybillDO == null) {
             return toJsonErrorMsg("Order does not exist");
         }
 
@@ -188,7 +185,7 @@ public class RiderDeliveryController extends BaseController {
     public String edit(String[] smallPack, String handleNo, Integer saveStatus, String rider) {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         String merchantId = me.getMerchantId();
-        if(handleNo==null || smallPack.length==0){
+        if (handleNo == null || smallPack.length == 0) {
             throw new DMSException(BizErrorCode.LOADING_NOT_EXIST);
         }
         RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
