@@ -23,7 +23,7 @@ public interface WaybillService {
 
     void handleOpt(OrderOptRequest optRequest);
 
-    void arrive(List<String> waybillNos, String merchantId, String networkId, String arriveBy);
+    void arrive(List<String> waybillNos);
 
     void print(String merchantId, List<String> orderNos);
 

@@ -1,14 +1,12 @@
 package com.nilo.dms.web.controller.pda;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.exception.SysErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.ThirdDriverDao;
 import com.nilo.dms.dao.ThirdExpressDao;
@@ -21,13 +19,17 @@ import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.model.LoginInfo;
 import com.nilo.dms.service.model.User;
 import com.nilo.dms.service.model.pda.PdaRider;
+import com.nilo.dms.service.model.pda.PdaWaybill;
 import com.nilo.dms.service.order.LoadingService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.Loading;
 import com.nilo.dms.service.order.model.ShipParameter;
+import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.service.order.model.WaybillHeader;
+import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.mobile.SendScanController;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +38,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.nilo.dms.common.Principal;
-import com.nilo.dms.dao.DeliveryOrderOptDao;
-import com.nilo.dms.service.model.pda.PdaWaybill;
-import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.Waybill;
-import com.nilo.dms.web.controller.BaseController;
-
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.apache.shiro.web.filter.mgt.DefaultFilter.user;
 
@@ -74,8 +72,10 @@ public class PdaController extends BaseController {
         return "mobile/network/arrive_scan/arriveScan";
     }
 
-    private PdaWaybill queryByOrderNo(String merchantId, String waybillNo) {
-        Waybill delivery = waybillService.queryByOrderNo(merchantId, waybillNo);
+    private PdaWaybill queryByOrderNo(String waybillNo) {
+
+        Principal principal = SessionLocal.getPrincipal();
+        Waybill delivery = waybillService.queryByOrderNo(principal.getMerchantId(), waybillNo);
         PdaWaybill pdaWaybill = new PdaWaybill();
         pdaWaybill.setWaybillNo(waybillNo);
         pdaWaybill.setReceiverCountry(delivery.getReceiverInfo().getReceiverCountry());
@@ -110,33 +110,35 @@ public class PdaController extends BaseController {
     @RequestMapping(value = "/arrive.html")
     public String arrive(String waybillNo) {
 
-        Principal me = SessionLocal.getPrincipal();
         List<String> waybillNos = new ArrayList<String>();
         waybillNos.add(waybillNo);
-        String arriveBy = me.getUserId();
-        String merchantId = me.getMerchantId();
-        String netWorkId = me.getNetworks().get(0) + "";
 
-        waybillService.arrive(waybillNos, arriveBy, merchantId, netWorkId);
+        waybillService.arrive(waybillNos);
 
-        PdaWaybill pdaWaybill = this.queryByOrderNo(merchantId, waybillNo);
+        PdaWaybill pdaWaybill = this.queryByOrderNo(waybillNo);
 
         return toJsonTrueData(pdaWaybill);
     }
 
     @ResponseBody
     @RequestMapping(value = "/arrvieWeighing.html")
-    public String arrvieWeighing(String waybillNo, Double weight, Double length, Double width, Double height) {
+    public String arriveAndWeight(String waybillNo, Double weight, Double length, Double width, Double height) {
 
-        Principal me = SessionLocal.getPrincipal();
+        //到件
+        waybillService.arrive(Arrays.asList(waybillNo));
 
-        String arriveBy = me.getUserId();
-        String merchantId = me.getMerchantId();
-        String netWorkId = me.getNetworks().get(0) + "";
+        Principal principal = SessionLocal.getPrincipal();
+        //更新长宽高
+        WaybillHeader header = new WaybillHeader();
+        header.setMerchantId(principal.getMerchantId());
+        header.setOrderNo(waybillNo);
+        header.setWeight(weight);
+        header.setLen(length);
+        header.setWidth(width);
+        header.setHeight(height);
+        waybillService.updateWaybill(header);
 
-//		waybillService.waybillArrvieWeighing(waybillNo, weight, length, width, height,arriveBy, merchantId, netWorkId);
-        PdaWaybill pdaWaybill = this.queryByOrderNo(merchantId, waybillNo);
-
+        PdaWaybill pdaWaybill = this.queryByOrderNo(waybillNo);
         return toJsonTrueData(pdaWaybill);
     }
 
@@ -354,17 +356,12 @@ public class PdaController extends BaseController {
 
     @RequestMapping(value = "/submit.html")
     @ResponseBody
-    public String submit(String scanedCodes, String logisticsNos) {
+    public String submit(String scanedCodes) {
 
-        Principal me = SessionLocal.getPrincipal();
-        // 获取merchantId
-        String merchantId = me.getMerchantId();
-        String arriveBy = me.getUserId();
-        String netWorkId = "" + me.getNetworks().get(0);
         try {
             String[] logisticsNoArray = scanedCodes.split(",");
             if (null != logisticsNoArray && logisticsNoArray.length > 0) {
-                waybillService.arrive(Arrays.asList(logisticsNoArray), arriveBy, merchantId, netWorkId);
+                waybillService.arrive(Arrays.asList(logisticsNoArray));
             }
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());

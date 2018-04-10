@@ -3,6 +3,7 @@ package com.nilo.dms.web.controller.api;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.MethodEnum;
 import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
@@ -63,6 +64,11 @@ public class ApiController extends BaseController {
 
         log.info("API Data:{}", data);
 
+        Principal principal = new Principal();
+        principal.setMerchantId(merchantId);
+        principal.setUserId("api");
+        principal.setNetworks(Arrays.asList(1));
+
         switch (method) {
             case CREATE_WAYBILL: {
                 waybillService.createWaybillRequest(merchantId, data, sign);
@@ -100,7 +106,7 @@ public class ApiController extends BaseController {
             }
             case ARRIVE_SCAN: {
                 List<String> list = JSONArray.parseArray(data, String.class);
-                waybillService.arrive(list, "api", merchantId, "1");
+                waybillService.arrive(list);
                 break;
             }
             case SIGN: {
