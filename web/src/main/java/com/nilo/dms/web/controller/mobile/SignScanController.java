@@ -5,7 +5,7 @@ import com.nilo.dms.common.enums.PaidTypeEnum;
 import com.nilo.dms.service.FileService;
 import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.service.order.model.SignForOrderParam;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
@@ -52,7 +52,7 @@ public class SignScanController extends BaseController {
         if (orderNo != null) {
             Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
             String merchantId = me.getMerchantId();
-            DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
+            Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
             if (deliveryOrder != null) {
 
                 String receiverName = deliveryOrder.getReceiverInfo().getReceiverName();
@@ -138,7 +138,7 @@ public class SignScanController extends BaseController {
         }
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         String merchantId = me.getMerchantId();
-        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
+        Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
 
         if (deliveryOrder == null) {
             return toJsonErrorMsg("orderNo is error");

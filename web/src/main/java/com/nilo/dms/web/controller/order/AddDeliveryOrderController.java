@@ -97,7 +97,7 @@ public class AddDeliveryOrderController extends BaseController {
 
     @RequestMapping(value = "/editHeader.html", method = RequestMethod.POST)
     @ResponseBody
-    public String editDeliveryOrderHeader(Model model, DeliveryOrder order) {
+    public String editDeliveryOrderHeader(Model model, Waybill order) {
 
         try {
             Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();

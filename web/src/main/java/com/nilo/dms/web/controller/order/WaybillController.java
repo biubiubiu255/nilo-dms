@@ -33,8 +33,8 @@ import java.util.*;
  * Created by ronny on 2017/9/15.
  */
 @Controller
-@RequestMapping("/order/deliveryOrder")
-public class DeliveryOrderController extends BaseController {
+@RequestMapping("/order/waybill")
+public class WaybillController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Value("#{configProperties['template_file_path']}")
@@ -56,7 +56,7 @@ public class DeliveryOrderController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html")
-    public String getOrderList(DeliveryOrderParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) {
+    public String getOrderList(WaybillParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
@@ -70,7 +70,7 @@ public class DeliveryOrderController extends BaseController {
         }
 
         Pagination page = getPage();
-        List<DeliveryOrder> list = waybillService.queryDeliveryOrderBy(parameter, page);
+        List<Waybill> list = waybillService.queryWaybillBy(parameter, page);
         return toPaginationLayUIData(page, list);
     }
 
@@ -91,12 +91,12 @@ public class DeliveryOrderController extends BaseController {
             String fileName = file.getOriginalFilename();
             ExcelData excelData = ReadExcel.readTable(file.getInputStream(), fileName);
 
-            Map<String, DeliveryOrder> deliveryOrderMap = new HashMap<>();
+            Map<String, Waybill> deliveryOrderMap = new HashMap<>();
 
             for (Map.Entry<String, List<CellData>> entry : excelData.getData().entrySet()) {
 
                 //订单头信息
-                DeliveryOrder deliveryOrder = new DeliveryOrder();
+                Waybill deliveryOrder = new Waybill();
                 deliveryOrder.setMerchantId(merchantId);
                 Field[] deliveryOrderFields = deliveryOrder.getClass().getDeclaredFields();
                 for (Field f1 : deliveryOrderFields) {
@@ -151,9 +151,9 @@ public class DeliveryOrderController extends BaseController {
                 }
 
             }
-            for (Map.Entry<String, DeliveryOrder> entry : deliveryOrderMap.entrySet()) {
+            for (Map.Entry<String, Waybill> entry : deliveryOrderMap.entrySet()) {
 
-                waybillService.addCreateDeliveryOrderRequest(merchantId, JSON.toJSONString(entry.getValue()), "import");
+                waybillService.createWaybillRequest(merchantId, JSON.toJSONString(entry.getValue()), "import");
             }
         } catch (Exception e) {
             log.error("import OrderData failed.", e);
@@ -211,7 +211,7 @@ public class DeliveryOrderController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         //查询订单详情
-        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
+        Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         List<DeliveryRoute> orderRouteList = deliveryRouteService.queryRoute(merchantId, orderNo);
         model.addAttribute("deliveryOrder", deliveryOrder);
         model.addAttribute("orderRouteList", orderRouteList);
@@ -225,7 +225,7 @@ public class DeliveryOrderController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         //查询订单详情
-        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
+        Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         model.addAttribute("delivery", deliveryOrder);
 
         return "delivery_order/edit";
@@ -237,14 +237,14 @@ public class DeliveryOrderController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         //查询订单详情
-        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
+        Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         model.addAttribute("delivery", deliveryOrder);
 
         return "delivery_order/print";
     }
 
     @RequestMapping(value = "/export.html", method = RequestMethod.GET)
-    public String export(HttpServletResponse response, DeliveryOrderParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) throws Exception {
+    public String export(HttpServletResponse response, WaybillParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) throws Exception {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
@@ -257,14 +257,14 @@ public class DeliveryOrderController extends BaseController {
         }
 
         Pagination page = getPage();
-        List<DeliveryOrder> list = waybillService.queryDeliveryOrderBy(parameter, page);
+        List<Waybill> list = waybillService.queryWaybillBy(parameter, page);
 
         HSSFWorkbook wb = new HSSFWorkbook();
         ExportExcel exportExcel = new ExportExcel(wb);
         List<String> header = Arrays.asList("orderNo", "orderType", "referenceNo", "orderTime", "country", "orderPlatform", "totalPrice", "needPayAmount", "weight", "status", "receiverName", "receiverPhone", "receiverAddress");
 
         List<Map<String, String>> data = new ArrayList<>();
-        for (DeliveryOrder order : list) {
+        for (Waybill order : list) {
             Map<String, String> map = new HashMap<>();
             for (String field : header) {
 
@@ -282,7 +282,7 @@ public class DeliveryOrderController extends BaseController {
             }
             data.add(map);
         }
-        exportExcel.fillData(list, DeliveryOrder.class);
+        exportExcel.fillData(list, Waybill.class);
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {

@@ -10,9 +10,9 @@ import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.Loading;
 import com.nilo.dms.service.order.model.ShipParameter;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/mobile/send")
@@ -165,7 +164,7 @@ public class SendScanController extends BaseController {
             return toJsonErrorMsg(e.getMessage());
         }
 
-        DeliveryOrder order = null;
+        Waybill order = null;
         for (int i = 0; i < scaned_codes.length; i++) {
             try {
                 loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i], me.getUserId());

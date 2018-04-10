@@ -5,7 +5,7 @@ import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.service.order.model.Loading;
 import com.nilo.dms.service.order.model.ShipParameter;
 import com.nilo.dms.web.controller.BaseController;
@@ -99,7 +99,7 @@ public class DeliverScanController extends BaseController {
             return toJsonErrorMsg(e.getMessage());
         }
 
-        DeliveryOrder order = null;
+        Waybill order = null;
         for (int i = 0; i < scaned_codes.length; i++) {
             try {
                 loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i], me.getUserId());

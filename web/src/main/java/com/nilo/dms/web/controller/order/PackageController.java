@@ -15,9 +15,9 @@ import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
-import com.nilo.dms.service.order.model.DeliveryOrderParameter;
 import com.nilo.dms.service.order.model.PackageRequest;
+import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.service.order.model.WaybillParameter;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -69,7 +69,7 @@ public class PackageController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
-        DeliveryOrderParameter parameter = new DeliveryOrderParameter();
+        WaybillParameter parameter = new WaybillParameter();
         parameter.setMerchantId(merchantId);
         parameter.setOrderNo(packageNo);
         parameter.setIsPackage(IS_PACKAGE);
@@ -79,7 +79,7 @@ public class PackageController extends BaseController {
         status.add(DeliveryOrderStatusEnum.SEND.getCode());
 */
         parameter.setStatus(status);
-        List<DeliveryOrder> list = waybillService.queryDeliveryOrderBy(parameter, page);
+        List<Waybill> list = waybillService.queryWaybillBy(parameter, page);
         return toPaginationLayUIData(page, list);
     }
 
@@ -118,7 +118,7 @@ public class PackageController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        DeliveryOrder order = null;
+        Waybill order = null;
         try {
             order = waybillService.queryByOrderNo(merchantId, orderNo);
 
@@ -175,9 +175,9 @@ public class PackageController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
 
-        DeliveryOrder packageInfo = waybillService.queryByOrderNo(merchantId, orderNo);
+        Waybill packageInfo = waybillService.queryByOrderNo(merchantId, orderNo);
         UserInfo userInfo = userService.findUserInfoByUserId(merchantId, packageInfo.getCreatedBy());
-        List<DeliveryOrder> list = waybillService.queryByPackageNo(merchantId, orderNo);
+        List<Waybill> list = waybillService.queryByPackageNo(merchantId, orderNo);
         model.addAttribute("list", list);
         model.addAttribute("packageInfo", packageInfo);
         model.addAttribute("packageBy", userInfo.getName());
@@ -189,8 +189,8 @@ public class PackageController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        DeliveryOrder packageInfo = waybillService.queryByOrderNo(merchantId, orderNo);
-        List<DeliveryOrder> list = waybillService.queryByPackageNo(merchantId, orderNo);
+        Waybill packageInfo = waybillService.queryByOrderNo(merchantId, orderNo);
+        List<Waybill> list = waybillService.queryByPackageNo(merchantId, orderNo);
         model.addAttribute("list", list);
         model.addAttribute("packageInfo", packageInfo);
         return "package/print";

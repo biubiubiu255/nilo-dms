@@ -200,7 +200,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
     @Override
-    public List<Waybill> queryWaybillBy(DeliveryOrderParameter parameter, Pagination pagination) {
+    public List<Waybill> queryWaybillBy(WaybillParameter parameter, Pagination pagination) {
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderNo", parameter.getOrderNo());

@@ -102,7 +102,7 @@
     </div>
 
     <table class="layui-table"
-           lay-data="{ url:'/order/deliveryOrder/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
+           lay-data="{ url:'/order/waybill/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
@@ -215,7 +215,7 @@
                         toCreatedTime = $("#toCreatedTime").val(),
                         platform = $("input[name='platform']").val();
 
-                var url = "/order/deliveryOrder/export.html?orderNo="+orderNo+"&referenceNo="+referenceNo+"&orderTypes="+orderTypes+"&orderStatus="+orderStatus+"&fromCreatedTime="+fromCreatedTime+"&toCreatedTime="+toCreatedTime+"&platform="+platform;
+                var url = "/order/waybill/export.html?orderNo="+orderNo+"&referenceNo="+referenceNo+"&orderTypes="+orderTypes+"&orderStatus="+orderStatus+"&fromCreatedTime="+fromCreatedTime+"&toCreatedTime="+toCreatedTime+"&platform="+platform;
                 window.location.href = url;
             })
 
@@ -230,7 +230,7 @@
                 var load;
                 var uploadInst = upload.render({
                     elem: '#importDeliveryOrder'
-                    , url: '/order/deliveryOrder/importOrderData.html'
+                    , url: '/order/waybill/importOrderData.html'
                     , accept: 'file' //普通文件
                     , exts: 'xls|xlsx'
                     , before: function () {
@@ -251,7 +251,7 @@
 
             function orderDetails(orderNo) {
                 $.ajax({
-                    url: "/order/deliveryOrder/" + orderNo + ".html",
+                    url: "/order/waybill/" + orderNo + ".html",
                     type: 'GET',
                     dataType: 'text',
                     success: function (data) {
@@ -268,12 +268,12 @@
             }
 
             function print(orderNo) {
-                parent.window.open("/order/deliveryOrder/print/" + orderNo + ".html");
+                parent.window.open("/order/waybill/print/" + orderNo + ".html");
             }
 
 
             $(".btn-add").on("click", function () {
-                var url = "/order/deliveryOrder/add.html";
+                var url = "/order/waybill/add.html";
                 var index = parent.layer.open({
                     type: 2,
                     title: 'Add DELIVERY',
@@ -289,7 +289,7 @@
                     title: 'Edit DELIVERY',
                     shadeClose: true,
                     area: ['800px', '600px'],
-                    content: "/order/deliveryOrder/edit/" + orderNo + ".html",
+                    content: "/order/waybill/edit/" + orderNo + ".html",
                     maxmin: true,
                     end: function () {
                         reloadCurrentPage();

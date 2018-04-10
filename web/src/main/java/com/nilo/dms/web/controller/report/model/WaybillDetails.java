@@ -1,27 +1,25 @@
 package com.nilo.dms.web.controller.report.model;
 
 import com.nilo.dms.service.order.model.AbnormalOrder;
-import com.nilo.dms.service.order.model.DeliveryOrder;
-import com.nilo.dms.service.order.model.DeliveryOrderOpt;
+import com.nilo.dms.service.order.model.Waybill;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by admin on 2017/11/23.
  */
-public class DeliveryOrderDetails implements Serializable {
+public class WaybillDetails implements Serializable {
     private static final long serialVersionUID = -8295855622681135044L;
 
-    private DeliveryOrder deliveryOrder;
+    private Waybill deliveryOrder;
 
     private AbnormalOrder abnormalOrder;
 
-    public DeliveryOrder getDeliveryOrder() {
+    public Waybill getDeliveryOrder() {
         return deliveryOrder;
     }
 
-    public void setDeliveryOrder(DeliveryOrder deliveryOrder) {
+    public void setDeliveryOrder(Waybill deliveryOrder) {
         this.deliveryOrder = deliveryOrder;
     }
 

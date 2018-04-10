@@ -57,7 +57,7 @@ public class LoadingController extends BaseController {
 
         double totalAmount = 0d;
         for (LoadingDetails d : loading.getDetailsList()) {
-            totalAmount = totalAmount + d.getDeliveryOrder().getNeedPayAmount();
+            totalAmount = totalAmount + d.getWaybill().getNeedPayAmount();
         }
         model.addAttribute("totalAmount", totalAmount);
         model.addAttribute("loading", loading);

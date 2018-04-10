@@ -6,9 +6,9 @@ import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
-import com.nilo.dms.service.order.model.DeliveryOrderParameter;
 import com.nilo.dms.service.order.model.PackageRequest;
+import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.service.order.model.WaybillParameter;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -102,13 +102,13 @@ public class MobilePackageController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
-        DeliveryOrderParameter parameter = new DeliveryOrderParameter();
+        WaybillParameter parameter = new WaybillParameter();
         parameter.setMerchantId(merchantId);
         if (!("packageNo".equals(parameters))) {
             parameter.setOrderNo(parameters);
         }
         parameter.setIsPackage(IS_PACKAGE);
-        List<DeliveryOrder> list = waybillService.queryDeliveryOrderBy(parameter, page);
+        List<Waybill> list = waybillService.queryWaybillBy(parameter, page);
         return toPaginationLayUIData(page, list);
     }
 

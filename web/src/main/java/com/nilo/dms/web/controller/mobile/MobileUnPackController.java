@@ -10,7 +10,7 @@ import com.nilo.dms.dao.WaybillScanDetailsDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.order.PackageController.NextStation;
 import com.nilo.dms.web.controller.order.UnPackController.UnpackInfo;
@@ -78,9 +78,9 @@ public class MobileUnPackController extends BaseController {
         if (StringUtil.isEmpty(scanNo)) return toPaginationLayUIData(pagination, list);
 
         List<WaybillScanDetailsDO> scanDetailsDOList = waybillScanDetailsDao.queryByScanNo(scanNo);
-        List<DeliveryOrder> orderList = waybillService.queryByPackageNo(merchantId, packageNo);
+        List<Waybill> orderList = waybillService.queryByPackageNo(merchantId, packageNo);
         if (orderList == null) throw new DMSException(BizErrorCode.PACKAGE_NO_ERROR);
-        for (DeliveryOrder o : orderList) {
+        for (Waybill o : orderList) {
             UnpackInfo i = new UnpackInfo();
             i.setOrderNo(o.getOrderNo());
             i.setOrderType(o.getOrderType());

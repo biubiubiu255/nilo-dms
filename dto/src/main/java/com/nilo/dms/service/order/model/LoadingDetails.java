@@ -14,14 +14,14 @@ public class LoadingDetails {
 
     private Integer status;
 
-    private DeliveryOrder deliveryOrder;
+    private Waybill waybill;
 
-    public DeliveryOrder getDeliveryOrder() {
-        return deliveryOrder;
+    public Waybill getWaybill() {
+        return waybill;
     }
 
-    public void setDeliveryOrder(DeliveryOrder deliveryOrder) {
-        this.deliveryOrder = deliveryOrder;
+    public void setWaybill(Waybill waybill) {
+        this.waybill = waybill;
     }
 
     public Integer getNum() {

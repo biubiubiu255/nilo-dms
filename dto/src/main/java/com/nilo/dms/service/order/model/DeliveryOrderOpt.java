@@ -1,8 +1,5 @@
 package com.nilo.dms.service.order.model;
 
-import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
-import com.nilo.dms.service.model.User;
-
 /**
  * Created by admin on 2017/9/19.
  */
@@ -24,14 +21,14 @@ public class DeliveryOrderOpt {
 
     private String remark;
 
-    private DeliveryOrder deliveryOrder;
+    private Waybill waybill;
 
-    public DeliveryOrder getDeliveryOrder() {
-        return deliveryOrder;
+    public Waybill getWaybill() {
+        return waybill;
     }
 
-    public void setDeliveryOrder(DeliveryOrder deliveryOrder) {
-        this.deliveryOrder = deliveryOrder;
+    public void setWaybill(Waybill waybill) {
+        this.waybill = waybill;
     }
 
     public String getRemark() {

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by admin on 2017/9/20.
  */
-public class DeliveryOrderParameter {
+public class WaybillParameter {
     private String merchantId;
 
     private String orderNo;

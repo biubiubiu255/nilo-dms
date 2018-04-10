@@ -14,7 +14,7 @@ import com.nilo.dms.service.order.DeliveryFeeDetailsService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.fee.*;
 import com.nilo.dms.service.order.model.DeliveryFeeDetails;
-import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.model.BizFeeConfig;
 import org.slf4j.Logger;
@@ -56,7 +56,7 @@ public class DeliveryFeeDetailsServiceImpl implements DeliveryFeeDetailsService 
         Double bizFeeTimes = bizFeeConfig.getFee();
 
         //get order details
-        DeliveryOrder order = waybillService.queryByOrderNo(merchantId, orderNo);
+        Waybill order = waybillService.queryByOrderNo(merchantId, orderNo);
 
         //查找计费模板
         DeliveryFeeTemplateDO param = new DeliveryFeeTemplateDO();

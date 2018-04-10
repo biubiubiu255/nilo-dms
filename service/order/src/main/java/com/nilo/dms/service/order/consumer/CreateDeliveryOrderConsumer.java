@@ -89,7 +89,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
             @Override
             public Void doInTransaction(TransactionStatus transactionStatus) {
                 String orderNo = deliveryOrderRequestDO.getOrderNo();
-                DeliveryOrder data = JSON.parseObject(deliveryOrderRequestDO.getData(), DeliveryOrder.class);
+                Waybill data = JSON.parseObject(deliveryOrderRequestDO.getData(), Waybill.class);
                 try {
 
                     //1、保存订单信息

@@ -8,9 +8,9 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
 import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.service.order.model.TaskParameter;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -81,9 +81,9 @@ public class DispatchTaskController extends BaseController {
         String merchantId = me.getMerchantId();
         String[] orderNos = request.getParameter("orderNos").split(",");
         //查询订单详情
-        List<DeliveryOrder> list = new ArrayList<>();
+        List<Waybill> list = new ArrayList<>();
         for (int i = 0; i < orderNos.length; i++) {
-            DeliveryOrder order = waybillService.queryByOrderNo(merchantId, orderNos[i]);
+            Waybill order = waybillService.queryByOrderNo(merchantId, orderNos[i]);
             list.add(order);
         }
         model.addAttribute("list", list);

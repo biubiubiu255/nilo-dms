@@ -107,7 +107,7 @@
             id: '999999',
             title: 'Waybill List',
             close: false,
-            url: '/order/deliveryOrder/listPage.html',
+            url: '/order/waybill/listPage.html',
             urlType: "relative"
         });
         App.fixIframeCotent();

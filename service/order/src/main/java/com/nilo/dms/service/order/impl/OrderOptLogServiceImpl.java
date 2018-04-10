@@ -93,7 +93,7 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
 
             for (Waybill o : orderList) {
                 if (StringUtil.equals(o.getOrderNo(), d.getOrderNo())) {
-                    opt.setDeliveryOrder(o);
+                    opt.setWaybill(o);
                     break;
                 }
             }

@@ -2,8 +2,6 @@ package com.nilo.dms.service.order.model;
 
 import com.nilo.dms.common.enums.TaskStatusEnum;
 import com.nilo.dms.common.enums.TaskTypeEnum;
-import com.nilo.dms.service.model.User;
-import com.nilo.dms.service.model.UserInfo;
 
 /**
  * Created by admin on 2017/10/23.
@@ -38,7 +36,7 @@ public class Task {
 
     private Integer taskRate;
 
-    private DeliveryOrder deliveryOrder;
+    private Waybill waybill;
 
     public String getCreatedName() {
         return createdName;
@@ -72,13 +70,6 @@ public class Task {
         this.taskRate = taskRate;
     }
 
-    public DeliveryOrder getDeliveryOrder() {
-        return deliveryOrder;
-    }
-
-    public void setDeliveryOrder(DeliveryOrder deliveryOrder) {
-        this.deliveryOrder = deliveryOrder;
-    }
 
     public String getTaskId() {
         return taskId;

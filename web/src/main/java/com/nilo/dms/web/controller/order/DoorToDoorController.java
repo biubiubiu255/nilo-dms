@@ -12,8 +12,8 @@ import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
-import com.nilo.dms.service.order.model.DeliveryOrderParameter;
+import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.service.order.model.WaybillParameter;
 import com.nilo.dms.service.order.model.OrderOptRequest;
 import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.web.controller.BaseController;
@@ -54,7 +54,7 @@ public class DoorToDoorController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html")
-    public String getOrderList(DeliveryOrderParameter parameter) {
+    public String getOrderList(WaybillParameter parameter) {
 
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
@@ -65,9 +65,9 @@ public class DoorToDoorController extends BaseController {
         parameter.setStatus(Arrays.asList(new Integer[]{DeliveryOrderStatusEnum.CREATE.getCode(), DeliveryOrderStatusEnum.ALLOCATED.getCode()}));
 */
         Pagination page = getPage();
-        List<DeliveryOrder> list = waybillService.queryDeliveryOrderBy(parameter, page);
+        List<Waybill> list = waybillService.queryWaybillBy(parameter, page);
 
-        for (DeliveryOrder o : list) {
+        for (Waybill o : list) {
             if (o.getStatus() != DeliveryOrderStatusEnum.CREATE) {
                 Task task = taskService.queryTaskByTypeAndOrderNo(o.getMerchantId(), TaskTypeEnum.PICK_UP.getCode(), o.getOrderNo());
                 if (task != null) {
@@ -135,8 +135,8 @@ public class DoorToDoorController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<DeliveryOrder> list = waybillService.queryByOrderNos(merchantId, Arrays.asList(orderNos.split(",")));
-        for (DeliveryOrder o : list) {
+        List<Waybill> list = waybillService.queryByOrderNos(merchantId, Arrays.asList(orderNos.split(",")));
+        for (Waybill o : list) {
             if (o.isPrinted()) {
                 throw new IllegalArgumentException("Delivery Order :" + o.getOrderNo() + " is already printed.");
             }
@@ -151,7 +151,7 @@ public class DoorToDoorController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<DeliveryOrder> list = waybillService.queryByOrderNos(merchantId, Arrays.asList(orderNos.split(",")));
+        List<Waybill> list = waybillService.queryByOrderNos(merchantId, Arrays.asList(orderNos.split(",")));
 
         waybillService.print(merchantId, Arrays.asList(orderNos.split(",")));
 

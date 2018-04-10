@@ -145,7 +145,7 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
             throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getOrderNo());
         }
 
-        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(param.getMerchantId(), param.getOrderNo());
+        Waybill deliveryOrder = waybillService.queryByOrderNo(param.getMerchantId(), param.getOrderNo());
         if (deliveryOrder == null) {
             throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, param.getOrderNo());
         }

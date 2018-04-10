@@ -11,7 +11,7 @@ import com.nilo.dms.dao.WaybillScanDetailsDao;
 import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.shiro.SecurityUtils;
@@ -66,7 +66,7 @@ public class ArriveScanController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<DeliveryOrder> list = new ArrayList<>();
+        List<Waybill> list = new ArrayList<>();
         Pagination pagination = new Pagination(0, 100);
 
         if (StringUtil.isEmpty(scanNo)) return toPaginationLayUIData(pagination, list);
@@ -80,7 +80,7 @@ public class ArriveScanController extends BaseController {
         }
         list = waybillService.queryByOrderNos(merchantId, orderNos);
 
-        for (DeliveryOrder o : list) {
+        for (Waybill o : list) {
             for (WaybillScanDetailsDO d : scanDetailsDOList) {
                 if (StringUtil.equals(d.getOrderNo(), o.getOrderNo()) && d.getWeight() != null) {
                     o.setWeight(d.getWeight());
@@ -100,7 +100,7 @@ public class ArriveScanController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
 
-        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
+        Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         if (deliveryOrder == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
 
         WaybillScanDetailsDO query = waybillScanDetailsDao.queryBy(orderNo, scanNo);

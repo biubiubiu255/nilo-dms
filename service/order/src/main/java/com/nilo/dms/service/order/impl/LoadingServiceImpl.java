@@ -147,7 +147,7 @@ public class LoadingServiceImpl implements LoadingService {
             inx++;
             LoadingDetails details = convert(detailsDO);
             details.setNum(inx);
-            details.setDeliveryOrder(waybillService.queryByOrderNo(merchantId, details.getOrderNo()));
+            details.setWaybill(waybillService.queryByOrderNo(merchantId, details.getOrderNo()));
             detailsList.add(details);
         }
         loading.setDetailsList(detailsList);

@@ -15,7 +15,7 @@ import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.service.order.model.TaskParameter;
 import org.slf4j.Logger;
@@ -155,15 +155,14 @@ public class TaskServiceImpl implements TaskService {
         List<String> userIdList = new ArrayList<>();
         userIdList.addAll(userIds);
         //查询所有订单信息
-        List<DeliveryOrder> deliveryOrderList = waybillService.queryByOrderNos(parameter.getMerchantId(), orderNos);
+        List<Waybill> deliveryOrderList = waybillService.queryByOrderNos(parameter.getMerchantId(), orderNos);
         //查询所有用户信息
         List<UserInfo> userInfoList = userService.findUserInfoByUserIds(parameter.getMerchantId(), userIdList);
 
         for (TaskDO t : doList) {
             Task task = convert(t);
-            for (DeliveryOrder order : deliveryOrderList) {
+            for (Waybill order : deliveryOrderList) {
                 if (StringUtil.equals(order.getOrderNo(), t.getOrderNo())) {
-                    task.setDeliveryOrder(order);
                     break;
                 }
             }

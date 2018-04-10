@@ -11,7 +11,7 @@ import com.nilo.dms.dao.WaybillScanDetailsDao;
 import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.order.model.Waybill;
 import com.nilo.dms.service.order.model.UnpackRequest;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.shiro.SecurityUtils;
@@ -76,9 +76,9 @@ public class UnPackController extends BaseController {
         if (StringUtil.isEmpty(scanNo)) return toPaginationLayUIData(pagination, list);
 
         List<WaybillScanDetailsDO> scanDetailsDOList = waybillScanDetailsDao.queryByScanNo(scanNo);
-        List<DeliveryOrder> orderList = waybillService.queryByPackageNo(merchantId, packageNo);
+        List<Waybill> orderList = waybillService.queryByPackageNo(merchantId, packageNo);
         if (orderList == null) throw new DMSException(BizErrorCode.PACKAGE_NO_ERROR);
-        for (DeliveryOrder o : orderList) {
+        for (Waybill o : orderList) {
             UnpackInfo i = new UnpackInfo();
             i.setOrderNo(o.getOrderNo());
             i.setOrderType(o.getOrderType());
@@ -100,13 +100,13 @@ public class UnPackController extends BaseController {
             }
 
             boolean exist = false;
-            for (DeliveryOrder o : orderList) {
+            for (Waybill o : orderList) {
                 if (StringUtil.equals(o.getOrderNo(), d.getOrderNo())) {
                     exist = true;
                 }
             }
             if (!exist) {
-                DeliveryOrder order = waybillService.queryByOrderNo(merchantId, d.getOrderNo());
+                Waybill order = waybillService.queryByOrderNo(merchantId, d.getOrderNo());
                 UnpackInfo i = new UnpackInfo();
                 i.setOrderNo(order.getOrderNo());
                 i.setOrderType(order.getOrderType());
@@ -127,7 +127,7 @@ public class UnPackController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
 
-        DeliveryOrder deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
+        Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         if (deliveryOrder == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
         if (StringUtil.equals(type, PACKAGE) && !deliveryOrder.isPackage()) {
             throw new DMSException(BizErrorCode.PACKAGE_NO_ERROR);
