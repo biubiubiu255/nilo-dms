@@ -10,18 +10,16 @@ import com.nilo.dms.dao.UserNetworkDao;
 import com.nilo.dms.dao.dataobject.UserNetworkDO;
 import com.nilo.dms.service.RoleService;
 import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.model.Role;
-import com.nilo.dms.service.model.User;
+import com.nilo.dms.dto.common.Role;
+import com.nilo.dms.dto.common.User;
 import com.nilo.dms.service.org.CompanyService;
 import com.nilo.dms.service.org.StaffService;
-import com.nilo.dms.service.org.model.Company;
-import com.nilo.dms.service.org.model.Staff;
+import com.nilo.dms.dto.org.Company;
+import com.nilo.dms.dto.org.Staff;
 import io.leopard.web.captcha.CaptchaUtil;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -133,8 +131,7 @@ public class AccountController extends BaseController {
     @RequestMapping(value = "/logout.html", method = RequestMethod.GET)
     public String logout(HttpSession session) {
         // 登出操作
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout(); // already call session.invalidate();
+        WebUtil.setHttpSessionValue("session_user", null);
         return "redirect:/";
     }
 

@@ -11,7 +11,7 @@ import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.order.PackageController.NextStation;
 import com.nilo.dms.web.controller.order.UnPackController.UnpackInfo;
@@ -100,15 +100,11 @@ public class MobileUnPackController extends BaseController {
 
     }
 
-
     @Transactional
     @ResponseBody
     @RequestMapping(value = "/save.html")
     public String save(@RequestParam("logisticsNo") String logisticsNo) {
-        Principal me = SessionLocal.getPrincipal();
-        String merchantId = me.getMerchantId();
-        String netWorkId = "" + me.getNetworks().get(0);
-        waybillService.arrive(Arrays.asList(new String[]{logisticsNo}), merchantId, me.getUserId(), netWorkId);
+        waybillService.arrive(Arrays.asList(new String[]{logisticsNo}));
         return toJsonTrueMsg();
     }
 

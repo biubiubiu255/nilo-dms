@@ -2,7 +2,7 @@ package com.nilo.dms.service.order;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.dao.dataobject.ReportCodDO;
-import com.nilo.dms.service.order.model.ReportCodQuery;
+import com.nilo.dms.dto.order.ReportCodQuery;
 
 import java.util.List;
 

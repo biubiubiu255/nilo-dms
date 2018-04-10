@@ -12,7 +12,8 @@ import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.dto.order.Waybill;
+import com.nilo.dms.dto.order.WaybillHeader;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
@@ -114,7 +115,7 @@ public class ArriveScanController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/updateWeight.html")
-    public String updateWeight(String orderNo, String scanNo, String weight) {
+    public String updateWeight(String orderNo, String weight) {
 
         if (!NumberUtils.isNumber(weight)) {
             return toJsonErrorMsg(BizErrorCode.WEIGHT_MORE_THAN_0.getDescription());
@@ -124,19 +125,20 @@ public class ArriveScanController extends BaseController {
             return toJsonErrorMsg(BizErrorCode.WEIGHT_MORE_THAN_0.getDescription());
 
         }
+        Principal principal = SessionLocal.getPrincipal();
+        //更新重量
+        WaybillHeader header = new WaybillHeader();
+        header.setMerchantId(principal.getMerchantId());
+        header.setOrderNo(orderNo);
+        header.setWeight(Double.parseDouble(weight));
+        waybillService.updateWaybill(header);
 
-        WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
-        scanDetailsDO.setScanNo(scanNo);
-        scanDetailsDO.setOrderNo(orderNo);
-        scanDetailsDO.setWeight(w);
-        waybillScanDetailsDao.update(scanDetailsDO);
         return toJsonTrueMsg();
     }
 
     @ResponseBody
     @RequestMapping(value = "/deleteDetails.html")
     public String deleteDetails(String orderNo, String scanNo) {
-
 
         WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
         scanDetailsDO.setScanNo(scanNo);
@@ -149,18 +151,14 @@ public class ArriveScanController extends BaseController {
     @RequestMapping(value = "/arrive.html")
     public String arrive(String scanNo) {
 
-        Principal me = SessionLocal.getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
         try {
-            List<WaybillScanDetailsDO> scanDetailsDOList = waybillScanDetailsDao.queryByScanNo(scanNo);
-            if (scanDetailsDOList == null) throw new DMSException(BizErrorCode.ARRIVE_EMPTY);
-
+            List<WaybillScanDetailsDO> list = waybillScanDetailsDao.queryByScanNo(scanNo);
+            if (list == null) throw new DMSException(BizErrorCode.ARRIVE_EMPTY);
             List<String> orderNos = new ArrayList<>();
-            for (WaybillScanDetailsDO details : scanDetailsDOList) {
+            for (WaybillScanDetailsDO details : list) {
                 orderNos.add(details.getOrderNo());
             }
-            waybillService.arrive(orderNos, merchantId, me.getFirstNetwork(), me.getUserId());
+            waybillService.arrive(orderNos);
         } catch (Exception e) {
             log.error("arrive failed. scanNo:{}", scanNo, e);
             return toJsonErrorMsg(e.getMessage());

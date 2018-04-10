@@ -45,16 +45,10 @@ public class MobileArriveScanController extends BaseController {
     @RequestMapping(value = "/submit.html")
     @ResponseBody
     public String submit(String scanedCodes, String logisticsNos) {
-
-        Principal me = SessionLocal.getPrincipal();
-        // 获取merchantId
-        String merchantId = me.getMerchantId();
-        String arriveBy = me.getUserId();
-        String netWorkId = "" + me.getNetworks().get(0);
         try {
             String[] logisticsNoArray = scanedCodes.split(",");
             if (null != logisticsNoArray && logisticsNoArray.length > 0) {
-                waybillService.arrive(Arrays.asList(logisticsNoArray), arriveBy, merchantId, netWorkId);
+                waybillService.arrive(Arrays.asList(logisticsNoArray));
             }
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());

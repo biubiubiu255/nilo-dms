@@ -12,7 +12,7 @@ import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.AbnormalOrderService;
 import com.nilo.dms.service.order.RiderOptService;
-import com.nilo.dms.service.order.model.AbnormalOrder;
+import com.nilo.dms.dto.order.AbnormalOrder;
 import com.nilo.dms.service.order.model.DelayParam;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.web.controller.BaseController;

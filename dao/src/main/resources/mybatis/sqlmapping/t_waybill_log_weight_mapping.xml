@@ -5,7 +5,7 @@
 
 	<!-- 实体bean与数据字段对应关系 -->
 	<resultMap id="weightLog"
-		type="com.nilo.dms.service.order.model.WaybillLogWeight">
+		type="com.nilo.dms.dto.order.WaybillLogWeight">
 		<result property="id" column="id" javaType="java.lang.Long"
 			jdbcType="INTEGER" />
 		<result property="orderNo" column="order_no" javaType="java.lang.String"
@@ -48,7 +48,7 @@
 	</sql>
 
 	<!-- 插入语句 -->
-	<insert id="insert" parameterType="com.nilo.dms.service.order.model.WaybillLogWeight"
+	<insert id="insert" parameterType="com.nilo.dms.dto.order.WaybillLogWeight"
 		statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
 		INSERT
 		INTO t_waybill_log_weight

@@ -1,9 +1,8 @@
 package com.nilo.dms.service.order;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.dao.dataobject.SendReportDO;
-import com.nilo.dms.service.order.model.SendOrderParameter;
-import com.nilo.dms.service.order.model.SendReport;
+import com.nilo.dms.dto.order.SendOrderParameter;
+import com.nilo.dms.dto.order.SendReport;
 
 import java.util.List;
 

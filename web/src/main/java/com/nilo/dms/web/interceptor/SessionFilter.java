@@ -2,19 +2,13 @@ package com.nilo.dms.web.interceptor;
 
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.common.exception.BizErrorCode;
-import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.model.User;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.web.util.WebUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by admin on 2018/4/10.

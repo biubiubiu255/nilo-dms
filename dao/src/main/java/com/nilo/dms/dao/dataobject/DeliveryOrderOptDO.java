@@ -1,7 +1,6 @@
 package com.nilo.dms.dao.dataobject;
 
 import com.nilo.dms.common.BaseDo;
-import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 
 /**
  * Created by admin on 2017/9/19.
@@ -15,13 +14,27 @@ public class DeliveryOrderOptDO extends BaseDo<Long> {
 
     private String opt;
 
-    private String optBy;
+    private String userId;
 
-    private Integer fromStatus;
-
-    private Integer toStatus;
+    private String name;
 
     private String remark;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getRemark() {
         return remark;
@@ -55,27 +68,5 @@ public class DeliveryOrderOptDO extends BaseDo<Long> {
         this.merchantId = merchantId;
     }
 
-    public String getOptBy() {
-        return optBy;
-    }
 
-    public void setOptBy(String optBy) {
-        this.optBy = optBy;
-    }
-
-    public Integer getFromStatus() {
-        return fromStatus;
-    }
-
-    public void setFromStatus(Integer fromStatus) {
-        this.fromStatus = fromStatus;
-    }
-
-    public Integer getToStatus() {
-        return toStatus;
-    }
-
-    public void setToStatus(Integer toStatus) {
-        this.toStatus = toStatus;
-    }
 }

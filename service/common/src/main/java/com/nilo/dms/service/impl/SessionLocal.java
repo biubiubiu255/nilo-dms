@@ -1,7 +1,6 @@
 package com.nilo.dms.service.impl;
 
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.service.model.User;
 
 /**
  * Created by admin on 2018/4/10.

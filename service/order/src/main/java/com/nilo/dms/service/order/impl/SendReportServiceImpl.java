@@ -4,15 +4,15 @@ import java.util.*;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.dao.*;
+import com.nilo.dms.dto.order.SendOrderParameter;
 import com.nilo.dms.service.order.*;
-import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.order.model.SendReport;
+import com.nilo.dms.dto.order.SendReport;
 import com.nilo.dms.dao.dataobject.SendReportDO;
 
 /**

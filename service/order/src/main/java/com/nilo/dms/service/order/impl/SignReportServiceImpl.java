@@ -1,19 +1,13 @@
 package com.nilo.dms.service.order.impl;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.common.enums.TaskStatusEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DeliverReportDao;
 import com.nilo.dms.dao.SignReportDao;
-import com.nilo.dms.dao.dataobject.DeliverReportDO;
 import com.nilo.dms.dao.dataobject.SignReportDO;
-import com.nilo.dms.service.order.DeliverReportService;
 import com.nilo.dms.service.order.SignReportService;
-import com.nilo.dms.service.order.model.DeliverOrderParameter;
-import com.nilo.dms.service.order.model.DeliverReport;
-import com.nilo.dms.service.order.model.SignOrderParameter;
-import com.nilo.dms.service.order.model.SignReport;
+import com.nilo.dms.dto.order.SignOrderParameter;
+import com.nilo.dms.dto.order.SignReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

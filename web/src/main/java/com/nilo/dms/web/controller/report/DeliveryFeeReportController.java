@@ -8,7 +8,6 @@ import com.nilo.dms.dao.dataobject.DeliveryFeeDetailsDO;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

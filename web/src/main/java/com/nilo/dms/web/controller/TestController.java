@@ -1,6 +1,6 @@
 package com.nilo.dms.web.controller;
 
-import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.dto.order.Waybill;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

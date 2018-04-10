@@ -2,7 +2,7 @@ package com.nilo.dms.dao;
 
 import org.springframework.stereotype.Repository;
 
-import com.nilo.dms.service.order.model.WaybillPaymentOrder;
+import com.nilo.dms.dto.order.WaybillPaymentOrder;
 
 @Repository
 public interface WaybillPaymentOrderDao {

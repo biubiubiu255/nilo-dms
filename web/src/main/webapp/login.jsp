@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page import="com.nilo.dms.common.utils.WebUtil" %>
 <%
-    if (session.getAttribute("userId") != null) {
+    if (session.getAttribute("session_user") != null) {
         //  已登陆用户回主面板
         response.sendRedirect("/dashboard.html");
         return;

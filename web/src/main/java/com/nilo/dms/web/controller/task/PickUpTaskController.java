@@ -11,7 +11,7 @@ import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.Task;
 import com.nilo.dms.service.order.model.TaskParameter;
-import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

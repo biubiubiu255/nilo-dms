@@ -1,6 +1,6 @@
 package com.nilo.dms.web.controller.report.model;
 
-import com.nilo.dms.service.order.model.ReportColumnName;
+import com.nilo.dms.dto.order.ReportColumnName;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;

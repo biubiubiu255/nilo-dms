@@ -13,7 +13,7 @@ import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.model.UnpackRequest;
-import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

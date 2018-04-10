@@ -17,9 +17,9 @@ import com.nilo.dms.dao.WaybillPaymentRecordDao;
 import com.nilo.dms.dao.WaybillTaskDao;
 import com.nilo.dms.dao.dataobject.WaybillTaskDo;
 import com.nilo.dms.service.order.PaymentService;
-import com.nilo.dms.service.order.model.WaybillPaymentOrder;
-import com.nilo.dms.service.order.model.WaybillPaymentOrderWaybill;
-import com.nilo.dms.service.order.model.WaybillPaymentRecord;
+import com.nilo.dms.dto.order.WaybillPaymentOrder;
+import com.nilo.dms.dto.order.WaybillPaymentOrderWaybill;
+import com.nilo.dms.dto.order.WaybillPaymentRecord;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {

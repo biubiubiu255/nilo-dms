@@ -1,13 +1,11 @@
 package com.nilo.dms.common.utils;
 
-import com.nilo.dms.common.utils.model.Excel;
+import com.nilo.dms.dto.util.Excel;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class ExportExcel<T> {
