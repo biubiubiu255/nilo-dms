@@ -19,6 +19,8 @@ public interface OrderService {
 
     String createDeliveryOrder(DeliveryOrder data);
 
+    void updateWeight(String merchantId,String orderNo, Double weight);
+
     List<DeliveryOrder> queryDeliveryOrderBy(DeliveryOrderParameter parameter, Pagination pagination);
 
     DeliveryOrder queryByOrderNo(String merchantId, String orderNo);
@@ -27,7 +29,7 @@ public interface OrderService {
 
     void handleOpt(OrderOptRequest optRequest);
 
-    void arrive(String merchantId,String scanNo,String networkId,String arriveBy);
+    void arrive(String merchantId, String scanNo, String networkId, String arriveBy);
 
     void print(String merchantId, List<String> orderNos);
 
@@ -35,13 +37,13 @@ public interface OrderService {
 
     void unpack(UnpackRequest unpackRequest);
 
-    List<DeliveryOrder> queryByPackageNo(String merchantNo,String packageNo);
-    
+    List<DeliveryOrder> queryByPackageNo(String merchantNo, String packageNo);
+
     void waybillNoListArrive(List<String> waybillNos, String arriveBy, String merchantId, String netWork);
 
     long updatePaidType(DeliveryOrderDO deliveryOrderDO);
 
-	void waybillArrvieWeighing(String waybillNo, Double weight, Double length, Double width, Double height,
-			String arriveBy, String merchantId, String networkId);
-    
+    void waybillArrvieWeighing(String waybillNo, Double weight, Double length, Double width, Double height,
+                               String arriveBy, String merchantId, String networkId);
+
 }

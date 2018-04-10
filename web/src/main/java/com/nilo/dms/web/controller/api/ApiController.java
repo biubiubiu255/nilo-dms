@@ -47,108 +47,119 @@ import com.nilo.dms.web.controller.api.model.RequestParam;
 @Controller
 public class ApiController extends BaseController {
 
-	private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
-	@Autowired
-	private OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
-	@Autowired
-	private PaymentService paymentService;
+    @Autowired
+    private PaymentService paymentService;
 
-	@Autowired
-	private RiderOptService riderOptService;
-	@Value("#{configProperties['signKey']}")
-	private String signKey;
+    @Autowired
+    private RiderOptService riderOptService;
+    @Value("#{configProperties['signKey']}")
+    private String signKey;
 
-	@RequestMapping(value = "/api.html", method = RequestMethod.GET)
-	public String doGet() {
-		return "api";
-	}
+    @RequestMapping(value = "/api.html", method = RequestMethod.GET)
+    public String doGet() {
+        return "api";
+    }
 
-	@RequestMapping(value = "/api.html", method = RequestMethod.POST)
-	@ResponseBody
-	public String doPost(RequestParam param) {
+    @RequestMapping(value = "/api.html", method = RequestMethod.POST)
+    @ResponseBody
+    public String doPost(RequestParam param) {
 
-		param.checkParam();
+        param.checkParam();
 
-		MethodEnum method = param.getMethod();
-		String data = param.getData();
-		String sign = param.getSign();
-		String merchantId = param.getApp_id();
+        MethodEnum method = param.getMethod();
+        String data = param.getData();
+        String sign = param.getSign();
+        String merchantId = param.getApp_id();
 
-		log.info("API Data:{}", data);
+        log.info("API Data:{}", data);
 
-		switch (method) {
-		case CREATE_WAYBILL: {
-			orderService.addCreateDeliveryOrderRequest(merchantId, data, sign);
-			break;
-		}
-		case CANCEL_WAYBILL: {
-			OrderOptRequest optRequest = new OrderOptRequest();
-			JSONObject jsonObject = JSON.parseObject(data);
-			String orderNo = jsonObject.getString("waybill_number");
-			AssertUtil.isNotBlank(orderNo, BizErrorCode.ORDER_NO_EMPTY);
-			optRequest.setOrderNo(Arrays.asList(new String[] { orderNo }));
-			optRequest.setMerchantId(merchantId);
-			optRequest.setOptBy("api");
-			optRequest.setOptType(OptTypeEnum.CANCEL);
-			orderService.handleOpt(optRequest);
-			break;
-		}
-		case WAYBILL_TRACE: {
-			break;
-		}
-		case ARRIVE_SCAN: {
-			List<String> list = JSONArray.parseArray(data, String.class);
-			orderService.waybillNoListArrive(list, "api", merchantId,"1");
-			break;
-		}
-		case SIGN: {
-			SignForOrderParam signForOrderParam = JSON.parseObject(data, SignForOrderParam.class);
-			signForOrderParam.setMerchantId(merchantId);
-			riderOptService.signForOrder(signForOrderParam);
-			break;
-		}
-		default:
-			break;
-		}
-		return toJsonTrueMsg();
-	}
+        switch (method) {
+            case CREATE_WAYBILL: {
+                orderService.addCreateDeliveryOrderRequest(merchantId, data, sign);
+                break;
+            }
+            case UPDATE_WEIGHT: {
+                JSONArray array = JSONArray.parseArray(data);
+                for (int i = 0; i < array.size(); i++) {
+                    JSONObject object = array.getJSONObject(i);
+                    String orderNo = object.getString("waybill_number");
+                    Double weight = object.getDouble("weight");
+                    orderService.updateWeight(merchantId, orderNo, weight);
+                }
 
-	@RequestMapping(value = "api/paymentNotify.html", method = RequestMethod.POST)
-	@ResponseBody
-	public String paymentNotify(PaymentResult paymentResult) {
+                break;
+            }
+            case CANCEL_WAYBILL: {
+                OrderOptRequest optRequest = new OrderOptRequest();
+                JSONObject jsonObject = JSON.parseObject(data);
+                String orderNo = jsonObject.getString("waybill_number");
+                AssertUtil.isNotBlank(orderNo, BizErrorCode.ORDER_NO_EMPTY);
+                optRequest.setOrderNo(Arrays.asList(new String[]{orderNo}));
+                optRequest.setMerchantId(merchantId);
+                optRequest.setOptBy("api");
+                optRequest.setOptType(OptTypeEnum.CANCEL);
+                orderService.handleOpt(optRequest);
+                break;
+            }
+            case WAYBILL_TRACE: {
+                break;
+            }
+            case ARRIVE_SCAN: {
+                List<String> list = JSONArray.parseArray(data, String.class);
+                orderService.waybillNoListArrive(list, "api", merchantId, "1");
+                break;
+            }
+            case SIGN: {
+                SignForOrderParam signForOrderParam = JSON.parseObject(data, SignForOrderParam.class);
+                signForOrderParam.setMerchantId(merchantId);
+                riderOptService.signForOrder(signForOrderParam);
+                break;
+            }
+            default:
+                break;
+        }
+        return toJsonTrueMsg();
+    }
 
-		String plainText = paymentResult.toString();
-		log.info("paymentNotify Data:{}", plainText);
-		String generateSign = DigestUtils.md5Hex(plainText + signKey);
-		if (paymentResult.getSign() != null && paymentResult.getSign().equalsIgnoreCase(generateSign)) {
-			
-			// 支付完成
-			WaybillPaymentRecord waybillPaymentRecord = new WaybillPaymentRecord();
-			waybillPaymentRecord.setPaymentOrderId(paymentResult.getMerchantOrderNo());
-			waybillPaymentRecord.setOrgTransId(paymentResult.getOrgTransId());
-			waybillPaymentRecord.setPaymentChannel(paymentResult.getPaymentChannel());
-			waybillPaymentRecord.setPaymentMethod(paymentResult.getPaymentMethod());
-			waybillPaymentRecord.setPaymentType(0);
-			waybillPaymentRecord.setThirdPaySn(paymentResult.getOrderId());
-			waybillPaymentRecord.setStatus(1);
-			paymentService.paySucess(waybillPaymentRecord);
-			
-			//返回数据
-			PaymentResponse paymentResponse = new PaymentResponse();
-			paymentResponse.setStatus("SUCCESS");
-			paymentResponse.setErrorCode("100");
-			paymentResponse.setMerchantId(paymentResult.getMerchantId());
-			paymentResponse.setSignType("MD5");
-			paymentResponse.setMerchantOrderNo(waybillPaymentRecord.getPaymentOrderId());
-			paymentResponse.setOrderId(waybillPaymentRecord.getThirdPaySn());
-			//paymentResponse.setSign(sign);
-			plainText = paymentResponse.toString();
-			String sign = DigestUtils.md5Hex(plainText + signKey);
-			paymentResponse.setSign(sign);
-			return JSON.toJSONString(paymentResponse);
-		}
-		return "false";
-	}
+    @RequestMapping(value = "api/paymentNotify.html", method = RequestMethod.POST)
+    @ResponseBody
+    public String paymentNotify(PaymentResult paymentResult) {
+
+        String plainText = paymentResult.toString();
+        log.info("paymentNotify Data:{}", plainText);
+        String generateSign = DigestUtils.md5Hex(plainText + signKey);
+        if (paymentResult.getSign() != null && paymentResult.getSign().equalsIgnoreCase(generateSign)) {
+
+            // 支付完成
+            WaybillPaymentRecord waybillPaymentRecord = new WaybillPaymentRecord();
+            waybillPaymentRecord.setPaymentOrderId(paymentResult.getMerchantOrderNo());
+            waybillPaymentRecord.setOrgTransId(paymentResult.getOrgTransId());
+            waybillPaymentRecord.setPaymentChannel(paymentResult.getPaymentChannel());
+            waybillPaymentRecord.setPaymentMethod(paymentResult.getPaymentMethod());
+            waybillPaymentRecord.setPaymentType(0);
+            waybillPaymentRecord.setThirdPaySn(paymentResult.getOrderId());
+            waybillPaymentRecord.setStatus(1);
+            paymentService.paySucess(waybillPaymentRecord);
+
+            //返回数据
+            PaymentResponse paymentResponse = new PaymentResponse();
+            paymentResponse.setStatus("SUCCESS");
+            paymentResponse.setErrorCode("100");
+            paymentResponse.setMerchantId(paymentResult.getMerchantId());
+            paymentResponse.setSignType("MD5");
+            paymentResponse.setMerchantOrderNo(waybillPaymentRecord.getPaymentOrderId());
+            paymentResponse.setOrderId(waybillPaymentRecord.getThirdPaySn());
+            //paymentResponse.setSign(sign);
+            plainText = paymentResponse.toString();
+            String sign = DigestUtils.md5Hex(plainText + signKey);
+            paymentResponse.setSign(sign);
+            return JSON.toJSONString(paymentResponse);
+        }
+        return "false";
+    }
 }

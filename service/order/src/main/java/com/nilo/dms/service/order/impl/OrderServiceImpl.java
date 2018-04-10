@@ -191,6 +191,15 @@ public class OrderServiceImpl extends AbstractOrderOpt implements OrderService {
     }
 
     @Override
+    public void updateWeight(String merchantId, String orderNo, Double weight) {
+        DeliveryOrderDO orderDO = new DeliveryOrderDO();
+        orderDO.setMerchantId(Long.parseLong(merchantId));
+        orderDO.setOrderNo(orderNo);
+        orderDO.setWeight(weight);
+        deliveryOrderDao.update(orderDO);
+    }
+
+    @Override
     public List<DeliveryOrder> queryDeliveryOrderBy(DeliveryOrderParameter parameter, Pagination pagination) {
 
         Map<String, Object> map = new HashMap<>();
