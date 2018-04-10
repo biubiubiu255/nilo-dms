@@ -4,9 +4,6 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.dao.dataobject.RiderDeliveryDO;
 import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
-import com.nilo.dms.service.order.model.Loading;
-import com.nilo.dms.service.order.model.ShipParameter;
-import com.nilo.dms.service.order.model.Waybill;
 
 import java.util.List;
 
@@ -15,17 +12,17 @@ import java.util.List;
  */
 public interface RiderDeliveryService {
 
-    void addRiderPackDetail(Long merchantId , String handleNo, String[] smallOrders);
+    void addRiderPackDetail(Long merchantId, String handleNo, String[] smallOrders);
 
     void addRiderPack(RiderDeliveryDO riderDeliveryDO);
 
-    void addRiderPackAndDetail(Long merchantId , RiderDeliveryDO riderDeliveryDO, String[] smallOrders);
+    void addRiderPackAndDetail(Long merchantId, RiderDeliveryDO riderDeliveryDO, String[] smallOrders);
 
-    List<RiderDeliveryDO> queryRiderDelivery(String merchantId , RiderDeliveryDO riderDeliveryDO, Pagination page);
+    List<RiderDeliveryDO> queryRiderDelivery(String merchantId, RiderDeliveryDO riderDeliveryDO, Pagination page);
 
-    List<RiderDeliverySmallDO> queryRiderDeliveryDetail(String merchantId , RiderDeliverySmallDO riderDeliverySmallDO, Pagination page);
+    List<RiderDeliverySmallDO> queryRiderDeliveryDetail(String merchantId, RiderDeliverySmallDO riderDeliverySmallDO, Pagination page);
 
-    List<WaybillDO> queryRiderDeliveryDetailPlus(String merchantId , RiderDeliveryDO riderDeliveryDO, Pagination page);
+    List<WaybillDO> queryRiderDeliveryDetailPlus(String merchantId, RiderDeliveryDO riderDeliveryDO, Pagination page);
 
     void editSmall(RiderDeliveryDO riderDeliveryDO, String[] smallOrders);
 
