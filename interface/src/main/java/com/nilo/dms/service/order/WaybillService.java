@@ -3,8 +3,7 @@ package com.nilo.dms.service.order;
 import java.util.List;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.order.model.*;
-import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.dto.order.*;
 
 /**
  * Created by ronny on 2017/9/15.

@@ -1,7 +1,7 @@
 package com.nilo.dms.web.controller.report.model;
 
-import com.nilo.dms.service.order.model.AbnormalOrder;
-import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.dto.order.AbnormalOrder;
+import com.nilo.dms.dto.order.Waybill;
 
 import java.io.Serializable;
 

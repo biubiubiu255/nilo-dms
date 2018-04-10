@@ -6,7 +6,7 @@ import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.dataobject.ReportCodDO;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.ReportService;
-import com.nilo.dms.service.order.model.ReportCodQuery;
+import com.nilo.dms.dto.order.ReportCodQuery;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.report.model.ReportUtil;
 import net.sf.jasperreports.engine.JRDataSource;

@@ -13,16 +13,15 @@ import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
-import com.nilo.dms.service.UserService;
+import com.nilo.dms.dto.order.*;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.*;
-import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
-import com.nilo.dms.service.system.model.OrderHandleConfig;
-import com.nilo.dms.service.system.model.SMSConfig;
+import com.nilo.dms.dto.system.OrderHandleConfig;
+import com.nilo.dms.dto.system.SMSConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,14 +61,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Autowired
     private DeliveryOrderSenderDao deliveryOrderSenderDao;
     @Autowired
-    private WaybillScanDetailsDao waybillScanDetailsDao;
-    @Autowired
     private DistributionNetworkDao distributionNetworkDao;
     @Autowired
     private DeliveryOrderRequestDao deliveryOrderRequestDao;
-
-    @Autowired
-    private WaybillLogWeightDao waybillLogWeightDao;
 
     @Autowired
     @Qualifier("phoneSMSProducer")

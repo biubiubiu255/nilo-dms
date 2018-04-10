@@ -1,7 +1,7 @@
 package test;
 
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
-import com.nilo.dms.service.order.model.ReportCodQuery;
+import com.nilo.dms.dto.order.ReportCodQuery;
 import com.nilo.dms.web.controller.report.model.ReportUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.math.NumberUtils;

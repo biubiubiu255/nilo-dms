@@ -2,7 +2,7 @@ package com.nilo.dms.dao;
 
 import org.springframework.stereotype.Repository;
 
-import com.nilo.dms.service.order.model.WaybillPaymentRecord;
+import com.nilo.dms.dto.order.WaybillPaymentRecord;
 @Repository
 public interface WaybillPaymentRecordDao {
     int deleteByPrimaryKey(Integer id);

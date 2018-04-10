@@ -4,7 +4,7 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.dao.WaybillCodDao;
 import com.nilo.dms.dao.dataobject.ReportCodDO;
 import com.nilo.dms.service.order.ReportService;
-import com.nilo.dms.service.order.model.ReportCodQuery;
+import com.nilo.dms.dto.order.ReportCodQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

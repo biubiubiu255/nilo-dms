@@ -1,9 +1,7 @@
 package com.nilo.dms.dao;
 
 import com.nilo.dms.common.BaseDao;
-import com.nilo.dms.dao.dataobject.WaybillLogArriveDO;
-import com.nilo.dms.dao.dataobject.WaybillLogPackageDO;
-import com.nilo.dms.service.order.model.WaybillLogWeight;
+import com.nilo.dms.dto.order.WaybillLogWeight;
 
 import org.springframework.stereotype.Repository;
 

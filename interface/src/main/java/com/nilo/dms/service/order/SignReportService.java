@@ -1,8 +1,8 @@
 package com.nilo.dms.service.order;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.order.model.SignOrderParameter;
-import com.nilo.dms.service.order.model.SignReport;
+import com.nilo.dms.dto.order.SignOrderParameter;
+import com.nilo.dms.dto.order.SignReport;
 
 import java.util.List;
 

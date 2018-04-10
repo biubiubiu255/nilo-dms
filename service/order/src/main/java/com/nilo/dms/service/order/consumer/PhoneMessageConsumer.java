@@ -6,7 +6,7 @@ import com.nilo.dms.dao.SMSLogDao;
 import com.nilo.dms.dao.dataobject.SMSLogDO;
 import com.nilo.dms.service.mq.consumer.AbstractMQConsumer;
 import com.nilo.dms.service.mq.model.ConsumerDesc;
-import com.nilo.dms.service.order.model.PhoneMessage;
+import com.nilo.dms.dto.order.PhoneMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

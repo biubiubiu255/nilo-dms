@@ -1,8 +1,8 @@
 package com.nilo.dms.service.order;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.order.model.DeliveryOrderOpt;
-import com.nilo.dms.service.order.model.OrderOptRequest;
+import com.nilo.dms.dto.order.DeliveryOrderOpt;
+import com.nilo.dms.dto.order.OrderOptRequest;
 
 import java.util.List;
 

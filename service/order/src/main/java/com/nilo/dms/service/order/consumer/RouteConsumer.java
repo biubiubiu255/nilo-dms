@@ -2,24 +2,16 @@ package com.nilo.dms.service.order.consumer;
 
 import com.alibaba.rocketmq.common.message.MessageExt;
 import com.nilo.dms.common.enums.OptTypeEnum;
-import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.dao.DeliveryOrderRouteDao;
-import com.nilo.dms.dao.TaskDao;
 import com.nilo.dms.dao.UserInfoDao;
-import com.nilo.dms.dao.UserNetworkDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderRouteDO;
-import com.nilo.dms.dao.dataobject.TaskDO;
 import com.nilo.dms.dao.dataobject.UserInfoDO;
-import com.nilo.dms.dao.dataobject.UserNetworkDO;
-import com.nilo.dms.service.order.model.DeliveryRouteMessage;
-import com.nilo.dms.service.system.SpringContext;
+import com.nilo.dms.dto.order.DeliveryRouteMessage;
 import com.nilo.dms.service.mq.consumer.AbstractMQConsumer;
 import com.nilo.dms.service.mq.model.ConsumerDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * Created by admin on 2017/10/18.

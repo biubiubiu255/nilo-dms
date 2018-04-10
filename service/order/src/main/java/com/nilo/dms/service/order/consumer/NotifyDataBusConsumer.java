@@ -2,21 +2,16 @@ package com.nilo.dms.service.order.consumer;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.rocketmq.common.message.MessageExt;
-import com.nilo.dms.common.enums.NotifyStatusEnum;
 import com.nilo.dms.common.utils.HttpUtil;
-import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.dao.NotifyDao;
 import com.nilo.dms.dao.dataobject.NotifyDO;
 import com.nilo.dms.service.mq.consumer.AbstractMQConsumer;
 import com.nilo.dms.service.mq.model.ConsumerDesc;
-import com.nilo.dms.service.order.model.NotifyRequest;
-import com.nilo.dms.service.order.model.NotifyResponse;
+import com.nilo.dms.dto.order.NotifyRequest;
+import com.nilo.dms.dto.order.NotifyResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by admin on 2017/10/18.

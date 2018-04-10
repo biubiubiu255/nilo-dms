@@ -14,7 +14,7 @@ import com.nilo.dms.service.order.DeliveryFeeDetailsService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.order.fee.*;
 import com.nilo.dms.service.order.model.DeliveryFeeDetails;
-import com.nilo.dms.service.order.model.Waybill;
+import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.model.BizFeeConfig;
 import org.slf4j.Logger;

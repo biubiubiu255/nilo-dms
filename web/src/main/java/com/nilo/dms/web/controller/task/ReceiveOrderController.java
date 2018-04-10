@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.model.AbnormalParam;
+import com.nilo.dms.dto.order.AbnormalParam;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
