@@ -12,6 +12,7 @@ import com.nilo.dms.dao.dataobject.RiderDeliveryDO;
 import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.RiderDeliveryService;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.web.controller.BaseController;
@@ -55,7 +56,8 @@ public class RiderDeliveryController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
     public String list(RiderDeliveryDO riderDeliveryDO) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+
+        Principal me = SessionLocal.getPrincipal();
         Pagination page = getPage();
         List<RiderDeliveryDO> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
         return toPaginationLayUIData(page, list);
@@ -64,7 +66,8 @@ public class RiderDeliveryController extends BaseController {
 
     @RequestMapping(value = "/detail.html")
     public String detail(Model model, String loadingNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
+
         Pagination page = getPage();
         //大包
         RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
@@ -84,7 +87,10 @@ public class RiderDeliveryController extends BaseController {
 
     @RequestMapping(value = "/print.html")
     public String print(Model model, String loadingNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+
+        Principal me = SessionLocal.getPrincipal();
+
+
         Pagination page = getPage();
         //大包
         RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
@@ -105,7 +111,7 @@ public class RiderDeliveryController extends BaseController {
     //返回页面
     @RequestMapping(value = "/addLoadingPage.html", method = RequestMethod.GET)
     public String addLoadingPage(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<StaffDO> staffList = getRiderList(merchantId);
@@ -117,7 +123,7 @@ public class RiderDeliveryController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/scanSmallPack.html")
     public String scanSmallPack(String orderNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
