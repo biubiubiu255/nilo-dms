@@ -16,11 +16,13 @@
     <div class="layui-row">
 
         <div class="layui-col-md5">
-            <shiro:hasPermission name="400061">
-                <button class="layui-btn layui-btn-normal loading-scan">Delivery Scan</button>
-            </shiro:hasPermission>
-            <button class="layui-btn btn-search">Search</button>
-        </div>
+        <%--
+        <shiro:hasPermission name="400061">
+            <button class="layui-btn layui-btn-normal loading-scan">Delivery Scan</button>
+        </shiro:hasPermission>
+            --%>
+        <button class="layui-btn btn-search">Search</button>
+    </div>
 
     </div>
     <div class="layui-collapse">
@@ -57,9 +59,7 @@
         <tr>
             <th lay-data="{fixed: 'left',field:'handleNo', width:140}">LoadingNo</th>
             <th lay-data="{field:'nextStation', width:150}">NextStation</th>
-            <th lay-data="{width:170, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">
-                HandleTime
-            </th>
+            <th lay-data="{field:'driver', width:150}">Driver</th>
             <th lay-data="{width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
                 CreatedTime
             </th>
@@ -72,8 +72,8 @@
 
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="tool-print">Print</a>
-        <a class="layui-btn layui-btn-primary  layui-btn-mini" lay-event="tool-detail">Detail</a>
-        <a class="layui-btn layui-btn-danger  layui-btn-mini" lay-event="tool-ship">Ship</a>
+        <a class="layui-btn layui-btn-normal  layui-btn-mini" lay-event="tool-detail">Detail</a>
+        <%--<a class="layui-btn layui-btn-danger  layui-btn-mini" lay-event="tool-ship">Ship</a>--%>
         <%--
         <shiro:hasPermission name="400062">
             <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail-loading">Detail</a>

@@ -6,6 +6,7 @@ import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.dao.HandleRiderDao;
+import com.nilo.dms.dao.ThirdDriverDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.WaybillScanDetailsDao;
 import com.nilo.dms.dao.dataobject.*;
@@ -13,6 +14,7 @@ import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SendThirdService;
+import com.nilo.dms.service.org.ThirdDriverService;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
@@ -50,6 +52,9 @@ public class SendNextStationController extends BaseController {
     private UserService userService;
 
     @Autowired
+    private ThirdDriverDao thirdDriverDao;
+
+    @Autowired
     private WaybillScanDetailsDao waybillScanDetailsDao;
 
 
@@ -66,6 +71,7 @@ public class SendNextStationController extends BaseController {
     public String list(SendThirdHead sendThirdHead){
         Principal me = SessionLocal.getPrincipal();
         Pagination page = getPage();
+        sendThirdHead.setType("package");
         List<SendThirdHead> sendThirdHeads = sendThirdService.queryHead(sendThirdHead, page);
         return toPaginationLayUIData(page, sendThirdHeads);
     }
@@ -84,7 +90,7 @@ public class SendNextStationController extends BaseController {
         model.addAttribute("pack", sendThirdHead);
         //这里需要传入一个json，给layui解析，所有这里查询出小包列表后，包装成layui格式，jsp先格式化在变量属性里，生成静态页面时，js再解析字符串成为对象进行渲染
         model.addAttribute("smallsJson", toPaginationLayUIData(page, sendThirdHead.getList()));
-        return "waybill/rider_delivery/details";
+        return "waybill/send_nextStation/details";
     }
 
 /*
@@ -156,6 +162,7 @@ public class SendNextStationController extends BaseController {
         //加上刚刚的站点信息，当前的操作信息，小包信息，合并写入系统
         sendThirdHead.setMerchantId(merchantId);
         sendThirdHead.setHandleBy(Long.valueOf(me.getUserId()));
+        sendThirdHead.setType("package");
         sendThirdHead.setStatus(saveStutus);
         sendThirdHead.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
 
@@ -164,6 +171,24 @@ public class SendNextStationController extends BaseController {
 
         return toJsonTrueMsg();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/getDriver.html", method = RequestMethod.POST)
+    public String updateStatus(String expressCode) {
+
+        List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(expressCode);
+        List<LoadingController.Driver> list = new ArrayList<>();
+        LoadingController.Driver driver = new LoadingController.Driver();
+        for (ThirdDriverDO d : thirdDriver) {
+            driver = new LoadingController.Driver();
+            driver.setCode(d.getDriverId());
+            driver.setName(d.getDriverName());
+            list.add(driver);
+        }
+        return toJsonTrueData(list);
+    }
+
+
 
     @ResponseBody
     @RequestMapping(value = "/updateStatus.html", method = RequestMethod.POST)
