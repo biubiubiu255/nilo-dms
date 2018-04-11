@@ -74,7 +74,7 @@ public class SendScanController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        model.addAttribute("riderList", getRiderList(merchantId));
+        model.addAttribute("riderList", getRiderList());
 
         //第三方快递公司及自提点
         List<ThirdExpressDO> expressDOList = thirdExpressDao.findByMerchantId(Long.parseLong(merchantId));

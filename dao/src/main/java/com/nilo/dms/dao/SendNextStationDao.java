@@ -1,8 +1,6 @@
 package com.nilo.dms.dao;
 
 import com.nilo.dms.common.BaseDao;
-import com.nilo.dms.dao.dataobject.RiderDeliveryDO;
-import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
 import com.nilo.dms.dao.dataobject.SendNextStationDO;
 import com.nilo.dms.dao.dataobject.SendNextStationDetailDO;
 import org.apache.ibatis.annotations.Param;

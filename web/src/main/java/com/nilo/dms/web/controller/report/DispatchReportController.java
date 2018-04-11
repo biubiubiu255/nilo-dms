@@ -20,10 +20,7 @@ public class DispatchReportController extends BaseController {
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model) {
-        Principal me = SessionLocal.getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        model.addAttribute("list", getRiderList(merchantId));
+        model.addAttribute("list", getRiderList());
         return "report/dispatch";
     }
 

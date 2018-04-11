@@ -8,7 +8,7 @@ import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.dao.HandleRiderDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.WaybillScanDetailsDao;
-import com.nilo.dms.dao.dataobject.RiderDeliveryDO;
+import com.nilo.dms.dao.dataobject.RiderDelivery;
 import com.nilo.dms.dao.dataobject.SendNextStationDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
@@ -61,10 +61,10 @@ public class SendNextStationController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-    public String list(RiderDeliveryDO riderDeliveryDO){
+    public String list(RiderDelivery riderDeliveryDO){
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         Pagination page = getPage();
-        List<RiderDeliveryDO> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
+        List<RiderDelivery> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
         return toPaginationLayUIData(page, list);
     }
 
@@ -74,9 +74,9 @@ public class SendNextStationController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         Pagination page = getPage();
         //大包
-        RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
+        RiderDelivery riderDeliveryDO = new RiderDelivery();
         riderDeliveryDO.setHandleNo(loadingNo);
-        List<RiderDeliveryDO> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
+        List<RiderDelivery> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
         riderDeliveryDO = list.get(0);
 
         RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
@@ -94,10 +94,10 @@ public class SendNextStationController extends BaseController {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
         Pagination page = getPage();
         //大包
-        RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
+        RiderDelivery riderDeliveryDO = new RiderDelivery();
         riderDeliveryDO.setHandleNo(loadingNo);
         //这里因为查询是自定义，也就是以有参数，就有什么查询条件查询，所有统为list，这里只需要查一个大包，也只有一条结果，但还是得取get(0)
-        List<RiderDeliveryDO> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
+        List<RiderDelivery> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
         riderDeliveryDO = list.get(0);
 
 
@@ -144,7 +144,7 @@ public class SendNextStationController extends BaseController {
 
         String merchantId = me.getMerchantId();
         //System.out.println("本次测试 = " + smallPack.length);
-        RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
+        RiderDelivery riderDeliveryDO = new RiderDelivery();
         riderDeliveryDO.setMerchantId(Long.valueOf(merchantId));
         riderDeliveryDO.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
         riderDeliveryDO.setRider(rider);
@@ -198,13 +198,13 @@ public class SendNextStationController extends BaseController {
             throw new DMSException(BizErrorCode.LOADING_NOT_EXIST);
         }
         Principal principal = SessionLocal.getPrincipal();
-        RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
-        riderDeliveryDO.setHandleNo(handleNo);
-        riderDeliveryDO.setMerchantId(Long.valueOf(principal.getMerchantId()));
-        riderDeliveryDO.setRider(rider);
-        riderDeliveryDO.setStatus(HandleRiderStatusEnum.getEnum(saveStatus).getCode());
-        riderDeliveryService.editSmall(riderDeliveryDO, smallPack);
-        riderDeliveryService.editBig(riderDeliveryDO);
+        RiderDelivery riderDelivery = new RiderDelivery();
+        riderDelivery.setHandleNo(handleNo);
+        riderDelivery.setMerchantId(Long.valueOf(principal.getMerchantId()));
+        riderDelivery.setRider(rider);
+        riderDelivery.setStatus(HandleRiderStatusEnum.getEnum(saveStatus).getCode());
+        riderDeliveryService.editSmall(riderDelivery, smallPack);
+        riderDeliveryService.editBig(riderDelivery);
         return toJsonTrueMsg();
     }
 

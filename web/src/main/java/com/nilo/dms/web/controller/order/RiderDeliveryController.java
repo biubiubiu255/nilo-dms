@@ -8,7 +8,7 @@ import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.dao.HandleRiderDao;
 import com.nilo.dms.dao.WaybillDao;
-import com.nilo.dms.dao.dataobject.RiderDeliveryDO;
+import com.nilo.dms.dao.dataobject.RiderDelivery;
 import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
@@ -54,11 +54,11 @@ public class RiderDeliveryController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-    public String list(RiderDeliveryDO riderDeliveryDO) {
+    public String list(RiderDelivery riderDelivery) {
 
         Principal me = SessionLocal.getPrincipal();
         Pagination page = getPage();
-        List<RiderDeliveryDO> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
+        List<RiderDelivery> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDelivery, page);
         return toPaginationLayUIData(page, list);
     }
 
@@ -69,15 +69,15 @@ public class RiderDeliveryController extends BaseController {
 
         Pagination page = getPage();
         //大包
-        RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
-        riderDeliveryDO.setHandleNo(loadingNo);
-        List<RiderDeliveryDO> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
-        riderDeliveryDO = list.get(0);
+        RiderDelivery riderDelivery = new RiderDelivery();
+        riderDelivery.setHandleNo(loadingNo);
+        List<RiderDelivery> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDelivery, page);
+        riderDelivery = list.get(0);
 
         RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
         riderDeliverySmallDO.setRider_handle_no(loadingNo);
         List<RiderDeliverySmallDO> smalls = riderDeliveryService.queryRiderDeliveryDetail(me.getMerchantId(), riderDeliverySmallDO, page);
-        model.addAttribute("pack", riderDeliveryDO);
+        model.addAttribute("pack", riderDelivery);
 
         //这里需要传入一个json，给layui解析，所有这里查询出小包列表后，包装成layui格式，jsp先格式化在变量属性里，生成静态页面时，js再解析字符串成为对象进行渲染
         model.addAttribute("smallsJson", toPaginationLayUIData(page, smalls));
@@ -88,21 +88,19 @@ public class RiderDeliveryController extends BaseController {
     public String print(Model model, String loadingNo) {
 
         Principal me = SessionLocal.getPrincipal();
-
-
         Pagination page = getPage();
         //大包
-        RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
-        riderDeliveryDO.setHandleNo(loadingNo);
+        RiderDelivery riderDelivery = new RiderDelivery();
+        riderDelivery.setHandleNo(loadingNo);
         //这里因为查询是自定义，也就是以有参数，就有什么查询条件查询，所有统为list，这里只需要查一个大包，也只有一条结果，但还是得取get(0)
-        List<RiderDeliveryDO> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
-        riderDeliveryDO = list.get(0);
+        List<RiderDelivery> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDelivery, page);
+        riderDelivery = list.get(0);
 
 
         RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
         riderDeliverySmallDO.setRider_handle_no(loadingNo);
         List<RiderDeliverySmallDO> smalls = riderDeliveryService.queryRiderDeliveryDetail(me.getMerchantId(), riderDeliverySmallDO, page);
-        model.addAttribute("pack", riderDeliveryDO);
+        model.addAttribute("pack", riderDelivery);
         model.addAttribute("smalls", smalls);
         return "waybill/rider_delivery/print";
     }
@@ -110,12 +108,8 @@ public class RiderDeliveryController extends BaseController {
     //返回页面
     @RequestMapping(value = "/addLoadingPage.html", method = RequestMethod.GET)
     public String addLoadingPage(Model model) {
-        Principal me = SessionLocal.getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        List<StaffDO> staffList = getRiderList(merchantId);
+        List<StaffDO> staffList = getRiderList();
         model.addAttribute("riderList", staffList);
-
         return "waybill/rider_delivery/loading_scan";
     }
 
@@ -141,15 +135,15 @@ public class RiderDeliveryController extends BaseController {
 
         String merchantId = me.getMerchantId();
         //System.out.println("本次测试 = " + smallPack.length);
-        RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
-        riderDeliveryDO.setMerchantId(Long.valueOf(merchantId));
-        riderDeliveryDO.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
-        riderDeliveryDO.setRider(rider);
-        riderDeliveryDO.setHandleBy(Long.valueOf(me.getUserId()));
-        riderDeliveryDO.setStatus(saveStutus);
-        riderDeliveryService.addRiderPackAndDetail(Long.valueOf(merchantId), riderDeliveryDO, smallPack);
+        RiderDelivery riderDelivery = new RiderDelivery();
+        riderDelivery.setMerchantId(Long.valueOf(merchantId));
+        riderDelivery.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
+        riderDelivery.setRider(rider);
+        riderDelivery.setHandleBy(Long.valueOf(me.getUserId()));
+        riderDelivery.setStatus(saveStutus);
+        riderDeliveryService.addRiderPackAndDetail(Long.valueOf(merchantId), riderDelivery, smallPack);
         Map<String, Object> map = new HashMap<>();
-        map.put("handleNo", riderDeliveryDO.getHandleNo());
+        map.put("handleNo", riderDelivery.getHandleNo());
         return toJsonTrueData(map);
     }
 
@@ -163,23 +157,21 @@ public class RiderDeliveryController extends BaseController {
 
     @RequestMapping(value = "/editPage.html", method = RequestMethod.GET)
     public String editPage(String handleNo, Model model) {
-        RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
-        riderDeliveryDO.setHandleNo(handleNo);
+        RiderDelivery riderDelivery = new RiderDelivery();
+        riderDelivery.setHandleNo(handleNo);
 
         Principal me = SessionLocal.getPrincipal();
         String merchantId = me.getMerchantId();
-        //System.out.println("本次测试 = " + smallPack.length);
         Pagination page = getPage();
-        List<WaybillDO> list = riderDeliveryService.queryRiderDeliveryDetailPlus(me.getMerchantId(), riderDeliveryDO, page);
+        List<WaybillDO> list = riderDeliveryService.queryRiderDeliveryDetailPlus(me.getMerchantId(), riderDelivery, page);
         String res = toJsonTrueData(list);
 
-
-        List<RiderDeliveryDO> templist = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
-        riderDeliveryDO = templist.get(0);
+        List<RiderDelivery> templist = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDelivery, page);
+        riderDelivery = templist.get(0);
 
         model.addAttribute("list", res);
-        model.addAttribute("riderList", getRiderList(merchantId));
-        model.addAttribute("riderDelivery", riderDeliveryDO);
+        model.addAttribute("riderList", getRiderList());
+        model.addAttribute("riderDelivery", riderDelivery);
         return "waybill/rider_delivery/edit";
     }
 
@@ -192,13 +184,12 @@ public class RiderDeliveryController extends BaseController {
         if (handleNo == null || smallPack.length == 0) {
             throw new DMSException(BizErrorCode.LOADING_NOT_EXIST);
         }
-        RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
-        riderDeliveryDO.setHandleNo(handleNo);
-        riderDeliveryDO.setMerchantId(Long.valueOf(merchantId));
-        riderDeliveryDO.setRider(rider);
-        riderDeliveryDO.setStatus(HandleRiderStatusEnum.getEnum(saveStatus).getCode());
-        riderDeliveryService.editSmall(riderDeliveryDO, smallPack);
-        riderDeliveryService.editBig(riderDeliveryDO);
+        RiderDelivery riderDelivery = new RiderDelivery();
+        riderDelivery.setHandleNo(handleNo);
+        riderDelivery.setMerchantId(Long.valueOf(merchantId));
+        riderDelivery.setRider(rider);
+        riderDelivery.setStatus(HandleRiderStatusEnum.getEnum(saveStatus).getCode());
+        riderDeliveryService.editRiderPackAndDetail(riderDelivery, smallPack);
         return toJsonTrueMsg();
     }
 

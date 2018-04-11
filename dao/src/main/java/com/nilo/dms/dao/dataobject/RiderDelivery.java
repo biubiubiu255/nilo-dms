@@ -5,7 +5,7 @@ import com.nilo.dms.common.BaseDo;
 /**
  * Created by admin on 2017/9/19.
  */
-public class RiderDeliveryDO extends BaseDo<Long> {
+public class RiderDelivery extends BaseDo<Long> {
 
     private Long merchantId;
     private String handleNo;
@@ -136,7 +136,7 @@ public class RiderDeliveryDO extends BaseDo<Long> {
 
     @Override
     public String toString() {
-        return "RiderDeliveryDO{" +
+        return "RiderDelivery{" +
                 "merchantId=" + merchantId +
                 ", handleNo='" + handleNo + '\'' +
                 ", rider='" + rider + '\'' +
