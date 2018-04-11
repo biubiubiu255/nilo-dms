@@ -18,9 +18,9 @@ public interface SendThirdService {
 
     void insertBigAndSmall(Long merchantId, SendThirdHead sendThirdHead, String[] smallOrders);
 
-    List<SendThirdHead> queryBigs(Long merchantId, SendThirdHead sendThirdHead, Pagination page);
+    List<SendThirdHead> queryHead(SendThirdHead head, Pagination page);
 
-    List<SendThirdDetail> querySmalls(String merchantId, SendThirdDetail sendThirdDetail, Pagination page);
+    SendThirdHead queryDetailsByHandleNo(String handleNo);
 
     List<Waybill> querySmallsPlus(String merchantId, String handleNo, Pagination page);
 

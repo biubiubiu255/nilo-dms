@@ -14,20 +14,21 @@ import java.util.List;
 @Repository
 public interface HandleThirdDao extends BaseDao<Long, SendThirdHead> {
 
+    SendThirdHead queryBigByHandleNo(@Param("merchantId") Long merchantId, @Param("handleNo") String handleNo);
+
     List<SendThirdHead> queryBig(@Param("ob") SendThirdHead sendThirdHead, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
-    Integer queryBigCount(@Param("ob") SendThirdHead sendThirdHead, @Param("offset") Integer offset, @Param("limit") Integer limit);
+    Integer queryBigCount(@Param("ob") SendThirdHead sendThirdHead);
 
     void insertBig(SendThirdHead sendThirdHead);
 
     void editBigBy(SendThirdHead sendThirdHead);
 
     //下面是子包
-
-    List<SendThirdDetail> querySmall(SendThirdDetail sendThirdDetail);
+    List<SendThirdDetail> querySmall(@Param("merchantId") Long merchantId, @Param("handleNo") String handleNo);
 
     void insertSmalls(List<SendThirdDetail> list);
 
-    void deleteSmallByHandleNo(SendThirdDetail sendThirdDetail);
+    void deleteSmallByHandleNo(@Param("merchantId") Long merchantId, @Param("handleNo") String handleNo);
 
 }

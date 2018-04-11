@@ -9,20 +9,23 @@
                 jdbcType="INTEGER"/>
         <result property="handleNo" column="handle_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="third_express_code" column="third_waybill_no" javaType="java.lang.String"
+        <result property="thirdExpressCode" column="third_waybill_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="third_waybill_no" column="third_waybill_no" javaType="java.lang.String"
+        <result property="thirdWaybillNo" column="third_waybill_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="driver" column="driver" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="network_id" column="network_id" javaType="java.lang.Integer"
-                jdbcType="INTEGER"/>
+        <result property="networkCode" column="network_code" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
         <result property="nextStation" column="next_station" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="handle_time" column="handle_time" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
         <result property="handleBy" column="handle_by" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
+        <result property="handleName" column="handle_Name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
         <result property="status" column="status" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
         <result property="remark" column="remark" javaType="java.lang.String"
@@ -57,26 +60,27 @@
                 jdbcType="INTEGER"/>
     </resultMap>
     <!-- 查询装车打包 -->
-    <select id="queryBig" resultMap="sendBig" statementType="PREPARED"  parameterType="com.nilo.dms.dto.handle.SendThirdHead">
+    <select id="queryBig" resultMap="sendBig" statementType="PREPARED"
+            parameterType="com.nilo.dms.dto.handle.SendThirdHead">
         SELECT
         *
         FROM
         t_handle_third_express
-        WHERE 1
+        WHERE 1 = 1
         <if test="ob.status != null">
             and status = #{ob.status}
         </if>
         <if test="ob.handleNo != null and ob.handleNo != '' ">
             and handle_no = #{ob.handleNo}
         </if>
-        <if test="ob.third_waybill_no != null and ob.third_waybill_no != '' ">
-            and third_waybill_no = #{ob.third_waybill_no}
+        <if test="ob.thirdHandleNo != null and ob.thirdHandleNo != '' ">
+            and third_waybill_no = #{ob.thirdHandleNo}
         </if>
-        <if test="ob.third_express_code != null and ob.third_express_code != '' ">
-            and third_express_code = #{ob.third_express_code}
+        <if test="ob.thirdExpressCode != null and ob.thirdExpressCode != '' ">
+            and third_express_code = #{ob.thirdExpressCode}
         </if>
-        <if test="ob.network_id != null and ob.network_id != '' ">
-            and network_id = #{ob.network_id}
+        <if test="ob.networkCode != null and ob.networkCode != '' ">
+            and network_code = #{ob.networkCode}
         </if>
         <if test="ob.driver != null and ob.driver != '' ">
             and driver = #{ob.driver}
@@ -88,40 +92,51 @@
     </select>
 
     <!-- 查询装车打包数量 -->
-    <select id="queryBigCount" resultType="java.lang.Integer" statementType="PREPARED"  parameterType="com.nilo.dms.dto.handle.SendThirdHead">
+    <select id="queryBigCount" resultType="java.lang.Integer" statementType="PREPARED"
+            parameterType="com.nilo.dms.dto.handle.SendThirdHead">
         SELECT
         count(*)
         FROM
         t_handle_third_express
-        WHERE 1
+        WHERE 1 = 1
         <if test="ob.status != null">
             and status = #{ob.status}
         </if>
         <if test="ob.handleNo != null and ob.handleNo != '' ">
             and handle_no = #{ob.handleNo}
         </if>
-        <if test="ob.third_waybill_no != null and ob.third_waybill_no != '' ">
-            and third_waybill_no = #{ob.third_waybill_no}
+        <if test="ob.thirdHandleNo != null and ob.thirdHandleNo != '' ">
+            and third_waybill_no = #{ob.thirdHandleNo}
         </if>
-        <if test="ob.third_express_code != null and ob.third_express_code != '' ">
-            and third_express_code = #{ob.third_express_code}
+        <if test="ob.thirdExpressCode != null and ob.thirdExpressCode != '' ">
+            and third_express_code = #{ob.thirdExpressCode}
         </if>
-        <if test="ob.network_id != null and ob.network_id != '' ">
-            and network_id = #{ob.network_id}
+        <if test="ob.networkCode != null and ob.networkCode != '' ">
+            and network_code = #{ob.networkCode}
         </if>
         <if test="ob.driver != null and ob.driver != '' ">
             and driver = #{ob.driver}
         </if>
     </select>
 
+
+    <!-- 查询装车打包数量 -->
+    <select id="queryBigByHandleNo" resultMap="sendBig" statementType="PREPARED">
+        SELECT *
+        FROM
+        t_handle_third_express
+        WHERE merchant_id =#{merchantId} and handle_no=#{handleNo}
+    </select>
+
+
     <insert id="insertBig" parameterType="com.nilo.dms.dto.handle.SendThirdHead"
             statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
         INSERT
         INTO t_handle_third_express
-        ( merchant_id, handle_no, third_express_code, third_waybill_no, driver, network_id, next_station, handle_time, handle_by, status, remark, created_time, updated_time, version)
+        ( merchant_id, handle_no, third_express_code, third_waybill_no, driver, networkCode, next_station, handle_time, handle_by, handle_Name,status, remark, created_time, updated_time, version)
         VALUES
         (
-        #{merchantId},#{handleNo},#{third_express_code},#{third_waybill_no},#{driver},#{network_id},#{nextStation},#{handle_time},#{handleBy},#{status},#{remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID()
+        #{merchantId},#{handleNo},#{thirdExpressCode},#{thirdWaybillNo},#{driver},#{networkCode},#{nextStation},#{handle_time},#{handleBy},#{handleName},#{status},#{remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID()
         )
     </insert>
 
@@ -134,14 +149,14 @@
         <if test="driver != null and driver != ''">
             , driver = ${driver}
         </if>
-        <if test="third_express_code != null and third_express_code != ''">
-            , third_express_code = ${third_express_code}
+        <if test="thirdExpressCode != null and thirdExpressCode != ''">
+            , third_express_code = ${thirdExpressCode}
         </if>
-        <if test="third_waybill_no != null and third_waybill_no != ''">
-            , third_waybill_no = ${third_waybill_no}
+        <if test="third_waybill_no != null and thirdWaybillNo != ''">
+            , thirdWaybillNo = ${thirdWaybillNo}
         </if>
-        <if test="network_id != null">
-            , network_id = ${network_id}
+        <if test="networkCode != null">
+            , network_code = ${networkCode}
         </if>
 
         <if test="remark != null and remark != ''">
@@ -152,20 +167,14 @@
     </update>
 
 
-
     <!-- 下面是子包分割线 -->
-    <select id="querySmall" resultMap="sendSmall" statementType="PREPARED" parameterType="com.nilo.dms.dto.handle.SendThirdDetail">
+    <select id="querySmall" resultMap="sendSmall" statementType="PREPARED"
+            parameterType="com.nilo.dms.dto.handle.SendThirdDetail">
         SELECT
         *
         FROM
         t_handle_third_express_details
-        WHERE 1
-        <if test="status != null">
-            and status = #{status}
-        </if>
-        <if test="thirdHandleNo != null and thirdHandleNo != '' ">
-            and third_handle_no = #{thirdHandleNo}
-        </if>
+        WHERE merchant_id = #{merchantId} and third_handle_no = #{handleNo}
         order by created_time desc
     </select>
 
@@ -177,7 +186,8 @@
         ( third_handle_no, order_no, weight, length, height, width, status, created_time, updated_time, version )
         VALUES
         <foreach collection="list" item="now" separator=",">
-            (#{now.thirdHandleNo},#{now.orderNo},#{now.weight},#{now.len},#{now.height},#{now.width},#{now.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()), UUID())
+            (#{now.thirdHandleNo},#{now.orderNo},#{now.weight},#{now.len},#{now.height},#{now.width},#{now.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),
+            UUID())
         </foreach>
 
     </insert>
@@ -185,7 +195,7 @@
 
     <delete id="deleteSmallByHandleNo" parameterType="com.nilo.dms.dto.handle.SendThirdDetail">
         delete FROM t_handle_third_express_details
-        WHERE third_handle_no = #{thirdHandleNo}
+        WHERE merchant_id = #{merchantId} and  third_handle_no = #{handleNo}
     </delete>
 
 

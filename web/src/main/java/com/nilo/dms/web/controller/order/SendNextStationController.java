@@ -149,10 +149,10 @@ public class SendNextStationController extends BaseController {
 
         //从session取出刚刚打包好的大包发运信息（下一站点ID、名字）
         SendThirdHead packageInfo = (SendThirdHead)session.getAttribute("packageInfo");
-        if(packageInfo.getNetwork_id()==null || packageInfo.getNextStation()==null){
+        if(packageInfo.getNetworkCode()==null || packageInfo.getNextStation()==null){
             throw new DMSException(BizErrorCode.NOT_STATION_INFO);
         }
-        sendThirdHead.setThird_express_code(packageInfo.getThird_express_code());
+        sendThirdHead.setThirdExpressCode(packageInfo.getThirdExpressCode());
         sendThirdHead.setNextStation(packageInfo.getNextStation());
 
         //加上刚刚的站点信息，当前的操作信息，小包信息，合并写入系统
