@@ -75,16 +75,6 @@
         <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="tool-print">Print</a>
         <a class="layui-btn layui-btn-primary  layui-btn-mini" lay-event="tool-edit">Detail</a>
         <a class="layui-btn layui-btn-danger  layui-btn-mini" lay-event="tool-ship">Ship</a>
-        <%--
-        <shiro:hasPermission name="400062">
-            <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail-loading">Detail</a>
-        </shiro:hasPermission>
-        <shiro:hasPermission name="400063">
-            <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="ship-loading">Ship</a>
-        </shiro:hasPermission>
-        <shiro:hasPermission name="400064">
-            <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete-loading">Delete</a>
-        </shiro:hasPermission>--%>
     </script>
 </div>
 <%@ include file="../../common/footer.jsp" %>

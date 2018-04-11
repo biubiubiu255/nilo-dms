@@ -12,7 +12,7 @@ public class RiderDeliverySmallDO extends BaseDo<Long> {
     private String orderNo;
     private Double weight;
     private Double length;
-    private Double high;
+    private Double height;
     private Double width;
     private Long handleBy;
     private Integer status;
@@ -60,13 +60,7 @@ public class RiderDeliverySmallDO extends BaseDo<Long> {
         this.length = length;
     }
 
-    public Double getHigh() {
-        return high;
-    }
 
-    public void setHigh(Double high) {
-        this.high = high;
-    }
 
     public Double getWidth() {
         return width;
@@ -118,6 +112,14 @@ public class RiderDeliverySmallDO extends BaseDo<Long> {
         this.version = version;
     }
 
+    public Double getHeight() {
+        return height;
+    }
+
+    public void setHeight(Double height) {
+        this.height = height;
+    }
+
     @Override
     public String toString() {
         return "RiderDeliverySmallDO{" +
@@ -126,7 +128,6 @@ public class RiderDeliverySmallDO extends BaseDo<Long> {
                 ", orderNo='" + orderNo + '\'' +
                 ", weight=" + weight +
                 ", length=" + length +
-                ", high=" + high +
                 ", width=" + width +
                 ", handleBy=" + handleBy +
                 ", status=" + status +

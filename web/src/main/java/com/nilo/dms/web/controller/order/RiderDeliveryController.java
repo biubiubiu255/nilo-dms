@@ -6,6 +6,7 @@ import com.nilo.dms.common.enums.HandleRiderStatusEnum;
 import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.HandleRiderDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.RiderDeliveryDO;
@@ -132,14 +133,13 @@ public class RiderDeliveryController extends BaseController {
         if (waybillDO == null) {
             return toJsonErrorMsg("Order does not exist");
         }
-
         return toJsonTrueData(toPaginationLayUIData(page, waybillDO));
     }
 
     @ResponseBody
     @RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
     public String addLoading(String[] smallPack, String rider, Integer saveStutus) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
 
         String merchantId = me.getMerchantId();
         //System.out.println("本次测试 = " + smallPack.length);
@@ -168,7 +168,7 @@ public class RiderDeliveryController extends BaseController {
         RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
         riderDeliveryDO.setHandleNo(handleNo);
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         String merchantId = me.getMerchantId();
         //System.out.println("本次测试 = " + smallPack.length);
         Pagination page = getPage();
@@ -189,7 +189,7 @@ public class RiderDeliveryController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/edit.html", method = RequestMethod.POST)
     public String edit(String[] smallPack, String handleNo, Integer saveStatus, String rider) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         String merchantId = me.getMerchantId();
         if (handleNo == null || smallPack.length == 0) {
             throw new DMSException(BizErrorCode.LOADING_NOT_EXIST);

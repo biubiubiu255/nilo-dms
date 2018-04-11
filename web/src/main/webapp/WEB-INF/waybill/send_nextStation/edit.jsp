@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
-<%@ page import="com.nilo.dms.dto.common.User" %>
+<%@ page import="com.nilo.dms.service.model.User" %>
 <html>
 <%@ include file="../../common/header.jsp" %>
 <%
@@ -10,6 +10,9 @@
 
 
 <body>
+
+
+
 
 
 <div class="box-body">
@@ -36,11 +39,12 @@
                     <label class="layui-form-label">Rider:</label>
                     <div class="layui-form-item layui-inline" style="width: 190px">
                         <select lay-filter="fil-rider" name="rider">
-                            <c:forEach items="${expressList}" var="express">
-                                <option value="${express.expressCode}">${express.expressName}</option>
+                            <c:forEach items="${riderList}" var="rider">
+                                <option value="${rider.userId}"
+                                        <c:if test="${riderDelivery.rider==rider.userId.toString()}">selected</c:if> > ${rider.staffId.toString()}-${rider.realName}</option>
                             </c:forEach>
                         </select>
-                        <input type="hidden" name="express" value="">
+                        <input type="hidden" name="rider" value="${riderDelivery.rider}">
                     </div>
                 </div>
 
@@ -83,7 +87,7 @@
 <script type="text/javascript">
     $(function () {
 
-        var tableData = JSON.parse('${packList}');
+        var tableData = JSON.parse('${list}');
         tableData = tableData.data;
         for(var i=0;i<tableData.length;i++){
             tableData[i].index = i+1;
@@ -258,6 +262,8 @@
                         //{ title: 'id', align:'center', width:80, sort: true, fixed: 'left', templet: '<div>{{d.LAY_INDEX }}</div>'}
                         { title: 'id', align:'center', width:80, sort: true, fixed: 'left', templet: '<div>{{d.index }}</div>'}
                         ,{field: 'orderNo', title: 'OrderNo', width:160, align:'center'}
+                        ,{field: 'orderType', title: 'OrderType', width:150, align:'center'}
+                        ,{field: 'referenceNo', title: 'ReferenceNo', width:130, align:'center'}
                         ,{field: 'weight', title: 'Weight(KG)', width:130, align:'center'}
                         ,{field: '', title: 'opt', width:80, toolbar: '#barDemo', fixed: 'right', align:'center'}
                     ]]

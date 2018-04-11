@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.HandleRiderDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="orderBig" type="com.nilo.dms.dao.dataobject.RiderDeliveryDO">
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="handleNo" column="handle_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleBy" column="handle_by" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="rider" column="rider" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="nextStation" column="network_id" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="handle_time" column="handle_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="remark" column="remark" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="created_time" column="created_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="updated_time" column="updated_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="orderSmall" type="com.nilo.dms.dao.dataobject.RiderDeliverySmallDO">
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="rider_handle_no" column="rider_handle_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="length" column="length" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="height" column="height" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="width" column="width" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="handleBy" column="handle_by" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="created_time" column="created_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="updated_time" column="updated_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 查询装车打包 -->
+    <select id="queryRiderDeliveryBig" resultMap="orderBig" statementType="PREPARED"  parameterType="com.nilo.dms.dao.dataobject.RiderDeliveryDO">
+        SELECT
+        *
+        FROM
+        t_handle_rider
+        WHERE 1
+        <if test="ob.status != null">
+            and status = #{ob.status}
+        </if>
+        <if test="ob.handleNo != null and ob.handleNo != '' ">
+            and handle_no = #{ob.handleNo}
+        </if>
+        order by created_time desc
+
+        limit #{offset} , #{limit}
+
+    </select>
+
+    <!-- 查询装车打包数量 -->
+    <select id="queryRiderDeliveryBigCount" resultType="java.lang.Integer" statementType="PREPARED"  parameterType="com.nilo.dms.dao.dataobject.RiderDeliveryDO">
+        SELECT
+        count(*)
+        FROM
+        t_handle_rider
+        WHERE 1
+        <if test="ob.status != null">
+            and status = #{ob.status}
+        </if>
+        <if test="ob.handleNo != null and ob.handleNo != '' ">
+            and handle_no = #{ob.handleNo}
+        </if>
+    </select>
+
+    <insert id="insertBig" parameterType="com.nilo.dms.dao.dataobject.RiderDeliveryDO"
+            statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
+        INSERT
+        INTO t_handle_rider
+        ( merchant_id, handle_no, rider, network_id, handle_time, handle_by, status, remark, created_time, updated_time)
+        VALUES
+        (
+        #{merchantId},#{handleNo},#{rider},#{nextStation},UNIX_TIMESTAMP(NOW()),#{handleBy},#{status},#{remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()))
+    </insert>
+
+    <update id="upBigStatus" statementType="PREPARED">
+        update t_handle_rider
+        SET
+        status = #{status},
+        updated_time=UNIX_TIMESTAMP(NOW()),
+        version=UUID()
+        WHERE
+        handle_no = #{handleNo}
+    </update>
+
+    <update id="upBigBy" statementType="PREPARED" parameterType="com.nilo.dms.dao.dataobject.RiderDeliveryDO">
+        update t_handle_rider
+        SET
+        status = #{status},
+        updated_time=UNIX_TIMESTAMP(NOW()),
+        version=UUID()
+        <if test="rider != null and rider != ''">
+            , rider = ${rider}
+        </if>
+
+        <if test="remark != null and remark != ''">
+            , remark = #{remark}
+        </if>
+        WHERE
+        handle_no = #{handleNo}
+    </update>
+
+
+
+    <!-- 下面是子包分割线 -->
+    <select id="queryDeliverySmall" resultMap="orderSmall" statementType="PREPARED" parameterType="com.nilo.dms.dao.dataobject.RiderDeliverySmallDO">
+        SELECT
+        *
+        FROM
+        t_handle_rider_details
+        WHERE 1
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        <if test="rider_handle_no != null and rider_handle_no != '' ">
+            and rider_handle_no = #{rider_handle_no}
+        </if>
+        order by created_time desc
+    </select>
+
+    <insert id="insertSmall" parameterType="com.nilo.dms.dao.dataobject.RiderDeliverySmallDO"
+            statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
+        INSERT
+        INTO
+        t_handle_rider_details
+        ( rider_handle_no, order_no, weight, length, height, width, handle_by, status, created_time, updated_time )
+        VALUES
+        (#{rider_handle_no},#{orderNo},#{weight},#{length},#{height},#{width},#{handleBy},#{status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()))
+    </insert>
+
+
+
+    <delete id="deleteSmallByHandleNo" parameterType="com.nilo.dms.dao.dataobject.RiderDeliverySmallDO">
+        delete FROM t_handle_rider_details
+        WHERE rider_handle_no = #{rider_handle_no}
+    </delete>
+
+</mapper>
