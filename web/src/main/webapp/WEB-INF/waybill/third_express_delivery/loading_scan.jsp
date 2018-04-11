@@ -13,26 +13,21 @@
     <form id="myForm" class="layui-form" action="">
 
         <div class="layui-form-item">
-            <div class="deliveryDiv layui-col-md5 layui-col-lg3">
-                <label class="layui-form-label" style="width:120px">Rider</label>
+                <label class="layui-form-label" style="width:120px">Carrier</label>
                 <div class="layui-input-inline">
-                    <select name="deliveryRiderLay" lay-filter="deliveryRiderLay" lay-search=""
-                            <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
+                    <select name="carrier" lay-search="" lay-filter="carrier">
                         <option value="">choose or search....</option>
-                        <c:forEach items="${riderList}" var="rider">
-                            <option value="${rider.userId}"> ${rider.staffId}-${rider.realName}</option>
+                        <c:forEach items="${thirdCarrier}" var="carrier">
+                            <option value="${carrier.expressCode}" >${carrier.expressName}</option>
                         </c:forEach>
                     </select>
-                    <input type="hidden" name="rider" value="" id="rider">
                 </div>
-            </div>
-            <div class="layui-col-md5 layui-col-lg3">
-                <label class="layui-form-label" style="width:120px">Loading By</label>
+                <label class="layui-form-label" style="width:120px">Driver</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="loadingBy" value="${sessionScope.userName}" autocomplete="off"
-                           class="layui-input layui-disabled" disabled>
+                    <select name="sendDriver" id="sendDriver" lay-search="">
+                        <option value="">choose or search....</option>
+                    </select>
                 </div>
-            </div>
         </div>
 
         <div class="layui-form-item layui-col-md5 layui-col-lg3">

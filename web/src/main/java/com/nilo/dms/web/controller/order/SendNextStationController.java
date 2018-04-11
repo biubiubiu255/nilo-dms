@@ -60,6 +60,7 @@ public class SendNextStationController extends BaseController {
         return "waybill/send_nextStation/list";
     }
 
+/*
 
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
@@ -92,6 +93,7 @@ public class SendNextStationController extends BaseController {
         return "waybill/rider_delivery/details";
     }
 
+*/
 /*
     @RequestMapping(value = "/print.html")
     public String print(Model model, String loadingNo) {
@@ -140,7 +142,8 @@ public class SendNextStationController extends BaseController {
 
         return toJsonTrueData(toPaginationLayUIData(page, deliveryOrderDO));
     }
-*/
+*//*
+
 
     @ResponseBody
     @RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
@@ -209,7 +212,6 @@ public class SendNextStationController extends BaseController {
         return "waybill/send_nextStation/add";
     }
 
-/*
     @ResponseBody
     @RequestMapping(value = "/edit.html", method = RequestMethod.POST)
     public String edit(String[] smallPack, String handleNo, Integer saveStatus, String rider) {
@@ -227,6 +229,7 @@ public class SendNextStationController extends BaseController {
         riderDeliveryService.editBig(riderDeliveryDO);
         return toJsonTrueMsg();
     }*/
+
 
 
 }

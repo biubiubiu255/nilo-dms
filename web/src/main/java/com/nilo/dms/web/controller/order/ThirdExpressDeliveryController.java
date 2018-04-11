@@ -7,10 +7,10 @@ import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.dao.HandleRiderDao;
+import com.nilo.dms.dao.ThirdDriverDao;
+import com.nilo.dms.dao.ThirdExpressDao;
 import com.nilo.dms.dao.WaybillDao;
-import com.nilo.dms.dao.dataobject.RiderDelivery;
-import com.nilo.dms.dao.dataobject.StaffDO;
-import com.nilo.dms.dao.dataobject.WaybillDO;
+import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SendThirdService;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,10 @@ public class ThirdExpressDeliveryController extends BaseController {
     private WaybillDao waybillDao;
     @Autowired
     private HandleRiderDao handleRiderDao;
+    @Autowired
+    private ThirdDriverDao thirdDriverDao;
+    @Autowired
+    private ThirdExpressDao thirdExpressDao;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model, HttpServletRequest request) {
@@ -90,9 +95,10 @@ public class ThirdExpressDeliveryController extends BaseController {
     //返回页面
     @RequestMapping(value = "/addLoadingPage.html", method = RequestMethod.GET)
     public String addLoadingPage(Model model) {
+        Principal me = SessionLocal.getPrincipal();
 
-        List<StaffDO> staffList = getRiderList();
-        model.addAttribute("riderList", staffList);
+        List<ThirdExpressDO> expressDOList = thirdExpressDao.findByMerchantId(Long.parseLong(me.getMerchantId()));
+        model.addAttribute("expressList", expressDOList);
         return "waybill/third_express_delivery/loading_scan";
     }
 
@@ -166,5 +172,21 @@ public class ThirdExpressDeliveryController extends BaseController {
         return toJsonTrueMsg();
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/getThirdDriver.html")
+    public String getNextStationDriver(String code) {
+
+        List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(code);
+        List<LoadingController.Driver> list = new ArrayList<>();
+        LoadingController.Driver driver = new LoadingController.Driver();
+        for (ThirdDriverDO d : thirdDriver) {
+            driver = new LoadingController.Driver();
+            driver.setCode(d.getDriverId());
+            driver.setName(d.getDriverName());
+            list.add(driver);
+        }
+
+        return toJsonTrueData(list);
+    }
 
 }
