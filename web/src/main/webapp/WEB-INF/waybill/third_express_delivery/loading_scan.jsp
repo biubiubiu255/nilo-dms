@@ -13,21 +13,21 @@
     <form id="myForm" class="layui-form" action="">
 
         <div class="layui-form-item">
-                <label class="layui-form-label" style="width:120px">Carrier</label>
-                <div class="layui-input-inline">
-                    <select name="carrier" lay-search="" lay-filter="carrier">
-                        <option value="">choose or search....</option>
-                        <c:forEach items="${thirdCarrier}" var="carrier">
-                            <option value="${carrier.expressCode}" >${carrier.expressName}</option>
-                        </c:forEach>
-                    </select>
-                </div>
-                <label class="layui-form-label" style="width:120px">Driver</label>
-                <div class="layui-input-inline">
-                    <select name="sendDriver" id="sendDriver" lay-search="">
-                        <option value="">choose or search....</option>
-                    </select>
-                </div>
+            <label class="layui-form-label" style="width:120px">Carrier</label>
+            <div class="layui-input-inline">
+                <select name="carrier" lay-search="" lay-filter="carrier">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${expressList}" var="carrier">
+                        <option value="${carrier.expressCode}">${carrier.expressName}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            <label class="layui-form-label" style="width:120px">Rider</label>
+            <div class="layui-input-inline">
+                <select name="rider" id="rider" lay-search="">
+                    <option value="">choose or search....</option>
+                </select>
+            </div>
         </div>
 
         <div class="layui-form-item layui-col-md5 layui-col-lg3">
@@ -63,23 +63,22 @@
 <script type="text/javascript">
     $(function () {
 
-        //var tableData = '{"msg":0,"code":0,"pages":0,"data":[{"deliveryOrder":{"alreadyPaid":0.0,"createdBy":"168081000340000768","createdTime":1518010827,"goodsInfoList":[],"height":258.0,"isCod":"1","length":456.0,"merchantId":"1","needPayAmount":10.0,"networkDesc":"Mombasa Office","networkId":4,"nextNetworkDesc":"Main Office","nextNetworkId":1,"orderNo":"Kili201802000003","orderType":"PG","orderTypeDesc":"Package","package":true,"printTimes":0,"printed":true,"receiverInfo":{"receiverAddress":"2222222222222222222222","receiverArea":"110106","receiverCity":"1101","receiverCountry":"CN","receiverName":"ronny","receiverPhone":"ronny","receiverProvince":"11"},"senderInfo":{"senderAddress":"aldkjf;","senderArea":"110101","senderCity":"1101","senderCountry":"CN","senderName":"ronny","senderPhone":"ronny","senderProvince":"11"},"serviceTypeDesc":"","status":"ARRIVED","statusDesc":"Arrived","updatedTime":1518010827,"weight":123.0,"width":789.0},"loadingBy":168081000340000768,"loadingNo":"L0020","num":1,"orderNo":"Kili201802000003","status":1}],"count":1}';
-        //var tableData = '[{"loadingNo":"aa"},{"loadingNo":"bb"},{"loadingNo":"cc"}]';
-        //tableData = JSON.parse(tableData);
-        //tableData = tableData.data;
         var tableData = new Array();
         view();
-
+        var form, table;
         layui.use('form', function () {
-            var form = layui.form;
+            form = layui.form;
             form.on('select(deliveryRiderLay)', function (data) {
                 //alert(data.value);
                 $("input[name='rider']").val(data.value);
             });
+
+            form.on('select(carrier)', function (data) {
+                getThirdDriver(data.value);
+            });
         });
 
         var packList = new Array();
-        var form, table;
 
         //表单监控
         layui.use('table', function () {
@@ -118,7 +117,7 @@
                 var load = layer.load(2);
                 $.ajax({
                     type: "POST",
-                    url: "/waybill/rider_delivery/scanSmallPack.html",
+                    url: "/waybill/third_express_delivery/scanSmallPack.html",
                     dataType: "json",
                     data: {
                         orderNo: orderNo,
@@ -158,22 +157,23 @@
         //提交数据
         function commit(type) {
             var printed = false;  //是否需要打印
-            var saveStutus = 0;   //传输到后台的状态，0仅保存、1发运
+            var status = 0;   //传输到后台的状态，0仅保存、1发运
+            var carrier = $("select[name='carrier']").val();
             type = parseInt(type);
             switch (type) {
                 case 0:
-                    saveStutus = 0;
+                    status = 0;
                     printed = false;
                     break;
                 case 1:
-                    saveStutus = 1;
+                    status = 1;
                     printed = true;
                     break;
                 default:
                     return;
             }
 
-            var rider = $("input[name='rider']").first().val();
+            var rider = $("select[name='rider']").val();
             if (rider == "") {
                 layer.msg("Please select the Rider", {icon: 2, time: 2000});
                 return;
@@ -186,12 +186,13 @@
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/waybill/rider_delivery/addLoading.html",
+                url: "/waybill/third_express_delivery/addLoading.html",
                 dataType: "json",
                 data: {
                     smallPack: smallPack,
                     rider: rider,
-                    saveStutus: saveStutus
+                    status: status,
+                    thirdExpressCode: carrier
                 },
                 success: function (data) {
                     if (data.result) {
@@ -223,8 +224,6 @@
                     page: false //开启分页
                     , elem: '#${id0}'
                     , height: 315
-                    //,even: true
-                    //,url: '/demo/table/user/' //数据接口
                     , data: tableData
                     , width: 868
                     , even: true
@@ -235,11 +234,8 @@
                         layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
                     }
                     , limit: 3000
-                    //,limits : [5, 10, 15, 20, 25]
                     , cellMinWidth: 80
-
                     , cols: [[ //表头 //layui-btn layui-btn-primary layui-btn-mini
-                        //{ title: 'id', align:'center', width:80, sort: true, fixed: 'left', templet: '<div>{{d.LAY_INDEX }}</div>'}
                         {
                             title: 'id',
                             align: 'center',
@@ -259,28 +255,32 @@
                         //如果是异步请求数据方式，res即为你接口返回的信息。
                         //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
                         console.log(res);
-
-                        //得到当前页码
-                        //console.log(curr);
-
-                        //得到数据总量
-                        //console.log(count);
-                        console.log("当前表格最新数量为：" + count);
                     }
                 });
 
             });
         }
 
-        /*
-         //扫描包返回内容过滤
-         function tableDateTrim(data){
-         if(typeof(data.height)=='undefined') data.height='';
-         if(typeof(data.height)=='undefined') data.height='';
-         if(typeof(data.height)=='undefined') data.height='';
-         if(typeof(data.height)=='undefined') data.height='';
-         }
-         */
+        function getThirdDriver(code) {
+            $.ajax({
+                type: "POST",
+                url: "/waybill/third_express_delivery/getThirdDriver.html",
+                dataType: "json",
+                data: {code: code},
+                success: function (data) {
+                    if (data.result) {
+                        $("#rider").empty();
+                        $("#rider").prepend("<option value='0'>choose or search....</option>");
+                        var driver = data.data;
+                        console.log(driver)
+                        for (var i = 0; i < driver.length; i++) {
+                            $("#rider").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
+                        }
+                        form.render();
+                    }
+                }
+            });
+        }
     });
 
 

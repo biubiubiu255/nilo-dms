@@ -118,7 +118,7 @@ public class ThirdExpressDeliveryController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
-    public String addLoading(String[] smallPack, String thirdExpressCode, Integer saveStutus) {
+    public String addLoading(String rider,String[] smallPack, String thirdExpressCode, Integer status) {
         Principal me = SessionLocal.getPrincipal();
 
         String merchantId = me.getMerchantId();
@@ -128,7 +128,8 @@ public class ThirdExpressDeliveryController extends BaseController {
         head.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
         head.setThirdExpressCode(thirdExpressCode);
         head.setHandleBy(Long.valueOf(me.getUserId()));
-        head.setStatus(saveStutus);
+        head.setDriver(rider);
+        head.setStatus(status);
         head.setHandleName(me.getUserName());
         sendThirdService.insertBigAndSmall(Long.parseLong(merchantId), head, smallPack);
         Map<String, Object> map = new HashMap<>();

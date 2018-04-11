@@ -6,7 +6,6 @@
 <%@ include file="../../common/header.jsp" %>
 <%
     request.setAttribute("id0", RandomStringUtils.randomAlphabetic(8));
-    request.setAttribute("orderTypeList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "delivery_order_type"));
 %>
 <body>
 <div class="box-body">
@@ -51,7 +50,8 @@
         </div>
     </div>
 
-    <table class="layui-table" lay-data="{ url:'/waybill/third_express_delivery/list.html' ,method:'post', page:true,limit:10, id:'${id0}'}"
+    <table class="layui-table"
+           lay-data="{ url:'/waybill/third_express_delivery/list.html' ,method:'post', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
@@ -103,10 +103,10 @@
                 var handleNo = data.handleNo;
                 if (obj.event === 'tool-detail') {
                     toDetails(handleNo);
-                }else if (obj.event === 'tool-print') {
+                } else if (obj.event === 'tool-print') {
                     toPrint(handleNo);
                 } else if (obj.event === 'tool-ship') {
-                    if(data.status==1){
+                    if (data.status == 1) {
                         layer.msg("Has been shipped", {icon: 2, time: 2000});
                         return;
                     }
@@ -155,6 +155,7 @@
                 }
             });
         }
+
         $(".loading-scan").on("click", function () {
             toLoadingScanPage("");
         })
@@ -177,6 +178,7 @@
                 }
             });
         }
+
         function toPrint(handleNo) {
             parent.window.open("/waybill/third_express_delivery/print.html?loadingNo=" + handleNo);
             location.reload();
@@ -186,8 +188,8 @@
         function toLoadingScanPage() {
             var url = "/waybill/third_express_delivery/addLoadingPage.html";
             parent.addTabs({
-                id: '40007002',
-                title: 'Rider Delivery',
+                id: '40008011',
+                title: 'Third Express Delivery',
                 close: true,
                 url: url
             });
@@ -230,22 +232,22 @@
             maxmin: true, //开启最大化最小化按钮
             area: ['900px', '600px'],
             offset: ['100px', '250px'],
-            content: '/waybill/third_express_delivery/editPage.html?handleNo='+handleNo,
+            content: '/waybill/third_express_delivery/editPage.html?handleNo=' + handleNo,
         });
 
     }
 
-    function strainerValue(str){
-        if(typeof(str)=='undefined') str='';
+    function strainerValue(str) {
+        if (typeof(str) == 'undefined') str = '';
         return str;
     }
 
-    function parseStatus(str){
-        if(str=="0"){
+    function parseStatus(str) {
+        if (str == "0") {
             str = "Loading";
-        }else if(str=="1"){
+        } else if (str == "1") {
             str = "Ship";
-        }else {
+        } else {
             str = "";
         }
         return str;
