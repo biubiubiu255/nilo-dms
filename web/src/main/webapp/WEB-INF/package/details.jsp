@@ -34,7 +34,7 @@
             </div>
             <label class="layui-form-label" style="width:120px">Height</label>
             <div class="layui-input-inline">
-                <input type="text" name="high" value="${packageInfo.high}" autocomplete="off"
+                <input type="text" name="height" value="${packageInfo.height}" autocomplete="off"
                        class="layui-input" disabled>
             </div>
         </div>

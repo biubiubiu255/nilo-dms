@@ -48,7 +48,7 @@
             </div>
             <label class="layui-form-label" style="width:120px">Height</label>
             <div class="layui-input-inline">
-                <input type="number" name="high" value="" autocomplete="off"
+                <input type="number" name="height" value="" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
@@ -183,7 +183,7 @@
                     if (data.result) {
                         layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
                             if(subtype=="submitShip"){
-                                $.get("/waybill/send_nextSation/editPage.html?tempScanNo=${scanNo}", function (data) {
+                                $.get("/waybill/send_nextStation/editPage.html?tempScanNo=${scanNo}", function (data) {
                                     var index = parent.layer.open({
                                         type: 1,
                                         content: data,

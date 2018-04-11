@@ -12,7 +12,7 @@ public class SendNextStationDetailDO extends BaseDo<Long> {
     private String order_no;
     private Double weight;
     private Double len;
-    private Double high;
+    private Double height;
     private Double width;
     private Integer status;
     private Integer created_time;
@@ -59,12 +59,12 @@ public class SendNextStationDetailDO extends BaseDo<Long> {
         this.len = len;
     }
 
-    public Double getHigh() {
-        return high;
+    public Double getHeight() {
+        return height;
     }
 
-    public void setHigh(Double high) {
-        this.high = high;
+    public void setHeight(Double height) {
+        this.height = height;
     }
 
     public Double getWidth() {
@@ -117,7 +117,7 @@ public class SendNextStationDetailDO extends BaseDo<Long> {
                 ", order_no='" + order_no + '\'' +
                 ", weight=" + weight +
                 ", len=" + len +
-                ", high=" + high +
+                ", height=" + height +
                 ", width=" + width +
                 ", status=" + status +
                 ", created_time=" + created_time +

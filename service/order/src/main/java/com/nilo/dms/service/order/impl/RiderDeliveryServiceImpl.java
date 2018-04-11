@@ -153,13 +153,17 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
         List<WaybillDO> list  = waybillDao.queryByOrderNos(merchantId, Arrays.asList(smallOrders));
-        RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
+        List<RiderDeliverySmallDO> datas = new ArrayList<RiderDeliverySmallDO>();
+
         for (WaybillDO e : list){
+            RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
             org.springframework.beans.BeanUtils.copyProperties(e, riderDeliverySmallDO);
             riderDeliverySmallDO.setRider_handle_no(handleNo);
-            handleRiderDao.insertSmall(riderDeliverySmallDO);
+            datas.add(riderDeliverySmallDO);
             //System.out.println("包裹信息 = " + riderDeliverySmallDO.toString());
         }
+        handleRiderDao.insertSmalls(datas);
+
     }
 
 

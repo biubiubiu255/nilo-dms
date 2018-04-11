@@ -38,7 +38,7 @@
         INSERT INTO t_waybill_log
         ( order_no ,merchant_id, opt ,  opt_by,name,remark, created_time )
         VALUES
-        ( #{orderNo},#{merchantId},#{opt},#{optBy},#{name},#{remark},UNIX_TIMESTAMP(NOW()))
+        ( #{orderNo},#{merchantId},#{opt},#{optBy},#{optName},#{remark},UNIX_TIMESTAMP(NOW()))
     </insert>
     <select id="queryById" resultMap="orderOptDO" statementType="PREPARED">
         SELECT
