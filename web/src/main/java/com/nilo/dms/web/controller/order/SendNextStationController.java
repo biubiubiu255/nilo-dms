@@ -13,6 +13,7 @@ import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.RiderDeliveryService;
+import com.nilo.dms.service.order.SendNextStationService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.web.controller.BaseController;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +43,7 @@ public class SendNextStationController extends BaseController {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
-    private RiderDeliveryService riderDeliveryService;
+    private SendNextStationService sendNextStationService;
 
     @Autowired
     private WaybillDao waybillDao;
@@ -140,24 +142,32 @@ public class SendNextStationController extends BaseController {
 
         return toJsonTrueData(toPaginationLayUIData(page, deliveryOrderDO));
     }
+*/
 
     @ResponseBody
     @RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
-    public String addLoading(String[] smallPack, String rider, Integer saveStutus) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+    public String addLoading(String[] smallPack, SendNextStationDO sendNextStationDO, Integer saveStutus, HttpServletRequest request) {
+        HttpSession session = request.getSession();
 
-        String merchantId = me.getMerchantId();
-        //System.out.println("本次测试 = " + smallPack.length);
-        RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
-        riderDeliveryDO.setMerchantId(Long.valueOf(merchantId));
-        riderDeliveryDO.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
-        riderDeliveryDO.setRider(rider);
-        riderDeliveryDO.setHandleBy(Long.valueOf(me.getUserId()));
-        riderDeliveryDO.setStatus(saveStutus);
-        riderDeliveryService.addRiderPackAndDetail(Long.valueOf(merchantId), riderDeliveryDO, smallPack);
-        Map<String, Object> map = new HashMap<>();
-        map.put("handleNo", riderDeliveryDO.getHandleNo());
-        return toJsonTrueData(map);
+        Principal me = SessionLocal.getPrincipal();
+        Long merchantId = Long.valueOf(me.getMerchantId());
+
+        //从session取出刚刚打包好的大包发运信息（下一站点ID、名字）
+        SendNextStationDO packageInfo = (SendNextStationDO)session.getAttribute("packageInfo");
+        if(packageInfo.getNetwork_id()==null || packageInfo.getNextStation()==null){
+            throw new DMSException(BizErrorCode.NOT_STATION_INFO);
+        }
+        sendNextStationDO.setThird_express_code(packageInfo.getThird_express_code());
+        sendNextStationDO.setNextStation(packageInfo.getNextStation());
+
+        //加上刚刚的站点信息，当前的操作信息，小包信息，合并写入系统
+        sendNextStationDO.setMerchantId(merchantId);
+        sendNextStationDO.setHandleBy(Long.valueOf(me.getUserId()));
+        sendNextStationDO.setStatus(saveStutus);
+        sendNextStationDO.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
+        sendNextStationService.insertBigAndSmall(merchantId, sendNextStationDO, smallPack);
+
+        return toJsonTrueMsg();
     }
 
     @ResponseBody
@@ -167,10 +177,12 @@ public class SendNextStationController extends BaseController {
         return toJsonTrueMsg();
     }
 
-*/
+
 
     @RequestMapping(value = "/editPage.html", method = RequestMethod.GET)
-    public String editPage(SendNextStationDO sendNextStationDO, String tempScanNo, Model model) {
+    public String editPage(SendNextStationDO sendNextStationDO, String tempScanNo, Model model, HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
 
         List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(tempScanNo);
 
@@ -183,19 +195,21 @@ public class SendNextStationController extends BaseController {
         expressList = userService.findExpressesAll(page);
 
 
-
         //sendNextStationDO.setHandleNo(SystemConfig.getNextSerialNo(merchantId, SerialTypeEnum.LOADING_NO.getCode()));
         //sendNextStationDO.setStatus(0);
         //sendNextStationDO.setHandleBy(Long.valueOf(SessionLocal.getPrincipal().getUserId()));
 
         //System.out.println("本次测试 = " + smallPack.length);
 
+
+        session.setAttribute("packageInfo", sendNextStationDO);
         model.addAttribute("packList", toPaginationLayUIData(page, scanDetailList));
         model.addAttribute("expressList", expressList);
+
         return "waybill/send_nextStation/edit";
     }
 
-
+/*
     @ResponseBody
     @RequestMapping(value = "/edit.html", method = RequestMethod.POST)
     public String edit(String[] smallPack, String handleNo, Integer saveStatus, String rider) {
@@ -212,7 +226,7 @@ public class SendNextStationController extends BaseController {
         riderDeliveryService.editSmall(riderDeliveryDO, smallPack);
         riderDeliveryService.editBig(riderDeliveryDO);
         return toJsonTrueMsg();
-    }
+    }*/
 
 
 }

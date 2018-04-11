@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
-<%@ page import="com.nilo.dms.service.model.User" %>
+<%@ page import="com.nilo.dms.dto.common.User" %>
 <html>
 <%@ include file="../../common/header.jsp" %>
 <%
@@ -10,9 +10,6 @@
 
 
 <body>
-
-
-
 
 
 <div class="box-body">
@@ -33,32 +30,32 @@
     </div>
 
     <%--第二排--%>
-        <div class="layui-form">
-            <div class="layui-form-item">
-                <div style="float: left; width: 39%; margin-left: 10px;">
-                    <label class="layui-form-label">Rider:</label>
-                    <div class="layui-form-item layui-inline" style="width: 190px">
-                        <select lay-filter="fil-rider" name="rider">
-                            <c:forEach items="${riderList}" var="rider">
-                                <option value="${rider.userId}"
-                                        <c:if test="${riderDelivery.rider==rider.userId.toString()}">selected</c:if> > ${rider.staffId.toString()}-${rider.realName}</option>
-                            </c:forEach>
-                        </select>
-                        <input type="hidden" name="rider" value="${riderDelivery.rider}">
-                    </div>
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <div style="float: left; width: 39%; margin-left: 10px;">
+                <label class="layui-form-label">Rider:</label>
+                <div class="layui-form-item layui-inline" style="width: 190px">
+                    <select lay-filter="fil-rider" name="expressLay">
+                        <option>Please select content</option>
+                        <c:forEach items="${expressList}" var="express">
+                            <option value="${express.expressCode}">${express.expressName}</option>
+                        </c:forEach>
+                    </select>
+                    <input type="hidden" name="express" value="">
                 </div>
-
-                <div style="float: left; width: 50%; margin-left: -3%;">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label" style="width:150px">Scan OrderNo:</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="orderNo" autocomplete="off" placeholder="Scan" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-
             </div>
+
+            <div style="float: left; width: 50%; margin-left: -3%;">
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="width:150px">Scan OrderNo:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="orderNo" autocomplete="off" placeholder="Scan" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
         </div>
+    </div>
 
     <hr>
 
@@ -87,19 +84,18 @@
 <script type="text/javascript">
     $(function () {
 
-        var tableData = JSON.parse('${list}');
+        var tableData = JSON.parse('${packList}');
         tableData = tableData.data;
         for(var i=0;i<tableData.length;i++){
             tableData[i].index = i+1;
         }
         view();
-        initShow();
 
         layui.use('form', function () {
             var form = layui.form;
             form.on('select(fil-rider)', function (data) {
                 //alert(data.value);
-                $("input[name='rider']").val(data.value);
+                $("input[name='express']").val(data.value);
             });
         });
 
@@ -116,10 +112,6 @@
                 var orderNo = data.orderNo;
 
                 if (obj.event === 'delete') {
-                    if(isModify()===false){
-                        layer.msg('Finished loading');
-                        return ;
-                    }
                     for(var i=0;i<tableData.length;i++){
                         if (tableData.splice(i, 1));
                         break;
@@ -187,11 +179,13 @@
             var saveStatus = 0;   //传输到后台的状态，0仅保存、1发运
             isPrint = parseInt(isPrint);
 
-            var rider = $("input[name='rider']").first().val();
+            var rider = $("input[name='express']").first().val();
             if (rider=="") {
-                layer.msg("Please select the Rider", {icon: 2, time: 2000});
+                layer.msg("Please select the Express", {icon: 2, time: 2000});
                 return ;
             }
+
+
             var smallPack = "";
             for(var i=0;i<tableData.length;i++){
                 smallPack += tableData[i].orderNo+",";
@@ -200,13 +194,13 @@
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/waybill/rider_delivery/edit.html",
+                url: "/waybill/send_nextStation/addLoading.html",
                 dataType: "json",
                 data: {
                     smallPack: smallPack,
                     saveStatus: saveStatus,
-                    handleNo: '${riderDelivery.handleNo}',
-                    rider: $("input[name='rider']").val()
+                    //express : $("input[name='third_express_code']").val() ,
+                    third_express_code: $("input[name='express']").val()
                 },
                 success: function (data) {
                     if (data.result) {
@@ -246,7 +240,7 @@
                     //,url: '/demo/table/user/' //数据接口
                     ,data : tableData
                     ,page: false //开启分页
-                    ,width: 737
+                    ,width: 550
                     ,even: true
                     ,text: {
                         none: 'Please start scanning the order'
@@ -260,12 +254,10 @@
 
                     ,cols: [[ //表头 //layui-btn layui-btn-primary layui-btn-mini
                         //{ title: 'id', align:'center', width:80, sort: true, fixed: 'left', templet: '<div>{{d.LAY_INDEX }}</div>'}
-                        { title: 'id', align:'center', width:80, sort: true, fixed: 'left', templet: '<div>{{d.index }}</div>'}
-                        ,{field: 'orderNo', title: 'OrderNo', width:160, align:'center'}
-                        ,{field: 'orderType', title: 'OrderType', width:150, align:'center'}
-                        ,{field: 'referenceNo', title: 'ReferenceNo', width:130, align:'center'}
-                        ,{field: 'weight', title: 'Weight(KG)', width:130, align:'center'}
-                        ,{field: '', title: 'opt', width:80, toolbar: '#barDemo', fixed: 'right', align:'center'}
+                        { title: 'id', align:'center', width:105, sort: true, fixed: 'left', templet: '<div>{{d.index }}</div>'}
+                        ,{field: 'orderNo', title: 'OrderNo', width:275, align:'center'}
+                        //,{field: 'weight', title: 'Weight(KG)', width:130, align:'center'}
+                        ,{field: '', title: 'opt', width:177, toolbar: '#barDemo', fixed: 'right', align:'center'}
                     ]]
 
                     ,done: function (res, curr, count) {
@@ -285,18 +277,7 @@
             });
         }
 
-        //根据isModify的值，来决定是否显示和不显示储存按钮
-        function initShow(){
-            if(isModify()===false){
-                $('.commit').hide();
-            }
-        }
 
-        //根据发车单状态，返回是否可以修改
-        function isModify(){
-            var bool = parseInt(${riderDelivery.status})==0 ? true : false;
-            return bool;
-        }
 
     });
 

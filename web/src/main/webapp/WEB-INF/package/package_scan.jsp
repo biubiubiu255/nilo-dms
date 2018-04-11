@@ -24,9 +24,11 @@
                 <select name="nextNetworkId" lay-search="" lay-filter="nextNetworkId" lay-verify="required">
                     <option value="">choose or search....</option>
                     <c:forEach items="${nextStation}" var="station">
-                        <option value="${station.code}" type="${station.type}">${station.name}</option>
+                        <option value="${station.code}" optionSeq="${station.code}" type="${station.type}">${station.name}</option>
                     </c:forEach>
                 </select>
+                <input type="hidden" name="network_id" value="">
+                <input type="hidden" name="nextStation" value="">
             </div>
             <label class="layui-form-label" style="width:120px">Weight</label>
             <div class="layui-input-inline">
@@ -98,6 +100,14 @@
         var form, table;
         layui.use(['form', 'layer'], function () {
             form = layui.form;
+
+            form.on('select(nextNetworkId)', function (data) {
+                var seq = data.value.toString();
+                $("input[name='network_id']").val(data.value);
+
+                $("input[name='nextStation']").val($("option[optionSeq='"+seq+"']").html());
+            });
+
         });
 
         layui.use('table', function () {
@@ -162,6 +172,21 @@
         };
 
         $('.package').on('click', function (e) {
+            var param = '?tempScanNo=249907893388840960&network_id='+$("input[name='network_id']").val()+'&nextStation='+$("input[name='nextStation']").val()
+            layer.open({
+                type: 2,
+                title: 'Edit',
+                shadeClose: true,
+                shade: false,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['900px', '600px'],
+                offset: ['100px', '250px'],
+                content: '/waybill/send_nextStation/editPage.html' + param
+            });
+
+            return;
+
+
             var subtype = e.currentTarget.value;
             var nextStation = $("select[name='nextNetworkId']").val();
             var weight = $("input[name='weight']").val();

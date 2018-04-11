@@ -37,9 +37,9 @@
     <resultMap id="sendSmall" type="com.nilo.dms.dao.dataobject.SendNextStationDetailDO">
         <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="rider_handle_no" column="rider_handle_no" javaType="java.lang.String"
+        <result property="third_handle_no" column="third_handle_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="orderNo" column="order_no" javaType="java.lang.String"
+        <result property="order_no" column="order_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
@@ -120,9 +120,6 @@
         INTO t_handle_third_express
         ( merchant_id, handle_no, third_express_code, third_waybill_no, driver, network_id, next_station, handle_time, handle_by, status, remark, created_time, updated_time, version)
         VALUES
-
-        (
-        NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL)
         (
         #{merchantId},#{handleNo},#{third_express_code},#{third_waybill_no},#{driver},#{network_id},#{nextStation},#{handle_time},#{handleBy},#{status},#{remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID()
         )
@@ -166,8 +163,8 @@
         <if test="status != null">
             and status = #{status}
         </if>
-        <if test="rider_handle_no != null and rider_handle_no != '' ">
-            and rider_handle_no = #{rider_handle_no}
+        <if test="third_handle_no != null and third_handle_no != '' ">
+            and third_handle_no = #{third_handle_no}
         </if>
         order by created_time desc
     </select>
@@ -177,15 +174,27 @@
         INSERT
         INTO
         t_handle_third_express_details
-        ( rider_handle_no, order_no, weight, length, height, width, status, created_time, updated_time, version )
+        ( third_handle_no, order_no, weight, length, height, width, status, created_time, updated_time, version )
         VALUES
-        (#{rider_handle_no},#{orderNo},#{weight},#{len},#{height},#{width},#{status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()))
+        (#{third_handle_no},#{order_no},#{weight},#{len},#{height},#{width},#{status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()), UUID())
+    </insert>
+
+    <insert id="insertSmalls">
+        INSERT
+        INTO
+        t_handle_third_express_details
+        ( third_handle_no, order_no, weight, length, height, width, status, created_time, updated_time, version )
+        VALUES
+        <foreach collection="list" item="now" separator=",">
+            (#{now.third_handle_no},#{now.order_no},#{now.weight},#{now.len},#{now.height},#{now.width},#{now.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()), UUID())
+        </foreach>
+
     </insert>
 
 
     <delete id="deleteSmallByHandleNo" parameterType="com.nilo.dms.dao.dataobject.SendNextStationDetailDO">
         delete FROM t_handle_third_express_details
-        WHERE rider_handle_no = #{rider_handle_no}
+        WHERE third_handle_no = #{third_handle_no}
     </delete>
 
 

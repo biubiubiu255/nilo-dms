@@ -104,7 +104,11 @@ public enum BizErrorCode implements ErrorCode {
     //STAFF_NOT_EXIST("Staff not exist", "100074"),
 
     PASSWORD_ERROR("Password Error.", "100073"),
-    SIGN_PHOTO_EMPTY("Sign Photo Empty.", "100074"),;
+    SIGN_PHOTO_EMPTY("Sign Photo Empty.", "100074"),
+
+    NOT_STATION_INFO("No site information found.", "100075"),
+
+    ;
 
     private final String description;
     private final String code;

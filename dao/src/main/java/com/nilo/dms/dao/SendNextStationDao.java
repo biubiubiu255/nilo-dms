@@ -30,6 +30,8 @@ public interface  SendNextStationDao extends BaseDao<Long, SendNextStationDO> {
 
     void insertSmall(SendNextStationDetailDO sendNextStationDetailDO);
 
+    void insertSmalls(List<SendNextStationDetailDO> list);
+
     void deleteSmallByHandleNo(SendNextStationDetailDO sendNextStationDetailDO);
 
 }

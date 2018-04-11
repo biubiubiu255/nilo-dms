@@ -44,13 +44,16 @@ public class SendNextSationServiceImpl implements SendNextStationService {
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
         List<Waybill> list  = waybillService.queryByOrderNos(merchantId.toString(), Arrays.asList(smallOrders));
-        SendNextStationDetailDO sendNextStationDetailDO = new SendNextStationDetailDO();
+        List<SendNextStationDetailDO> dataList = new ArrayList<SendNextStationDetailDO>();
         for (Waybill e : list){
+            SendNextStationDetailDO sendNextStationDetailDO = new SendNextStationDetailDO();
             org.springframework.beans.BeanUtils.copyProperties(e, sendNextStationDetailDO);
             sendNextStationDetailDO.setThird_handle_no(handleNo);
-            sendNextStationDao.insertSmall(sendNextStationDetailDO);
+            sendNextStationDetailDO.setOrder_no(e.getOrderNo());
+            dataList.add(sendNextStationDetailDO);
             //System.out.println("包裹信息 = " + riderDeliverySmallDO.toString());
         }
+        sendNextStationDao.insertSmalls(dataList);
     }
 
     //这里是插入一个大包记录，没有别的注意，有什么写入什么
