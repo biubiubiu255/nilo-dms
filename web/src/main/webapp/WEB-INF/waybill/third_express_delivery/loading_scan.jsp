@@ -274,7 +274,7 @@
                         var driver = data.data;
                         console.log(driver)
                         for (var i = 0; i < driver.length; i++) {
-                            $("#rider").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
+                            $("#rider").append("<option value='" + driver[i].name + "'>" + driver[i].name + "</option>");
                         }
                         form.render();
                     }

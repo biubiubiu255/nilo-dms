@@ -5,7 +5,6 @@
 <%
     request.setAttribute("id2", RandomStringUtils.randomAlphabetic(8));
     request.setAttribute("id1", RandomStringUtils.randomAlphabetic(8));
-    request.setAttribute("nextStation", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "next_station"));
 %>
 
 <div class="box-body">
@@ -25,21 +24,6 @@
     <form id="myForm" class="layui-form" action="">
         <input type="hidden" name="${pack.handleNo}">
 
-        <div class="layui-form-item">
-            <label class="layui-form-label" style="width:120px">Rider</label>
-            <div class="layui-input-inline">
-                <input type="text" name="rider" value="${pack.rider}" autocomplete="off"
-                       class="layui-input layui-disabled"
-                       disabled>
-            </div>
-
-            <label class="layui-form-label" style="width:120px">Quantity</label>
-            <div class="layui-input-inline">
-                <input type="text" name="quantity" value="" autocomplete="off"
-                       class="layui-input layui-disabled"
-                       disabled>
-            </div>
-        </div>
     </form>
     <hr>
 
