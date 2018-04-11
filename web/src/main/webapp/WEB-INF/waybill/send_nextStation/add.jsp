@@ -200,7 +200,7 @@
                     smallPack: smallPack,
                     saveStatus: saveStatus,
                     //express : $("input[name='third_express_code']").val() ,
-                    third_express_code: $("input[name='express']").val()
+                    thirdExpressCode: $("input[name='express']").val()
                 },
                 success: function (data) {
                     if (data.result) {

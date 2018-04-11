@@ -69,6 +69,9 @@ public class SendThirdServiceImpl implements SendThirdService {
         if (sendThirdHead.getHandleNo() == null || sendThirdHead.equals("")) {
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
+        if (sendThirdHead.getMerchantId()==null){
+            sendThirdHead.setMerchantId(merchantId);
+        }
         insertBig(sendThirdHead);
         insertSmallAll(merchantId, sendThirdHead.getHandleNo(), smallOrders);
     }
