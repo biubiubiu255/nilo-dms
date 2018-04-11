@@ -51,12 +51,11 @@
         </div>
     </div>
 
-    <table class="layui-table" lay-data="{ url:'/waybill/rider_delivery/list.html' ,method:'post', page:true,limit:10, id:'${id0}'}"
+    <table class="layui-table" lay-data="{ url:'/waybill/send_nextStation/list.html' ,method:'post', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
             <th lay-data="{fixed: 'left',field:'handleNo', width:140}">LoadingNo</th>
-            <th lay-data="{field:'riderName', width:150}">Rider</th>
             <th lay-data="{field:'handleByName', width:150}">HandleByName</th>
             <th lay-data="{field:'handle_time', width:170, templet:'<div>{{ formatDate(d.handle_time) }}</div>'}">
                 HandleTime
@@ -151,7 +150,7 @@
         function toDetails(handleNo) {
 
             $.ajax({
-                url: "/waybill/rider_delivery/detail.html?loadingNo=" + handleNo,
+                url: "/waybill/send_nextStation/detail.html?loadingNo=" + handleNo,
                 type: 'GET',
                 //dataType: 'text',
                 success: function (data) {
@@ -167,46 +166,21 @@
             });
         }
         function toPrint(handleNo) {
-            parent.window.open("/waybill/rider_delivery/print.html?loadingNo=" + handleNo);
+            parent.window.open("/waybill/send_nextStation/print.html?loadingNo=" + handleNo);
             location.reload();
         }
 
 
         function toLoadingScanPage() {
-            var url = "/waybill/rider_delivery/addLoadingPage.html";
+            var url = "/waybill/send_nextStation/addLoadingPage.html";
             parent.addTabs({
                 id: '40007002',
-                title: 'Rider Delivery',
+                title: 'Send Third Station',
                 close: true,
                 url: url
             });
         }
 
-        //暂时停用
-        function ship(handleNo) {
-            var load = layer.load(2);
-            $.ajax({
-                type: "POST",
-                url: "/waybill/rider_delivery/updateStatus.html",
-                dataType: "json",
-                data: {
-                    handleNo: handleNo,
-                    status: 1
-                },
-                success: function (data) {
-                    if (data.result) {
-                        layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
-                            reloadTable();
-                        });
-                    } else {
-                        layer.msg(data.msg, {icon: 2, time: 2000});
-                    }
-                },
-                complete: function () {
-                    layer.close(load);
-                }
-            });
-        }
 
     });
 
@@ -219,7 +193,7 @@
             maxmin: true, //开启最大化最小化按钮
             area: ['900px', '600px'],
             offset: ['100px', '250px'],
-            content: '/waybill/rider_delivery/editPage.html?handleNo='+handleNo,
+            content: '/waybill/send_nextStation/editPage.html?handleNo='+handleNo,
         });
 
     }

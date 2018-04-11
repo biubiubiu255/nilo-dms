@@ -172,19 +172,6 @@
         };
 
         $('.package').on('click', function (e) {
-            var param = '?tempScanNo=249907893388840960&network_id='+$("input[name='network_id']").val()+'&nextStation='+$("input[name='nextStation']").val()
-            layer.open({
-                type: 2,
-                title: 'Edit',
-                shadeClose: true,
-                shade: false,
-                maxmin: true, //开启最大化最小化按钮
-                area: ['900px', '600px'],
-                offset: ['100px', '250px'],
-                content: '/waybill/send_nextStation/editPage.html' + param
-            });
-
-            return;
 
 
             var subtype = e.currentTarget.value;
@@ -206,20 +193,24 @@
                 data: $('#myForm').serialize(),
                 success: function (data) {
                     if (data.result) {
-                        layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
-                            if(subtype=="submitShip"){
-                                $.get("/waybill/send_nextStation/editPage.html?tempScanNo=${scanNo}", function (data) {
-                                    var index = parent.layer.open({
-                                        type: 1,
-                                        content: data,
-                                        area: ['900px', '600px'],
-                                        offset: ['100px', '250px'],
-                                        maxmin: true
-                                    });
-                                });
-                            }
-                            //location.reload();
-                        });
+                        if(subtype=="submitShip"){
+                            var param = '?tempScanNo=${scanNo}&network_id='+$("input[name='network_id']").val()+'&nextStation='+$("input[name='nextStation']").val()
+                            layer.open({
+                                type: 2,
+                                title: 'Edit',
+                                shadeClose: true,
+                                shade: false,
+                                maxmin: true, //开启最大化最小化按钮
+                                area: ['900px', '600px'],
+                                offset: ['100px', '250px'],
+                                content: '/waybill/send_nextStation/editPage.html' + param
+                            });
+                        }else {
+                            layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
+                                location.reload();
+                            });
+                        }
+
                     } else {
                         layer.msg(data.msg, {icon: 2, time: 2000});
                     }

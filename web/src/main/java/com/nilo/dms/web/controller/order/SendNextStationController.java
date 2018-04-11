@@ -53,19 +53,21 @@ public class SendNextStationController extends BaseController {
     private WaybillScanDetailsDao waybillScanDetailsDao;
 
 
-/*
+
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model, HttpServletRequest request) {
-        return "waybill/rider_delivery/list";
+        return "waybill/send_nextStation/list";
     }
+
 
     @ResponseBody
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
-    public String list(RiderDeliveryDO riderDeliveryDO){
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+    public String list(SendThirdHead sendThirdHead){
+        Principal me = SessionLocal.getPrincipal();
         Pagination page = getPage();
-        List<RiderDeliveryDO> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDeliveryDO, page);
+
+        List<SendThirdHead> list = sendThirdService.queryBigs(Long.valueOf(me.getMerchantId()), sendThirdHead, page);
         return toPaginationLayUIData(page, list);
     }
 
@@ -90,6 +92,7 @@ public class SendNextStationController extends BaseController {
         return "waybill/rider_delivery/details";
     }
 
+/*
     @RequestMapping(value = "/print.html")
     public String print(Model model, String loadingNo) {
         Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
@@ -149,10 +152,10 @@ public class SendNextStationController extends BaseController {
 
         //从session取出刚刚打包好的大包发运信息（下一站点ID、名字）
         SendThirdHead packageInfo = (SendThirdHead)session.getAttribute("packageInfo");
-        if(packageInfo.getNetworkCode()==null || packageInfo.getNextStation()==null){
+        if(packageInfo.getNetwork_id()==null || packageInfo.getNextStation()==null){
             throw new DMSException(BizErrorCode.NOT_STATION_INFO);
         }
-        sendThirdHead.setThirdExpressCode(packageInfo.getThirdExpressCode());
+        sendThirdHead.setNetwork_id(packageInfo.getNetwork_id());
         sendThirdHead.setNextStation(packageInfo.getNextStation());
 
         //加上刚刚的站点信息，当前的操作信息，小包信息，合并写入系统
@@ -160,6 +163,8 @@ public class SendNextStationController extends BaseController {
         sendThirdHead.setHandleBy(Long.valueOf(me.getUserId()));
         sendThirdHead.setStatus(saveStutus);
         sendThirdHead.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
+
+        sendThirdHead.setHandle_time(Long.valueOf(System.currentTimeMillis()/1000).intValue());
         sendThirdService.insertBigAndSmall(merchantId, sendThirdHead, smallPack);
 
         return toJsonTrueMsg();
@@ -201,7 +206,7 @@ public class SendNextStationController extends BaseController {
         model.addAttribute("packList", toPaginationLayUIData(page, scanDetailList));
         model.addAttribute("expressList", expressList);
 
-        return "waybill/send_nextStation/edit";
+        return "waybill/send_nextStation/add";
     }
 
 /*
