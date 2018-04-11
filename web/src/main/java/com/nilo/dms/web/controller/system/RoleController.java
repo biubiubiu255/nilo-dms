@@ -6,6 +6,7 @@
 package com.nilo.dms.web.controller.system;
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.RoleStatusEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
@@ -15,9 +16,7 @@ import com.nilo.dms.dto.common.ZTree;
 import com.nilo.dms.service.PermissionService;
 import com.nilo.dms.service.RoleService;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +58,7 @@ public class RoleController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<Role> list = roleService.findBy(merchantId,roleName,null);
+        List<Role> list = roleService.findBy(merchantId, roleName, null);
         Pagination page = new Pagination(0, list.size());
         return toPaginationLayUIData(page, list);
     }

@@ -3,20 +3,19 @@ package com.nilo.dms.web.controller.order;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.HandleRiderStatusEnum;
-import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.dao.HandleRiderDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.WaybillScanDetailsDao;
-import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.dao.dataobject.RiderDeliveryDO;
+import com.nilo.dms.dao.dataobject.SendNextStationDO;
+import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.RiderDeliveryService;
-import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ronny on 2017/9/15.
@@ -183,7 +179,6 @@ public class SendNextStationController extends BaseController {
         expressList = userService.findExpressesAll(page);
 
 
-
         //sendNextStationDO.setHandleNo(SystemConfig.getNextSerialNo(merchantId, SerialTypeEnum.LOADING_NO.getCode()));
         //sendNextStationDO.setStatus(0);
         //sendNextStationDO.setHandleBy(Long.valueOf(SessionLocal.getPrincipal().getUserId()));
@@ -199,14 +194,13 @@ public class SendNextStationController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/edit.html", method = RequestMethod.POST)
     public String edit(String[] smallPack, String handleNo, Integer saveStatus, String rider) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        String merchantId = me.getMerchantId();
-        if(handleNo==null || smallPack.length==0){
+        if (handleNo == null || smallPack.length == 0) {
             throw new DMSException(BizErrorCode.LOADING_NOT_EXIST);
         }
+        Principal principal = SessionLocal.getPrincipal();
         RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
         riderDeliveryDO.setHandleNo(handleNo);
-        riderDeliveryDO.setMerchantId(Long.valueOf(merchantId));
+        riderDeliveryDO.setMerchantId(Long.valueOf(principal.getMerchantId()));
         riderDeliveryDO.setRider(rider);
         riderDeliveryDO.setStatus(HandleRiderStatusEnum.getEnum(saveStatus).getCode());
         riderDeliveryService.editSmall(riderDeliveryDO, smallPack);

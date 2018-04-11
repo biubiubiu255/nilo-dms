@@ -14,18 +14,18 @@ import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
-import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.dto.common.LoginInfo;
 import com.nilo.dms.dto.common.User;
-import com.nilo.dms.dto.pda.PdaRider;
-import com.nilo.dms.dto.pda.PdaWaybill;
-import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.dto.order.Loading;
 import com.nilo.dms.dto.order.ShipParameter;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.dto.order.WaybillHeader;
+import com.nilo.dms.dto.pda.PdaRider;
+import com.nilo.dms.dto.pda.PdaWaybill;
+import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.order.LoadingService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.mobile.SendScanController;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -42,8 +42,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.apache.shiro.web.filter.mgt.DefaultFilter.user;
 
 @Controller
 @RequestMapping("/pda")
@@ -332,7 +330,6 @@ public class PdaController extends BaseController {
     @ResponseBody
     public String editPassword(String oldPassword, String newPassword, String againPassword) {
         try {
-            AssertUtil.isNotNull(user, SysErrorCode.REQUEST_IS_NULL);
             AssertUtil.isNotBlank(oldPassword, SysErrorCode.REQUEST_IS_NULL);
             Principal me = SessionLocal.getPrincipal();
             String userId = me.getUserId();
