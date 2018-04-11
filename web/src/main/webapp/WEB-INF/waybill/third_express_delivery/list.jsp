@@ -51,20 +51,20 @@
         </div>
     </div>
 
-    <table class="layui-table" lay-data="{ url:'/waybill/rider_delivery/list.html' ,method:'post', page:true,limit:10, id:'${id0}'}"
+    <table class="layui-table" lay-data="{ url:'/waybill/third_express_delivery/list.html' ,method:'post', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
             <th lay-data="{fixed: 'left',field:'handleNo', width:140}">LoadingNo</th>
-            <th lay-data="{field:'riderName', width:150}">Rider</th>
+            <th lay-data="{field:'thirdExpressCode', width:150}">Third Express</th>
+            <th lay-data="{field:'driver', width:150}">Rider</th>
             <th lay-data="{field:'handleByName', width:150}">HandleByName</th>
-            <th lay-data="{field:'handle_time', width:170, templet:'<div>{{ formatDate(d.handle_time) }}</div>'}">
+            <th lay-data="{field:'handleTime', width:170, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">
                 HandleTime
             </th>
-            <th lay-data="{field:'', width:170, templet:'<div>{{ formatDate(d.created_time) }}</div>'}">
+            <th lay-data="{field:'', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
                 CreatedTime
             </th>
-            <%--<th lay-data="{field:'remark', width:120}">Remark</th>--%>
             <th lay-data="{field:'', width:120, templet:'<div>{{ parseStatus(d.status) }}</div>'}">Status</th>
             <th lay-data="{title:'Opt', width:230, align:'center', toolbar: '#barDemo', fixed: 'right'}"></th>
         </tr>
@@ -89,6 +89,9 @@
             layDate.render({
                 elem: '#toCreatedTime'
                 , lang: 'en'
+            });
+            form.on('select(carrier)', function (data) {
+                getThirdDriver(data.value);
             });
         });
         var table;
@@ -133,7 +136,25 @@
                 }
             });
         };
-
+        function getThirdDriver(code) {
+            $.ajax({
+                type: "POST",
+                url: "/waybill/third_express_delivery/getThirdDriver.html",
+                dataType: "json",
+                data: {code: code},
+                success: function (data) {
+                    if (data.result) {
+                        $("#sendDriver").empty();
+                        $("#sendDriver").prepend("<option value='0'>choose or search....</option>");
+                        var driver = data.data;
+                        for (var i = 0; i < driver.length; i++) {
+                            $("#sendDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
+                        }
+                        form.render();
+                    }
+                }
+            });
+        }
         $(".loading-scan").on("click", function () {
             toLoadingScanPage("");
         })
@@ -141,7 +162,7 @@
         function toDetails(handleNo) {
 
             $.ajax({
-                url: "/waybill/rider_delivery/detail.html?loadingNo=" + handleNo,
+                url: "/waybill/third_express_delivery/detail.html?loadingNo=" + handleNo,
                 type: 'GET',
                 //dataType: 'text',
                 success: function (data) {
@@ -157,13 +178,13 @@
             });
         }
         function toPrint(handleNo) {
-            parent.window.open("/waybill/rider_delivery/print.html?loadingNo=" + handleNo);
+            parent.window.open("/waybill/third_express_delivery/print.html?loadingNo=" + handleNo);
             location.reload();
         }
 
 
         function toLoadingScanPage() {
-            var url = "/waybill/rider_delivery/addLoadingPage.html";
+            var url = "/waybill/third_express_delivery/addLoadingPage.html";
             parent.addTabs({
                 id: '40007002',
                 title: 'Rider Delivery',
@@ -177,7 +198,7 @@
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/waybill/rider_delivery/updateStatus.html",
+                url: "/waybill/third_express_delivery/updateStatus.html",
                 dataType: "json",
                 data: {
                     handleNo: handleNo,
@@ -209,7 +230,7 @@
             maxmin: true, //开启最大化最小化按钮
             area: ['900px', '600px'],
             offset: ['100px', '250px'],
-            content: '/waybill/rider_delivery/editPage.html?handleNo='+handleNo,
+            content: '/waybill/third_express_delivery/editPage.html?handleNo='+handleNo,
         });
 
     }

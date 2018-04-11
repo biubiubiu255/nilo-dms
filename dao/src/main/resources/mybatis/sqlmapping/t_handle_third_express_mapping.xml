@@ -9,7 +9,7 @@
                 jdbcType="INTEGER"/>
         <result property="handleNo" column="handle_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="thirdExpressCode" column="third_waybill_no" javaType="java.lang.String"
+        <result property="thirdExpressCode" column="third_express_code" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="thirdWaybillNo" column="third_waybill_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
@@ -19,7 +19,7 @@
                 jdbcType="VARCHAR"/>
         <result property="nextStation" column="next_station" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="handle_time" column="handle_time" javaType="java.lang.Integer"
+        <result property="handleTime" column="handle_time" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
         <result property="handleBy" column="handle_by" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
@@ -30,9 +30,9 @@
                 jdbcType="INTEGER"/>
         <result property="remark" column="remark" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="created_time" column="created_time" javaType="java.lang.Integer"
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="updated_time" column="updated_time" javaType="java.lang.Integer"
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
     </resultMap>
 
@@ -73,8 +73,8 @@
         <if test="ob.handleNo != null and ob.handleNo != '' ">
             and handle_no = #{ob.handleNo}
         </if>
-        <if test="ob.thirdHandleNo != null and ob.thirdHandleNo != '' ">
-            and third_waybill_no = #{ob.thirdHandleNo}
+        <if test="ob.thirdWaybillNo != null and ob.thirdWaybillNo != '' ">
+            and third_waybill_no = #{ob.thirdWaybillNo}
         </if>
         <if test="ob.thirdExpressCode != null and ob.thirdExpressCode != '' ">
             and third_express_code = #{ob.thirdExpressCode}
@@ -105,8 +105,8 @@
         <if test="ob.handleNo != null and ob.handleNo != '' ">
             and handle_no = #{ob.handleNo}
         </if>
-        <if test="ob.thirdHandleNo != null and ob.thirdHandleNo != '' ">
-            and third_waybill_no = #{ob.thirdHandleNo}
+        <if test="ob.thirdWaybillNo != null and ob.thirdWaybillNo != '' ">
+            and third_waybill_no = #{ob.thirdWaybillNo}
         </if>
         <if test="ob.thirdExpressCode != null and ob.thirdExpressCode != '' ">
             and third_express_code = #{ob.thirdExpressCode}
@@ -136,7 +136,7 @@
         ( merchant_id, handle_no, third_express_code, third_waybill_no, driver, networkCode, next_station, handle_time, handle_by, handle_Name,status, remark, created_time, updated_time, version)
         VALUES
         (
-        #{merchantId},#{handleNo},#{thirdExpressCode},#{thirdWaybillNo},#{driver},#{networkCode},#{nextStation},#{handle_time},#{handleBy},#{handleName},#{status},#{remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID()
+        #{merchantId},#{handleNo},#{thirdExpressCode},#{thirdWaybillNo},#{driver},#{networkCode},#{nextStation},#{handleTime},#{handleBy},#{handleName},#{status},#{remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID()
         )
     </insert>
 
