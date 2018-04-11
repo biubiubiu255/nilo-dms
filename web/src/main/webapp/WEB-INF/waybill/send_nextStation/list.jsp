@@ -150,7 +150,7 @@
         function toDetails(handleNo) {
 
             $.ajax({
-                url: "/waybill/send_nextStation/detail.html?loadingNo=" + handleNo,
+                url: "/waybill/send_nextStation/detail.html?handleNo=" + handleNo,
                 type: 'GET',
                 //dataType: 'text',
                 success: function (data) {

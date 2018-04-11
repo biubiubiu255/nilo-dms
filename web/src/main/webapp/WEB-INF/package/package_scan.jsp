@@ -194,7 +194,7 @@
                 success: function (data) {
                     if (data.result) {
                         if(subtype=="submitShip"){
-                            var param = '?tempScanNo=${scanNo}&network_id='+$("input[name='network_id']").val()+'&nextStation='+$("input[name='nextStation']").val()
+                            var param = '?tempScanNo=${scanNo}&networkCode='+$("input[name='network_id']").val()+'&nextStation='+$("input[name='nextStation']").val()
                             layer.open({
                                 type: 2,
                                 title: 'Edit',
