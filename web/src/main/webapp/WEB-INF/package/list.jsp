@@ -49,7 +49,7 @@
             <th lay-data="{field:'weight', width:120}">Weight</th>
             <th lay-data="{field:'length', width:120}">Length</th>
             <th lay-data="{field:'width', width:120}">Width</th>
-            <th lay-data="{field:'high', width:120}">High</th>
+            <th lay-data="{field:'height', width:120}">High</th>
             <th lay-data="{field:'remark', width:200}">Remark</th>
             <th lay-data="{title:'Opt',fixed: 'right', width:150, align:'center', toolbar: '#barDemo'}"></th>
 

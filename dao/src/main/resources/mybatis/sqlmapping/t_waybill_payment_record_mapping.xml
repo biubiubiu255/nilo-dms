@@ -36,7 +36,7 @@
       #{paymentChannel,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=VARCHAR}, #{orgTransId,jdbcType=VARCHAR}, 
       #{paymentType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=BIGINT})
-  </insert>
+</insert>
   <insert id="insertSelective" parameterType="com.nilo.dms.dto.order.WaybillPaymentRecord" >
     insert into t_waybill_payment_record
     <trim prefix="(" suffix=")" suffixOverrides="," >

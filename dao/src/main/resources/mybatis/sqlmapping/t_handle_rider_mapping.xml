@@ -153,6 +153,17 @@
     </insert>
 
 
+    <insert id="insertSmalls">
+        INSERT
+        INTO
+        t_handle_rider_details
+        ( rider_handle_no, order_no, weight, length, height, width, handle_by, status, created_time, updated_time )
+        VALUES
+        <foreach collection="emps" item="emp" separator=",">
+
+        </foreach>
+        (#{emp.rider_handle_no},#{emp.orderNo},#{emp.weight},#{emp.length},#{emp.height},#{emp.width},#{emp.handleBy},#{emp.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()))
+    </insert>
 
     <delete id="deleteSmallByHandleNo" parameterType="com.nilo.dms.dao.dataobject.RiderDeliverySmallDO">
         delete FROM t_handle_rider_details

@@ -72,7 +72,7 @@
 <script type="text/javascript">
     $(function () {
 
-        //var tableData = '{"msg":0,"code":0,"pages":0,"data":[{"deliveryOrder":{"alreadyPaid":0.0,"createdBy":"168081000340000768","createdTime":1518010827,"goodsInfoList":[],"high":258.0,"isCod":"1","length":456.0,"merchantId":"1","needPayAmount":10.0,"networkDesc":"Mombasa Office","networkId":4,"nextNetworkDesc":"Main Office","nextNetworkId":1,"orderNo":"Kili201802000003","orderType":"PG","orderTypeDesc":"Package","package":true,"printTimes":0,"printed":true,"receiverInfo":{"receiverAddress":"2222222222222222222222","receiverArea":"110106","receiverCity":"1101","receiverCountry":"CN","receiverName":"ronny","receiverPhone":"ronny","receiverProvince":"11"},"senderInfo":{"senderAddress":"aldkjf;","senderArea":"110101","senderCity":"1101","senderCountry":"CN","senderName":"ronny","senderPhone":"ronny","senderProvince":"11"},"serviceTypeDesc":"","status":"ARRIVED","statusDesc":"Arrived","updatedTime":1518010827,"weight":123.0,"width":789.0},"loadingBy":168081000340000768,"loadingNo":"L0020","num":1,"orderNo":"Kili201802000003","status":1}],"count":1}';
+        //var tableData = '{"msg":0,"code":0,"pages":0,"data":[{"deliveryOrder":{"alreadyPaid":0.0,"createdBy":"168081000340000768","createdTime":1518010827,"goodsInfoList":[],"height":258.0,"isCod":"1","length":456.0,"merchantId":"1","needPayAmount":10.0,"networkDesc":"Mombasa Office","networkId":4,"nextNetworkDesc":"Main Office","nextNetworkId":1,"orderNo":"Kili201802000003","orderType":"PG","orderTypeDesc":"Package","package":true,"printTimes":0,"printed":true,"receiverInfo":{"receiverAddress":"2222222222222222222222","receiverArea":"110106","receiverCity":"1101","receiverCountry":"CN","receiverName":"ronny","receiverPhone":"ronny","receiverProvince":"11"},"senderInfo":{"senderAddress":"aldkjf;","senderArea":"110101","senderCity":"1101","senderCountry":"CN","senderName":"ronny","senderPhone":"ronny","senderProvince":"11"},"serviceTypeDesc":"","status":"ARRIVED","statusDesc":"Arrived","updatedTime":1518010827,"weight":123.0,"width":789.0},"loadingBy":168081000340000768,"loadingNo":"L0020","num":1,"orderNo":"Kili201802000003","status":1}],"count":1}';
         //var tableData = '[{"loadingNo":"aa"},{"loadingNo":"bb"},{"loadingNo":"cc"}]';
         //tableData = JSON.parse(tableData);
         //tableData = tableData.data;
@@ -278,10 +278,10 @@
         /*
         //扫描包返回内容过滤
         function tableDateTrim(data){
-            if(typeof(data.high)=='undefined') data.high='';
-            if(typeof(data.high)=='undefined') data.high='';
-            if(typeof(data.high)=='undefined') data.high='';
-            if(typeof(data.high)=='undefined') data.high='';
+            if(typeof(data.height)=='undefined') data.height='';
+            if(typeof(data.height)=='undefined') data.height='';
+            if(typeof(data.height)=='undefined') data.height='';
+            if(typeof(data.height)=='undefined') data.height='';
         }
         */
     });

@@ -69,7 +69,7 @@
 	                        <td>${item.orderNo}</td>
 	                        <td>${item.weight}</td>
 	                        <td>${item.length}</td>
-	                        <td>${item.high}</td>
+	                        <td>${item.height}</td>
 	                        <td>${item.width}</td>
                             <td><date:date value="${item.created_time}" parttern="yyyy-MM-dd HH:mm:ss"></date:date></td>
                        </tr>
