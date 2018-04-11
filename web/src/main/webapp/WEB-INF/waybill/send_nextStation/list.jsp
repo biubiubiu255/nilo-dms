@@ -56,11 +56,11 @@
         <thead>
         <tr>
             <th lay-data="{fixed: 'left',field:'handleNo', width:140}">LoadingNo</th>
-            <th lay-data="{field:'handleByName', width:150}">HandleByName</th>
-            <th lay-data="{field:'handle_time', width:170, templet:'<div>{{ formatDate(d.handle_time) }}</div>'}">
+            <th lay-data="{field:'nextStation', width:150}">NextStation</th>
+            <th lay-data="{width:170, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">
                 HandleTime
             </th>
-            <th lay-data="{field:'', width:170, templet:'<div>{{ formatDate(d.created_time) }}</div>'}">
+            <th lay-data="{width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
                 CreatedTime
             </th>
             <%--<th lay-data="{field:'remark', width:120}">Remark</th>--%>
@@ -72,7 +72,7 @@
 
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="tool-print">Print</a>
-        <a class="layui-btn layui-btn-primary  layui-btn-mini" lay-event="tool-edit">Detail</a>
+        <a class="layui-btn layui-btn-primary  layui-btn-mini" lay-event="tool-detail">Detail</a>
         <a class="layui-btn layui-btn-danger  layui-btn-mini" lay-event="tool-ship">Ship</a>
         <%--
         <shiro:hasPermission name="400062">
