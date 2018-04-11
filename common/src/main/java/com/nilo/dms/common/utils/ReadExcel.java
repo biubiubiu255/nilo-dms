@@ -44,6 +44,7 @@ public class ReadExcel {
 
         //获取表头信息
         Iterator<Row> iteRow = sheet.rowIterator();
+        if (iteRow == null || !iteRow.hasNext()) throw new RuntimeException("Excel Empty");
         Row headRow = iteRow.next();
         Iterator<Cell> headCell = headRow.cellIterator();
         List<String> header = new ArrayList<String>();

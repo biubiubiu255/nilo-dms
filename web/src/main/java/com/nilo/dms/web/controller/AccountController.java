@@ -131,7 +131,7 @@ public class AccountController extends BaseController {
     @RequestMapping(value = "/logout.html", method = RequestMethod.GET)
     public String logout(HttpSession session) {
         // 登出操作
-        WebUtil.setHttpSessionValue("session_user", null);
+        session.invalidate();
         return "redirect:/";
     }
 

@@ -11,8 +11,8 @@ public class HandleSignDO extends BaseDo<Long> {
     private String orderNo;
     private String signer;
     private String networkCode;
-    private String handledBy;
-    private Long handledTime;
+    private String handleBy;
+    private Long handleTime;
     private String remark;
 
     public Long getMerchantId() {
@@ -47,20 +47,20 @@ public class HandleSignDO extends BaseDo<Long> {
         this.networkCode = networkCode;
     }
 
-    public String getHandledBy() {
-        return handledBy;
+    public String getHandleBy() {
+        return handleBy;
     }
 
-    public void setHandledBy(String handledBy) {
-        this.handledBy = handledBy;
+    public void setHandleBy(String handleBy) {
+        this.handleBy = handleBy;
     }
 
-    public Long getHandledTime() {
-        return handledTime;
+    public Long getHandleTime() {
+        return handleTime;
     }
 
-    public void setHandledTime(Long handledTime) {
-        this.handledTime = handledTime;
+    public void setHandleTime(Long handleTime) {
+        this.handleTime = handleTime;
     }
 
     public String getRemark() {
