@@ -4,6 +4,7 @@ import com.nilo.dms.common.BaseDao;
 import com.nilo.dms.common.enums.HandleRiderStatusEnum;
 import com.nilo.dms.dao.dataobject.RiderDeliveryDO;
 import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
+import com.nilo.dms.dao.dataobject.UserInfoDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +21,8 @@ public interface HandleRiderDao extends BaseDao<Long, RiderDeliveryDO> {
     Integer queryRiderDeliveryBigCount(@Param("ob") RiderDeliveryDO riderDeliveryDO, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
     List<RiderDeliverySmallDO> queryDeliverySmall(RiderDeliverySmallDO riderDeliverySmallDO);
+
+    UserInfoDO queryUserInfoBySmallNo(String orderNo);
 
     void insertBig(RiderDeliveryDO riderDeliveryDO);
 

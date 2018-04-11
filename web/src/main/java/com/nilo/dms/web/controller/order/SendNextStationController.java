@@ -192,7 +192,7 @@ public class SendNextStationController extends BaseController {
 
         model.addAttribute("packList", toPaginationLayUIData(page, scanDetailList));
         model.addAttribute("expressList", expressList);
-        return "waybill/rider_delivery/send_nextStation";
+        return "waybill/send_nextStation/edit";
     }
 
 

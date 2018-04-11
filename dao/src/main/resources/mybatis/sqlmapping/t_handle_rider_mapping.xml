@@ -53,6 +53,26 @@
                 jdbcType="INTEGER"/>
     </resultMap>
 
+    <resultMap id="userInfoDO" type="com.nilo.dms.dao.dataobject.UserInfoDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="name" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="email" column="email" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="version" column="version" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+
     <!-- 查询装车打包 -->
     <select id="queryRiderDeliveryBig" resultMap="orderBig" statementType="PREPARED"  parameterType="com.nilo.dms.dao.dataobject.RiderDeliveryDO">
         SELECT
@@ -169,5 +189,28 @@
         delete FROM t_handle_rider_details
         WHERE rider_handle_no = #{rider_handle_no}
     </delete>
+
+    <!-- 查询其他的信息 -->
+
+    <select id="queryUserInfoBySmallNo" resultMap="orderSmall" statementType="PREPARED">
+        SELECT
+
+        c.*
+
+        FROM
+
+        t_handle_rider_details a
+
+        INNER JOIN t_handle_rider b
+
+        on a.rider_handle_no = b.handle_no
+
+        INNER JOIN t_sys_user_info c
+
+        on b.rider = c.id
+
+        WHERE a.order_no = #{orderNo}
+    </select>
+
 
 </mapper>

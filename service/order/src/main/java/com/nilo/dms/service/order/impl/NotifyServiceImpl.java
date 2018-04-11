@@ -8,10 +8,13 @@ import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
+import com.nilo.dms.dao.HandleRiderDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.UserInfoDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
+import com.nilo.dms.dto.common.UserInfo;
 import com.nilo.dms.dto.order.DeliveryOrderOpt;
 import com.nilo.dms.dto.order.NotifyRequest;
 import com.nilo.dms.dto.order.OrderOptRequest;
@@ -56,6 +59,9 @@ public class NotifyServiceImpl implements NotifyService {
     private AbnormalOrderDao abnormalOrderDao;
     @Autowired
     private DeliveryOrderOptDao deliveryOrderOptDao;
+    @Autowired
+    private HandleRiderDao handleRiderDao;
+
     @Value("#{configProperties['kili_dispatch']}")
     private String kili_dispatch;
     @Value("#{configProperties['kili_refuse']}")
@@ -100,9 +106,10 @@ public class NotifyServiceImpl implements NotifyService {
                     case DELIVERY: {
 
                         DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, "" + network), DistributionNetworkDO.class);
+                        UserInfoDO user = handleRiderDao.queryUserInfoBySmallNo(orderNo);
                         dataMap.put("location", networkDO == null ? "" : networkDO.getName());
-                        dataMap.put("rider_name", userInfo.getName());
-                        dataMap.put("rider_phone", userInfo.getPhone());
+                        dataMap.put("rider_name", user.getName());
+                        dataMap.put("rider_phone", user.getPhone());
                         break;
                     }
                     case SEND: {
