@@ -2,20 +2,15 @@ package com.nilo.dms.web.controller.order;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.enums.OptTypeEnum;
-import com.nilo.dms.common.enums.TaskStatusEnum;
-import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
-import com.nilo.dms.dto.common.UserInfo;
 import com.nilo.dms.dto.order.OrderOptRequest;
-import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.dto.order.WaybillParameter;
+import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +37,6 @@ public class DoorToDoorController extends BaseController {
     @Autowired
     private WaybillService waybillService;
     @Autowired
-    private TaskService taskService;
-    @Autowired
     private UserService userService;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
@@ -60,23 +53,9 @@ public class DoorToDoorController extends BaseController {
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
         parameter.setOrderType(Arrays.asList(new String[]{"DS"}));
-/*
-        parameter.setStatus(Arrays.asList(new Integer[]{DeliveryOrderStatusEnum.CREATE.getCode(), DeliveryOrderStatusEnum.ALLOCATED.getCode()}));
-*/
+
         Pagination page = getPage();
         List<Waybill> list = waybillService.queryWaybillBy(parameter, page);
-
-        for (Waybill o : list) {
-            if (o.getStatus() != DeliveryOrderStatusEnum.CREATE) {
-                Task task = taskService.queryTaskByTypeAndOrderNo(o.getMerchantId(), TaskTypeEnum.PICK_UP.getCode(), o.getOrderNo());
-                if (task != null) {
-                    UserInfo riderInfo = userService.findUserInfoByUserId(o.getMerchantId(), task.getHandledBy());
-                    if (riderInfo != null) {
-                        o.setAllocatedRider(riderInfo.getName());
-                    }
-                }
-            }
-        }
 
         return toPaginationLayUIData(page, list);
     }
@@ -108,17 +87,6 @@ public class DoorToDoorController extends BaseController {
             optRequest.setOrderNo(Arrays.asList(orderNos));
             waybillService.handleOpt(optRequest);
 
-            //添加上门揽件任务
-            for (String orderNo : orderNos) {
-                Task task = new Task();
-                task.setMerchantId(merchantId);
-                task.setStatus(TaskStatusEnum.CREATE);
-                task.setCreatedBy(me.getUserId());
-                task.setOrderNo(orderNo);
-                task.setHandledBy(userId);
-                task.setTaskType(TaskTypeEnum.PICK_UP);
-                taskService.addTask(task);
-            }
         } catch (Exception e) {
             log.error("allocate failed. orderNo:{}", orderNos, e);
             return toJsonErrorMsg(e.getMessage());
