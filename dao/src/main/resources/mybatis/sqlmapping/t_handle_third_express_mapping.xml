@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.nilo.dms.dao.SendNextStationDao">
+<mapper namespace="com.nilo.dms.dao.HandleThirdDao">
 
     <!-- 实体bean与数据字段对应关系 -->
-    <resultMap id="sendBig" type="com.nilo.dms.dao.dataobject.SendNextStationDO">
+    <resultMap id="sendBig" type="com.nilo.dms.dto.handle.SendThirdHead">
         <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="handleNo" column="handle_no" javaType="java.lang.String"
@@ -34,12 +34,12 @@
     </resultMap>
 
     <!--实体bean与数据字段对应关系-->
-    <resultMap id="sendSmall" type="com.nilo.dms.dao.dataobject.SendNextStationDetailDO">
+    <resultMap id="sendSmall" type="com.nilo.dms.dto.handle.SendThirdDetail">
         <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="third_handle_no" column="third_handle_no" javaType="java.lang.String"
+        <result property="thirdHandleNo" column="third_handle_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="order_no" column="order_no" javaType="java.lang.String"
+        <result property="orderNo" column="order_No" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
@@ -57,7 +57,7 @@
                 jdbcType="INTEGER"/>
     </resultMap>
     <!-- 查询装车打包 -->
-    <select id="queryBig" resultMap="sendBig" statementType="PREPARED"  parameterType="com.nilo.dms.dao.dataobject.SendNextStationDO">
+    <select id="queryBig" resultMap="sendBig" statementType="PREPARED"  parameterType="com.nilo.dms.dto.handle.SendThirdHead">
         SELECT
         *
         FROM
@@ -88,7 +88,7 @@
     </select>
 
     <!-- 查询装车打包数量 -->
-    <select id="queryBigCount" resultType="java.lang.Integer" statementType="PREPARED"  parameterType="com.nilo.dms.dao.dataobject.SendNextStationDO">
+    <select id="queryBigCount" resultType="java.lang.Integer" statementType="PREPARED"  parameterType="com.nilo.dms.dto.handle.SendThirdHead">
         SELECT
         count(*)
         FROM
@@ -114,7 +114,7 @@
         </if>
     </select>
 
-    <insert id="insertBig" parameterType="com.nilo.dms.dao.dataobject.SendNextStationDO"
+    <insert id="insertBig" parameterType="com.nilo.dms.dto.handle.SendThirdHead"
             statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
         INSERT
         INTO t_handle_third_express
@@ -125,7 +125,7 @@
         )
     </insert>
 
-    <update id="editBigBy" statementType="PREPARED" parameterType="com.nilo.dms.dao.dataobject.SendNextStationDO">
+    <update id="editBigBy" statementType="PREPARED" parameterType="com.nilo.dms.dto.handle.SendThirdHead">
         update t_handle_third_express
         SET
         status = #{status},
@@ -154,7 +154,7 @@
 
 
     <!-- 下面是子包分割线 -->
-    <select id="querySmall" resultMap="sendSmall" statementType="PREPARED" parameterType="com.nilo.dms.dao.dataobject.SendNextStationDetailDO">
+    <select id="querySmall" resultMap="sendSmall" statementType="PREPARED" parameterType="com.nilo.dms.dto.handle.SendThirdDetail">
         SELECT
         *
         FROM
@@ -163,21 +163,12 @@
         <if test="status != null">
             and status = #{status}
         </if>
-        <if test="third_handle_no != null and third_handle_no != '' ">
-            and third_handle_no = #{third_handle_no}
+        <if test="thirdHandleNo != null and thirdHandleNo != '' ">
+            and third_handle_no = #{thirdHandleNo}
         </if>
         order by created_time desc
     </select>
 
-    <insert id="insertSmall" parameterType="com.nilo.dms.dao.dataobject.SendNextStationDetailDO"
-            statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
-        INSERT
-        INTO
-        t_handle_third_express_details
-        ( third_handle_no, order_no, weight, length, height, width, status, created_time, updated_time, version )
-        VALUES
-        (#{third_handle_no},#{order_no},#{weight},#{len},#{height},#{width},#{status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()), UUID())
-    </insert>
 
     <insert id="insertSmalls">
         INSERT
@@ -186,15 +177,15 @@
         ( third_handle_no, order_no, weight, length, height, width, status, created_time, updated_time, version )
         VALUES
         <foreach collection="list" item="now" separator=",">
-            (#{now.third_handle_no},#{now.order_no},#{now.weight},#{now.len},#{now.height},#{now.width},#{now.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()), UUID())
+            (#{now.thirdHandleNo},#{now.orderNo},#{now.weight},#{now.len},#{now.height},#{now.width},#{now.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()), UUID())
         </foreach>
 
     </insert>
 
 
-    <delete id="deleteSmallByHandleNo" parameterType="com.nilo.dms.dao.dataobject.SendNextStationDetailDO">
+    <delete id="deleteSmallByHandleNo" parameterType="com.nilo.dms.dto.handle.SendThirdDetail">
         delete FROM t_handle_third_express_details
-        WHERE third_handle_no = #{third_handle_no}
+        WHERE third_handle_no = #{thirdHandleNo}
     </delete>
 
 

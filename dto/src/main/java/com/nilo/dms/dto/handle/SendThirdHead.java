@@ -1,11 +1,11 @@
-package com.nilo.dms.dao.dataobject;
+package com.nilo.dms.dto.handle;
 
 import com.nilo.dms.common.BaseDo;
 
 /**
  * Created by admin on 2017/9/19.
  */
-public class SendNextStationDO extends BaseDo<Long> {
+public class SendThirdHead extends BaseDo<Long> {
 
     private Long merchantId;
     private String handleNo;
@@ -136,7 +136,7 @@ public class SendNextStationDO extends BaseDo<Long> {
 
     @Override
     public String toString() {
-        return "SendNextStationDO{" +
+        return "SendThirdHead{" +
                 "merchantId=" + merchantId +
                 ", handleNo='" + handleNo + '\'' +
                 ", third_express_code='" + third_express_code + '\'' +

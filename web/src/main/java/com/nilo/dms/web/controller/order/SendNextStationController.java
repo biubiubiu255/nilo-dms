@@ -2,7 +2,6 @@ package com.nilo.dms.web.controller.order;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.common.enums.HandleRiderStatusEnum;
 import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
@@ -10,14 +9,12 @@ import com.nilo.dms.dao.HandleRiderDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.WaybillScanDetailsDao;
 import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.RiderDeliveryService;
-import com.nilo.dms.service.order.SendNextStationService;
-import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ronny on 2017/9/15.
@@ -43,7 +38,7 @@ public class SendNextStationController extends BaseController {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
-    private SendNextStationService sendNextStationService;
+    private SendThirdService sendThirdService;
 
     @Autowired
     private WaybillDao waybillDao;
@@ -146,26 +141,26 @@ public class SendNextStationController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
-    public String addLoading(String[] smallPack, SendNextStationDO sendNextStationDO, Integer saveStutus, HttpServletRequest request) {
+    public String addLoading(String[] smallPack, SendThirdHead sendThirdHead, Integer saveStutus, HttpServletRequest request) {
         HttpSession session = request.getSession();
 
         Principal me = SessionLocal.getPrincipal();
         Long merchantId = Long.valueOf(me.getMerchantId());
 
         //从session取出刚刚打包好的大包发运信息（下一站点ID、名字）
-        SendNextStationDO packageInfo = (SendNextStationDO)session.getAttribute("packageInfo");
+        SendThirdHead packageInfo = (SendThirdHead)session.getAttribute("packageInfo");
         if(packageInfo.getNetwork_id()==null || packageInfo.getNextStation()==null){
             throw new DMSException(BizErrorCode.NOT_STATION_INFO);
         }
-        sendNextStationDO.setThird_express_code(packageInfo.getThird_express_code());
-        sendNextStationDO.setNextStation(packageInfo.getNextStation());
+        sendThirdHead.setThird_express_code(packageInfo.getThird_express_code());
+        sendThirdHead.setNextStation(packageInfo.getNextStation());
 
         //加上刚刚的站点信息，当前的操作信息，小包信息，合并写入系统
-        sendNextStationDO.setMerchantId(merchantId);
-        sendNextStationDO.setHandleBy(Long.valueOf(me.getUserId()));
-        sendNextStationDO.setStatus(saveStutus);
-        sendNextStationDO.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
-        sendNextStationService.insertBigAndSmall(merchantId, sendNextStationDO, smallPack);
+        sendThirdHead.setMerchantId(merchantId);
+        sendThirdHead.setHandleBy(Long.valueOf(me.getUserId()));
+        sendThirdHead.setStatus(saveStutus);
+        sendThirdHead.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
+        sendThirdService.insertBigAndSmall(merchantId, sendThirdHead, smallPack);
 
         return toJsonTrueMsg();
     }
@@ -180,7 +175,7 @@ public class SendNextStationController extends BaseController {
 
 
     @RequestMapping(value = "/editPage.html", method = RequestMethod.GET)
-    public String editPage(SendNextStationDO sendNextStationDO, String tempScanNo, Model model, HttpServletRequest request) {
+    public String editPage(SendThirdHead sendThirdHead, String tempScanNo, Model model, HttpServletRequest request) {
 
         HttpSession session = request.getSession();
 
@@ -195,14 +190,14 @@ public class SendNextStationController extends BaseController {
         expressList = userService.findExpressesAll(page);
 
 
-        //sendNextStationDO.setHandleNo(SystemConfig.getNextSerialNo(merchantId, SerialTypeEnum.LOADING_NO.getCode()));
-        //sendNextStationDO.setStatus(0);
-        //sendNextStationDO.setHandleBy(Long.valueOf(SessionLocal.getPrincipal().getUserId()));
+        //sendThirdHead.setHandleNo(SystemConfig.getNextSerialNo(merchantId, SerialTypeEnum.LOADING_NO.getCode()));
+        //sendThirdHead.setStatus(0);
+        //sendThirdHead.setHandleBy(Long.valueOf(SessionLocal.getPrincipal().getUserId()));
 
         //System.out.println("本次测试 = " + smallPack.length);
 
 
-        session.setAttribute("packageInfo", sendNextStationDO);
+        session.setAttribute("packageInfo", sendThirdHead);
         model.addAttribute("packList", toPaginationLayUIData(page, scanDetailList));
         model.addAttribute("expressList", expressList);
 

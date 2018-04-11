@@ -1,23 +1,20 @@
-package com.nilo.dms.dao.dataobject;
+package com.nilo.dms.dto.handle;
 
 import com.nilo.dms.common.BaseDo;
 
 /**
  * Created by admin on 2017/9/19.
  */
-public class SendNextStationDetailDO extends BaseDo<Long> {
+public class SendThirdDetail extends BaseDo<Long> {
 
     private Long merchantId;
-    private String third_handle_no;
-    private String order_no;
+    private String thirdHandleNo;
+    private String orderNo;
     private Double weight;
     private Double len;
     private Double height;
     private Double width;
     private Integer status;
-    private Integer created_time;
-    private Integer updated_time;
-    private String version;
 
     public Long getMerchantId() {
         return merchantId;
@@ -27,20 +24,20 @@ public class SendNextStationDetailDO extends BaseDo<Long> {
         this.merchantId = merchantId;
     }
 
-    public String getThird_handle_no() {
-        return third_handle_no;
+    public String getThirdHandleNo() {
+        return thirdHandleNo;
     }
 
-    public void setThird_handle_no(String third_handle_no) {
-        this.third_handle_no = third_handle_no;
+    public void setThirdHandleNo(String thirdHandleNo) {
+        this.thirdHandleNo = thirdHandleNo;
     }
 
-    public String getOrder_no() {
-        return order_no;
+    public String getOrderNo() {
+        return orderNo;
     }
 
-    public void setOrder_no(String order_no) {
-        this.order_no = order_no;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     public Double getWeight() {
@@ -83,46 +80,19 @@ public class SendNextStationDetailDO extends BaseDo<Long> {
         this.status = status;
     }
 
-    public Integer getCreated_time() {
-        return created_time;
-    }
 
-    public void setCreated_time(Integer created_time) {
-        this.created_time = created_time;
-    }
-
-    public Integer getUpdated_time() {
-        return updated_time;
-    }
-
-    public void setUpdated_time(Integer updated_time) {
-        this.updated_time = updated_time;
-    }
-
-    @Override
-    public String getVersion() {
-        return version;
-    }
-
-    @Override
-    public void setVersion(String version) {
-        this.version = version;
-    }
 
     @Override
     public String toString() {
-        return "SendNextStationDetailDO{" +
+        return "SendThirdDetail{" +
                 "merchantId=" + merchantId +
-                ", third_handle_no='" + third_handle_no + '\'' +
-                ", order_no='" + order_no + '\'' +
+                ", thirdHandleNo='" + thirdHandleNo + '\'' +
+                ", orderNo='" + orderNo + '\'' +
                 ", weight=" + weight +
                 ", len=" + len +
                 ", height=" + height +
                 ", width=" + width +
                 ", status=" + status +
-                ", created_time=" + created_time +
-                ", updated_time=" + updated_time +
-                ", version='" + version + '\'' +
                 '}';
     }
 }

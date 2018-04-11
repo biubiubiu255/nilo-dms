@@ -4,12 +4,13 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.HandleRiderStatusEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
-import com.nilo.dms.dao.SendNextStationDao;
-import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.dao.HandleThirdDao;
 import com.nilo.dms.dto.common.UserInfo;
+import com.nilo.dms.dto.handle.SendThirdDetail;
+import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.order.SendNextStationService;
+import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,10 @@ import java.util.*;
  * Created by admin on 2017/10/31.
  */
 @Service
-public class SendNextSationServiceImpl implements SendNextStationService {
+public class SendThirdServiceImpl implements SendThirdService {
 
     @Autowired
-    private SendNextStationDao sendNextStationDao;
+    private HandleThirdDao handleThirdDao;
 
     @Autowired
     private WaybillService waybillService;
@@ -44,45 +45,45 @@ public class SendNextSationServiceImpl implements SendNextStationService {
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
         List<Waybill> list  = waybillService.queryByOrderNos(merchantId.toString(), Arrays.asList(smallOrders));
-        List<SendNextStationDetailDO> dataList = new ArrayList<SendNextStationDetailDO>();
+        List<SendThirdDetail> dataList = new ArrayList<SendThirdDetail>();
         for (Waybill e : list){
-            SendNextStationDetailDO sendNextStationDetailDO = new SendNextStationDetailDO();
-            org.springframework.beans.BeanUtils.copyProperties(e, sendNextStationDetailDO);
-            sendNextStationDetailDO.setThird_handle_no(handleNo);
-            sendNextStationDetailDO.setOrder_no(e.getOrderNo());
-            dataList.add(sendNextStationDetailDO);
+            SendThirdDetail sendThirdDetail = new SendThirdDetail();
+            org.springframework.beans.BeanUtils.copyProperties(e, sendThirdDetail);
+            sendThirdDetail.setThirdHandleNo(handleNo);
+            sendThirdDetail.setOrderNo(e.getOrderNo());
+            dataList.add(sendThirdDetail);
             //System.out.println("包裹信息 = " + riderDeliverySmallDO.toString());
         }
-        sendNextStationDao.insertSmalls(dataList);
+        handleThirdDao.insertSmalls(dataList);
     }
 
     //这里是插入一个大包记录，没有别的注意，有什么写入什么
     @Override
-    public void insertBig(SendNextStationDO sendNextStationDO) {
-        if(sendNextStationDO.getStatus()==null){
-            sendNextStationDO.setStatus(HandleRiderStatusEnum.SAVA.getCode());
+    public void insertBig(SendThirdHead sendThirdHead) {
+        if(sendThirdHead.getStatus()==null){
+            sendThirdHead.setStatus(HandleRiderStatusEnum.SAVA.getCode());
         }
-        sendNextStationDao.insertBig(sendNextStationDO);
+        handleThirdDao.insertBig(sendThirdHead);
     }
 
     //大包的status代表0 保存而已、1 分派成功
     //这里是同时写入大包和所有小包
     @Override
     @Transactional
-    public void insertBigAndSmall(Long merchantId, SendNextStationDO sendNextStationDO, String[] smallOrders) {
-        if(sendNextStationDO.getHandleNo()==null || sendNextStationDO.equals("")){
+    public void insertBigAndSmall(Long merchantId, SendThirdHead sendThirdHead, String[] smallOrders) {
+        if(sendThirdHead.getHandleNo()==null || sendThirdHead.equals("")){
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
-        insertBig(sendNextStationDO);
-        insertSmallAll(merchantId, sendNextStationDO.getHandleNo(), smallOrders);
+        insertBig(sendThirdHead);
+        insertSmallAll(merchantId, sendThirdHead.getHandleNo(), smallOrders);
     }
 
     //根据大包号，获取子包list，并且自动渲染driver、操作人名字
     @Override
-    public List<SendNextStationDO> queryBigs(Long merchantId , SendNextStationDO sendNextStationDO, Pagination page) {
-        List<SendNextStationDO> list = sendNextStationDao.queryBig(sendNextStationDO, page.getOffset(), page.getLimit());
+    public List<SendThirdHead> queryBigs(Long merchantId , SendThirdHead sendThirdHead, Pagination page) {
+        List<SendThirdHead> list = handleThirdDao.queryBig(sendThirdHead, page.getOffset(), page.getLimit());
         //page.setTotalCount(commonDao.lastFoundRows());
-        page.setTotalCount(sendNextStationDao.queryBigCount(sendNextStationDO, page.getOffset(), page.getLimit()));
+        page.setTotalCount(handleThirdDao.queryBigCount(sendThirdHead, page.getOffset(), page.getLimit()));
         Set<String> userIds = new HashSet<>();
         for (int i=0;i<list.size();i++){
             userIds.add(list.get(i).getHandleBy().toString());
@@ -95,7 +96,7 @@ public class SendNextSationServiceImpl implements SendNextStationService {
         for (int i=0;i<list.size();i++){
             for (UserInfo e : riderInfoList){
                 if (e.getUserId().equals(list.get(i).getHandleBy().toString())){
-                    SendNextStationDO tempSend = list.get(i);
+                    SendThirdHead tempSend = list.get(i);
                     tempSend.setHandleByName(e.getName());
                     list.set(i, tempSend);
                 }
@@ -108,8 +109,8 @@ public class SendNextSationServiceImpl implements SendNextStationService {
     //查询大包下的子包信息，也就是查询到件后，分派很多小包
     //这里的查询是自定义查询，传入的是大包DO，其实也就是需要大包号即可，即可查询到所有小包
     @Override
-    public List<SendNextStationDetailDO> querySmalls(String merchantId , SendNextStationDetailDO sendNextStationDetailDO, Pagination page) {
-        List<SendNextStationDetailDO> list = sendNextStationDao.querySmall(sendNextStationDetailDO);
+    public List<SendThirdDetail> querySmalls(String merchantId , SendThirdDetail sendThirdDetail, Pagination page) {
+        List<SendThirdDetail> list = handleThirdDao.querySmall(sendThirdDetail);
         return list;
     }
 
@@ -117,13 +118,13 @@ public class SendNextSationServiceImpl implements SendNextStationService {
     @Override
     public List<Waybill> querySmallsPlus(String merchantId, String handleNo, Pagination page) {
         //新建一个以装车单号为查询条件的DO，返回的即时该装车单里所有的小包
-        SendNextStationDetailDO sendNextStationDetailDO = new SendNextStationDetailDO();
-        sendNextStationDetailDO.setThird_handle_no(handleNo);
-        List<SendNextStationDetailDO> list = sendNextStationDao.querySmall(sendNextStationDetailDO);
+        SendThirdDetail sendThirdDetail = new SendThirdDetail();
+        sendThirdDetail.setThirdHandleNo(handleNo);
+        List<SendThirdDetail> list = handleThirdDao.querySmall(sendThirdDetail);
 
         List<String> smallOrders = new ArrayList<String>();
-        for (SendNextStationDetailDO e : list){
-            smallOrders.add(e.getOrder_no());
+        for (SendThirdDetail e : list){
+            smallOrders.add(e.getOrderNo());
         }
         List<Waybill> resList  = waybillService.queryByOrderNos(merchantId, smallOrders);
         return resList;
@@ -132,28 +133,28 @@ public class SendNextSationServiceImpl implements SendNextStationService {
     @Override
     @Transactional
     public void editSmall(Long merchantId, String handleNo, String[] smallOrders) {
-        SendNextStationDO sendNextStationDO = new SendNextStationDO();
-        sendNextStationDO.setHandleNo(handleNo);
+        SendThirdHead sendThirdHead = new SendThirdHead();
+        sendThirdHead.setHandleNo(handleNo);
 
         //查看装车单号是否存在
-        List<SendNextStationDO> tempList = queryBigs(merchantId, sendNextStationDO, new Pagination());
+        List<SendThirdHead> tempList = queryBigs(merchantId, sendThirdHead, new Pagination());
         if (tempList.size()==0){
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
 
-        SendNextStationDetailDO sendNextStationDetailDO = new SendNextStationDetailDO();
-        sendNextStationDetailDO.setThird_handle_no(handleNo);
-        sendNextStationDao.deleteSmallByHandleNo(sendNextStationDetailDO);
+        SendThirdDetail sendThirdDetail = new SendThirdDetail();
+        sendThirdDetail.setThirdHandleNo(handleNo);
+        handleThirdDao.deleteSmallByHandleNo(sendThirdDetail);
 
         insertSmallAll(merchantId, handleNo, smallOrders);
     }
 
     @Override
-    public void editBig(SendNextStationDO sendNextStationDO) {
-        if(sendNextStationDO.getHandleNo()==null){
+    public void editBig(SendThirdHead sendThirdHead) {
+        if(sendThirdHead.getHandleNo()==null){
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
-        sendNextStationDao.editBigBy(sendNextStationDO);
+        handleThirdDao.editBigBy(sendThirdHead);
     }
 
 }

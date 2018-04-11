@@ -1,0 +1,31 @@
+package com.nilo.dms.service.order;
+
+import com.nilo.dms.common.Pagination;
+import com.nilo.dms.dto.handle.SendThirdDetail;
+import com.nilo.dms.dto.handle.SendThirdHead;
+import com.nilo.dms.dto.order.Waybill;
+
+import java.util.List;
+
+/**
+ * Created by admin on 2017/10/31.
+ */
+public interface SendThirdService {
+
+    void insertSmallAll(Long merchantId, String handleNo, String[] smallOrders);
+
+    void insertBig(SendThirdHead sendThirdHead);
+
+    void insertBigAndSmall(Long merchantId, SendThirdHead sendThirdHead, String[] smallOrders);
+
+    List<SendThirdHead> queryBigs(Long merchantId, SendThirdHead sendThirdHead, Pagination page);
+
+    List<SendThirdDetail> querySmalls(String merchantId, SendThirdDetail sendThirdDetail, Pagination page);
+
+    List<Waybill> querySmallsPlus(String merchantId, String handleNo, Pagination page);
+
+    void editBig(SendThirdHead sendThirdHead);
+
+    void editSmall(Long merchantId, String handleNo, String[] smallOrders);
+
+}

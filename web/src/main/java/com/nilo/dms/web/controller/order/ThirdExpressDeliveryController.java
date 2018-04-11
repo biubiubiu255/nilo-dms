@@ -193,8 +193,9 @@ public class ThirdExpressDeliveryController extends BaseController {
         riderDelivery.setMerchantId(Long.valueOf(merchantId));
         riderDelivery.setRider(rider);
         riderDelivery.setStatus(HandleRiderStatusEnum.getEnum(saveStatus).getCode());
-        riderDeliveryService.editSmall(riderDelivery, smallPack);
-        riderDeliveryService.editBig(riderDelivery);
+        //riderDeliveryService.editRiderPackAndDetail();
+        //riderDeliveryService.editSmall(riderDelivery, smallPack);
+        //riderDeliveryService.editBig(riderDelivery);
         return toJsonTrueMsg();
     }
 

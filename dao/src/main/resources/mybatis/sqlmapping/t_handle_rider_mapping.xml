@@ -33,7 +33,7 @@
                 jdbcType="INTEGER"/>
         <result property="rider_handle_no" column="rider_handle_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="orderNo" column="order_no" javaType="java.lang.String"
+        <result property="orderNo" column="orderNo" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
@@ -167,7 +167,7 @@
         INSERT
         INTO
         t_handle_rider_details
-        ( rider_handle_no, order_no, weight, length, height, width, handle_by, status, created_time, updated_time )
+        ( rider_handle_no, orderNo, weight, length, height, width, handle_by, status, created_time, updated_time )
         VALUES
         (#{rider_handle_no},#{orderNo},#{weight},#{length},#{height},#{width},#{handleBy},#{status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()))
     </insert>
@@ -177,7 +177,7 @@
         INSERT
         INTO
         t_handle_rider_details
-        ( rider_handle_no, order_no, weight, length, height, width, handle_by, status, created_time, updated_time )
+        ( rider_handle_no, orderNo, weight, length, height, width, handle_by, status, created_time, updated_time )
         VALUES
         <foreach collection="emps" item="emp" separator=",">
             (#{emp.rider_handle_no},#{emp.orderNo},#{emp.weight},#{emp.length},#{emp.height},#{emp.width},#{emp.handleBy},#{emp.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()))
@@ -209,7 +209,7 @@
 
         on b.rider = c.id
 
-        WHERE a.order_no = #{orderNo}
+        WHERE a.orderNo = #{orderNo}
     </select>
 
 
