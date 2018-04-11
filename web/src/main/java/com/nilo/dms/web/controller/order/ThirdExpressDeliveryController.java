@@ -64,6 +64,7 @@ public class ThirdExpressDeliveryController extends BaseController {
         SendThirdHead head = new SendThirdHead();
         head.setHandleNo(handleNo);
         head.setStatus(status);
+        head.setType("waybill");
         List<SendThirdHead> list = sendThirdService.queryHead(head, page);
         return toPaginationLayUIData(page, list);
     }
@@ -118,7 +119,7 @@ public class ThirdExpressDeliveryController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
-    public String addLoading(String rider,String[] smallPack, String thirdExpressCode, Integer status) {
+    public String addLoading(String rider, String[] smallPack, String thirdExpressCode, Integer status) {
         Principal me = SessionLocal.getPrincipal();
 
         String merchantId = me.getMerchantId();
@@ -130,6 +131,7 @@ public class ThirdExpressDeliveryController extends BaseController {
         head.setHandleBy(Long.valueOf(me.getUserId()));
         head.setDriver(rider);
         head.setStatus(status);
+        head.setType("waybill");
         head.setHandleName(me.getUserName());
         sendThirdService.insertBigAndSmall(Long.parseLong(merchantId), head, smallPack);
         Map<String, Object> map = new HashMap<>();
