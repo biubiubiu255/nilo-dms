@@ -6,7 +6,7 @@ import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.dao.HandleRiderDao;
 import com.nilo.dms.dao.WaybillDao;
-import com.nilo.dms.dao.dataobject.RiderDeliveryDO;
+import com.nilo.dms.dao.dataobject.RiderDelivery;
 import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.common.UserInfo;
@@ -44,28 +44,28 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
 
     //这里是插入一个大包记录，没有别的注意，有什么写入什么
     @Override
-    public void addRiderPack(RiderDeliveryDO riderDeliveryDO) {
-        if(riderDeliveryDO.getStatus()==null){
-            riderDeliveryDO.setStatus(HandleRiderStatusEnum.SAVA.getCode());
+    public void addRiderPack(RiderDelivery riderDelivery) {
+        if(riderDelivery.getStatus()==null){
+            riderDelivery.setStatus(HandleRiderStatusEnum.SAVA.getCode());
         }
-        handleRiderDao.insertBig(riderDeliveryDO);
+        handleRiderDao.insertBig(riderDelivery);
     }
 
     //大包的status代表0 保存而已、1 分派成功
     //这里是同时写入大包和所有小包
     @Override
     @Transactional
-    public void addRiderPackAndDetail(Long merchantId, RiderDeliveryDO riderDeliveryDO, String[] smallOrders) {
-        addRiderPack(riderDeliveryDO);
-        addRiderPackDetail(merchantId, riderDeliveryDO.getHandleNo(), smallOrders);
+    public void addRiderPackAndDetail(Long merchantId, RiderDelivery riderDelivery, String[] smallOrders) {
+        addRiderPack(riderDelivery);
+        addRiderPackDetail(merchantId, riderDelivery.getHandleNo(), smallOrders);
     }
 
     //根据大包号，获取子包list，并且自动渲染driver、操作人名字
     @Override
-    public List<RiderDeliveryDO> queryRiderDelivery(String merchantId , RiderDeliveryDO riderDeliveryDO, Pagination page) {
-        List<RiderDeliveryDO> list = handleRiderDao.queryRiderDeliveryBig(riderDeliveryDO, page.getOffset(), page.getLimit());
+    public List<RiderDelivery> queryRiderDelivery(String merchantId , RiderDelivery riderDelivery, Pagination page) {
+        List<RiderDelivery> list = handleRiderDao.queryRiderDeliveryBig(riderDelivery, page.getOffset(), page.getLimit());
         //page.setTotalCount(commonDao.lastFoundRows());
-        page.setTotalCount(handleRiderDao.queryRiderDeliveryBigCount(riderDeliveryDO, page.getOffset(), page.getLimit()));
+        page.setTotalCount(handleRiderDao.queryRiderDeliveryBigCount(riderDelivery, page.getOffset(), page.getLimit()));
         Set<String> userIds = new HashSet<>();
         for (int i=0;i<list.size();i++){
             userIds.add(list.get(i).getRider());
@@ -79,12 +79,12 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         for (int i=0;i<list.size();i++){
             for (UserInfo e : riderInfoList){
                 if (e.getUserId().equals(list.get(i).getRider())){
-                    RiderDeliveryDO riderTemp = list.get(i);
+                    RiderDelivery riderTemp = list.get(i);
                     riderTemp.setRiderName(e.getName());
                     list.set(i, riderTemp);
                 }
                 if (e.getUserId().equals(list.get(i).getHandleBy().toString())){
-                    RiderDeliveryDO riderTemp = list.get(i);
+                    RiderDelivery riderTemp = list.get(i);
                     riderTemp.setHandleByName(e.getName());
                     list.set(i, riderTemp);
                 }
@@ -104,10 +104,10 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
     //查询大包下的子包信息，也就是查询到件后，分派很多小包
     //这里的查询是自定义查询，传入的是大包DO，其实也就是需要大包号即可，即可查询到所有小包，这里的小包信息更全，也就是总表的信息
     @Override
-    public List<WaybillDO> queryRiderDeliveryDetailPlus(String merchantId , RiderDeliveryDO riderDeliveryDO, Pagination page) {
+    public List<WaybillDO> queryRiderDeliveryDetailPlus(String merchantId , RiderDelivery riderDelivery, Pagination page) {
         RiderDeliverySmallDO  riderDeliverySmallDO = new RiderDeliverySmallDO();
-        riderDeliveryDO.setHandleNo(riderDeliveryDO.getHandleNo());
-        riderDeliverySmallDO.setRider_handle_no(riderDeliveryDO.getHandleNo());
+        riderDelivery.setHandleNo(riderDelivery.getHandleNo());
+        riderDeliverySmallDO.setRider_handle_no(riderDelivery.getHandleNo());
         List<RiderDeliverySmallDO> list = handleRiderDao.queryDeliverySmall(riderDeliverySmallDO);
         List<String> smallOrders = new ArrayList<String>();
         for (RiderDeliverySmallDO e : list){
@@ -119,29 +119,26 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
 
     @Override
     @Transactional
-    public void editSmall(RiderDeliveryDO riderDeliveryDO, String[] smallOrders) {
+    public void editRiderPackAndDetail(RiderDelivery riderDelivery, String[] smallOrders) {
 
         RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
         //以小包DO的order，调用deliveryOrderDao接口查询多条该订单的信息
         //然后把查询到的list中每条信息，比如weight等合并到小包list的每条信息中，这里用的是bean合并，因为常用字段都一样
         //这里因为查询是自定义，也就是以有参数，就有什么查询条件查询，所有统为list，这里只需要查一个大包，也只有一条结果，但还是得取get(0)
-        List<RiderDeliveryDO> tempList = handleRiderDao.queryRiderDeliveryBig(riderDeliveryDO, 0, 1);
+        List<RiderDelivery> tempList = handleRiderDao.queryRiderDeliveryBig(riderDelivery, 0, 1);
         if (tempList.size()==0){
             throw new DMSException(BizErrorCode.LOADING_EMPTY);
         }
-        riderDeliveryDO = tempList.get(0);
+        riderDelivery = tempList.get(0);
 
-        riderDeliverySmallDO.setRider_handle_no(riderDeliveryDO.getHandleNo());
+        riderDeliverySmallDO.setRider_handle_no(riderDelivery.getHandleNo());
         handleRiderDao.deleteSmallByHandleNo(riderDeliverySmallDO);
-        insertSmalls(riderDeliveryDO.getMerchantId(), riderDeliveryDO.getHandleNo(), smallOrders);
-    }
+        insertSmalls(riderDelivery.getMerchantId(), riderDelivery.getHandleNo(), smallOrders);
 
-    @Override
-    public void editBig(RiderDeliveryDO riderDeliveryDO) {
-        if(riderDeliveryDO.getHandleNo()==null){
+        if(riderDelivery.getHandleNo()==null){
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
-        handleRiderDao.upBigBy(riderDeliveryDO);
+        handleRiderDao.upBigBy(riderDelivery);
     }
 
     @Override

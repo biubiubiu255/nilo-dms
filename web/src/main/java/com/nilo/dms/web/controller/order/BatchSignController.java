@@ -3,6 +3,7 @@ package com.nilo.dms.web.controller.order;
 import com.nilo.dms.common.utils.FileUtil;
 import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.common.utils.ReadExcel;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dto.util.CellData;
 import com.nilo.dms.dto.util.ExcelData;
 import com.nilo.dms.service.order.WaybillOptService;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,44 +39,44 @@ public class BatchSignController extends BaseController {
     private String savePath;
 
     @RequestMapping(value = "/page.html", method = RequestMethod.GET)
-    public String receivePage(Model model, String orderNo, String taskId, String referenceNo) {
-        model.addAttribute("orderNo", orderNo);
-        model.addAttribute("taskId", taskId);
-        model.addAttribute("referenceNo", referenceNo);
-        return "task/dispatch/receive";
+    public String receivePage(Model model) {
+        return "waybill/batch_sign/page";
     }
 
     @RequestMapping(value = "/importSignData.html", method = RequestMethod.POST)
     @ResponseBody
     public String importSignData(Model model, @RequestParam("file") CommonsMultipartFile file) {
-        List<Map<String, String>> resultList = new ArrayList<>();
+        //保存上传的excel
+        ExcelData excelData = null;
         try {
-            //保存上传的excel
             String fileSaveName = IdWorker.getInstance().nextId() + ".xlsx";
             FileUtil.saveFile(file.getInputStream(), savePath, fileSaveName);
-
             //解析excel
             String fileName = file.getOriginalFilename();
-            ExcelData excelData = ReadExcel.readTable(file.getInputStream(), fileName);
-            List<String> list = new ArrayList<>();
-            for (Map.Entry<String, List<CellData>> entry : excelData.getData().entrySet()) {
-                for (CellData cell1 : entry.getValue()) {
+            excelData = ReadExcel.readTable(file.getInputStream(), fileName);
+        } catch (Exception e) {
+            throw new RuntimeException("Excel Parse Failed.");
+        }
+        List<String> list = new ArrayList<>();
+        for (Map.Entry<String, List<CellData>> entry : excelData.getData().entrySet()) {
+            for (CellData cell1 : entry.getValue()) {
+                if (StringUtil.isNotBlank(cell1.getValue())) {
                     list.add(cell1.getValue());
                 }
             }
-            //批量签收
-            for (String orderNo : list) {
-                try {
-                    waybillOptService.sign(orderNo, "Batch Sign");
-                } catch (Exception e) {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("message", orderNo + ":" + e.getMessage());
-                    resultList.add(map);
-                }
+        }
+
+        if (list.size() == 0) throw new IllegalArgumentException("Excel Data Error.");
+        List<String> resultList = new ArrayList<>();
+        //批量签收
+        for (String orderNo : list) {
+            try {
+                waybillOptService.sign(orderNo, "Batch Sign");
+                resultList.add(orderNo + ": success");
+            } catch (Exception e) {
+                resultList.add("<font color='red'>" + orderNo + "</font>:" + e.getMessage());
             }
-        } catch (Exception e) {
-            log.error("importSignData failed.", e);
-            return toJsonErrorMsg(e.getMessage());
+
         }
         return toJsonTrueData(resultList);
     }

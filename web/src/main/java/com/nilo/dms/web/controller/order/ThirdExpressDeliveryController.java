@@ -34,22 +34,20 @@ import java.util.Map;
  * Created by ronny on 2017/9/15.
  */
 @Controller
-@RequestMapping("/waybill/rider_delivery")
-public class RiderDeliveryController extends BaseController {
+@RequestMapping("/waybill/third_express_delivery")
+public class ThirdExpressDeliveryController extends BaseController {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     private RiderDeliveryService riderDeliveryService;
-
     @Autowired
     private WaybillDao waybillDao;
-
     @Autowired
     private HandleRiderDao handleRiderDao;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model, HttpServletRequest request) {
-        return "waybill/rider_delivery/list";
+        return "waybill/third_express_delivery/list";
     }
 
     @ResponseBody
@@ -88,6 +86,8 @@ public class RiderDeliveryController extends BaseController {
     public String print(Model model, String loadingNo) {
 
         Principal me = SessionLocal.getPrincipal();
+
+
         Pagination page = getPage();
         //大包
         RiderDelivery riderDelivery = new RiderDelivery();
@@ -108,8 +108,10 @@ public class RiderDeliveryController extends BaseController {
     //返回页面
     @RequestMapping(value = "/addLoadingPage.html", method = RequestMethod.GET)
     public String addLoadingPage(Model model) {
+
         List<StaffDO> staffList = getRiderList();
         model.addAttribute("riderList", staffList);
+
         return "waybill/rider_delivery/loading_scan";
     }
 
@@ -162,9 +164,11 @@ public class RiderDeliveryController extends BaseController {
 
         Principal me = SessionLocal.getPrincipal();
         String merchantId = me.getMerchantId();
+        //System.out.println("本次测试 = " + smallPack.length);
         Pagination page = getPage();
         List<WaybillDO> list = riderDeliveryService.queryRiderDeliveryDetailPlus(me.getMerchantId(), riderDelivery, page);
         String res = toJsonTrueData(list);
+
 
         List<RiderDelivery> templist = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDelivery, page);
         riderDelivery = templist.get(0);
@@ -189,7 +193,8 @@ public class RiderDeliveryController extends BaseController {
         riderDelivery.setMerchantId(Long.valueOf(merchantId));
         riderDelivery.setRider(rider);
         riderDelivery.setStatus(HandleRiderStatusEnum.getEnum(saveStatus).getCode());
-        riderDeliveryService.editRiderPackAndDetail(riderDelivery, smallPack);
+        riderDeliveryService.editSmall(riderDelivery, smallPack);
+        riderDeliveryService.editBig(riderDelivery);
         return toJsonTrueMsg();
     }
 

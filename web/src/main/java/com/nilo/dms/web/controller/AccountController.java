@@ -8,18 +8,16 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.common.utils.WebUtil;
 import com.nilo.dms.dao.UserNetworkDao;
 import com.nilo.dms.dao.dataobject.UserNetworkDO;
-import com.nilo.dms.service.RoleService;
-import com.nilo.dms.service.UserService;
 import com.nilo.dms.dto.common.Role;
 import com.nilo.dms.dto.common.User;
-import com.nilo.dms.service.org.CompanyService;
-import com.nilo.dms.service.org.StaffService;
 import com.nilo.dms.dto.org.Company;
 import com.nilo.dms.dto.org.Staff;
+import com.nilo.dms.service.RoleService;
+import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.org.CompanyService;
+import com.nilo.dms.service.org.StaffService;
 import io.leopard.web.captcha.CaptchaUtil;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.shiro.authc.LockedAccountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,9 +79,8 @@ public class AccountController extends BaseController {
             // check user.status
             switch (user.getLoginInfo().getStatus()) {
                 case DISABLED:
-                    throw new DisabledAccountException();
                 case FROZEN:
-                    throw new LockedAccountException();
+                    throw new RuntimeException("Account status not allowed");
             }
             List<String> urlAuthorities = roleService.findUrlPermissionsByUserId(user.getUserId());
             List<String> authorities = roleService.findPermissionsByUserId(user.getUserId());
@@ -131,7 +128,7 @@ public class AccountController extends BaseController {
     @RequestMapping(value = "/logout.html", method = RequestMethod.GET)
     public String logout(HttpSession session) {
         // 登出操作
-        WebUtil.setHttpSessionValue("session_user", null);
+        session.invalidate();
         return "redirect:/";
     }
 

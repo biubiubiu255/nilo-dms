@@ -38,10 +38,7 @@ public class CancellationController extends BaseController {
 
     @RequestMapping("/listPage.html")
     public String list(Model model) {
-        Principal me = SessionLocal.getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        model.addAttribute("riderList", getRiderList(merchantId));
+        model.addAttribute("riderList", getRiderList());
         return "delivery_order/cancellation/list";
     }
 

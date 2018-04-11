@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
-
 <html>
 <%@ include file="../common/header.jsp" %>
 <%
     request.setAttribute("id0", RandomStringUtils.randomAlphabetic(8));
-    request.setAttribute("orderTypeList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "delivery_order_type"));
 %>
 <body>
 <div class="box-body">
@@ -15,7 +13,6 @@
             <shiro:hasPermission name="400041">
                 <button class="layui-btn layui-btn-normal batch">Batch</button>
             </shiro:hasPermission>
-
             <shiro:hasPermission name="400046">
                 <button class="layui-btn layui-btn-normal print">Print</button>
             </shiro:hasPermission>

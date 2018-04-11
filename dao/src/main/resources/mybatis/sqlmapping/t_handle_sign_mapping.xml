@@ -34,7 +34,7 @@
     </sql>
 
     <!-- 插入语句 -->
-    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.LogConfigDO" statementType="PREPARED"
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.HandleSignDO" statementType="PREPARED"
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_handle_sign

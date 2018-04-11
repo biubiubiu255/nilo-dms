@@ -93,8 +93,8 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
         signDO.setMerchantId(Long.parseLong(principal.getMerchantId()));
         signDO.setOrderNo(orderNo);
         signDO.setRemark(remark);
-        signDO.setHandledBy(principal.getUserId());
-        signDO.setHandledTime(DateUtil.getSysTimeStamp());
+        signDO.setHandleBy(principal.getUserId());
+        signDO.setHandleTime(DateUtil.getSysTimeStamp());
         signDO.setNetworkCode(principal.getFirstNetwork());
         signDO.setSigner("Self");
         handleSignDao.insert(signDO);

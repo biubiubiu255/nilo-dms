@@ -25,7 +25,7 @@ public class PickupReportController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        model.addAttribute("list", getRiderList(merchantId));
+        model.addAttribute("list", getRiderList());
         return "report/pick_up";
     }
 

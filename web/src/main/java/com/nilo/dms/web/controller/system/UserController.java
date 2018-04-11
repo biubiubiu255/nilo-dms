@@ -1,6 +1,7 @@
 package com.nilo.dms.web.controller.system;
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.RoleStatusEnum;
 import com.nilo.dms.common.enums.UserStatusEnum;
 import com.nilo.dms.common.enums.UserTypeEnum;
@@ -8,9 +9,7 @@ import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.exception.SysErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
-import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.UserNetworkDao;
-import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.dto.common.LoginInfo;
 import com.nilo.dms.dto.common.Role;
 import com.nilo.dms.dto.common.User;
@@ -20,25 +19,18 @@ import com.nilo.dms.service.RoleService;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.system.DistributionNetworkService;
-import com.nilo.dms.common.Principal;
 import com.nilo.dms.web.controller.BaseController;
-
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Iterator;
 import java.util.List;
-
-import static org.apache.shiro.web.filter.mgt.DefaultFilter.user;
 
 @Controller
 @RequestMapping("/admin/user")
@@ -53,8 +45,8 @@ public class UserController extends BaseController {
 
     @Autowired
     private DistributionNetworkService distributionNetworkService;
-    
-    
+
+
     @RequestMapping(value = "/list.html", method = RequestMethod.GET)
     public String list(Model model) {
         return "user/list";
@@ -73,15 +65,14 @@ public class UserController extends BaseController {
         return toPaginationLayUIData(page, list);
     }
 
-    
-    
+
     //修改密码
     @RequestMapping("/passwordView.html")
     public String passwordView(Model model) {
         return "user/passwordView";
     }
-    
-    
+
+
     //添加字段页面
     @RequestMapping(value = "/addPage.html", method = RequestMethod.GET)
     public String addPage(Model model) {
@@ -89,7 +80,7 @@ public class UserController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<Role> roleList = roleService.findBy(merchantId,"",RoleStatusEnum.NORMAL);
+        List<Role> roleList = roleService.findBy(merchantId, "", RoleStatusEnum.NORMAL);
 
 
         Pagination page = new Pagination(0, 100);
@@ -146,10 +137,10 @@ public class UserController extends BaseController {
         model.addAttribute("userRoles", roleService.findRolesByUserId(userId));
         model.addAttribute("userNetworks", userNetworkDao.queryByUserId(Long.parseLong(userId)));
         Pagination page = new Pagination(0, 100);
-        List<DistributionNetwork> distributionList = distributionNetworkService.queryBy(user.getMerchantId(),null, page);
+        List<DistributionNetwork> distributionList = distributionNetworkService.queryBy(user.getMerchantId(), null, page);
         model.addAttribute("distributionList", distributionList);
 
-        List<Role> roleList = roleService.findBy(merchantId,"",RoleStatusEnum.NORMAL);
+        List<Role> roleList = roleService.findBy(merchantId, "", RoleStatusEnum.NORMAL);
         //去掉不可用的角色
         Iterator<Role> it = roleList.iterator();
         while (it.hasNext()) {
@@ -191,11 +182,10 @@ public class UserController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/changePassword.html", method = RequestMethod.POST)
-    public String changePassword(String oldPassword, String newPassword,String newPassword2) {
+    public String changePassword(String oldPassword, String newPassword, String newPassword2) {
         try {
-            AssertUtil.isNotNull(user, SysErrorCode.REQUEST_IS_NULL);
             AssertUtil.isNotBlank(oldPassword, SysErrorCode.REQUEST_IS_NULL);
-            AssertUtil.isEquals(newPassword, newPassword2,BizErrorCode.NEW_PASSWORD_NOT_EQUAL);
+            AssertUtil.isEquals(newPassword, newPassword2, BizErrorCode.NEW_PASSWORD_NOT_EQUAL);
 
             Principal me = SessionLocal.getPrincipal();
             String userId = me.getUserId();

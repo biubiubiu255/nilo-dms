@@ -8,10 +8,12 @@ package com.nilo.dms.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.EnumMessage;
 import com.nilo.dms.common.utils.WebUtil;
 import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.dataobject.StaffDO;
+import com.nilo.dms.service.impl.SessionLocal;
 import nl.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -139,8 +141,9 @@ public class BaseController {
         return new Pagination(offset, limit);
     }
 
-    protected List<StaffDO> getRiderList(String companyId) {
-        List<StaffDO> riderList = staffDao.queryAllRider(Long.parseLong(companyId));
+    protected List<StaffDO> getRiderList() {
+        Principal principal = SessionLocal.getPrincipal();
+        List<StaffDO> riderList = staffDao.queryAllRider(Long.parseLong(principal.getCompanyId()));
         return riderList;
     }
 
