@@ -1,12 +1,17 @@
 package com.nilo.dms.service.order.impl;
 
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.*;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.dao.DeliveryOrderDelayDao;
+import com.nilo.dms.dao.HandleSignDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
+import com.nilo.dms.dao.dataobject.HandleSignDO;
+import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.order.*;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,17 +27,17 @@ import java.util.List;
  */
 @Service
 public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOptService {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final Integer MAX_DELAY_TIMES = 2;
-
     @Autowired
     WaybillService waybillService;
     @Autowired
     private AbnormalOrderService abnormalOrderService;
-
     @Autowired
     private DeliveryOrderDelayDao deliveryOrderDelayDao;
+    @Autowired
+    private HandleSignDao handleSignDao;
+
 
     @Override
     @Transactional
@@ -82,6 +87,17 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
         waybillService.handleOpt(optRequest);
 
         //写入 t_handler_sign
+        Principal principal = SessionLocal.getPrincipal();
+
+        HandleSignDO signDO = new HandleSignDO();
+        signDO.setMerchantId(Long.parseLong(principal.getMerchantId()));
+        signDO.setOrderNo(orderNo);
+        signDO.setRemark(remark);
+        signDO.setHandledBy(principal.getUserId());
+        signDO.setHandledTime(DateUtil.getSysTimeStamp());
+        signDO.setNetworkCode(principal.getFirstNetwork());
+        signDO.setSigner("Self");
+        handleSignDao.insert(signDO);
     }
 
     @Override

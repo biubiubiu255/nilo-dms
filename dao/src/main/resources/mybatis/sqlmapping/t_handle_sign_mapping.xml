@@ -38,16 +38,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_handle_sign
-        ( operation,url)
+        ( merchant_id,order_no,signer,network_code,handle_by,handle_time,remark,created_time,updated_time,version)
         VALUES
-        (#{operation},#{url})
+        (#{merchantId},#{orderNo},#{signer},#{networkCode},#{handleBy},#{handleTime},#{remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
-
-    <!-- 查询所有用户信息 -->
-    <select id="queryAll" resultMap="logConfigDO" statementType="PREPARED">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_sys_config_log
-    </select>
 
 </mapper>
