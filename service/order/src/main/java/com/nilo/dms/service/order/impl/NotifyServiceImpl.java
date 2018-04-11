@@ -4,33 +4,27 @@ import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.enums.MethodEnum;
-import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
-import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.DeliveryOrderOptDao;
-import com.nilo.dms.dao.NotifyDao;
+import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
-import com.nilo.dms.dao.dataobject.WaybillDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderOptDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.order.DeliveryOrderOpt;
-import com.nilo.dms.service.UserService;
-import com.nilo.dms.dto.common.UserInfo;
-import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.mq.producer.AbstractMQProducer;
-import com.nilo.dms.service.order.NotifyService;
-import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.dto.order.NotifyRequest;
 import com.nilo.dms.dto.order.OrderOptRequest;
-import com.nilo.dms.dto.order.Task;
-import com.nilo.dms.service.system.RedisUtil;
-import com.nilo.dms.service.system.SystemCodeUtil;
-import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.dto.system.InterfaceConfig;
 import com.nilo.dms.dto.system.MerchantConfig;
 import com.nilo.dms.dto.system.OrderHandleConfig;
+import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.mq.producer.AbstractMQProducer;
+import com.nilo.dms.service.order.NotifyService;
+import com.nilo.dms.service.system.RedisUtil;
+import com.nilo.dms.service.system.SystemCodeUtil;
+import com.nilo.dms.service.system.SystemConfig;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,16 +46,12 @@ public class NotifyServiceImpl implements NotifyService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private NotifyDao notifyDao;
-    @Autowired
     @Qualifier("notifyDataBusProducer")
     private AbstractMQProducer notifyDataBusProducer;
     @Autowired
     private WaybillDao waybillDao;
     @Autowired
     private UserService userService;
-    @Autowired
-    private TaskService taskService;
     @Autowired
     private AbnormalOrderDao abnormalOrderDao;
     @Autowired
@@ -108,8 +98,6 @@ public class NotifyServiceImpl implements NotifyService {
                         break;
                     }
                     case DELIVERY: {
-                        Task task = taskService.queryTaskByTypeAndOrderNo(merchantId, TaskTypeEnum.DELIVERY.getCode(), orderNo);
-                        UserInfo userInfo = userService.findUserInfoByUserId(merchantId, task.getHandledBy());
 
                         DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, "" + network), DistributionNetworkDO.class);
                         dataMap.put("location", networkDO == null ? "" : networkDO.getName());
@@ -118,7 +106,6 @@ public class NotifyServiceImpl implements NotifyService {
                         break;
                     }
                     case SEND: {
-                        Task task = taskService.queryTaskByTypeAndOrderNo(merchantId, TaskTypeEnum.DELIVERY.getCode(), orderNo);
                         break;
                     }
                     case PROBLEM: {

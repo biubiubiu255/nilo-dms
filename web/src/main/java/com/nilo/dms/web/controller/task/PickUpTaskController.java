@@ -8,8 +8,8 @@ import com.nilo.dms.dao.UserInfoDao;
 import com.nilo.dms.dto.order.Task;
 import com.nilo.dms.dto.order.TaskParameter;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.RiderOptService;
 import com.nilo.dms.service.order.TaskService;
+import com.nilo.dms.service.order.WaybillOptService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.web.controller.BaseController;
@@ -46,7 +46,7 @@ public class PickUpTaskController extends BaseController {
     private WaybillService waybillService;
 
     @Autowired
-    private RiderOptService riderOptService;
+    private WaybillOptService waybillOptService;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model) {
@@ -81,7 +81,7 @@ public class PickUpTaskController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
-            riderOptService.pickup(merchantId, orderNo, me.getUserId(), taskId);
+            waybillOptService.pickup(merchantId, orderNo, me.getUserId(), taskId);
 
         } catch (Exception e) {
             log.error("pickup failed. orderNo:{}", orderNo, e);
@@ -105,7 +105,7 @@ public class PickUpTaskController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
-            riderOptService.pickupFailed(merchantId, orderNo, notes, me.getUserId(), taskId);
+            waybillOptService.pickupFailed(merchantId, orderNo, notes, me.getUserId(), taskId);
         } catch (Exception e) {
             log.error("pickup failed. orderNo:{}", orderNo, e);
             return toJsonErrorMsg(e.getMessage());
@@ -120,7 +120,7 @@ public class PickUpTaskController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
-            riderOptService.goToPickup(merchantId, orderNo, me.getUserId(), taskId);
+            waybillOptService.goToPickup(merchantId, orderNo, me.getUserId(), taskId);
         } catch (Exception e) {
             log.error("pickup failed. orderNo:{}", orderNo, e);
             return toJsonErrorMsg(e.getMessage());

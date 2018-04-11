@@ -9,11 +9,11 @@ import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderDelayDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
+import com.nilo.dms.dto.order.AbnormalOrder;
 import com.nilo.dms.dto.order.DelayParam;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.AbnormalOrderService;
-import com.nilo.dms.service.order.RiderOptService;
-import com.nilo.dms.dto.order.AbnormalOrder;
+import com.nilo.dms.service.order.WaybillOptService;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ import java.util.List;
 @RequestMapping("/order/delay")
 public class DelayOrderController extends BaseController {
     @Autowired
-    private RiderOptService riderOptService;
+    private WaybillOptService waybillOptService;
     @Autowired
     private AbnormalOrderService abnormalOrderService;
     @Autowired
@@ -128,7 +128,7 @@ public class DelayOrderController extends BaseController {
         try {
             param.setOptBy(me.getUserId());
             param.setMerchantId(merchantId);
-            riderOptService.resend(param);
+            waybillOptService.resend(param);
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());
         }
@@ -146,7 +146,7 @@ public class DelayOrderController extends BaseController {
         try {
             param.setOptBy(me.getUserId());
             param.setMerchantId(merchantId);
-            riderOptService.delay(param);
+            waybillOptService.delay(param);
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());
         }

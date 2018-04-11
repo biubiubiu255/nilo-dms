@@ -2,12 +2,13 @@ package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.PaidTypeEnum;
-import com.nilo.dms.dto.order.SignForOrderParam;
+import com.nilo.dms.common.exception.BizErrorCode;
+import com.nilo.dms.common.utils.AssertUtil;
+import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.service.FileService;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.RiderOptService;
+import com.nilo.dms.service.order.WaybillOptService;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ import java.util.Map;
 @RequestMapping("/mobile/rider/sign")
 public class SignScanController extends BaseController {
     @Autowired
-    private RiderOptService riderOptService;
+    private WaybillOptService waybillOptService;
 
     @Autowired
     private WaybillService waybillService;
@@ -100,31 +101,16 @@ public class SignScanController extends BaseController {
     @RequestMapping(value = "/save.html")
     @ResponseBody
     public String save(MultipartFile file, String logisticsNo, String signer, String remark) {
-        SignForOrderParam param = new SignForOrderParam();
-        param.setOrderNo(logisticsNo);
-        param.setSignBy(signer);
-        param.setRemark(remark);
+
         Principal me = SessionLocal.getPrincipal();
-        // 写入图片
+        AssertUtil.isNotNull(file, BizErrorCode.SIGN_PHOTO_EMPTY);
         try {
-            if (file != null) {
-                fileService.uploadSignImage(me.getMerchantId(), me.getUserId(), logisticsNo, file.getBytes());
-                // imageDO.setImageType(ImageTypeEnum.getEnum().getCode());
-            }
+            fileService.uploadSignImage(me.getMerchantId(), me.getUserId(), logisticsNo, file.getBytes());
         } catch (Exception e) {
-            return toJsonErrorMsg(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
-        // 写入数据
-        try {
-            param.setMerchantId(me.getMerchantId());
-            param.setOptBy(me.getUserId());
-            param.setOrderNo(logisticsNo);
-            param.setRemark(remark);
-            param.setSignBy(signer);
-            riderOptService.signForOrder(param);
-        } catch (Exception e) {
-            return toJsonErrorMsg(e.getMessage());
-        }
+        // 签收
+        waybillOptService.sign(logisticsNo, remark);
         return toJsonTrueMsg();
     }
 

@@ -1,7 +1,9 @@
 package com.nilo.dms.service.order.impl;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.common.enums.*;
+import com.nilo.dms.common.enums.LoadingStatusEnum;
+import com.nilo.dms.common.enums.OptTypeEnum;
+import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.AssertUtil;
@@ -13,11 +15,13 @@ import com.nilo.dms.dao.LoadingDetailsDao;
 import com.nilo.dms.dao.dataobject.LoadingDO;
 import com.nilo.dms.dao.dataobject.LoadingDetailsDO;
 import com.nilo.dms.dto.common.UserInfo;
-import com.nilo.dms.dto.order.*;
+import com.nilo.dms.dto.order.Loading;
+import com.nilo.dms.dto.order.LoadingDetails;
+import com.nilo.dms.dto.order.OrderOptRequest;
+import com.nilo.dms.dto.order.ShipParameter;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.order.TaskService;
 import com.nilo.dms.service.system.SystemConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +29,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by admin on 2017/10/31.
@@ -34,17 +41,12 @@ import java.util.*;
 public class LoadingServiceImpl implements LoadingService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
     @Autowired
     private CommonDao commonDao;
-
     @Autowired
     private LoadingDao loadingDao;
-
     @Autowired
     private LoadingDetailsDao loadingDetailsDao;
-    @Autowired
-    private TaskService taskService;
     @Autowired
     private WaybillService waybillService;
     @Autowired
@@ -241,21 +243,6 @@ public class LoadingServiceImpl implements LoadingService {
         List<String> orderNoList = new ArrayList<>();
 
         for (LoadingDetailsDO details : detailsDO) {
-
-            //添加发运任务
-            Task task = new Task();
-            task.setMerchantId("" + merchantId);
-            task.setStatus(TaskStatusEnum.CREATE);
-            task.setCreatedBy(parameter.getOptBy());
-            task.setOrderNo(details.getOrderNo());
-            task.setHandledBy(loadingDO.getRider());
-            if (StringUtil.isNotEmpty(loadingDO.getNextStation())) {
-                task.setTaskType(TaskTypeEnum.SEND);
-            } else {
-                task.setTaskType(TaskTypeEnum.DELIVERY);
-            }
-            taskService.addTask(task);
-
             orderNoList.add(details.getOrderNo());
         }
 

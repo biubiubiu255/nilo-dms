@@ -38,8 +38,13 @@ public class FileServiceImpl implements FileService {
     private ImageDao imageDao;
 
     @Override
-    public void uploadSignImage(String merchantId, String uploadBy, String orderNo, byte[] b) throws Exception {
-        String imageName = uploadS3(b, "dms/sign");
+    public void uploadSignImage(String merchantId, String uploadBy, String orderNo, byte[] b) {
+        String imageName = "";
+        try {
+            imageName = uploadS3(b, "dms/sign");
+        } catch (Exception e) {
+            throw new RuntimeException("upload S3 failed." + e.getMessage());
+        }
         ImageDO imageDO = new ImageDO();
         imageDO.setMerchantId(Long.parseLong(merchantId));
         imageDO.setOrderNo(orderNo);

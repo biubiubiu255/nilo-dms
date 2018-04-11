@@ -4,10 +4,12 @@ import com.nilo.dms.dto.order.AbnormalParam;
 import com.nilo.dms.dto.order.DelayParam;
 import com.nilo.dms.dto.order.SignForOrderParam;
 
+import java.util.List;
+
 /**
  * Created by admin on 2017/10/30.
  */
-public interface RiderOptService {
+public interface WaybillOptService {
 
     void goToPickup(String merchantId, String orderNo, String optBy, String taskId);
 
@@ -15,7 +17,7 @@ public interface RiderOptService {
 
     void pickupFailed(String merchantId, String orderNo, String reason, String optBy, String taskId);
 
-    void signForOrder(SignForOrderParam param);
+    void sign(String orderNo, String remark);
 
     void refuse(AbnormalParam param);
 

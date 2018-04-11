@@ -3,7 +3,7 @@ package com.nilo.dms.web.controller.mobile;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dto.order.DelayParam;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.RiderOptService;
+import com.nilo.dms.service.order.WaybillOptService;
 import com.nilo.dms.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class StrandedParcelController extends BaseController {
 
     	@Autowired
-    	private RiderOptService riderOptService;
+    	private WaybillOptService waybillOptService;
     	
         @RequestMapping(value = "/scan.html")
         public String customers() {
@@ -34,7 +34,7 @@ public class StrandedParcelController extends BaseController {
             try {
                 param.setOptBy(me.getUserId());
                 param.setMerchantId(merchantId);
-                riderOptService.delay(param);
+                waybillOptService.delay(param);
             } catch (Exception e) {
                 return toJsonErrorMsg(e.getMessage());
             }

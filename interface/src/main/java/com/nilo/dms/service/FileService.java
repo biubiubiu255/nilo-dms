@@ -8,7 +8,7 @@ import java.util.List;
  */
 public interface FileService {
 
-    void uploadSignImage(String merchantId,String uploadBy ,String orderNo, byte[] b) throws Exception;
+    void uploadSignImage(String merchantId,String uploadBy ,String orderNo, byte[] b);
 
     void uploadProblemImage(String merchantId,String uploadBy ,String orderNo, byte[] b) throws Exception;
 

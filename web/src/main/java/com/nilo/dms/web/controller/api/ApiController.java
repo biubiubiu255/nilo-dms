@@ -10,7 +10,7 @@ import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.dto.order.*;
 import com.nilo.dms.service.order.PaymentService;
-import com.nilo.dms.service.order.RiderOptService;
+import com.nilo.dms.service.order.WaybillOptService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.api.model.RequestParam;
@@ -42,7 +42,7 @@ public class ApiController extends BaseController {
     private PaymentService paymentService;
 
     @Autowired
-    private RiderOptService riderOptService;
+    private WaybillOptService waybillOptService;
     @Value("#{configProperties['signKey']}")
     private String signKey;
 
@@ -108,9 +108,10 @@ public class ApiController extends BaseController {
                 break;
             }
             case SIGN: {
-                SignForOrderParam signForOrderParam = JSON.parseObject(data, SignForOrderParam.class);
-                signForOrderParam.setMerchantId(merchantId);
-                riderOptService.signForOrder(signForOrderParam);
+                JSONObject jsonObject = JSON.parseObject(data);
+                String orderNo = jsonObject.getString("waybill_number");
+                String remark = jsonObject.getString("remark");
+                waybillOptService.sign(orderNo, remark);
                 break;
             }
             default:

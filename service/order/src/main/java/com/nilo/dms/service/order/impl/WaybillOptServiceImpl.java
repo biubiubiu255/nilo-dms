@@ -21,13 +21,11 @@ import java.util.List;
  * Created by admin on 2017/10/30.
  */
 @Service
-public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptService {
+public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOptService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final Integer MAX_DELAY_TIMES = 2;
 
-    @Autowired
-    TaskService taskService;
     @Autowired
     WaybillService waybillService;
     @Autowired
@@ -39,39 +37,23 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
     @Override
     @Transactional
     public void goToPickup(String merchantId, String orderNo, String optBy, String taskId) {
-
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOptType(OptTypeEnum.GO_TO_PICK_UP);
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(orderNo);
         optRequest.setOrderNo(orderNoList);
         waybillService.handleOpt(optRequest);
-
-        Task task = new Task();
-        task.setTaskId(taskId);
-        task.setStatus(TaskStatusEnum.PROCESS);
-        task.setHandledTime(DateUtil.getSysTimeStamp());
-        taskService.updateTask(task);
-
-
     }
 
     @Override
     @Transactional
     public void pickup(String merchantId, String orderNo, String optBy, String taskId) {
-
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOptType(OptTypeEnum.PICK_UP);
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(orderNo);
         optRequest.setOrderNo(orderNoList);
         waybillService.handleOpt(optRequest);
-
-        Task task = new Task();
-        task.setTaskId(taskId);
-        task.setStatus(TaskStatusEnum.COMPLETE);
-        task.setHandledTime(DateUtil.getSysTimeStamp());
-        taskService.updateTask(task);
     }
 
     @Override
@@ -86,56 +68,25 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         optRequest.setOrderNo(orderNoList);
         waybillService.handleOpt(optRequest);
 
-        Task task = new Task();
-        task.setTaskId(taskId);
-        task.setStatus(TaskStatusEnum.COMPLETE);
-        task.setHandledTime(DateUtil.getSysTimeStamp());
-
-        taskService.updateTask(task);
-
     }
 
     @Override
-    @Transactional
-    public void signForOrder(SignForOrderParam param) {
-
-        //根据订单号查询任务
-        Task t = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(), TaskTypeEnum.DELIVERY.getCode(), param.getOrderNo());
-        /*if (t == null || t.getStatus() == TaskStatusEnum.COMPLETE) {
-            throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getOrderNo());
-        }*/
-        if (t == null) {
-            t = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(), TaskTypeEnum.SELF_DELIVERY.getCode(), param.getOrderNo());
-        }
-        if (t != null && t.getStatus() == TaskStatusEnum.COMPLETE) {
-            throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getOrderNo());
-        }
+    public void sign(String orderNo, String remark) {
 
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOptType(OptTypeEnum.SIGN);
-        optRequest.setRemark(param.getRemark());
+        optRequest.setRemark(remark);
         List<String> orderNoList = new ArrayList<>();
-        orderNoList.add(param.getOrderNo());
+        orderNoList.add(orderNo);
         optRequest.setOrderNo(orderNoList);
         waybillService.handleOpt(optRequest);
 
-        if (t != null) {
-            Task task = new Task();
-            task.setTaskId(t.getTaskId());
-            task.setStatus(TaskStatusEnum.COMPLETE);
-            task.setHandledTime(DateUtil.getSysTimeStamp());
-            taskService.updateTask(task);
-        }
+        //写入 t_handler_sign
     }
 
     @Override
     @Transactional
     public void refuse(AbnormalParam param) {
-        //根据订单号查询任务
-        Task t = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(), null, param.getOrderNo());
-        if (t == null || t.getStatus() == TaskStatusEnum.COMPLETE) {
-            throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED, param.getOrderNo());
-        }
 
         Waybill deliveryOrder = waybillService.queryByOrderNo(param.getMerchantId(), param.getOrderNo());
         if (deliveryOrder == null) {
@@ -150,13 +101,6 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
         abnormalOrder.setReason(param.getReason());
         abnormalOrder.setCreatedBy(param.getOptBy());
         abnormalOrderService.addAbnormalOrder(abnormalOrder);
-        //修改任务状态
-        Task task = new Task();
-        task.setTaskId(t.getTaskId());
-        task.setStatus(TaskStatusEnum.COMPLETE);
-        task.setHandledTime(DateUtil.getSysTimeStamp());
-        taskService.updateTask(task);
-
     }
 
     @Override
@@ -185,12 +129,6 @@ public class RiderOptServiceImpl extends AbstractOrderOpt implements RiderOptSer
             if (update.getDelayTimes() == MAX_DELAY_TIMES) {
             }
         }
-
-        //修改任务状态
-        Task task = taskService.queryTaskByTypeAndOrderNo(param.getMerchantId(), TaskTypeEnum.DELIVERY.getCode(), param.getOrderNo());
-        task.setStatus(TaskStatusEnum.COMPLETE);
-        task.setHandledTime(DateUtil.getSysTimeStamp());
-        taskService.updateTask(task);
 
     }
 

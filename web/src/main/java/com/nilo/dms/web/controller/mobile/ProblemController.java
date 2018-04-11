@@ -3,7 +3,7 @@ package com.nilo.dms.web.controller.mobile;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dto.order.AbnormalParam;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.RiderOptService;
+import com.nilo.dms.service.order.WaybillOptService;
 import com.nilo.dms.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,15 +12,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
-
-
 @Controller
 @RequestMapping("/mobile/rider/problem")
 public class ProblemController extends BaseController {
 	
 	@Autowired
-	private RiderOptService riderOptService;
+	private WaybillOptService waybillOptService;
 	
     @RequestMapping(value = "/scan.html")
     public String customers() {
@@ -44,7 +41,7 @@ public class ProblemController extends BaseController {
             param.setRemark(remark);
             param.setOrderNo(orderNo);
             param.setReason(reason);
-            riderOptService.refuse(param);
+            waybillOptService.refuse(param);
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());
         }
