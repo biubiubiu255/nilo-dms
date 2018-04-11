@@ -33,9 +33,7 @@ public class SessionFilter implements Filter {
         }
         HttpSession session = request.getSession();
         if (session.getAttribute("session_user") != null) {
-            if (SessionLocal.getPrincipal() == null) {
-                SessionLocal.setPrincipal((Principal) session.getAttribute("session_user"));
-            }
+            SessionLocal.setPrincipal((Principal) session.getAttribute("session_user"));
         } else {
             boolean isAjax = request.getHeader(AJAX_HEADER_KEY) != null;
             HttpServletResponse resp = ((HttpServletResponse) res);
