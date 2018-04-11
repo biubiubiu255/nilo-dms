@@ -58,7 +58,7 @@
             <th lay-data="{fixed: 'left',field:'handleNo', width:140}">LoadingNo</th>
             <th lay-data="{field:'thirdExpressCode', width:150}">Third Express</th>
             <th lay-data="{field:'driver', width:150}">Rider</th>
-            <th lay-data="{field:'handleByName', width:150}">HandleByName</th>
+            <th lay-data="{field:'handleName', width:150}">HandleName</th>
             <th lay-data="{field:'handleTime', width:170, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">
                 HandleTime
             </th>
@@ -73,7 +73,7 @@
 
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="tool-print">Print</a>
-        <a class="layui-btn layui-btn-primary  layui-btn-mini" lay-event="tool-edit">Detail</a>
+        <a class="layui-btn layui-btn-primary  layui-btn-mini" lay-event="tool-detail">Detail</a>
         <a class="layui-btn layui-btn-danger  layui-btn-mini" lay-event="tool-ship">Ship</a>
     </script>
 </div>
