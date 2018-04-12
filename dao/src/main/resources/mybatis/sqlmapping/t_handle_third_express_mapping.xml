@@ -152,9 +152,11 @@
     <update id="editBigBy" statementType="PREPARED" parameterType="com.nilo.dms.dto.handle.SendThirdHead">
         update t_handle_third_express
         SET
-        status = #{status},
         updated_time=UNIX_TIMESTAMP(NOW()),
         version=UUID()
+        <if test="status != null and status != ''">
+            , status = ${status}
+        </if>
         <if test="driver != null and driver != ''">
             , driver = ${driver}
         </if>
