@@ -3,11 +3,14 @@ package com.nilo.dms.service.order.impl;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.HandleRiderStatusEnum;
+import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.HandleThirdDao;
 import com.nilo.dms.dto.handle.SendThirdDetail;
 import com.nilo.dms.dto.handle.SendThirdHead;
+import com.nilo.dms.dto.order.OrderOptRequest;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
@@ -48,6 +51,7 @@ public class SendThirdServiceImpl implements SendThirdService {
             sendThirdDetail.setMerchantId(merchantId);
             sendThirdDetail.setThirdHandleNo(handleNo);
             sendThirdDetail.setOrderNo(e.getOrderNo());
+            sendThirdDetail.setMerchantId(merchantId);
             dataList.add(sendThirdDetail);
         }
         handleThirdDao.insertSmalls(dataList);
@@ -70,7 +74,7 @@ public class SendThirdServiceImpl implements SendThirdService {
         if (sendThirdHead.getHandleNo() == null || sendThirdHead.equals("")) {
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
-        if (sendThirdHead.getMerchantId()==null){
+        if (sendThirdHead.getMerchantId() == null) {
             sendThirdHead.setMerchantId(merchantId);
         }
         insertBig(sendThirdHead);
@@ -130,6 +134,30 @@ public class SendThirdServiceImpl implements SendThirdService {
         handleThirdDao.deleteSmallByHandleNo(merchantId, handleNo);
         //插入小包
         insertSmallAll(merchantId, handleNo, smallOrders);
+    }
+
+    @Override
+    public void ship(String handleNo) {
+        Principal principal = SessionLocal.getPrincipal();
+        SendThirdHead head = handleThirdDao.queryBigByHandleNo(Long.parseLong(principal.getMerchantId()), handleNo);
+        if (head == null) {
+            throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, handleNo);
+        }
+        List<SendThirdDetail> detailsList = handleThirdDao.querySmall(Long.parseLong(principal.getMerchantId()), handleNo);
+        List<String> orderNos = new ArrayList<>();
+        for (SendThirdDetail d : detailsList) {
+            orderNos.add(d.getOrderNo());
+        }
+
+        OrderOptRequest request = new OrderOptRequest();
+        request.setOptType(OptTypeEnum.SEND);
+        request.setOrderNo(orderNos);
+        waybillService.handleOpt(request);
+        SendThirdHead update = new SendThirdHead();
+        update.setHandleNo(handleNo);
+        update.setMerchantId(Long.parseLong(principal.getMerchantId()));
+        update.setStatus(1);
+        handleThirdDao.editBigBy(update);
     }
 
     @Override

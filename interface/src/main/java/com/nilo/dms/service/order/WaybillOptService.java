@@ -23,7 +23,7 @@ public interface WaybillOptService {
 
     void delay(DelayParam param);
 
-    void resend(DelayParam param);
+    void completeDelay(String orderNo);
 
 
 }

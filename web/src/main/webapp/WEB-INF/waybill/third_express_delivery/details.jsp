@@ -11,27 +11,19 @@
     <div class="layui-form-item">
         <label class="layui-form-label" style="width:120px">LoadingNo</label>
         <div class="layui-input-inline">
-            <input type="text" name="loadingBy" value="${riderDelivery.handleNo}" autocomplete="off"
+            <input type="text" name="loadingBy" value="${pack.handleNo}" autocomplete="off"
                    class="layui-input layui-disabled" disabled>
         </div>
-
-        <label class="layui-form-label" style="width:150px">Quantity</label>
-        <div class="layui-input-inline">
-            <input type="text" name="quantity" value="" autocomplete="off"
-                   class="layui-input layui-disabled"
-                   disabled>
-        </div>
     </div>
+    <form id="myForm" class="layui-form" action="">
 
-    <%--第二排--%>
-    <div class="layui-form">
         <div class="layui-form-item">
             <label class="layui-form-label" style="width:120px">Carrier</label>
             <div class="layui-input-inline">
                 <select name="carrier" lay-search="" lay-filter="carrier">
                     <option value="">choose or search....</option>
                     <c:forEach items="${expressList}" var="carrier">
-                        <option value="${carrier.expressCode}">${carrier.expressName}</option>
+                        <option value="${carrier.expressCode}" <c:if test="${pack.thirdExpressCode == carrier.expressCode}">selected </c:if> >${carrier.expressName}</option>
                     </c:forEach>
                 </select>
             </div>
@@ -39,21 +31,21 @@
             <div class="layui-input-inline">
                 <select name="rider" id="rider" lay-search="">
                     <option value="">choose or search....</option>
+                    <c:forEach items="${driverList}" var="driver">
+                        <option value="${driver.driverName}"
+                                <c:if test="${pack.driver == driver.driverName}">selected</c:if>>${driver.driverName}</option>
+                    </c:forEach>
                 </select>
             </div>
-
-            <div class="layui-form-item">
-                <label class="layui-form-label" style="width:150px">Scan OrderNo:</label>
-                <div class="layui-input-inline">
-                    <input type="text" id="orderNo" autocomplete="off" placeholder="Scan" class="layui-input">
-                </div>
-            </div>
-
         </div>
-    </div>
-
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:120px">OrderNo:</label>
+            <div class="layui-input-inline">
+                <input type="text" id="orderNo" autocomplete="off" placeholder="Scan" class="layui-input">
+            </div>
+        </div>
+    </form>
     <hr>
-
 
     <div style="margin-left:120px;">
         <table id='${id0}' lay-filter="filterLab"></table>
@@ -85,25 +77,14 @@
         view();
         initShow();
 
-        layui.use('form', function () {
-            var form = layui.form;
-            form.on('select(fil-rider)', function (data) {
-                //alert(data.value);
-                $("input[name='rider']").val(data.value);
-            });
-        });
-
-        var packList = new Array();
         var form, table;
 
         //表单监控
-        layui.use('table', function () {
+        layui.use(['table', 'form'], function () {
+            form = layui.form;
             table = layui.table;
             table.on('tool(filterLab)', function (obj) {
                 var data = obj.data; //获得当前行数据
-                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-                var tr = obj.tr; //获得当前行 tr 的DOM对象
-                var orderNo = data.orderNo;
 
                 if (obj.event === 'delete') {
                     if (isModify() === false) {
@@ -134,7 +115,7 @@
                 var load = layer.load(2);
                 $.ajax({
                     type: "POST",
-                    url: "/waybill/rider_delivery/scanSmallPack.html",
+                    url: "/waybill/third_express_delivery/scanSmallPack.html",
                     dataType: "json",
                     data: {
                         orderNo: orderNo,
@@ -190,7 +171,7 @@
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/waybill/rider_delivery/edit.html",
+                url: "/waybill/third_express_delivery/edit.html",
                 dataType: "json",
                 data: {
                     smallPack: smallPack,
@@ -224,7 +205,6 @@
 
             $("input[name='quantity']").val(tableData.length);
 
-            //console.log(tableData);
             layui.use('table', function () {
                 var table = layui.table;
                 console.log("条目：" + tableData.length);
@@ -232,8 +212,6 @@
                 table.render({
                     elem: '#${id0}',
                     height: 400
-                    //,even: true
-                    //,url: '/demo/table/user/' //数据接口
                     , data: tableData
                     , page: false //开启分页
                     , width: 737
@@ -241,15 +219,10 @@
                     , text: {
                         none: 'Please start scanning the order'
                     }
-                    /*,page : {
-                     layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
-                     }*/
                     , limit: 3000
-                    //,limits : [5, 10, 15, 20, 25]
                     , cellMinWidth: 80
 
                     , cols: [[ //表头 //layui-btn layui-btn-primary layui-btn-mini
-                        //{ title: 'id', align:'center', width:80, sort: true, fixed: 'left', templet: '<div>{{d.LAY_INDEX }}</div>'}
                         {
                             title: 'id',
                             align: 'center',
@@ -266,16 +239,7 @@
                     ]]
 
                     , done: function (res, curr, count) {
-                        //如果是异步请求数据方式，res即为你接口返回的信息。
-                        //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-                        console.log(res);
 
-                        //得到当前页码
-                        //console.log(curr);
-
-                        //得到数据总量
-                        //console.log(count);
-                        console.log("当前表格最新数量为：" + count);
                     }
                 });
 
@@ -299,5 +263,3 @@
 
 
 </script>
-</body>
-</html>

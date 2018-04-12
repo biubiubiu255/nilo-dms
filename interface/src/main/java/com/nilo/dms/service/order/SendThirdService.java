@@ -28,4 +28,6 @@ public interface SendThirdService {
 
     void editSmall(Long merchantId, String handleNo, String[] smallOrders);
 
+    void ship(String handleNo);
+
 }

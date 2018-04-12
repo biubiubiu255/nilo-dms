@@ -215,13 +215,6 @@ public class SendNextStationController extends BaseController {
         expressList = userService.findExpressesAll(page);
 
 
-        //sendThirdHead.setHandleNo(SystemConfig.getNextSerialNo(merchantId, SerialTypeEnum.LOADING_NO.getCode()));
-        //sendThirdHead.setStatus(0);
-        //sendThirdHead.setHandleBy(Long.valueOf(SessionLocal.getPrincipal().getUserId()));
-
-        //System.out.println("本次测试 = " + smallPack.length);
-
-
         session.setAttribute("packageInfo", sendThirdHead);
         model.addAttribute("packList", toPaginationLayUIData(page, scanDetailList));
         model.addAttribute("expressList", expressList);
@@ -229,24 +222,6 @@ public class SendNextStationController extends BaseController {
         return "waybill/send_nextStation/add";
     }
 
-/*
-    @ResponseBody
-    @RequestMapping(value = "/edit.html", method = RequestMethod.POST)
-    public String edit(String[] smallPack, String handleNo, Integer saveStatus, String rider) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        String merchantId = me.getMerchantId();
-        if(handleNo==null || smallPack.length==0){
-            throw new DMSException(BizErrorCode.LOADING_NOT_EXIST);
-        }
-        RiderDeliveryDO riderDeliveryDO = new RiderDeliveryDO();
-        riderDeliveryDO.setHandleNo(handleNo);
-        riderDeliveryDO.setMerchantId(Long.valueOf(merchantId));
-        riderDeliveryDO.setRider(rider);
-        riderDeliveryDO.setStatus(HandleRiderStatusEnum.getEnum(saveStatus).getCode());
-        riderDeliveryService.editSmall(riderDeliveryDO, smallPack);
-        riderDeliveryService.editBig(riderDeliveryDO);
-        return toJsonTrueMsg();
-    }*/
 
 
 }

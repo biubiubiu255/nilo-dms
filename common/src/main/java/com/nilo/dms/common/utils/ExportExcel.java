@@ -1,6 +1,6 @@
 package com.nilo.dms.common.utils;
 
-import com.nilo.dms.dto.util.Excel;
+import com.nilo.dms.common.Excel;
 import org.apache.poi.hssf.usermodel.*;
 
 import java.io.FileOutputStream;

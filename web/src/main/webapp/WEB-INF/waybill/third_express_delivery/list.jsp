@@ -59,9 +59,6 @@
             <th lay-data="{field:'thirdExpressCode', width:150}">Third Express</th>
             <th lay-data="{field:'driver', width:150}">Rider</th>
             <th lay-data="{field:'handleName', width:150}">HandleName</th>
-            <th lay-data="{field:'handleTime', width:170, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">
-                HandleTime
-            </th>
             <th lay-data="{field:'', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
                 CreatedTime
             </th>
@@ -80,7 +77,7 @@
 <%@ include file="../../common/footer.jsp" %>
 <script type="text/javascript">
     $(function () {
-        layui.use(['form', 'layer', 'element', 'laydate'], function () {
+        layui.use(['layer', 'element', 'laydate'], function () {
             var layDate = layui.laydate;
             layDate.render({
                 elem: '#fromCreatedTime'
@@ -90,9 +87,7 @@
                 elem: '#toCreatedTime'
                 , lang: 'en'
             });
-            form.on('select(carrier)', function (data) {
-                getThirdDriver(data.value);
-            });
+
         });
         var table;
         layui.use('table', function () {
@@ -111,8 +106,6 @@
                         return;
                     }
                     ship(handleNo);
-                } else if (obj.event === 'tool-edit') {
-                    edit(handleNo);
                 }
 
             });
@@ -136,25 +129,7 @@
                 }
             });
         };
-        function getThirdDriver(code) {
-            $.ajax({
-                type: "POST",
-                url: "/waybill/third_express_delivery/getThirdDriver.html",
-                dataType: "json",
-                data: {code: code},
-                success: function (data) {
-                    if (data.result) {
-                        $("#sendDriver").empty();
-                        $("#sendDriver").prepend("<option value='0'>choose or search....</option>");
-                        var driver = data.data;
-                        for (var i = 0; i < driver.length; i++) {
-                            $("#sendDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
-                        }
-                        form.render();
-                    }
-                }
-            });
-        }
+
 
         $(".loading-scan").on("click", function () {
             toLoadingScanPage("");
@@ -162,20 +137,15 @@
 
         function toDetails(handleNo) {
 
-            $.ajax({
-                url: "/waybill/third_express_delivery/detail.html?loadingNo=" + handleNo,
-                type: 'GET',
-                //dataType: 'text',
-                success: function (data) {
-                    //弹出即全屏
-                    var index = parent.layer.open({
-                        type: 1,
-                        content: data,
-                        area: ['900px', '600px'],
-                        offset: ['100px', '250px'],
-                        maxmin: true
-                    });
-                }
+            parent.layer.open({
+                type: 2,
+                title: 'Detail',
+                shadeClose: true,
+                shade: false,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['900px', '600px'],
+                offset: ['100px', '250px'],
+                content: '/waybill/third_express_delivery/detail.html?loadingNo=' + handleNo
             });
         }
 
@@ -200,7 +170,7 @@
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/waybill/third_express_delivery/updateStatus.html",
+                url: "/waybill/third_express_delivery/ship.html",
                 dataType: "json",
                 data: {
                     handleNo: handleNo,
@@ -222,20 +192,6 @@
         }
 
     });
-
-    function edit(handleNo) {
-        layer.open({
-            type: 2,
-            title: 'Edit',
-            shadeClose: true,
-            shade: false,
-            maxmin: true, //开启最大化最小化按钮
-            area: ['900px', '600px'],
-            offset: ['100px', '250px'],
-            content: '/waybill/third_express_delivery/editPage.html?handleNo=' + handleNo,
-        });
-
-    }
 
     function strainerValue(str) {
         if (typeof(str) == 'undefined') str = '';

@@ -160,8 +160,8 @@
         <if test="thirdExpressCode != null and thirdExpressCode != ''">
             , third_express_code = ${thirdExpressCode}
         </if>
-        <if test="third_waybill_no != null and thirdWaybillNo != ''">
-            , thirdWaybillNo = ${thirdWaybillNo}
+        <if test="thirdWaybillNo != null and thirdWaybillNo != ''">
+            , third_waybill_no = ${thirdWaybillNo}
         </if>
         <if test="networkCode != null">
             , network_code = ${networkCode}
@@ -191,10 +191,10 @@
         INSERT
         INTO
         t_handle_third_express_details
-        ( third_handle_no, order_no, weight, length, height, width, status, created_time, updated_time, version )
+        ( merchant_id,third_handle_no, order_no, weight, length, height, width, status, created_time, updated_time, version )
         VALUES
         <foreach collection="list" item="now" separator=",">
-            (#{now.thirdHandleNo},#{now.orderNo},#{now.weight},#{now.len},#{now.height},#{now.width},#{now.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),
+            (#{now.merchantId},#{now.thirdHandleNo},#{now.orderNo},#{now.weight},#{now.len},#{now.height},#{now.width},#{now.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),
             UUID())
         </foreach>
 

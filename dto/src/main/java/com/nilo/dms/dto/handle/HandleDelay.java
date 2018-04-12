@@ -1,4 +1,4 @@
-package com.nilo.dms.dao.dataobject;
+package com.nilo.dms.dto.handle;
 
 import com.nilo.dms.common.BaseDo;
 import com.nilo.dms.common.enums.DelayStatusEnum;
@@ -6,21 +6,55 @@ import com.nilo.dms.common.enums.DelayStatusEnum;
 /**
  * Created by ronny on 2017/8/30.
  */
-public class DeliveryOrderDelayDO extends BaseDo<Long> {
+public class HandleDelay extends BaseDo<Long> {
 
     private Long merchantId;
 
     private String orderNo;
 
-    private String delayReason;
+    private String reason;
+
+    private String reasonId;
+
+    private String handleBy;
+
+    private String handleName;
 
     private String remark;
 
-    private Integer allowTimes;
-
-    private Integer delayTimes;
-
     private Integer status;
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getReasonId() {
+        return reasonId;
+    }
+
+    public void setReasonId(String reasonId) {
+        this.reasonId = reasonId;
+    }
+
+    public String getHandleBy() {
+        return handleBy;
+    }
+
+    public void setHandleBy(String handleBy) {
+        this.handleBy = handleBy;
+    }
+
+    public String getHandleName() {
+        return handleName;
+    }
+
+    public void setHandleName(String handleName) {
+        this.handleName = handleName;
+    }
 
     public String getRemark() {
         return remark;
@@ -30,13 +64,6 @@ public class DeliveryOrderDelayDO extends BaseDo<Long> {
         this.remark = remark;
     }
 
-    public String getDelayReason() {
-        return delayReason;
-    }
-
-    public void setDelayReason(String delayReason) {
-        this.delayReason = delayReason;
-    }
 
     public Integer getStatus() {
         return status;
@@ -60,22 +87,6 @@ public class DeliveryOrderDelayDO extends BaseDo<Long> {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
-    }
-
-    public Integer getAllowTimes() {
-        return allowTimes;
-    }
-
-    public void setAllowTimes(Integer allowTimes) {
-        this.allowTimes = allowTimes;
-    }
-
-    public Integer getDelayTimes() {
-        return delayTimes;
-    }
-
-    public void setDelayTimes(Integer delayTimes) {
-        this.delayTimes = delayTimes;
     }
 
     public String getStatusDesc() {

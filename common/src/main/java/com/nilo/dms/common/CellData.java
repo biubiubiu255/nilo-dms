@@ -2,7 +2,7 @@
  * Kilimall Inc.
  * Copyright (c) 2015-2016 All Rights Reserved.
  */
-package com.nilo.dms.dto.util;
+package com.nilo.dms.common;
 
 /**
  * 单元格数据

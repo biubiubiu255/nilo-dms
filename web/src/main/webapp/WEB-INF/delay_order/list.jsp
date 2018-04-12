@@ -54,11 +54,10 @@
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:250}">OrderNo</th>
-            <th lay-data="{field:'delayReason', width:300}">Type</th>
+            <th lay-data="{fixed: 'left',field:'orderNo', width:170}">OrderNo</th>
+            <th lay-data="{field:'reason', width:150}">Reason</th>
+            <th lay-data="{field:'handleName', width:150}">Handle Name</th>
             <th lay-data="{field:'statusDesc', width:150}">Status</th>
-            <th lay-data="{field:'allowTimes', width:150}">AllowTimes</th>
-            <th lay-data="{field:'delayTimes', width:150}">DelayTimes</th>
             <th lay-data="{field:'createdTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
                 CreatedTime
             </th>

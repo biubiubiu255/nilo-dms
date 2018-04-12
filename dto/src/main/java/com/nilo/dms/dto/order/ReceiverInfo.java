@@ -1,7 +1,7 @@
 package com.nilo.dms.dto.order;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.nilo.dms.dto.util.Excel;
+import com.nilo.dms.common.Excel;
 
 /**
  * Created by ronny on 2017/9/27.
