@@ -5,15 +5,13 @@ package com.nilo.dms.dto.order;
  */
 public class DelayParam {
 
-    private String merchantId;
-
     private String orderNo;
 
     private String reason;
 
-    private String remark;
+    private String reasonId;
 
-    private String optBy;
+    private String remark;
 
     public String getReason() {
         return reason;
@@ -21,14 +19,6 @@ public class DelayParam {
 
     public void setReason(String reason) {
         this.reason = reason;
-    }
-
-    public String getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(String merchantId) {
-        this.merchantId = merchantId;
     }
 
     public String getOrderNo() {
@@ -47,12 +37,11 @@ public class DelayParam {
         this.remark = remark;
     }
 
-    public String getOptBy() {
-        return optBy;
+    public String getReasonId() {
+        return reasonId;
     }
 
-    public void setOptBy(String optBy) {
-        this.optBy = optBy;
+    public void setReasonId(String reasonId) {
+        this.reasonId = reasonId;
     }
-
 }

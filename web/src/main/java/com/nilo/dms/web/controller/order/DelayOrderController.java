@@ -1,20 +1,17 @@
 package com.nilo.dms.web.controller.order;
 
-import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.AbnormalTypeEnum;
-import com.nilo.dms.common.enums.DelayStatusEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DeliveryOrderDelayDao;
-import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
+import com.nilo.dms.dao.HandleDelayDao;
+import com.nilo.dms.dto.handle.HandleDelay;
 import com.nilo.dms.dto.order.AbnormalOrder;
 import com.nilo.dms.dto.order.DelayParam;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.AbnormalOrderService;
 import com.nilo.dms.service.order.WaybillOptService;
-import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +34,7 @@ public class DelayOrderController extends BaseController {
     @Autowired
     private AbnormalOrderService abnormalOrderService;
     @Autowired
-    private DeliveryOrderDelayDao deliveryOrderDelayDao;
+    private HandleDelayDao handleDelayDao;
 
     @RequestMapping(value = "/list.html", method = RequestMethod.GET)
     public String list(Model model) {
@@ -61,17 +58,11 @@ public class DelayOrderController extends BaseController {
         }
         Pagination page = getPage();
 
-        List<DeliveryOrderDelayDO> delayDOList = new ArrayList<>();
-        Long count = deliveryOrderDelayDao.queryCountBy(Long.parseLong(merchantId), orderNo, fromTimeLong, toTimeLong);
+        List<HandleDelay> delayDOList = new ArrayList<>();
+        Long count = handleDelayDao.queryCountBy(Long.parseLong(merchantId), orderNo, fromTimeLong, toTimeLong);
         if (count == null || count == 0) return toPaginationLayUIData(page, delayDOList);
 
-        delayDOList = deliveryOrderDelayDao.queryBy(Long.parseLong(merchantId), orderNo, fromTimeLong, toTimeLong, page.getOffset(), page.getLimit());
-
-        //设置类型描述
-        for (DeliveryOrderDelayDO d : delayDOList) {
-            String abnormalTypeDesc = SystemCodeUtil.getCodeVal("" + d.getMerchantId(), Constant.DELAY_REASON, d.getDelayReason());
-            d.setDelayReason(abnormalTypeDesc);
-        }
+        delayDOList = handleDelayDao.queryBy(Long.parseLong(merchantId), orderNo, fromTimeLong, toTimeLong, page.getOffset(), page.getLimit());
 
         return toPaginationLayUIData(page, delayDOList);
     }
@@ -82,7 +73,7 @@ public class DelayOrderController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        DeliveryOrderDelayDO delayDO = deliveryOrderDelayDao.findByOrderNo(Long.parseLong(merchantId), orderNo);
+        HandleDelay delayDO = handleDelayDao.findByOrderNo(Long.parseLong(merchantId), orderNo);
         //查询rider列表
         model.addAttribute("delayDO", delayDO);
         return "delay_order/problem";
@@ -95,43 +86,24 @@ public class DelayOrderController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        try {
+        AbnormalOrder abnormalOrder = new AbnormalOrder();
+        abnormalOrder.setCreatedBy(me.getUserId());
+        abnormalOrder.setMerchantId(merchantId);
+        abnormalOrder.setReason(param.getReason());
+        abnormalOrder.setOrderNo(param.getOrderNo());
+        abnormalOrder.setRemark(param.getRemark());
+        abnormalOrder.setAbnormalType(AbnormalTypeEnum.PROBLEM);
+        abnormalOrderService.addAbnormalOrder(abnormalOrder);
 
-            AbnormalOrder abnormalOrder = new AbnormalOrder();
-            abnormalOrder.setCreatedBy(me.getUserId());
-            abnormalOrder.setMerchantId(merchantId);
-            abnormalOrder.setReason(param.getReason());
-            abnormalOrder.setOrderNo(param.getOrderNo());
-            abnormalOrder.setRemark(param.getRemark());
-            abnormalOrder.setAbnormalType(AbnormalTypeEnum.PROBLEM);
-            abnormalOrderService.addAbnormalOrder(abnormalOrder);
+        waybillOptService.completeDelay(param.getOrderNo());
 
-            DeliveryOrderDelayDO update = new DeliveryOrderDelayDO();
-            update.setOrderNo(param.getOrderNo());
-            update.setMerchantId(Long.parseLong(merchantId));
-            update.setStatus(DelayStatusEnum.COMPLETE.getCode());
-            deliveryOrderDelayDao.update(update);
-        } catch (Exception e) {
-            return toJsonErrorMsg(e.getMessage());
-        }
         return toJsonTrueMsg();
     }
 
     @ResponseBody
     @RequestMapping(value = "/resend.html")
     public String resend(DelayParam param) {
-
-        Principal me = SessionLocal.getPrincipal();
-
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        try {
-            param.setOptBy(me.getUserId());
-            param.setMerchantId(merchantId);
-            waybillOptService.resend(param);
-        } catch (Exception e) {
-            return toJsonErrorMsg(e.getMessage());
-        }
+        waybillOptService.completeDelay(param.getOrderNo());
         return toJsonTrueMsg();
     }
 
@@ -139,17 +111,7 @@ public class DelayOrderController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/delay.html")
     public String delay(DelayParam param) {
-
-        Principal me = SessionLocal.getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
-        try {
-            param.setOptBy(me.getUserId());
-            param.setMerchantId(merchantId);
-            waybillOptService.delay(param);
-        } catch (Exception e) {
-            return toJsonErrorMsg(e.getMessage());
-        }
+        waybillOptService.delay(param);
         return toJsonTrueMsg();
     }
 }

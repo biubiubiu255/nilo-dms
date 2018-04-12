@@ -39,13 +39,16 @@
 
     <div class="row">
         <div class="col-xs-3">
-            HandleNo NO: ${pack.handleNo}
+            Loading No.: ${pack.handleNo}
         </div>
         <div class="col-xs-3">
-            handleByName: ${pack.handleBy}
+            Express :${pack.thirdExpressCode}
         </div>
         <div class="col-xs-3">
-            Rider :${pack.rider}
+            Rider :${pack.driver}
+        </div>
+        <div class="col-xs-3">
+            Operator : ${pack.handleName}
         </div>
         <br><br>
     </div>
@@ -56,22 +59,22 @@
                 <thead>
                 <tr>
                     <th>Order No</th>
-                    <th>Weight</th>
-                    <th>Length</th>
-                    <th>Hight</th>
-                    <th>Width</th>
-                    <th>CreateTime</th>
+                    <th>Customer Name</th>
+                    <th>Contact No</th>
+                    <th>Address</th>
+                    <th>Price</th>
+                    <th>Pending Pay</th>
                 </tr>
                 </thead>
                 <tbody>
                 	<c:forEach items="${smalls}" var="item">
 	                   <tr>
-	                        <td>${item.orderNo}</td>
-	                        <td>${item.weight}</td>
-	                        <td>${item.length}</td>
-	                        <td>${item.height}</td>
-	                        <td>${item.width}</td>
-                            <td><date:date value="${item.created_time}" parttern="yyyy-MM-dd HH:mm:ss"></date:date></td>
+                           <td>${item.orderNo}</td>
+                           <td>${item.receiverInfo.receiverName}</td>
+                           <td>${item.receiverInfo.receiverPhone}</td>
+                           <td>${item.receiverInfo.receiverAddress}</td>
+                           <td>${item.totalPrice}</td>
+                           <td>${item.needPayAmount}</td>
                        </tr>
                    </c:forEach> 
                 </tbody>
