@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="layui-form-item layui-col-md5 layui-col-lg3">
+        <div class="layui-form-item">
             <label class="layui-form-label" style="width:120px">OrderNo:</label>
             <div class="layui-input-inline">
                 <input type="text" id="orderNo" autocomplete="off" placeholder="Scan" class="layui-input">
@@ -68,11 +68,6 @@
         var form, table;
         layui.use('form', function () {
             form = layui.form;
-            form.on('select(deliveryRiderLay)', function (data) {
-                //alert(data.value);
-                $("input[name='rider']").val(data.value);
-            });
-
             form.on('select(carrier)', function (data) {
                 getThirdDriver(data.value);
             });

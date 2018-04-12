@@ -322,8 +322,8 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         // 判断是否允许打包
         for (String o : packageRequest.getOrderNos()) {
             Waybill waybill = queryByOrderNo(packageRequest.getMerchantId(), o);
-            if (StringUtil.isNotEmpty(waybill.getParentNo()) || waybill.getStatus() != DeliveryOrderStatusEnum.ARRIVED) {
-                throw new DMSException(BizErrorCode.PACKAGE_NOT_ALLOW, o);
+            if (StringUtil.isNotEmpty(waybill.getParentNo()) ) {
+                throw new DMSException(BizErrorCode.PACKAGE_ALREADY_PACKAGE, o);
             }
         }
 
@@ -402,7 +402,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             String orderNo = iterator.next();
             Waybill waybill = queryByOrderNo(unpackRequest.getMerchantId(), orderNo);
             if (StringUtil.isEmpty(waybill.getParentNo()) && !waybill.isPackage()) {
-                throw new DMSException(BizErrorCode.PACKAGE_NOT_ALLOW, orderNo);
+                throw new DMSException(BizErrorCode.UNPACK_NOT_ALLOW, orderNo);
             }
             if (waybill.isPackage()) {
                 OrderOptRequest optRequest = new OrderOptRequest();

@@ -187,9 +187,7 @@ public class SendNextStationController extends BaseController {
         sendThirdHead.setHandleName(me.getUserName());
         sendThirdHead.setType("package");
         sendThirdHead.setStatus(saveStutus);
-        sendThirdHead.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
 
-        sendThirdHead.setHandleTime(Long.valueOf(System.currentTimeMillis()/1000).intValue());
         sendThirdService.insertBigAndSmall(merchantId, sendThirdHead, smallPack);
 
         return toJsonTrueMsg();
