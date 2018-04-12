@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.HandleAllocateDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="handleAllocate" type="com.nilo.dms.dto.handle.HandleAllocate">
+
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="riderPhone" column="rider_phone" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="riderName" column="rider_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="riderId" column="rider_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+        <result property="networkCode" column="network_code" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleBy" column="handle_by" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleName" column="handle_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+        <result property="remark" column="remark" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id ,merchant_id,order_no,rider_phone,rider_name,rider_id,network_code,handle_by,handle_name,remark,created_time,updated_time,version
+    </sql>
+
+    <!-- 插入语句 -->
+    <insert id="batchInsert" parameterType="com.nilo.dms.dto.handle.HandleAllocate" statementType="PREPARED"
+            >
+        INSERT INTO t_handle_allocate
+        ( merchant_id,order_no,rider_phone,rider_name,rider_id,network_code,handle_by,handle_name,remark,created_time,updated_time,version)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+        (#{item.merchantId},#{item.orderNo},#{item.riderPhone},#{item.riderName},#{item.riderId},#{item.networkCode},#{item.handleBy},#{item.handleName},#{item.remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        </foreach>
+
+    </insert>
+
+    <select id="queryByOrderNo" resultMap="handleAllocate" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_handle_allocate where
+        merchant_id = #{merchantId} and order_no = #{orderNo}
+    </select>
+
+</mapper>

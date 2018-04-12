@@ -7,11 +7,15 @@ import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.DateUtil;
+import com.nilo.dms.dao.HandleAllocateDao;
 import com.nilo.dms.dao.HandleDelayDao;
 import com.nilo.dms.dao.HandleSignDao;
 import com.nilo.dms.dao.dataobject.HandleSignDO;
+import com.nilo.dms.dto.common.UserInfo;
+import com.nilo.dms.dto.handle.HandleAllocate;
 import com.nilo.dms.dto.handle.HandleDelay;
 import com.nilo.dms.dto.order.*;
+import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.AbnormalOrderService;
 import com.nilo.dms.service.order.AbstractOrderOpt;
@@ -30,52 +34,18 @@ import java.util.List;
 @Service
 public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOptService {
 
-    private static final Integer MAX_DELAY_TIMES = 2;
     @Autowired
     WaybillService waybillService;
     @Autowired
     private AbnormalOrderService abnormalOrderService;
     @Autowired
+    private UserService userService;
+    @Autowired
     private HandleDelayDao handleDelayDao;
     @Autowired
+    private HandleAllocateDao handleAllocateDao;
+    @Autowired
     private HandleSignDao handleSignDao;
-
-
-    @Override
-    @Transactional
-    public void goToPickup(String merchantId, String orderNo, String optBy, String taskId) {
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setOptType(OptTypeEnum.GO_TO_PICK_UP);
-        List<String> orderNoList = new ArrayList<>();
-        orderNoList.add(orderNo);
-        optRequest.setOrderNo(orderNoList);
-        waybillService.handleOpt(optRequest);
-    }
-
-    @Override
-    @Transactional
-    public void pickup(String merchantId, String orderNo, String optBy, String taskId) {
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setOptType(OptTypeEnum.PICK_UP);
-        List<String> orderNoList = new ArrayList<>();
-        orderNoList.add(orderNo);
-        optRequest.setOrderNo(orderNoList);
-        waybillService.handleOpt(optRequest);
-    }
-
-    @Override
-    @Transactional
-    public void pickupFailed(String merchantId, String orderNo, String reason, String optBy, String taskId) {
-
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setOptType(OptTypeEnum.PICK_UP_FAILED);
-        optRequest.setRemark(reason);
-        List<String> orderNoList = new ArrayList<>();
-        orderNoList.add(orderNo);
-        optRequest.setOrderNo(orderNoList);
-        waybillService.handleOpt(optRequest);
-
-    }
 
     @Override
     public void sign(String orderNo, String remark) {
@@ -157,5 +127,34 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
         update.setStatus(DelayStatusEnum.COMPLETE.getCode());
         handleDelayDao.update(update);
 
+    }
+
+    @Override
+    public void allocate(List<String> orderNos, String riderId, String remark) {
+
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setOptType(OptTypeEnum.ALLOCATE);
+        optRequest.setRemark(remark);
+        optRequest.setOrderNo(orderNos);
+        waybillService.handleOpt(optRequest);
+
+        Principal principal = SessionLocal.getPrincipal();
+        UserInfo userInfo = userService.findUserInfoByUserId(principal.getMerchantId(), riderId);
+        List<HandleAllocate> list = new ArrayList<>();
+        Long merchantId = Long.parseLong(principal.getMerchantId());
+        for (String o : orderNos) {
+            HandleAllocate h = new HandleAllocate();
+            h.setOrderNo(o);
+            h.setHandleBy(principal.getUserId());
+            h.setHandleName(principal.getUserName());
+            h.setNetworkCode(principal.getFirstNetwork());
+            h.setMerchantId(merchantId);
+            h.setRemark(remark);
+            h.setRiderId(riderId);
+            h.setRiderName(userInfo.getName());
+            h.setRiderPhone(userInfo.getPhone());
+            list.add(h);
+        }
+        handleAllocateDao.batchInsert(list);
     }
 }

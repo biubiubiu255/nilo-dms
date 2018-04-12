@@ -187,6 +187,8 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         }
         List<DeliveryOrderSenderDO> senderDO = deliveryOrderSenderDao.queryByOrderNos(merchantId, orderNos);
         List<DeliveryOrderReceiverDO> receiverDO = deliveryOrderReceiverDao.queryByOrderNos(merchantId, orderNos);
+        List<DeliveryOrderGoodsDO> goodsDO = deliveryOrderGoodsDao.queryByOrderNos(merchantId, orderNos);
+
         for (WaybillDO o : waybillDOs) {
             Waybill order = convert(o);
             for (DeliveryOrderSenderDO s : senderDO) {
@@ -201,6 +203,13 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
                     break;
                 }
             }
+            List<DeliveryOrderGoodsDO> goodsList = new ArrayList<>();
+            for (DeliveryOrderGoodsDO r : goodsDO) {
+                if (StringUtil.equals(o.getOrderNo(), r.getOrderNo())) {
+                    goodsList.add(r);
+                }
+            }
+            order.setGoodsInfoList(convert(goodsList));
             list.add(order);
         }
         return list;
