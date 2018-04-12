@@ -51,7 +51,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Autowired
     private NotifyService notifyService;
     @Autowired
-    private OrderOptLogService orderOptLogService;
+    private WaybillLogService waybillLogService;
     @Autowired
     private DeliveryOrderGoodsDao deliveryOrderGoodsDao;
     @Autowired
@@ -267,7 +267,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
                     // 记录物流轨迹
                     deliveryRouteService.addRoute(optRequest);
                     // 添加操作记录
-                    orderOptLogService.addOptLog(optRequest);
+                    waybillLogService.addOptLog(optRequest);
                 } catch (Exception e) {
                     logger.error("handleOpt Failed. Data:{}", optRequest, e);
                     transactionStatus.setRollbackOnly();
@@ -379,7 +379,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOrderNo(packageRequest.getOrderNos());
         optRequest.setOptType(OptTypeEnum.PACKAGE);
-        orderOptLogService.addOptLog(optRequest);
+        waybillLogService.addOptLog(optRequest);
         return orderNo;
     }
 

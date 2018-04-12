@@ -5,12 +5,14 @@ import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.dao.*;
-import com.nilo.dms.dao.dataobject.*;
-import com.nilo.dms.dto.order.DeliveryOrderOpt;
+import com.nilo.dms.dao.dataobject.WaybillDO;
+import com.nilo.dms.dao.dataobject.WaybillLogArriveDO;
+import com.nilo.dms.dao.dataobject.WaybillLogPackageDO;
+import com.nilo.dms.dao.dataobject.WaybillLogUnPackDO;
+import com.nilo.dms.dto.order.WaybillLog;
 import com.nilo.dms.dto.order.OrderOptRequest;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.OrderOptLogService;
-import com.nilo.dms.dto.order.Waybill;
+import com.nilo.dms.service.order.WaybillLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +23,10 @@ import java.util.List;
  * Created by admin on 2017/11/14.
  */
 @Service
-public class OrderOptLogServiceImpl implements OrderOptLogService {
+public class WaybillLogServiceImpl implements WaybillLogService {
 
     @Autowired
-    private DeliveryOrderOptDao deliveryOrderOptDao;
+    private WaybillLogDao waybillLogDao;
     @Autowired
     private WaybillDao waybillDao;
     @Autowired
@@ -35,25 +37,25 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
     private WaybillLogPackageDao waybillLogPackageDao;
 
     @Override
-    public List<DeliveryOrderOpt> queryBy(String merchantId, String optType, String orderNo, String optBy, Long fromtTime, Long toTime, Pagination pagination) {
+    public List<WaybillLog> queryBy(String merchantId, String optType, String orderNo, String optBy, Long fromtTime, Long toTime, Pagination pagination) {
 
-        List<DeliveryOrderOpt> list = new ArrayList<>();
+        List<WaybillLog> list = new ArrayList<>();
 
-        Long count = deliveryOrderOptDao.queryCountBy(Long.parseLong(merchantId), optType, orderNo, optBy, fromtTime, toTime);
+        Long count = waybillLogDao.queryCountBy(Long.parseLong(merchantId), optType, orderNo, optBy, fromtTime, toTime);
         if (count == null || count == 0) {
             return list;
         }
         pagination.setTotalCount(count);
 
-        List<DeliveryOrderOpt> queryList = deliveryOrderOptDao.queryBy(Long.parseLong(merchantId), optType, orderNo, optBy, fromtTime, toTime, pagination.getOffset(), pagination.getLimit());
+        List<WaybillLog> queryList = waybillLogDao.queryBy(Long.parseLong(merchantId), optType, orderNo, optBy, fromtTime, toTime, pagination.getOffset(), pagination.getLimit());
 
         return queryList;
     }
 
     @Override
-    public List<DeliveryOrderOpt> queryByOrderNos(String merchantId, List<String> orderNos) {
+    public List<WaybillLog> queryByOrderNos(String merchantId, List<String> orderNos) {
 
-        List<DeliveryOrderOpt> queryList = deliveryOrderOptDao.queryByOrderNos(Long.parseLong(merchantId), orderNos);
+        List<WaybillLog> queryList = waybillLogDao.queryByOrderNos(Long.parseLong(merchantId), orderNos);
         return queryList;
     }
 
@@ -115,14 +117,14 @@ public class OrderOptLogServiceImpl implements OrderOptLogService {
         }
 
         for (String orderNo : request.getOrderNo()) {
-            DeliveryOrderOpt optLog = new DeliveryOrderOpt();
+            WaybillLog optLog = new WaybillLog();
             optLog.setMerchantId(merchantId);
             optLog.setOptBy(userId);
             optLog.setOptName(principal.getUserName());
             optLog.setOpt(request.getOptType().getCode());
             optLog.setRemark(request.getRemark());
             optLog.setOrderNo(orderNo);
-            deliveryOrderOptDao.insert(optLog);
+            waybillLogDao.insert(optLog);
         }
     }
 

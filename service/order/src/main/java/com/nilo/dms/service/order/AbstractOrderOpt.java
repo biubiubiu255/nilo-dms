@@ -4,7 +4,7 @@ import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.exception.SysErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
-import com.nilo.dms.dao.DeliveryOrderOptDao;
+import com.nilo.dms.dao.WaybillLogDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.order.OrderOptRequest;
@@ -25,7 +25,7 @@ public abstract class AbstractOrderOpt {
     private static Logger logger = LoggerFactory.getLogger(AbstractOrderOpt.class);
 
     @Autowired
-    DeliveryOrderOptDao deliveryOrderOptDao;
+    WaybillLogDao waybillLogDao;
 
     @Autowired
     WaybillDao waybillDao;

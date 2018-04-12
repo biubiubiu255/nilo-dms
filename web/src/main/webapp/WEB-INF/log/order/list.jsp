@@ -36,7 +36,7 @@
 
 
     <table class="layui-table"
-           lay-data="{ url:'/order/log/getLogList.html',method:'post', page:true,limit:10, id:'${id0}'}"
+           lay-data="{ url:'/waybill/log/getLogList.html',method:'post', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
@@ -46,7 +46,7 @@
             <th lay-data="{field:'createdTime', width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
                 Opt Time
             </th>
-            <th lay-data="{field:'optUser', width:200, templet:'<div>{{d.optName }}</div>'}">
+            <th lay-data="{field:'optName', width:200, templet:'<div>{{d.optName }}</div>'}">
                 Opt By
             </th>
             <th lay-data="{field:'remark', width:300}">Remark</th>

@@ -3,7 +3,7 @@ package com.nilo.dms.dto.order;
 /**
  * Created by admin on 2017/9/19.
  */
-public class DeliveryOrderOpt {
+public class WaybillLog {
 
     private String id;
 

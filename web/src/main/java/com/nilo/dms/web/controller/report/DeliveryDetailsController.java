@@ -2,12 +2,10 @@ package com.nilo.dms.web.controller.report;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.dto.order.DeliveryOrderOpt;
-import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.OrderOptLogService;
-import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.dto.order.WaybillParameter;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,10 +29,6 @@ public class DeliveryDetailsController extends BaseController {
 
     @Autowired
     private WaybillService waybillService;
-
-    @Autowired
-    private OrderOptLogService orderOptLogService;
-
 
     @RequestMapping(value = "/deliveryDetailsReport.html", method = RequestMethod.GET)
     public String list(Model model) {
@@ -64,8 +58,6 @@ public class DeliveryDetailsController extends BaseController {
         for (Waybill order : list) {
             orderNos.add(order.getOrderNo());
         }
-        //订单操作记录
-        List<DeliveryOrderOpt> optList = orderOptLogService.queryByOrderNos(merchantId, orderNos);
         //订单轨迹信息
         return toPaginationLayUIData(page, list);
     }

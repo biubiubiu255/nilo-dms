@@ -2,14 +2,14 @@ package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.WaybillLogDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dto.order.PackageRequest;
-import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.dto.order.WaybillParameter;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class MobilePackageController extends BaseController {
     @Autowired
     private DistributionNetworkDao distributionNetworkDao;
     @Autowired
-    private DeliveryOrderOptDao deliveryOrderOptDao;
+    private WaybillLogDao waybillLogDao;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -63,7 +63,7 @@ public class MobilePackageController extends BaseController {
     @RequestMapping(value = "/check.html")
     public String check(String code) {
 
-        Long a = deliveryOrderOptDao.getStateByOrderNo(code);
+        Long a = waybillLogDao.getStateByOrderNo(code);
         if (a == null) {
             return toJsonErrorMsg("There is no OrderNo");
         }

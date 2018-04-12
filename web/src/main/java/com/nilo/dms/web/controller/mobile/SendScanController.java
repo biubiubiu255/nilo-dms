@@ -2,18 +2,18 @@ package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.ThirdDriverDao;
 import com.nilo.dms.dao.ThirdExpressDao;
+import com.nilo.dms.dao.WaybillLogDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.dto.order.Loading;
-import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.dto.order.ShipParameter;
 import com.nilo.dms.dto.order.Waybill;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,9 +40,8 @@ public class SendScanController extends BaseController {
     @Autowired
     private LoadingService loadingService;
     @Autowired
-    private DeliveryOrderOptDao deliveryOrderOptDao;
-//    @Autowired
-//    private StaffDao staffDao;
+    private WaybillLogDao waybillLogDao;
+
 
     @RequestMapping(value = "/list.html")
     public String list(String loadingNo, Integer loadingStatus) {
@@ -59,7 +58,7 @@ public class SendScanController extends BaseController {
     @RequestMapping(value = "/check.html")
     public String check(String code) {
 
-        Long a = deliveryOrderOptDao.getStateByOrderNo(code);
+        Long a = waybillLogDao.getStateByOrderNo(code);
         if (a == null) {
             return toJsonErrorMsg("There is no OrderNo");
         }
