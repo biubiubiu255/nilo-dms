@@ -76,6 +76,7 @@
             $("#orderNo").attr("disabled", false);
             $("#orderNo").focus();
         }
+        initShow();
 
         var form, table1;
         layui.use(['form', 'table'], function () {
@@ -179,7 +180,7 @@
                 success: function (data) {
                     if (data.result) {
                         layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
-                            //parent.layer.close(index);
+                            layer.closeAll();
                         });
                     } else {
                         layer.msg(data.msg, {icon: 2, time: 2000});
@@ -222,6 +223,7 @@
         });
 
         function initShow() {
+            //console.log("正在渲染");
             if('${pack.status}'=='1'){
                 $('.commit').hide();
             }

@@ -160,7 +160,10 @@
                         content: data,
                         area: ['900px', '600px'],
                         offset: ['100px', '250px'],
-                        maxmin: true
+                        maxmin: true,
+                        end: function () {
+                            reloadTable();
+                        }
                     });
                 }
             });

@@ -195,9 +195,7 @@ public class SendNextStationController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/updateStatus.html", method = RequestMethod.POST)
     public String updateStatus(String handleNo, Integer status) {
-        SendThirdHead sendThirdHead = new SendThirdHead();
-
-        handleThirdDao.editBigBy(handleNo, status);
+        sendThirdService.ship(handleNo);
         return toJsonTrueMsg();
     }
 
