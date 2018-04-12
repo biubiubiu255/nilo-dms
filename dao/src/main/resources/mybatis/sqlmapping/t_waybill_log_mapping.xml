@@ -5,8 +5,6 @@
 
     <!-- 实体bean与数据字段对应关系 -->
     <resultMap id="orderOptDO" type="com.nilo.dms.dto.order.WaybillLog">
-        <result property="id" column="id" javaType="java.lang.Long"
-                jdbcType="INTEGER"/>
         <result property="orderNo" column="order_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="merchantId" column="merchant_id" javaType="java.lang.Long"

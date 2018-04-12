@@ -5,8 +5,6 @@ package com.nilo.dms.dto.order;
  */
 public class WaybillLog {
 
-    private String id;
-
     private String orderNo;
 
     private String merchantId;
@@ -67,14 +65,6 @@ public class WaybillLog {
 
     public void setOptBy(String optBy) {
         this.optBy = optBy;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getMerchantId() {
