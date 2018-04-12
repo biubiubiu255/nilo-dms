@@ -195,7 +195,7 @@ public class SendNextStationController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/getDriver.html", method = RequestMethod.POST)
-    public String updateStatus(String expressCode) {
+    public String getDriver(String expressCode) {
 
         List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(expressCode);
         List<LoadingController.Driver> list = new ArrayList<>();

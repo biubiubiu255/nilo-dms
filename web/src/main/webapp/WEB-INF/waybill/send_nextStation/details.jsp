@@ -192,31 +192,7 @@
             });
         });
 
-        $('.ship').on('click', function () {
 
-            var load = layer.load(2);
-            $.ajax({
-                type: "POST",
-                url: "/order/loading/ship.html",
-                dataType: "json",
-                data: {
-                    loadingNo: $("#loadingNo").val(),
-                },
-                success: function (data) {
-                    if (data.result) {
-                        layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
-                            location.reload();
-                        });
-                    } else {
-                        layer.msg(data.msg, {icon: 2, time: 2000});
-                    }
-                },
-                complete: function () {
-                    layer.close(load);
-                }
-            });
-
-        });
 
         $('.print').on('click', function () {
             window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
