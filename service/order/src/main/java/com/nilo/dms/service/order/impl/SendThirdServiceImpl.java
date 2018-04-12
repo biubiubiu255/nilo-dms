@@ -140,10 +140,14 @@ public class SendThirdServiceImpl implements SendThirdService {
     public void ship(String handleNo) {
         Principal principal = SessionLocal.getPrincipal();
         SendThirdHead head = handleThirdDao.queryBigByHandleNo(Long.parseLong(principal.getMerchantId()), handleNo);
-        if (head == null) {
-            throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, handleNo);
+        if (head == null || head.getStatus() == 1) {
+            throw new IllegalArgumentException("Loading No." + handleNo + " Ship Failed.");
         }
         List<SendThirdDetail> detailsList = handleThirdDao.querySmall(Long.parseLong(principal.getMerchantId()), handleNo);
+        if (detailsList == null || detailsList.size() == 0) {
+            throw new DMSException(BizErrorCode.LOADING_EMPTY);
+        }
+
         List<String> orderNos = new ArrayList<>();
         for (SendThirdDetail d : detailsList) {
             orderNos.add(d.getOrderNo());

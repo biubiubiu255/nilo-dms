@@ -1,8 +1,6 @@
 package com.nilo.dms.web.controller.mobile;
 
-import com.nilo.dms.common.Principal;
-import com.nilo.dms.dao.DeliveryOrderOptDao;
-import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.dao.WaybillLogDao;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,7 @@ public class MobileArriveScanController extends BaseController {
     private WaybillService waybillService;
 
     @Autowired
-    private DeliveryOrderOptDao deliveryOrderOptDao;
+    private WaybillLogDao waybillLogDao;
 
     @RequestMapping(value = "/scan.html")
     public String toPage() {
@@ -31,7 +29,7 @@ public class MobileArriveScanController extends BaseController {
     @RequestMapping(value = "/check.html")
     public String check(String code) {
 
-        Long a = deliveryOrderOptDao.getStateByOrderNo(code);
+        Long a = waybillLogDao.getStateByOrderNo(code);
         if (a == null) {
             return toJsonErrorMsg("There is no OrderNo");
         }

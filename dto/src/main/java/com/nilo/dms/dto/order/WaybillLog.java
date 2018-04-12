@@ -3,9 +3,7 @@ package com.nilo.dms.dto.order;
 /**
  * Created by admin on 2017/9/19.
  */
-public class DeliveryOrderOpt {
-
-    private String id;
+public class WaybillLog {
 
     private String orderNo;
 
@@ -67,14 +65,6 @@ public class DeliveryOrderOpt {
 
     public void setOptBy(String optBy) {
         this.optBy = optBy;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getMerchantId() {
