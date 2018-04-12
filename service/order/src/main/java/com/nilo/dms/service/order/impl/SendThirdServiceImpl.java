@@ -45,6 +45,7 @@ public class SendThirdServiceImpl implements SendThirdService {
         for (Waybill e : list) {
             SendThirdDetail sendThirdDetail = new SendThirdDetail();
             org.springframework.beans.BeanUtils.copyProperties(e, sendThirdDetail);
+            sendThirdDetail.setMerchantId(merchantId);
             sendThirdDetail.setThirdHandleNo(handleNo);
             sendThirdDetail.setOrderNo(e.getOrderNo());
             dataList.add(sendThirdDetail);

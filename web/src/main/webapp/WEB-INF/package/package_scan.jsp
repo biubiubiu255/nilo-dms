@@ -173,6 +173,20 @@
 
         $('.package').on('click', function (e) {
 
+            var param = '?tempScanNo=${scanNo}&networkCode='+$("input[name='network_id']").val()+'&nextStation='+$("input[name='nextStation']").val()
+            layer.open({
+                type: 2,
+                title: 'Edit',
+                shadeClose: true,
+                shade: false,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['900px', '600px'],
+                offset: ['100px', '250px'],
+                content: '/waybill/send_nextStation/editPage.html' + param
+            });
+
+            return;
+
 
             var subtype = e.currentTarget.value;
             var nextStation = $("select[name='nextNetworkId']").val();
@@ -197,7 +211,7 @@
                             var param = '?tempScanNo=${scanNo}&networkCode='+$("input[name='network_id']").val()+'&nextStation='+$("input[name='nextStation']").val()
                             layer.open({
                                 type: 2,
-                                title: 'Edit',
+                                title: 'Add Send Third Station',
                                 shadeClose: true,
                                 shade: false,
                                 maxmin: true, //开启最大化最小化按钮

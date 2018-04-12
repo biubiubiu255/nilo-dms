@@ -14,12 +14,21 @@
 
 <div class="box-body">
     <%--第一排--%>
-    <div class="layui-form-item">
-        <label class="layui-form-label" style="width:120px">LoadingNo</label>
-        <div class="layui-input-inline">
-            <input type="text" name="loadingBy" value="${riderDelivery.handleNo}" autocomplete="off"
-                   class="layui-input layui-disabled" disabled>
+    <div class="layui-form layui-form-item">
+        <div style="float: left; width: 39%; margin-left: 10px;">
+            <label class="layui-form-label">Express:</label>
+            <div class="layui-form-item layui-inline" style="width: 190px">
+                <select lay-filter="fil-express" name="expressLay">
+                    <option>Please select content</option>
+                    <c:forEach items="${expressList}" var="express">
+                        <option value="${express.expressCode}">${express.expressName}</option>
+                    </c:forEach>
+                </select>
+                <input type="hidden" name="express" value="">
+            </div>
         </div>
+
+
 
         <label class="layui-form-label" style="width:150px">Quantity</label>
         <div class="layui-input-inline">
@@ -33,21 +42,17 @@
     <div class="layui-form">
         <div class="layui-form-item">
             <div style="float: left; width: 39%; margin-left: 10px;">
-                <label class="layui-form-label">Rider:</label>
+                <label class="layui-form-label">Driver:</label>
                 <div class="layui-form-item layui-inline" style="width: 190px">
-                    <select lay-filter="fil-rider" name="expressLay">
-                        <option>Please select content</option>
-                        <c:forEach items="${expressList}" var="express">
-                            <option value="${express.expressCode}">${express.expressName}</option>
-                        </c:forEach>
+                    <select lay-filter="fil-driver" name="expressLay" id="sendDriver">
                     </select>
-                    <input type="hidden" name="express" value="">
+                    <input type="hidden" name="driver" value="">
                 </div>
             </div>
 
             <div style="float: left; width: 50%; margin-left: -3%;">
                 <div class="layui-form-item">
-                    <label class="layui-form-label" style="width:150px">Scan OrderNo:</label>
+                    <label class="layui-form-label" style="width:150px; margin-left: 25px">Scan OrderNo:</label>
                     <div class="layui-input-inline">
                         <input type="text" id="orderNo" autocomplete="off" placeholder="Scan" class="layui-input">
                     </div>
@@ -92,10 +97,14 @@
         view();
 
         layui.use('form', function () {
-            var form = layui.form;
-            form.on('select(fil-rider)', function (data) {
+            form = layui.form;
+            form.on('select(fil-driver)', function (data) {
+                $("input[name='driver']").val(data.value);
+            });
+            form.on('select(fil-express)', function (data) {
                 //alert(data.value);
                 $("input[name='express']").val(data.value);
+                showDriverSelect(data.value);
             });
         });
 
@@ -278,6 +287,24 @@
         }
 
 
+        function showDriverSelect(expressCode){
+            $.post('/waybill/send_nextStation/getDriver.html', {expressCode: expressCode}, function(data){
+
+              if (data.result) {
+                    $("#sendDriver").empty();
+                    $("#sendDriver").prepend("<option value='0'>choose or search....</option>");
+                    var driver = data.data;
+                    console.log(data.data.length);
+                    for (var i = 0; i < driver.length; i++) {
+                        $("#sendDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
+                    }
+                    layui.use('form', function () {
+                        form = layui.form;
+                        form.render();
+                    });
+                }
+            }, 'json');
+        }
 
     });
 

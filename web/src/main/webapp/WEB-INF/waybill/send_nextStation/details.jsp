@@ -18,7 +18,7 @@
         </div>
         <label class="layui-form-label" style="width:120px">Loading By</label>
         <div class="layui-input-inline">
-            <input type="text" name="handleByName" value="${pack.handleByName}" autocomplete="off"
+            <input type="text" name="handleName" value="${pack.nextStation}" autocomplete="off"
                    class="layui-input layui-disabled" disabled>
         </div>
     </div>
@@ -26,9 +26,9 @@
         <input type="hidden" name="${pack.handleNo}">
 
         <div class="layui-form-item">
-            <label class="layui-form-label" style="width:120px">Rider</label>
+                <label class="layui-form-label" style="width:120px">Driver</label>
             <div class="layui-input-inline">
-                <input type="text" name="rider" value="${pack.rider}" autocomplete="off"
+                <input type="text" name="driver" value="${pack.driver}" autocomplete="off"
                        class="layui-input layui-disabled"
                        disabled>
             </div>
@@ -91,6 +91,10 @@
                 var data = obj.data;
                 var orderNo = data.orderNo;
                 if (obj.event === 'delete') {
+                    if(isModify()===false){
+                        layer.msg('Finished loading');
+                        return ;
+                    }
                     for(var i=0;i<tableData.length;i++){
                         if (tableData.splice(i, 1));
                         break;
@@ -153,7 +157,7 @@
                     {field: 'id', title: 'ID', width: 80}
                     , {field: 'orderNo', title: 'OrderNo', width: 190}
                     , {field: 'weight' , title: 'Weight' , width: 90}
-                    , {title: 'CreateTime', width: 200, templet: '<div>{{formatDate(d.created_time)}}</div>'}
+                    , {title: 'CreateTime', width: 200, templet: '<div>{{formatDate(d.createdTime)}}</div>'}
                     //, {field: '', title: 'opt', width:80, toolbar: '#barDemo', fixed: 'right', align:'center'}
                 ]]
                 , id: '${id2}'
@@ -166,7 +170,7 @@
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/waybill/rider_delivery/updateStatus.html",
+                url: "/waybill/send_nextStation/updateStatus.html",
                 dataType: "json",
                 data: {
                     handleNo: "${pack.handleNo}",
@@ -217,6 +221,16 @@
             window.open("/order/loading/print.html?loadingNo=" + $("#loadingNo").val());
         });
 
+        function initShow() {
+            if('${pack.status}'=='1'){
+                $('.commit').hide();
+            }
+        }
 
+        //根据发车单状态，返回是否可以修改
+        function isModify(){
+            var bool = parseInt(${pack.status})==0 ? true : false;
+            return bool;
+        }
     });
 </script>

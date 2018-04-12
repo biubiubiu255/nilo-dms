@@ -56,9 +56,9 @@
                 jdbcType="DOUBLE"/>
         <result property="status" column="status" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
-        <result property="created_time" column="created_time" javaType="java.lang.Integer"
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="updated_time" column="updated_time" javaType="java.lang.Integer"
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
     </resultMap>
     <!-- 查询装车打包 -->
