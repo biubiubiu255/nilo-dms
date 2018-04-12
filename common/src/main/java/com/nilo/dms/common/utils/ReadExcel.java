@@ -4,11 +4,8 @@
  */
 package com.nilo.dms.common.utils;
 
-import com.nilo.dms.dto.util.CellData;
-import com.nilo.dms.dto.util.ExcelData;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
+import com.nilo.dms.common.CellData;
+import com.nilo.dms.common.ExcelData;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,7 +13,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.*;
 

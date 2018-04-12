@@ -74,7 +74,6 @@
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
                 <th lay-data="{field:'orderType', width:100}">OrderType</th>
-                <th lay-data="{field:'country', width:100}">Country</th>
                 <th lay-data="{title:'Opt',fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
             </tr>
             </thead>
@@ -172,21 +171,6 @@
         };
 
         $('.package').on('click', function (e) {
-
-            var param = '?tempScanNo=${scanNo}&networkCode='+$("input[name='network_id']").val()+'&nextStation='+$("input[name='nextStation']").val()
-            layer.open({
-                type: 2,
-                title: 'Edit',
-                shadeClose: true,
-                shade: false,
-                maxmin: true, //开启最大化最小化按钮
-                area: ['900px', '600px'],
-                offset: ['100px', '250px'],
-                content: '/waybill/send_nextStation/editPage.html' + param
-            });
-
-            return;
-
 
             var subtype = e.currentTarget.value;
             var nextStation = $("select[name='nextNetworkId']").val();

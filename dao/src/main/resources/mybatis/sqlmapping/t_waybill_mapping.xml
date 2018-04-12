@@ -281,6 +281,9 @@
             <if test="printTimes != null">
                 print_Times = #{printTimes},
             </if>
+            <if test="delayTimes != null">
+                delay_times = #{delayTimes},
+            </if>
             <if test="alreadyPaid != null">
                 already_paid = #{alreadyPaid},
             </if>

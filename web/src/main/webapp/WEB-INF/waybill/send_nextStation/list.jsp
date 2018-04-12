@@ -16,11 +16,10 @@
     <div class="layui-row">
 
         <div class="layui-col-md5">
-        <%--
+
         <shiro:hasPermission name="400061">
             <button class="layui-btn layui-btn-normal loading-scan">Delivery Scan</button>
         </shiro:hasPermission>
-            --%>
         <button class="layui-btn btn-search">Search</button>
     </div>
 
@@ -160,7 +159,10 @@
                         content: data,
                         area: ['900px', '600px'],
                         offset: ['100px', '250px'],
-                        maxmin: true
+                        maxmin: true,
+                        end: function () {
+                            reloadTable();
+                        }
                     });
                 }
             });

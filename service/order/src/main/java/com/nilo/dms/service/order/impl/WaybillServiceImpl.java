@@ -51,7 +51,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Autowired
     private NotifyService notifyService;
     @Autowired
-    private OrderOptLogService orderOptLogService;
+    private WaybillLogService waybillLogService;
     @Autowired
     private DeliveryOrderGoodsDao deliveryOrderGoodsDao;
     @Autowired
@@ -187,6 +187,8 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         }
         List<DeliveryOrderSenderDO> senderDO = deliveryOrderSenderDao.queryByOrderNos(merchantId, orderNos);
         List<DeliveryOrderReceiverDO> receiverDO = deliveryOrderReceiverDao.queryByOrderNos(merchantId, orderNos);
+        List<DeliveryOrderGoodsDO> goodsDO = deliveryOrderGoodsDao.queryByOrderNos(merchantId, orderNos);
+
         for (WaybillDO o : waybillDOs) {
             Waybill order = convert(o);
             for (DeliveryOrderSenderDO s : senderDO) {
@@ -201,6 +203,13 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
                     break;
                 }
             }
+            List<DeliveryOrderGoodsDO> goodsList = new ArrayList<>();
+            for (DeliveryOrderGoodsDO r : goodsDO) {
+                if (StringUtil.equals(o.getOrderNo(), r.getOrderNo())) {
+                    goodsList.add(r);
+                }
+            }
+            order.setGoodsInfoList(convert(goodsList));
             list.add(order);
         }
         return list;
@@ -267,7 +276,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
                     // 记录物流轨迹
                     deliveryRouteService.addRoute(optRequest);
                     // 添加操作记录
-                    orderOptLogService.addOptLog(optRequest);
+                    waybillLogService.addOptLog(optRequest);
                 } catch (Exception e) {
                     logger.error("handleOpt Failed. Data:{}", optRequest, e);
                     transactionStatus.setRollbackOnly();
@@ -313,8 +322,8 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         // 判断是否允许打包
         for (String o : packageRequest.getOrderNos()) {
             Waybill waybill = queryByOrderNo(packageRequest.getMerchantId(), o);
-            if (StringUtil.isNotEmpty(waybill.getParentNo()) || waybill.getStatus() != DeliveryOrderStatusEnum.ARRIVED) {
-                throw new DMSException(BizErrorCode.PACKAGE_NOT_ALLOW, o);
+            if (StringUtil.isNotEmpty(waybill.getParentNo()) ) {
+                throw new DMSException(BizErrorCode.PACKAGE_ALREADY_PACKAGE, o);
             }
         }
 
@@ -379,7 +388,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOrderNo(packageRequest.getOrderNos());
         optRequest.setOptType(OptTypeEnum.PACKAGE);
-        orderOptLogService.addOptLog(optRequest);
+        waybillLogService.addOptLog(optRequest);
         return orderNo;
     }
 
@@ -393,7 +402,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             String orderNo = iterator.next();
             Waybill waybill = queryByOrderNo(unpackRequest.getMerchantId(), orderNo);
             if (StringUtil.isEmpty(waybill.getParentNo()) && !waybill.isPackage()) {
-                throw new DMSException(BizErrorCode.PACKAGE_NOT_ALLOW, orderNo);
+                throw new DMSException(BizErrorCode.UNPACK_NOT_ALLOW, orderNo);
             }
             if (waybill.isPackage()) {
                 OrderOptRequest optRequest = new OrderOptRequest();

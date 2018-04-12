@@ -7,21 +7,19 @@ import com.nilo.dms.common.enums.MethodEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
-import com.nilo.dms.dao.DeliveryOrderOptDao;
+import com.nilo.dms.dao.WaybillLogDao;
 import com.nilo.dms.dao.HandleRiderDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.UserInfoDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
-import com.nilo.dms.dto.common.UserInfo;
-import com.nilo.dms.dto.order.DeliveryOrderOpt;
 import com.nilo.dms.dto.order.NotifyRequest;
 import com.nilo.dms.dto.order.OrderOptRequest;
+import com.nilo.dms.dto.order.WaybillLog;
 import com.nilo.dms.dto.system.InterfaceConfig;
 import com.nilo.dms.dto.system.MerchantConfig;
 import com.nilo.dms.dto.system.OrderHandleConfig;
-import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.NotifyService;
@@ -54,11 +52,9 @@ public class NotifyServiceImpl implements NotifyService {
     @Autowired
     private WaybillDao waybillDao;
     @Autowired
-    private UserService userService;
-    @Autowired
     private AbnormalOrderDao abnormalOrderDao;
     @Autowired
-    private DeliveryOrderOptDao deliveryOrderOptDao;
+    private WaybillLogDao waybillLogDao;
     @Autowired
     private HandleRiderDao handleRiderDao;
 
@@ -95,7 +91,7 @@ public class NotifyServiceImpl implements NotifyService {
                 switch (request.getOptType()) {
                     case ARRIVE_SCAN: {
                         //到件只通知一次
-                        List<DeliveryOrderOpt> list = deliveryOrderOptDao.queryByOrderNos(Long.parseLong(merchantId), Arrays.asList(orderNo));
+                        List<WaybillLog> list = waybillLogDao.queryByOrderNos(Long.parseLong(merchantId), Arrays.asList(orderNo));
                         if (list == null || list.size() > 0) {
                             return;
                         }

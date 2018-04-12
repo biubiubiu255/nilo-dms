@@ -1,8 +1,10 @@
 package com.nilo.dms.dao;
 
 import com.nilo.dms.common.BaseDao;
+import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.handle.SendThirdDetail;
+import com.nilo.dms.dto.order.Waybill;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

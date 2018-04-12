@@ -11,9 +11,12 @@ import com.nilo.dms.dao.ThirdDriverDao;
 import com.nilo.dms.dao.ThirdExpressDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.dto.handle.SendThirdDetail;
 import com.nilo.dms.dto.handle.SendThirdHead;
+import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SendThirdService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
@@ -42,7 +45,7 @@ public class ThirdExpressDeliveryController extends BaseController {
     @Autowired
     private SendThirdService sendThirdService;
     @Autowired
-    private WaybillDao waybillDao;
+    private WaybillService waybillService;
     @Autowired
     private HandleRiderDao handleRiderDao;
     @Autowired
@@ -80,20 +83,25 @@ public class ThirdExpressDeliveryController extends BaseController {
         }
         model.addAttribute("pack", head);
         Pagination page = getPage();
-        model.addAttribute("smallsJson", toPaginationLayUIData(page, head.getList()));
+        model.addAttribute("list", toPaginationLayUIData(page, head.getList()));
 
         List<ThirdExpressDO> expressDOList = thirdExpressDao.findByMerchantId(Long.parseLong(me.getMerchantId()));
         model.addAttribute("expressList", expressDOList);
+
+        List<ThirdDriverDO> driverList = thirdDriverDao.findByExpressCode(head.getThirdExpressCode());
+        model.addAttribute("driverList", driverList);
 
         return "waybill/third_express_delivery/details";
     }
 
     @RequestMapping(value = "/print.html")
     public String print(Model model, String loadingNo) {
+        Principal me = SessionLocal.getPrincipal();
 
         SendThirdHead head = sendThirdService.queryDetailsByHandleNo(loadingNo);
         model.addAttribute("pack", head);
-        model.addAttribute("smalls", head.getList());
+        //List<Waybill> smalls = sendThirdService.querySmallsPlus(me.getMerchantId(), loadingNo);
+        //model.addAttribute("smalls", smalls);
         return "waybill/third_express_delivery/print";
     }
 
@@ -114,7 +122,7 @@ public class ThirdExpressDeliveryController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
-        WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.valueOf(merchantId), orderNo);
+        Waybill waybillDO = waybillService.queryByOrderNo(merchantId, orderNo);
         if (waybillDO == null) {
             return toJsonErrorMsg("Order does not exist");
         }
@@ -127,10 +135,8 @@ public class ThirdExpressDeliveryController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
 
         String merchantId = me.getMerchantId();
-        //System.out.println("本次测试 = " + smallPack.length);
         SendThirdHead head = new SendThirdHead();
         head.setMerchantId(Long.valueOf(merchantId));
-        head.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
         head.setThirdExpressCode(thirdExpressCode);
         head.setHandleBy(Long.valueOf(me.getUserId()));
         head.setDriver(rider);
@@ -144,24 +150,11 @@ public class ThirdExpressDeliveryController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/updateStatus.html", method = RequestMethod.POST)
-    public String updateStatus(String handleNo, Integer status) {
-        handleRiderDao.upBigStatus(handleNo, status);
+    @RequestMapping(value = "/ship.html", method = RequestMethod.POST)
+    public String updateStatus(String handleNo) {
+        sendThirdService.ship(handleNo);
         return toJsonTrueMsg();
     }
-
-
-    @RequestMapping(value = "/editPage.html", method = RequestMethod.GET)
-    public String editPage(String handleNo, Model model) {
-
-        SendThirdHead head = sendThirdService.queryDetailsByHandleNo(handleNo);
-
-        model.addAttribute("list", head.getList());
-        model.addAttribute("riderList", getRiderList());
-        model.addAttribute("riderDelivery", head);
-        return "waybill/third_express_delivery/edit";
-    }
-
 
     @ResponseBody
     @RequestMapping(value = "/edit.html", method = RequestMethod.POST)

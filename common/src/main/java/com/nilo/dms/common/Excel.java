@@ -1,4 +1,4 @@
-package com.nilo.dms.dto.util;
+package com.nilo.dms.common;
 
 import java.lang.annotation.*;
 import java.util.HashMap;

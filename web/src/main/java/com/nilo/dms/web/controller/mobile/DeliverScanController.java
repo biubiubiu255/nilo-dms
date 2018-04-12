@@ -3,14 +3,13 @@ package com.nilo.dms.web.controller.mobile;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DeliveryOrderOptDao;
+import com.nilo.dms.dao.WaybillLogDao;
 import com.nilo.dms.dto.order.Loading;
-import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.dto.order.ShipParameter;
 import com.nilo.dms.dto.order.Waybill;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.order.LoadingService;
 import com.nilo.dms.web.controller.BaseController;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +26,8 @@ public class DeliverScanController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     private LoadingService loadingService;
-    //    @Autowired
-//    private OrderService orderService;
     @Autowired
-    private DeliveryOrderOptDao deliveryOrderOptDao;
+    private WaybillLogDao waybillLogDao;
 
     @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
@@ -38,29 +35,11 @@ public class DeliverScanController extends BaseController {
         return "mobile/network/deliver_scan/deliverScan";
     }
 
-
-    @Test
-    public void test() {
-        //File file = new File("1.txt");
-        //System.out.println(file.exists());
-        //String path = file.getCanonicalPath();
-        //System.out.println(path);
-        //Properties prop = new Properties();
-        // String path = Thread.currentThread().getContextClassLoader().getResource("").toString();
-        //System.out.println(path);
-        //InputStream stream = this.getClass().getClass().getClassLoader().getResourceAsStream("i18n_en_US.properties");
-
-
-        //prop.load(stream);
-        //String value = prop.getProperty("add_delivery_fee_template");
-        //System.out.println(value);
-    }
-
     @ResponseBody
     @RequestMapping(value = "/check.html")
     public String check(String code) {
 
-        Long a = deliveryOrderOptDao.getStateByOrderNo(code);
+        Long a = waybillLogDao.getStateByOrderNo(code);
         if (a == null) {
             return toJsonErrorMsg("There is no OrderNo");
         }

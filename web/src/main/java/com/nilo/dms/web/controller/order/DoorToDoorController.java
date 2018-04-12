@@ -5,11 +5,14 @@ import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.dao.HandleAllocateDao;
+import com.nilo.dms.dto.handle.HandleAllocate;
 import com.nilo.dms.dto.order.OrderOptRequest;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.dto.order.WaybillParameter;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.order.WaybillOptService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +41,9 @@ public class DoorToDoorController extends BaseController {
     @Autowired
     private WaybillService waybillService;
     @Autowired
-    private UserService userService;
+    private WaybillOptService waybillOptService;
+    @Autowired
+    private HandleAllocateDao handleAllocateDao;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model) {
@@ -56,7 +62,14 @@ public class DoorToDoorController extends BaseController {
 
         Pagination page = getPage();
         List<Waybill> list = waybillService.queryWaybillBy(parameter, page);
-
+        if (list != null) {
+            for (Waybill w : list) {
+                HandleAllocate allocate = handleAllocateDao.queryByOrderNo(Long.parseLong(merchantId), w.getOrderNo());
+                if (allocate != null) {
+                    w.setAllocatedRider(allocate.getRiderName());
+                }
+            }
+        }
         return toPaginationLayUIData(page, list);
     }
 
@@ -72,22 +85,9 @@ public class DoorToDoorController extends BaseController {
     public String allocate(String userId, String remark, HttpServletRequest request) {
 
         String[] orderNos = (String[]) request.getSession().getAttribute("orderNos");
-        Principal me = SessionLocal.getPrincipal();
-        String merchantId = me.getMerchantId();
-        try {
-            if (orderNos == null) {
-                throw new DMSException(BizErrorCode.ORDER_NO_EMPTY);
-            }
-            //操作订单
-            OrderOptRequest optRequest = new OrderOptRequest();
-            optRequest.setOptType(OptTypeEnum.ALLOCATE);
-            optRequest.setOrderNo(Arrays.asList(orderNos));
-            waybillService.handleOpt(optRequest);
 
-        } catch (Exception e) {
-            log.error("allocate failed. orderNo:{}", orderNos, e);
-            return toJsonErrorMsg(e.getMessage());
-        }
+        waybillOptService.allocate(Arrays.asList(orderNos), userId, remark);
+
         return toJsonTrueMsg();
 
     }

@@ -1,20 +1,26 @@
 package com.nilo.dms.service.order.impl;
 
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.common.enums.*;
+import com.nilo.dms.common.enums.AbnormalTypeEnum;
+import com.nilo.dms.common.enums.DelayStatusEnum;
+import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.DateUtil;
-import com.nilo.dms.dao.DeliveryOrderDelayDao;
+import com.nilo.dms.dao.HandleAllocateDao;
+import com.nilo.dms.dao.HandleDelayDao;
 import com.nilo.dms.dao.HandleSignDao;
-import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
 import com.nilo.dms.dao.dataobject.HandleSignDO;
-import com.nilo.dms.dao.dataobject.WaybillDO;
+import com.nilo.dms.dto.common.UserInfo;
+import com.nilo.dms.dto.handle.HandleAllocate;
+import com.nilo.dms.dto.handle.HandleDelay;
 import com.nilo.dms.dto.order.*;
+import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.nilo.dms.service.order.AbnormalOrderService;
+import com.nilo.dms.service.order.AbstractOrderOpt;
+import com.nilo.dms.service.order.WaybillOptService;
+import com.nilo.dms.service.order.WaybillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,52 +34,18 @@ import java.util.List;
 @Service
 public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOptService {
 
-    private static final Integer MAX_DELAY_TIMES = 2;
     @Autowired
     WaybillService waybillService;
     @Autowired
     private AbnormalOrderService abnormalOrderService;
     @Autowired
-    private DeliveryOrderDelayDao deliveryOrderDelayDao;
+    private UserService userService;
+    @Autowired
+    private HandleDelayDao handleDelayDao;
+    @Autowired
+    private HandleAllocateDao handleAllocateDao;
     @Autowired
     private HandleSignDao handleSignDao;
-
-
-    @Override
-    @Transactional
-    public void goToPickup(String merchantId, String orderNo, String optBy, String taskId) {
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setOptType(OptTypeEnum.GO_TO_PICK_UP);
-        List<String> orderNoList = new ArrayList<>();
-        orderNoList.add(orderNo);
-        optRequest.setOrderNo(orderNoList);
-        waybillService.handleOpt(optRequest);
-    }
-
-    @Override
-    @Transactional
-    public void pickup(String merchantId, String orderNo, String optBy, String taskId) {
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setOptType(OptTypeEnum.PICK_UP);
-        List<String> orderNoList = new ArrayList<>();
-        orderNoList.add(orderNo);
-        optRequest.setOrderNo(orderNoList);
-        waybillService.handleOpt(optRequest);
-    }
-
-    @Override
-    @Transactional
-    public void pickupFailed(String merchantId, String orderNo, String reason, String optBy, String taskId) {
-
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setOptType(OptTypeEnum.PICK_UP_FAILED);
-        optRequest.setRemark(reason);
-        List<String> orderNoList = new ArrayList<>();
-        orderNoList.add(orderNo);
-        optRequest.setOrderNo(orderNoList);
-        waybillService.handleOpt(optRequest);
-
-    }
 
     @Override
     public void sign(String orderNo, String remark) {
@@ -122,40 +94,67 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
     @Override
     @Transactional
     public void delay(DelayParam param) {
-        //判断是否允许delay
-        DeliveryOrderDelayDO delayDO = deliveryOrderDelayDao.findByOrderNo(Long.parseLong(param.getMerchantId()), param.getOrderNo());
 
-        //修改delay次数
-        if (delayDO == null) {
-            DeliveryOrderDelayDO insert = new DeliveryOrderDelayDO();
-            insert.setOrderNo(param.getOrderNo());
-            insert.setMerchantId(Long.parseLong(param.getMerchantId()));
-            insert.setAllowTimes(MAX_DELAY_TIMES);
-            insert.setDelayTimes(1);
-            insert.setStatus(DelayStatusEnum.CREATE.getCode());
-            insert.setDelayReason(param.getReason());
-            insert.setRemark(param.getRemark());
-            deliveryOrderDelayDao.insert(insert);
-        } else {
-            DeliveryOrderDelayDO update = new DeliveryOrderDelayDO();
-            update.setOrderNo(param.getOrderNo());
-            update.setMerchantId(Long.parseLong(param.getMerchantId()));
-            update.setDelayTimes(delayDO.getDelayTimes() + 1);
-            deliveryOrderDelayDao.update(update);
-            if (update.getDelayTimes() == MAX_DELAY_TIMES) {
-            }
-        }
+        Principal principal = SessionLocal.getPrincipal();
 
+        HandleDelay insert = new HandleDelay();
+        insert.setOrderNo(param.getOrderNo());
+        insert.setMerchantId(Long.parseLong(principal.getMerchantId()));
+        insert.setHandleBy(principal.getUserId());
+        insert.setHandleName(principal.getUserName());
+        insert.setStatus(DelayStatusEnum.CREATE.getCode());
+        insert.setRemark(param.getRemark());
+        insert.setReason(param.getReason());
+        insert.setReasonId(param.getReasonId());
+        handleDelayDao.insert(insert);
+
+        Waybill waybill = waybillService.queryByOrderNo(principal.getMerchantId(), param.getOrderNo());
+        WaybillHeader header = new Waybill();
+        header.setMerchantId(principal.getMerchantId());
+        header.setOrderNo(param.getOrderNo());
+        header.setDelayTimes(waybill.getDelayTimes() == null ? 1 : waybill.getDelayTimes() + 1);
+        waybillService.updateWaybill(header);
     }
 
     @Override
     @Transactional
-    public void resend(DelayParam param) {
+    public void completeDelay(String orderNo) {
 
-        DeliveryOrderDelayDO update = new DeliveryOrderDelayDO();
-        update.setOrderNo(param.getOrderNo());
-        update.setMerchantId(Long.parseLong(param.getMerchantId()));
+        Principal principal = SessionLocal.getPrincipal();
+        HandleDelay update = new HandleDelay();
+        update.setOrderNo(orderNo);
+        update.setMerchantId(Long.parseLong(principal.getMerchantId()));
         update.setStatus(DelayStatusEnum.COMPLETE.getCode());
-        deliveryOrderDelayDao.update(update);
+        handleDelayDao.update(update);
+
+    }
+
+    @Override
+    public void allocate(List<String> orderNos, String riderId, String remark) {
+
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setOptType(OptTypeEnum.ALLOCATE);
+        optRequest.setRemark(remark);
+        optRequest.setOrderNo(orderNos);
+        waybillService.handleOpt(optRequest);
+
+        Principal principal = SessionLocal.getPrincipal();
+        UserInfo userInfo = userService.findUserInfoByUserId(principal.getMerchantId(), riderId);
+        List<HandleAllocate> list = new ArrayList<>();
+        Long merchantId = Long.parseLong(principal.getMerchantId());
+        for (String o : orderNos) {
+            HandleAllocate h = new HandleAllocate();
+            h.setOrderNo(o);
+            h.setHandleBy(principal.getUserId());
+            h.setHandleName(principal.getUserName());
+            h.setNetworkCode(principal.getFirstNetwork());
+            h.setMerchantId(merchantId);
+            h.setRemark(remark);
+            h.setRiderId(riderId);
+            h.setRiderName(userInfo.getName());
+            h.setRiderPhone(userInfo.getPhone());
+            list.add(h);
+        }
+        handleAllocateDao.batchInsert(list);
     }
 }

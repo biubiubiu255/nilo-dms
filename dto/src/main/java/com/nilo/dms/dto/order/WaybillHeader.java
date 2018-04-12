@@ -4,7 +4,7 @@ package com.nilo.dms.dto.order;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.enums.PaidTypeEnum;
-import com.nilo.dms.dto.util.Excel;
+import com.nilo.dms.common.Excel;
 
 /**
  * Created by ronny on 2017/9/15.
@@ -57,9 +57,17 @@ public class WaybillHeader {
     private Double billNo;
     private Double accountNo;
     private Integer printTimes;
-
+    private Integer delayTimes;
     private String allocatedRider;
     private PaidTypeEnum paidType;
+
+    public Integer getDelayTimes() {
+        return delayTimes;
+    }
+
+    public void setDelayTimes(Integer delayTimes) {
+        this.delayTimes = delayTimes;
+    }
 
     public PaidTypeEnum getPaidType() {
         return paidType;

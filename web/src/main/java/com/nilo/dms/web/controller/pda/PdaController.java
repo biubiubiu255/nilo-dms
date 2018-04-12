@@ -6,7 +6,7 @@ import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.exception.SysErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DeliveryOrderOptDao;
+import com.nilo.dms.dao.WaybillLogDao;
 import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.ThirdDriverDao;
 import com.nilo.dms.dao.ThirdExpressDao;
@@ -63,7 +63,7 @@ public class PdaController extends BaseController {
     private ThirdDriverDao thirdDriverDao;
 
     @Autowired
-    private DeliveryOrderOptDao deliveryOrderOptDao;
+    private WaybillLogDao waybillLogDao;
 
     @RequestMapping(value = "/scan.html")
     public String toPage() {
@@ -94,7 +94,7 @@ public class PdaController extends BaseController {
     @RequestMapping(value = "/sendCheck.html")
     public String sendCheck(String waybillno) {
 
-        Long a = deliveryOrderOptDao.getStateByOrderNo(waybillno);
+        Long a = waybillLogDao.getStateByOrderNo(waybillno);
         if (a == null) {
             return toJsonErrorMsg("There is no OrderNo");
         }

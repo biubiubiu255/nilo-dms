@@ -5,9 +5,9 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dto.order.DeliveryOrderOpt;
+import com.nilo.dms.dto.order.WaybillLog;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.OrderOptLogService;
+import com.nilo.dms.service.order.WaybillLogService;
 import com.nilo.dms.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,11 +19,11 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/order/log")
-public class OrderLogController extends BaseController {
+@RequestMapping("/waybill/log")
+public class WaybillLogController extends BaseController {
 
     @Autowired
-    private OrderOptLogService orderOptLogService;
+    private WaybillLogService waybillLogService;
 
     @RequestMapping("/list.html")
     public String list(Model model) {
@@ -51,7 +51,7 @@ public class OrderLogController extends BaseController {
             toTimeLong = DateUtil.parse(toTime, "yyyy-MM-dd") + 24 * 60 * 60 - 1;
         }
         Pagination page = getPage();
-        List<DeliveryOrderOpt> list = orderOptLogService.queryBy(merchantId, null, orderNo, null, fromTimeLong, toTimeLong, page);
+        List<WaybillLog> list = waybillLogService.queryBy(merchantId, null, orderNo, null, fromTimeLong, toTimeLong, page);
         return toPaginationLayUIData(page, list);
     }
 

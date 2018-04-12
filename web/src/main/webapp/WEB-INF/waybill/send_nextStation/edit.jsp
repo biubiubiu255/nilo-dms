@@ -145,7 +145,7 @@
                 var load = layer.load(2);
                 $.ajax({
                     type: "POST",
-                    url: "/waybill/rider_delivery/scanSmallPack.html",
+                    url: "/waybill/send_nextStation/scanSmallPack.html",
                     dataType: "json",
                     data: {
                         orderNo: orderNo,
@@ -188,9 +188,10 @@
             var saveStatus = 0;   //传输到后台的状态，0仅保存、1发运
             isPrint = parseInt(isPrint);
 
-            var rider = $("input[name='express']").first().val();
-            if (rider=="") {
-                layer.msg("Please select the Express", {icon: 2, time: 2000});
+            var express = $("input[name='express']").first().val();
+            var driver  = $("input[name='driver']").first().val();
+            if (express=="" || driver=="") {
+                layer.msg("Please select option", {icon: 2, time: 2000});
                 return ;
             }
 
@@ -209,7 +210,8 @@
                     smallPack: smallPack,
                     saveStatus: saveStatus,
                     //express : $("input[name='third_express_code']").val() ,
-                    thirdExpressCode: $("input[name='express']").val()
+                    thirdExpressCode: $("input[name='express']").val() ,
+                    driver: $("input[name='driver']").val()
                 },
                 success: function (data) {
                     if (data.result) {
@@ -296,7 +298,8 @@
                     var driver = data.data;
                     console.log(data.data.length);
                     for (var i = 0; i < driver.length; i++) {
-                        $("#sendDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
+                        //$("#sendDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
+                        $("#sendDriver").append("<option value='" + driver[i].name + "'>" + driver[i].name + "</option>");
                     }
                     layui.use('form', function () {
                         form = layui.form;

@@ -12,13 +12,7 @@
     <div class="box-header with-border">
         <h3 class="box-title">Arrive Scan</h3>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label" style="width:120px">Arrive By:</label>
-        <div class="layui-input-inline">
-            <label class="layui-form-label" style="width:120px">${userName}</label>
-        </div>
-    </div>
-
+    <br>
     <div class="layui-form-item">
         <label class="layui-form-label" style="width:120px">OrderNo:</label>
         <div class="layui-input-inline">
@@ -33,7 +27,7 @@
             <thead>
             <tr>
                 <th lay-data="{field:'orderNo', width:200}">OrderNo</th>
-                <th lay-data="{field:'weight', width:100,edit:'text'}">Weight(KG)</th>
+                <th lay-data="{field:'weight', width:130,edit:'text'}">Weight(KG)</th>
                 <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
                 <th lay-data="{field:'orderType', width:100}">OrderType</th>
                 <th lay-data="{title:'Opt',fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
