@@ -54,6 +54,9 @@
 					<a href="/mobile/rider/Batch/toPay.html" title="">
 						<li><img src="/mobile/images/icon_5.png" /><br /><label>Batch transfer</label></li>
 					</a>
+					<a href="/mobile/rider/deliver/toScan.html" title="">
+						<li><img src="/mobile/images/icon_5.png" /><br /><label>Rider Delivery</label></li>
+					</a>
 				</ul>
 				<div class="clear"></div>
 			</div>
