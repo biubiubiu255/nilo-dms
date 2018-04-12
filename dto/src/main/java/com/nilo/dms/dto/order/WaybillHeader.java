@@ -61,6 +61,7 @@ public class WaybillHeader {
     private String allocatedRider;
     private PaidTypeEnum paidType;
 
+
     public PaidTypeEnum getPaidType() {
         return paidType;
     }

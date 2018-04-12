@@ -22,7 +22,7 @@ public interface SendThirdService {
 
     SendThirdHead queryDetailsByHandleNo(String handleNo);
 
-    List<Waybill> querySmallsPlus(String merchantId, String handleNo, Pagination page);
+    List<Waybill> querySmallsPlus(String merchantId, String handleNo);
 
     void editBig(SendThirdHead sendThirdHead);
 

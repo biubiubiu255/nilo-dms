@@ -61,6 +61,7 @@
         <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
     </resultMap>
+
     <!-- 查询装车打包 -->
     <select id="queryBig" resultMap="sendBig" statementType="PREPARED"
             parameterType="com.nilo.dms.dto.handle.SendThirdHead">
@@ -186,15 +187,32 @@
         order by created_time desc
     </select>
 
+<!--
+
+    &lt;!&ndash; 下面是批量查询详单 &ndash;&gt;
+    <select id="querySmallsPlus" resultMap="orderDO">
+        SELECT
+        *
+        FROM
+        t_waybill
+        WHERE merchant_id = #{merchantId} and order_no in
+        <foreach collection="orderNos" item="now" open="(" close=")"
+                 separator=",">
+            #{now}
+        </foreach>
+    </select>
+
+-->
+
 
     <insert id="insertSmalls">
         INSERT
         INTO
         t_handle_third_express_details
-        ( third_handle_no, order_no, weight, length, height, width, status, created_time, updated_time, version )
+        ( merchant_id, third_handle_no, order_no, weight, length, height, width, status, created_time, updated_time, version )
         VALUES
         <foreach collection="list" item="now" separator=",">
-            (#{now.thirdHandleNo},#{now.orderNo},#{now.weight},#{now.len},#{now.height},#{now.width},#{now.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),
+            (#{now.merchantId}, #{now.thirdHandleNo},#{now.orderNo},#{now.weight},#{now.len},#{now.height},#{now.width},#{now.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),
             UUID())
         </foreach>
 

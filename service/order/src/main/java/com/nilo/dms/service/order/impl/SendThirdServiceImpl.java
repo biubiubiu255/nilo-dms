@@ -105,7 +105,7 @@ public class SendThirdServiceImpl implements SendThirdService {
 
     //查询一个装车单里所有的小包，并且返回的是总表类型的list<DeliveryOrderDO>
     @Override
-    public List<Waybill> querySmallsPlus(String merchantId, String handleNo, Pagination page) {
+    public List<Waybill> querySmallsPlus(String merchantId, String handleNo) {
         //新建一个以装车单号为查询条件的DO，返回的即时该装车单里所有的小包
         SendThirdDetail sendThirdDetail = new SendThirdDetail();
         sendThirdDetail.setThirdHandleNo(handleNo);
