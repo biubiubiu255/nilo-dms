@@ -172,13 +172,6 @@ public class PdaController extends BaseController {
         List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
 
         List<SendScanController.NextStation> list = new ArrayList<>();
-        for (ThirdExpressDO e : expressDOList) {
-            SendScanController.NextStation s = new SendScanController.NextStation();
-            s.setCode(e.getExpressCode());
-            s.setName(e.getExpressName());
-            s.setType("T");
-            list.add(s);
-        }
         for (DistributionNetworkDO n : networkDOList) {
             SendScanController.NextStation s = new SendScanController.NextStation();
             s.setCode("" + n.getId());
