@@ -39,7 +39,7 @@ public class Constant {
     
     public static final String STAFF_JOB = "job";
 
-    public static final String IS_PACKAGE="Y";
+    public static final String IS_PACKAGE="1";
 
     public static final String ALLOW_URL="/api.html,/captcha/image.html,/account/login.html,/home.html,/account/logout.html," +
             "/mobile/network/DemoController/toLoginPage.html,/mobile/DemoController/toIndexPage.html,/mobile/DemoController/test.html," +

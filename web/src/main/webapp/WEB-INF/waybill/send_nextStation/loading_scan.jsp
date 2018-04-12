@@ -16,29 +16,43 @@
 
         <div class="layui-form-item">
             <div class="deliveryDiv layui-col-md5 layui-col-lg3">
-                <label class="layui-form-label" style="width:120px">Rider</label>
-                <div class="layui-input-inline">
-                    <select name="deliveryRiderLay" lay-filter="deliveryRiderLay" lay-search=""
-                        <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
-                        <option value="">choose or search....</option>
-                        <c:forEach items="${riderList}" var="rider">
-                            <option value="${rider.userId}"> ${rider.staffId}-${rider.realName}</option>
+                <label class="layui-form-label">Express:</label>
+                <div class="layui-form-item layui-inline" style="width: 190px">
+                    <select lay-filter="fil-express" name="expressLay">
+                        <option>Please select content</option>
+                        <c:forEach items="${expressList}" var="express">
+                            <option value="${express.expressCode}">${express.expressName}</option>
                         </c:forEach>
                     </select>
-                    <input type="hidden" name="rider" value="" id="rider">
+                    <input type="hidden" name="express" value="">
                 </div>
             </div>
             <div class="layui-col-md5 layui-col-lg3">
-                <label class="layui-form-label" style="width:120px">Loading By</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="loadingBy" value="${sessionScope.userName}" autocomplete="off"
-                           class="layui-input layui-disabled" disabled>
+                <label class="layui-form-label">Driver:</label>
+                <div class="layui-form-item layui-inline" style="width: 190px">
+                    <select lay-filter="fil-driver" name="expressLay" id="sendDriver">
+                    </select>
+                    <input type="hidden" name="driver" value="">
                 </div>
             </div>
         </div>
 
-        <div class="layui-form-item layui-col-md5 layui-col-lg3">
-            <label class="layui-form-label" style="width:120px">OrderNo:</label>
+        <div class="layui-form-item">
+
+            <label class="layui-form-label" style="width:110px">Next Station</label>
+            <div class="layui-input-inline">
+                <select name="nextNetworkId" lay-search="" lay-filter="nextNetworkId" lay-verify="required">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${nextStations}" var="station">
+                        <option value="${station.code}" optionSeq="${station.code}" type="${station.type}">${station.name}</option>
+                    </c:forEach>
+                </select>
+                <input type="hidden" name="network_id" value="">
+                <input type="hidden" name="nextStation" value="">
+            </div>
+
+
+            <label class="layui-form-label" style="width:160px">OrderNo:</label>
             <div class="layui-input-inline">
                 <input type="text" id="orderNo" autocomplete="off" placeholder="Scan" class="layui-input">
             </div>
@@ -81,9 +95,19 @@
 
         layui.use('form', function () {
             var form = layui.form;
-            form.on('select(deliveryRiderLay)', function (data) {
+            form.on('select(nextNetworkId)', function (data) {
+                var seq = data.value.toString();
+                $("input[name='network_id']").val(data.value);
+
+                $("input[name='nextStation']").val($("option[optionSeq='"+seq+"']").html());
+            });
+            form.on('select(fil-driver)', function (data) {
+                $("input[name='driver']").val(data.value);
+            });
+            form.on('select(fil-express)', function (data) {
                 //alert(data.value);
-                $("input[name='rider']").val(data.value);
+                $("input[name='express']").val(data.value);
+                showDriverSelect(data.value);
             });
         });
 
@@ -127,7 +151,7 @@
                 var load = layer.load(2);
                 $.ajax({
                     type: "POST",
-                    url: "/waybill/rider_delivery/scanSmallPack.html",
+                    url: "/waybill/send_nextStation/scanSmallPack.html",
                     dataType: "json",
                     data: {
                         orderNo: orderNo,
@@ -183,24 +207,34 @@
                     return;
             }
 
-            var rider = $("input[name='rider']").first().val();
-            if (rider=="") {
-                layer.msg("Please select the Rider", {icon: 2, time: 2000});
-                return ;
-            }
+            //集成提交参数
             var smallPack = "";
             for(var i=0;i<tableData.length;i++){
                 smallPack += tableData[i].orderNo+",";
             }
             smallPack = smallPack.substring(0, smallPack.length-1);
+
+            var driver = $("input[name='driver']").first().val();
+            var networkCode = $("input[name='network_id']").first().val();
+            var nextStation = $("input[name='nextStation']").first().val();
+            var thirdExpressCode = $("input[name='express']").first().val();
+
+            if (rider=="" || networkCode=="" || nextStation=="" || thirdExpressCode=="" || smallPack=="") {
+                layer.msg("Please select the option", {icon: 2, time: 2000});
+                return ;
+            }
+
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/waybill/rider_delivery/addLoading.html",
+                url: "/waybill/send_nextStation/addLoading.html",
                 dataType: "json",
                 data: {
                     smallPack: smallPack,
-                    rider: rider,
+                    driver: driver,
+                    thirdExpressCode: thirdExpressCode,
+                    networkCode: networkCode,
+                    nextStation: nextStation,
                     saveStutus: saveStutus
                 },
                 success: function (data) {
@@ -208,8 +242,8 @@
                         layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
                             if(printed==true){
                                 //这里需要返回一个大包号，才能打印，因为是在后台创建时生成订单号
-                                parent.window.open("/waybill/rider_delivery/print.html?loadingNo=" + data.data.handleNo);
-                                location.reload();
+                                //parent.window.open("/waybill/rider_delivery/print.html?loadingNo=" + data.data.handleNo);
+                                //location.reload();
                             }
                         });
                     } else {
@@ -273,6 +307,26 @@
                 });
 
             });
+        }
+
+        function showDriverSelect(expressCode){
+            $.post('/waybill/send_nextStation/getDriver.html', {expressCode: expressCode}, function(data){
+
+                if (data.result) {
+                    $("#sendDriver").empty();
+                    $("#sendDriver").prepend("<option value='0'>choose or search....</option>");
+                    var driver = data.data;
+                    console.log(data.data.length);
+                    for (var i = 0; i < driver.length; i++) {
+                        //$("#sendDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
+                        $("#sendDriver").append("<option value='" + driver[i].name + "'>" + driver[i].name + "</option>");
+                    }
+                    layui.use('form', function () {
+                        form = layui.form;
+                        form.render();
+                    });
+                }
+            }, 'json');
         }
 
         /*

@@ -8,13 +8,11 @@ import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
-import com.nilo.dms.dto.handle.SendThirdDetail;
 import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SendThirdService;
-import com.nilo.dms.service.org.ThirdDriverService;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
@@ -60,6 +58,8 @@ public class SendNextStationController extends BaseController {
     @Autowired
     private WaybillScanDetailsDao waybillScanDetailsDao;
 
+    @Autowired
+    private DistributionNetworkDao distributionNetworkDao;
 
 
 
@@ -114,34 +114,47 @@ public class SendNextStationController extends BaseController {
         return "waybill/send_nextStation/print";
     }
 
-/*
+
     //返回页面
     @RequestMapping(value = "/addLoadingPage.html", method = RequestMethod.GET)
     public String addLoadingPage(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<StaffDO> staffList = getRiderList(merchantId);
-        model.addAttribute("riderList", staffList);
+        Pagination page = getPage();
+        List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(merchantId));
+        List<PackageController.NextStation> list = new ArrayList<>();
 
-        return "waybill/rider_delivery/loading_scan";
+        for (DistributionNetworkDO n : networkDOList) {
+            PackageController.NextStation s = new PackageController.NextStation();
+            s.setCode("" + n.getId());
+            s.setName(n.getName());
+            list.add(s);
+        }
+
+        List<ThirdExpressDO> expressList = userService.findExpressesAll(page);
+
+
+        model.addAttribute("nextStations", list);
+        model.addAttribute("expressList", expressList);
+
+        return "waybill/send_nextStation/loading_scan";
     }
 
     @ResponseBody
     @RequestMapping(value = "/scanSmallPack.html")
     public String scanSmallPack(String orderNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
-        WaybillDO deliveryOrderDO = waybillDao.queryByOrderNo(Long.valueOf(merchantId), orderNo);
-        if (deliveryOrderDO==null){
-            return toJsonErrorMsg("Order does not exist");
+        WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.valueOf(merchantId), orderNo);
+        if (waybillDO==null || !waybillDO.getIsPackage().equals("1")){
+            return toJsonErrorMsg("Order No or no packaging");
         }
-
-        return toJsonTrueData(toPaginationLayUIData(page, deliveryOrderDO));
+        return toJsonTrueData(toPaginationLayUIData(page, waybillDO));
     }
-*/
+
 
     @ResponseBody
     @RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
@@ -151,14 +164,19 @@ public class SendNextStationController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         Long merchantId = Long.valueOf(me.getMerchantId());
 
+        //这里有两种增加方式，一种是页面之间添加，所以session-model里没有值，全在当前参数里，另外一种是站点在session-model里，driver在当前参数
         //从session取出刚刚打包好的大包发运信息（下一站点ID、名字）
         SendThirdHead packageInfo = (SendThirdHead)session.getAttribute("packageInfo");
-        if(StringUtil.isEmpty(packageInfo.getNetworkCode()) || StringUtil.isEmpty(packageInfo.getNextStation())){
+        if(StringUtil.isEmpty(packageInfo.getNetworkCode()) || StringUtil.isEmpty(packageInfo.getNextStation()) ||
+                StringUtil.isEmpty(sendThirdHead.getNetworkCode()) || StringUtil.isEmpty(sendThirdHead.getNetworkCode())){
             throw new DMSException(BizErrorCode.NOT_STATION_INFO);
         }
-
-        sendThirdHead.setNetworkCode(packageInfo.getNetworkCode());
-        sendThirdHead.setNextStation(packageInfo.getNextStation());
+        if(StringUtil.isEmpty(sendThirdHead.getNetworkCode())){
+            sendThirdHead.setNetworkCode(packageInfo.getNetworkCode());
+        }
+        if(StringUtil.isEmpty(sendThirdHead.getNextStation())){
+            sendThirdHead.setNextStation(packageInfo.getNextStation());
+        }
 
         //加上刚刚的站点信息，当前的操作信息，小包信息，合并写入系统
         sendThirdHead.setMerchantId(merchantId);
@@ -221,7 +239,7 @@ public class SendNextStationController extends BaseController {
         model.addAttribute("packList", toPaginationLayUIData(page, scanDetailList));
         model.addAttribute("expressList", expressList);
 
-        return "waybill/send_nextStation/add";
+        return "waybill/send_nextStation/edit";
     }
 
 
