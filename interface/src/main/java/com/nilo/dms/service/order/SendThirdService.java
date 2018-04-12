@@ -24,9 +24,7 @@ public interface SendThirdService {
 
     List<Waybill> querySmallsPlus(String merchantId, String handleNo);
 
-    void editBig(SendThirdHead sendThirdHead);
-
-    void editSmall(Long merchantId, String handleNo, String[] smallOrders);
+    void edit(SendThirdHead sendThirdHead, String[] smallOrders);
 
     void ship(String handleNo);
 

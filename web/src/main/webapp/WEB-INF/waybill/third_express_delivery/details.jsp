@@ -2,7 +2,7 @@
 <%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
 <html>
 <%@ include file="../../common/header.jsp" %>
-<%
+    <%
     request.setAttribute("id0", RandomStringUtils.randomAlphabetic(8));
 %>
 <body>
@@ -23,7 +23,8 @@
                 <select name="carrier" lay-search="" lay-filter="carrier">
                     <option value="">choose or search....</option>
                     <c:forEach items="${expressList}" var="carrier">
-                        <option value="${carrier.expressCode}" <c:if test="${pack.thirdExpressCode == carrier.expressCode}">selected </c:if> >${carrier.expressName}</option>
+                        <option value="${carrier.expressCode}"
+                                <c:if test="${pack.thirdExpressCode == carrier.expressCode}">selected </c:if> >${carrier.expressName}</option>
                     </c:forEach>
                 </select>
             </div>
@@ -153,16 +154,10 @@
         });
 
         //提交数据
-        function commit(isPrint) {
+        function commit(ifship) {
             var printed = false;  //是否需要打印
-            var saveStatus = 0;   //传输到后台的状态，0仅保存、1发运
-            isPrint = parseInt(isPrint);
+            var ifship = parseInt(ifship);   //传输到后台的状态，0仅保存、1发运
 
-            var rider = $("input[name='rider']").first().val();
-            if (rider == "") {
-                layer.msg("Please select the Rider", {icon: 2, time: 2000});
-                return;
-            }
             var smallPack = "";
             for (var i = 0; i < tableData.length; i++) {
                 smallPack += tableData[i].orderNo + ",";
@@ -175,8 +170,8 @@
                 dataType: "json",
                 data: {
                     smallPack: smallPack,
-                    saveStatus: saveStatus,
-                    handleNo: '${riderDelivery.handleNo}',
+                    saveStatus: ifship,
+                    handleNo: '${pack.handleNo}',
                     rider: $("input[name='rider']").val()
                 },
                 success: function (data) {
@@ -255,7 +250,7 @@
 
         //根据发车单状态，返回是否可以修改
         function isModify() {
-            var bool = parseInt(${riderDelivery.status}) == 0 ? true : false;
+            var bool = parseInt(${pack.status}) == 0 ? true : false;
             return bool;
         }
 

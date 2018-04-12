@@ -133,15 +133,22 @@ public class SendThirdServiceImpl implements SendThirdService {
 
     @Override
     @Transactional
-    public void editSmall(Long merchantId, String handleNo, String[] smallOrders) {
+    public void edit(SendThirdHead sendThirdHead, String[] smallOrders) {
+
+        AssertUtil.isNotNull(sendThirdHead, BizErrorCode.HandleNO_NOT_EXIST);
+        AssertUtil.isNotBlank(sendThirdHead.getHandleNo(), BizErrorCode.HandleNO_NOT_EXIST);
+
+        Long merchantId = Long.parseLong(SessionLocal.getPrincipal().getMerchantId());
         //查看装车单号是否存在
-        SendThirdHead query = handleThirdDao.queryBigByHandleNo(merchantId, handleNo);
-        if (query == null) {
+        SendThirdHead query = handleThirdDao.queryBigByHandleNo(merchantId, sendThirdHead.getHandleNo());
+        if(query== null){
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
-        handleThirdDao.deleteSmallByHandleNo(merchantId, handleNo);
+
+        handleThirdDao.editBigBy(sendThirdHead);
+        handleThirdDao.deleteSmallByHandleNo(merchantId, sendThirdHead.getHandleNo());
         //插入小包
-        insertSmallAll(merchantId, handleNo, smallOrders);
+        insertSmallAll(merchantId, sendThirdHead.getHandleNo(), smallOrders);
     }
 
     @Override
@@ -172,12 +179,5 @@ public class SendThirdServiceImpl implements SendThirdService {
         handleThirdDao.editBigBy(update);
     }
 
-    @Override
-    public void editBig(SendThirdHead sendThirdHead) {
-        if (sendThirdHead.getHandleNo() == null) {
-            throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
-        }
-        handleThirdDao.editBigBy(sendThirdHead);
-    }
 
 }

@@ -15,25 +15,21 @@
     <form id="myForm" class="layui-form" action="">
 
         <div class="layui-form-item">
-            <div class="deliveryDiv layui-col-md5 layui-col-lg3">
-                <label class="layui-form-label">Express:</label>
-                <div class="layui-form-item layui-inline" style="width: 190px">
-                    <select lay-filter="fil-express" name="expressLay">
-                        <option>Please select content</option>
-                        <c:forEach items="${expressList}" var="express">
-                            <option value="${express.expressCode}">${express.expressName}</option>
-                        </c:forEach>
-                    </select>
-                    <input type="hidden" name="express" value="">
-                </div>
+            <label class="layui-form-label">Express:</label>
+            <div class="layui-input-inline">
+                <select lay-filter="fil-express" name="expressLay">
+                    <option>Please select content</option>
+                    <c:forEach items="${expressList}" var="express">
+                        <option value="${express.expressCode}">${express.expressName}</option>
+                    </c:forEach>
+                </select>
+                <input type="hidden" name="express" value="">
             </div>
-            <div class="layui-col-md5 layui-col-lg3">
-                <label class="layui-form-label">Driver:</label>
-                <div class="layui-form-item layui-inline" style="width: 190px">
-                    <select lay-filter="fil-driver" name="expressLay" id="sendDriver">
-                    </select>
-                    <input type="hidden" name="driver" value="">
-                </div>
+            <label class="layui-form-label">Driver:</label>
+            <div class="layui-input-inline">
+                <select lay-filter="fil-driver" name="expressLay" id="sendDriver">
+                </select>
+                <input type="hidden" name="driver" value="">
             </div>
         </div>
 
@@ -44,15 +40,15 @@
                 <select name="nextNetworkId" lay-search="" lay-filter="nextNetworkId" lay-verify="required">
                     <option value="">choose or search....</option>
                     <c:forEach items="${nextStations}" var="station">
-                        <option value="${station.code}" optionSeq="${station.code}" type="${station.type}">${station.name}</option>
+                        <option value="${station.code}" optionSeq="${station.code}"
+                                type="${station.type}">${station.name}</option>
                     </c:forEach>
                 </select>
                 <input type="hidden" name="network_id" value="">
                 <input type="hidden" name="nextStation" value="">
             </div>
 
-
-            <label class="layui-form-label" style="width:160px">OrderNo:</label>
+            <label class="layui-form-label">OrderNo:</label>
             <div class="layui-input-inline">
                 <input type="text" id="orderNo" autocomplete="off" placeholder="Scan" class="layui-input">
             </div>
@@ -62,11 +58,9 @@
     <hr>
 
 
-
     <div style="margin-left:120px;">
         <table id='${id0}' lay-filter="filterLab"></table>
     </div>
-
 
 
     <script type="text/html" id="barDemo">
@@ -99,7 +93,7 @@
                 var seq = data.value.toString();
                 $("input[name='network_id']").val(data.value);
 
-                $("input[name='nextStation']").val($("option[optionSeq='"+seq+"']").html());
+                $("input[name='nextStation']").val($("option[optionSeq='" + seq + "']").html());
             });
             form.on('select(fil-driver)', function (data) {
                 $("input[name='driver']").val(data.value);
@@ -127,9 +121,9 @@
                 if (obj.event === 'delete') {
                     //deleteLoadingDetails(orderNo);
                     //alert(data.id);
-                    tableData.splice(data.index-1, 1);
-                    for (var i=0;i<tableData.length;i++){
-                        tableData[i].index = i+1;
+                    tableData.splice(data.index - 1, 1);
+                    for (var i = 0; i < tableData.length; i++) {
+                        tableData[i].index = i + 1;
                     }
                     view();
                 }
@@ -161,13 +155,13 @@
                             $("#orderNo").focus();
                             $("#orderNo").val('');
                             var res = JSON.parse(data.data).data
-                            for(var i=0;i<tableData.length;i++){
-                                if(res.orderNo==tableData[i].orderNo){
+                            for (var i = 0; i < tableData.length; i++) {
+                                if (res.orderNo == tableData[i].orderNo) {
                                     layer.msg("Order already exists", {icon: 2, time: 2000});
-                                    return ;
+                                    return;
                                 }
                             }
-                            res.index = tableData.length+1;
+                            res.index = tableData.length + 1;
                             tableData.push(res);
                         } else {
                             layer.msg(data.msg, {icon: 2, time: 2000});
@@ -193,14 +187,14 @@
             var printed = false;  //是否需要打印
             var saveStutus = 0;   //传输到后台的状态，0仅保存、1发运
             type = parseInt(type);
-            switch (type){
+            switch (type) {
                 case 0:
-                    saveStutus=0;
-                    printed=false;
+                    saveStutus = 0;
+                    printed = false;
                     break;
                 case 1:
-                    saveStutus=1;
-                    printed=true;
+                    saveStutus = 1;
+                    printed = true;
                     break;
                 default:
                     return;
@@ -208,19 +202,19 @@
 
             //集成提交参数
             var smallPack = "";
-            for(var i=0;i<tableData.length;i++){
-                smallPack += tableData[i].orderNo+",";
+            for (var i = 0; i < tableData.length; i++) {
+                smallPack += tableData[i].orderNo + ",";
             }
-            smallPack = smallPack.substring(0, smallPack.length-1);
+            smallPack = smallPack.substring(0, smallPack.length - 1);
 
             var driver = $("input[name='driver']").first().val();
             var networkCode = $("input[name='network_id']").first().val();
             var nextStation = $("input[name='nextStation']").first().val();
             var thirdExpressCode = $("input[name='express']").first().val();
 
-            if (driver=="" || networkCode=="" || nextStation=="" || thirdExpressCode=="" || smallPack=="") {
+            if (driver == "" || networkCode == "" || nextStation == "" || thirdExpressCode == "" || smallPack == "") {
                 layer.msg("Please fill in the complete content", {icon: 2, time: 2000});
-                return ;
+                return;
             }
 
             var load = layer.load(2);
@@ -239,7 +233,7 @@
                 success: function (data) {
                     if (data.result) {
                         layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
-                            if(printed==true){
+                            if (printed == true) {
                                 //这里需要返回一个大包号，才能打印，因为是在后台创建时生成订单号
                                 //parent.window.open("/waybill/rider_delivery/print.html?loadingNo=" + data.data.handleNo);
                                 //location.reload();
@@ -256,42 +250,49 @@
         }
 
         //视图渲染
-        function view(){
+        function view() {
             //console.log(tableData);
-            layui.use('table', function(){
+            layui.use('table', function () {
                 var table = layui.table;
                 console.log("条目：" + tableData.length);
                 //第一个实例
                 table.render({
                     page: false //开启分页
-                    ,elem : '#${id0}'
-                    ,height: 315
+                    , elem: '#${id0}'
+                    , height: 315
                     //,even: true
                     //,url: '/demo/table/user/' //数据接口
-                    ,data : tableData
-                    ,width: 868
-                    ,even: true
-                    ,text: {
+                    , data: tableData
+                    , width: 868
+                    , even: true
+                    , text: {
                         none: 'Please start scanning the order'
                     }
-                    ,page : {
+                    , page: {
                         layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
                     }
-                    ,limit : 3000
+                    , limit: 3000
                     //,limits : [5, 10, 15, 20, 25]
-                    ,cellMinWidth: 80
+                    , cellMinWidth: 80
 
-                    ,cols: [[ //表头 //layui-btn layui-btn-primary layui-btn-mini
+                    , cols: [[ //表头 //layui-btn layui-btn-primary layui-btn-mini
                         //{ title: 'id', align:'center', width:80, sort: true, fixed: 'left', templet: '<div>{{d.LAY_INDEX }}</div>'}
-                        { title: 'id', align:'center', width:80, sort: true, fixed: 'left', templet: '<div>{{d.index }}</div>'}
-                        ,{field: 'orderNo', title: 'OrderNo', width:160, align:'center'}
-                        ,{field: 'orderType', title: 'OrderType', width:150, align:'center'}
-                        ,{field: 'referenceNo', title: 'ReferenceNo', width:130, align:'center'}
-                        ,{field: 'weight', title: 'Weight(KG)', width:130, align:'center'}
-                        ,{field: '', title: 'opt', width:80, toolbar: '#barDemo', fixed: 'right', align:'center'}
+                        {
+                            title: 'id',
+                            align: 'center',
+                            width: 80,
+                            sort: true,
+                            fixed: 'left',
+                            templet: '<div>{{d.index }}</div>'
+                        }
+                        , {field: 'orderNo', title: 'OrderNo', width: 160, align: 'center'}
+                        , {field: 'orderType', title: 'OrderType', width: 150, align: 'center'}
+                        , {field: 'referenceNo', title: 'ReferenceNo', width: 130, align: 'center'}
+                        , {field: 'weight', title: 'Weight(KG)', width: 130, align: 'center'}
+                        , {field: '', title: 'opt', width: 80, toolbar: '#barDemo', fixed: 'right', align: 'center'}
                     ]]
 
-                    ,done: function (res, curr, count) {
+                    , done: function (res, curr, count) {
                         //如果是异步请求数据方式，res即为你接口返回的信息。
                         //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
                         console.log(res);
@@ -308,8 +309,8 @@
             });
         }
 
-        function showDriverSelect(expressCode){
-            $.post('/waybill/send_nextStation/getDriver.html', {expressCode: expressCode}, function(data){
+        function showDriverSelect(expressCode) {
+            $.post('/waybill/send_nextStation/getDriver.html', {expressCode: expressCode}, function (data) {
 
                 if (data.result) {
                     $("#sendDriver").empty();
@@ -329,16 +330,15 @@
         }
 
         /*
-        //扫描包返回内容过滤
-        function tableDateTrim(data){
-            if(typeof(data.height)=='undefined') data.height='';
-            if(typeof(data.height)=='undefined') data.height='';
-            if(typeof(data.height)=='undefined') data.height='';
-            if(typeof(data.height)=='undefined') data.height='';
-        }
-        */
+         //扫描包返回内容过滤
+         function tableDateTrim(data){
+         if(typeof(data.height)=='undefined') data.height='';
+         if(typeof(data.height)=='undefined') data.height='';
+         if(typeof(data.height)=='undefined') data.height='';
+         if(typeof(data.height)=='undefined') data.height='';
+         }
+         */
     });
-
 
 
 </script>

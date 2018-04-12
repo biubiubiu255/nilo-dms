@@ -47,8 +47,6 @@ public class ThirdExpressDeliveryController extends BaseController {
     @Autowired
     private WaybillService waybillService;
     @Autowired
-    private HandleRiderDao handleRiderDao;
-    @Autowired
     private ThirdDriverDao thirdDriverDao;
     @Autowired
     private ThirdExpressDao thirdExpressDao;
@@ -159,16 +157,14 @@ public class ThirdExpressDeliveryController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/edit.html", method = RequestMethod.POST)
     public String edit(String[] smallPack, String handleNo, Integer saveStatus, String rider) {
-        Principal me = SessionLocal.getPrincipal();
-        String merchantId = me.getMerchantId();
-        if (handleNo == null || smallPack.length == 0) {
-            throw new DMSException(BizErrorCode.LOADING_NOT_EXIST);
+
+        SendThirdHead head = new SendThirdHead();
+        head.setHandleName(handleNo);
+        head.setDriver(rider);
+        sendThirdService.edit(head, smallPack);
+        if (saveStatus == 1) {
+            sendThirdService.ship(handleNo);
         }
-        RiderDelivery riderDelivery = new RiderDelivery();
-        riderDelivery.setHandleNo(handleNo);
-        riderDelivery.setMerchantId(Long.valueOf(merchantId));
-        riderDelivery.setRider(rider);
-        riderDelivery.setStatus(HandleRiderStatusEnum.getEnum(saveStatus).getCode());
         return toJsonTrueMsg();
     }
 
