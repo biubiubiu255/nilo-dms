@@ -11,19 +11,36 @@ import java.util.List;
  */
 public interface WaybillOptService {
 
-    void goToPickup(String merchantId, String orderNo, String optBy, String taskId);
-
-    void pickup(String merchantId, String orderNo, String optBy, String taskId);
-
-    void pickupFailed(String merchantId, String orderNo, String reason, String optBy, String taskId);
-
+    /**
+     * 签收
+     * @param orderNo
+     * @param remark
+     */
     void sign(String orderNo, String remark);
 
+    /**
+     * 拒收
+     * @param param
+     */
     void refuse(AbnormalParam param);
 
+    /**
+     * 运单标记为延迟件
+     * @param param
+     */
     void delay(DelayParam param);
 
+    /**
+     * 处理完成延迟件
+     * @param orderNo
+     */
     void completeDelay(String orderNo);
 
-
+    /**
+     * 分配快递员上门揽件
+     * @param orderNos
+     * @param riderId
+     * @param remark
+     */
+    void allocate(List<String> orderNos,String riderId,String remark);
 }

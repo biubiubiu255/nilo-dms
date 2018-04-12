@@ -9,9 +9,9 @@
 <body>
 <div class="box-body">
     <div class="layui-row">
-        <div class="layui-col-md5 layui-col-lg3">
+        <div class="layui-col-md6 layui-col-lg4 layui-col-sm8">
             <shiro:hasPermission name="400041">
-                <button class="layui-btn layui-btn-normal batch">Batch</button>
+                <button class="layui-btn layui-btn-normal allocate">Allocate</button>
             </shiro:hasPermission>
             <shiro:hasPermission name="400046">
                 <button class="layui-btn layui-btn-normal print">Print</button>
@@ -27,19 +27,19 @@
         <div class="layui-colla-item">
             <div class="layui-colla-content ">
                 <div class="layui-form layui-row">
-                    <div class="layui-col-md4 layui-col-lg3">
+                    <div class="layui-col-md3 layui-col-sm4">
                         <label class="layui-form-label">OrderNo:</label>
                         <div class="layui-inline">
                             <input class="layui-input" name="orderNo" autocomplete="off">
                         </div>
                     </div>
-                    <div class="layui-col-md4 layui-col-lg3">
+                    <div class="layui-col-md3 layui-col-sm4">
                         <label class="layui-form-label">ReferenceNo:</label>
                         <div class="layui-input-inline">
                             <input type="text" name="referenceNo" autocomplete="off" class="layui-input">
                         </div>
                     </div>
-                    <div class="layui-col-md8 layui-col-lg5">
+                    <div class="layui-col-md5 layui-col-sm7">
                         <label class="layui-form-label">CreateTime:</label>
                         <div class="layui-inline">
                             <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
@@ -50,7 +50,7 @@
                         </div>
                     </div>
 
-                    <div class="layui-col-md1 layui-col-lg1">
+                    <div class="layui-col-md1 layui-col-sm2">
                         <shiro:hasPermission name="400043">
                             <button class="layui-btn layui-btn-normal search">Search</button>
                         </shiro:hasPermission>
@@ -78,26 +78,19 @@
             <th lay-data="{field:'senderName', width:100,templet: '<div>{{d.senderInfo.senderName}}</div>'}">Name</th>
             <th lay-data="{field:'senderPhone', width:150,templet: '<div>{{d.senderInfo.senderPhone}}</div>'}">Phone
             </th>
-            <th lay-data="{field:'senderAddress', width:200,templet: '<div>{{d.senderInfo.senderAddress}}</div>'}">Fetch
-                Address
+            <th lay-data="{field:'senderAddress', width:200,templet: '<div>{{d.senderInfo.senderAddress}}</div>'}">Address
             </th>
             <th lay-data="{field:'weight', width:100}">Weight</th>
-            <th lay-data="{field:'goodsType', width:120}">GoodsType</th>
             <th lay-data="{field:'createdTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
                 CreatedTime
             </th>
             <th lay-data="{field:'updatedTime', width:170, templet:'<div>{{ formatDate(d.updatedTime) }}</div>'}">
                 UpdatedTime
             </th>
-            <th lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
         </thead>
     </table>
-    <script type="text/html" id="barDemo">
-        <shiro:hasPermission name="400042">
-            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="allocate">Allocate</a>
-        </shiro:hasPermission>
-    </script>
+
 </div>
 <%@ include file="../common/footer.jsp" %>
 <script type="text/javascript">
@@ -141,7 +134,7 @@
             reloadTable();
         })
 
-        $('.batch').on('click', function () {
+        $('.allocate').on('click', function () {
             var checkStatus = table.checkStatus('${id0}')
                     , data = checkStatus.data;
             if (data.length == 0) {

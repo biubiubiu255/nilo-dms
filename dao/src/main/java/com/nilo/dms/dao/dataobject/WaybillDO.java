@@ -59,10 +59,16 @@ public class WaybillDO extends BaseDo<Long> {
     private Double accountNo;
 
     private Integer printTimes;
-    
+    private Integer delayTimes;
     private Integer paidType;
-    
-    
+
+    public Integer getDelayTimes() {
+        return delayTimes;
+    }
+
+    public void setDelayTimes(Integer delayTimes) {
+        this.delayTimes = delayTimes;
+    }
 
     public Integer getPaidType() {
 		return paidType;
