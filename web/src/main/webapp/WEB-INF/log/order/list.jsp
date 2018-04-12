@@ -40,7 +40,6 @@
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{field:'id', width:150}">ID</th>
             <th lay-data="{field:'orderNo', width:200}">OrderNo</th>
             <th lay-data="{field:'opt', width:200}">Opt</th>
             <th lay-data="{field:'createdTime', width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">
