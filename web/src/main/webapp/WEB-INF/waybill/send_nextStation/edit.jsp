@@ -145,7 +145,7 @@
                 var load = layer.load(2);
                 $.ajax({
                     type: "POST",
-                    url: "/waybill/rider_delivery/scanSmallPack.html",
+                    url: "/waybill/send_nextStation/scanSmallPack.html",
                     dataType: "json",
                     data: {
                         orderNo: orderNo,
