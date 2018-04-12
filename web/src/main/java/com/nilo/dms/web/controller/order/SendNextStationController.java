@@ -166,17 +166,20 @@ public class SendNextStationController extends BaseController {
 
         //这里有两种增加方式，一种是页面之间添加，所以session-model里没有值，全在当前参数里，另外一种是站点在session-model里，driver在当前参数
         //从session取出刚刚打包好的大包发运信息（下一站点ID、名字）
-        SendThirdHead packageInfo = (SendThirdHead)session.getAttribute("packageInfo");
-        if(StringUtil.isEmpty(packageInfo.getNetworkCode()) || StringUtil.isEmpty(packageInfo.getNextStation()) ||
-                StringUtil.isEmpty(sendThirdHead.getNetworkCode()) || StringUtil.isEmpty(sendThirdHead.getNetworkCode())){
-            throw new DMSException(BizErrorCode.NOT_STATION_INFO);
+
+        if(StringUtil.isEmpty(sendThirdHead.getNetworkCode()) || StringUtil.isEmpty(sendThirdHead.getNetworkCode())){
+            if(session.getAttribute("packageInfo")==null){
+                throw new DMSException(BizErrorCode.NOT_STATION_INFO);
+            }
+            SendThirdHead packageInfo = (SendThirdHead)session.getAttribute("packageInfo");
+            if(StringUtil.isEmpty(packageInfo.getNetworkCode()) || StringUtil.isEmpty(packageInfo.getNextStation())){
+                throw new DMSException(BizErrorCode.NOT_STATION_INFO);
+            }else {
+                sendThirdHead.setNetworkCode(packageInfo.getNetworkCode());
+                sendThirdHead.setNextStation(packageInfo.getNextStation());
+            }
         }
-        if(StringUtil.isEmpty(sendThirdHead.getNetworkCode())){
-            sendThirdHead.setNetworkCode(packageInfo.getNetworkCode());
-        }
-        if(StringUtil.isEmpty(sendThirdHead.getNextStation())){
-            sendThirdHead.setNextStation(packageInfo.getNextStation());
-        }
+
 
         //加上刚刚的站点信息，当前的操作信息，小包信息，合并写入系统
         sendThirdHead.setMerchantId(merchantId);

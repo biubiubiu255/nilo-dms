@@ -168,7 +168,6 @@
                                 }
                             }
                             res.index = tableData.length+1;
-                            foramOb(res);
                             tableData.push(res);
                         } else {
                             layer.msg(data.msg, {icon: 2, time: 2000});
@@ -219,8 +218,8 @@
             var nextStation = $("input[name='nextStation']").first().val();
             var thirdExpressCode = $("input[name='express']").first().val();
 
-            if (rider=="" || networkCode=="" || nextStation=="" || thirdExpressCode=="" || smallPack=="") {
-                layer.msg("Please select the option", {icon: 2, time: 2000});
+            if (driver=="" || networkCode=="" || nextStation=="" || thirdExpressCode=="" || smallPack=="") {
+                layer.msg("Please fill in the complete content", {icon: 2, time: 2000});
                 return ;
             }
 
