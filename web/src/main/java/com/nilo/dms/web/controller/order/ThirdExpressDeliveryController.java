@@ -72,6 +72,7 @@ public class ThirdExpressDeliveryController extends BaseController {
 
     @RequestMapping(value = "/detail.html")
     public String detail(Model model, String loadingNo) {
+        Principal me = SessionLocal.getPrincipal();
 
         SendThirdHead head = sendThirdService.queryDetailsByHandleNo(loadingNo);
         if (head == null) {
@@ -79,8 +80,11 @@ public class ThirdExpressDeliveryController extends BaseController {
         }
         model.addAttribute("pack", head);
         Pagination page = getPage();
-        //这里需要传入一个json，给layui解析，所有这里查询出小包列表后，包装成layui格式，jsp先格式化在变量属性里，生成静态页面时，js再解析字符串成为对象进行渲染
         model.addAttribute("smallsJson", toPaginationLayUIData(page, head.getList()));
+
+        List<ThirdExpressDO> expressDOList = thirdExpressDao.findByMerchantId(Long.parseLong(me.getMerchantId()));
+        model.addAttribute("expressList", expressDOList);
+
         return "waybill/third_express_delivery/details";
     }
 

@@ -26,25 +26,26 @@
     <%--第二排--%>
     <div class="layui-form">
         <div class="layui-form-item">
-            <div style="float: left; width: 39%; margin-left: 10px;">
-                <label class="layui-form-label">Rider:</label>
-                <div class="layui-form-item layui-inline" style="width: 190px">
-                    <select lay-filter="fil-rider" name="rider">
-                        <c:forEach items="${riderList}" var="rider">
-                            <option value="${rider.userId}"
-                                    <c:if test="${riderDelivery.rider==rider.userId.toString()}">selected</c:if> > ${rider.staffId.toString()}-${rider.realName}</option>
-                        </c:forEach>
-                    </select>
-                    <input type="hidden" name="rider" value="${riderDelivery.rider}">
-                </div>
+            <label class="layui-form-label" style="width:120px">Carrier</label>
+            <div class="layui-input-inline">
+                <select name="carrier" lay-search="" lay-filter="carrier">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${expressList}" var="carrier">
+                        <option value="${carrier.expressCode}">${carrier.expressName}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            <label class="layui-form-label" style="width:120px">Rider</label>
+            <div class="layui-input-inline">
+                <select name="rider" id="rider" lay-search="">
+                    <option value="">choose or search....</option>
+                </select>
             </div>
 
-            <div style="float: left; width: 50%; margin-left: -3%;">
-                <div class="layui-form-item">
-                    <label class="layui-form-label" style="width:150px">Scan OrderNo:</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="orderNo" autocomplete="off" placeholder="Scan" class="layui-input">
-                    </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width:150px">Scan OrderNo:</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="orderNo" autocomplete="off" placeholder="Scan" class="layui-input">
                 </div>
             </div>
 
