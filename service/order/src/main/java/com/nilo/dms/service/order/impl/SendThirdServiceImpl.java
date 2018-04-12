@@ -4,8 +4,10 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.HandleRiderStatusEnum;
 import com.nilo.dms.common.enums.OptTypeEnum;
+import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.HandleThirdDao;
 import com.nilo.dms.dto.handle.SendThirdDetail;
@@ -16,6 +18,7 @@ import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.system.SystemConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,12 +74,17 @@ public class SendThirdServiceImpl implements SendThirdService {
     @Override
     @Transactional
     public void insertBigAndSmall(Long merchantId, SendThirdHead sendThirdHead, String[] smallOrders) {
-        if (sendThirdHead.getHandleNo() == null || sendThirdHead.equals("")) {
-            throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
-        }
-        if (sendThirdHead.getMerchantId() == null) {
-            sendThirdHead.setMerchantId(merchantId);
-        }
+
+        AssertUtil.isNotBlank(sendThirdHead.getThirdExpressCode(), BizErrorCode.THIRD_EXPRESS_EMPTY);
+        AssertUtil.isNotBlank(sendThirdHead.getDriver(), BizErrorCode.THIRD_DRIVER_EMPTY);
+        AssertUtil.isNotNull(smallOrders, BizErrorCode.WAYBILL_EMPTY);
+        AssertUtil.isTrue(smallOrders.length == 0, BizErrorCode.WAYBILL_EMPTY);
+
+        Principal principal = SessionLocal.getPrincipal();
+
+        sendThirdHead.setMerchantId(Long.parseLong(principal.getMerchantId()));
+        sendThirdHead.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
+
         insertBig(sendThirdHead);
         insertSmallAll(merchantId, sendThirdHead.getHandleNo(), smallOrders);
     }

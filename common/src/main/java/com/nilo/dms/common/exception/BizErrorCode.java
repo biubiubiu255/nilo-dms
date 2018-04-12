@@ -91,7 +91,7 @@ public enum BizErrorCode implements ErrorCode {
     ARRIVE_EMPTY("Arrive Scan is empty.", "100064"),
     ALREADY_SCAN("{0}  already scan", "100065"),
     NEW_PASSWORD_NOT_EQUAL("New Password not equal.", "100066"),
-    PACKAGE_NOT_ALLOW("Delivery No {0} can not package.", "100067"),
+    PACKAGE_ALREADY_PACKAGE("Delivery No {0} already in package.", "100067"),
     UNPACK_NOT_ALLOW("Delivery No {0} can not unpack.", "100068"),
     DELIVERY_NO_EXIST("Delivery No {0}  exist.", "100069"),
     PACKAGE_EMPTY("Package is empty", "100070"),
@@ -107,6 +107,9 @@ public enum BizErrorCode implements ErrorCode {
     SIGN_PHOTO_EMPTY("Sign Photo Empty.", "100074"),
 
     NOT_STATION_INFO("No site information found.", "100075"),
+    THIRD_EXPRESS_EMPTY("Third Express Empty.", "100076"),
+    THIRD_DRIVER_EMPTY("Third Driver Empty.", "100077"),
+    WAYBILL_EMPTY("Waybill Empty.", "100078"),
 
     ;
 

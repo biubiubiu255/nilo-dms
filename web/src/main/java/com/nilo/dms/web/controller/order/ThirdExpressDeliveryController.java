@@ -137,7 +137,6 @@ public class ThirdExpressDeliveryController extends BaseController {
         String merchantId = me.getMerchantId();
         SendThirdHead head = new SendThirdHead();
         head.setMerchantId(Long.valueOf(merchantId));
-        head.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
         head.setThirdExpressCode(thirdExpressCode);
         head.setHandleBy(Long.valueOf(me.getUserId()));
         head.setDriver(rider);
