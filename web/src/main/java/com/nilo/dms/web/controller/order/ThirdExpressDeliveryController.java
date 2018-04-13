@@ -97,7 +97,10 @@ public class ThirdExpressDeliveryController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
 
         SendThirdHead head = sendThirdService.queryDetailsByHandleNo(loadingNo);
+        List<Waybill> waybills = sendThirdService.querySmallsPlus(me.getMerchantId(), loadingNo);
+
         model.addAttribute("pack", head);
+        model.addAttribute("smalls", waybills);
         //List<Waybill> smalls = sendThirdService.querySmallsPlus(me.getMerchantId(), loadingNo);
         //model.addAttribute("smalls", smalls);
         return "waybill/third_express_delivery/print";
@@ -142,6 +145,10 @@ public class ThirdExpressDeliveryController extends BaseController {
         head.setType("waybill");
         head.setHandleName(me.getUserName());
         sendThirdService.insertBigAndSmall(Long.parseLong(merchantId), head, smallPack);
+        //如果初次写入直接是ship的话，这里再批量ship一下
+        if(head.getStatus().equals(HandleRiderStatusEnum.SHIP.getCode())){
+            sendThirdService.ship(head.getHandleNo());
+        }
         Map<String, Object> map = new HashMap<>();
         map.put("handleNo", head.getHandleNo());
         return toJsonTrueData(map);

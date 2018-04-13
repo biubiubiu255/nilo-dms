@@ -25,13 +25,13 @@ public interface HandleRiderDao extends BaseDao<Long, RiderDelivery> {
 
     void insertBig(RiderDelivery riderDelivery);
 
-    void insertSmall(RiderDeliverySmallDO riderDeliverySmallDO);
-
     void insertSmalls(@Param("emps") List<RiderDeliverySmallDO> list);
 
     void upBigBy(RiderDelivery riderDelivery);
 
     void upBigStatus(@Param("handleNo") String handleNo, @Param("status") Integer status);
+
+    void upSmallStatus(@Param("handleNo") String handleNo, @Param("status") Integer status);
 
     void deleteSmallByHandleNo(RiderDeliverySmallDO riderDeliverySmallDO);
 }

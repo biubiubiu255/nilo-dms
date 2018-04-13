@@ -80,6 +80,16 @@ public class StringUtil {
      *
      * @return 如果为空白, 则返回<code>true</code>
      */
+
+    public static boolean isEmptys(Object...str) {
+        for (int i=0;i<str.length;i++){
+            if(str[i]==null || str[i].toString().equals("")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isBlank(String str) {
         int length;
 

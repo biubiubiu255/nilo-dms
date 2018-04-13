@@ -8,7 +8,7 @@ import com.nilo.dms.common.BaseDo;
 public class RiderDeliverySmallDO extends BaseDo<Long> {
 
     private Long merchantId;
-    private String rider_handle_no;
+    private String handleNo;
     private String orderNo;
     private Double weight;
     private Double length;
@@ -28,12 +28,12 @@ public class RiderDeliverySmallDO extends BaseDo<Long> {
         this.merchantId = merchantId;
     }
 
-    public String getRider_handle_no() {
-        return rider_handle_no;
+    public String getHandleNo() {
+        return handleNo;
     }
 
-    public void setRider_handle_no(String rider_handle_no) {
-        this.rider_handle_no = rider_handle_no;
+    public void setHandleNo(String handleNo) {
+        this.handleNo = handleNo;
     }
 
     public String getOrderNo() {
@@ -124,7 +124,7 @@ public class RiderDeliverySmallDO extends BaseDo<Long> {
     public String toString() {
         return "RiderDeliverySmallDO{" +
                 "merchantId=" + merchantId +
-                ", rider_handle_no='" + rider_handle_no + '\'' +
+                ", handleNo='" + handleNo + '\'' +
                 ", orderNo='" + orderNo + '\'' +
                 ", weight=" + weight +
                 ", length=" + length +

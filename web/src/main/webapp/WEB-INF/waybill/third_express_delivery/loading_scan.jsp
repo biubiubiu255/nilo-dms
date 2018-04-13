@@ -194,7 +194,7 @@
                         layer.msg("SUCCESS", {icon: 1, time: 2000}, function () {
                             if (printed == true) {
                                 //这里需要返回一个大包号，才能打印，因为是在后台创建时生成订单号
-                                parent.window.open("/waybill/rider_delivery/print.html?loadingNo=" + data.data.handleNo);
+                                parent.window.open("/waybill/third_express_delivery/print.html?loadingNo=" + data.data.handleNo);
                                 location.reload();
                             }
                         });

@@ -67,16 +67,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                	<c:forEach items="${smalls}" var="item">
-	                   <tr>
-                           <td>${item.orderNo}</td>
-                           <td>${item.receiverInfo.receiverName}</td>
-                           <td>${item.receiverInfo.receiverPhone}</td>
-                           <td>${item.receiverInfo.receiverAddress}</td>
-                           <td>${item.totalPrice}</td>
-                           <td>${item.needPayAmount}</td>
-                       </tr>
-                   </c:forEach> 
+                <c:forEach items="${smalls}" var="item">
+                    <tr>
+                        <td>${item.orderNo}</td>
+                        <td>${item.receiverInfo.receiverName}</td>
+                        <td>${item.receiverInfo.receiverPhone}</td>
+                        <td>${item.receiverInfo.receiverAddress}</td>
+                        <td>${item.totalPrice}</td>
+                        <td>${item.needPayAmount}</td>
+                            <%--<td><date:date value="${item.createdTime}" parttern="yyyy-MM-dd HH:mm:ss"></date:date></td>--%>
+                    </tr>
+                </c:forEach>
                 </tbody>
             </table>
         </div>

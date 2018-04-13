@@ -12,6 +12,7 @@
        default-autowire="byName">
 
     <bean id="springContext" class="com.nilo.dms.service.system.SpringContext"/>
+
     <context:component-scan base-package="com.nilo.dms"/>
 
     <bean id="exceptionHandler" class="com.nilo.dms.web.DefaultExceptionHandler"/>

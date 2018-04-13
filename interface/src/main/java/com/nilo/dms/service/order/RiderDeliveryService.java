@@ -28,4 +28,6 @@ public interface RiderDeliveryService {
 
     void insertSmalls(Long merchantId, String handleNo, String[] smallOrders);
 
+    void ship(String handleNo);
+
 }

@@ -10,6 +10,7 @@ import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.HandleThirdDao;
+import com.nilo.dms.dao.dataobject.RiderDelivery;
 import com.nilo.dms.dto.handle.SendThirdDetail;
 import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.order.OrderOptRequest;
@@ -19,6 +20,7 @@ import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.system.SystemConfig;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,10 +65,10 @@ public class SendThirdServiceImpl implements SendThirdService {
     //这里是插入一个大包记录，没有别的注意，有什么写入什么
     @Override
     public void insertBig(SendThirdHead sendThirdHead) {
-        if (sendThirdHead.getStatus() == null) {
-            sendThirdHead.setStatus(HandleRiderStatusEnum.SAVA.getCode());
-        }
-        handleThirdDao.insertBig(sendThirdHead);
+        SendThirdHead sendThirdHeadCl = new SendThirdHead();
+        BeanUtils.copyProperties(sendThirdHead, sendThirdHeadCl);
+        sendThirdHeadCl.setStatus(HandleRiderStatusEnum.SAVA.getCode());
+        handleThirdDao.insertBig(sendThirdHeadCl);
     }
 
     //大包的status代表0 保存而已、1 分派成功

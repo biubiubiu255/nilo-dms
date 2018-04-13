@@ -1,7 +1,9 @@
 package com.nilo.dms.service.order.impl;
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.HandleRiderStatusEnum;
+import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.dao.HandleRiderDao;
@@ -10,8 +12,12 @@ import com.nilo.dms.dao.dataobject.RiderDelivery;
 import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.common.UserInfo;
+import com.nilo.dms.dto.order.OrderOptRequest;
 import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.RiderDeliveryService;
+import com.nilo.dms.service.order.WaybillService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +39,10 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    WaybillService waybillService;
+
+
 
     //插入多个小包
     //参数 riderDeliveryDO：主要是需要大包号，以及操作人
@@ -45,10 +55,10 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
     //这里是插入一个大包记录，没有别的注意，有什么写入什么
     @Override
     public void addRiderPack(RiderDelivery riderDelivery) {
-        if(riderDelivery.getStatus()==null){
-            riderDelivery.setStatus(HandleRiderStatusEnum.SAVA.getCode());
-        }
-        handleRiderDao.insertBig(riderDelivery);
+        RiderDelivery RiderDeliveryCl = new RiderDelivery();
+        BeanUtils.copyProperties(riderDelivery, RiderDeliveryCl);
+        RiderDeliveryCl.setStatus(HandleRiderStatusEnum.SAVA.getCode());
+        handleRiderDao.insertBig(RiderDeliveryCl);
     }
 
     //大包的status代表0 保存而已、1 分派成功
@@ -107,7 +117,7 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
     public List<WaybillDO> queryRiderDeliveryDetailPlus(String merchantId , RiderDelivery riderDelivery, Pagination page) {
         RiderDeliverySmallDO  riderDeliverySmallDO = new RiderDeliverySmallDO();
         riderDelivery.setHandleNo(riderDelivery.getHandleNo());
-        riderDeliverySmallDO.setRider_handle_no(riderDelivery.getHandleNo());
+        riderDeliverySmallDO.setHandleNo(riderDelivery.getHandleNo());
         List<RiderDeliverySmallDO> list = handleRiderDao.queryDeliverySmall(riderDeliverySmallDO);
         List<String> smallOrders = new ArrayList<String>();
         for (RiderDeliverySmallDO e : list){
@@ -131,7 +141,7 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         }
         riderDelivery = tempList.get(0);
 
-        riderDeliverySmallDO.setRider_handle_no(riderDelivery.getHandleNo());
+        riderDeliverySmallDO.setHandleNo(riderDelivery.getHandleNo());
         handleRiderDao.deleteSmallByHandleNo(riderDeliverySmallDO);
         insertSmalls(riderDelivery.getMerchantId(), riderDelivery.getHandleNo(), smallOrders);
 
@@ -155,7 +165,7 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         for (WaybillDO e : list){
             RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
             org.springframework.beans.BeanUtils.copyProperties(e, riderDeliverySmallDO);
-            riderDeliverySmallDO.setRider_handle_no(handleNo);
+            riderDeliverySmallDO.setHandleNo(handleNo);
             datas.add(riderDeliverySmallDO);
             //System.out.println("包裹信息 = " + riderDeliverySmallDO.toString());
         }
@@ -163,5 +173,40 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
 
     }
 
+    @Override
+    public void ship(String handleNo) {
+        Principal principal = SessionLocal.getPrincipal();
+        RiderDelivery riderDelivery = new RiderDelivery();
+        riderDelivery.setHandleNo(handleNo);
+        List<RiderDelivery> riderDeliveries = handleRiderDao.queryRiderDeliveryBig(riderDelivery, 0, 1);
+        if(riderDeliveries.size()==0){
+            throw  new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
+        } else {
+            riderDelivery = riderDeliveries.get(0);
+        }
+
+        if (riderDelivery.getStatus()==null) {
+            throw new IllegalArgumentException("Loading No." + handleNo + " Ship Failed.");
+        }
+        RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
+        riderDeliverySmallDO.setHandleNo(riderDelivery.getHandleNo());
+        List<RiderDeliverySmallDO> riderDeliverySmallDOS = handleRiderDao.queryDeliverySmall(riderDeliverySmallDO);
+        if (riderDeliverySmallDOS == null || riderDeliverySmallDOS.size() == 0) {
+            throw new DMSException(BizErrorCode.LOADING_EMPTY);
+        }
+
+        List<String> orderNos = new ArrayList<>();
+        for (RiderDeliverySmallDO d : riderDeliverySmallDOS) {
+            orderNos.add(d.getOrderNo());
+        }
+
+        OrderOptRequest request = new OrderOptRequest();
+        request.setOptType(OptTypeEnum.SEND);
+        request.setOrderNo(orderNos);
+        waybillService.handleOpt(request);
+
+        handleRiderDao.upBigStatus(handleNo, HandleRiderStatusEnum.SHIP.getCode());
+        handleRiderDao.upSmallStatus(handleNo, HandleRiderStatusEnum.SHIP.getCode());
+    }
 
 }

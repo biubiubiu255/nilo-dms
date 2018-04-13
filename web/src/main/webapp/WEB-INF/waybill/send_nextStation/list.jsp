@@ -176,7 +176,7 @@
         function toLoadingScanPage() {
             var url = "/waybill/send_nextStation/addLoadingPage.html";
             parent.addTabs({
-                id: '40007002',
+                id: '40007005',
                 title: 'Send Third Station',
                 close: true,
                 url: url

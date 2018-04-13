@@ -149,12 +149,12 @@ public class SendNextStationController extends BaseController {
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
         WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.valueOf(merchantId), orderNo);
-        if (waybillDO==null || !waybillDO.getIsPackage().equals("1")){
+
+        if (StringUtil.isEmptys(waybillDO, waybillDO.getIsPackage()) || !waybillDO.getIsPackage().equals("1")){
             return toJsonErrorMsg("Order No or no packaging");
         }
         return toJsonTrueData(toPaginationLayUIData(page, waybillDO));
     }
-
 
     @ResponseBody
     @RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
@@ -189,6 +189,7 @@ public class SendNextStationController extends BaseController {
         sendThirdHead.setStatus(saveStutus);
 
         sendThirdService.insertBigAndSmall(merchantId, sendThirdHead, smallPack);
+
 
         return toJsonTrueMsg();
     }

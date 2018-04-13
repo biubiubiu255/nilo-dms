@@ -75,7 +75,7 @@ public class RiderDeliveryController extends BaseController {
         riderDelivery = list.get(0);
 
         RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
-        riderDeliverySmallDO.setRider_handle_no(loadingNo);
+        riderDeliverySmallDO.setHandleNo(loadingNo);
         List<RiderDeliverySmallDO> smalls = riderDeliveryService.queryRiderDeliveryDetail(me.getMerchantId(), riderDeliverySmallDO, page);
         model.addAttribute("pack", riderDelivery);
 
@@ -98,7 +98,7 @@ public class RiderDeliveryController extends BaseController {
 
 
         RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
-        riderDeliverySmallDO.setRider_handle_no(loadingNo);
+        riderDeliverySmallDO.setHandleNo(loadingNo);
         List<RiderDeliverySmallDO> smalls = riderDeliveryService.queryRiderDeliveryDetail(me.getMerchantId(), riderDeliverySmallDO, page);
         model.addAttribute("pack", riderDelivery);
         model.addAttribute("smalls", smalls);
@@ -142,6 +142,9 @@ public class RiderDeliveryController extends BaseController {
         riderDelivery.setHandleBy(Long.valueOf(me.getUserId()));
         riderDelivery.setStatus(saveStutus);
         riderDeliveryService.addRiderPackAndDetail(Long.valueOf(merchantId), riderDelivery, smallPack);
+        if(riderDelivery.getStatus().equals(HandleRiderStatusEnum.SHIP.getCode())){
+            riderDeliveryService.ship(riderDelivery.getHandleNo());
+        }
         Map<String, Object> map = new HashMap<>();
         map.put("handleNo", riderDelivery.getHandleNo());
         return toJsonTrueData(map);

@@ -31,9 +31,9 @@
     <resultMap id="orderSmall" type="com.nilo.dms.dao.dataobject.RiderDeliverySmallDO">
         <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="rider_handle_no" column="rider_handle_no" javaType="java.lang.String"
+        <result property="handleNo" column="handle_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="orderNo" column="orderNo" javaType="java.lang.String"
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
@@ -156,8 +156,8 @@
         <if test="status != null">
             and status = #{status}
         </if>
-        <if test="rider_handle_no != null and rider_handle_no != '' ">
-            and rider_handle_no = #{rider_handle_no}
+        <if test="handleNo != null and handleNo != '' ">
+            and handle_no = #{handleNo}
         </if>
         order by created_time desc
     </select>
@@ -167,9 +167,9 @@
         INSERT
         INTO
         t_handle_rider_details
-        ( rider_handle_no, orderNo, weight, length, height, width, handle_by, status, created_time, updated_time )
+        ( handle_no, order_no, weight, length, height, width, handle_by, status, created_time, updated_time )
         VALUES
-        (#{rider_handle_no},#{orderNo},#{weight},#{length},#{height},#{width},#{handleBy},#{status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()))
+        (#{handleNo},#{orderNo},#{weight},#{length},#{height},#{width},#{handleBy},#{status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()))
     </insert>
 
 
@@ -177,17 +177,17 @@
         INSERT
         INTO
         t_handle_rider_details
-        ( rider_handle_no, orderNo, weight, length, height, width, handle_by, status, created_time, updated_time )
+        ( handle_no, order_no, weight, length, height, width, handle_by, status, created_time, updated_time )
         VALUES
         <foreach collection="emps" item="emp" separator=",">
-            (#{emp.rider_handle_no},#{emp.orderNo},#{emp.weight},#{emp.length},#{emp.height},#{emp.width},#{emp.handleBy},#{emp.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()))
+            (#{emp.handleNo},#{emp.orderNo},#{emp.weight},#{emp.length},#{emp.height},#{emp.width},#{emp.handleBy},#{emp.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()))
         </foreach>
 
     </insert>
 
     <delete id="deleteSmallByHandleNo" parameterType="com.nilo.dms.dao.dataobject.RiderDeliverySmallDO">
         delete FROM t_handle_rider_details
-        WHERE rider_handle_no = #{rider_handle_no}
+        WHERE handle_no = #{handleNo}
     </delete>
 
     <!-- 查询其他的信息 -->
@@ -203,14 +203,24 @@
 
         INNER JOIN t_handle_rider b
 
-        on a.rider_handle_no = b.handle_no
+        on a.handle_no = b.handle_no
 
         INNER JOIN t_sys_user_info c
 
         on b.rider = c.id
 
-        WHERE a.orderNo = #{orderNo}
+        WHERE a.order_no = #{orderNo}
     </select>
 
+
+    <update id="upSmallStatus" statementType="PREPARED">
+        update t_handle_rider_details
+        SET
+        status = #{status},
+        updated_time=UNIX_TIMESTAMP(NOW()),
+        version=UUID()
+        WHERE
+        handle_no = #{handleNo}
+    </update>
 
 </mapper>
