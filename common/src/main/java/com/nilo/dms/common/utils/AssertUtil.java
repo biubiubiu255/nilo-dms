@@ -173,7 +173,7 @@ public final class AssertUtil {
      * @throws DMSException
      */
     public static void isTrue(boolean expression, ErrorCode resutlCode) throws DMSException {
-        if (expression) {
+        if (!expression) {
             throw new DMSException(resutlCode);
         }
     }
@@ -186,7 +186,7 @@ public final class AssertUtil {
      * @throws DMSException
      */
     public static void isFalse(boolean expression, ErrorCode resutlCode) throws DMSException {
-        if (!expression) {
+        if (expression) {
             throw new DMSException(resutlCode);
         }
     }

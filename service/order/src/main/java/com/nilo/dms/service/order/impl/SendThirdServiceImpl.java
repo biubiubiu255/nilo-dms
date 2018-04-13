@@ -78,7 +78,7 @@ public class SendThirdServiceImpl implements SendThirdService {
         AssertUtil.isNotBlank(sendThirdHead.getThirdExpressCode(), BizErrorCode.THIRD_EXPRESS_EMPTY);
         AssertUtil.isNotBlank(sendThirdHead.getDriver(), BizErrorCode.THIRD_DRIVER_EMPTY);
         AssertUtil.isNotNull(smallOrders, BizErrorCode.WAYBILL_EMPTY);
-        AssertUtil.isTrue(smallOrders.length == 0, BizErrorCode.WAYBILL_EMPTY);
+        AssertUtil.isFalse(smallOrders.length == 0, BizErrorCode.WAYBILL_EMPTY);
 
         Principal principal = SessionLocal.getPrincipal();
 
