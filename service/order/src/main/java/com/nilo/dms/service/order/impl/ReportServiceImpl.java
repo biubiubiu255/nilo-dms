@@ -25,6 +25,10 @@ public class ReportServiceImpl implements ReportService{
 
         reportCodQuery.setLimit(page.getLimit());
         reportCodQuery.setOffset(page.getOffset());
+        if(reportCodQuery.getOut_warm()==null){
+            reportCodQuery.setOut_warm(1);
+            //设置默认的预警时间
+        }
         List<ReportCodDO> list = waybillCodDao.queryReportCod(reportCodQuery);
         for (int i=0;i<list.size();i++){
             ReportCodDO reportCodDO = list.get(i);

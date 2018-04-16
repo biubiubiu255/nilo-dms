@@ -35,12 +35,13 @@
                     <li><input type='text' placeholder="Logistics No" required="required" property_name="all_logistics_no" set_attr="placeholder" maxlength='100' class='input_value i18n-input' name='orderNo' /><span class="scanner" data-locale="all_scan">scan</span></li>
                     <li>
                         <%--<label>Reason</label>--%>
-                        <select required="required" class='input_value' name='reason'>
+                        <select required="required" class='input_value' name='reasonId'>
                             <option value="">Please select a reason</option>
 	                       <c:forEach var="values" items="${delayReason}" >
 	                           <option value="${values.code}">${values.value }</option>
 		                   </c:forEach>
                         </select>
+                        <input type="hidden" name="reason" value="">
                     </li>
                     <li><input type='text' placeholder="Remark" property_name="stranded_remark" set_attr="placeholder" maxlength='100' class='input_value i18n-input' name='remark' /></li>
                     <a ></a>
@@ -91,8 +92,12 @@
     	
     	
         $.scanner(scan_callback);                     //直接传一个空的回调函数
-        //$.scanner(scan_callback('这里是订单号'), 1); //测试模式，直接传订单号 
-        
+        //$.scanner(scan_callback('这里是订单号'), 1); //测试模式，直接传订单号
+
+        $("select[name='reasonId']").change(function () {
+            var p1=$(this).children('option:selected').html();//这就是selected的值
+            $("input[name='reason']").val(p1);
+        });
     });
 </script>
 

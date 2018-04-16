@@ -30,12 +30,12 @@
                 jdbcType="INTEGER"/>
         <result property="arrive_time" column="arrive_time" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
-        <result property="sign_time" column="sign_name" javaType="java.lang.Integer"
+        <result property="sign_time" column="sign_time" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
         <result property="send_time" column="send_time" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
-        <result property="dispatcher_time" column="delivery_time" javaType="java.lang.Integer"
-                jdbcType="INTEGER"/>
+<!--        <result property="dispatcher_time" column="delivery_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>-->
 
         <result property="payBackDate" column="payment_time" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
@@ -66,7 +66,7 @@
 
     <select id="queryReportCod" resultMap="ReportCodDo">
 
-    SELECT
+        SELECT
 
         a.order_no, a.order_type, a.reference_no, a.order_time, a.country, a.order_platform, a.status as order_status
 
@@ -74,13 +74,13 @@
 
         , d.price_amount, d.payment_time, d.status as pay_status, e.created_time as arrive_time, f.created_time as send_time
 
-        , g.created_time as sign_name
+        , g.created_time as sign_time, g.signer sign_name
 
-        , h.created_time as delivery_time, h.task_type, i.name rider
+        , i.name rider
 
         , if((g.created_time-d.payment_time)/3600>24*#{out_warm}, 1, 0) as is_out, (g.created_time-d.payment_time)/3600 as cycle_time
 
-        , j.abnormal_type , k.delay_reason
+        , j.abnormal_type , k.reason
 
         FROM
 
@@ -98,32 +98,32 @@
 
         on b.payment_order_id = d.id AND d.status=1
 
-        LEFT JOIN (select * from t_waybill_log group by order_no)  e
 
-        on a.order_no = e.order_no AND e.opt='arrive_scan'
+        LEFT JOIN t_waybill_log_arrive  e
 
-        LEFT JOIN (select * from t_waybill_log group by order_no)  f
-
-        on a.order_no = f.order_no AND f.opt='send'
+        on a.order_no = e.order_no
 
 
-        LEFT JOIN (select * from t_waybill_log group by order_no)  g
+        LEFT JOIN t_handle_loading_details  f
 
-        on a.order_no = g.order_no AND g.opt='receive'
+        on a.order_no = f.order_no
 
-        LEFT JOIN (select * from t_waybill_task group by order_no) h
 
-        on a.order_no = h.order_no
+        LEFT JOIN t_handle_sign  g
+
+        on a.order_no = g.order_no
+
+
 
         LEFT JOIN t_sys_user_info i
 
-        on h.handled_by = i.id AND h.task_type='delivery'
+        on g.handle_by = i.id
 
         LEFT JOIN t_waybill_abnormal j
 
         on a.order_no = j.order_no
 
-        LEFT JOIN t_waybill_delay k
+        LEFT JOIN t_handle_delay k
 
         on a.order_no = k.order_no
 
@@ -162,11 +162,6 @@
             a.status = #{order_status}
         </if>
 
-        <if test="send_company !=null  and send_company !='' ">
-            AND
-            h.task_type = #{send_company}
-        </if>
-
         <if test="rider !=null  and rider !='' ">
             AND
             i.name = #{rider}
@@ -188,11 +183,7 @@
             AND
             (f.created_time<![CDATA[<]]>#{send_time_end} AND e.created_time>#{send_time_start})
         </if>
-        <if test="delivery_time_start !=null and delivery_time_start !='' and  delivery_time_end != null and delivery_time_end != ''">
-            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
-            AND
-            (h.created_time<![CDATA[<]]>#{delivery_time_end} AND e.created_time>#{delivery_time_start})
-        </if>
+
         <if test="sign_name_start !=null and sign_name_start !='' and  sign_name_end != null and sign_name_end != ''">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
@@ -209,7 +200,6 @@
     </select>
 
     <select id="queryReportCodCount" resultType="java.lang.Integer">
-
         SELECT
 
         count(*)
@@ -230,32 +220,32 @@
 
         on b.payment_order_id = d.id AND d.status=1
 
-        LEFT JOIN (select * from t_waybill_log group by order_no)  e
 
-        on a.order_no = e.order_no AND e.opt='arrive_scan'
+        LEFT JOIN t_waybill_log_arrive  e
 
-        LEFT JOIN (select * from t_waybill_log group by order_no)  f
-
-        on a.order_no = f.order_no AND f.opt='send'
+        on a.order_no = e.order_no
 
 
-        LEFT JOIN (select * from t_waybill_log group by order_no)  g
+        LEFT JOIN t_handle_loading_details  f
 
-        on a.order_no = g.order_no AND g.opt='receive'
+        on a.order_no = f.order_no
 
-        LEFT JOIN (select * from t_waybill_task group by order_no) h
 
-        on a.order_no = h.order_no
+        LEFT JOIN t_handle_sign  g
+
+        on a.order_no = g.order_no
+
+
 
         LEFT JOIN t_sys_user_info i
 
-        on h.handled_by = i.id AND h.task_type='delivery'
+        on g.handle_by = i.id
 
         LEFT JOIN t_waybill_abnormal j
 
         on a.order_no = j.order_no
 
-        LEFT JOIN t_waybill_delay k
+        LEFT JOIN t_handle_delay k
 
         on a.order_no = k.order_no
 
@@ -294,11 +284,6 @@
             a.status = #{order_status}
         </if>
 
-        <if test="send_company !=null  and send_company !='' ">
-            AND
-            h.task_type = #{send_company}
-        </if>
-
         <if test="rider !=null  and rider !='' ">
             AND
             i.name = #{rider}
@@ -320,11 +305,7 @@
             AND
             (f.created_time<![CDATA[<]]>#{send_time_end} AND e.created_time>#{send_time_start})
         </if>
-        <if test="delivery_time_start !=null and delivery_time_start !='' and  delivery_time_end != null and delivery_time_end != ''">
-            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
-            AND
-            (h.created_time<![CDATA[<]]>#{delivery_time_end} AND e.created_time>#{delivery_time_start})
-        </if>
+
         <if test="sign_name_start !=null and sign_name_start !='' and  sign_name_end != null and sign_name_end != ''">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND

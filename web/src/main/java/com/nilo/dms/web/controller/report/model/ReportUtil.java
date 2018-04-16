@@ -24,7 +24,10 @@ public class ReportUtil {
 
         for (Map.Entry<String, String> entry : map.entrySet()){
             point = ParsefieldStr(entry.getValue());
-            str.append(entry.getKey()+": "+point+" | ");
+            if(point!=null && !point.equals("")){
+                str.append(entry.getKey()+": "+point+" | ");
+            }
+
         }
         return str.toString().trim();
     }

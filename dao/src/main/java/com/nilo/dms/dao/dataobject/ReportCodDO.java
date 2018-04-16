@@ -24,7 +24,7 @@ public class ReportCodDO {
     private String order_status;   //订单状态
     private String order_problem_status;   //订单状态
     private String send_company;   //派件公司
-    private String rider;         //快递员
+    private String rider;          //快递员
     private String cycle;          //COD汇款周期
     private String payStatus;      //支付状态
     private String pay_orderNo;    //支付订单号
