@@ -252,6 +252,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         checkOtpParam(optRequest);
         // 校验操作类型
         checkOptType(optRequest);
+        //判断是否是大包，否则拆包，然后以小包列表添加到list里
+        unPackage(optRequest);
+
         transactionTemplate.execute(new TransactionCallback<Void>() {
             @Override
             public Void doInTransaction(TransactionStatus transactionStatus) {

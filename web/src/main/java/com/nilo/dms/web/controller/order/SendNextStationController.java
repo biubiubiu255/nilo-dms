@@ -2,6 +2,7 @@ package com.nilo.dms.web.controller.order;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.enums.HandleRiderStatusEnum;
 import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
@@ -190,6 +191,10 @@ public class SendNextStationController extends BaseController {
 
         sendThirdService.insertBigAndSmall(merchantId, sendThirdHead, smallPack);
 
+        //如果初次写入直接是ship的话，这里再批量ship一下
+        if(sendThirdHead.getStatus().equals(HandleRiderStatusEnum.SHIP.getCode())){
+            sendThirdService.ship(sendThirdHead.getHandleNo());
+        }
 
         return toJsonTrueMsg();
     }

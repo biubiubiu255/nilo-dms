@@ -14,7 +14,9 @@ import com.nilo.dms.service.system.SystemConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import static com.nilo.dms.common.Constant.IS_PACKAGE;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,5 +81,28 @@ public abstract class AbstractOrderOpt {
             }
         }
     }
+
+    protected void unPackage(OrderOptRequest optRequest) {
+
+        Long merchantId = Long.valueOf(SessionLocal.getPrincipal().getMerchantId());
+        List<String> orders = new ArrayList<String>();
+        for (String orderNo : optRequest.getOrderNo()) {
+            WaybillDO orderDO = waybillDao.queryByOrderNo(merchantId, orderNo);
+            if(!orderDO.getIsPackage().equals(IS_PACKAGE)){
+                return ;
+            }
+
+            List<WaybillDO> childrenWaybill = waybillDao.queryByPackageNo(merchantId, orderNo);
+            List<String> childrenOrders = new ArrayList<String>();
+            for (WaybillDO e : childrenWaybill){
+                childrenOrders.add(e.getOrderNo());
+            }
+            orders.addAll(childrenOrders);
+
+        }
+        optRequest.getOrderNo().addAll(orders);
+    }
+
+
 
 }
