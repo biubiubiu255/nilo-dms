@@ -88,7 +88,7 @@ public abstract class AbstractOrderOpt {
         List<String> orders = new ArrayList<String>();
         for (String orderNo : optRequest.getOrderNo()) {
             WaybillDO orderDO = waybillDao.queryByOrderNo(merchantId, orderNo);
-            if(!orderDO.getIsPackage().equals(IS_PACKAGE)){
+            if(orderDO.getIsPackage()==null || !orderDO.getIsPackage().equals(IS_PACKAGE)){
                 return ;
             }
 
@@ -100,7 +100,9 @@ public abstract class AbstractOrderOpt {
             orders.addAll(childrenOrders);
 
         }
-        optRequest.getOrderNo().addAll(orders);
+        ArrayList<String> strings = new ArrayList<>(optRequest.getOrderNo());
+        strings.addAll(orders);
+        optRequest.setOrderNo(strings);
     }
 
 

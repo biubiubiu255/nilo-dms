@@ -208,7 +208,7 @@
                 dataType: "json",
                 data: {
                     smallPack: smallPack,
-                    saveStatus: saveStatus,
+                    saveStatus: isPrint,
                     //express : $("input[name='third_express_code']").val() ,
                     thirdExpressCode: $("input[name='express']").val() ,
                     driver: $("input[name='driver']").val()

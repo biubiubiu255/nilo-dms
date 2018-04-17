@@ -192,7 +192,7 @@ public class SendNextStationController extends BaseController {
         sendThirdService.insertBigAndSmall(merchantId, sendThirdHead, smallPack);
 
         //如果初次写入直接是ship的话，这里再批量ship一下
-        if(sendThirdHead.getStatus().equals(HandleRiderStatusEnum.SHIP.getCode())){
+        if(sendThirdHead.getStatus()!=null && sendThirdHead.getStatus().equals(HandleRiderStatusEnum.SHIP.getCode())){
             sendThirdService.ship(sendThirdHead.getHandleNo());
         }
 
