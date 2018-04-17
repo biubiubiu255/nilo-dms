@@ -33,7 +33,7 @@
             <label class="layui-form-label" style="width:120px">Weight</label>
             <div class="layui-input-inline">
                 <input type="number" name="weight" value="" autocomplete="off"
-                       class="layui-input" lay-verify="required">
+                       class="layui-input" cust-verify="lenVer">
             </div>
         </div>
 
@@ -41,17 +41,17 @@
             <label class="layui-form-label" style="width:120px">Length</label>
             <div class="layui-input-inline">
                 <input type="number" name="length" value="" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input" cust-verify="lenVer">
             </div>
             <label class="layui-form-label" style="width:120px">Width</label>
             <div class="layui-input-inline">
                 <input type="number" name="width" value="" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input" cust-verify="lenVer">
             </div>
             <label class="layui-form-label" style="width:120px">Height</label>
             <div class="layui-input-inline">
                 <input type="number" name="height" value="" autocomplete="off"
-                       class="layui-input">
+                       class="layui-input" cust-verify="lenVer">
             </div>
         </div>
 
@@ -106,6 +106,7 @@
 
                 $("input[name='nextStation']").val($("option[optionSeq='"+seq+"']").html());
             });
+
 
         });
 
@@ -175,6 +176,19 @@
             var subtype = e.currentTarget.value;
             var nextStation = $("select[name='nextNetworkId']").val();
             var weight = $("input[name='weight']").val();
+            var isValidity = true;
+            $("input[cust-verify='lenVer']").each(function () {
+                var value = $(this).val();
+
+                if(value!="" && parseInt(value)<=0){
+                    isValidity = false;
+                    layer.msg("Please enter a reasonable value", {icon: 2, time: 2000});
+                }
+            });
+            if(isValidity==false){
+                return ;
+            }
+
             if (nextStation=='') {
                 layer.msg("Pls select Next Station", {icon: 2, time: 2000});
                 return;
@@ -219,6 +233,8 @@
             });
 
         });
+
+
 
     });
 </script>
