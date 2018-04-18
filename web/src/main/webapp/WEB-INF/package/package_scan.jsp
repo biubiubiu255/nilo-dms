@@ -183,7 +183,7 @@
             $("input[cust-verify='lenVer']").each(function () {
                 var value = $(this).val();
 
-                if(value!="" && parseInt(value)<=0){
+                if(value!="" && parseFloat(value)<=0){
                     isValidity = false;
                     layer.msg("Please enter a reasonable value", {icon: 2, time: 2000});
                 }

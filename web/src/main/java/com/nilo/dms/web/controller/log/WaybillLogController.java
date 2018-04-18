@@ -5,6 +5,7 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.dto.order.WaybillLog;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.WaybillLogService;
