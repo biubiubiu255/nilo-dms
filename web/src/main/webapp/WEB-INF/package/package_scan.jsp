@@ -50,7 +50,7 @@
             </div>
             <label class="layui-form-label" style="width:120px">Height</label>
             <div class="layui-input-inline">
-                <input type="number" name="height" value="" autocomplete="off"
+                <input type="number" name="high" value="" autocomplete="off"
                        class="layui-input" cust-verify="lenVer">
             </div>
         </div>

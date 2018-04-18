@@ -59,12 +59,14 @@
                     obj.del();
                 }
             });
-
             //监听单元格编辑
             table.on('edit(${id0})', function (obj) {
+                var number = parseFloat(obj.value);
+                number = number.toFixed(2);
                 var value = obj.value //得到修改后的值
                         , data = obj.data //得到所在行所有键值
                 updateWeight(data.orderNo, value);
+                reloadTable();
             });
 
         });

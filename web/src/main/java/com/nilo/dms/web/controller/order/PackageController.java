@@ -78,7 +78,7 @@ public class PackageController extends BaseController {
 /*
         status.add(DeliveryOrderStatusEnum.SEND.getCode());
 */
-        parameter.setStatus(status);
+        //parameter.setStatus(status);
         List<Waybill> list = waybillService.queryWaybillBy(parameter, page);
         return toPaginationLayUIData(page, list);
     }
