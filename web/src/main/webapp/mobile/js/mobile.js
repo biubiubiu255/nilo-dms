@@ -721,7 +721,9 @@ MobileData.prototype.paginate = function(options) {
                     invokeCallBack(callback, response);
                 }
             } catch (e) {
-                showError(response.msg);
+            	if(response.msg!='' || response.msg!='undefiend'){
+                    showError(response.msg);
+				}
             }
 			mbObject.requestIng = false;
             closeMask();

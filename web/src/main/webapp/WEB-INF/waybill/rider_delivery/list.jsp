@@ -16,9 +16,10 @@
     <div class="layui-row">
 
         <div class="layui-col-md5">
-            <shiro:hasPermission name="400061">
+<%--            <shiro:hasPermission name="400061">
                 <button class="layui-btn layui-btn-normal loading-scan">Delivery Scan</button>
-            </shiro:hasPermission>
+            </shiro:hasPermission>--%>
+            <button class="layui-btn layui-btn-normal loading-scan">Delivery Scan</button>
             <button class="layui-btn btn-search">Search</button>
         </div>
 
