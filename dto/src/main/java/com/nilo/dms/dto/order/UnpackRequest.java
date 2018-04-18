@@ -7,6 +7,9 @@ import java.util.List;
  */
 public class UnpackRequest {
 
+
+    String packageNo;
+
     List<String> orderNos;
 
     String merchantId;
@@ -45,5 +48,13 @@ public class UnpackRequest {
 
     public void setOptBy(String optBy) {
         this.optBy = optBy;
+    }
+
+    public String getPackageNo() {
+        return packageNo;
+    }
+
+    public void setPackageNo(String packageNo) {
+        this.packageNo = packageNo;
     }
 }

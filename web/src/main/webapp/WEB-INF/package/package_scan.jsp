@@ -96,6 +96,7 @@
 <script type="text/javascript">
     $(function () {
 
+        var smallTotalWeight = 0;
         var form, table;
         layui.use(['form', 'layer'], function () {
             form = layui.form;
@@ -136,9 +137,11 @@
                         orderNo: orderNo, scanNo: '${scanNo}'
                     },
                     success: function (data) {
+
                         if (data.result) {
                             $("#orderNo").focus();
                             $("#orderNo").val('');
+                            smallTotalWeight += parseFloat(data.data.weight);
                             //刷新数据
                             reloadTable();
                         } else {

@@ -252,8 +252,11 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         checkOtpParam(optRequest);
         // 校验操作类型
         checkOptType(optRequest);
-        //判断是否是大包，否则拆包，然后以小包列表添加到list里
-        unPackage(optRequest);
+
+        //查询旗下所有的小包，自动加入列表
+        excavateAllSmall(optRequest.getOrderNo());
+
+        //if(optRequest!=null ) return;  测试专用
 
         transactionTemplate.execute(new TransactionCallback<Void>() {
             @Override
@@ -293,6 +296,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Override
     public void arrive(List<String> waybillNos) {
 
+
         Principal principal = SessionLocal.getPrincipal();
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
@@ -325,6 +329,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         // 判断是否允许打包
         for (String o : packageRequest.getOrderNos()) {
             Waybill waybill = queryByOrderNo(packageRequest.getMerchantId(), o);
+            if(!waybill.getStatus().equals(DeliveryOrderStatusEnum.ARRIVED)){
+                throw new DMSException(BizErrorCode.PACKAGE_NO_ERROR);
+            }
             if (StringUtil.isNotEmpty(waybill.getParentNo()) ) {
                 throw new DMSException(BizErrorCode.PACKAGE_ALREADY_PACKAGE, o);
             }
@@ -399,25 +406,14 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Transactional
     public void unpack(UnpackRequest unpackRequest) {
 
-        Iterator<String> iterator = unpackRequest.getOrderNos().iterator();
-        // 判断是否允许拆包
-        for (; iterator.hasNext(); ) {
-            String orderNo = iterator.next();
-            Waybill waybill = queryByOrderNo(unpackRequest.getMerchantId(), orderNo);
-            if (StringUtil.isEmpty(waybill.getParentNo()) && !waybill.isPackage()) {
-                throw new DMSException(BizErrorCode.UNPACK_NOT_ALLOW, orderNo);
-            }
-            if (waybill.isPackage()) {
-                OrderOptRequest optRequest = new OrderOptRequest();
-                optRequest.setOptType(OptTypeEnum.SIGN);
-                optRequest.setOrderNo(Arrays.asList(new String[]{orderNo}));
-                handleOpt(optRequest);
-                iterator.remove();
-            }
-        }
+        //小包到件，需求已经变更
+        //arrive(unpackRequest.getOrderNos());
 
-        //小包到件
-        arrive(unpackRequest.getOrderNos());
+        //大包、小包签收
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
+        optRequest.setOrderNo(new ArrayList<>(Arrays.asList(new String[]{unpackRequest.getPackageNo()})));
+        handleOpt(optRequest);
 
         for (String o : unpackRequest.getOrderNos()) {
             //3、清除 大包号

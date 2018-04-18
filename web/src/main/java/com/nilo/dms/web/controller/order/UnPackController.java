@@ -145,7 +145,10 @@ public class UnPackController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/unpack.html")
-    public String unpack(String scanNo) {
+    public String unpack(String scanNo, String packageNo) {
+        if(packageNo==null){
+            throw new DMSException(BizErrorCode.PACKAGE_EMPTY);
+        }
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
@@ -157,11 +160,16 @@ public class UnPackController extends BaseController {
         for (WaybillScanDetailsDO d : scanDetailList) {
             orderNos.add(d.getOrderNo());
         }
+        //剔除大包
+        orderNos.remove(packageNo);
+
         UnpackRequest request = new UnpackRequest();
         request.setMerchantId(merchantId);
         request.setOptBy(me.getUserId());
         request.setNetworkId(me.getNetworks().get(0));
         request.setOrderNos(orderNos);
+        request.setPackageNo(packageNo);
+
         waybillService.unpack(request);
 
         return toJsonTrueMsg();

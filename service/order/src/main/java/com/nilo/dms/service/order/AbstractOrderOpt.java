@@ -82,6 +82,51 @@ public abstract class AbstractOrderOpt {
         }
     }
 
+    //public static void main(arg String[])
+
+    protected void  excavateAllSmall(List<String> orderList){
+
+        Long merchantId = Long.valueOf(SessionLocal.getPrincipal().getMerchantId());
+
+        List<WaybillDO> waybillDOList = waybillDao.queryByOrderNos(merchantId, orderList);
+
+        for(WaybillDO e : waybillDOList){
+            if(e.getIsPackage()!=null && e.getIsPackage().equals(IS_PACKAGE)){
+                List<WaybillDO> tempOrders = waybillDao.queryByPackageNo(merchantId, e.getOrderNo());
+                List<String> tempOrderList = new ArrayList<String>();
+                if (tempOrders.size()>0){
+                    for(WaybillDO tempOrdersWaybillDO : tempOrders){
+                        tempOrderList.add(tempOrdersWaybillDO.getOrderNo());
+                    }
+
+                    excavateAllSmall(tempOrderList);
+                    tempOrderList = new ArrayList<String>(tempOrderList);
+                    System.out.println("本次测试 = " + tempOrderList.size());
+                    if(tempOrderList.size()>0) {
+                        orderList.addAll(tempOrderList);
+                    }
+
+                }
+            }
+        }
+    }
+
+
+/*    protected List<WaybillDO>  excavateAllSmall(List<WaybillDO> waybillDOList){
+
+        Long merchantId = Long.valueOf(SessionLocal.getPrincipal().getMerchantId());
+        for(WaybillDO e : waybillDOList){
+            if(e.getIsPackage().equals(IS_PACKAGE)){
+                List<WaybillDO> tempOrders = waybillDao.queryByPackageNo(merchantId, e.getOrderNo());
+                if (tempOrders.size()!=0){
+                    waybillDOList.addAll(excavateAllSmall(tempOrders));
+                }
+            }
+        }
+
+        return waybillDOList;
+    }*/
+
     protected void unPackage(OrderOptRequest optRequest) {
 
         Long merchantId = Long.valueOf(SessionLocal.getPrincipal().getMerchantId());
@@ -100,7 +145,7 @@ public abstract class AbstractOrderOpt {
             orders.addAll(childrenOrders);
 
         }
-        ArrayList<String> strings = new ArrayList<>(optRequest.getOrderNo());
+        List<String> strings = optRequest.getOrderNo();
         strings.addAll(orders);
         optRequest.setOrderNo(strings);
     }

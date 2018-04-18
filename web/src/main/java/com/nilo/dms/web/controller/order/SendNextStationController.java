@@ -152,7 +152,7 @@ public class SendNextStationController extends BaseController {
         WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.valueOf(merchantId), orderNo);
 
         if (StringUtil.isEmptys(waybillDO, waybillDO.getIsPackage()) || !waybillDO.getIsPackage().equals("1")){
-            return toJsonErrorMsg("Order No or no packaging");
+            return toJsonErrorMsg("Empty or not packaged");
         }
         return toJsonTrueData(toPaginationLayUIData(page, waybillDO));
     }
