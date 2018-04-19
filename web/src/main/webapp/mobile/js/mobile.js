@@ -1077,7 +1077,7 @@ function getI18nAttr(value) {
 		}else {
 			language = 'en';
 		}
-		
+		language = 'en'; //目前实际只有英语环境
 		var content=null;
 		
 		$.i18n.properties({

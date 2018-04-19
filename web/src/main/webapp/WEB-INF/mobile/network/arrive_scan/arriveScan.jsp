@@ -101,6 +101,8 @@
 					$('#code' + value).remove();
 				}
 			}
+			
+			android.startScan();
 		});
 </script>
 
