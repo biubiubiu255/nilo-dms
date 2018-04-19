@@ -35,33 +35,42 @@
 		<%--<c:if test="${isRider }">--%>
 			<div class="j_sy_n1">
 				<div class="model_banner_title">
-					<i class="model_banner_title"></i><div data-locale="home_rider">Rider</div>
+					<i class="model_banner_title"></i><div >Handle function</div>
 				</div>
 				<ul class="model_banner_ul"
 					style="width: 100%; overflow: hidden; margin: 0px;">
+					<c:if test="${isRider==false}">
+						<a href="/mobile/arrive/scan.html" title="">
+							<li><img src="/mobile/images/icon_3.png" /><br /><label data-locale="arrive_scan">Arrive Scan</label></li>
+						</a>
+					</c:if>
 					<a href="/mobile/rider/sign/toSign.html" title="">
-						<li><img src="/mobile/images/icon_1.png" /><br /><label data-locale="sign_scan">Sign Scan</label></li>
+						<li><img src="/mobile/images/icon_1.png" /><br /><label data-locale="sign_scan">Sign</label></li>
 					</a>
-					<a href="/mobile/rider/COD/sign.html" title="">
-						<li><img src="/mobile/images/icon_2.png" /><br /><label >Payment</label></li>
+					
+					<a href="/mobile/rider/stranded/scan.html" title="">
+						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="stranded_parcel">Stranded</label></li>
 					</a>
 					<a href="/mobile/rider/problem/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="refuse">Refuse</label></li>
 					</a>
-					<a href="/mobile/rider/stranded/scan.html" title="">
-						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="stranded_parcel">Stranded Parcel</label></li>
+					<a href="/mobile/rider/COD/sign.html" title="">
+						<li><img src="/mobile/images/icon_2.png" /><br /><label >Payment</label></li>
 					</a>
 					<a href="/mobile/rider/Batch/toPay.html" title="">
-						<li><img src="/mobile/images/icon_5.png" /><br /><label>Batch transfer</label></li>
+						<li><img src="/mobile/images/icon_5.png" /><br /><label>Batch Payment</label></li>
 					</a>
-					<a href="/mobile/rider/deliver/toScan.html" title="">
+					<!-- <a href="/mobile/rider/deliver/toScan.html" title="">
 						<li><img src="/mobile/images/icon_5.png" /><br /><label>Rider Delivery</label></li>
+					</a> -->
+					<a href="/mobile/network/unpackage/unpack.html" title="">
+						<li><img src="/mobile/images/icon_3.png" /><br /><label data-locale="unPack">UnPack</label></li>
 					</a>
 				</ul>
 				<div class="clear"></div>
 			</div>
 		<%--</c:if>--%>
-		<c:if test="${isRider==false}">
+		<%-- <c:if test="${isRider==false}">
 			<div class="model_banner">
 				<div class="model_banner_title">
 					<i class="model_banner_title"></i><div data-locale="home_network">Network</div>
@@ -94,7 +103,7 @@
 				</ul>
 				<div class="clear"></div>
 			</div>
-		</c:if>
+		</c:if> --%>
 		<div class="model_banner">
 			<div class="model_banner_title">
 				<i class="model_banner_title"></i><div data-locale="home_basic">Basic function</div>
