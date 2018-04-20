@@ -68,7 +68,7 @@ public class MobileHomeController extends BaseController {
 
             Object sessionUser = WebUtil.getHttpSessionValue("session_user");
             if (sessionUser != null) {
-                return toJsonTrueMsg();
+            	return "redirect:/mobile/home.html";
             }
             User user = userService.findByUsername(username);
             if (user == null) {

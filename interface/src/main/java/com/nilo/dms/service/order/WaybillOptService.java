@@ -1,5 +1,6 @@
 package com.nilo.dms.service.order;
 
+import com.nilo.dms.dto.handle.HandleRefuse;
 import com.nilo.dms.dto.order.AbnormalParam;
 import com.nilo.dms.dto.order.DelayParam;
 import com.nilo.dms.dto.order.SignForOrderParam;
@@ -22,7 +23,7 @@ public interface WaybillOptService {
      * 拒收
      * @param param
      */
-    void refuse(AbnormalParam param);
+    void refuse(HandleRefuse handleRefuse);
 
     /**
      * 运单标记为延迟件

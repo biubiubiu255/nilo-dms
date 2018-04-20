@@ -50,8 +50,10 @@
                     }
 
                     showInfo('Success');
-                    // var url = "http://127.0.0.1:8080/mobile/login.html";
-                    // window.location.href = url;
+                    setTimeout(function(){
+                        window.history.back(-1);
+                    }, 2000);
+
                 } else {
                     showError(data.msg)
                 }

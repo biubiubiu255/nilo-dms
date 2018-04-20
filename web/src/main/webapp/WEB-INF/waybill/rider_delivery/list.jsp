@@ -58,7 +58,7 @@
         <tr>
             <th lay-data="{fixed: 'left',field:'handleNo', width:140}">LoadingNo</th>
             <th lay-data="{field:'riderName', width:150}">Rider</th>
-            <th lay-data="{field:'handleByName', width:150}">HandleByName</th>
+            <th lay-data="{field:'handleName', width:150}">HandleByName</th>
             <th lay-data="{field:'handle_time', width:170, templet:'<div>{{ formatDate(d.handle_time) }}</div>'}">
                 HandleTime
             </th>

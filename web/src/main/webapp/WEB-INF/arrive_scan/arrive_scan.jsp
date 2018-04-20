@@ -63,10 +63,15 @@
             table.on('edit(${id0})', function (obj) {
                 var number = parseFloat(obj.value);
                 number = number.toFixed(2);
+                $("cdsf").change()
                 var value = obj.value //得到修改后的值
                         , data = obj.data //得到所在行所有键值
+                layer.msg("sussess");
                 updateWeight(data.orderNo, value);
-                reloadTable();
+                setTimeout(function () {
+                    reloadTable();
+                }, 500)
+
             });
 
         });

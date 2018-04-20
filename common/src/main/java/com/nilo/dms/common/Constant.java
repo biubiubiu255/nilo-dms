@@ -45,6 +45,6 @@ public class Constant {
             "/mobile/network/DemoController/toLoginPage.html,/mobile/DemoController/toIndexPage.html,/mobile/DemoController/test.html," +
             "/mobile/StrandedParcelController/test.html,/mobile/SignScanController/test.html,/mobile/CODSignController/test.html," +
         "/mobile/PorblemController/test.html,/mobile/SjArriveScanController/test.html,/mobile/DeliverScanController/test.html," +
-            "/mobile/SendScanController/test.html," + "/mobile/password/toPage.html";
+            "/mobile/SendScanController/test.html,/mobile/password/toPage.html,/mobile/login.html";
 
 }

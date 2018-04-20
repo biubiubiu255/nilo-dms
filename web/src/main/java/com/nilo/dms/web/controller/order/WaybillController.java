@@ -68,6 +68,7 @@ public class WaybillController extends BaseController {
         if (orderStatus != null && orderStatus.length > 0) {
             parameter.setStatus(Arrays.asList(orderStatus));
         }
+        parameter.setIsPackage("0");
 
         Pagination page = getPage();
         List<Waybill> list = waybillService.queryWaybillBy(parameter, page);

@@ -41,7 +41,8 @@ public class ProblemController extends BaseController {
             param.setRemark(remark);
             param.setOrderNo(orderNo);
             param.setReason(reason);
-            waybillOptService.refuse(param);
+            //waybillOptService.refuse(param);
+            //waybillOptService.
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());
         }
