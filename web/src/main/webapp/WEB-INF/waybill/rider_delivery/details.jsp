@@ -18,7 +18,7 @@
         </div>
         <label class="layui-form-label" style="width:120px">Loading By</label>
         <div class="layui-input-inline">
-            <input type="text" name="handleByName" value="${pack.handleByName}" autocomplete="off"
+            <input type="text" name="handleName" value="${pack.handleName}" autocomplete="off"
                    class="layui-input layui-disabled" disabled>
         </div>
     </div>

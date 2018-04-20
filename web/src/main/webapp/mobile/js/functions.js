@@ -103,6 +103,9 @@ function ajaxRequest(postURL, params, showMsg, callback,loadMask) {
                 }
             } catch (e) {
                 showError('此次请求发生异常，请重试!' + e);
+                setTimeout(function () {
+                    closeMask();
+                }, 1500)
             }
         }
     	,error: function (textStatus) {

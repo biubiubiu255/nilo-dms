@@ -51,8 +51,11 @@
 					<a href="/mobile/rider/stranded/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="stranded_parcel">Stranded</label></li>
 					</a>
-					<a href="/mobile/rider/problem/scan.html" title="">
-						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="refuse">Refuse</label></li>
+					<%--<a href="/mobile/rider/problem/scan.html" title="">
+						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="problem">problem</label></li>
+					</a>--%>
+					<a href="/mobile/rider/refuse/scan.html" title="">
+						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="refuse">refuse</label></li>
 					</a>
 					<a href="/mobile/rider/COD/sign.html" title="">
 						<li><img src="/mobile/images/icon_2.png" /><br /><label >Payment</label></li>

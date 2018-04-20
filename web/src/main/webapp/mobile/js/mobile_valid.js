@@ -107,7 +107,15 @@
                                 }
                                 closeMask();
                             } catch (e) {
-                                showError('此次请求发生异常，请重试!' + e);
+
+                            	if(typeof(json.msg)!='undefined'){
+                                    showError(json.msg);
+								}else {
+                                    showError('此次请求发生异常，请重试!' + e);
+								}
+                                setTimeout(function () {
+                                    closeMask();
+                                }, 1500)
                             }
 							requestIng = false;
                         },

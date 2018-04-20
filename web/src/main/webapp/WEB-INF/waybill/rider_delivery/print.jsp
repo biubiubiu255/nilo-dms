@@ -42,7 +42,7 @@
             HandleNo NO: ${pack.handleNo}
         </div>
         <div class="col-xs-3">
-            handleByName: ${pack.handleBy}
+            handleName: ${pack.handleBy}
         </div>
         <div class="col-xs-3">
             Rider :${pack.rider}

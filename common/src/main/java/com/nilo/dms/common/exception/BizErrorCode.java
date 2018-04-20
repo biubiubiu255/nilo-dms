@@ -111,6 +111,8 @@ public enum BizErrorCode implements ErrorCode {
     THIRD_DRIVER_EMPTY("Third Driver Empty.", "100077"),
     WAYBILL_EMPTY("Waybill Empty.", "100078"),
 
+    REFUSE_ALREADY_EXISTS("The refuse package already exists", "100079"),
+
     ;
 
     private final String description;

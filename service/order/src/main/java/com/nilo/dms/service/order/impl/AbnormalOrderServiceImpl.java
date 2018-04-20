@@ -47,9 +47,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
     @Transactional
     public void addAbnormalOrder(AbnormalOrder abnormalOrder) {
 
-
-        WaybillDO orderDO = waybillDao
-                .queryByOrderNo(Long.parseLong(abnormalOrder.getMerchantId()), abnormalOrder.getOrderNo());
+        WaybillDO orderDO = waybillDao.queryByOrderNo(Long.parseLong(abnormalOrder.getMerchantId()), abnormalOrder.getOrderNo());
         if (orderDO == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, abnormalOrder.getOrderNo());
 
         String abnormalNo = SystemConfig.getNextSerialNo(abnormalOrder.getMerchantId(), SerialTypeEnum.ABNORMAL_DELIVERY_ORDER_NO.getCode());

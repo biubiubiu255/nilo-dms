@@ -9,11 +9,13 @@ import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.dao.HandleAllocateDao;
 import com.nilo.dms.dao.HandleDelayDao;
+import com.nilo.dms.dao.HandleRefuseDao;
 import com.nilo.dms.dao.HandleSignDao;
 import com.nilo.dms.dao.dataobject.HandleSignDO;
 import com.nilo.dms.dto.common.UserInfo;
 import com.nilo.dms.dto.handle.HandleAllocate;
 import com.nilo.dms.dto.handle.HandleDelay;
+import com.nilo.dms.dto.handle.HandleRefuse;
 import com.nilo.dms.dto.order.*;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,6 +47,8 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
     private HandleDelayDao handleDelayDao;
     @Autowired
     private HandleAllocateDao handleAllocateDao;
+    @Autowired
+    private HandleRefuseDao handleRefuseDao;
     @Autowired
     private HandleSignDao handleSignDao;
 
@@ -74,21 +79,28 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
 
     @Override
     @Transactional
-    public void refuse(AbnormalParam param) {
-
-        Waybill deliveryOrder = waybillService.queryByOrderNo(param.getMerchantId(), param.getOrderNo());
-        if (deliveryOrder == null) {
-            throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, param.getOrderNo());
+    public void refuse(HandleRefuse handleRefuse) {
+        Long merchantId = Long.parseLong(SessionLocal.getPrincipal().getMerchantId());
+        if(handleRefuse.getMerchantId()==null){
+            handleRefuse.setMerchantId(merchantId);
         }
-        //新增异常件
-        AbnormalOrder abnormalOrder = new AbnormalOrder();
-        abnormalOrder.setMerchantId(param.getMerchantId());
-        abnormalOrder.setAbnormalType(AbnormalTypeEnum.REFUSE);
-        abnormalOrder.setOrderNo(param.getOrderNo());
-        abnormalOrder.setRemark(param.getRemark());
-        abnormalOrder.setReason(param.getReason());
-        abnormalOrder.setCreatedBy(param.getOptBy());
-        abnormalOrderService.addAbnormalOrder(abnormalOrder);
+        Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId.toString(), handleRefuse.getOrderNo());
+        if (deliveryOrder == null) {
+            throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, handleRefuse.getOrderNo());
+        }
+        List<HandleRefuse> handleRefuseList = handleRefuseDao.queryByDO(handleRefuse);
+
+        if(handleRefuseList.size()!=0){
+            throw new DMSException(BizErrorCode.REFUSE_ALREADY_EXISTS, handleRefuse.getOrderNo());
+        }
+        handleRefuse.setStatus(DelayStatusEnum.CREATE.getCode());
+        handleRefuseDao.insert(handleRefuse);
+
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setOptType(OptTypeEnum.REFUSE);
+        optRequest.setRemark(handleRefuse.getRemark());
+        optRequest.setOrderNo(new ArrayList<String>(Arrays.asList(new String[]{handleRefuse.getOrderNo()})));
+        waybillService.handleOpt(optRequest);
     }
 
     @Override
