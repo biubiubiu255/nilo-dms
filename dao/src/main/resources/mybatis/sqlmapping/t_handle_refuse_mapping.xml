@@ -89,9 +89,13 @@
         <if test="now.reason != null and now.reason != '' ">
             and refuse_reason = #{now.reason}
         </if>
-        <if test="beginTime != null and endTime != null ">
-            and created_time >= #{beginTime} <![CDATA[and created_time <= #{endTime} ]]>
+        <if test="beginTime != null ">
+            and created_time >= #{beginTime}
         </if>
+        <if test="endTime != null ">
+        <![CDATA[and created_time <= #{endTime} ]]>
+        </if>
+
         order by created_time desc
         limit #{offset} , #{limit}
     </select>

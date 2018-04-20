@@ -1,5 +1,6 @@
 package com.nilo.dms.web.controller.order;
 
+import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.HandleDelayDao;
@@ -8,6 +9,7 @@ import com.nilo.dms.dto.handle.HandleRefuse;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.AbnormalOrderService;
 import com.nilo.dms.service.order.WaybillOptService;
+import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,6 +52,11 @@ public class RefuseOrderController extends BaseController {
         Long queryCount = handleRefuseDao.queryCountBy(handleRefuse, fromTime, toTime);
         if(queryCount!=null){
             page.setTotalCount(queryCount);
+        }
+        for(int i=0;i<handleRefuseList.size();i++){
+            HandleRefuse tempHandleRefuse = handleRefuseList.get(i);
+            tempHandleRefuse.setReason(SystemCodeUtil.getCodeVal(merchantId.toString(), Constant.REFUSE_REASON, handleRefuseList.get(i).getReason()));
+            handleRefuseList.set(i, tempHandleRefuse);
         }
         return toPaginationLayUIData(page, handleRefuseList);
     }

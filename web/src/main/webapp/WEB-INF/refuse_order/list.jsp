@@ -137,7 +137,7 @@
             $(".layui-colla-content").toggleClass("layui-show");
             $(".btn-search").toggleClass("layui-btn-warm");
         })
-        function reloadTable(item) {
+        function reloadTable() {
 
             var fromCreatedTime = $("#fromCreatedTime").val()=="" ? "" : Date.parse(new Date($("#fromCreatedTime").val()))/1000;
             var toCreatedTime = $("#toCreatedTime").val()=="" ? "" : Date.parse(new Date($("#toCreatedTime").val()))/1000+86400;
@@ -164,7 +164,7 @@
                         area: ['800px', '500px'],
                         offset: ['100px', '250px'],
                         end: function () {
-                            reloadCurrentPage();
+                            reloadTable();
                         }
                     })
                 }
@@ -187,7 +187,7 @@
                     }
                 },
                 complete: function () {
-                    reloadCurrentPage();
+                    reloadTable();
                 }
             });
         }
