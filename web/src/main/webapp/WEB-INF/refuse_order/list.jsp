@@ -29,7 +29,7 @@
             <div class="layui-colla-content ">
                 <div class="layui-row">
                     <div class="layui-col-md4 layui-col-lg3">
-                        <label class="layui-form-label">OrderNo:</label>
+                        <label class="layui-form-label">WaybillNo:</label>
                         <div class="layui-input-inline">
                             <input type="text" name="orderNo" autocomplete="off" class="layui-input">
                         </div>
@@ -76,7 +76,7 @@
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:250}">OrderNo</th>
+            <th lay-data="{fixed: 'left',field:'orderNo', width:250}">WaybillNo</th>
             <th lay-data="{field:'reason', width:150}">Reason</th>
             <th lay-data="{field:'handleName', width:150}">Handle Name</th>
             <%--<th lay-data="{field:'statusDesc', width:100}">Status</th>--%>

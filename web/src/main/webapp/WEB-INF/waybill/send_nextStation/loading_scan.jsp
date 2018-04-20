@@ -48,7 +48,7 @@
                 <input type="hidden" name="nextStation" value="">
             </div>
 
-            <label class="layui-form-label">OrderNo:</label>
+            <label class="layui-form-label">packageNo:</label>
             <div class="layui-input-inline">
                 <input type="text" id="orderNo" autocomplete="off" placeholder="Scan" class="layui-input">
             </div>
