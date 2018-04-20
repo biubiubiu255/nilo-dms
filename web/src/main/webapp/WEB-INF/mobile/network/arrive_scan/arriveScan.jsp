@@ -101,6 +101,8 @@
 					$('#code' + value).remove();
 				}
 			}
+			
+			android.startScan();
 		});
 </script>
 
@@ -109,7 +111,7 @@
 
 	<div class="formula_modify">
 		<div class="wap_top">
-			<a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
+			<a href="/mobile/home.html" title="Back" class="wap_top_back"></a>
 			<h2 data-locale="arrive_scan_title">Arrive Scan</h2>
 		</div>
 

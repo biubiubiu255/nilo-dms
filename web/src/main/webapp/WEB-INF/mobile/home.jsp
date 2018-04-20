@@ -49,7 +49,7 @@
 					</a>
 					
 					<a href="/mobile/rider/stranded/scan.html" title="">
-						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="stranded_parcel">Stranded</label></li>
+						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="delay">Delay</label></li>
 					</a>
 					<%--<a href="/mobile/rider/problem/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="problem">problem</label></li>
@@ -66,9 +66,9 @@
 					<!-- <a href="/mobile/rider/deliver/toScan.html" title="">
 						<li><img src="/mobile/images/icon_5.png" /><br /><label>Rider Delivery</label></li>
 					</a> -->
-					<a href="/mobile/network/unpackage/unpack.html" title="">
+					<!-- <a href="/mobile/network/unpackage/unpack.html" title="">
 						<li><img src="/mobile/images/icon_3.png" /><br /><label data-locale="unPack">UnPack</label></li>
-					</a>
+					</a> -->
 				</ul>
 				<div class="clear"></div>
 			</div>

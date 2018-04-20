@@ -514,6 +514,7 @@ $(function(){
 	}else {
 		lang = 'en';
 	}
+	lang = 'en';
 	//alert(lang);
     loadLanguage(lang);
 });
