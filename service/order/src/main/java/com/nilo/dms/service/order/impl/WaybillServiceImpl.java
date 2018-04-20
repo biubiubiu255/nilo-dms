@@ -315,6 +315,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             WaybillDO update = new WaybillDO();
             update.setOrderNo(o);
             update.setMerchantId(Long.parseLong(merchantId));
+            if(orderDO.getPrintTimes()==null){
+                orderDO.setPrintTimes(0);
+            }
             update.setPrintTimes(orderDO.getPrintTimes() + 1);
             waybillDao.update(update);
         }
