@@ -1,30 +1,26 @@
 package com.nilo.dms.web.controller.pda;
 
+import com.alibaba.druid.sql.visitor.functions.Char;
+import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.enums.HandleRiderStatusEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.exception.SysErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.WaybillLogDao;
-import com.nilo.dms.dao.DistributionNetworkDao;
-import com.nilo.dms.dao.ThirdDriverDao;
-import com.nilo.dms.dao.ThirdExpressDao;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
-import com.nilo.dms.dao.dataobject.StaffDO;
-import com.nilo.dms.dao.dataobject.ThirdDriverDO;
-import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.dao.*;
+import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.dto.common.LoginInfo;
 import com.nilo.dms.dto.common.User;
-import com.nilo.dms.dto.order.Loading;
-import com.nilo.dms.dto.order.ShipParameter;
-import com.nilo.dms.dto.order.Waybill;
-import com.nilo.dms.dto.order.WaybillHeader;
+import com.nilo.dms.dto.handle.SendThirdHead;
+import com.nilo.dms.dto.order.*;
 import com.nilo.dms.dto.pda.PdaRider;
 import com.nilo.dms.dto.pda.PdaWaybill;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.LoadingService;
+import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.mobile.SendScanController;
@@ -36,9 +32,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -61,10 +59,12 @@ public class PdaController extends BaseController {
     private DistributionNetworkDao distributionNetworkDao;
     @Autowired
     private ThirdDriverDao thirdDriverDao;
-
     @Autowired
     private WaybillLogDao waybillLogDao;
-
+    @Autowired
+    private WaybillDao waybillDao;
+    @Autowired
+    private SendThirdService sendThirdService;
     @RequestMapping(value = "/scan.html")
     public String toPage() {
         return "mobile/network/arrive_scan/arriveScan";
@@ -355,6 +355,111 @@ public class PdaController extends BaseController {
             }
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());
+        }
+
+        return toJsonTrueMsg();
+    }
+    @ResponseBody
+    @RequestMapping(value = "/getExpress.html")
+    public String getExpress() {
+        Pagination page = getPage();
+        List<ThirdExpressDO> expressList = userService.findExpressesAll(page);
+        List<SendScanController.NextStation> list = new ArrayList<>();
+        for (ThirdExpressDO e : expressList) {
+            SendScanController.NextStation s = new SendScanController.NextStation();
+            s.setCode(e.getExpressCode());
+            s.setName(e.getExpressName());
+            s.setType("T");
+            list.add(s);
+        }
+        return toJsonTrueData(list);
+    }
+    @ResponseBody
+    @RequestMapping(value = "/packageScan.html")
+    public String packageScan(String waybillno) {
+
+        Principal me = SessionLocal.getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        Waybill order = null;
+        try {
+            order = waybillService.queryByOrderNo(merchantId, waybillno);
+            if (order == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, waybillno);
+        } catch (Exception e) {
+            log.error("loadingScan failed. orderNo:{}", waybillno, e);
+            return toJsonErrorMsg(e.getMessage());
+        }
+        return toJsonTrueMsg();
+    }
+    @ResponseBody
+    @RequestMapping(value = "/addPackage.html")
+    public String addLoading(String waybillnosBill,Double weight,Double length,Double width,Double height,Integer nextNetworkId) {
+
+        Principal me = SessionLocal.getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        List<String> orderNos = Arrays.asList(waybillnosBill.split(","));
+        String orderNo = "";
+        try {
+            PackageRequest packageRequest = new PackageRequest();
+            packageRequest.setOrderNos(orderNos);
+            packageRequest.setMerchantId(merchantId);
+            packageRequest.setOptBy(me.getUserId());
+            packageRequest.setWeight(weight);
+            packageRequest.setLength(length);
+            packageRequest.setWidth(width);
+            packageRequest.setHigh(height);
+            packageRequest.setOptBy(me.getUserId());
+            packageRequest.setNextNetworkId(nextNetworkId);
+            if (me.getNetworks() != null && me.getNetworks().size() != 0) {
+                packageRequest.setNetworkId(me.getNetworks().get(0));
+            }
+            orderNo = waybillService.addPackage(packageRequest);
+        } catch (Exception e) {
+            return toJsonErrorMsg(e.getMessage());
+        }
+        return toJsonTrueData(orderNo);
+    }
+    @ResponseBody
+    @RequestMapping(value = "/scanSmallPack.html")
+    public String scanSmallPack(String waybillno) {
+        Principal me = SessionLocal.getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.valueOf(merchantId), waybillno);
+        try {
+            if (StringUtil.isEmptys(waybillDO, waybillDO.getIsPackage()) || !waybillDO.getIsPackage().equals("1")){
+                return toJsonErrorMsg("Empty or not packaged");
+            }
+        }catch (Exception e){
+            return toJsonErrorMsg("This order has permission");
+        }
+
+        return toJsonTrueMsg();
+    }
+    @ResponseBody
+    @RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
+    public String addLoading(String smallPacks,String driver,String thirdExpressCode,String networkCode,String nextStation, Integer saveStutus) {
+        String [] smallPack= smallPacks.split(",");
+        Principal me = SessionLocal.getPrincipal();
+        Long merchantId = Long.valueOf(me.getMerchantId());
+        //加上刚刚的站点信息，当前的操作信息，小包信息，合并写入系统
+        SendThirdHead sendThirdHead = new SendThirdHead();
+        sendThirdHead.setMerchantId(merchantId);
+        sendThirdHead.setHandleBy(Long.valueOf(me.getUserId()));
+        sendThirdHead.setHandleName(me.getUserName());
+        sendThirdHead.setType("package");
+        sendThirdHead.setDriver(driver);
+        sendThirdHead.setThirdExpressCode(thirdExpressCode);
+        sendThirdHead.setNetworkCode(networkCode);
+        sendThirdHead.setNextStation(nextStation);
+        sendThirdHead.setStatus(saveStutus);
+
+        sendThirdService.insertBigAndSmall(merchantId, sendThirdHead, smallPack);
+
+        //如果初次写入直接是ship的话，这里再批量ship一下
+        if(sendThirdHead.getStatus()!=null && sendThirdHead.getStatus().equals(HandleRiderStatusEnum.SHIP.getCode())){
+            sendThirdService.ship(sendThirdHead.getHandleNo());
         }
 
         return toJsonTrueMsg();
