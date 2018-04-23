@@ -17,7 +17,7 @@
         </div>
 
         <div class="layui-col-md8 layui-col-lg5">
-            <label class="layui-form-label">handledTime:</label>
+            <label class="layui-form-label">handleTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromHandledTime" placeholder="From">
             </div>

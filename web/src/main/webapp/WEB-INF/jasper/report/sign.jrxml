@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sign" language="groovy" pageWidth="1300" pageHeight="842" columnWidth="1260" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="abbb5591-3eef-4ff8-af13-2d294816bebb">
-	<property name="ireport.zoom" value="1.771561000000001"/>
-	<property name="ireport.x" value="450"/>
-	<property name="ireport.y" value="74"/>
+	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="referenceNo" class="java.lang.String"/>
 	<field name="weight" class="java.lang.Double"/>
 	<field name="needPayAmount" class="java.lang.String"/>
 	<field name="alreadyPaid" class="java.lang.Double"/>
-	<field name="handledBy" class="java.lang.String"/>
-	<field name="handledTime" class="java.lang.String"/>
+	<field name="handleBy" class="java.lang.String"/>
+	<field name="handleTime" class="java.lang.String"/>
 	<field name="sName" class="java.lang.String"/>
 	<field name="rName" class="java.lang.String"/>
 	<field name="contactNumber" class="java.lang.String"/>
@@ -189,7 +189,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{handledBy}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{handleBy}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="762" y="0" width="86" height="20" uuid="bad6dc3e-55e5-4a30-9194-defa62833c54"/>
@@ -222,7 +222,7 @@
 			<textField>
 				<reportElement x="539" y="0" width="119" height="20" uuid="9ce41700-f298-4d1e-a262-d36270aa6675"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.valueOf($F{handledTime})*1000))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.valueOf($F{handleTime})*1000))]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

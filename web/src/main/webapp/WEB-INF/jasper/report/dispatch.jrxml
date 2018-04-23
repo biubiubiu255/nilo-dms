@@ -11,7 +11,7 @@
 	<field name="waybill.orderType" class="java.lang.String"/>
 	<field name="waybill.country" class="java.lang.String"/>
 	<field name="createdTime" class="java.lang.String"/>
-	<field name="handledTime" class="java.lang.String"/>
+	<field name="handleTime" class="java.lang.String"/>
 	<field name="waybill.receiverInfo.receiverAddress" class="java.lang.String"/>
 	<field name="waybill.weight" class="java.lang.Double"/>
 	<variable name="waybill.weight_1" class="java.lang.Double" calculation="Sum">
@@ -205,7 +205,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.valueOf($F{handledTime})*1000))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.valueOf($F{handleTime})*1000))]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1035" y="0" width="129" height="20" uuid="a1329261-9d6c-4351-b992-07000d398db3"/>

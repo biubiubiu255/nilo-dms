@@ -60,7 +60,7 @@
             <th lay-data="{field:'address', width:300,templet: '<div>{{d.deliveryOrder.senderInfo.address}}</div>'}">
                 Pick Up Address
             </th>
-            <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.handledTime) }}</div>'}">
+            <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">
                 OptTime
             </th>
         </tr>
