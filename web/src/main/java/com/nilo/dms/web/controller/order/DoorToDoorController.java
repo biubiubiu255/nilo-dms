@@ -68,6 +68,9 @@ public class DoorToDoorController extends BaseController {
                 if (allocate != null) {
                     w.setAllocatedRider(allocate.getRiderName());
                 }
+                if(w.getPrintTimes()==null){
+                    w.setPrintTimes(0);
+                }
             }
         }
         return toPaginationLayUIData(page, list);

@@ -85,7 +85,7 @@ public class ReportArriveController extends BaseController {
         }
 
         if (fileType.equals("json")) {
-            request.setAttribute("toDate", toPaginationLayUIData(getPage(), list));
+            request.setAttribute("toDate", toPaginationLayUIData(page, list));
             return "common/toResponseBody";
         }
 

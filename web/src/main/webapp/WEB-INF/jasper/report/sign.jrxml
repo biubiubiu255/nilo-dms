@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sign" language="groovy" pageWidth="1300" pageHeight="842" columnWidth="1260" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="abbb5591-3eef-4ff8-af13-2d294816bebb">
-	<property name="ireport.zoom" value="1.0000000000000004"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="1.7715610000000015"/>
+	<property name="ireport.x" value="954"/>
+	<property name="ireport.y" value="78"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="referenceNo" class="java.lang.String"/>
 	<field name="weight" class="java.lang.Double"/>
@@ -148,80 +148,80 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="38" splitType="Stretch">
+		<band height="39" splitType="Stretch">
 			<textField>
-				<reportElement x="16" y="0" width="110" height="20" uuid="d5f825e3-8941-48b3-bd6f-6339772532a8"/>
+				<reportElement x="16" y="2" width="110" height="20" uuid="d5f825e3-8941-48b3-bd6f-6339772532a8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{orderNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="146" y="0" width="108" height="20" uuid="c6ec054e-5cbf-40a5-b706-d51db1f217d6"/>
+				<reportElement x="146" y="2" width="108" height="20" uuid="c6ec054e-5cbf-40a5-b706-d51db1f217d6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{referenceNo}==null ? "" : $F{referenceNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="271" y="0" width="66" height="20" uuid="ebe39e90-1da5-4359-8f8c-c0d5e8349c3b"/>
+				<reportElement x="271" y="2" width="66" height="20" uuid="ebe39e90-1da5-4359-8f8c-c0d5e8349c3b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="358" y="0" width="71" height="20" uuid="a5657fc1-0764-489f-a672-64b406d32583"/>
+				<reportElement x="358" y="2" width="71" height="20" uuid="a5657fc1-0764-489f-a672-64b406d32583"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{needPayAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="447" y="0" width="78" height="20" uuid="349bbab5-e9e8-4cdc-93ed-4354488bad7b"/>
+				<reportElement x="447" y="2" width="78" height="20" uuid="349bbab5-e9e8-4cdc-93ed-4354488bad7b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{alreadyPaid}==null ? 0 : $F{alreadyPaid}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="669" y="0" width="83" height="20" uuid="6259ca50-51d0-4da8-8077-0e8b24453b20"/>
+				<reportElement x="669" y="2" width="83" height="20" uuid="6259ca50-51d0-4da8-8077-0e8b24453b20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{handleBy}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="762" y="0" width="86" height="20" uuid="bad6dc3e-55e5-4a30-9194-defa62833c54"/>
+				<reportElement x="762" y="2" width="86" height="20" uuid="bad6dc3e-55e5-4a30-9194-defa62833c54"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{sName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="858" y="0" width="96" height="20" uuid="084c0e4d-d89a-465a-86c0-fdb43be202ef"/>
+				<reportElement x="858" y="2" width="96" height="20" uuid="084c0e4d-d89a-465a-86c0-fdb43be202ef"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{rName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="965" y="0" width="81" height="20" uuid="4005e0fb-2efd-47a3-b96a-9a6c7d062a81"/>
+				<reportElement x="965" y="2" width="81" height="20" uuid="4005e0fb-2efd-47a3-b96a-9a6c7d062a81"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{contactNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1058" y="0" width="163" height="20" uuid="01098200-bf9e-43bd-adbe-9934df7a8ef8"/>
+				<reportElement x="1058" y="2" width="163" height="20" uuid="01098200-bf9e-43bd-adbe-9934df7a8ef8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="539" y="0" width="119" height="20" uuid="9ce41700-f298-4d1e-a262-d36270aa6675"/>
-				<textElement textAlignment="Center"/>
+				<reportElement x="539" y="2" width="119" height="20" uuid="9ce41700-f298-4d1e-a262-d36270aa6675"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.valueOf($F{handleTime})*1000))]]></textFieldExpression>
 			</textField>
 		</band>

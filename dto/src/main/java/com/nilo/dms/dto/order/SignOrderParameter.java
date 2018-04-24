@@ -66,4 +66,17 @@ public class SignOrderParameter {
     public void setCarrierName(String carrierName) {
         this.carrierName = carrierName;
     }
+
+    @Override
+    public String toString() {
+        return "SignOrderParameter{" +
+                "merchantId='" + merchantId + '\'' +
+                ", orderNo='" + orderNo + '\'' +
+                ", nextNetwork='" + nextNetwork + '\'' +
+                ", status=" + status +
+                ", carrierName='" + carrierName + '\'' +
+                ", fromHandledTime='" + fromHandledTime + '\'' +
+                ", toHandledTime='" + toHandledTime + '\'' +
+                '}';
+    }
 }

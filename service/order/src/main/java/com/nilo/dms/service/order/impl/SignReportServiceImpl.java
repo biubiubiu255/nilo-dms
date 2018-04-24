@@ -91,10 +91,10 @@ public class SignReportServiceImpl implements SignReportService {
         signReport.setRemark(s.getRemark());
         signReport.setsName(s.getsName());
         signReport.setrName(s.getrName());
-        signReport.setHandleTime(s.getHandledTime());
+        signReport.setHandleTime(s.getHandleTime());
         signReport.setNeedPayAmount(s.getNeedPayAmount());
         signReport.setAlreadyPaid(s.getAlreadyPaid());
-        signReport.setHandleBy(s.getHandledBy());
+        signReport.setHandleBy(s.getHandleBy());
 
         return signReport;
     }

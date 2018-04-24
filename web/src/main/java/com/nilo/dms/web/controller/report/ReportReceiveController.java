@@ -68,6 +68,7 @@ public class ReportReceiveController extends BaseController {
         page.setTotalCount(reportReceiveDao.queryReportReceiveCount(map));
         //page.setTotalCount(commonDao.lastFoundRows());
 
+
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
         // 动态指定报表模板url
         model.addAttribute("url", "/WEB-INF/jasper/report/receive.jasper");
