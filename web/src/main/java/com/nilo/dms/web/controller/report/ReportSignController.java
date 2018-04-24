@@ -65,17 +65,12 @@ public class ReportSignController extends BaseController {
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         if(sTime_creat!=null){
-            parameter.setFromHandledTime(simpleDateFormat.format(Long.parseLong(sTime_creat+"000")));
+            parameter.setFromHandledTime(sTime_creat.toString());
         }
         if(eTime_creat!=null){
-            parameter.setToHandledTime(simpleDateFormat.format(Long.parseLong(eTime_creat + "000")));
+            parameter.setToHandledTime(eTime_creat.toString());
         }
-        //System.out.println("本次测试 = " + sTime_creat);
-        //System.out.println("本次测试 = " + parameter.toString());
-
-        //parameter.setFromHandledTime();
 
         Pagination page = getPage();
         List<SignReport> list = signReportService.querySignReport(parameter, page);
