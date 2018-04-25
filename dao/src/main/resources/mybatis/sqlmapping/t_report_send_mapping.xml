@@ -57,10 +57,33 @@
 
 
     <select id="querySendReport" resultMap="sendDO">
-        SELECT a.reference_no,a.next_network_id,a.network_id,a.order_no,a.order_category,a.weight,a.`stop`,a.carrier_name,a.delivery_fee,a.`status`,a.remark,b.name,b.contact_number,b.address
-        FROM t_waybill a INNER JOIN t_waybill_receiver b
-        ON a.order_no=b.order_no
-        WHERE 1=1
+
+        SELECT a.*, c.name as rider , d.name as handle_name, e.order_type, f.contact_number as phone, f.address FROM
+
+        t_handle_rider_details a
+
+        INNER JOIN t_handle_rider b
+
+        ON a.handle_no = b.handle_no
+
+        LEFT JOIN t_sys_user_info c
+
+        ON b.rider = c.id
+
+        LEFT JOIN t_sys_user_info d
+
+        ON b.handle_by = c.id
+
+        INNER JOIN t_waybill e
+
+        ON a.order_no = e.order_no
+
+        INNER JOIN t_waybill_receiver f
+
+        ON a.order_no = f.order_no
+
+        WHERE 1
+
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>

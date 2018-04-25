@@ -50,12 +50,6 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         WaybillDO orderDO = waybillDao.queryByOrderNo(Long.parseLong(abnormalOrder.getMerchantId()), abnormalOrder.getOrderNo());
         if (orderDO == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, abnormalOrder.getOrderNo());
 
-        String abnormalNo = SystemConfig.getNextSerialNo(abnormalOrder.getMerchantId(), SerialTypeEnum.ABNORMAL_DELIVERY_ORDER_NO.getCode());
-        abnormalOrder.setAbnormalNo(abnormalNo);
-        abnormalOrder.setStatus(AbnormalOrderStatusEnum.CREATE);
-        AbnormalOrderDO abnormalOrderDO = convertTo(abnormalOrder);
-        abnormalOrderDao.insert(abnormalOrderDO);
-
         //操作运单状态为问题件
         OrderOptRequest optRequest = new OrderOptRequest();
 
@@ -74,6 +68,12 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         optRequest.setOrderNo(orderNoList);
         optRequest.setRemark(abnormalOrder.getRemark());
         waybillService.handleOpt(optRequest);
+
+        String abnormalNo = SystemConfig.getNextSerialNo(abnormalOrder.getMerchantId(), SerialTypeEnum.ABNORMAL_DELIVERY_ORDER_NO.getCode());
+        abnormalOrder.setAbnormalNo(abnormalNo);
+        abnormalOrder.setStatus(AbnormalOrderStatusEnum.CREATE);
+        AbnormalOrderDO abnormalOrderDO = convertTo(abnormalOrder);
+        abnormalOrderDao.insert(abnormalOrderDO);
 
     }
 

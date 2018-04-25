@@ -36,7 +36,7 @@
 
         INNER JOIN t_bas_network d ON a.last_network_id = d.id
 
-        INNER JOIN t_bas_network e ON a.network_id = d.id
+        INNER JOIN t_bas_network e ON a.network_id = e.id
 
         INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no
 
