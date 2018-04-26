@@ -125,6 +125,9 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
         header.setMerchantId(principal.getMerchantId());
         header.setOrderNo(param.getOrderNo());
         header.setDelayTimes(waybill.getDelayTimes() == null ? 1 : waybill.getDelayTimes() + 1);
+        if(header.getAreDelay()==null || header.getAreDelay()==false){
+            header.setAreDelay(true);
+        }
         waybillService.updateWaybill(header);
     }
 

@@ -7,32 +7,32 @@
     <resultMap id="sendDO" type="com.nilo.dms.dao.dataobject.SendReportDO">
         <result property="referenceNo" column="reference_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="nextNetwork" column="next_network_id" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="network" column="network_id" javaType="java.lang.String"
+        <result property="nextStation" column="next_station" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="orderNo" column="order_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="orderCategory" column="order_category" javaType="java.lang.String"
+        <result property="orderType" column="order_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
-        <result property="stop" column="stop" javaType="java.lang.String"
+        <result property="deliveryType" column="delivery_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="carrierName" column="carrier_name" javaType="java.lang.String"
+        <result property="expressName" column="express_name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="deliveryFee" column="delivery_fee" javaType="java.lang.Double"
-                jdbcType="DOUBLE"/>
-        <result property="status" column="status" javaType="java.lang.Integer"
-                jdbcType="INTEGER"/>
-        <result property="remark" column="remark" javaType="java.lang.String"
+
+        <result property="driver" column="driver" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="name" column="name" javaType="java.lang.String"
+        <result property="handleName" column="handle_name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="contactNumber" column="contact_number" javaType="java.lang.String"
+        <result property="handleNo" column="handle_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="address" column="address" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
     </resultMap>
 
     <resultMap id="receiveDO" type="com.nilo.dms.dao.dataobject.ReportReceiveDO">
@@ -58,69 +58,110 @@
 
     <select id="querySendReport" resultMap="sendDO">
 
-        SELECT a.*, c.name as rider , d.name as handle_name, e.order_type, f.contact_number as phone, f.address FROM
+        SELECT a.order_no, a.weight, a.created_time, b.handle_no, b.type as delivery_type, b.driver, b.next_station, b.handle_name, c.order_type, c.reference_no, d.contact_number as phone, d.address, e.express_name
 
-        t_handle_rider_details a
+        FROM t_handle_third_express_details a
 
-        INNER JOIN t_handle_rider b
+        INNER JOIN t_handle_third_express b
 
-        ON a.handle_no = b.handle_no
+        ON a.third_handle_no = b.handle_no
 
-        LEFT JOIN t_sys_user_info c
+        INNER JOIN t_waybill c
 
-        ON b.rider = c.id
+        ON a.order_no = c.order_no
 
-        LEFT JOIN t_sys_user_info d
+        INNER JOIN t_waybill_receiver d
 
-        ON b.handle_by = c.id
+        ON a.order_no = d.order_no
 
-        INNER JOIN t_waybill e
+        LEFT JOIN t_bas_third_express e
 
-        ON a.order_no = e.order_no
-
-        INNER JOIN t_waybill_receiver f
-
-        ON a.order_no = f.order_no
+        ON b.third_express_code = e.express_code
 
         WHERE 1
 
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>
-        <if test="carrierName !=null and carrierName.size() > 0">
-            <foreach collection="carrierName" item="item" index="index" open="and (" separator="or" close=")">
-                a.carrier_name=#{item}
-            </foreach>
+        <if test="driver !=null and driver !='' ">
+            and b.driver = #{driver}
         </if>
-        <if test="status !=null and status.size() > 0 ">
-            <foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">
-                a.status=#{item}
-            </foreach>
+        <if test="nextStation !=null and nextStation !='' ">
+            and b.next_station = #{nextStation}
         </if>
-        order by a.order_no desc
-        limit #{offset} , #{limit}
+        <if test="handleNo !=null and handleNo !='' ">
+            and b.handle_no = #{handleNo}
+        </if>
+        <if test="orderType !=null and orderType !='' ">
+            and c.order_type = #{orderType}
+        </if>
+        <if test="fromHandledTime !=null ">
+            and a.created_time >= #{fromHandledTime}
+        </if>
+        <if test="toHandledTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toHandledTime} ]]>
+        </if>
+
+        order by a.created_time desc
+
+        <if test="limit !=null ">
+            limit
+            <if test="offset !=null ">
+                #{offset} ,
+            </if>
+            #{limit}
+        </if>
+
+
     </select>
 
     <select id="queryCountBy" resultType="java.lang.Long">
+
         SELECT
+
         count(1)
-        FROM t_waybill a INNER JOIN t_waybill_receiver b
-        ON a.order_no=b.order_no
-        WHERE 1=1
+
+        FROM t_handle_third_express_details a
+
+        INNER JOIN t_handle_third_express b
+
+        ON a.third_handle_no = b.handle_no
+
+        INNER JOIN t_waybill c
+
+        ON a.order_no = c.order_no
+
+        INNER JOIN t_waybill_receiver d
+
+        ON a.order_no = d.order_no
+
+        LEFT JOIN t_bas_third_express e
+
+        ON b.third_express_code = e.express_code
+
+        WHERE 1
+
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>
-        <if test="carrierName !=null and carrierName.size() > 0">
-            <foreach collection="carrierName" item="item" index="index" open="and (" separator="or" close=")">
-                a.carrier_name=#{item}
-            </foreach>
+        <if test="driver !=null and driver !='' ">
+            and b.driver = #{driver}
         </if>
-        <if test="status !=null and status.size() > 0 ">
-            <foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">
-                a.status=#{item}
-            </foreach>
+        <if test="nextStation !=null and nextStation !='' ">
+            and b.next_station = #{nextStation}
         </if>
-        order by null
+        <if test="handleNo !=null and handleNo !='' ">
+            and b.handle_no = #{handleNo}
+        </if>
+        <if test="orderType !=null and orderType !='' ">
+            and c.order_type = #{orderType}
+        </if>
+        <if test="fromHandledTime !=null ">
+            and a.created_time >= #{fromHandledTime}
+        </if>
+        <if test="toHandledTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toHandledTime} ]]>
+        </if>
 
     </select>
 

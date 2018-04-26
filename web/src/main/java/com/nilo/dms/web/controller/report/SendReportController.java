@@ -3,6 +3,8 @@ package com.nilo.dms.web.controller.report;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.ThirdExpressDao;
+import com.nilo.dms.dao.dataobject.QO.SendReportQO;
+import com.nilo.dms.dao.dataobject.SendReportDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SendReportService;
@@ -40,50 +42,27 @@ public class SendReportController extends BaseController {
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
         List<ThirdExpressDO> list = thirdExpressDao.findByMerchantIdAll();
-//        for (ThirdExpressDO t:list) {
-//            System.out.println(t);
-//        }
+
+
+
         model.addAttribute("express",list);
         return "report/send/list";
     }
 
 
     @RequestMapping(value = "/list.html")
-    public String getOrderList(Model model, SendOrderParameter parameter,
-                               @RequestParam(value = "carrierNames[]", required = false) String[] carrierNames,
-                               @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus ,
-                               HttpServletRequest request, Integer exportType) {
+    public String getOrderList(Model model,  HttpServletRequest request, SendReportQO sendReportQO) {
 
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
-        String merchantId = me.getMerchantId();
-        parameter.setMerchantId(merchantId);
-        if (carrierNames != null && carrierNames.length > 0) {
-            parameter.setCarrierName(Arrays.asList(carrierNames));
-        }
-        if (orderStatus != null && orderStatus.length > 0) {
-            parameter.setStatus(Arrays.asList(orderStatus));
-        }
+        Long merchantId = Long.parseLong(me.getMerchantId());
+        sendReportQO.setMerchantId(merchantId);
 
         Pagination page = getPage();
-        List<SendReport> list = sendReportService.querySendReport(parameter, page);
-
-        List<Waybill> listF = new ArrayList<Waybill>();
-        Waybill deliver = null;
-        for (SendReport d: list) {
-            deliver = new Waybill();
-            BeanUtils.copyProperties(d, deliver);
-            deliver.setNextNetworkDesc(d.getNextNetwork());
-            deliver.setNetworkDesc(d.getNetwork());
-            deliver.setAllocatedRider(d.getName());
-            listF.add(deliver);
-        }
-
-        System.out.println(" = " + listF.size());
-        System.out.println(" = " + listF.get(0).getOrderNo());
+        List<SendReportDO> list = sendReportService.querySendReport(sendReportQO, page);
 
         String fileType;
-        switch (exportType) {
+        switch (sendReportQO.getExportType()) {
             case 0:
                 fileType = "pdf";
                 break;
@@ -102,7 +81,7 @@ public class SendReportController extends BaseController {
             return "common/toResponseBody";
         }
 
-        JRDataSource jrDataSource = new JRBeanCollectionDataSource(listF);
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
         // 动态指定报表模板url
         model.addAttribute("url", "/WEB-INF/jasper/report/send.jasper");
         model.addAttribute("format", "pdf"); // 报表格式

@@ -4,6 +4,7 @@ import java.util.*;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.dao.*;
+import com.nilo.dms.dao.dataobject.QO.SendReportQO;
 import com.nilo.dms.dto.order.SendOrderParameter;
 import com.nilo.dms.service.order.*;
 import com.nilo.dms.service.system.SystemCodeUtil;
@@ -27,63 +28,16 @@ public class SendReportServiceImpl implements SendReportService {
 
 
     @Override
-    public List<SendReport> querySendReport(SendOrderParameter parameter, Pagination pagination) {
+    public List<SendReportDO> querySendReport(SendReportQO sendReportQO, Pagination page) {
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("orderNo", parameter.getOrderNo());
-        map.put("nextNetwork", parameter.getNextNetwork());
-        map.put("status", parameter.getStatus());
-        map.put("carrierName", parameter.getCarrierName());
-
-        map.put("offset", pagination.getOffset());
-        map.put("limit", pagination.getLimit());
+        sendReportQO.setLimit(page.getLimit());
+        sendReportQO.setOffset(page.getOffset());
 
         // 查询记录
-        List<SendReportDO> queryList = SendReportDao.querySendReport(map);
-        Long count = SendReportDao.queryCountBy(map);
-        pagination.setTotalCount(count == null ? 0 : count);
-        return batchQuery(queryList, Long.parseLong(parameter.getMerchantId()));
+        List<SendReportDO> queryList = SendReportDao.querySendReport(sendReportQO);
+        Long count = SendReportDao.queryCountBy(sendReportQO);
+        page.setTotalCount(count == null ? 0 : count);
+        return queryList;
     }
 
-    private List<SendReport> batchQuery(List<SendReportDO> sendReportDOs, Long merchantId) {
-
-        List<SendReport> list = new ArrayList<>();
-        // 构建订单号集合
-        List<String> orderNos = new ArrayList<>();
-        for (SendReportDO o : sendReportDOs) {
-            orderNos.add(o.getOrderNo());
-        }
-//        List<SendReportDO> senderDO = deliveryOrderSenderDao.queryByOrderNos2(merchantId, orderNos);
-//        List<SendReportDO> receiverDO = deliveryOrderReceiverDao.queryByOrderNos2(merchantId, orderNos);
-        for (SendReportDO o : sendReportDOs) {
-            SendReport order = convert(o);
-            list.add(order);
-        }
-        return list;
-    }
-
-    private SendReport convert(SendReportDO s) {
-        SendReport sendReport = new SendReport();
-        sendReport.setMerchantId("" +s.getMerchantId());
-        sendReport.setOrderNo(s.getOrderNo());
-        sendReport.setAddress(s.getAddress());
-        sendReport.setCarrierName(s.getCarrierName());
-
-        String carrierNameDesc = SystemCodeUtil.getCodeVal("" + s.getMerchantId(), Constant.REPORT_CARRIER_NAME, s.getCarrierName());
-        sendReport.setCarrierNameDesc(carrierNameDesc);
-
-        sendReport.setContactNumber(s.getContactNumber());
-        sendReport.setDeliveryFee(s.getDeliveryFee());
-        sendReport.setName(s.getName());
-        sendReport.setNetwork(s.getNetwork());
-        sendReport.setNextNetwork(s.getNextNetwork());
-        sendReport.setOrderCategory(s.getOrderCategory());
-        sendReport.setReferenceNo(s.getReferenceNo());
-        sendReport.setWeight(s.getWeight());
-        sendReport.setStatus(DeliveryOrderStatusEnum.getEnum(s.getStatus()));
-        sendReport.setStop(s.getStop());
-        sendReport.setRemark(s.getRemark());
-
-        return sendReport;
-    }
 }
