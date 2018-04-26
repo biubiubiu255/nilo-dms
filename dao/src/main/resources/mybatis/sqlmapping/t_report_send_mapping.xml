@@ -89,6 +89,13 @@
         <if test="nextStation !=null and nextStation !='' ">
             and b.next_station = #{nextStation}
         </if>
+        <if test="nextStationCode !=null and nextStationCode !='' ">
+            and b.network_code = #{nextStationCode}
+        </if>
+        <if test="expressCode !=null and expressCode !='' ">
+            and e.express_code = #{expressCode}
+        </if>
+
         <if test="handleNo !=null and handleNo !='' ">
             and b.handle_no = #{handleNo}
         </if>

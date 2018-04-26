@@ -2,16 +2,20 @@ package com.nilo.dms.web.controller.report;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.ThirdExpressDao;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.QO.SendReportQO;
 import com.nilo.dms.dao.dataobject.SendReportDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SendReportService;
 import com.nilo.dms.dto.order.SendOrderParameter;
 import com.nilo.dms.dto.order.SendReport;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.web.controller.BaseController;
+import com.nilo.dms.web.controller.order.PackageController;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.BeanUtils;
@@ -38,14 +42,35 @@ public class SendReportController extends BaseController {
     @Autowired
     private ThirdExpressDao thirdExpressDao;
 
+    @Autowired
+    private DistributionNetworkDao distributionNetworkDao;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
-        List<ThirdExpressDO> list = thirdExpressDao.findByMerchantIdAll();
 
+        Long merchantId = Long.parseLong(SessionLocal.getPrincipal().getMerchantId());
 
+        Principal me = SessionLocal.getPrincipal();
+        Pagination page = getPage();
 
-        model.addAttribute("express",list);
+        List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(merchantId);
+        List<PackageController.NextStation> list = new ArrayList<>();
+
+        for (DistributionNetworkDO n : networkDOList) {
+            PackageController.NextStation s = new PackageController.NextStation();
+            s.setCode("" + n.getId());
+            s.setName(n.getName());
+            list.add(s);
+        }
+
+        List<ThirdExpressDO> expressList = userService.findExpressesAll(page);
+
+        model.addAttribute("nextStations", list);
+        model.addAttribute("expressList", expressList);
+
         return "report/send/list";
     }
 
@@ -84,7 +109,7 @@ public class SendReportController extends BaseController {
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
         // 动态指定报表模板url
         model.addAttribute("url", "/WEB-INF/jasper/report/send.jasper");
-        model.addAttribute("format", "pdf"); // 报表格式
+        model.addAttribute("format", fileType); // 报表格式
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView"; // 对应jasper-defs.xml中的bean id
     }

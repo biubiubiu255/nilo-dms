@@ -15,10 +15,12 @@ public class SendReportQO extends BaseDo<Long> {
 
     private String driver;
     private String nextStation;
+    private String nextStationCode;
     private String handleName;
     private String handleNo;
     private String deliveryType;
     private String expressName;
+    private String expressCode;
 
     private Integer offset;
     private Integer limit;
@@ -115,6 +117,14 @@ public class SendReportQO extends BaseDo<Long> {
         this.nextStation = nextStation;
     }
 
+    public String getNextStationCode() {
+        return nextStationCode;
+    }
+
+    public void setNextStationCode(String nextStationCode) {
+        this.nextStationCode = nextStationCode;
+    }
+
     public String getHandleName() {
         return handleName;
     }
@@ -145,6 +155,14 @@ public class SendReportQO extends BaseDo<Long> {
 
     public void setExpressName(String expressName) {
         this.expressName = expressName;
+    }
+
+    public String getExpressCode() {
+        return expressCode;
+    }
+
+    public void setExpressCode(String expressCode) {
+        this.expressCode = expressCode;
     }
 
     public Integer getOffset() {

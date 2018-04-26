@@ -198,7 +198,7 @@
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:160}"><O></O>rderNo</th>
+            <th lay-data="{fixed: 'left',field:'orderNo', width:160}"><O></O>orderNo</th>
             <th lay-data="{field: 'reference_no', width:130}">CustomerOrder</th>
             <th lay-data="{field: 'country', width:90}">Country</th>
             <th lay-data="{field: 'order_type', width:100}">OrderType</th>

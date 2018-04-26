@@ -38,7 +38,7 @@
     <div class="layui-form layui-row">
 
         <!-- 搜索按钮 -->
-        <div class="layui-col-md1 layui-col-lg4" style="margin-left: 2.4rem;">
+        <div class="layui-col-md4 layui-col-lg4" style="margin-left: 2.4rem;">
             <button class="layui-btn layui-btn-normal search">Search</button>
             <button class="layui-btn layui-btn-normal btn-pdf">View</button>
             <button class="layui-btn layui-btn-normal btn-export">Export</button>
@@ -53,7 +53,7 @@
                lay-filter="demo">
             <thead>
             <tr>
-                <th lay-data="{fixed: 'left',field:'orderNo', width:200}">rderNo</th>
+                <th lay-data="{fixed: 'left',field:'orderNo', width:200}">orderNo</th>
                 <th lay-data="{field:'referenceNo', width:170}">ReferenceNo</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'alreadyPaid', width:100}">AlreadyPaid</th>
