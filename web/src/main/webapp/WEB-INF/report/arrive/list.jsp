@@ -65,7 +65,7 @@
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:200}"><O></O>orderNo</th>
+            <th lay-data="{fixed: 'left',field:'orderNo', width:200}"><O></O>Waybill No</th>
             <th lay-data="{field: 'recipients', width:100}">Recipients</th>
             <th lay-data="{field:'lastNetwork' , width:200}">LastNetwork</th>
             <th lay-data="{field:'scanNetwork', width:200}">ScanNetwork</th>

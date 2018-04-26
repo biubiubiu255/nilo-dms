@@ -113,7 +113,7 @@
                lay-filter="demo">
             <thead>
             <tr>
-                <th lay-data="{fixed: 'left',field:'orderNo', width:200}">orderNo</th>
+                <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
                 <th lay-data="{field:'handleNo', width:100}">HandleNo</th>
                 <th lay-data="{field: 'orderType', width:100}">OrderType</th>
                 <th lay-data="{field:'deliveryType' , width:100}">DeliveryType</th>

@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div class="layui-col-md4 layui-col-lg3">
-                        <label class="layui-form-label">OrderNo:</label>
+                        <label class="layui-form-label">Waybill No:</label>
                         <div class="layui-input-inline">
                             <input type="text" name="order_no" autocomplete="off" class="layui-input">
                         </div>
@@ -198,7 +198,7 @@
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:160}"><O></O>orderNo</th>
+            <th lay-data="{fixed: 'left',field:'orderNo', width:160}"><O></O>Waybill No</th>
             <th lay-data="{field: 'reference_no', width:130}">CustomerOrder</th>
             <th lay-data="{field: 'country', width:90}">Country</th>
             <th lay-data="{field: 'order_type', width:100}">OrderType</th>
