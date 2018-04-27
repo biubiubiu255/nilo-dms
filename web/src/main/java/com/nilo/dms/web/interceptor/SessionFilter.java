@@ -42,7 +42,7 @@ public class SessionFilter implements Filter {
         } else {
             isValidUser = true;
         }
-        if(isValidUser = true){
+        if(isValidUser == true){
             boolean isAjax = request.getHeader(AJAX_HEADER_KEY) != null;
             HttpServletResponse resp = ((HttpServletResponse) res);
             if (isAjax) {
