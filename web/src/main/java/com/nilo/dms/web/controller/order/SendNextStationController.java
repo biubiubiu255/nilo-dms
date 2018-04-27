@@ -165,6 +165,8 @@ public class SendNextStationController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         Long merchantId = Long.valueOf(me.getMerchantId());
 
+
+
         //这里有两种增加方式，一种是页面之间添加，所以session-model里没有值，全在当前参数里，另外一种是站点在session-model里，driver在当前参数
         //从session取出刚刚打包好的大包发运信息（下一站点ID、名字）
 
@@ -231,8 +233,6 @@ public class SendNextStationController extends BaseController {
 
         HttpSession session = request.getSession();
 
-        List<WaybillScanDetailsDO> scanDetailList = waybillScanDetailsDao.queryByScanNo(tempScanNo);
-
         String merchantId = SessionLocal.getPrincipal().getMerchantId();
 
         Pagination page = getPage();
@@ -241,6 +241,13 @@ public class SendNextStationController extends BaseController {
 
         expressList = userService.findExpressesAll(page);
 
+        List<WaybillScanDetailsDO> scanDetailList = new ArrayList<WaybillScanDetailsDO>();  //构建一个已扫描大包列表
+
+        WaybillScanDetailsDO waybillScanDetailsDO = new WaybillScanDetailsDO();             //构建一个已扫描大包
+
+        waybillScanDetailsDO.setOrderNo((String) session.getAttribute("packageNo"));     //为大包赋值
+
+        scanDetailList.add(waybillScanDetailsDO);                                            //添加到大包列表中
 
         session.setAttribute("packageInfo", sendThirdHead);
         model.addAttribute("packList", toPaginationLayUIData(page, scanDetailList));

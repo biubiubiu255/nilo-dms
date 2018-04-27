@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,7 +140,9 @@ public class PackageController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/addPackage.html")
-    public String addLoading(PackageRequest packageRequest, String scanNo) {
+    public String addLoading(PackageRequest packageRequest, String scanNo, HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
 
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
@@ -165,6 +169,9 @@ public class PackageController extends BaseController {
         } catch (Exception e) {
             return toJsonErrorMsg(e.getMessage());
         }
+
+        session.setAttribute("packageNo", orderNo);
+
         return toJsonTrueData(orderNo);
     }
 

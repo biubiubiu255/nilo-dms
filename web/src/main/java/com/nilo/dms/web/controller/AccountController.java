@@ -95,6 +95,10 @@ public class AccountController extends BaseController {
 
             List<UserNetworkDO> userNetworkDOList = userNetworkDao.queryByUserId(Long.parseLong(user.getUserId()));
 
+            if(userNetworkDOList==null || userNetworkDOList.size()==0){
+                throw new DMSException(BizErrorCode.NOT_FOUND_NEXTWORK);
+            }
+
             Principal principal = new Principal();
             principal.setUserId(user.getUserId());
             principal.setUserName(user.getLoginInfo().getUserName());

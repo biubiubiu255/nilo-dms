@@ -113,6 +113,8 @@ public enum BizErrorCode implements ErrorCode {
 
     REFUSE_ALREADY_EXISTS("The refuse package already exists", "100079"),
 
+    NOT_FOUND_NEXTWORK("Do not found nextWork, please contact administrator.", "100080"),
+
     ;
 
     private final String description;
