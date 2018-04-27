@@ -4,13 +4,27 @@
 <mapper namespace="com.nilo.dms.dao.ReportDispatchDao">
 
     <resultMap id="dispatchDO" type="com.nilo.dms.dao.dataobject.ReportDispatchDO">
+        <result property="handleNo" column="handle_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
         <result property="orderNo" column="order_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="referenceNo" column="reference_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+
+        <result property="orderType" column="order_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
         <result property="country" column="country" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="orderType" column="order_type" javaType="java.lang.String"
+
+
+        <result property="rider" column="rider" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleName" column="handle_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
+
+        <result property="phone" column="phone" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="address" column="address" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
@@ -24,8 +38,6 @@
                 jdbcType="DOUBLE"/>
         <result property="len" column="length" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
-        <result property="handleName" column="name" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
 
@@ -35,43 +47,67 @@
 
     <select id="queryReportDispatch" resultMap="dispatchDO">
 
-        SELECT a.*, b.reference_no, b.order_type, b.country, c.address FROM
-        (
-        SELECT
-        order_no,weight,length,height,width,STATUS,created_time
+        SELECT a.*, c.name as rider , d.name as handle_name, e.order_type, e.country, f.contact_number as phone, f.address
+
         FROM
-        t_handle_rider_details
-        UNION
-        SELECT
-        order_no,weight,length,height,width,STATUS,created_time
-        FROM
-        t_handle_third_express_details
 
-        )   a
+        t_handle_rider_details a
 
-        INNER JOIN t_waybill b
+        INNER JOIN t_handle_rider b
 
-        on a.order_no = b.order_no
+        ON a.handle_no = b.handle_no
 
-        INNER JOIN t_waybill_receiver c
+        LEFT JOIN t_sys_user_info c
 
-        on a.order_no = c.order_no
+        ON b.rider = c.id
 
-        WHERE 1
+        LEFT JOIN t_sys_user_info d
+
+        ON b.handle_by = d.id
+
+        INNER JOIN t_waybill e
+
+        ON a.order_no = e.order_no
+
+        INNER JOIN t_waybill_receiver f
+
+        ON a.order_no = f.order_no
+
+        WHERE b.merchant_id = #{merchantId}
 
         <if test="orderNo !=null  and orderNo !='' ">
             AND
             a.order_no = #{orderNo}
         </if>
+        <if test="handleNo !=null and handleNo !='' ">
+            and a.handle_no = #{handleNo}
+        </if>
+        <if test="orderType !=null and orderType !='' ">
+            and e.order_type = #{orderType}
+        </if>
+        <if test="country !=null and country !='' ">
+            and e.country = #{country}
+        </if>
+        <if test="rider !=null and rider !='' ">
+            and c.name = #{rider}
+        </if>
 
-        <if test=" sTime_creat !=null and eTime_creat !=null ">
-            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
-            AND
-            (a.created_time<![CDATA[<]]>#{eTime_creat} AND a.created_time>#{sTime_creat})
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
         </if>
 
         order by a.created_time desc
-        limit #{offset} , #{limit}
+
+        <if test="limit !=null ">
+            limit
+            <if test="offset !=null ">
+                #{offset} ,
+            </if>
+            #{limit}
+        </if>
 
 
     </select>
@@ -79,41 +115,60 @@
     <!-- 查询上条查询条件下影响的全部条数 -->
     <select id="queryReportDispatchCount" resultType="java.lang.Integer">
 
+
         SELECT
+
         COUNT(1)
+
         FROM
-        (
-        SELECT
-        order_no,weight,length,height,width,STATUS,created_time
-        FROM
-        t_handle_rider_details
-        UNION
-        SELECT
-        order_no,weight,length,height,width,STATUS,created_time
-        FROM
-        t_handle_third_express_details
 
-        )   a
+        t_handle_rider_details a
 
-        INNER JOIN t_waybill b
+        INNER JOIN t_handle_rider b
 
-        on a.order_no = b.order_no
+        ON b.handle_no = a.handle_no
 
-        INNER JOIN t_waybill_receiver c
+        LEFT JOIN t_sys_user_info c
 
-        on a.order_no = c.order_no
+        ON b.rider = c.id
 
-        WHERE 1
+        LEFT JOIN t_sys_user_info d
+
+        ON b.handle_by = d.id
+
+        INNER JOIN t_waybill e
+
+        ON a.order_no = e.order_no
+
+        INNER JOIN t_waybill_receiver f
+
+        ON a.order_no = f.order_no
+
+        WHERE b.merchant_id = #{merchantId}
 
         <if test="orderNo !=null  and orderNo !='' ">
             AND
             a.order_no = #{orderNo}
         </if>
+        <if test="handleNo !=null and handleNo !='' ">
+            and a.handle_no = #{handleNo}
+        </if>
+        <if test="orderType !=null and orderType !='' ">
+            and e.order_type = #{orderType}
+        </if>
+        <if test="country !=null and country !='' ">
+            and e.country = #{country}
+        </if>
 
-        <if test=" sTime_creat !=null and eTime_creat !=null ">
-            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
-            AND
-            (a.created_time<![CDATA[<]]>#{eTime_creat} AND a.created_time>#{sTime_creat})
+        <if test="rider !=null and rider !='' ">
+            and c.name = #{rider}
+        </if>
+
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
         </if>
 
     </select>

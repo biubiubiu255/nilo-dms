@@ -20,7 +20,7 @@
 
 
         <div class="layui-col-md4 layui-col-lg4">
-            <label class="layui-form-label">ScanTime:</label>
+            <label class="layui-form-label">CreatedTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="createdTime_s">
             </div>
@@ -53,16 +53,17 @@
                lay-filter="demo">
             <thead>
             <tr>
-                <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
-                <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
+                <th lay-data="{fixed: 'left',field:'orderNo', width:150}">Waybill No</th>
+                <th lay-data="{field:'handleNo', width:100}">HandleNo</th>
+                <th lay-data="{field:'referenceNo', width:150}">ReferenceNo</th>
                 <th lay-data="{field:'orderType', width:100}">OrderType</th>
-                <th lay-data="{field:'country', width:200}">Country</th>
-                <th lay-data="{field:'len', width:100}">Length</th>
-                <th lay-data="{field:'width', width:100}">Width</th>
-                <th lay-data="{field:'high', width:100}">High</th>
+                <th lay-data="{field:'country', width:100}">Country</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
+                <th lay-data="{field:'rider', width:130}">Rider</th>
+                <th lay-data="{field:'handleName', width:130}">HandleName</th>
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
-                <th lay-data="{field:'address', width:300}">Address</th>
+                <th lay-data="{field:'phone', width:150}">Phone</th>
+                <th lay-data="{field:'address', width:270}">Address</th>
 
             </tr>
             </thead>
@@ -136,18 +137,11 @@
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("input[name='createdTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val()))/1000;
                 var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
-                if (sTime_creat!="" && eTime_creat=="" || eTime_creat!="" && sTime_creat==""){
-                    layui.use('layer', function () {
-                        var layer = layui.layer;
-                        layer.msg('Please select the full date', {icon: 0, time: 2000});
-                    });
-                    return ;
-                }
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
-                    sTime_creat: sTime_creat,
-                    eTime_creat: eTime_creat,
+                    fromCreatedTime: sTime_creat,
+                    toCreatedTime: eTime_creat,
                     exportType: dateType
                 };
                 if (isPojo===true) return param;

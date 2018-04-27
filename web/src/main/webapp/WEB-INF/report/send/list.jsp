@@ -118,14 +118,14 @@
                 <th lay-data="{field: 'orderType', width:100}">OrderType</th>
                 <th lay-data="{field:'deliveryType' , width:100}">DeliveryType</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
-                <th lay-data="{field:'driver', width:160}">Driver</th>
-                <th lay-data="{field:'nextStation', width:200}">NextStation</th>
-                <th lay-data="{field:'expressName', width:140}">ExpressName</th>
+                <th lay-data="{field:'driver', width:130}">Driver</th>
+                <th lay-data="{field:'nextStation', width:150}">NextStation</th>
+                <th lay-data="{field:'expressName', width:100}">ExpressName</th>
                 <th lay-data="{field: 'handleName', width:130}">HandleName</th>
 
-                <th lay-data="{field: 'referenceNo', width:100}">ReferenceNo</th>
+                <th lay-data="{field: 'referenceNo', width:170}">ReferenceNo</th>
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
-                <th lay-data="{field:'phone', width:100}">Phone</th>
+                <th lay-data="{field:'phone', width:150}">Phone</th>
                 <th lay-data="{field:'address', width:200}">Address</th>
             </tr>
             </thead>
@@ -202,13 +202,6 @@
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : Date.parse(new Date($("#fromCreatedTime").val()))/1000;
                 var eTime_creat = $("#toCreatedTime").val()==""   ? "" : Date.parse(new Date($("#toCreatedTime").val()))/1000+86400;
-                if (sTime_creat!="" && eTime_creat=="" || eTime_creat!="" && sTime_creat==""){
-                    layui.use('layer', function () {
-                        var layer = layui.layer;
-                        layer.msg('Please select the full date', {icon: 0, time: 2000});
-                    });
-                    return ;
-                }
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),

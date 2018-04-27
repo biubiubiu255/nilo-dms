@@ -199,15 +199,15 @@
         <thead>
         <tr>
             <th lay-data="{fixed: 'left',field:'orderNo', width:160}"><O></O>Waybill No</th>
-            <th lay-data="{field: 'reference_no', width:130}">CustomerOrder</th>
+            <th lay-data="{field: 'reference_no', width:200}">CustomerOrder</th>
             <th lay-data="{field: 'country', width:90}">Country</th>
             <th lay-data="{field: 'order_type', width:100}">OrderType</th>
             <th lay-data="{field: 'orderOriginal', width:130}">CustomerType</th>
             <th lay-data="{field: 'pay_type', width:90}">PayType</th>
             <th lay-data="{field: 'order_status', width:110 }">OrderStatus</th>
             <th lay-data="{field: 'send_company', width:125}">SendCompany</th>
-            <th lay-data="{field: 'rider', width:90}">Rider</th>
-            <th lay-data="{field: 'cycle', width:90}">PayBack Periods</th>
+            <th lay-data="{field: 'rider', width:130}">Rider</th>
+            <th lay-data="{field: 'cycle', width:150}">PayBack Periods</th>
             <th lay-data="{field:'payStatus' , width:100, templet:'<div>{{  formatPayStatus(payStatus) }}</div>'}">PayStatus</th>
             <th lay-data="{field:'pay_orderNo', width:200}">PayOrderNo</th>
             <th lay-data="{field:'pay_price' , width:100}">Price</th>

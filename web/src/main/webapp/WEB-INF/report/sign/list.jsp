@@ -134,13 +134,13 @@
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("input[name='createdTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val()))/1000;
                 var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
-                if (sTime_creat!="" && eTime_creat=="" || eTime_creat!="" && sTime_creat==""){
+                /*if (sTime_creat!="" && eTime_creat=="" || eTime_creat!="" && sTime_creat==""){
                     layui.use('layer', function () {
                         var layer = layui.layer;
                         layer.msg('Please select the full date', {icon: 0, time: 2000});
                     });
                     return ;
-                }
+                }*/
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),

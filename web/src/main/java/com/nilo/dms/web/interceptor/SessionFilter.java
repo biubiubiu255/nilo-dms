@@ -32,9 +32,17 @@ public class SessionFilter implements Filter {
             return;
         }
         HttpSession session = request.getSession();
+        boolean isValidUser = false;
         if (session.getAttribute("session_user") != null) {
-            SessionLocal.setPrincipal((Principal) session.getAttribute("session_user"));
+            Principal session_user = (Principal) session.getAttribute("session_user");
+            SessionLocal.setPrincipal(session_user);
+            if(session_user.getNetworks().size()==0){
+                isValidUser = true;
+            }
         } else {
+            isValidUser = true;
+        }
+        if(isValidUser = true){
             boolean isAjax = request.getHeader(AJAX_HEADER_KEY) != null;
             HttpServletResponse resp = ((HttpServletResponse) res);
             if (isAjax) {
@@ -46,6 +54,7 @@ public class SessionFilter implements Filter {
                 return;
             }
         }
+
         chain.doFilter(req, res);
     }
 

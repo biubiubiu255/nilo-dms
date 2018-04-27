@@ -3,12 +3,14 @@ package com.nilo.dms.dao.dataobject;
 import com.nilo.dms.common.BaseDo;
 
 public class ReportDispatchDO extends BaseDo<Long> {
+
+    private Long   merchantId;
     private String handleNo;
     private String orderNo;
     private String referenceNo;
     private String country;
     private String orderType;
-    private String address;
+
 
 
     private Double weight;
@@ -17,6 +19,17 @@ public class ReportDispatchDO extends BaseDo<Long> {
     private Double width;
     private Long handleBy;
     private String handleName;
+    private String rider;
+    private String phone;
+    private String address;
+
+    public Long getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
+    }
 
     public String getHandleNo() {
         return handleNo;
@@ -106,6 +119,22 @@ public class ReportDispatchDO extends BaseDo<Long> {
         this.handleName = handleName;
     }
 
+    public String getRider() {
+        return rider;
+    }
+
+    public void setRider(String rider) {
+        this.rider = rider;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -117,7 +146,8 @@ public class ReportDispatchDO extends BaseDo<Long> {
     @Override
     public String toString() {
         return "ReportDispatchDO{" +
-                "handleNo='" + handleNo + '\'' +
+                "merchantId=" + merchantId +
+                ", handleNo='" + handleNo + '\'' +
                 ", orderNo='" + orderNo + '\'' +
                 ", referenceNo='" + referenceNo + '\'' +
                 ", country='" + country + '\'' +
@@ -128,6 +158,8 @@ public class ReportDispatchDO extends BaseDo<Long> {
                 ", width=" + width +
                 ", handleBy=" + handleBy +
                 ", handleName='" + handleName + '\'' +
+                ", rider='" + rider + '\'' +
+                ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 '}';
     }

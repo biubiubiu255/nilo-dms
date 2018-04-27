@@ -1,6 +1,7 @@
 package com.nilo.dms.dao;
 
 import com.nilo.dms.common.BaseDao;
+import com.nilo.dms.dao.dataobject.QO.ReportDispatchQO;
 import com.nilo.dms.dao.dataobject.ReportDispatchDO;
 import com.nilo.dms.dao.dataobject.ReportReceiveDO;
 import com.nilo.dms.dao.dataobject.SendReportDO;
@@ -14,6 +15,6 @@ import java.util.Map;
  */
 @Repository
 public interface ReportDispatchDao extends BaseDao<Long,SendReportDO> {
-    List<ReportDispatchDO> queryReportDispatch(Map map);
-    Integer queryReportDispatchCount(Map map);
+    List<ReportDispatchDO> queryReportDispatch(ReportDispatchQO reportDispatchQO);
+    Integer queryReportDispatchCount(ReportDispatchQO reportDispatchQO);
 }

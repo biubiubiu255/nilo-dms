@@ -25,8 +25,8 @@ public class SendReportQO extends BaseDo<Long> {
     private Integer offset;
     private Integer limit;
     private Integer total;
-    private Integer fromHandledTime;
-    private Integer toHandledTime;
+    private Integer fromCreatedTime;
+    private Integer toCreatedTime;
     private Integer exportType;
 
     public Long getMerchantId() {
@@ -189,20 +189,20 @@ public class SendReportQO extends BaseDo<Long> {
         this.total = total;
     }
 
-    public Integer getFromHandledTime() {
-        return fromHandledTime;
+    public Integer getFromCreatedTime() {
+        return fromCreatedTime;
     }
 
-    public void setFromHandledTime(Integer fromHandledTime) {
-        this.fromHandledTime = fromHandledTime;
+    public void setFromCreatedTime(Integer fromCreatedTime) {
+        this.fromCreatedTime = fromCreatedTime;
     }
 
-    public Integer getToHandledTime() {
-        return toHandledTime;
+    public Integer getToCreatedTime() {
+        return toCreatedTime;
     }
 
-    public void setToHandledTime(Integer toHandledTime) {
-        this.toHandledTime = toHandledTime;
+    public void setToCreatedTime(Integer toCreatedTime) {
+        this.toCreatedTime = toCreatedTime;
     }
 
     public Integer getExportType() {
@@ -227,15 +227,18 @@ public class SendReportQO extends BaseDo<Long> {
                 ", address='" + address + '\'' +
                 ", driver='" + driver + '\'' +
                 ", nextStation='" + nextStation + '\'' +
+                ", nextStationCode='" + nextStationCode + '\'' +
                 ", handleName='" + handleName + '\'' +
                 ", handleNo='" + handleNo + '\'' +
                 ", deliveryType='" + deliveryType + '\'' +
                 ", expressName='" + expressName + '\'' +
+                ", expressCode='" + expressCode + '\'' +
                 ", offset=" + offset +
                 ", limit=" + limit +
                 ", total=" + total +
-                ", fromHandledTime=" + fromHandledTime +
-                ", toHandledTime=" + toHandledTime +
+                ", fromCreatedTime=" + fromCreatedTime +
+                ", toCreatedTime=" + toCreatedTime +
+                ", exportType=" + exportType +
                 '}';
     }
 }

@@ -39,7 +39,7 @@
 
         <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">ScanNetwork:</label>
-            <div class="layui-inline">
+            <div class="layui-inline-">
                 <select name="scanNetwork" lay-verify="required" lay-search="" style="display: none">
                     <option value="">choose or search....</option>
                     <c:forEach items="${list}" var="rider">
@@ -50,6 +50,7 @@
 
         <!-- 搜索按钮 -->
         <div class="layui-col-md4 layui-col-lg4" style="margin-left: 2.4rem;">
+            <button class="layui-btn layui-btn-normal btn-export">Export</button>
             <button class="layui-btn layui-btn-normal search">Search</button>
             <button class="layui-btn layui-btn-normal btn-pdf">View</button>
         </div>
@@ -118,6 +119,13 @@
                 reloadTable();
             })
 
+            $(".btn-export").on("click", function () {
+                var param = getParam(1);
+                var url = "/report/arrive/list.html?" + param;
+                console.log(url);
+                window.location.href = url;
+            });
+
             function reloadTable() {
 
                 if (showPattern==0){
@@ -141,13 +149,6 @@
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("input[name='createdTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val()))/1000;
                 var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
-                if (sTime_creat!="" && eTime_creat=="" || eTime_creat!="" && sTime_creat==""){
-                    layui.use('layer', function () {
-                        var layer = layui.layer;
-                        layer.msg('Please select the full date', {icon: 0, time: 2000});
-                    });
-                    return ;
-                }
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),

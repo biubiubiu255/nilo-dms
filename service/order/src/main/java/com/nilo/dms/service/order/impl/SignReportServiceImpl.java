@@ -32,12 +32,14 @@ public class SignReportServiceImpl implements SignReportService {
     public List<SignReport> querySignReport(SignOrderParameter parameter, Pagination pagination) {
 
         Map<String, Object> map = new HashMap<>();
+
         map.put("orderNo", parameter.getOrderNo());
         map.put("nextNetwork", parameter.getNextNetwork());
         map.put("status", parameter.getStatus());
         map.put("carrierName", parameter.getCarrierName());
         map.put("fromHandledTime", parameter.getFromHandledTime());
         map.put("toHandledTime", parameter.getToHandledTime());
+        map.put("merchantId", parameter.getMerchantId());
 
         if (StringUtil.isEmpty(parameter.getFromHandledTime()) || StringUtil.isEmpty(parameter.getToHandledTime())) {
             if (StringUtil.isEmpty(parameter.getFromHandledTime())) {

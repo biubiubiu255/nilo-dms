@@ -44,6 +44,7 @@
         on c.order_no = d.order_no
         INNER JOIN t_sys_user_info e
         on b.handle_by = e.id
+        WHERE a.merchant_id=#{merchantId}
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>
@@ -73,6 +74,7 @@
         on c.order_no = d.order_no
         INNER JOIN t_sys_user_info e
         on b.handle_by = e.id
+        WHERE a.merchant_id=#{merchantId}
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>

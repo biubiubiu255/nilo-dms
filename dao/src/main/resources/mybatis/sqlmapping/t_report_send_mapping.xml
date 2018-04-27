@@ -78,7 +78,7 @@
 
         ON b.third_express_code = e.express_code
 
-        WHERE 1
+        WHERE a.merchant_id=#{merchantId}
 
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
@@ -102,11 +102,11 @@
         <if test="orderType !=null and orderType !='' ">
             and c.order_type = #{orderType}
         </if>
-        <if test="fromHandledTime !=null ">
-            and a.created_time >= #{fromHandledTime}
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
         </if>
-        <if test="toHandledTime !=null ">
-            and  <![CDATA[ a.created_time <= #{toHandledTime} ]]>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
         </if>
 
         order by a.created_time desc
@@ -146,7 +146,7 @@
 
         ON b.third_express_code = e.express_code
 
-        WHERE 1
+        WHERE a.merchant_id=#{merchantId}
 
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
@@ -163,11 +163,11 @@
         <if test="orderType !=null and orderType !='' ">
             and c.order_type = #{orderType}
         </if>
-        <if test="fromHandledTime !=null ">
-            and a.created_time >= #{fromHandledTime}
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
         </if>
-        <if test="toHandledTime !=null ">
-            and  <![CDATA[ a.created_time <= #{toHandledTime} ]]>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
         </if>
 
     </select>

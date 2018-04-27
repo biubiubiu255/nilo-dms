@@ -5,6 +5,7 @@ import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.ReportDispatchDao;
+import com.nilo.dms.dao.dataobject.QO.ReportDispatchQO;
 import com.nilo.dms.dao.dataobject.ReportArriveDO;
 import com.nilo.dms.dao.dataobject.ReportDispatchDO;
 import com.nilo.dms.service.impl.SessionLocal;
@@ -39,34 +40,24 @@ public class DispatchReportController extends BaseController {
     }
 
     @RequestMapping(value = "/list.html")
-    public String getOrderList(Model model, String orderNo, Integer sTime_creat, Integer eTime_creat,
-                               String scanNetwork, Integer exportType, HttpServletRequest request) {
+    public String getOrderList(Model model, ReportDispatchQO reportDispatchQO, HttpServletRequest request) {
 
-        Principal me = SessionLocal.getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
+
+        reportDispatchQO.setMerchantId(Long.parseLong(SessionLocal.getPrincipal().getMerchantId()));
+
         Pagination page = getPage();
 
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        map.put("merchantId", merchantId);
-        map.put("sTime_creat", sTime_creat);
-        map.put("eTime_creat", eTime_creat);
-        map.put("orderNo", orderNo);
-        map.put("scanNetwork", scanNetwork);
-        map.put("offset", page.getOffset());
-        map.put("limit", page.getLimit());
 
 
-        List<ReportDispatchDO> list = reportDispatchDao.queryReportDispatch(map);
-        page.setTotalCount(reportDispatchDao.queryReportDispatchCount(map));
+        List<ReportDispatchDO> list = reportDispatchDao.queryReportDispatch(reportDispatchQO);
+        page.setTotalCount(reportDispatchDao.queryReportDispatchCount(reportDispatchQO));
         //page.setTotalCount(commonDao.lastFoundRows());
 
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
         System.out.println(" = " + list.size());
 
         String fileType;
-        switch (exportType) {
+        switch (reportDispatchQO.getExportType()) {
             case 0:
                 fileType = "pdf";
                 break;
