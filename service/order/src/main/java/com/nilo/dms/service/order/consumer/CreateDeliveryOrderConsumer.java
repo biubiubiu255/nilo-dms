@@ -126,6 +126,7 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setRelationOrderNo(data.getRelationOrderNo());
                     orderHeader.setDeliveryFee(data.getDeliveryFee());
                     orderHeader.setIsCod(data.getIsCod());
+                    orderHeader.setIsPackage("0");
                     if (data.getNeedPayAmount() != null) {
                         data.setIsCod("1");
                     }
