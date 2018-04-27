@@ -16,12 +16,12 @@
 
 
 <link href="/mobile/css/ionic.css" rel="stylesheet" type="text/css" />
-<link href="/mobile/css/mps.css" type="text/css" rel="stylesheet" />
+<link href="/mobile/css/mps.css?v=1" type="text/css" rel="stylesheet" />
 <script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="/mobile/js/functions.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
 <script type="text/javascript" src="/mobile/js/mobile.js"></script>
-<script type="text/javascript" src="/mobile/js/jquery.scanner.js"></script>
+<script type="text/javascript" src="/mobile/js/jquery.scanner.js?v=4"></script>
 <script type="text/javascript"
 	src="/mobile/js/jquery.i18n.properties-1.0.9.js"></script>
 
@@ -69,9 +69,9 @@
 
 			var code_array = [];
 			var scan_callback = function(code) {
-				mobile.setFormFieldValue('logisticsNo', code);
+				//mobile.setFormFieldValue('logisticsNo', code);
 				if (!isEmpty(code_array[code])) {
-					warningTipMsg('This order already scanned');
+					warningTipMsg('This logisticsNo already scanned');
 					return;
 				}
 				code_array[code] = code;
@@ -91,6 +91,7 @@
 			$('a.delete_button').click(function () {
 				del();
 			});
+			
 
 			function del() {
 				var checkboxs = $('#arrive-form').find(
@@ -103,7 +104,11 @@
 			}
 			
 			android.startScan();
+			
 		});
+	/* function scan(){
+		android.startScan();
+	} */
 </script>
 
 </head>
@@ -118,12 +123,13 @@
 		<div class="banner_content">
 			<form id="arrive-form">
 				<div class="banner_content">
-					<input type="hidden" name="scanedCodes" />
-					<ul class="one_banner">
-						<li><input type='text'  placeholder="Logistics No" required="required" property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input' id="logisticsNo" name='logisticsNo' /><span data-locale="all_scan" class="scanner" id="scan">scan</span></li>
-						<%--<li><input type='text' placeholder="Logistics No" required="required" class='input_value' id="logisticsNo" name='logisticsNo' /><span data-locale="all_scan" class="scanner" id="scan">scan</span></li>--%>
-					</ul>
+					 <input type="hidden" name="scanedCodes" />
+					 <ul class="scanner_banner">
+						<img src="/mobile/images/scannner.png" class="scanner"><input type='text'  placeholder="Logistics No" required="required" property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input' id="logisticsNo" name='logisticsNo' /><span >ok</span>
+					</ul>  
+					<!-- <div class="scanner"><img src="/mobile/images/scannner.png" id="scan"><input type="text" placeholder="Input code or scan code"><span>OK</span></div> -->
 				</div>
+				</br>
 
 				<ul id='append_order_items_id'>
 					<%--<li id="code123"><input type='checkbox' class='fuxuank' value="123" name='items' /><span class="suiyi">code 12123123</span></li>--%>
