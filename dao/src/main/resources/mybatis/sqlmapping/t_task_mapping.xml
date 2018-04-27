@@ -15,9 +15,9 @@
                 jdbcType="VARCHAR"/>
         <result property="createdBy" column="created_by" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="handledBy" column="handled_by" javaType="java.lang.String"
+        <result property="handleBy" column="handled_by" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="handledTime" column="handled_time" javaType="java.lang.Long"
+        <result property="handleTime" column="handled_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="orderNo" column="order_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
@@ -44,9 +44,9 @@
                 <!--jdbcType="DOUBLE"/>-->
         <!--<result property="alreadyPaid" column="task_type" javaType="java.lang.Double"-->
                 <!--jdbcType="DOUBLE"/>-->
-        <!--<result property="handledBy" column="handled_by" javaType="java.lang.String"-->
+        <!--<result property="handleBy" column="handled_by" javaType="java.lang.String"-->
                 <!--jdbcType="VARCHAR"/>-->
-        <!--<result property="handledTime" column="handled_time" javaType="java.lang.Long"-->
+        <!--<result property="handleTime" column="handled_time" javaType="java.lang.Long"-->
                 <!--jdbcType="INTEGER"/>-->
         <!--<result property="status" column="status" javaType="java.lang.Integer"-->
                 <!--jdbcType="INTEGER"/>-->
@@ -63,7 +63,7 @@
         INSERT INTO t_waybill_task
         ( merchant_id,task_id,task_type,created_by,handled_by,handled_time,order_no, status,task_rate,task_desc,created_time , updated_time ,version)
         VALUES
-        (#{merchantId},#{taskId}, #{taskType},#{createdBy},#{handledBy},#{handledTime},#{orderNo},#{status},#{taskRate},#{taskDesc}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{merchantId},#{taskId}, #{taskType},#{createdBy},#{handleBy},#{handleTime},#{orderNo},#{status},#{taskRate},#{taskDesc}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
     <!-- 动态更新语句 -->
     <update id="update" parameterType="com.nilo.dms.dao.dataobject.TaskDO" statementType="PREPARED">
@@ -72,17 +72,17 @@
             <if test="status != null ">
                 status = #{status},
             </if>
-            <if test="handledBy != null ">
-                handled_by = #{handledBy},
+            <if test="handleBy != null ">
+                handled_by = #{handleBy},
             </if>
-            <if test="handledTime != null ">
-                handled_time = #{handledTime},
+            <if test="handleTime != null ">
+                handled_time = #{handleTime},
             </if>
             <if test="taskRate != null ">
                 task_rate = #{taskRate},
             </if>
-            <if test="handledTime != null ">
-                handled_time = #{handledTime},
+            <if test="handleTime != null ">
+                handled_time = #{handleTime},
             </if>
             updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
         </trim>
@@ -103,8 +103,8 @@
                 task_type=#{item}
             </foreach>
         </if>
-        <if test="handledBy != null and handledBy != ''">
-            and handled_by = #{handledBy}
+        <if test="handleBy != null and handleBy != ''">
+            and handled_by = #{handleBy}
         </if>
         <if test="orderNo !=null and orderNo !='' ">
             and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
@@ -129,8 +129,8 @@
         <if test="taskType != null and taskType != ''">
             and task_type = #{taskType}
         </if>
-        <if test="handledBy != null and handledBy != ''">
-            and handled_by = #{handledBy}
+        <if test="handleBy != null and handleBy != ''">
+            and handled_by = #{handleBy}
         </if>
         <if test="orderNo !=null and orderNo !='' ">
             and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.ReportDispatchDao">
+
+    <resultMap id="dispatchDO" type="com.nilo.dms.dao.dataobject.ReportDispatchDO">
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="referenceNo" column="reference_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="country" column="country" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderType" column="order_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="address" column="address" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="high" column="high" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="width" column="width" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="len" column="length" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="handleName" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+
+    </resultMap>
+
+    <!-- Receive Report 查询语句 -->
+
+    <select id="queryReportDispatch" resultMap="dispatchDO">
+
+        SELECT a.*, b.reference_no, b.order_type, b.country, c.address FROM
+        (
+        SELECT
+        order_no,weight,length,height,width,STATUS,created_time
+        FROM
+        t_handle_rider_details
+        UNION
+        SELECT
+        order_no,weight,length,height,width,STATUS,created_time
+        FROM
+        t_handle_third_express_details
+
+        )   a
+
+        INNER JOIN t_waybill b
+
+        on a.order_no = b.order_no
+
+        INNER JOIN t_waybill_receiver c
+
+        on a.order_no = c.order_no
+
+        WHERE 1
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test=" sTime_creat !=null and eTime_creat !=null ">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.created_time<![CDATA[<]]>#{eTime_creat} AND a.created_time>#{sTime_creat})
+        </if>
+
+        order by a.created_time desc
+        limit #{offset} , #{limit}
+
+
+    </select>
+
+    <!-- 查询上条查询条件下影响的全部条数 -->
+    <select id="queryReportDispatchCount" resultType="java.lang.Integer">
+
+        SELECT
+        COUNT(1)
+        FROM
+        (
+        SELECT
+        order_no,weight,length,height,width,STATUS,created_time
+        FROM
+        t_handle_rider_details
+        UNION
+        SELECT
+        order_no,weight,length,height,width,STATUS,created_time
+        FROM
+        t_handle_third_express_details
+
+        )   a
+
+        INNER JOIN t_waybill b
+
+        on a.order_no = b.order_no
+
+        INNER JOIN t_waybill_receiver c
+
+        on a.order_no = c.order_no
+
+        WHERE 1
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test=" sTime_creat !=null and eTime_creat !=null ">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.created_time<![CDATA[<]]>#{eTime_creat} AND a.created_time>#{sTime_creat})
+        </if>
+
+    </select>
+
+</mapper>

@@ -62,6 +62,11 @@ public class WaybillDO extends BaseDo<Long> {
     private Integer delayTimes;
     private Integer paidType;
 
+    private Boolean areAbnormal;
+    private Boolean areRefuse;
+    private Boolean areDelay;
+
+
     public Integer getDelayTimes() {
         return delayTimes;
     }
@@ -374,4 +379,27 @@ public class WaybillDO extends BaseDo<Long> {
         this.status = status;
     }
 
+    public Boolean getAreAbnormal() {
+        return areAbnormal;
+    }
+
+    public void setAreAbnormal(Boolean areAbnormal) {
+        this.areAbnormal = areAbnormal;
+    }
+
+    public Boolean getAreRefuse() {
+        return areRefuse;
+    }
+
+    public void setAreRefuse(Boolean areRefuse) {
+        this.areRefuse = areRefuse;
+    }
+
+    public Boolean getAreDelay() {
+        return areDelay;
+    }
+
+    public void setAreDelay(Boolean areDelay) {
+        this.areDelay = areDelay;
+    }
 }

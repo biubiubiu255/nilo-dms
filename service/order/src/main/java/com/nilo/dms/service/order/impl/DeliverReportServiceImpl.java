@@ -62,7 +62,7 @@ public class DeliverReportServiceImpl implements DeliverReportService {
         // 查询记录
         List<DeliverReportDO> queryList = seliverReportDao.queryDeliverReport(map);
 //        for(DeliverReportDO d:queryList){
-//            System.out.println(d.getHandledBy());
+//            System.out.println(d.getHandleBy());
 //        }
         Long count = seliverReportDao.queryCountBy(map);
         pagination.setTotalCount(count == null ? 0 : count);

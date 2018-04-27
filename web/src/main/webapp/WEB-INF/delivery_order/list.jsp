@@ -119,7 +119,7 @@
             <th lay-data="{field:'totalPrice', width:120}">Order Amount</th>
             <th lay-data="{field:'needPayAmount', width:120}">Need Pay</th>
             <th lay-data="{field:'parentNo', width:100}">PackageNo</th>
-            <th lay-data="{field:'receiverInfo', width:150,templet: '<div>{{d.receiverInfo.receiverName}}</div>' }">
+                <th lay-data="{field:'receiverInfo', width:150,templet: '<div>{{d.receiverInfo.receiverName}}</div>' }">
                 Receiver
                 Name
             </th>
@@ -199,7 +199,6 @@
                         fromCreatedTime: $("#fromCreatedTime").val(),
                         toCreatedTime: $("#toCreatedTime").val(),
                         platform: $("input[name='platform']").val(),
-
                     }
                 });
             };
@@ -207,15 +206,17 @@
 
             $(".btn-export").on("click", function () {
 
-                var orderNo = $("input[name='orderNo']").val(),
-                        referenceNo = $("input[name='referenceNo']").val(),
-                        orderTypes = $("select[name='orderType']").val(),
-                        orderStatus = $("select[name='orderStatus']").val(),
-                        fromCreatedTime = $("#fromCreatedTime").val(),
-                        toCreatedTime = $("#toCreatedTime").val(),
-                        platform = $("input[name='platform']").val();
+                var params = { orderNo : $("input[name='orderNo']").val(),
+                    referenceNo: $("input[name='referenceNo']").val(),
+                    orderTypes: $("select[name='orderType']").val(),
+                    orderStatus: $("select[name='orderStatus']").val(),
+                    fromCreatedTime: $("#fromCreatedTime").val(),
+                    toCreatedTime: $("#toCreatedTime").val(),
+                    platform: $("input[name='platform']").val()};
 
-                var url = "/waybill/export.html?orderNo="+orderNo+"&referenceNo="+referenceNo+"&orderTypes="+orderTypes+"&orderStatus="+orderStatus+"&fromCreatedTime="+fromCreatedTime+"&toCreatedTime="+toCreatedTime+"&platform="+platform;
+
+
+                var url = "/waybill/exportPlus.html?" + jQuery.param(params);
                 window.location.href = url;
             })
 

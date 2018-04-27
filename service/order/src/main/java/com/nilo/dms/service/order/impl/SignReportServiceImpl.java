@@ -36,6 +36,8 @@ public class SignReportServiceImpl implements SignReportService {
         map.put("nextNetwork", parameter.getNextNetwork());
         map.put("status", parameter.getStatus());
         map.put("carrierName", parameter.getCarrierName());
+        map.put("fromHandledTime", parameter.getFromHandledTime());
+        map.put("toHandledTime", parameter.getToHandledTime());
 
         if (StringUtil.isEmpty(parameter.getFromHandledTime()) || StringUtil.isEmpty(parameter.getToHandledTime())) {
             if (StringUtil.isEmpty(parameter.getFromHandledTime())) {
@@ -43,14 +45,6 @@ public class SignReportServiceImpl implements SignReportService {
             } else {
                 parameter.setToHandledTime(parameter.getFromHandledTime());
             }
-        }
-        if (StringUtil.isNotEmpty(parameter.getFromHandledTime())) {
-            Long fromTime = DateUtil.parse(parameter.getFromHandledTime(), "yyyy-MM-dd");
-            map.put("fromHandledTime", fromTime);
-        }
-        if (StringUtil.isNotEmpty(parameter.getToHandledTime())) {
-            Long toTime = DateUtil.parse(parameter.getToHandledTime(), "yyyy-MM-dd") + 24 * 60 * 60 - 1;
-            map.put("toHandledTime", toTime);
         }
 
         map.put("offset", pagination.getOffset());
@@ -91,10 +85,10 @@ public class SignReportServiceImpl implements SignReportService {
         signReport.setRemark(s.getRemark());
         signReport.setsName(s.getsName());
         signReport.setrName(s.getrName());
-        signReport.setHandledTime(s.getHandledTime());
+        signReport.setHandleTime(s.getHandleTime());
         signReport.setNeedPayAmount(s.getNeedPayAmount());
         signReport.setAlreadyPaid(s.getAlreadyPaid());
-        signReport.setHandledBy(s.getHandledBy());
+        signReport.setHandleBy(s.getHandleBy());
 
         return signReport;
     }

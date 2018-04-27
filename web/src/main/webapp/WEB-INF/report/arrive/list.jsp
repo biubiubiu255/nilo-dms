@@ -49,7 +49,7 @@
         </div>
 
         <!-- 搜索按钮 -->
-        <div class="layui-col-md1 layui-col-lg4" style="margin-left: 2.4rem;">
+        <div class="layui-col-md4 layui-col-lg4" style="margin-left: 2.4rem;">
             <button class="layui-btn layui-btn-normal search">Search</button>
             <button class="layui-btn layui-btn-normal btn-pdf">View</button>
         </div>
@@ -65,7 +65,7 @@
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:200}"><O></O>rderNo</th>
+            <th lay-data="{fixed: 'left',field:'orderNo', width:200}"><O></O>Waybill No</th>
             <th lay-data="{field: 'recipients', width:100}">Recipients</th>
             <th lay-data="{field:'lastNetwork' , width:200}">LastNetwork</th>
             <th lay-data="{field:'scanNetwork', width:200}">ScanNetwork</th>

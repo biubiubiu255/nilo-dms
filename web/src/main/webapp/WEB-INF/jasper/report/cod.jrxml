@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cod" language="groovy" pageWidth="1500" pageHeight="1000" columnWidth="1460" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="70cf3c91-4a95-426b-8148-0315f7c746c8">
-	<property name="ireport.zoom" value="0.7899937629182421"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="2.0490403660952192"/>
+	<property name="ireport.x" value="2045"/>
+	<property name="ireport.y" value="79"/>
 	<parameter name="POJO_COLMUN" class="java.lang.String"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="orderOriginal" class="java.lang.String"/>
@@ -45,19 +45,21 @@
 				<text><![CDATA[COD Report]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1327" y="51" width="37" height="20" uuid="07450f8b-a24c-4783-8395-1f7bffdbb093"/>
+				<reportElement x="1272" y="51" width="92" height="20" uuid="07450f8b-a24c-4783-8395-1f7bffdbb093"/>
+				<textElement textAlignment="Right"/>
 				<text><![CDATA[Count:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1302" y="71" width="62" height="23" uuid="4fb5e9d7-23b8-4837-b07c-765c9598bebc"/>
+				<reportElement x="1272" y="71" width="92" height="23" uuid="4fb5e9d7-23b8-4837-b07c-765c9598bebc"/>
+				<textElement textAlignment="Right"/>
 				<text><![CDATA[Total weight:]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="1369" y="51" width="41" height="20" uuid="e0732f0c-91a5-4c89-a2b6-3eb8c326bc77"/>
+				<reportElement x="1369" y="51" width="62" height="20" uuid="e0732f0c-91a5-4c89-a2b6-3eb8c326bc77"/>
 				<textFieldExpression><![CDATA[$V{orderNo_1}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="1369" y="71" width="41" height="20" uuid="4eac1132-1bd3-4e7b-8c8d-2b9a16278412"/>
+				<reportElement x="1369" y="71" width="62" height="20" uuid="4eac1132-1bd3-4e7b-8c8d-2b9a16278412"/>
 				<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -339,11 +341,13 @@
 				<textFieldExpression><![CDATA[$F{send_company}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1411" y="0" width="49" height="20" uuid="54e93b85-9100-4209-a77d-000280aab8d0"/>
+				<reportElement x="1410" y="0" width="50" height="20" uuid="54e93b85-9100-4209-a77d-000280aab8d0"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$F{pay_price}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="961" y="0" width="51" height="20" uuid="23c3c84c-1870-4481-ae53-07690866c20c"/>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{rider}]]></textFieldExpression>
 			</textField>
 		</band>

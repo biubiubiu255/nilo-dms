@@ -61,6 +61,10 @@ public class WaybillHeader {
     private String allocatedRider;
     private PaidTypeEnum paidType;
 
+    private Boolean areAbnormal;
+    private Boolean areRefuse;
+    private Boolean areDelay;
+
     public Integer getDelayTimes() {
         return delayTimes;
     }
@@ -449,4 +453,27 @@ public class WaybillHeader {
         return this.status == null ? "" : this.status.getDesc();
     }
 
+    public Boolean getAreAbnormal() {
+        return areAbnormal;
+    }
+
+    public void setAreAbnormal(Boolean areAbnormal) {
+        this.areAbnormal = areAbnormal;
+    }
+
+    public Boolean getAreRefuse() {
+        return areRefuse;
+    }
+
+    public void setAreRefuse(Boolean areRefuse) {
+        this.areRefuse = areRefuse;
+    }
+
+    public Boolean getAreDelay() {
+        return areDelay;
+    }
+
+    public void setAreDelay(Boolean areDelay) {
+        this.areDelay = areDelay;
+    }
 }

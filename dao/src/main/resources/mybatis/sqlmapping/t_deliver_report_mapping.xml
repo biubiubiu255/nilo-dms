@@ -17,9 +17,9 @@
                 jdbcType="INTEGER"/>
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="handledBy" column="handled_by" javaType="java.lang.String"
+        <result property="handleBy" column="handled_by" javaType="java.lang.String"
                 jdbcType="BIGINT"/>
-        <result property="handledTime" column="handled_time" javaType="java.lang.Long"
+        <result property="handleTime" column="handled_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="name" column="name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>

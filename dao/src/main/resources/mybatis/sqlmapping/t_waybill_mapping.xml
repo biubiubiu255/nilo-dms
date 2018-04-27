@@ -65,6 +65,13 @@
         <result property="remark" column="remark" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
 
+        <result property="areAbnormal" column="status_abnormal" javaType="java.lang.Boolean"
+                jdbcType="BIT"/>
+        <result property="areRefuse" column="status_refuse" javaType="java.lang.Boolean"
+                jdbcType="BIT"/>
+        <result property="areDelay" column="status_delay" javaType="java.lang.Boolean"
+                jdbcType="BIT"/>
+
 
         <result property="isPackage" column="is_Package" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
@@ -287,8 +294,22 @@
             <if test="alreadyPaid != null">
                 already_paid = #{alreadyPaid},
             </if>
-            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
-        </trim>
+
+            <if test="delayTimes != null">
+                delay_times = #{delayTimes},
+            </if>
+            <if test="areAbnormal != null">
+                status_abnormal = #{areAbnormal},
+            </if>
+            <if test="areRefuse != null">
+                status_refuse = #{areRefuse},
+            </if>
+            <if test="areDelay != null">
+                status_delay = #{areDelay},
+            </if>
+
+        updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+    </trim>
     </update>
 
     <select id="queryByPackageNo" resultMap="orderDO">

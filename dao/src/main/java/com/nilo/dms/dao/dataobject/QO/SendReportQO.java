@@ -1,8 +1,8 @@
-package com.nilo.dms.dao.dataobject;
+package com.nilo.dms.dao.dataobject.QO;
 
 import com.nilo.dms.common.BaseDo;
 
-public class SendReportDO extends BaseDo<Long> {
+public class SendReportQO extends BaseDo<Long> {
     private Long merchantId;
     private String referenceNo;
     private String orderNo;
@@ -15,10 +15,19 @@ public class SendReportDO extends BaseDo<Long> {
 
     private String driver;
     private String nextStation;
+    private String nextStationCode;
     private String handleName;
     private String handleNo;
     private String deliveryType;
     private String expressName;
+    private String expressCode;
+
+    private Integer offset;
+    private Integer limit;
+    private Integer total;
+    private Integer fromHandledTime;
+    private Integer toHandledTime;
+    private Integer exportType;
 
     public Long getMerchantId() {
         return merchantId;
@@ -108,6 +117,14 @@ public class SendReportDO extends BaseDo<Long> {
         this.nextStation = nextStation;
     }
 
+    public String getNextStationCode() {
+        return nextStationCode;
+    }
+
+    public void setNextStationCode(String nextStationCode) {
+        this.nextStationCode = nextStationCode;
+    }
+
     public String getHandleName() {
         return handleName;
     }
@@ -140,9 +157,65 @@ public class SendReportDO extends BaseDo<Long> {
         this.expressName = expressName;
     }
 
+    public String getExpressCode() {
+        return expressCode;
+    }
+
+    public void setExpressCode(String expressCode) {
+        this.expressCode = expressCode;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public Integer getFromHandledTime() {
+        return fromHandledTime;
+    }
+
+    public void setFromHandledTime(Integer fromHandledTime) {
+        this.fromHandledTime = fromHandledTime;
+    }
+
+    public Integer getToHandledTime() {
+        return toHandledTime;
+    }
+
+    public void setToHandledTime(Integer toHandledTime) {
+        this.toHandledTime = toHandledTime;
+    }
+
+    public Integer getExportType() {
+        return exportType;
+    }
+
+    public void setExportType(Integer exportType) {
+        this.exportType = exportType;
+    }
+
     @Override
     public String toString() {
-        return "SendReportDO{" +
+        return "SendReportQO{" +
                 "merchantId=" + merchantId +
                 ", referenceNo='" + referenceNo + '\'' +
                 ", orderNo='" + orderNo + '\'' +
@@ -158,6 +231,11 @@ public class SendReportDO extends BaseDo<Long> {
                 ", handleNo='" + handleNo + '\'' +
                 ", deliveryType='" + deliveryType + '\'' +
                 ", expressName='" + expressName + '\'' +
+                ", offset=" + offset +
+                ", limit=" + limit +
+                ", total=" + total +
+                ", fromHandledTime=" + fromHandledTime +
+                ", toHandledTime=" + toHandledTime +
                 '}';
     }
 }

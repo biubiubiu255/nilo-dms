@@ -45,6 +45,40 @@ public class BatchSignController extends BaseController {
 
     @RequestMapping(value = "/importSignData.html", method = RequestMethod.POST)
     @ResponseBody
+    public String importSignDataNew(Model model, @RequestParam("file") CommonsMultipartFile file) {
+        //保存上传的excel
+        ExcelData excelData = null;
+        try {
+            String fileSaveName = file.getFileItem().getName();
+            excelData = ReadExcel.readTable(file.getInputStream(), fileSaveName);
+        } catch (Exception e) {
+            throw new RuntimeException("Excel Parse Failed.");
+        }
+        List<String> list = new ArrayList<>();
+        for (Map.Entry<String, List<CellData>> entry : excelData.getData().entrySet()) {
+            for (CellData cell1 : entry.getValue()) {
+                if (StringUtil.isNotBlank(cell1.getValue())) {
+                    list.add(cell1.getValue());
+                }
+            }
+        }
+
+        if (list.size() == 0) throw new IllegalArgumentException("Excel Data Error.");
+        List<String> resultList = new ArrayList<>();
+        //批量签收
+        for (String orderNo : list) {
+            try {
+                waybillOptService.sign(orderNo, "Batch Sign");
+                resultList.add(orderNo + ": success");
+            } catch (Exception e) {
+                resultList.add("<font color='red'>" + orderNo + "</font>:" + e.getMessage());
+            }
+
+        }
+        return toJsonTrueData(resultList);
+    }
+
+    //原版
     public String importSignData(Model model, @RequestParam("file") CommonsMultipartFile file) {
         //保存上传的excel
         ExcelData excelData = null;
@@ -80,6 +114,5 @@ public class BatchSignController extends BaseController {
         }
         return toJsonTrueData(resultList);
     }
-
 
 }

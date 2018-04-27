@@ -132,10 +132,15 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         if (header.getPaidType() != null) {
             update.setPaidType(header.getPaidType().getCode());
         }
+        if(header.getAreDelay()!=null){
+            update.setAreDelay(header.getAreDelay());
+        }
+        if(header.getDelayTimes()!=null){
+            update.setDelayTimes(header.getDelayTimes());
+        }
         header.setPrintTimes(header.getPrintTimes());
         header.setAlreadyPaid(header.getAlreadyPaid());
         waybillDao.update(update);
-
     }
 
     @Override

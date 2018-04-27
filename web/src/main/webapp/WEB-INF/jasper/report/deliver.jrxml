@@ -8,7 +8,7 @@
 	<field name="statusDesc" class="java.lang.String"/>
 	<field name="networkDesc" class="java.lang.String"/>
 	<field name="createdTime" class="java.lang.String"/>
-	<field name="handledTime" class="java.lang.String"/>
+	<field name="handleTime" class="java.lang.String"/>
 	<field name="name" class="java.lang.String"/>
 	<field name="contactNumber" class="java.lang.String"/>
 	<field name="address" class="java.lang.String"/>
@@ -90,7 +90,7 @@
 				<textElement>
 					<font fontName="微软雅黑"/>
 				</textElement>
-				<text><![CDATA[handledTime]]></text>
+				<text><![CDATA[handleTime]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="667" y="1" width="51" height="20" uuid="1f0d33c5-b5ab-4e84-b7e2-31eefad0650b"/>
@@ -178,7 +178,7 @@
 				<textElement>
 					<font fontName="微软雅黑"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{handledTime}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{handleTime}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="667" y="6" width="51" height="20" uuid="28c09a4c-b418-46ab-afcf-84fc31769e53"/>

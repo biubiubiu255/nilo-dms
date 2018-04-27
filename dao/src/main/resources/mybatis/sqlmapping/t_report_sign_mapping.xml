@@ -16,11 +16,11 @@
         <result property="alreadyPaid" column="already_paid" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
         <!--
-        <result property="handledBy" column="handled_by" javaType="java.lang.String"
+        <result property="handleBy" column="handled_by" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>-->
-        <result property="handledBy" column="rider" javaType="java.lang.String"
+        <result property="handleBy" column="rider" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="handledTime" column="handled_time" javaType="java.lang.Long"
+        <result property="handleTime" column="handle_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="sName" column="sname" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
@@ -35,24 +35,23 @@
     </resultMap>
 
     <select id="querySignReport" resultMap="signDO">
-        select a.order_no,a.reference_no,a.weight,a.need_pay_amount,a.already_paid,b.handled_by,b.handled_time,c.`name` sname,d.`name` rname,d.contact_number,d.address,a.remark,e.name rider
-        from t_waybill a INNER JOIN t_waybill_task b
+        select a.order_no,a.reference_no,a.weight,a.need_pay_amount,a.already_paid, b.handle_by,b.handle_time,c.`name` sname,d.`name` rname,d.contact_number,d.address,a.remark,e.name rider
+        from t_waybill a INNER JOIN t_handle_sign b
         ON a.order_no = b.order_no
         INNER JOIN t_waybill_sender c
         on b.order_no = c.order_no
         INNER JOIN t_waybill_receiver d
         on c.order_no = d.order_no
         INNER JOIN t_sys_user_info e
-        on b.handled_by = e.id
-        WHERE b.`status`=3
+        on b.handle_by = e.id
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>
         <if test="fromHandledTime !=null ">
-            and b.handled_time >= #{fromHandledTime}
+            and b.handle_time >= #{fromHandledTime}
         </if>
         <if test="toHandledTime !=null ">
-            and  <![CDATA[ b.handled_time <= #{toHandledTime} ]]>
+            and  <![CDATA[ b.handle_time <= #{toHandledTime} ]]>
         </if>
         <!--<if test="status !=null and status.size() > 0 ">-->
             <!--<foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">-->
@@ -64,23 +63,24 @@
     </select>
 
     <select id="queryCountBy" resultType="java.lang.Long">
-        SELECT
-        count(1)
-        from t_waybill a INNER JOIN t_waybill_task b
+        select
+        COUNT(1)
+        from t_waybill a INNER JOIN t_handle_sign b
         ON a.order_no = b.order_no
         INNER JOIN t_waybill_sender c
         on b.order_no = c.order_no
         INNER JOIN t_waybill_receiver d
         on c.order_no = d.order_no
-        WHERE b.`status`=3
+        INNER JOIN t_sys_user_info e
+        on b.handle_by = e.id
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>
         <if test="fromHandledTime !=null ">
-            and b.handled_time >= #{fromHandledTime}
+            and b.handle_time >= #{fromHandledTime}
         </if>
         <if test="toHandledTime !=null ">
-            and  <![CDATA[ b.handled_time <= #{toHandledTime} ]]>
+            and  <![CDATA[ b.handle_time <= #{toHandledTime} ]]>
         </if>
         <!--<if test="status !=null and status.size() > 0 ">-->
             <!--<foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">-->

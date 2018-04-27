@@ -11,6 +11,9 @@ import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.DeliveryRouteService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.web.controller.BaseController;
+import com.nilo.dms.web.controller.report.model.ReportUtil;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -321,4 +324,34 @@ public class WaybillController extends BaseController {
         }
         return null;
     }
+
+
+    @RequestMapping(value = "/exportPlus.html", method = RequestMethod.GET)
+    public String exportPlus(WaybillParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus, Model model) {
+
+        Principal me = SessionLocal.getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        parameter.setMerchantId(merchantId);
+        if (orderTypes != null && orderTypes.length > 0) {
+            parameter.setOrderType(Arrays.asList(orderTypes));
+        }
+        if (orderStatus != null && orderStatus.length > 0) {
+            parameter.setStatus(Arrays.asList(orderStatus));
+        }
+        parameter.setIsPackage("0");
+
+        Pagination page = getPage();
+        List<Waybill> list = waybillService.queryWaybillBy(parameter, page);
+
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
+        model.addAttribute("url", "/WEB-INF/jasper/report/waybill.jasper");
+        model.addAttribute("format", "xls"); // 报表格式
+        //model.addAttribute("net.sf.jasperreports.json.source", jrDataSource);
+        //model.addAttribute("net.sf.jasperreports.json.source", input);
+        // model.addAttribute("JSON_INPUT_STREAM", toJsonTrueData(list));
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView"; // 对应jasper-defs.xml中的bean id
+    }
+
 }
