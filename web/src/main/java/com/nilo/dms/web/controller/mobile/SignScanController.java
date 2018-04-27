@@ -94,6 +94,9 @@ public class SignScanController extends BaseController {
             }
             model.addAttribute("isPaid", isPaid);
             model.addAttribute("logisticsNo", orderNo);
+        }else {
+        	model.addAttribute("isCod", 0);
+        	model.addAttribute("isPaid", true);
         }
         return "mobile/rider/sign/sign";
     }

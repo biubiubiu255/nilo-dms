@@ -88,6 +88,7 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
         if (deliveryOrder == null) {
             throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, handleRefuse.getOrderNo());
         }
+        
         List<HandleRefuse> handleRefuseList = handleRefuseDao.queryByDO(handleRefuse);
 
         if(handleRefuseList.size()!=0){
