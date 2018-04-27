@@ -127,16 +127,12 @@ public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
                     orderHeader.setDeliveryFee(data.getDeliveryFee());
                     orderHeader.setIsCod(data.getIsCod());
                     orderHeader.setIsPackage("0");
-                    if (data.getNeedPayAmount() != null) {
+                    if (data.getNeedPayAmount() != null && data.getNeedPayAmount() != 0) {
                         data.setIsCod("1");
                     }
                     orderHeader.setNotes(data.getNotes());
                     orderHeader.setRemark(data.getRemark());
-
                     orderHeader.setNeedPayAmount(data.getNeedPayAmount());
-                    orderHeader.setAlreadyPaid(data.getAlreadyPaid());
-                    orderHeader.setBillNo(data.getBillNo());
-                    orderHeader.setAccountNo(data.getAccountNo());
 
                     waybillDao.insert(orderHeader);
 
