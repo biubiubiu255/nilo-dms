@@ -77,11 +77,11 @@ public class SignScanController extends BaseController {
                         model.addAttribute("amount", 0);
                         model.addAttribute("already", 0);
                     }
-                    model.addAttribute("isCod", 1);
+                    model.addAttribute("isCod", "1");
                     //运单不是代收货款类型
                 } else {
                     isPaid = true;
-                    model.addAttribute("isCod", 0);
+                    model.addAttribute("isCod", "0");
                 }
                 model.addAttribute("receiverName", receiverName);
 
@@ -96,7 +96,7 @@ public class SignScanController extends BaseController {
             model.addAttribute("isPaid", isPaid);
             model.addAttribute("logisticsNo", orderNo);
         }else {
-        	model.addAttribute("isCod", 0);
+        	model.addAttribute("isCod", "0");
         	model.addAttribute("isPaid", true);
         }
         return "mobile/rider/sign/sign";

@@ -43,7 +43,7 @@
 			<form id="myForm" class="layui-form" action="">
 				<div class="banner_content">
 					<ul class="one_banner">
-						
+						<input type="hidden" name="isPaid" id="isPaid" value="${isPaid}" />
 						<li><input type="text" placeholder="Logistics No"
 							property_name="all_logistics_no" set_attr="placeholder"
 							id="logisticsNo" name="logisticsNo"
@@ -56,7 +56,14 @@
 						<li><input type='text' placeholder="Remark" id="remark"
 							property_name="sign_scan_remark" set_attr="placeholder"
 							class='input_value i18n-input' name='remark' /></li>
-						
+						<c:if test="${isCod=='1'}">
+							<c:if test="${isPaid == false}">
+								<li>Need to pay ${amount} ,already paid ${already}</li>
+							</c:if>
+							<c:if test="${isPaid}">
+								<li>Need to pay ${amount} ,already paid by ${paidType}</li>
+							</c:if>
+						</c:if>
 						<li><label data-locale="sign_scan_Picture">Sign
 								Picture</label>
 							<div class="xq">
@@ -100,7 +107,12 @@
 					isUpPic = true;
 				},
 				before : function(res) {
-					
+					if ($("#isPaid").val() == 'false') {
+
+						showWarning("you need to payment first!");
+						return;
+					}
+
 					if (isUpPic === false) {
 						showWarning("plase chose a pic");
 						return;
