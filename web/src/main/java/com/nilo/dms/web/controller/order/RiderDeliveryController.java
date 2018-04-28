@@ -12,6 +12,7 @@ import com.nilo.dms.dao.dataobject.RiderDelivery;
 import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
+import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.RiderDeliveryService;
 import com.nilo.dms.service.system.SystemConfig;
@@ -47,6 +48,9 @@ public class RiderDeliveryController extends BaseController {
     @Autowired
     private HandleRiderDao handleRiderDao;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model, HttpServletRequest request) {
         return "waybill/rider_delivery/list";
@@ -77,8 +81,8 @@ public class RiderDeliveryController extends BaseController {
         RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
         riderDeliverySmallDO.setHandleNo(loadingNo);
         List<RiderDeliverySmallDO> smalls = riderDeliveryService.queryRiderDeliveryDetail(me.getMerchantId(), riderDeliverySmallDO, page);
+        //userService.findByUserId(me.getMerchantId(), riderDelivery.getHandleBy().toString());
         model.addAttribute("pack", riderDelivery);
-
         //这里需要传入一个json，给layui解析，所有这里查询出小包列表后，包装成layui格式，jsp先格式化在变量属性里，生成静态页面时，js再解析字符串成为对象进行渲染
         model.addAttribute("smallsJson", toPaginationLayUIData(page, smalls));
         return "waybill/rider_delivery/details";
@@ -100,6 +104,8 @@ public class RiderDeliveryController extends BaseController {
         RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
         riderDeliverySmallDO.setHandleNo(loadingNo);
         List<RiderDeliverySmallDO> smalls = riderDeliveryService.queryRiderDeliveryDetail(me.getMerchantId(), riderDeliverySmallDO, page);
+
+
         model.addAttribute("pack", riderDelivery);
         model.addAttribute("smalls", smalls);
         return "waybill/rider_delivery/print";

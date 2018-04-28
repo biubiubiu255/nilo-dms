@@ -47,7 +47,7 @@
 
     <select id="queryReportDispatch" resultMap="dispatchDO">
 
-        SELECT a.*, c.name as rider , d.name as handle_name, e.order_type, e.country, f.contact_number as phone, f.address
+        SELECT a.*, c.name as rider , d.name as handle_name, e.order_type, e.reference_no, e.country, f.contact_number as phone, f.address
 
         FROM
 

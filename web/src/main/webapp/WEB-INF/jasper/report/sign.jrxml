@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sign" language="groovy" pageWidth="1300" pageHeight="842" columnWidth="1260" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="abbb5591-3eef-4ff8-af13-2d294816bebb">
 	<property name="ireport.zoom" value="1.7715610000000015"/>
-	<property name="ireport.x" value="954"/>
+	<property name="ireport.x" value="919"/>
 	<property name="ireport.y" value="78"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="referenceNo" class="java.lang.String"/>
@@ -108,7 +108,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Rider]]></text>
+				<text><![CDATA[Signer]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="762" y="0" width="86" height="20" uuid="f5ed74ba-ce37-4ce8-bd41-97e900d5029d"/>

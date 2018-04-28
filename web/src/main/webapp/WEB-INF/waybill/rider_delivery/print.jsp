@@ -42,10 +42,10 @@
             HandleNo NO: ${pack.handleNo}
         </div>
         <div class="col-xs-3">
-            handleName: ${pack.handleBy}
+            handleName: ${pack.handleByName}
         </div>
         <div class="col-xs-3">
-            Rider :${pack.rider}
+            Rider :${pack.riderName}
         </div>
         <br><br>
     </div>
