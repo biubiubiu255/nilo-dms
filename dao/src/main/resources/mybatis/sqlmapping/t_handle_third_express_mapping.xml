@@ -139,7 +139,7 @@
 
 
     <insert id="insertBig" parameterType="com.nilo.dms.dto.handle.SendThirdHead"
-            statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
+            statementType="PREPARED" useGeneratedKeys="true" keyProperty="id" >
         INSERT
         INTO t_handle_third_express
         ( merchant_id, type, handle_no, third_express_code, third_waybill_no, driver, network_Code, next_station, handle_time, handle_by, handle_Name,status, remark, created_time, updated_time, version)

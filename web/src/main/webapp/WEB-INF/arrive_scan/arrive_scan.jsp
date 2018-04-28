@@ -66,6 +66,11 @@
                 $("cdsf").change()
                 var value = obj.value //得到修改后的值
                         , data = obj.data //得到所在行所有键值
+                if (value.length > 10){
+                    layer.msg("sorry! too heavy");
+                    reloadTable();
+                    return ;
+                }
                 layer.msg("sussess");
                 updateWeight(data.orderNo, value);
                 setTimeout(function () {
