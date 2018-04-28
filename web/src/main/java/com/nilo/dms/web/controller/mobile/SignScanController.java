@@ -81,6 +81,7 @@ public class SignScanController extends BaseController {
                     //运单不是代收货款类型
                 } else {
                     isPaid = true;
+                    model.addAttribute("isCod", 0);
                 }
                 model.addAttribute("receiverName", receiverName);
 
