@@ -57,12 +57,12 @@
 					<a href="/mobile/rider/refuse/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="refuse">refuse</label></li>
 					</a>
-					<a href="/mobile/rider/COD/sign.html" title="">
+					<!-- <a href="/mobile/rider/COD/sign.html" title="">
 						<li><img src="/mobile/images/icon_2.png" /><br /><label >Payment</label></li>
 					</a>
 					<a href="/mobile/rider/Batch/toPay.html" title="">
 						<li><img src="/mobile/images/icon_5.png" /><br /><label>Batch Payment</label></li>
-					</a>
+					</a> -->
 					<!-- <a href="/mobile/rider/deliver/toScan.html" title="">
 						<li><img src="/mobile/images/icon_5.png" /><br /><label>Rider Delivery</label></li>
 					</a> -->
