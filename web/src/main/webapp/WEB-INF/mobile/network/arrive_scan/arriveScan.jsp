@@ -125,7 +125,7 @@
 				<div class="banner_content">
 					 <input type="hidden" name="scanedCodes" />
 					 <ul class="scanner_banner">
-						<img src="/mobile/images/scannner.png" class="scanner"><input type='text'  placeholder="Logistics No" required="required" property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input' id="logisticsNo" name='logisticsNo' /><span >ok</span>
+						<img src="/mobile/images/scannner.png" class="scanner"><input type='text'  placeholder="Logistics No" property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input' id="logisticsNo" name='logisticsNo' /><span >ok</span>
 					</ul>  
 					<!-- <div class="scanner"><img src="/mobile/images/scannner.png" id="scan"><input type="text" placeholder="Input code or scan code"><span>OK</span></div> -->
 				</div>

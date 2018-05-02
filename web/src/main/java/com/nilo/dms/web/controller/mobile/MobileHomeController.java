@@ -66,10 +66,10 @@ public class MobileHomeController extends BaseController {
         HttpSession session = request.getSession();
         try {
 
-            Object sessionUser = WebUtil.getHttpSessionValue("session_user");
+            /*Object sessionUser = WebUtil.getHttpSessionValue("session_user");
             if (sessionUser != null) {
             	return "redirect:/mobile/home.html";
-            }
+            }*/
             User user = userService.findByUsername(username);
             if (user == null) {
                 throw new RuntimeException("username not exist.");
