@@ -338,7 +338,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         for (String o : packageRequest.getOrderNos()) {
             Waybill waybill = queryByOrderNo(packageRequest.getMerchantId(), o);
             if(!waybill.getStatus().equals(DeliveryOrderStatusEnum.ARRIVED)){
-                throw new DMSException(BizErrorCode.PACKAGE_NO_ERROR);
+                throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED,o);
             }
             if (StringUtil.isNotEmpty(waybill.getParentNo()) ) {
                 throw new DMSException(BizErrorCode.PACKAGE_ALREADY_PACKAGE, o);

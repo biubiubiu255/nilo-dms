@@ -4,6 +4,7 @@ import com.alibaba.druid.sql.visitor.functions.Char;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.HandleRiderStatusEnum;
+import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.exception.SysErrorCode;
@@ -20,8 +21,10 @@ import com.nilo.dms.dto.pda.PdaWaybill;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.LoadingService;
+import com.nilo.dms.service.order.RiderDeliveryService;
 import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.mobile.SendScanController;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -39,7 +42,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/pda")
@@ -65,6 +70,8 @@ public class PdaController extends BaseController {
     private WaybillDao waybillDao;
     @Autowired
     private SendThirdService sendThirdService;
+    @Autowired
+    private RiderDeliveryService riderDeliveryService;
     @RequestMapping(value = "/scan.html")
     public String toPage() {
         return "mobile/network/arrive_scan/arriveScan";
@@ -223,7 +230,7 @@ public class PdaController extends BaseController {
     public String riderDelivery(String waybillnos, String rider, String logisticsNo) {
 
         String[] scaned_codes = waybillnos.split(",");
-        Loading loading = new Loading();
+        /*Loading loading = new Loading();
         loading.setRider(rider);
 
         Principal me = SessionLocal.getPrincipal();
@@ -265,7 +272,24 @@ public class PdaController extends BaseController {
         parameter.setNetworkId("" + me.getNetworks().get(0));
         loadingService.ship(parameter);
 
-        return toJsonTrueData(loadingNo);
+        return toJsonTrueData(loadingNo);*/
+        
+        Principal me = SessionLocal.getPrincipal();
+
+        String merchantId = me.getMerchantId();
+        //System.out.println("本次测试 = " + smallPack.length);
+        RiderDelivery riderDelivery = new RiderDelivery();
+        riderDelivery.setMerchantId(Long.valueOf(merchantId));
+        riderDelivery.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
+        riderDelivery.setRider(rider);
+        riderDelivery.setHandleBy(Long.valueOf(me.getUserId()));
+        riderDelivery.setStatus(1);
+        riderDeliveryService.addRiderPackAndDetail(Long.valueOf(merchantId), riderDelivery, scaned_codes);
+        if(riderDelivery.getStatus().equals(HandleRiderStatusEnum.SHIP.getCode())){
+            riderDeliveryService.ship(riderDelivery.getHandleNo());
+        }
+        
+        return toJsonTrueData(riderDelivery.getHandleNo());
     }
 
     @RequestMapping(value = "/sendNext.html")
@@ -274,7 +298,7 @@ public class PdaController extends BaseController {
                            String logisticsNo) {
         String[] scaned_codes = waybillnos.split(",");
 
-        Loading loading = new Loading();
+        /*Loading loading = new Loading();
         loading.setNextStation(nextStation);
         loading.setRider(sendDriver);
         loading.setCarrier(carrier);
@@ -316,7 +340,24 @@ public class PdaController extends BaseController {
         parameter.setLoadingNo(loadingNo);
         parameter.setNetworkId("" + me.getNetworks().get(0));
         loadingService.ship(parameter);
-        return toJsonTrueData(loadingNo);
+        return toJsonTrueData(loadingNo);*/
+        Principal me = SessionLocal.getPrincipal();
+        String merchantId = me.getMerchantId();
+        SendThirdHead head = new SendThirdHead();
+        head.setMerchantId(Long.valueOf(merchantId));
+        head.setThirdExpressCode(carrier);
+        head.setHandleBy(Long.valueOf(me.getUserId()));
+        head.setDriver(sendDriver);
+        head.setStatus(1);
+        head.setType("waybill");
+        head.setHandleName(me.getUserName());
+        sendThirdService.insertBigAndSmall(Long.parseLong(merchantId), head, scaned_codes);
+        //如果初次写入直接是ship的话，这里再批量ship一下
+        if(head.getStatus().equals(HandleRiderStatusEnum.SHIP.getCode())){
+            sendThirdService.ship(head.getHandleNo());
+        }
+        
+        return toJsonTrueData(head.getHandleNo());
     }
 
     @RequestMapping(value = "/editPassword.html")
