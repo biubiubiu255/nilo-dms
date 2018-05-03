@@ -61,6 +61,7 @@
                 <th lay-data="{field:'handleBy', width:150}">HandleName</th>
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">HandleTime</th>
                 <th lay-data="{field:'rName', width:150}">Signer</th>
+                <th lay-data="{field:'sName', width:150}">Sender</th>
                 <th lay-data="{field:'address', width:300}">Address</th>
             </tr>
             </thead>

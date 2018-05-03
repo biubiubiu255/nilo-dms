@@ -20,4 +20,8 @@ public interface StaffDao extends BaseDao<Long, StaffDO> {
     List<StaffDO> queryAllRider(@Param("companyId") Long companyId);
 
     List<StaffDO> queryNetworkStaff(@Param("networkId") Long networkId);
+
+    List<StaffDO> findstaffByIDs(@Param("arr") Long[] staffIDs);
+
+
 }

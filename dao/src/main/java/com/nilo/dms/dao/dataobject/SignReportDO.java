@@ -9,8 +9,9 @@ public class SignReportDO {
     private Double alreadyPaid;
     private String handleBy;
     private Long handleTime;
-    private String sName;
-    private String rName;
+    private String sName;    //发件人
+    private String rName;    //收件人
+    private String signer; //签收人
     private String contactNumber;
     private String address;
     private String remark;
@@ -95,6 +96,14 @@ public class SignReportDO {
         this.rName = rName;
     }
 
+    public String getSigner() {
+        return signer;
+    }
+
+    public void setSigner(String signer) {
+        this.signer = signer;
+    }
+
     public String getContactNumber() {
         return contactNumber;
     }
@@ -132,8 +141,10 @@ public class SignReportDO {
                 ", handleTime=" + handleTime +
                 ", sName='" + sName + '\'' +
                 ", rName='" + rName + '\'' +
+                ", signer='" + signer + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +
                 ", address='" + address + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }

@@ -185,4 +185,14 @@
     </select>
 
 
+    <select id="findstaffByIDs" resultMap="staffDO" statementType="PREPARED" parameterType="java.util.ArrayList">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_bas_staff where user_id in
+        <foreach collection="arr" index="index" item="now" open="(" close=")" separator=",">
+            #{now}
+        </foreach>
+    </select>
+
+
 </mapper>

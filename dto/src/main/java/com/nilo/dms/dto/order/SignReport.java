@@ -11,6 +11,7 @@ public class SignReport {
     private Long handleTime;
     private String sName;
     private String rName;
+    private String signer;
     private String contactNumber;
     private String address;
     private String remark;
@@ -95,6 +96,14 @@ public class SignReport {
         this.rName = rName;
     }
 
+    public String getSigner() {
+        return signer;
+    }
+
+    public void setSigner(String signer) {
+        this.signer = signer;
+    }
+
     public String getContactNumber() {
         return contactNumber;
     }
@@ -132,8 +141,10 @@ public class SignReport {
                 ", handleTime=" + handleTime +
                 ", sName='" + sName + '\'' +
                 ", rName='" + rName + '\'' +
+                ", signer='" + signer + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +
                 ", address='" + address + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }

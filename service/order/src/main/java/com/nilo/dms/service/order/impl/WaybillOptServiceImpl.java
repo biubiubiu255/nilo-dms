@@ -3,6 +3,7 @@ package com.nilo.dms.service.order.impl;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.AbnormalTypeEnum;
 import com.nilo.dms.common.enums.DelayStatusEnum;
+import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
@@ -110,6 +111,13 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
 
         Principal principal = SessionLocal.getPrincipal();
 
+        Waybill waybill = waybillService.queryByOrderNo(principal.getMerchantId(), param.getOrderNo());
+        WaybillHeader header = new Waybill();
+        if(waybill==null || waybill.getStatus().equals(DeliveryOrderStatusEnum.SIGN)){
+            throw new DMSException(BizErrorCode.NOT_BECAME_DELAY);
+        }
+
+        //开始插入
         HandleDelay insert = new HandleDelay();
         insert.setOrderNo(param.getOrderNo());
         insert.setMerchantId(Long.parseLong(principal.getMerchantId()));
@@ -120,9 +128,9 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
         insert.setReason(param.getReason());
         insert.setReasonId(param.getReasonId());
         handleDelayDao.insert(insert);
+        //结束插入
 
-        Waybill waybill = waybillService.queryByOrderNo(principal.getMerchantId(), param.getOrderNo());
-        WaybillHeader header = new Waybill();
+
         header.setMerchantId(principal.getMerchantId());
         header.setOrderNo(param.getOrderNo());
         header.setDelayTimes(waybill.getDelayTimes() == null ? 1 : waybill.getDelayTimes() + 1);

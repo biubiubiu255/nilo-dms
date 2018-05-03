@@ -7,9 +7,11 @@ import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.dao.HandleRiderDao;
+import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.RiderDelivery;
 import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
+import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.common.UserInfo;
 import com.nilo.dms.dto.order.OrderOptRequest;
@@ -41,6 +43,9 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
 
     @Autowired
     WaybillService waybillService;
+
+    @Autowired
+    private StaffDao staffDao;
 
 
 
@@ -76,30 +81,48 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         List<RiderDelivery> list = handleRiderDao.queryRiderDeliveryBig(riderDelivery, page.getOffset(), page.getLimit());
         //page.setTotalCount(commonDao.lastFoundRows());
         page.setTotalCount(handleRiderDao.queryRiderDeliveryBigCount(riderDelivery, page.getOffset(), page.getLimit()));
-        Set<String> userIds = new HashSet<>();
+        Set<Long> userIds = new HashSet<>();
         for (int i=0;i<list.size();i++){
-            userIds.add(list.get(i).getRider());
-            userIds.add(list.get(i).getHandleBy().toString());
+            userIds.add(Long.parseLong(list.get(i).getRider()));
+            userIds.add(Long.parseLong(list.get(i).getHandleBy().toString()));
         }
+
+
         //查询出当前大包结果list中所有成员id（主要是快递员ID和操作人ID）
         //然后再查出这些ID对应的个人信息（主要是取名字）
-        List<UserInfo> riderInfoList  = userService.findUserInfoByUserIds(merchantId, new ArrayList<>(userIds));
+
+        Long[] userIDArr = new Long[userIds.size()];
+        userIds.toArray(userIDArr);
+        List<StaffDO> userInfoByUserIds = findUserInfoByUserIds(Long.parseLong(merchantId), userIDArr);
+
+        //String[] userIDArrStr = new String[userIds.size()];
+        List<String> userIDList = new ArrayList<String>();
+        for(Long e : userIds){
+            userIDList.add(e.toString());
+        }
+
+        List<UserInfo> userInfoByUserIdStrs = userService.findUserInfoByUserIds(merchantId, userIDList);
 
         //这里两个for循环是将list结果中与当前成员表（riderInfoList、opNameInfoList）中对应的ID找到，然后赋值name
         for (int i=0;i<list.size();i++){
-            for (UserInfo e : riderInfoList){
-                if (e.getUserId().equals(list.get(i).getRider())){
+            for (StaffDO e : userInfoByUserIds){
+                if (e.getUserId().equals(Long.parseLong(list.get(i).getRider()))){
                     RiderDelivery riderTemp = list.get(i);
-                    riderTemp.setRiderName(e.getName());
+                    riderTemp.setRiderName(e.getNickName());
                     list.set(i, riderTemp);
                 }
+            }
+            for (UserInfo e : userInfoByUserIdStrs){
                 if (e.getUserId().equals(list.get(i).getHandleBy().toString())){
                     RiderDelivery riderTemp = list.get(i);
                     riderTemp.setHandleByName(e.getName());
                     list.set(i, riderTemp);
                 }
             }
+
+
         }
+
         //System.out.println("本次测试 = " + list.toString());
         return list;
     }
@@ -208,5 +231,11 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         handleRiderDao.upBigStatus(handleNo, HandleRiderStatusEnum.SHIP.getCode());
         handleRiderDao.upSmallStatus(handleNo, HandleRiderStatusEnum.SHIP.getCode());
     }
+
+    @Override
+    public List<StaffDO> findUserInfoByUserIds(Long merchantId, Long[] userIDs) {
+        return staffDao.findstaffByIDs(userIDs);
+    }
+
 
 }

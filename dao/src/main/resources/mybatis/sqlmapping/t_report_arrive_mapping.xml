@@ -34,9 +34,9 @@
 
         INNER JOIN t_waybill c ON a.order_no = c.order_no
 
-        INNER JOIN t_bas_network d ON a.last_network_id = d.id
+        LEFT JOIN t_bas_network d ON a.last_network_id = d.id
 
-        INNER JOIN t_bas_network e ON a.network_id = e.id
+        LEFT JOIN t_bas_network e ON a.network_id = e.id
 
         INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no
 
@@ -70,7 +70,7 @@
 
         SELECT
 
-        count(*)
+        count(1)
 
         FROM  t_waybill_log_arrive a
 
@@ -78,13 +78,11 @@
 
         INNER JOIN t_waybill c ON a.order_no = c.order_no
 
-        INNER JOIN t_bas_network d ON a.last_network_id = d.id
+        LEFT JOIN t_bas_network d ON a.last_network_id = d.id
 
-        INNER JOIN t_bas_network e ON a.network_id = d.id
+        LEFT JOIN t_bas_network e ON a.network_id = e.id
 
         INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no
-
-        WHERE a.merchant_id=#{merchantId}
 
         <if test="orderNo !=null  and orderNo !='' ">
             AND

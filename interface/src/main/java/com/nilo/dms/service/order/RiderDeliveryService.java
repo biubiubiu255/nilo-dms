@@ -3,6 +3,7 @@ package com.nilo.dms.service.order;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.dao.dataobject.RiderDelivery;
 import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
+import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
 
 import java.util.List;
@@ -29,5 +30,7 @@ public interface RiderDeliveryService {
     void insertSmalls(Long merchantId, String handleNo, String[] smallOrders);
 
     void ship(String handleNo);
+
+    List<StaffDO> findUserInfoByUserIds(Long merchantId, Long[] userIDs);
 
 }

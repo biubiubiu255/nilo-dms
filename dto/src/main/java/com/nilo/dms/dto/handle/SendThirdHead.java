@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by admin on 2017/9/19.
  */
-public class SendThirdHead extends BaseDo<Long> {
+public class SendThirdHead extends BaseDo<Integer> {
 
     private Long merchantId;
     private String handleNo;
@@ -22,6 +22,10 @@ public class SendThirdHead extends BaseDo<Long> {
     private String handleName;
     private Integer status;
     private String remark;
+
+    public Integer getId() {
+        return super.getId();
+    }
 
     private List<SendThirdDetail> list ;
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @Controller
@@ -42,14 +43,10 @@ public class MobileArriveScanController extends BaseController {
 
     @RequestMapping(value = "/submit.html")
     @ResponseBody
-    public String submit(String scanedCodes, String logisticsNos) {
-        try {
-            String[] logisticsNoArray = scanedCodes.split(",");
-            if (null != logisticsNoArray && logisticsNoArray.length > 0) {
-                waybillService.arrive(Arrays.asList(logisticsNoArray));
-            }
-        } catch (Exception e) {
-            return toJsonErrorMsg(e.getMessage());
+    public String submit(String[] scanedCodes, String logisticsNo ) {
+
+        if (scanedCodes.length > 0) {
+            waybillService.arrive(new ArrayList<>(Arrays.asList(scanedCodes)));
         }
 
         return toJsonTrueMsg();

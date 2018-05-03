@@ -91,6 +91,8 @@ public class SignReportServiceImpl implements SignReportService {
         signReport.setNeedPayAmount(s.getNeedPayAmount());
         signReport.setAlreadyPaid(s.getAlreadyPaid());
         signReport.setHandleBy(s.getHandleBy());
+        signReport.setSigner(s.getSigner());
+
 
         return signReport;
     }

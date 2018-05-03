@@ -68,12 +68,7 @@ public class SendThirdServiceImpl implements SendThirdService {
         SendThirdHead sendThirdHeadCl = new SendThirdHead();
         BeanUtils.copyProperties(sendThirdHead, sendThirdHeadCl);
         sendThirdHeadCl.setStatus(HandleRiderStatusEnum.SAVA.getCode());
-
-        //sendThirdHeadCl.setId(2);
-
         handleThirdDao.insertBig(sendThirdHeadCl);
-
-        //System.out.println("本次测试 = " + sendThirdHead);
     }
 
     //大包的status代表0 保存而已、1 分派成功
