@@ -8,6 +8,7 @@
     request.setAttribute("refuse_reason", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.REFUSE_REASON));
     request.setAttribute("id0", RandomStringUtils.randomAlphabetic(8));
     request.setAttribute("imageType", "abnormal");
+    request.setAttribute(Constant.PRBOLEM_REASON, SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.PRBOLEM_REASON));
 %>
 <body>
 <div class="box-body">
@@ -52,7 +53,7 @@
                         <div class="layui-form-item layui-inline" style="margin: 0px">
                             <select name="reason">
                                 <option value="">Pls select type...</option>
-                                <c:forEach items="${refuse_reason}" var="r">
+                                <c:forEach items="${problem_reason}" var="r">
                                     <option value=${r.code}>${r.value}</option>
                                 </c:forEach>
                             </select>
