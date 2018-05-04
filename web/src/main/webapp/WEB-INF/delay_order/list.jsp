@@ -55,7 +55,7 @@
         <thead>
         <tr>
             <th lay-data="{fixed: 'left',field:'orderNo', width:170}">OrderNo</th>
-            <th lay-data="{field:'reason', width:150}">Reason</th>
+            <th lay-data="{field:'reason', width:284}">Reason</th>
             <th lay-data="{field:'handleName', width:150}">Handle Name</th>
             <th lay-data="{field:'statusDesc', width:150}">Status</th>
             <th lay-data="{field:'createdTime', width:170, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">

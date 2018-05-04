@@ -268,7 +268,11 @@
 
             $(".btn-export").on("click", function () {
                 var param = getParam(1);
-                var url = "/report/cod/list.html?" + param;
+                if(showPattern==1){
+                    url = "/report/cod/list.html?limit=1000&" + param;
+                }else {
+                    url = "/report/cod/list.html?" + param;
+                }
                 window.location.href = url;
             });
 
@@ -297,7 +301,7 @@
                     $("#ifm").show();
                     $("#me_tab").hide();
                     var url = "/report/cod/list.html";
-                    document.getElementById("ifm").src = url + "?" + getParam(0);
+                    document.getElementById("ifm").src = url + "?limit=1000&" + getParam(0);
                 }
 
 

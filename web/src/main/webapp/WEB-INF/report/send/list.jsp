@@ -174,15 +174,18 @@
 
             $(".btn-export").on("click", function () {
                 var param = getParam(1);
-                var url = "/report/send/list.html?" + param;
+                if(showPattern==1){
+                    url = "/report/send/list.html?limit=1000&" + param;
+                }else {
+                    url = "/report/send/list.html?" + param;
+                }
                 console.log(url);
                 window.location.href = url;
+
             });
 
             function reloadTable() {
-
                 if (showPattern==0){
-
                     $("#me_tab").show();
                     $("#ifm").hide();
                     table.reload("${id0}", {
@@ -192,7 +195,7 @@
                     $("#ifm").show();
                     $("#me_tab").hide();
                     var url = "/report/send/list.html";
-                    document.getElementById("ifm").src = url + "?" + getParam(0);
+                    document.getElementById("ifm").src = url + "?limit=1000&" + getParam(0);
                 }
 
 

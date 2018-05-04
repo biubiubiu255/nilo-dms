@@ -37,15 +37,16 @@
 
     <div class="layui-form layui-row">
 
-        <div class="layui-col-md4 layui-col-lg4">
+        <div class="layui-col-md3 layui-col-lg4">
             <label class="layui-form-label">ScanNetwork:</label>
-            <div class="layui-inline-">
+            <div class="layui-input-inline">
                 <select name="scanNetwork" lay-verify="required" lay-search="" style="display: none">
                     <option value="">choose or search....</option>
                     <c:forEach items="${list}" var="rider">
                         <option value="${rider.name}">${rider.name}</option>
                     </c:forEach>
-                </select></div>
+                </select>
+            </div>
         </div>
 
         <!-- 搜索按钮 -->
@@ -67,7 +68,7 @@
         <thead>
         <tr>
             <th lay-data="{fixed: 'left',field:'orderNo', width:200}"><O></O>Waybill No</th>
-            <th lay-data="{field: 'recipients', width:100}">Recipients</th>
+            <th lay-data="{field: 'recipients', width:170}">Recipients</th>
             <th lay-data="{field:'lastNetwork' , width:200}">LastNetwork</th>
             <th lay-data="{field:'scanNetwork', width:200}">ScanNetwork</th>
             <th lay-data="{field:'scanTime', width:200, templet:'<div>{{ formatDate(d.scanTime) }}</div>'}">ScanTime</th>
@@ -121,8 +122,12 @@
 
             $(".btn-export").on("click", function () {
                 var param = getParam(1);
-                var url = "/report/arrive/list.html?" + param;
-                console.log(url);
+                if(showPattern==1){
+                    url = "/report/arrive/list.html?limit=1000&" + param;
+                }else {
+                    url = "/report/arrive/list.html?" + param;
+                }
+                //console.log(url);
                 window.location.href = url;
             });
 
@@ -139,7 +144,7 @@
                     $("#ifm").show();
                     $("#me_tab").hide();
                     var url = "/report/arrive/list.html";
-                    document.getElementById("ifm").src = url + "?" + getParam(0);
+                    document.getElementById("ifm").src = url + "?limit=1000&" + getParam(0);
                 }
 
 

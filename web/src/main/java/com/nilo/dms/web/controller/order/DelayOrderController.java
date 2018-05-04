@@ -64,6 +64,8 @@ public class DelayOrderController extends BaseController {
 
         delayDOList = handleDelayDao.queryBy(Long.parseLong(merchantId), orderNo, fromTimeLong, toTimeLong, page.getOffset(), page.getLimit());
 
+        page.setTotalCount(handleDelayDao.queryCountBy(Long.parseLong(merchantId), orderNo, fromTimeLong, toTimeLong));
+
         return toPaginationLayUIData(page, delayDOList);
     }
 
@@ -73,9 +75,12 @@ public class DelayOrderController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        HandleDelay delayDO = handleDelayDao.findByOrderNo(Long.parseLong(merchantId), orderNo);
-        //查询rider列表
-        model.addAttribute("delayDO", delayDO);
+
+        List<HandleDelay> handleDelays = handleDelayDao.queryBy(Long.parseLong(merchantId), orderNo, null, null, 1, 2);
+        if(handleDelays.size()>0){
+            //查询rider列表
+            model.addAttribute("delayDO", handleDelays.get(0));
+        }
         return "delay_order/problem";
     }
 

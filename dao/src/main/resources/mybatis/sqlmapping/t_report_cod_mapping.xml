@@ -99,7 +99,7 @@
         on b.payment_order_id = d.id AND d.status=1
 
 
-        LEFT JOIN t_waybill_log_arrive  e
+        LEFT JOIN (select * from t_waybill_log_arrive group by order_no)  e
 
         on a.order_no = e.order_no
 
@@ -221,7 +221,7 @@
         on b.payment_order_id = d.id AND d.status=1
 
 
-        LEFT JOIN t_waybill_log_arrive  e
+        LEFT JOIN (select * from t_waybill_log_arrive group by order_no)  e
 
         on a.order_no = e.order_no
 

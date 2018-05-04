@@ -30,9 +30,9 @@
 
         FROM  t_waybill_log_arrive a
 
-        INNER JOIN t_sys_user_info b ON a.opt_by = b.id
+        LEFT JOIN t_sys_user_info b ON a.opt_by = b.id
 
-        INNER JOIN t_waybill c ON a.order_no = c.order_no
+        LEFT JOIN t_waybill c ON a.order_no = c.order_no
 
         LEFT JOIN t_bas_network d ON a.last_network_id = d.id
 
@@ -74,9 +74,9 @@
 
         FROM  t_waybill_log_arrive a
 
-        INNER JOIN t_sys_user_info b ON a.opt_by = b.id
+        LEFT JOIN t_sys_user_info b ON a.opt_by = b.id
 
-        INNER JOIN t_waybill c ON a.order_no = c.order_no
+        LEFT JOIN t_waybill c ON a.order_no = c.order_no
 
         LEFT JOIN t_bas_network d ON a.last_network_id = d.id
 

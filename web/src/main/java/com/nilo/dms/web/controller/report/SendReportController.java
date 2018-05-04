@@ -26,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import static com.nilo.dms.common.Constant.MAX_EXPORT_COUNT;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -79,11 +80,15 @@ public class SendReportController extends BaseController {
     public String getOrderList(Model model,  HttpServletRequest request, SendReportQO sendReportQO) {
 
         Principal me = SessionLocal.getPrincipal();
+
+        Pagination page = getPage();
+
+
         //获取merchantId
         Long merchantId = Long.parseLong(me.getMerchantId());
         sendReportQO.setMerchantId(merchantId);
 
-        Pagination page = getPage();
+
         List<SendReportDO> list = sendReportService.querySendReport(sendReportQO, page);
 
         String fileType;

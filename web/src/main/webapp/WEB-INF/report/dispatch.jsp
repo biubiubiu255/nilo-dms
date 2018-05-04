@@ -102,7 +102,11 @@
             //reloadTable();
 
             $(".btn-export").on("click", function () {
-                window.location.href = "/report/dispatch/list.html" + "?" + getParam(1);
+                if(showPattern==1){
+                    window.location.href = "/report/dispatch/list.html" + "?limit=1000&" + getParam(1);
+                }else {
+                    window.location.href = "/report/dispatch/list.html" + "?" + getParam(1);
+                }
             });
 
             $(".search").on("click", function () {
@@ -127,7 +131,7 @@
                     $("#ifm").show();
                     $("#me_tab").hide();
                     var url = "/report/dispatch/list.html";
-                    document.getElementById("ifm").src = url + "?" + getParam(0);
+                    document.getElementById("ifm").src = url + "?limit=1000&" + getParam(0);
                 }
 
 

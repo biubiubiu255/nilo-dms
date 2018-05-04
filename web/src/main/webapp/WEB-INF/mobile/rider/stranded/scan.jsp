@@ -66,6 +66,8 @@
             autoLoad:false
             ,formId:'stranded-form'
         });
+
+
     	
     	mobile.initSubmitForm({
     		formId: 'stranded-form' ,
@@ -75,6 +77,10 @@
     		callback: function (data) {
                 if (data.result) {
                     showInfo('submit success');
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+
                     //mobile.paginate();
                 } else {
                     showError(data.msg);

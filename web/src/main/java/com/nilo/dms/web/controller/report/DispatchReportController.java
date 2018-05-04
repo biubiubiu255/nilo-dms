@@ -47,7 +47,8 @@ public class DispatchReportController extends BaseController {
 
         Pagination page = getPage();
 
-
+        reportDispatchQO.setLimit(page.getLimit());
+        reportDispatchQO.setOffset(page.getOffset());
 
         List<ReportDispatchDO> list = reportDispatchDao.queryReportDispatch(reportDispatchQO);
         page.setTotalCount(reportDispatchDao.queryReportDispatchCount(reportDispatchQO));
