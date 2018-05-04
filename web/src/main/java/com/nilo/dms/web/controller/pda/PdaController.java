@@ -480,11 +480,24 @@ public class PdaController extends BaseController {
     }
     @ResponseBody
     @RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
-    public String addLoading(String smallPacks,String driver,String thirdExpressCode,String networkCode,String nextStation, Integer saveStutus) {
+    public String addLoading(String smallPacks,String driver,String thirdExpressCode) {
         String [] smallPack= smallPacks.split(",");
         Principal me = SessionLocal.getPrincipal();
         Long merchantId = Long.valueOf(me.getMerchantId());
         //加上刚刚的站点信息，当前的操作信息，小包信息，合并写入系统
+        
+        List<Waybill> waybills = waybillService.queryByOrderNos(me.getMerchantId(), Arrays.asList(smallPack));
+        int networkCode = waybills.get(0).getNetworkId();
+        int nextStation = waybills.get(0).getNextNetworkId();
+        for (Waybill waybill : waybills) {
+        	if(!waybill.isPackage()) {
+        		return toJsonErrorMsg("Waybill No "+ waybill.getOrderNo()+"is not a package!");
+        	}
+        	if(networkCode!=waybill.getNetworkId()||nextStation!=waybill.getNextNetworkId()) {
+        		return toJsonErrorMsg("Waybill No "+ waybill.getOrderNo()+"is wrong!");
+        	}
+		}
+        
         SendThirdHead sendThirdHead = new SendThirdHead();
         sendThirdHead.setMerchantId(merchantId);
         sendThirdHead.setHandleBy(Long.valueOf(me.getUserId()));
@@ -492,9 +505,9 @@ public class PdaController extends BaseController {
         sendThirdHead.setType("package");
         sendThirdHead.setDriver(driver);
         sendThirdHead.setThirdExpressCode(thirdExpressCode);
-        sendThirdHead.setNetworkCode(networkCode);
-        sendThirdHead.setNextStation(nextStation);
-        sendThirdHead.setStatus(saveStutus);
+        sendThirdHead.setNetworkCode(networkCode+"");
+        sendThirdHead.setNextStation(nextStation+"");
+        sendThirdHead.setStatus(1);
 
         sendThirdService.insertBigAndSmall(merchantId, sendThirdHead, smallPack);
 
