@@ -35,6 +35,7 @@ public class SendReportServiceImpl implements SendReportService {
 
         // 查询记录
         List<SendReportDO> queryList = SendReportDao.querySendReport(sendReportQO);
+
         Long count = SendReportDao.queryCountBy(sendReportQO);
         page.setTotalCount(count == null ? 0 : count);
         return queryList;

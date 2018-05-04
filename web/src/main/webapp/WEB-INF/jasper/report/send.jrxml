@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sign" language="groovy" pageWidth="1201" pageHeight="802" columnWidth="1201" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="abbb5591-3eef-4ff8-af13-2d294816bebb">
-	<property name="ireport.zoom" value="2.5937424601000068"/>
-	<property name="ireport.x" value="1129"/>
+	<property name="ireport.zoom" value="1.1000000000000023"/>
+	<property name="ireport.x" value="197"/>
 	<property name="ireport.y" value="0"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="weight" class="java.lang.Double"/>
@@ -87,14 +87,14 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[handleNo]]></text>
+				<text><![CDATA[HandleNo]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="290" y="0" width="49" height="20" uuid="fcd5c5b6-09e2-4e1f-9262-6881eefe3805"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[orderType]]></text>
+				<text><![CDATA[OrderType]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="339" y="0" width="62" height="20" uuid="c03d7aff-1594-4e2d-a730-7f57c0f390f4"/>
@@ -108,28 +108,28 @@
 				<textElement textAlignment="Center">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[driver]]></text>
+				<text><![CDATA[Driver]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="474" y="0" width="125" height="20" uuid="59ebb1ce-9d48-4bc1-9d58-0f3e7392ba97"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[nextStation]]></text>
+				<text><![CDATA[NextStation]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="599" y="0" width="55" height="20" uuid="b70961fc-68b5-4f88-ac9a-4d2e850eb004"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[expressName]]></text>
+				<text><![CDATA[ExpressName]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="720" y="0" width="73" height="20" uuid="82d5f943-62fe-4e31-bb64-431f845e7d37"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[handleName]]></text>
+				<text><![CDATA[HandleName]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="793" y="0" width="119" height="20" uuid="27e132f5-6174-42a1-bdc7-e4a512d03bf7"/>
@@ -143,7 +143,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[phone]]></text>
+				<text><![CDATA[Phone]]></text>
 			</staticText>
 		</band>
 	</columnHeader>

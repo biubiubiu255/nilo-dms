@@ -35,7 +35,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/report/send")
-public class SendReportController extends BaseController {
+public class ReportSendRiderController extends BaseController {
 
     @Autowired
     private SendReportService sendReportService;
@@ -113,7 +113,7 @@ public class SendReportController extends BaseController {
 
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
         // 动态指定报表模板url
-        model.addAttribute("url", "/WEB-INF/jasper/report/send.jasper");
+        model.addAttribute("url", "/WEB-INF/jasper/report/sendRider.jasper");
         model.addAttribute("format", fileType); // 报表格式
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView"; // 对应jasper-defs.xml中的bean id

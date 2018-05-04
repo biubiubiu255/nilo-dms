@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/report/dispatch")
-public class DispatchReportController extends BaseController {
+public class ReportSendThirdController extends BaseController {
 
     @Autowired
     private ReportDispatchDao reportDispatchDao;
@@ -78,7 +78,7 @@ public class DispatchReportController extends BaseController {
         }
 
         // 动态指定报表模板url
-        model.addAttribute("url", "/WEB-INF/jasper/report/dispatch.jasper");
+        model.addAttribute("url", "/WEB-INF/jasper/report/sendThird.jasper");
         model.addAttribute("format", fileType); // 报表格式
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView"; // 对应jasper-defs.xml中的bean id
