@@ -47,7 +47,7 @@
 				
 									content = '';
 				                    for (var int = 0; int < res.data.length; int++) {
-				                    	content += getResult(res.data[int]);
+				                    	content += getResult(res.data[int]) + ' ';
 									}
 				                    if(content=='') content='<span>' + getI18nAttr('title_not_found_order') + '</span>';
 				                    $(".banner_center").first().html(content);
@@ -64,8 +64,18 @@
 						android.startScan();
 						
 					});
-	
-	
+
+    var map = {
+        route_const_parcel: getI18nAttr('route_const_parcel'),
+        all_scan: getI18nAttr('all_scan'),
+        home_network: getI18nAttr('home_network'),
+        route_const_delivering: getI18nAttr('route_const_delivering'),
+        home_rider: getI18nAttr('home_rider'),
+        route_const_signed: getI18nAttr('route_const_signed'),
+        sign_scan_signer: getI18nAttr('sign_scan_signer')
+    };
+
+
 	function getResult(d) {
 
 		var dataStr = GetCurrentTime('YYYY-MM-DD hh:mm:ss', d.optTime);
@@ -74,31 +84,22 @@
 	
     	//alert(d.opt);
     	//alert(dataStr);
-    	
-    	var map = {
-    				route_const_parcel: getI18nAttr('route_const_parcel'),
-    				all_scan: getI18nAttr('all_scan'),
-    				home_network: getI18nAttr('home_network'),
-    				route_const_delivering: getI18nAttr('route_const_delivering'),
-    				home_rider: getI18nAttr('home_rider'),
-    				route_const_signed: getI18nAttr('route_const_signed'),
-    				sign_scan_signer: getI18nAttr('sign_scan_signer')
-    			  };
+
     	
 		switch (d.opt) {
-		
+
 		case 'arrive_scan':
-			point = map.route_const_parcel + '：' + d.optByName + map.all_scan + '，' + map.home_network + '：' + d.networkDesc;
+			point = map.route_const_parcel + '：' + d.optByName + '<br/>' + map.home_network + '：' + d.networkDesc;
 			break;
 
 		case 'delivery':
 			point = map.route_const_delivering  + '，' + map.home_rider + '【' + d.optByName + '，' + d.phone+'】';
 			break;
-			
+
 		case 'receive':
 			point = map.route_const_signed + '，' + map.sign_scan_signer + '：' + d.optByName;
 			break;
-			
+
 		default:
 			return '';
 			break;

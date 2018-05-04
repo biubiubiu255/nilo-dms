@@ -259,7 +259,10 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         checkOptType(optRequest);
 
         //查询旗下所有的小包，自动加入列表
-        excavateAllSmall(optRequest.getOrderNo());
+        if (optRequest.getOptType()==OptTypeEnum.DELIVERY){
+            excavateAllSmall(optRequest.getOrderNo());
+        }
+
 
         //if(optRequest!=null ) return;  测试专用
 
