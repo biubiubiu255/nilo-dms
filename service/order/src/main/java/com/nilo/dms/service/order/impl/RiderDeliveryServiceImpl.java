@@ -236,13 +236,13 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         UserInfo userInfo = userService.findUserInfoByUserId("" + riderDelivery.getMerchantId(), "" + riderDelivery.getHandleBy());
         //发送短信
         for (RiderDeliverySmallDO d : riderDeliverySmallDOS) {
-            WaybillDO w = waybillDao.queryByOrderNo(d.getMerchantId(), d.getOrderNo());
-            DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(d.getMerchantId(), d.getOrderNo());
+            WaybillDO w = waybillDao.queryByOrderNo(riderDelivery.getMerchantId(), d.getOrderNo());
+            DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(riderDelivery.getMerchantId(), d.getOrderNo());
             //送货上门
             if (StringUtil.equals(w.getChannel(), "1")) {
-                String content = "Dear customer, your order " + d.getOrderNo() + " has been dispatched today. Your total order amount is Ksh." + w.getNeedPayAmount() + ".Kindly call " + userInfo.getName() + " " + userInfo.getPhone() + "to notify you the time of delivery. Please keep your phone on. Thank you.";
+                String content = "Dear customer, your order " + d.getOrderNo() + " has been dispatched today. Your total order amount is Ksh." + w.getNeedPayAmount() + ".Kindly call " + userInfo.getName() + " " + userInfo.getPhone() + " to notify you the time of delivery. Please keep your phone on. Thank you.";
                 PhoneMessage message = new PhoneMessage();
-                message.setMerchantId("" + d.getMerchantId());
+                message.setMerchantId("" + riderDelivery.getMerchantId());
                 message.setContent(content);
                 message.setPhoneNum(r.getContactNumber());
                 message.setMsgType(OptTypeEnum.DELIVERY.getCode());
