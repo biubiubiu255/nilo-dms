@@ -25,6 +25,7 @@ import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
+import com.nilo.dms.service.order.DeliveryRouteService;
 import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.system.SystemConfig;
@@ -58,7 +59,8 @@ public class SendThirdServiceImpl implements SendThirdService {
     private WaybillDao waybillDao;
     @Autowired
     private DeliveryOrderReceiverDao deliveryOrderReceiverDao;
-
+    @Autowired
+    private DeliveryRouteService deliveryRouteService;
     @Override
     public void insertSmallAll(Long merchantId, String handleNo, String[] smallOrders) {
         //以小包DO的order，调用deliveryOrderDao接口查询多条该订单的信息
@@ -220,6 +222,9 @@ public class SendThirdServiceImpl implements SendThirdService {
             } catch (Exception e) {
             }
         }
+
+        deliveryRouteService.addKiliRoute(orderNos, "P30");
+
     }
 }
 
