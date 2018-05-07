@@ -20,10 +20,7 @@ import com.nilo.dms.dto.handle.HandleRefuse;
 import com.nilo.dms.dto.order.*;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.AbnormalOrderService;
-import com.nilo.dms.service.order.AbstractOrderOpt;
-import com.nilo.dms.service.order.WaybillOptService;
-import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.order.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +49,8 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
     private HandleRefuseDao handleRefuseDao;
     @Autowired
     private HandleSignDao handleSignDao;
+    @Autowired
+    private DeliveryRouteService deliveryRouteService;
 
     @Override
     public void sign(String orderNo, String remark) {
@@ -76,23 +75,28 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
         signDO.setNetworkCode(principal.getFirstNetwork());
         signDO.setSigner("Self");
         handleSignDao.insert(signDO);
+
+        List<String> list = new ArrayList<>();
+        list.add(orderNo);
+        deliveryRouteService.addKiliRoute(list, "P40");
+
     }
 
     @Override
     @Transactional
     public void refuse(HandleRefuse handleRefuse) {
         Long merchantId = Long.parseLong(SessionLocal.getPrincipal().getMerchantId());
-        if(handleRefuse.getMerchantId()==null){
+        if (handleRefuse.getMerchantId() == null) {
             handleRefuse.setMerchantId(merchantId);
         }
         Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId.toString(), handleRefuse.getOrderNo());
         if (deliveryOrder == null) {
             throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, handleRefuse.getOrderNo());
         }
-        
+
         List<HandleRefuse> handleRefuseList = handleRefuseDao.queryByDO(handleRefuse);
 
-        if(handleRefuseList.size()!=0){
+        if (handleRefuseList.size() != 0) {
             throw new DMSException(BizErrorCode.REFUSE_ALREADY_EXISTS, handleRefuse.getOrderNo());
         }
         handleRefuse.setStatus(DelayStatusEnum.CREATE.getCode());
@@ -113,7 +117,7 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
 
         Waybill waybill = waybillService.queryByOrderNo(principal.getMerchantId(), param.getOrderNo());
         WaybillHeader header = new Waybill();
-        if(waybill==null || waybill.getStatus().equals(DeliveryOrderStatusEnum.SIGN)){
+        if (waybill == null || waybill.getStatus().equals(DeliveryOrderStatusEnum.SIGN)) {
             throw new DMSException(BizErrorCode.NOT_BECAME_DELAY);
         }
 
@@ -134,7 +138,7 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
         header.setMerchantId(principal.getMerchantId());
         header.setOrderNo(param.getOrderNo());
         header.setDelayTimes(waybill.getDelayTimes() == null ? 1 : waybill.getDelayTimes() + 1);
-        if(header.getAreDelay()==null || header.getAreDelay()==false){
+        if (header.getAreDelay() == null || header.getAreDelay() == false) {
             header.setAreDelay(true);
         }
         waybillService.updateWaybill(header);

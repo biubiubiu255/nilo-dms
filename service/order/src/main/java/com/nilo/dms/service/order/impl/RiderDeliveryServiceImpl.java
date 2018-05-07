@@ -1,5 +1,6 @@
 package com.nilo.dms.service.order.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.HandleRiderStatusEnum;
@@ -10,19 +11,24 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.dto.common.UserInfo;
+import com.nilo.dms.dto.order.NotifyRequest;
 import com.nilo.dms.dto.order.OrderOptRequest;
 import com.nilo.dms.dto.order.PhoneMessage;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
+import com.nilo.dms.service.order.DeliveryRouteService;
 import com.nilo.dms.service.order.RiderDeliveryService;
 import com.nilo.dms.service.order.WaybillService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -47,8 +53,10 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
 
     @Autowired
     private StaffDao staffDao;
+
     @Autowired
-    private ReportDispatchDao reportDispatchDao;
+    private DeliveryRouteService deliveryRouteService;
+
 
     //插入多个小包
     //参数 riderDeliveryDO：主要是需要大包号，以及操作人
@@ -253,12 +261,12 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
                 }
             }
         }
+        deliveryRouteService.addKiliRoute(orderNos, "P30");
     }
 
     @Override
     public List<StaffDO> findUserInfoByUserIds(Long merchantId, Long[] userIDs) {
         return staffDao.findstaffByIDs(userIDs);
     }
-
 
 }
