@@ -13,6 +13,7 @@ import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.dao.dataobject.QO.ReportDispatchQO;
 import com.nilo.dms.dto.order.*;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
@@ -65,9 +66,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Autowired
     private DeliveryOrderRequestDao deliveryOrderRequestDao;
 
-    @Autowired
-    @Qualifier("phoneSMSProducer")
-    private AbstractMQProducer phoneSMSProducer;
+
 
     @Autowired
     @Qualifier("createDeliveryOrderProducer")
@@ -132,10 +131,10 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         if (header.getPaidType() != null) {
             update.setPaidType(header.getPaidType().getCode());
         }
-        if(header.getAreDelay()!=null){
+        if (header.getAreDelay() != null) {
             update.setAreDelay(header.getAreDelay());
         }
-        if(header.getDelayTimes()!=null){
+        if (header.getDelayTimes() != null) {
             update.setDelayTimes(header.getDelayTimes());
         }
         header.setPrintTimes(header.getPrintTimes());
@@ -259,12 +258,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         checkOptType(optRequest);
 
         //查询旗下所有的小包，自动加入列表
-        if (optRequest.getOptType()==OptTypeEnum.SEND){
+        if (optRequest.getOptType() == OptTypeEnum.SEND) {
             excavateAllSmall(optRequest.getOrderNo());
         }
-
-
-        //if(optRequest!=null ) return;  测试专用
 
         transactionTemplate.execute(new TransactionCallback<Void>() {
             @Override
@@ -282,8 +278,6 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
                             // 更新订单状态
                             updateDeliveryOrderStatus(optRequest, orderNo, handleConfig);
                         }
-                        // 短信消息
-                        sendPhoneSMS(merchantId, optRequest.getOptType().getCode(), orderDO);
                     }
                     //通知上游系统状态变更
                     notifyService.updateStatus(optRequest);
@@ -323,7 +317,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             WaybillDO update = new WaybillDO();
             update.setOrderNo(o);
             update.setMerchantId(Long.parseLong(merchantId));
-            if(orderDO.getPrintTimes()==null){
+            if (orderDO.getPrintTimes() == null) {
                 orderDO.setPrintTimes(0);
             }
             update.setPrintTimes(orderDO.getPrintTimes() + 1);
@@ -475,31 +469,6 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             throw new DMSException(SysErrorCode.DB_EXCEPTION);
         }
     }
-
-    private void sendPhoneSMS(String merchantId, String optType, WaybillDO query) {
-        try {
-            SMSConfig smsConfig = JSON.parseObject(RedisUtil.hget(Constant.SMS_CONF + merchantId, optType),
-                    SMSConfig.class);
-
-            if (smsConfig == null) {
-                return;
-            }
-
-            String content = smsConfig.getContent();
-            // 查询手机号码
-            DeliveryOrderReceiverDO receiverDO = deliveryOrderReceiverDao.queryByOrderNo(query.getMerchantId(),
-                    query.getOrderNo());
-            PhoneMessage message = new PhoneMessage();
-            message.setPhoneNum(receiverDO.getContactNumber());
-            message.setContent(content);
-            message.setMerchantId(merchantId);
-            message.setMsgType(optType);
-            phoneSMSProducer.sendMessage(message);
-        } catch (Exception e) {
-            logger.error("Send Phone Message Failed.", e);
-        }
-    }
-
 
     private Waybill convert(WaybillDO d) {
         Waybill waybill = new Waybill();

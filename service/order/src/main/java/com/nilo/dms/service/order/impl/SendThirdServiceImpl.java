@@ -9,19 +9,28 @@ import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.DeliveryOrderReceiverDao;
+import com.nilo.dms.dao.HandleRiderDao;
 import com.nilo.dms.dao.HandleThirdDao;
+import com.nilo.dms.dao.WaybillDao;
+import com.nilo.dms.dao.dataobject.DeliveryOrderReceiverDO;
 import com.nilo.dms.dao.dataobject.RiderDelivery;
+import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
+import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.handle.SendThirdDetail;
 import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.order.OrderOptRequest;
+import com.nilo.dms.dto.order.PhoneMessage;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.system.SystemConfig;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +49,15 @@ public class SendThirdServiceImpl implements SendThirdService {
 
     @Autowired
     private WaybillService waybillService;
+    @Autowired
+    @Qualifier("phoneSMSProducer")
+    private AbstractMQProducer phoneSMSProducer;
+    @Autowired
+    private HandleRiderDao handleRiderDao;
+    @Autowired
+    private WaybillDao waybillDao;
+    @Autowired
+    private DeliveryOrderReceiverDao deliveryOrderReceiverDao;
 
     @Override
     public void insertSmallAll(Long merchantId, String handleNo, String[] smallOrders) {
@@ -143,7 +161,7 @@ public class SendThirdServiceImpl implements SendThirdService {
         Long merchantId = Long.parseLong(SessionLocal.getPrincipal().getMerchantId());
         //查看装车单号是否存在
         SendThirdHead query = handleThirdDao.queryBigByHandleNo(merchantId, sendThirdHead.getHandleNo());
-        if(query== null){
+        if (query == null) {
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
 
@@ -179,7 +197,29 @@ public class SendThirdServiceImpl implements SendThirdService {
         update.setMerchantId(Long.parseLong(principal.getMerchantId()));
         update.setStatus(1);
         handleThirdDao.editBigBy(update);
+
+
+        for (SendThirdDetail d : detailsList) {
+            //发送短信
+            WaybillDO w = waybillDao.queryByOrderNo(d.getMerchantId(), d.getOrderNo());
+            DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(d.getMerchantId(), d.getOrderNo());
+            //送货上门
+            String content="";
+            if (StringUtil.equals(w.getChannel(), "1")) {
+                 content = "Dear customer, your order "+d.getOrderNo()+" has been dispatched today, the next station is "+w.getStop()+",and you should expect it in 1-5 business days at "+w.getCarrierName()+". Any question kindly contact us through Social Media and Live Chat.";
+            }else{
+                 content = "Dear customer, your order "+d.getOrderNo()+" has been dispatched today, the next station is "+w.getStop()+". Your total order amount is Ksh."+w.getNeedPayAmount()+". The courier service provider will contact you before delivery. Please keep your phone on. Thank you.";
+            }
+            PhoneMessage message = new PhoneMessage();
+            message.setMerchantId("" + d.getMerchantId());
+            message.setContent(content);
+            message.setPhoneNum(r.getContactNumber());
+            message.setMsgType(OptTypeEnum.DELIVERY.getCode());
+            try {
+                phoneSMSProducer.sendMessage(message);
+            } catch (Exception e) {
+            }
+        }
     }
-
-
 }
+
