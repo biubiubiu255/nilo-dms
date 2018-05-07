@@ -6,8 +6,10 @@ import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DeliveryOrderRouteDao;
+import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderRouteDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.common.UserInfo;
 import com.nilo.dms.dto.order.DeliveryRoute;
 import com.nilo.dms.dto.order.DeliveryRouteMessage;
@@ -51,6 +53,9 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
     @Qualifier("notifyDataBusProducer")
     private AbstractMQProducer notifyDataBusProducer;
 
+    @Autowired
+    private WaybillDao waybillDao;
+
     @Override
     public List<DeliveryRoute> queryRoute(String merchantId, String orderNo) {
 
@@ -87,9 +92,11 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
     @Override
     public void addKiliRoute(List<String> orderNos, String statusId) {
         //写入物流轨迹
+        Principal principal = SessionLocal.getPrincipal();
         List<String> transList = new ArrayList<String>();
         for (String orderNo : orderNos) {
-            transList.add("KE" + orderNo);
+            WaybillDO w = waybillDao.queryByOrderNo(Long.parseLong(principal.getMerchantId()), orderNo);
+            transList.add("KE" + w.getReferenceNo());
         }
         String operateTime = "" + System.currentTimeMillis() / 1000L;
         String transNo = JSONObject.toJSONString(transList);
