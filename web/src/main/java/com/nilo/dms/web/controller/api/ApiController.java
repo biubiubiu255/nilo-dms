@@ -9,6 +9,7 @@ import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.dto.order.*;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.PaymentService;
 import com.nilo.dms.service.order.WaybillOptService;
 import com.nilo.dms.service.order.WaybillService;
@@ -68,6 +69,8 @@ public class ApiController extends BaseController {
         principal.setMerchantId(merchantId);
         principal.setUserId("api");
         principal.setNetworks(Arrays.asList(1));
+
+        SessionLocal.setPrincipal(principal);
 
         switch (method) {
             case CREATE_WAYBILL: {
