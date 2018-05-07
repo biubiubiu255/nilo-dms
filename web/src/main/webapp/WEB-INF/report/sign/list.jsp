@@ -56,7 +56,7 @@
                 <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
                 <th lay-data="{field:'referenceNo', width:170}">ReferenceNo</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
-                <th lay-data="{field:'alreadyPaid', width:100}">AlreadyPaid</th>
+                <th lay-data="{field:'alreadyPaid', width:110}">AlreadyPaid</th>
                 <th lay-data="{field:'needPayAmount', width:100}">NeedPayAmount</th>
                 <th lay-data="{field:'handleBy', width:150}">HandleName</th>
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">HandleTime</th>

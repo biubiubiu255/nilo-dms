@@ -53,7 +53,7 @@
         <include refid="Base_Column_List"/>
         FROM t_handle_allocate where
         merchant_id = #{merchantId} and order_no = #{orderNo}
-        AND limit 1
+        limit 1
     </select>
 
 </mapper>

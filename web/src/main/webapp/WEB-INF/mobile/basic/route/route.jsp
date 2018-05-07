@@ -72,7 +72,9 @@
         route_const_delivering: getI18nAttr('route_const_delivering'),
         home_rider: getI18nAttr('home_rider'),
         route_const_signed: getI18nAttr('route_const_signed'),
-        sign_scan_signer: getI18nAttr('sign_scan_signer')
+        sign_scan_signer: getI18nAttr('sign_scan_signer'),
+        arrive_scan: getI18nAttr('arrive_scan'),
+        send_scan: getI18nAttr('send_scan')
     };
 
 
@@ -89,8 +91,13 @@
 		switch (d.opt) {
 
 		case 'arrive_scan':
-			point = map.route_const_parcel + '：' + d.optByName + '<br/>' + map.home_network + '：' + d.networkDesc;
+			point = map.arrive_scan + '：' + d.optByName + '<br/>' + map.home_network + '：' + d.networkDesc;
+			//alert(point);
 			break;
+
+            case 'send':
+                point = map.send_scan + '，' + map.home_network + '：' + d.optByName;
+                break;
 
 		case 'delivery':
 			point = map.route_const_delivering  + '，' + map.home_rider + '【' + d.optByName + '，' + d.phone+'】';

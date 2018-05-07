@@ -340,12 +340,14 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         // 判断是否允许打包
         for (String o : packageRequest.getOrderNos()) {
             Waybill waybill = queryByOrderNo(packageRequest.getMerchantId(), o);
+            /*  判断是否符合大包条件
             if(!waybill.getStatus().equals(DeliveryOrderStatusEnum.ARRIVED)){
                 throw new DMSException(BizErrorCode.ORDER_STATUS_LIMITED,o);
             }
             if (StringUtil.isNotEmpty(waybill.getParentNo()) ) {
                 throw new DMSException(BizErrorCode.PACKAGE_ALREADY_PACKAGE, o);
             }
+            */
         }
 
         // 1、保存订单信息
