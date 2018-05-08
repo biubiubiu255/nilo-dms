@@ -116,7 +116,7 @@
                 <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
                 <th lay-data="{field:'handleNo', width:100}">HandleNo</th>
                 <th lay-data="{field: 'orderType', width:100}">OrderType</th>
-                <th lay-data="{field:'deliveryType' , width:100}">DispatchType</th>
+                <th lay-data="{field:'deliveryType' , width:150}">DispatchType</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'driver', width:130}">Driver</th>
                 <th lay-data="{field:'nextStation', width:150}">NextStation</th>
