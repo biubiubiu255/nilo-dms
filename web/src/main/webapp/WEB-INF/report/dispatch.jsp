@@ -19,6 +19,7 @@
         </div>
 
 
+
         <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">CreatedTime:</label>
             <div class="layui-inline">
@@ -74,6 +75,10 @@
     <%@ include file="../common/footer.jsp" %>
     <script src="${ctx}/dist/js/ajaxfileupload.js"></script>
     <script type="text/javascript">
+
+
+        alert("${request.te}");
+
         $(function () {
 
             showPattern = 0;

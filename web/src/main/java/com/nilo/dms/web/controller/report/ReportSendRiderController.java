@@ -34,7 +34,7 @@ public class ReportSendRiderController extends BaseController {
     private ReportDispatchDao reportDispatchDao;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
-    public String list(Model model) {
+    public String list(Model model, HttpServletRequest http) {
         model.addAttribute("list", getRiderList());
         return "report/dispatch";
     }
