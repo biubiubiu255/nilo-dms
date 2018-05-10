@@ -19,6 +19,7 @@
         </div>
 
 
+
         <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">CreatedTime:</label>
             <div class="layui-inline">
@@ -57,7 +58,6 @@
                 <th lay-data="{field:'handleNo', width:100}">HandleNo</th>
                 <th lay-data="{field:'referenceNo', width:150}">ReferenceNo</th>
                 <th lay-data="{field:'orderType', width:100}">OrderType</th>
-                <th lay-data="{field:'country', width:100}">Country</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'rider', width:130}">Rider</th>
                 <th lay-data="{field:'handleName', width:130}">HandleName</th>
@@ -75,6 +75,10 @@
     <%@ include file="../common/footer.jsp" %>
     <script src="${ctx}/dist/js/ajaxfileupload.js"></script>
     <script type="text/javascript">
+
+
+        alert("${request.te}");
+
         $(function () {
 
             showPattern = 0;

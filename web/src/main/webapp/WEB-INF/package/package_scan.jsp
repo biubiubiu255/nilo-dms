@@ -212,7 +212,7 @@
                             var param = '?tempScanNo=${scanNo}&networkCode='+$("input[name='network_id']").val()+'&nextStation='+$("input[name='nextStation']").val()
                             layer.open({
                                 type: 2,
-                                title: 'Add Send Third Station',
+                                title: 'Add Send NextStation',
                                 shadeClose: true,
                                 shade: false,
                                 maxmin: true, //开启最大化最小化按钮

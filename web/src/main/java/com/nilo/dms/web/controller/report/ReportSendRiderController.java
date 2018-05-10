@@ -2,97 +2,63 @@ package com.nilo.dms.web.controller.report;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.dao.DistributionNetworkDao;
-import com.nilo.dms.dao.ThirdExpressDao;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
-import com.nilo.dms.dao.dataobject.QO.SendReportQO;
-import com.nilo.dms.dao.dataobject.SendReportDO;
-import com.nilo.dms.dao.dataobject.ThirdExpressDO;
-import com.nilo.dms.service.UserService;
+import com.nilo.dms.common.utils.DateUtil;
+import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.ReportDispatchDao;
+import com.nilo.dms.dao.dataobject.QO.ReportDispatchQO;
+import com.nilo.dms.dao.dataobject.ReportArriveDO;
+import com.nilo.dms.dao.dataobject.ReportDispatchDO;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.SendReportService;
-import com.nilo.dms.dto.order.SendOrderParameter;
-import com.nilo.dms.dto.order.SendReport;
-import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.web.controller.BaseController;
-import com.nilo.dms.web.controller.order.PackageController;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import static com.nilo.dms.common.Constant.MAX_EXPORT_COUNT;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * Created by admin on 2017/11/20.
+ */
 @Controller
-@RequestMapping("/report/send")
+@RequestMapping("/report/dispatch")
 public class ReportSendRiderController extends BaseController {
 
     @Autowired
-    private SendReportService sendReportService;
-
-    @Autowired
-    private ThirdExpressDao thirdExpressDao;
-
-    @Autowired
-    private DistributionNetworkDao distributionNetworkDao;
-
-    @Autowired
-    private UserService userService;
+    private ReportDispatchDao reportDispatchDao;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
-    public String listPage(Model model) {
-
-        Long merchantId = Long.parseLong(SessionLocal.getPrincipal().getMerchantId());
-
-        Principal me = SessionLocal.getPrincipal();
-        Pagination page = getPage();
-
-        List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(merchantId);
-        List<PackageController.NextStation> list = new ArrayList<>();
-
-        for (DistributionNetworkDO n : networkDOList) {
-            PackageController.NextStation s = new PackageController.NextStation();
-            s.setCode("" + n.getId());
-            s.setName(n.getName());
-            list.add(s);
-        }
-
-        List<ThirdExpressDO> expressList = userService.findExpressesAll(page);
-
-        model.addAttribute("nextStations", list);
-        model.addAttribute("expressList", expressList);
-
-        return "report/send/list";
+    public String list(Model model, HttpServletRequest http) {
+        model.addAttribute("list", getRiderList());
+        return "report/dispatch";
     }
 
-
     @RequestMapping(value = "/list.html")
-    public String getOrderList(Model model,  HttpServletRequest request, SendReportQO sendReportQO) {
+    public String getOrderList(Model model, ReportDispatchQO reportDispatchQO, HttpServletRequest request) {
 
-        Principal me = SessionLocal.getPrincipal();
+
+        reportDispatchQO.setMerchantId(Long.parseLong(SessionLocal.getPrincipal().getMerchantId()));
 
         Pagination page = getPage();
 
+        reportDispatchQO.setLimit(page.getLimit());
+        reportDispatchQO.setOffset(page.getOffset());
 
-        //获取merchantId
-        Long merchantId = Long.parseLong(me.getMerchantId());
-        sendReportQO.setMerchantId(merchantId);
+        List<ReportDispatchDO> list = reportDispatchDao.queryReportDispatch(reportDispatchQO);
+        page.setTotalCount(reportDispatchDao.queryReportDispatchCount(reportDispatchQO));
+        //page.setTotalCount(commonDao.lastFoundRows());
 
-
-        List<SendReportDO> list = sendReportService.querySendReport(sendReportQO, page);
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
+        System.out.println(" = " + list.size());
 
         String fileType;
-        switch (sendReportQO.getExportType()) {
+        switch (reportDispatchQO.getExportType()) {
             case 0:
                 fileType = "pdf";
                 break;
@@ -111,7 +77,6 @@ public class ReportSendRiderController extends BaseController {
             return "common/toResponseBody";
         }
 
-        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
         // 动态指定报表模板url
         model.addAttribute("url", "/WEB-INF/jasper/report/sendRider.jasper");
         model.addAttribute("format", fileType); // 报表格式
