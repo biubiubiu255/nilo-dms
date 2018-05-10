@@ -77,7 +77,7 @@ public class DelayOrderController extends BaseController {
         String merchantId = me.getMerchantId();
 
         List<HandleDelay> handleDelays = handleDelayDao.queryBy(Long.parseLong(merchantId), orderNo, null, null, 1, 2);
-        if(handleDelays.size()>0){
+        if (handleDelays.size() > 0) {
             //查询rider列表
             model.addAttribute("delayDO", handleDelays.get(0));
         }
@@ -98,6 +98,7 @@ public class DelayOrderController extends BaseController {
         abnormalOrder.setOrderNo(param.getOrderNo());
         abnormalOrder.setRemark(param.getRemark());
         abnormalOrder.setAbnormalType(AbnormalTypeEnum.PROBLEM);
+        abnormalOrder.setMerchantId(me.getMerchantId());
         abnormalOrderService.addAbnormalOrder(abnormalOrder);
 
         waybillOptService.completeDelay(param.getOrderNo());
