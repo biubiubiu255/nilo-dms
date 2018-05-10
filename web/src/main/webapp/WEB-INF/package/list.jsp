@@ -50,7 +50,7 @@
             <th lay-data="{field:'len', width:120}">Length</th>
             <th lay-data="{field:'width', width:120}">Width</th>
             <%--<th lay-data="{field:'height', width:120}">High</th>--%>
-            <th lay-data="{title:'Opt',fixed: 'right', width:150, align:'center', toolbar: '#barDemo'}"></th>
+            <th lay-data="{title:'Opt',fixed: 'right', width:250, align:'center', toolbar: '#barDemo'}"></th>
 
         </tr>
         </thead>
@@ -61,7 +61,10 @@
             <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="details">Details</a>
         </shiro:hasPermission>
         <shiro:hasPermission name="400084">
-            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="print">Print</a>
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="print">Print Packing</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="400085">
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="print_delivery">Print Waybill</a>
         </shiro:hasPermission>
     </script>
 </div>
@@ -89,8 +92,17 @@
                 if (obj.event === 'print') {
                     printPackage(orderNo);
                 }
+                if (obj.event === 'print_delivery') {
+                    print(orderNo);
+                }
             });
         });
+
+
+        function print(orderNo) {
+            parent.window.open("/waybill/print/" + orderNo + ".html");
+        }
+
         $(".search").on("click", function () {
             reloadTable();
         })
