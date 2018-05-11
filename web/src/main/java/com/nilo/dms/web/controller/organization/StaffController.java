@@ -5,6 +5,8 @@ import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.StaffStatusEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.OutsourceDao;
+import com.nilo.dms.dao.dataobject.OutsourceDO;
 import com.nilo.dms.dto.org.Department;
 import com.nilo.dms.dto.org.Staff;
 import com.nilo.dms.service.impl.SessionLocal;
@@ -28,6 +30,8 @@ public class StaffController extends BaseController {
     private StaffService staffService;
     @Autowired
     private DepartmentService departmentService;
+    @Autowired
+    private OutsourceDao outsourceDao;
 
     @RequestMapping(value = "/list.html", method = RequestMethod.GET)
     public String listGet(Model model) {
@@ -52,9 +56,12 @@ public class StaffController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         String companyId = me.getCompanyId();
         Staff staff = staffService.findByStaffId(companyId, staffId);
-        model.addAttribute("staff", staff);
         List<Department> list = departmentService.queryAll(me.getCompanyId());
+        List<OutsourceDO> outsourceList = outsourceDao.findAll(me.getMerchantId());
+
         model.addAttribute("departmentList", list);
+        model.addAttribute("staff", staff);
+        model.addAttribute("outsourceList", outsourceList);
 
         return "staff/edit";
     }
@@ -64,6 +71,9 @@ public class StaffController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         List<Department> list = departmentService.queryAll(me.getCompanyId());
         model.addAttribute("departmentList", list);
+        List<OutsourceDO> outsourceList = outsourceDao.findAll(me.getMerchantId());
+        model.addAttribute("outsourceList", outsourceList);
+
         return "staff/add";
     }
 

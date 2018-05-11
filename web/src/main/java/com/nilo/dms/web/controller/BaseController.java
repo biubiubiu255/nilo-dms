@@ -143,7 +143,7 @@ public class BaseController {
 
     protected List<StaffDO> getRiderList() {
         Principal principal = SessionLocal.getPrincipal();
-        List<StaffDO> riderList = staffDao.queryAllRider(Long.parseLong(principal.getCompanyId()));
+        List<StaffDO> riderList = staffDao.queryAllRider(Long.parseLong(principal.getCompanyId()),"");
         return riderList;
     }
 
