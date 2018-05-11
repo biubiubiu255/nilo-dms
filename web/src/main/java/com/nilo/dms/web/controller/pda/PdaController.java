@@ -116,13 +116,17 @@ public class PdaController extends BaseController {
     public String arrive(String waybillNo) {
 
         List<String> waybillNos = new ArrayList<String>();
-        waybillNos.add(waybillNo);
+        
+        String[] scaned_codes = waybillNo.split(",");
+        for (String code : scaned_codes) {
+        	waybillNos.add(code);
+		}
 
         waybillService.arrive(waybillNos);
 
-        PdaWaybill pdaWaybill = this.queryByOrderNo(waybillNo);
+        //PdaWaybill pdaWaybill = this.queryByOrderNo(waybillNo);
 
-        return toJsonTrueData(pdaWaybill);
+        return toJsonTrueMsg();
     }
 
     @ResponseBody

@@ -195,6 +195,7 @@ public class NotifyServiceImpl implements NotifyService {
                 param.put("sign", createSign(merchantConfig.getKey(), data));
                 param.put("request_id", UUID.randomUUID().toString());
                 param.put("timestamp", "" + DateUtil.getSysTimeStamp());
+                param.put("country_code", "ke");
 
                 NotifyRequest notify = new NotifyRequest();
                 notify.setUrl(interfaceConfig.getUrl());

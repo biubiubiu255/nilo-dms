@@ -6,13 +6,26 @@
     request.setAttribute("id0", RandomStringUtils.randomAlphabetic(8));
 %>
 
-
 <body>
 
 <div class="box-body">
     <form id="myForm" class="layui-form" action="">
 
         <div class="layui-form-item">
+
+            <div class="layui-col-md5 layui-col-lg3">
+                <label class="layui-form-label" style="width:120px">Outsource：</label>
+                <div class="layui-input-inline">
+                    <select name="outsource" lay-filter="outsource" lay-search=""
+                            <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
+                        <option value="">choose or search....</option>
+                        <c:forEach items="${outsourceList}" var="outsource">
+                            <option value="${outsource.outsource}"> ${outsource.outsourceName}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
+
             <div class="deliveryDiv layui-col-md5 layui-col-lg3">
                 <label class="layui-form-label" style="width:120px">Rider</label>
                 <div class="layui-input-inline">
@@ -26,13 +39,7 @@
                     <input type="hidden" name="rider" value="" id="rider">
                 </div>
             </div>
-            <div class="layui-col-md5 layui-col-lg3">
-                <label class="layui-form-label" style="width:120px">Loading By</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="loadingBy" value="${sessionScope.userName}" autocomplete="off"
-                           class="layui-input layui-disabled" disabled>
-                </div>
-            </div>
+
         </div>
 
         <div class="layui-form-item layui-col-md5 layui-col-lg3">
@@ -74,15 +81,38 @@
         //tableData = tableData.data;
         var tableData = new Array();
         view();
-
+        var form;
         layui.use('form', function () {
-            var form = layui.form;
+            form = layui.form;
             form.on('select(deliveryRiderLay)', function (data) {
                 //alert(data.value);
                 $("input[name='rider']").val(data.value);
             });
-        });
 
+            form.on('select(outsource)', function (data) {
+                getOutsourceDriver(data.value);
+            });
+
+        });
+        function getOutsourceDriver(code) {
+            $.ajax({
+                type: "POST",
+                url: "/waybill/rider_delivery/getOutsourceRider.html",
+                dataType: "json",
+                data: {outsource: code},
+                success: function (data) {
+                    if (data.result) {
+                        $("select[name=deliveryRiderLay]").empty();
+                        $("select[name=deliveryRiderLay]").prepend("<option value='0'>choose or search....</option>");
+                        var rider = data.data;
+                        for (var i = 0; i < rider.length; i++) {
+                            $("select[name=deliveryRiderLay]").append("<option value='" + rider[i].userId + "'>" + rider[i].staffId+"-"+rider[i].realName + "</option>");
+                        }
+                        form.render();
+                    }
+                }
+            });
+        }
         var packList = new Array();
         var form, table;
 

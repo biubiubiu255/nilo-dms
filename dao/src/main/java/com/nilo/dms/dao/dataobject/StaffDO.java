@@ -53,6 +53,16 @@ public class StaffDO extends BaseDo<Long> {
 
     private Long resignedTime;
 
+    private String outsource;
+
+    public String getOutsource() {
+        return outsource;
+    }
+
+    public void setOutsource(String outsource) {
+        this.outsource = outsource;
+    }
+
     public String getAddress() {
         return address;
     }

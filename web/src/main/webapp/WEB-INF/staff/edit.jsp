@@ -39,8 +39,23 @@
                 <input type="checkbox" name="isRiderCode" title="Rider" value="1"
                        lay-skin="primary" <c:if test="${staff.isRiderCode =='1'}">checked</c:if>>
             </div>
-        </div>
 
+        </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">OutSource:</label>
+                <div class="layui-input-inline">
+                    <select lay-verify="required" name="outsource">
+                        <option value="">Pls select outsource...</option>
+                        <c:forEach items="${outsourceList}" var="r">
+                            <option value=${r.outsource} <c:if test="${r.outsource == staff.outsource}">selected</c:if>  >${r.outsourceName}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
+
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label"><font color="red">*</font>Phone</label>
             <div class="layui-input-inline">

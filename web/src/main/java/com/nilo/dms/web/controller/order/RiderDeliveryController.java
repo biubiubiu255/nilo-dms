@@ -7,11 +7,11 @@ import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.dao.HandleRiderDao;
+import com.nilo.dms.dao.OutSourceDao;
+import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.WaybillDao;
-import com.nilo.dms.dao.dataobject.RiderDelivery;
-import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
-import com.nilo.dms.dao.dataobject.StaffDO;
-import com.nilo.dms.dao.dataobject.WaybillDO;
+import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.dto.org.Staff;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.RiderDeliveryService;
@@ -49,7 +49,9 @@ public class RiderDeliveryController extends BaseController {
     private HandleRiderDao handleRiderDao;
 
     @Autowired
-    private UserService userService;
+    private OutSourceDao outsourceDao;
+    @Autowired
+    private StaffDao staffDao;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model, HttpServletRequest request) {
@@ -114,8 +116,12 @@ public class RiderDeliveryController extends BaseController {
     //返回页面
     @RequestMapping(value = "/addLoadingPage.html", method = RequestMethod.GET)
     public String addLoadingPage(Model model) {
+
         List<StaffDO> staffList = getRiderList();
         model.addAttribute("riderList", staffList);
+        Principal me = SessionLocal.getPrincipal();
+        List<OutsourceDO> outsourceList = outsourceDao.findAll(me.getMerchantId());
+        model.addAttribute("outsourceList", outsourceList);
         return "waybill/rider_delivery/loading_scan";
     }
 
@@ -148,7 +154,7 @@ public class RiderDeliveryController extends BaseController {
         riderDelivery.setHandleBy(Long.valueOf(me.getUserId()));
         riderDelivery.setStatus(saveStutus);
         riderDeliveryService.addRiderPackAndDetail(Long.valueOf(merchantId), riderDelivery, smallPack);
-        if(riderDelivery.getStatus().equals(HandleRiderStatusEnum.SHIP.getCode())){
+        if (riderDelivery.getStatus().equals(HandleRiderStatusEnum.SHIP.getCode())) {
             riderDeliveryService.ship(riderDelivery.getHandleNo());
         }
         Map<String, Object> map = new HashMap<>();
@@ -178,6 +184,9 @@ public class RiderDeliveryController extends BaseController {
         List<RiderDelivery> templist = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDelivery, page);
         riderDelivery = templist.get(0);
 
+        List<OutsourceDO> outsourceList = outsourceDao.findAll(me.getMerchantId());
+        model.addAttribute("outsourceList", outsourceList);
+
         model.addAttribute("list", res);
         model.addAttribute("riderList", getRiderList());
         model.addAttribute("riderDelivery", riderDelivery);
@@ -202,5 +211,14 @@ public class RiderDeliveryController extends BaseController {
         return toJsonTrueMsg();
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/getOutsourceRider.html", method = RequestMethod.POST)
+    public String getOutsourceRider(String outsource) {
+        Principal me = SessionLocal.getPrincipal();
+        String merchantId = me.getMerchantId();
 
+        List<StaffDO> outsourceRider = staffDao.queryAllRider(Long.parseLong(me.getCompanyId()), outsource);
+
+        return toJsonTrueData(outsourceRider);
+    }
 }

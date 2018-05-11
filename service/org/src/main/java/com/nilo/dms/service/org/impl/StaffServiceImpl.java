@@ -202,6 +202,7 @@ public class StaffServiceImpl implements StaffService {
         staff.setTitle(staffDO.getTitle());
         staff.setTitleLevel(staffDO.getTitleLevel());
         staff.setTitleTime(staffDO.getTitleTime());
+        staff.setOutsource(staffDO.getOutsource());
 
         staff.setIsRider(staffDO.getIsRider() == 1);
         staff.setStatus(StaffStatusEnum.getEnum(staffDO.getStatus()));
@@ -243,6 +244,7 @@ public class StaffServiceImpl implements StaffService {
         staffDO.setTitleLevel(staff.getTitleLevel());
         staffDO.setTitleTime(staff.getTitleTime());
         staffDO.setAddress(staff.getAddress());
+        staffDO.setOutsource(staff.getOutsource());
         if (staff.getStatus() != null) {
             staffDO.setStatus(staff.getStatus().getCode());
         }

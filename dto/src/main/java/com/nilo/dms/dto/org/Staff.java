@@ -56,6 +56,16 @@ public class Staff {
 
     private Boolean isRider;
 
+    private String outsource;
+
+    public String getOutsource() {
+        return outsource;
+    }
+
+    public void setOutsource(String outsource) {
+        this.outsource = outsource;
+    }
+
     public String getUserId() {
         return userId;
     }
