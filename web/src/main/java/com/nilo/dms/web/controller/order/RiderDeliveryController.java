@@ -7,7 +7,7 @@ import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.dao.HandleRiderDao;
-import com.nilo.dms.dao.OutSourceDao;
+import com.nilo.dms.dao.OutsourceDao;
 import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.*;
@@ -49,7 +49,7 @@ public class RiderDeliveryController extends BaseController {
     private HandleRiderDao handleRiderDao;
 
     @Autowired
-    private OutSourceDao outsourceDao;
+    private OutsourceDao outsourceDao;
     @Autowired
     private StaffDao staffDao;
 

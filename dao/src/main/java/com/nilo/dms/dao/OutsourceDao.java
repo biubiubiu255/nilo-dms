@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OutSourceDao extends BaseDao<Long, OutsourceDO> {
+public interface OutsourceDao extends BaseDao<Long, OutsourceDO> {
 
     List<OutsourceDO> findAll(String merchantId);
 

@@ -72,6 +72,11 @@ public class PdaController extends BaseController {
     private SendThirdService sendThirdService;
     @Autowired
     private RiderDeliveryService riderDeliveryService;
+    @Autowired
+    private OutsourceDao outsourceDao;
+    @Autowired
+    private StaffDao staffDao;
+    
     @RequestMapping(value = "/scan.html")
     public String toPage() {
         return "mobile/network/arrive_scan/arriveScan";
@@ -150,6 +155,40 @@ public class PdaController extends BaseController {
         PdaWaybill pdaWaybill = this.queryByOrderNo(waybillNo);
         return toJsonTrueData(pdaWaybill);
     }
+    
+    
+    @ResponseBody
+    @RequestMapping(value = "/getOutsource.html")
+    public String getOutsource(Model model, HttpServletRequest request) {
+        Principal me = SessionLocal.getPrincipal();
+       
+        // 第三方
+        List<OutsourceDO> outsourceList = outsourceDao.findAll(me.getMerchantId());
+        
+        return toJsonTrueData(outsourceList);
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/getOutsourceRider.html", method = RequestMethod.POST)
+    public String getOutsourceRider(String outsource) {
+        Principal me = SessionLocal.getPrincipal();
+        
+        List<StaffDO> outsourceRider = staffDao.queryAllRider(Long.parseLong(me.getCompanyId()), outsource);
+        List<PdaRider> pdaRiders = new ArrayList<PdaRider>();
+        for (StaffDO s : outsourceRider) {
+            PdaRider pdaRider = new PdaRider();
+            pdaRider.setMerchantId(s.getMerchantId());
+            pdaRider.setDepartmentId(s.getDepartmentId());
+            pdaRider.setUserId(s.getUserId());
+            pdaRider.setStaffId(s.getStaffId());
+            pdaRider.setIdandName(s.getStaffId() + "-" + s.getRealName());
+            pdaRider.setRealName(s.getRealName());
+            pdaRiders.add(pdaRider);
+        }
+        return toJsonTrueData(pdaRiders);
+        
+    }
+    
 
     @ResponseBody
     @RequestMapping(value = "/getThirdExpress.html")
