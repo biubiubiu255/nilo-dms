@@ -98,6 +98,7 @@
             //监听工具条
             table.on('tool(demo)', function (obj) {
                 var data = obj.data;
+                console.log(data);
                 if (obj.event === 'detail') {
                     var orderNo = data.orderNo;
                     layer.msg(orderNo);
