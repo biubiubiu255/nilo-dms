@@ -156,7 +156,6 @@
                 batchDispatchToDMS: function () { //获取选中数据
                     var checkStatus = table.checkStatus('dispatchToDMS')
                             , data = checkStatus.data;
-                    layer.alert(JSON.stringify(data));
                 }
             };
 

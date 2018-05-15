@@ -7,8 +7,8 @@
     <resultMap id="staffDO" type="com.nilo.dms.dao.dataobject.StaffDO">
         <result property="id" column="id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="userId" column="user_id" javaType="java.lang.Long"
-                jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
         <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="companyId" column="company_id" javaType="java.lang.Long"

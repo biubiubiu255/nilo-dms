@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-<%@ include file="../common/header.jsp" %>
+<link href="${ctx}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <script type="text/javascript">window.print();</script>
 <style media="all">
     * {
@@ -29,7 +29,8 @@
         height: 1.53cm;
         width: 5cm;
     }
-    .print-font-large{
+
+    .print-font-large {
         font-size: large;
     }
 </style>

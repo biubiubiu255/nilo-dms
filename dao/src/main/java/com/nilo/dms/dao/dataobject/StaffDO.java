@@ -11,7 +11,7 @@ public class StaffDO extends BaseDo<Long> {
 
     private String staffId;
 
-    private Long userId;
+    private String userId;
 
     private Long merchantId;
 
@@ -79,11 +79,11 @@ public class StaffDO extends BaseDo<Long> {
         this.isRider = isRider;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

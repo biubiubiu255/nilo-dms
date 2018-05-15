@@ -58,7 +58,6 @@
         <tr>
             <th lay-data="{fixed: 'left',field:'handleNo', width:140}">LoadingNo</th>
             <th lay-data="{field:'riderName', width:150}">Rider</th>
-            <th lay-data="{field:'handleByName', width:150}">HandleByName</th>
             <th lay-data="{field:'handle_time', width:170, templet:'<div>{{ formatDate(d.handle_time) }}</div>'}">
                 HandleTime
             </th>
@@ -141,21 +140,18 @@
 
         function toDetails(handleNo) {
 
-            $.ajax({
-                url: "/waybill/rider_delivery/detail.html?loadingNo=" + handleNo,
-                type: 'GET',
-                //dataType: 'text',
-                success: function (data) {
-                    //弹出即全屏
-                    var index = parent.layer.open({
-                        type: 1,
-                        content: data,
-                        area: ['900px', '600px'],
-                        offset: ['100px', '250px'],
-                        maxmin: true
-                    });
-                }
+
+            parent.layer.open({
+                type: 2,
+                title: 'Detail',
+                shadeClose: true,
+                shade: false,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['900px', '600px'],
+                offset: ['100px', '250px'],
+                content: "/waybill/rider_delivery/detail.html?loadingNo=" + handleNo
             });
+
         }
         function toPrint(handleNo) {
             parent.window.open("/waybill/rider_delivery/print.html?loadingNo=" + handleNo);
@@ -202,7 +198,7 @@
     });
 
     function edit(handleNo) {
-        layer.open({
+        parent.layer.open({
             type: 2,
             title: 'Edit',
             shadeClose: true,
