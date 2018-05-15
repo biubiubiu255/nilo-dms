@@ -76,7 +76,7 @@ public class DelayOrderController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
 
-        List<HandleDelay> handleDelays = handleDelayDao.queryBy(Long.parseLong(merchantId), orderNo, null, null, 1, 2);
+        List<HandleDelay> handleDelays = handleDelayDao.queryBy(Long.parseLong(merchantId), orderNo, null, null, 0, 2);
         if (handleDelays.size() > 0) {
             //查询rider列表
             model.addAttribute("delayDO", handleDelays.get(0));

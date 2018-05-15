@@ -11,7 +11,7 @@
 <body>
 <div class="box-body">
     <div class="layui-row">
-        <div class="layui-col-md4 layui-col-lg4">
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">Waybil No:</label>
             <div class="layui-input-inline">
                 <input type="text" name="orderNo" autocomplete="off" class="layui-input">
@@ -19,7 +19,7 @@
         </div>
 
 
-        <div class="layui-col-md4 layui-col-lg4">
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md6 layui-col-lg6">
             <label class="layui-form-label">ScanTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="createdTime_s">
@@ -37,7 +37,7 @@
 
     <div class="layui-form layui-row">
 
-        <div class="layui-col-md3 layui-col-lg4">
+        <div class="layui-col-xs12 layui-col-sm10 layui-col-md5 layui-col-lg4">
             <label class="layui-form-label">ScanNetwork:</label>
             <div class="layui-input-inline">
                 <select name="scanNetwork" lay-verify="required" lay-search="" style="display: none">
@@ -50,7 +50,7 @@
         </div>
 
         <!-- 搜索按钮 -->
-        <div class="layui-col-md4 layui-col-lg4" style="margin-left: 2.4rem;">
+        <div class="layui-col-sm10 layui-col-md4 layui-col-lg4" style="margin-left: 2.4rem;">
             <button class="layui-btn layui-btn-normal btn-export">Export</button>
             <button class="layui-btn layui-btn-normal search">Search</button>
             <button class="layui-btn layui-btn-normal btn-pdf">View</button>

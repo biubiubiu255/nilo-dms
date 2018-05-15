@@ -47,10 +47,11 @@
 					<a href="/mobile/rider/sign/toSign.html" title="">
 						<li><img src="/mobile/images/icon_1.png" /><br /><label data-locale="sign_scan">Sign</label></li>
 					</a>
-					
-					<a href="/mobile/rider/stranded/scan.html" title="">
-						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="delay">Delay</label></li>
-					</a>
+					<c:if test="${isRider==true}">
+						<a href="/mobile/rider/stranded/scan.html" title="">
+							<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="delay">Delay</label></li>
+						</a>
+					</c:if>
 					<%--<a href="/mobile/rider/problem/scan.html" title="">
 						<li><img src="/mobile/images/icon_7.png" /><br /><label data-locale="problem">problem</label></li>
 					</a>--%>
