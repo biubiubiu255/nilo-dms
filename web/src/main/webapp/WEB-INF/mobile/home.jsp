@@ -114,7 +114,7 @@
 			</div>
 			<ul class="model_banner_ul">
 				<a href="/mobile/basic/route/route.html">
-					<li><img src="/mobile/images/scheduler_info.png" /><br /><label data-locale="routing_query">Routing Query</label></li>
+					<li><img src="/mobile/images/scheduler_info.png" /><br /><label data-locale="tracking_query">Routing Query</label></li>
 				</a>
 				<a href="/mobile/password/toPage.html" title="">
 					<li><img src="/mobile/images/index_icon_1.png" /><br /><label data-locale="modify_password">Modify password</label></li>
