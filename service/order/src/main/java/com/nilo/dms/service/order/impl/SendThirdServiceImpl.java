@@ -61,6 +61,7 @@ public class SendThirdServiceImpl implements SendThirdService {
     private DeliveryOrderReceiverDao deliveryOrderReceiverDao;
     @Autowired
     private DeliveryRouteService deliveryRouteService;
+
     @Override
     public void insertSmallAll(Long merchantId, String handleNo, String[] smallOrders) {
         //以小包DO的order，调用deliveryOrderDao接口查询多条该订单的信息
@@ -206,11 +207,11 @@ public class SendThirdServiceImpl implements SendThirdService {
             WaybillDO w = waybillDao.queryByOrderNo(d.getMerchantId(), d.getOrderNo());
             DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(d.getMerchantId(), d.getOrderNo());
             //送货上门
-            String content="";
+            String content = "";
             if (StringUtil.equals(w.getChannel(), "1")) {
-                 content = "Dear customer, your order "+d.getOrderNo()+" has been dispatched today, the next station is "+w.getStop()+",and you should expect it in 1-5 business days at "+w.getCarrierName()+". Any question kindly contact us through Social Media and Live Chat.";
-            }else{
-                 content = "Dear customer, your order "+d.getOrderNo()+" has been dispatched today, the next station is "+w.getStop()+". Your total order amount is Ksh."+w.getNeedPayAmount()+". The courier service provider will contact you before delivery. Please keep your phone on. Thank you.";
+                content = "Dear customer, your order " + d.getOrderNo() + " has been dispatched today, the next station is " + w.getStop() + ",and you should pick up it in 1-5 business days at " + r.getAddress() + ". Any question kindly contact us through Social Media and Live Chat.";
+            } else {
+                content = "Dear customer, your order " + d.getOrderNo() + " has been dispatched today, the next station is " + w.getStop() + ". Your total order amount is Ksh." + w.getNeedPayAmount() + ". The courier service provider will contact you before delivery. Please keep your phone on. Thank you.";
             }
             PhoneMessage message = new PhoneMessage();
             message.setMerchantId("" + d.getMerchantId());
