@@ -147,7 +147,7 @@ ul li{
 	                    <li>
 	                        <input type='text' placeholder="Logistics No" required="required" maxlength='100' property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input' name='logisticsNo' style="width: 62%;" />
 	                    	<span class="scanner" style="left: 66%;" data-locale="all_scan">scan</span>
-	                    	<span id="query" data-locale="all_query">Query</span>
+	                    	<span id="query" data-locale="route_title">Query</span>
 	                    </li>
 					</ul>
 					
