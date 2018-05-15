@@ -99,7 +99,7 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         //这里两个for循环是将list结果中与当前成员表（riderInfoList、opNameInfoList）中对应的ID找到，然后赋值name
         for (RiderDelivery r : list) {
             for (StaffDO s : staff) {
-                if (StringUtil.equals( s.getUserId().toString(), r.getRider())) {
+                if (StringUtil.equals(s.getUserId().toString(), r.getRider())) {
                     r.setRiderName(s.getStaffId() + "-" + s.getRealName());
                 }
             }
@@ -219,18 +219,16 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
             WaybillDO w = waybillDao.queryByOrderNo(riderDelivery.getMerchantId(), d.getOrderNo());
             DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(riderDelivery.getMerchantId(), d.getOrderNo());
             //送货上门
-            if (StringUtil.equals(w.getChannel(), "1")) {
-                String content = "Dear customer, your order " + d.getOrderNo() + " has been dispatched today. Your total order amount is Ksh." + w.getNeedPayAmount() + ".Kindly call " + userInfo.getName() + " " + userInfo.getPhone() + " to notify you the time of delivery. Please keep your phone on. Thank you.";
-                PhoneMessage message = new PhoneMessage();
-                message.setMerchantId("" + riderDelivery.getMerchantId());
-                message.setContent(content);
-                message.setPhoneNum(r.getContactNumber());
-                message.setMsgType(OptTypeEnum.DELIVERY.getCode());
-                try {
-                    phoneSMSProducer.sendMessage(message);
-                } catch (Exception e) {
+            String content = "Dear customer, your order " + d.getOrderNo() + " has been dispatched today. Your total order amount is Ksh." + w.getNeedPayAmount() + ".Kindly call " + userInfo.getName() + " " + userInfo.getPhone() + " to notify you the time of delivery. Please keep your phone on. Thank you.";
+            PhoneMessage message = new PhoneMessage();
+            message.setMerchantId("" + riderDelivery.getMerchantId());
+            message.setContent(content);
+            message.setPhoneNum(r.getContactNumber());
+            message.setMsgType(OptTypeEnum.DELIVERY.getCode());
+            try {
+                phoneSMSProducer.sendMessage(message);
+            } catch (Exception e) {
 
-                }
             }
         }
         deliveryRouteService.addKiliRoute(orderNos, "P30");
