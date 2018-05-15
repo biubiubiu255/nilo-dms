@@ -103,7 +103,7 @@
 				}
 			}
 			
-			android.startScan();
+			//android.startScan();
 			
 		});
 	/* function scan(){
