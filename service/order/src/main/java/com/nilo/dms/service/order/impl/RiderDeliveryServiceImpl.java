@@ -88,51 +88,23 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
     @Override
     public List<RiderDelivery> queryRiderDelivery(String merchantId, RiderDelivery riderDelivery, Pagination page) {
         List<RiderDelivery> list = handleRiderDao.queryRiderDeliveryBig(riderDelivery, page.getOffset(), page.getLimit());
-        //page.setTotalCount(commonDao.lastFoundRows());
         page.setTotalCount(handleRiderDao.queryRiderDeliveryBigCount(riderDelivery, page.getOffset(), page.getLimit()));
-        Set<Long> userIds = new HashSet<>();
+
+        Set<Long> userIDList = new HashSet<>();
         for (int i = 0; i < list.size(); i++) {
-            userIds.add(Long.parseLong(list.get(i).getRider()));
-            userIds.add(Long.parseLong(list.get(i).getHandleBy().toString()));
+            userIDList.add(Long.parseLong(list.get(i).getRider()));
         }
 
-
-        //查询出当前大包结果list中所有成员id（主要是快递员ID和操作人ID）
-        //然后再查出这些ID对应的个人信息（主要是取名字）
-
-        Long[] userIDArr = new Long[userIds.size()];
-        userIds.toArray(userIDArr);
-        List<StaffDO> userInfoByUserIds = findUserInfoByUserIds(Long.parseLong(merchantId), userIDArr);
-
-        //String[] userIDArrStr = new String[userIds.size()];
-        List<String> userIDList = new ArrayList<String>();
-        for (Long e : userIds) {
-            userIDList.add(e.toString());
-        }
-
-        List<UserInfo> userInfoByUserIdStrs = userService.findUserInfoByUserIds(merchantId, userIDList);
-
+        List<StaffDO> staff = staffDao.findstaffByIDs(userIDList.toArray(new Long[userIDList.size()]));
         //这里两个for循环是将list结果中与当前成员表（riderInfoList、opNameInfoList）中对应的ID找到，然后赋值name
-        for (int i = 0; i < list.size(); i++) {
-            for (StaffDO e : userInfoByUserIds) {
-                if (e.getUserId().equals(Long.parseLong(list.get(i).getRider()))) {
-                    RiderDelivery riderTemp = list.get(i);
-                    riderTemp.setRiderName(e.getNickName());
-                    list.set(i, riderTemp);
+        for (RiderDelivery r : list) {
+            for (StaffDO s : staff) {
+                if (StringUtil.equals( s.getUserId().toString(), r.getRider())) {
+                    r.setRiderName(s.getStaffId() + "-" + s.getRealName());
                 }
             }
-            for (UserInfo e : userInfoByUserIdStrs) {
-                if (e.getUserId().equals(list.get(i).getHandleBy().toString())) {
-                    RiderDelivery riderTemp = list.get(i);
-                    riderTemp.setHandleByName(e.getName());
-                    list.set(i, riderTemp);
-                }
-            }
-
-
         }
 
-        //System.out.println("本次测试 = " + list.toString());
         return list;
     }
 

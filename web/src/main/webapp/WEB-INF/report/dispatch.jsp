@@ -77,8 +77,6 @@
     <script type="text/javascript">
 
 
-        alert("${request.te}");
-
         $(function () {
 
             showPattern = 0;

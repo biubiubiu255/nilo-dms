@@ -179,7 +179,7 @@ public class PdaController extends BaseController {
             PdaRider pdaRider = new PdaRider();
             pdaRider.setMerchantId(s.getMerchantId());
             pdaRider.setDepartmentId(s.getDepartmentId());
-            pdaRider.setUserId(s.getUserId());
+            pdaRider.setUserId(Long.parseLong(s.getUserId()));
             pdaRider.setStaffId(s.getStaffId());
             pdaRider.setIdandName(s.getStaffId() + "-" + s.getRealName());
             pdaRider.setRealName(s.getRealName());
@@ -259,7 +259,7 @@ public class PdaController extends BaseController {
             PdaRider pdaRider = new PdaRider();
             pdaRider.setMerchantId(s.getMerchantId());
             pdaRider.setDepartmentId(s.getDepartmentId());
-            pdaRider.setUserId(s.getUserId());
+            pdaRider.setUserId(Long.parseLong(s.getUserId()));
             pdaRider.setStaffId(s.getStaffId());
             pdaRider.setIdandName(s.getStaffId() + "-" + s.getRealName());
             pdaRider.setRealName(s.getRealName());

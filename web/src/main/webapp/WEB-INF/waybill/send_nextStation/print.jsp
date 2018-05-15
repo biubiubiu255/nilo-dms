@@ -39,13 +39,17 @@
 
     <div class="row">
         <div class="col-xs-3">
-            HandleNo NO: ${pack.handleNo}
+            Loading NO: ${loading.loadingNo}
         </div>
         <div class="col-xs-3">
-            NextStation: ${pack.nextStation}
+            Name: ${loading.carrier}
         </div>
         <div class="col-xs-3">
-            HandleName :${pack.handleName}
+            Rider :${loading.riderName}
+        </div>
+        <div class="col-xs-3">
+            Operator :
+            ${sessionScope.userName}
         </div>
         <br><br>
     </div>
@@ -59,20 +63,15 @@
                     <th>Customer Name</th>
                     <th>Contact No</th>
                     <th>Address</th>
-                    <th>Price</th>
-                    <th>Pending Pay</th>
                 </tr>
                 </thead>
                 <tbody>
-                	<c:forEach items="${smalls}" var="item">
+                	<c:forEach items="${loading.detailsList}" var="item">
 	                   <tr>
 	                        <td>${item.orderNo}</td>
-	                        <td>${item.receiverInfo.receiverName}</td>
-	                        <td>${item.receiverInfo.receiverPhone}</td>
-	                        <td>${item.receiverInfo.receiverAddress}</td>
-	                        <td>${item.totalPrice}</td>
-	                        <td>${item.needPayAmount}</td>
-                            <%--<td><date:date value="${item.createdTime}" parttern="yyyy-MM-dd HH:mm:ss"></date:date></td>--%>
+	                        <td>${item.deliveryOrder.receiverInfo.receiverName}</td>
+	                        <td>${item.deliveryOrder.receiverInfo.receiverPhone}</td>
+	                        <td>${item.deliveryOrder.receiverInfo.receiverAddress}</td>
                        </tr>
                    </c:forEach> 
                 </tbody>
@@ -83,8 +82,9 @@
     </div>
     <div class="row">
         <div class="col-xs-6">
-            Total Order :${smalls.size()}
+            Total Order :${fn:length(loading.detailsList)}
         </div>
+
         <br><br>
     </div>
     

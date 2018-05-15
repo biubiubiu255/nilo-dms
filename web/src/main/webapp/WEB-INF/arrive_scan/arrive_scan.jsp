@@ -41,6 +41,7 @@
         </div>
         <script type="text/html" id="barDemo">
             <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">Delete</a>
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="print">Print</a>
         </script>
     </div>
 </div>
@@ -57,6 +58,9 @@
                 if (obj.event === 'delete') {
                     deleteDetails(orderNo);
                     obj.del();
+                }
+                if (obj.event === 'print') {
+                    printOrder(orderNo);
                 }
             });
             //监听单元格编辑
@@ -183,6 +187,10 @@
                 }
             });
         };
+        
+        var printOrder = function (orderNo) {
+            parent.window.open("/waybill/print/" + orderNo + ".html");
+        }
     });
 </script>
 </body>
