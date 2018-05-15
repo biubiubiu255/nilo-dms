@@ -100,7 +100,6 @@ public class DelayOrderController extends BaseController {
         abnormalOrder.setAbnormalType(AbnormalTypeEnum.PROBLEM);
         abnormalOrder.setMerchantId(me.getMerchantId());
         abnormalOrderService.addAbnormalOrder(abnormalOrder);
-
         waybillOptService.completeDelay(param.getOrderNo());
 
         return toJsonTrueMsg();

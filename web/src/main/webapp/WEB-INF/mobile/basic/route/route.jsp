@@ -61,8 +61,7 @@
 						}
 						$.scanner(scan_callback);
 						
-						android.startScan();
-						
+						//android.startScan();
 					});
 
     var map = {
@@ -138,7 +137,7 @@ ul li{
 
 		<div class="wap_top">
 			<a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-			<h2 data-locale="route_title">Route</h2>
+			<h2 data-locale="route_title">Track</h2>
 		</div>
 		<div class="banner_content">
 			<form id="unpackage-form">

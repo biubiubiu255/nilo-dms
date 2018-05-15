@@ -20,6 +20,8 @@ public interface WaybillService {
 
     List<Waybill> queryByOrderNos(String merchantId, List<String> orderNos);
 
+    boolean checkHandleOpt(OrderOptRequest optRequest);
+
     void handleOpt(OrderOptRequest optRequest);
 
     void arrive(List<String> waybillNos);

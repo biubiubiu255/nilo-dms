@@ -34,9 +34,9 @@ public class MobileArriveScanController extends BaseController {
         if (a == null) {
             return toJsonErrorMsg("There is no OrderNo");
         }
-        if (a == 35 || a == 40 || a == 50 || a == 60) {
+/*        if (a == 35 || a == 40 || a == 50 || a == 60) {
             return toJsonErrorMsg("There are restrictions on this order");
-        }
+        }*/
         return toJsonTrueMsg();
     }
 

@@ -250,6 +250,13 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     }
 
     @Override
+    public boolean checkHandleOpt(OrderOptRequest optRequest) {
+        checkOtpParam(optRequest);
+        checkOptType(optRequest);
+        return true;
+    }
+
+    @Override
     public void handleOpt(OrderOptRequest optRequest) {
 
         // 校验操作参数
@@ -303,6 +310,8 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
         optRequest.setOrderNo(waybillNos);
+
+        //checkHandleOpt(optRequest);
         handleOpt(optRequest);
     }
 

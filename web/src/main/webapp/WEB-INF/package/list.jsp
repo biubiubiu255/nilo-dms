@@ -49,6 +49,8 @@
             <th lay-data="{field:'weight', width:120}">Weight</th>
             <th lay-data="{field:'len', width:120}">Length</th>
             <th lay-data="{field:'width', width:120}">Width</th>
+            <th lay-data="{field:'createdBy', width:120}">PackageBy</th>
+            <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreateTime</th>
             <%--<th lay-data="{field:'height', width:120}">High</th>--%>
             <th lay-data="{title:'Opt',fixed: 'right', width:250, align:'center', toolbar: '#barDemo'}"></th>
 

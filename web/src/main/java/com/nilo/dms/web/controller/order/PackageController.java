@@ -12,6 +12,7 @@ import com.nilo.dms.dao.WaybillScanDetailsDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
+import com.nilo.dms.dto.common.User;
 import com.nilo.dms.dto.common.UserInfo;
 import com.nilo.dms.dto.order.PackageRequest;
 import com.nilo.dms.service.UserService;
@@ -33,7 +34,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.nilo.dms.common.Constant.IS_PACKAGE;
 
@@ -82,6 +85,19 @@ public class PackageController extends BaseController {
 */
         //parameter.setStatus(status);
         List<Waybill> list = waybillService.queryWaybillBy(parameter, page);
+        //下面都是list中的createBy转对应的名字
+        Set<String> userList = new HashSet();
+        for (Waybill e : list){
+            userList.add(e.getCreatedBy());
+        }
+        List<User> userInfoList = userService.findByUserIds(merchantId, new ArrayList<>(userList));
+        for (Waybill e : list){
+            for (User u : userInfoList){
+                if(e.getCreatedBy().equals(u.getUserId())){
+                    e.setCreatedBy(u.getUserInfo().getName());
+                }
+            }
+        }
         return toPaginationLayUIData(page, list);
     }
 
