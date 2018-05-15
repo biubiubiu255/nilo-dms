@@ -209,9 +209,9 @@ public class SendThirdServiceImpl implements SendThirdService {
             //送货上门
             String content = "";
             if (StringUtil.equals(w.getChannel(), "1")) {
-                content = "Dear customer, your order " + d.getOrderNo() + " has been dispatched today, the next station is " + w.getStop() + ",and you should pick up it in 1-5 business days at " + r.getAddress() + ". Any question kindly contact us through Social Media and Live Chat.";
+                content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today, the next station is " + w.getStop() + ",and you should pick up it in 1-5 business days at " + r.getAddress() + ". Any question kindly contact us through Social Media and Live Chat.";
             } else {
-                content = "Dear customer, your order " + d.getOrderNo() + " has been dispatched today, the next station is " + w.getStop() + ". Your total order amount is Ksh." + w.getNeedPayAmount() + ". The courier service provider will contact you before delivery. Please keep your phone on. Thank you.";
+                content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today, the next station is " + w.getStop() + ". Your total order amount is Ksh." + w.getNeedPayAmount() + ". The courier service provider will contact you before delivery. Please keep your phone on. Thank you.";
             }
             PhoneMessage message = new PhoneMessage();
             message.setMerchantId("" + d.getMerchantId());
