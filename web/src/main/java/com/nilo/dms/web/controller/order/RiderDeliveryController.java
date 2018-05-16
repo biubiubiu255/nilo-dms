@@ -11,10 +11,12 @@ import com.nilo.dms.dao.OutsourceDao;
 import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.dto.org.Staff;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.RiderDeliveryService;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +44,8 @@ public class RiderDeliveryController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     private RiderDeliveryService riderDeliveryService;
-
+    @Autowired
+    private WaybillService waybillService;
     @Autowired
     private WaybillDao waybillDao;
 
@@ -102,14 +106,19 @@ public class RiderDeliveryController extends BaseController {
         List<RiderDelivery> list = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDelivery, page);
         riderDelivery = list.get(0);
 
-
         RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
         riderDeliverySmallDO.setHandleNo(loadingNo);
         List<RiderDeliverySmallDO> smalls = riderDeliveryService.queryRiderDeliveryDetail(me.getMerchantId(), riderDeliverySmallDO, page);
 
+        List<String> orderNos = new ArrayList<>();
+        for(RiderDeliverySmallDO s : smalls){
+            orderNos.add(s.getOrderNo());
+        }
+        List<Waybill> waybillList = waybillService.queryByOrderNos(me.getMerchantId(),orderNos);
+
 
         model.addAttribute("pack", riderDelivery);
-        model.addAttribute("smalls", smalls);
+        model.addAttribute("smalls", waybillList);
         return "waybill/rider_delivery/print";
     }
 

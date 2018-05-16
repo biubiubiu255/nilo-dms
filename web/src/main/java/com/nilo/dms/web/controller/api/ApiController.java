@@ -56,14 +56,14 @@ public class ApiController extends BaseController {
     @ResponseBody
     public String doPost(RequestParam param) {
 
+        log.info("API RequestParam:{}", param);
+
         param.checkParam();
 
         MethodEnum method = param.getMethod();
         String data = param.getData();
         String sign = param.getSign();
         String merchantId = param.getApp_id();
-
-        log.info("API Data:{}", data);
 
         Principal principal = new Principal();
         principal.setMerchantId(merchantId);

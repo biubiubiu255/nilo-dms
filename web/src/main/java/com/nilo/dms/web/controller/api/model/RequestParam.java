@@ -109,4 +109,16 @@ public class RequestParam {
         String checkSign = DigestUtils.md5Hex(key + data + key);
         return StringUtil.equalsIgnoreCase(checkSign, sign);
     }
+
+    @Override
+    public String toString() {
+        return "RequestParam{" +
+                "data='" + data + '\'' +
+                ", sign='" + sign + '\'' +
+                ", app_key='" + app_key + '\'' +
+                ", timestamp=" + timestamp +
+                ", method='" + method + '\'' +
+                ", app_id='" + app_id + '\'' +
+                '}';
+    }
 }
