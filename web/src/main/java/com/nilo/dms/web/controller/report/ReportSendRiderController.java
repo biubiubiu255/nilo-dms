@@ -55,7 +55,6 @@ public class ReportSendRiderController extends BaseController {
         //page.setTotalCount(commonDao.lastFoundRows());
 
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
-        System.out.println(" = " + list.size());
 
         String fileType;
         switch (reportDispatchQO.getExportType()) {

@@ -23,7 +23,8 @@
                 jdbcType="VARCHAR"/>
 
 
-
+        <result property="status" column="waybill_status" javaType="java.lang.Integer"
+                jdbcType="VARCHAR"/>
         <result property="phone" column="phone" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="address" column="address" javaType="java.lang.String"
@@ -47,7 +48,7 @@
 
     <select id="queryReportDispatch" resultMap="dispatchDO">
 
-        SELECT a.*, c.name as rider , d.name as handle_name, e.order_type, e.reference_no, e.country, f.contact_number as phone, f.address
+        SELECT a.*, c.name as rider , d.name as handle_name, e.order_type,e.status as waybill_status, e.reference_no, e.country, f.contact_number as phone, f.address
 
         FROM
 
@@ -74,7 +75,10 @@
         ON a.order_no = f.order_no
 
         WHERE b.merchant_id = #{merchantId}
-
+        <if test="status !=null ">
+            AND
+            e.status = #{status}
+        </if>
         <if test="orderNo !=null  and orderNo !='' ">
             AND
             a.order_no = #{orderNo}
@@ -89,7 +93,7 @@
             and e.country = #{country}
         </if>
         <if test="rider !=null and rider !='' ">
-            and c.name = #{rider}
+            and c.user_id = #{rider}
         </if>
 
         <if test="fromCreatedTime !=null ">
@@ -145,7 +149,10 @@
         ON a.order_no = f.order_no
 
         WHERE b.merchant_id = #{merchantId}
-
+        <if test="status !=null ">
+            AND
+            e.status = #{status}
+        </if>
         <if test="orderNo !=null  and orderNo !='' ">
             AND
             a.order_no = #{orderNo}
@@ -161,7 +168,7 @@
         </if>
 
         <if test="rider !=null and rider !='' ">
-            and c.name = #{rider}
+            and c.user_id = #{rider}
         </if>
 
         <if test="fromCreatedTime !=null ">

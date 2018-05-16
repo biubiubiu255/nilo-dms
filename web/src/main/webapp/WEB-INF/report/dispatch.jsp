@@ -10,7 +10,7 @@
 %>
 <body>
 <div class="box-body">
-    <div class="layui-row">
+    <div class="layui-form layui-row">
         <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">Waybill No:</label>
             <div class="layui-input-inline">
@@ -18,8 +18,28 @@
             </div>
         </div>
 
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">Status:</label>
+            <div class="layui-input-inline">
+                <select name="status" lay-filter="status" lay-search="">
+                    <option value="">Select Status....</option>
+                    <option value="20">Arrived</option>
+                    <option value="30">Delivery</option>
+                    <option value="40">Problem</option>
+                    <option value="60">Refuse</option>
+                    <option value="50">Sign</option>
 
-
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">Rider:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="orderNo" autocomplete="off" class="layui-input">
+            </div>
+        </div>
         <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">CreatedTime:</label>
             <div class="layui-inline">
@@ -60,6 +80,7 @@
                 <th lay-data="{field:'orderType', width:100}">OrderType</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'rider', width:130}">Rider</th>
+                <th lay-data="{field:'statusDesc', width:130}">Status</th>
                 <th lay-data="{field:'handleName', width:130}">HandleName</th>
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
                 <th lay-data="{field:'phone', width:150}">Phone</th>
@@ -70,7 +91,8 @@
         </table>
     </div>
 
-    <iframe scrolling="no" frameborder="0" src="/report/dispatch/list.html?exportType=0" id="ifm" width="100%" height="100%" style="padding: 0px; display: none;"></iframe>
+    <iframe scrolling="no" frameborder="0" src="/report/dispatch/list.html?exportType=0" id="ifm" width="100%"
+            height="100%" style="padding: 0px; display: none;"></iframe>
 
     <%@ include file="../common/footer.jsp" %>
     <script src="${ctx}/dist/js/ajaxfileupload.js"></script>
@@ -92,7 +114,8 @@
                     elem: '#toCreatedTime'
                     , lang: 'en'
                 });
-
+                var form = layui.form;
+                form.render();
             });
 
             var table = layui.table;
@@ -104,9 +127,9 @@
             //reloadTable();
 
             $(".btn-export").on("click", function () {
-                if(showPattern==1){
+                if (showPattern == 1) {
                     window.location.href = "/report/dispatch/list.html" + "?limit=1000&" + getParam(1);
-                }else {
+                } else {
                     window.location.href = "/report/dispatch/list.html" + "?" + getParam(1);
                 }
             });
@@ -116,20 +139,20 @@
             });
 
             $(".btn-pdf").on("click", function () {
-                showPattern==1 ? showPattern=0 : showPattern=1;
+                showPattern == 1 ? showPattern = 0 : showPattern = 1;
                 reloadTable();
             });
 
             function reloadTable() {
 
-                if (showPattern==0){
+                if (showPattern == 0) {
 
                     $("#me_tab").show();
                     $("#ifm").hide();
                     table.reload("${id0}", {
                         where: getParam(2, true)
                     });
-                }else if(showPattern==1){
+                } else if (showPattern == 1) {
                     $("#ifm").show();
                     $("#me_tab").hide();
                     var url = "/report/dispatch/list.html";
@@ -139,19 +162,21 @@
 
             };
 
-            function getParam(dateType, isPojo){
-                if (dateType=="" || dateType=='undefind') dateType=0;
-                var sTime_creat = $("input[name='createdTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val()))/1000;
-                var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
+            function getParam(dateType, isPojo) {
+                if (dateType == "" || dateType == 'undefind') dateType = 0;
+                var sTime_creat = $("input[name='createdTime_s']").val() == "" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val())) / 1000;
+                var eTime_creat = $("input[name='createdTime_e']").val() == "" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val())) / 1000 + 86400;
+                var status = $("select[name='status']").val();
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
                     fromCreatedTime: sTime_creat,
                     toCreatedTime: eTime_creat,
-                    exportType: dateType
+                    exportType: dateType,
+                    status:status
                 };
-                if (isPojo===true) return param;
-                else return jQuery.param( param );
+                if (isPojo === true) return param;
+                else return jQuery.param(param);
 
             }
         });
