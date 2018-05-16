@@ -24,8 +24,6 @@ public class ReportDispatchDO extends BaseDo<Long> {
 
     private Integer status;
 
-    private String statusDesc;
-
     public Integer getStatus() {
         return status;
     }
