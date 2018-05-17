@@ -123,29 +123,38 @@
 			<div class="clear"></div>
 		</div>
 
-		<div class="model_banner">
-			<div class="model_banner_title">
-				<i class="model_banner_title"></i><div data-locale="today_task"></div>
-			</div>
+	</div>
 
-			<div class="clear" id="report">
-				this month 100 had been sent, today 15 need to sent, 10 had been sent, 2 had been delayed, and 3 had not been sent.
-			</div>
-		</div>
-		<div class="j_bootm"></div>
+	<div class="model_banner_title">
+		<i class="model_banner_title"></i><div data-locale="today_task"></div>
+	</div>
 
+	<div class="list card">
+		<a href="#" class="item item-icon-left">
+			<i class="icon ion-home"></i>
+			Month had bean seet：<span id="deliveredMonthNum"></span>
+		</a>
+		<a href="#" class="item item-icon-left">
+			<i class="icon ion-ios-telephone"></i>
+			Today need to sent：<span id="taskDayNum"></span>
+		</a>
+		<a href="#" class="item item-icon-left">
+			<i class="icon ion-wifi"></i>
+			Today delayed：<span id="delayDayNum"></span>
+		</a>
+		<a href="#" class="item item-icon-left">
+			<i class="icon ion-card"></i>
+			Not been sent：<span id="remaining"></span>
+		</a>
 	</div>
 
 	<script>
 		$(function () {
 		    $.post('/mobile/getTaskReport.html', function (data) {
-		        $("#report").html(
-		            'Month had bean seet：'+data.data.deliveredMonthNum
-					+"<br/>Today need to sent："+data.data.taskDayNum
-					+"<br/>Today delayed：" + data.data.delayDayNum
-					+"<br/>Not been sent：" + (data.data.taskDayNum-data.data.deliveredDayNum)
-				);
-				console.log(data);
+		        $("#deliveredMonthNum").html(data.data.deliveredMonthNum);
+		        $("#taskDayNum").html(data.data.taskDayNum);
+		        $("#delayDayNum").html(data.data.delayDayNum);
+		        $("#remaining").html(data.data.taskDayNum-data.data.deliveredDayNum);
             },"json")
         });
 
