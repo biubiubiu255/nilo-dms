@@ -122,8 +122,42 @@
 			</ul>
 			<div class="clear"></div>
 		</div>
-		<div class="j_bootm"></div>
 
 	</div>
+
+	<div class="model_banner_title">
+		<i class="model_banner_title"></i><div data-locale="today_task"></div>
+	</div>
+
+	<div class="list card">
+		<a href="#" class="item item-icon-left">
+			<i class="icon ion-home"></i>
+			Month had bean seet：<span id="deliveredMonthNum"></span>
+		</a>
+		<a href="#" class="item item-icon-left">
+			<i class="icon ion-ios-telephone"></i>
+			Today need to sent：<span id="taskDayNum"></span>
+		</a>
+		<a href="#" class="item item-icon-left">
+			<i class="icon ion-wifi"></i>
+			Today delayed：<span id="delayDayNum"></span>
+		</a>
+		<a href="#" class="item item-icon-left">
+			<i class="icon ion-card"></i>
+			Not been sent：<span id="remaining"></span>
+		</a>
+	</div>
+
+	<script>
+		$(function () {
+		    $.post('/mobile/getTaskReport.html', function (data) {
+		        $("#deliveredMonthNum").html(data.data.deliveredMonthNum);
+		        $("#taskDayNum").html(data.data.taskDayNum);
+		        $("#delayDayNum").html(data.data.delayDayNum);
+		        $("#remaining").html(data.data.taskDayNum-data.data.deliveredDayNum);
+            },"json")
+        });
+
+	</script>
 </body>
 </html>

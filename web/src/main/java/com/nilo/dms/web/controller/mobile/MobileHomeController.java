@@ -6,7 +6,9 @@ import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.common.utils.WebUtil;
+import com.nilo.dms.dao.DeliverAgendaDao;
 import com.nilo.dms.dao.UserNetworkDao;
+import com.nilo.dms.dao.dataobject.DeliverAgendaDO;
 import com.nilo.dms.dao.dataobject.UserNetworkDO;
 import com.nilo.dms.dto.common.Role;
 import com.nilo.dms.dto.common.User;
@@ -25,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -48,6 +51,8 @@ public class MobileHomeController extends BaseController {
     private UserNetworkDao userNetworkDao;
     @Autowired
     private StaffService staffService;
+    @Autowired
+    private DeliverAgendaDao deliverAgendaDao;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -129,5 +134,13 @@ public class MobileHomeController extends BaseController {
             list.add(networkDO.getDistributionNetworkId().intValue());
         }
         return list;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getTaskReport.html")
+    public String getTaskReport(String riderNo) {
+        Principal principal = SessionLocal.getPrincipal();
+        DeliverAgendaDO result = deliverAgendaDao.queryReport(principal.getUserId());
+        return toJsonTrueData(result);
     }
 }

@@ -72,27 +72,32 @@ public class ReportSignController extends BaseController {
             parameter.setToHandledTime(eTime_creat.toString());
         }
 
-        Pagination page = getPage();
-        List<SignReport> list = signReportService.querySignReport(parameter, page);
-        //page.setTotalCount(commonDao.lastFoundRows());
-
-        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
-        System.out.println(" = " + list.size());
+        Pagination page = null;
 
         String fileType;
         switch (exportType) {
             case 0:
                 fileType = "pdf";
+                page = new Pagination(0, 1000);
                 break;
             case 1:
                 fileType = "xls";
+                page = new Pagination(0, 1000);
                 break;
             case 2:
                 fileType = "json";
+                page = getPage();
                 break;
             default:
                 fileType = "pdf";
+                page = getPage();
         }
+
+        List<SignReport> list = signReportService.querySignReport(parameter, page);
+        //page.setTotalCount(commonDao.lastFoundRows());
+
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
+        System.out.println(" = " + list.size());
 
         if (fileType.equals("json")) {
             request.setAttribute("toDate", toPaginationLayUIData(page, list));

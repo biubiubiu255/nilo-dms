@@ -62,20 +62,17 @@ public class ReportArriveController extends BaseController {
         map.put("limit", page.getLimit());
 
 
-        List<ReportArriveDO> list = waybillArriveDao.queryReportArrive(map);
-        page.setTotalCount(waybillArriveDao.queryReportArriveCount(map));
-        //page.setTotalCount(commonDao.lastFoundRows());
-
-        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
-        System.out.println(" = " + list.size());
-
         String fileType;
         switch (exportType) {
             case 0:
                 fileType = "pdf";
+                map.put("offset", 0);
+                map.put("limit", 1000);
                 break;
             case 1:
                 fileType = "xls";
+                map.put("offset", 0);
+                map.put("limit", 1000);
                 break;
             case 2:
                 fileType = "json";
@@ -83,6 +80,13 @@ public class ReportArriveController extends BaseController {
             default:
                 fileType = "pdf";
         }
+
+        List<ReportArriveDO> list = waybillArriveDao.queryReportArrive(map);
+        page.setTotalCount(waybillArriveDao.queryReportArriveCount(map));
+        //page.setTotalCount(commonDao.lastFoundRows());
+
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
+        System.out.println(" = " + list.size());
 
         if (fileType.equals("json")) {
             request.setAttribute("toDate", toPaginationLayUIData(page, list));

@@ -32,26 +32,42 @@
                 </select>
             </div>
         </div>
+
+
+
     </div>
-    <div class="layui-row">
-        <div class="layui-col-md4 layui-col-lg4">
-            <label class="layui-form-label">Rider:</label>
-            <div class="layui-input-inline">
-                <input type="text" name="rider" autocomplete="off" class="layui-input">
+
+    <div class="layui-form layui-row">
+        <div class="layui-row">
+
+            <div class="layui-col-md4 layui-col-lg4">
+                <label class="layui-form-label">Rider:</label>
+                <div class="layui-inline">
+                    <select name="rider" lay-verify="required" lay-filter="orderTypeLay">
+                        <option value="">choose or search....</option>
+                        <c:forEach items="${list}" var="r">
+                            <option value=${r.userId}>${r.nickName}</option>
+                        </c:forEach>
+                    </select>
+                    <%--<input type="text" name="orderNo" autocomplete="off" class="layui-input">--%>
+                </div>
+
             </div>
-        </div>
-        <div class="layui-col-md6 layui-col-lg5">
-            <label class="layui-form-label">CreatedTime:</label>
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="createdTime_s">
-            </div>
-            -
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="toCreatedTime" placeholder="To" name="createdTime_e">
-            </div>
-        </div>
 
 
+            <div class="layui-col-md4 layui-col-lg4">
+                <label class="layui-form-label">CreatedTime:</label>
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="createdTime_s">
+                </div>
+                -
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="toCreatedTime" placeholder="To" name="createdTime_e">
+                </div>
+            </div>
+
+
+        </div>
     </div>
 
     <!-- 搜索栏的第二行 -->
@@ -167,7 +183,7 @@
                 var sTime_creat = $("input[name='createdTime_s']").val() == "" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val())) / 1000;
                 var eTime_creat = $("input[name='createdTime_e']").val() == "" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val())) / 1000 + 86400;
                 var status = $("select[name='status']").val();
-                var rider = $("input[name='rider']").val();
+                var rider  = $("select[name='rider']").val();
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
@@ -175,7 +191,7 @@
                     toCreatedTime: eTime_creat,
                     exportType: dateType,
                     status:status,
-                    rider:rider
+                    rider: rider
                 };
                 if (isPojo === true) return param;
                 else return jQuery.param(param);
