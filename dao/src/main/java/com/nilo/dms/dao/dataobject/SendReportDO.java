@@ -1,6 +1,7 @@
 package com.nilo.dms.dao.dataobject;
 
 import com.nilo.dms.common.BaseDo;
+import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 
 public class SendReportDO extends BaseDo<Long> {
     private Long merchantId;
@@ -62,6 +63,11 @@ public class SendReportDO extends BaseDo<Long> {
 
     public Integer getStatus() {
         return status;
+    }
+
+    public String getStatusDesc() {
+        DeliveryOrderStatusEnum statusEnum = DeliveryOrderStatusEnum.getEnum(this.status);
+        return statusEnum == null ? "" : statusEnum.getDesc();
     }
 
     public void setStatus(Integer status) {

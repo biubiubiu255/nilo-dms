@@ -92,7 +92,7 @@ public class SignReportServiceImpl implements SignReportService {
         signReport.setAlreadyPaid(s.getAlreadyPaid());
         signReport.setHandleBy(s.getHandleBy());
         signReport.setSigner(s.getSigner());
-
+        signReport.setStatus(s.getStatus());
 
         return signReport;
     }

@@ -213,7 +213,7 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         handleRiderDao.upBigStatus(handleNo, HandleRiderStatusEnum.SHIP.getCode());
         handleRiderDao.upSmallStatus(handleNo, HandleRiderStatusEnum.SHIP.getCode());
 
-        UserInfo userInfo = userService.findUserInfoByUserId("" + riderDelivery.getMerchantId(), "" + riderDelivery.getHandleBy());
+        UserInfo userInfo = userService.findUserInfoByUserId("" + riderDelivery.getMerchantId(), "" + riderDelivery.getRider());
         //发送短信
         for (RiderDeliverySmallDO d : riderDeliverySmallDOS) {
             WaybillDO w = waybillDao.queryByOrderNo(riderDelivery.getMerchantId(), d.getOrderNo());
