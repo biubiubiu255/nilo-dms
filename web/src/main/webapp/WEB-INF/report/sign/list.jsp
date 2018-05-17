@@ -19,7 +19,7 @@
         </div>
 
 
-        <div class="layui-col-md4 layui-col-lg4">
+        <div class="layui-col-md6 layui-col-lg4">
             <label class="layui-form-label">ScanTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="createdTime_s">
@@ -58,6 +58,7 @@
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'alreadyPaid', width:110}">AlreadyPaid</th>
                 <th lay-data="{field:'needPayAmount', width:100}">NeedPayAmount</th>
+                <th lay-data="{field:'statusDesc', width:150}">Status</th>
                 <th lay-data="{field:'handleBy', width:150}">HandleName</th>
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">HandleTime</th>
                 <th lay-data="{field:'rName', width:150}">Signer</th>

@@ -52,13 +52,15 @@
                 jdbcType="VARCHAR"/>
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
     </resultMap>
 
 
 
     <select id="querySendReport" resultMap="sendDO">
 
-        SELECT a.order_no, a.weight, a.created_time, b.handle_no, b.type as delivery_type, b.driver, b.next_station, b.handle_name, c.order_type, c.reference_no, d.contact_number as phone, d.address, e.express_name
+        SELECT c.status,a.order_no, a.weight, a.created_time, b.handle_no, b.type as delivery_type, b.driver, b.next_station, b.handle_name, c.order_type, c.reference_no, d.contact_number as phone, d.address, e.express_name
 
         FROM t_handle_third_express_details a
 

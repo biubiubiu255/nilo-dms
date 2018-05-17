@@ -159,7 +159,7 @@ public class SendNextStationController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
-    public String addLoading(String[] smallPack, SendThirdHead sendThirdHead, Integer saveStutus, HttpServletRequest request) {
+    public String addLoading(String[] smallPack, SendThirdHead sendThirdHead, Integer saveStatus, HttpServletRequest request) {
         HttpSession session = request.getSession();
 
         Principal me = SessionLocal.getPrincipal();
@@ -189,7 +189,7 @@ public class SendNextStationController extends BaseController {
         sendThirdHead.setHandleBy(Long.valueOf(me.getUserId()));
         sendThirdHead.setHandleName(me.getUserName());
         sendThirdHead.setType("package");
-        sendThirdHead.setStatus(saveStutus);
+        sendThirdHead.setStatus(saveStatus);
 
         sendThirdService.insertBigAndSmall(merchantId, sendThirdHead, smallPack);
 

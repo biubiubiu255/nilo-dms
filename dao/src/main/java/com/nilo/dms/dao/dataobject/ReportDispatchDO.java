@@ -1,6 +1,7 @@
 package com.nilo.dms.dao.dataobject;
 
 import com.nilo.dms.common.BaseDo;
+import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 
 public class ReportDispatchDO extends BaseDo<Long> {
 
@@ -11,8 +12,6 @@ public class ReportDispatchDO extends BaseDo<Long> {
     private String country;
     private String orderType;
 
-
-
     private Double weight;
     private Double len;
     private Double high;
@@ -22,6 +21,19 @@ public class ReportDispatchDO extends BaseDo<Long> {
     private String rider;
     private String phone;
     private String address;
+
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+    public String getStatusDesc() {
+        DeliveryOrderStatusEnum s =DeliveryOrderStatusEnum.getEnum(this.status);
+        return  s== null?"":s.getDesc();
+    }
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public Long getMerchantId() {
         return merchantId;
