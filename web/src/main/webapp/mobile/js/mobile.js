@@ -1094,3 +1094,7 @@ function getI18nAttr(value) {
 	
 }
 
+function toHome(){
+	window.location.href = "/mobile/home.html";
+}
+
