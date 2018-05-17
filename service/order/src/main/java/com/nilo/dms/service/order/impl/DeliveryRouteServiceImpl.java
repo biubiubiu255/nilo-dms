@@ -96,7 +96,9 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
         List<String> transList = new ArrayList<String>();
         for (String orderNo : orderNos) {
             WaybillDO w = waybillDao.queryByOrderNo(Long.parseLong(principal.getMerchantId()), orderNo);
-            transList.add("KE" + w.getReferenceNo());
+            if (w != null && StringUtil.isNotBlank(w.getReferenceNo())) {
+                transList.add("KE" + w.getReferenceNo());
+            }
         }
         String operateTime = "" + System.currentTimeMillis() / 1000L;
         String transNo = JSONObject.toJSONString(transList);
