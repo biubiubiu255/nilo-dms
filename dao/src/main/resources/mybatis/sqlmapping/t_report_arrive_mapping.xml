@@ -22,11 +22,13 @@
                 jdbcType="VARCHAR"/>
         <result property="phone" column="contact_number" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="queryReportArrive" resultMap="ArriveDo">
 
-        SELECT a.order_no, a.opt_time,  b.name op_name, c.weight, d.name last_network, e.name scan_network, f.contact_number, f.name address_name, f.address
+        SELECT c.status, a.order_no, a.opt_time,  b.name op_name, c.weight, d.name last_network, e.name scan_network, f.contact_number, f.name address_name, f.address
 
         FROM  t_waybill_log_arrive a
 

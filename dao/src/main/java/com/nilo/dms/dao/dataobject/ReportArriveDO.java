@@ -1,5 +1,7 @@
 package com.nilo.dms.dao.dataobject;
 
+import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
+
 public class ReportArriveDO {
     private Long merchantId;
     private String orderNo;
@@ -10,7 +12,18 @@ public class ReportArriveDO {
     private String recipients;
     private String address;
     private String phone;
+    private Integer status;
+    public String getStatusDesc() {
+        DeliveryOrderStatusEnum statusEnum = DeliveryOrderStatusEnum.getEnum(this.status);
+        return statusEnum == null ? "" : statusEnum.getDesc();
+    }
+    public Integer getStatus() {
+        return status;
+    }
 
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
     public Long getMerchantId() {
         return merchantId;
     }

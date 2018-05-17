@@ -124,6 +124,7 @@
                 <th lay-data="{field: 'handleName', width:130}">HandleName</th>
 
                 <th lay-data="{field: 'referenceNo', width:170}">ReferenceNo</th>
+                <th lay-data="{field: 'statusDesc', width:130}">Status</th>
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
                 <th lay-data="{field:'phone', width:150}">Phone</th>
                 <th lay-data="{field:'address', width:200}">Address</th>

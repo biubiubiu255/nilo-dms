@@ -72,6 +72,7 @@
             <th lay-data="{field:'lastNetwork' , width:200}">LastNetwork</th>
             <th lay-data="{field:'scanNetwork', width:200}">ScanNetwork</th>
             <th lay-data="{field:'scanTime', width:200, templet:'<div>{{ formatDate(d.scanTime) }}</div>'}">ScanTime</th>
+            <th lay-data="{field:'statusDesc', width:200}">Status</th>
             <th lay-data="{field:'weight', width:100}">weight</th>
             <th lay-data="{field:'phone', width:200}">Phone</th>
             <th lay-data="{field:'address', width:200}">address</th>

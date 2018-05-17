@@ -37,10 +37,10 @@
         <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">Rider:</label>
             <div class="layui-input-inline">
-                <input type="text" name="orderNo" autocomplete="off" class="layui-input">
+                <input type="text" name="rider" autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-col-md4 layui-col-lg4">
+        <div class="layui-col-md6 layui-col-lg5">
             <label class="layui-form-label">CreatedTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="createdTime_s">
@@ -167,13 +167,15 @@
                 var sTime_creat = $("input[name='createdTime_s']").val() == "" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val())) / 1000;
                 var eTime_creat = $("input[name='createdTime_e']").val() == "" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val())) / 1000 + 86400;
                 var status = $("select[name='status']").val();
+                var rider = $("input[name='rider']").val();
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
                     fromCreatedTime: sTime_creat,
                     toCreatedTime: eTime_creat,
                     exportType: dateType,
-                    status:status
+                    status:status,
+                    rider:rider
                 };
                 if (isPojo === true) return param;
                 else return jQuery.param(param);
