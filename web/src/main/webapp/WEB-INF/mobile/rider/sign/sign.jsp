@@ -118,7 +118,8 @@
 					if (res.result) {
 						$('#lypic').attr('src', "");
 						showInfo('submit success');
-						window.location.href = "/mobile/home.html";
+						window.location.reload();
+						//window.location.href = "/mobile/home.html";
 					} else {
 						showError(res.msg);
 						$("#remark").val();
