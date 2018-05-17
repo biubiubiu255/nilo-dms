@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public class PhoneMessageConsumer extends AbstractMQConsumer {
             //发送短信
             Map<String, String> param = new HashMap<>();
             param.put("mobile", phoneMessage.getPhoneNum());
-            param.put("msg", phoneMessage.getContent());
+            param.put("msg", URLEncoder.encode(phoneMessage.getContent(),"utf-8"));
             param.put("sign", sign(phoneMessage.getContent(), phoneMessage.getPhoneNum()));
             String response = HttpUtil.post(sms_url, param);
 

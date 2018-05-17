@@ -204,8 +204,12 @@ public class SendThirdServiceImpl implements SendThirdService {
 
         for (SendThirdDetail d : detailsList) {
             //发送短信
-            WaybillDO w = waybillDao.queryByOrderNo(d.getMerchantId(), d.getOrderNo());
-            DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(d.getMerchantId(), d.getOrderNo());
+            WaybillDO w = waybillDao.queryByOrderNo(Long.parseLong(principal.getMerchantId()), d.getOrderNo());
+            if(StringUtil.equals(w.getOrderType(),"PK")){
+                continue;
+            }
+
+            DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(Long.parseLong(principal.getMerchantId()), d.getOrderNo());
             //送货上门
             String content = "";
             if (StringUtil.equals(w.getChannel(), "1")) {
