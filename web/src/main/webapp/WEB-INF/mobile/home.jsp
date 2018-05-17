@@ -122,8 +122,33 @@
 			</ul>
 			<div class="clear"></div>
 		</div>
+
+		<div class="model_banner">
+			<div class="model_banner_title">
+				<i class="model_banner_title"></i><div data-locale="today_task"></div>
+			</div>
+
+			<div class="clear" id="report">
+				this month 100 had been sent, today 15 need to sent, 10 had been sent, 2 had been delayed, and 3 had not been sent.
+			</div>
+		</div>
 		<div class="j_bootm"></div>
 
 	</div>
+
+	<script>
+		$(function () {
+		    $.post('/mobile/getTaskReport.html', function (data) {
+		        $("#report").html(
+		            'Month had bean seet：'+data.data.deliveredMonthNum
+					+"<br/>Today need to sent："+data.data.taskDayNum
+					+"<br/>Today delayed：" + data.data.delayDayNum
+					+"<br/>Not been sent：" + (data.data.taskDayNum-data.data.deliveredDayNum)
+				);
+				console.log(data);
+            },"json")
+        });
+
+	</script>
 </body>
 </html>

@@ -50,19 +50,17 @@ public class ReportSendRiderController extends BaseController {
         reportDispatchQO.setLimit(page.getLimit());
         reportDispatchQO.setOffset(page.getOffset());
 
-        List<ReportDispatchDO> list = reportDispatchDao.queryReportDispatch(reportDispatchQO);
-        page.setTotalCount(reportDispatchDao.queryReportDispatchCount(reportDispatchQO));
-        //page.setTotalCount(commonDao.lastFoundRows());
-
-        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
-
         String fileType;
         switch (reportDispatchQO.getExportType()) {
             case 0:
                 fileType = "pdf";
+                reportDispatchQO.setLimit(1000);
+                reportDispatchQO.setOffset(0);
                 break;
             case 1:
                 fileType = "xls";
+                reportDispatchQO.setLimit(1000);
+                reportDispatchQO.setOffset(0);
                 break;
             case 2:
                 fileType = "json";
@@ -70,6 +68,12 @@ public class ReportSendRiderController extends BaseController {
             default:
                 fileType = "pdf";
         }
+
+        List<ReportDispatchDO> list = reportDispatchDao.queryReportDispatch(reportDispatchQO);
+        page.setTotalCount(reportDispatchDao.queryReportDispatchCount(reportDispatchQO));
+        //page.setTotalCount(commonDao.lastFoundRows());
+
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
 
         if (fileType.equals("json")) {
             request.setAttribute("toDate", toPaginationLayUIData(page, list));

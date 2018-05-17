@@ -93,7 +93,7 @@
             and e.country = #{country}
         </if>
         <if test="rider !=null and rider !='' ">
-            and c.user_id = #{rider}
+            and c.id = #{rider}
         </if>
 
         <if test="fromCreatedTime !=null ">
@@ -168,7 +168,7 @@
         </if>
 
         <if test="rider !=null and rider !='' ">
-            and c.user_id = #{rider}
+            and c.id = #{rider}
         </if>
 
         <if test="fromCreatedTime !=null ">

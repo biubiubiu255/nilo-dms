@@ -87,17 +87,18 @@ public class ReportSendThirdController extends BaseController {
         //获取merchantId
         Long merchantId = Long.parseLong(me.getMerchantId());
         sendReportQO.setMerchantId(merchantId);
-
-
-        List<SendReportDO> list = sendReportService.querySendReport(sendReportQO, page);
-
+        
         String fileType;
         switch (sendReportQO.getExportType()) {
             case 0:
                 fileType = "pdf";
+                sendReportQO.setLimit(1000);
+                sendReportQO.setOffset(0);
                 break;
             case 1:
                 fileType = "xls";
+                sendReportQO.setLimit(1000);
+                sendReportQO.setOffset(0);
                 break;
             case 2:
                 fileType = "json";
@@ -105,6 +106,8 @@ public class ReportSendThirdController extends BaseController {
             default:
                 fileType = "pdf";
         }
+
+        List<SendReportDO> list = sendReportService.querySendReport(sendReportQO, page);
 
         if (fileType.equals("json")) {
             request.setAttribute("toDate", toPaginationLayUIData(page, list));

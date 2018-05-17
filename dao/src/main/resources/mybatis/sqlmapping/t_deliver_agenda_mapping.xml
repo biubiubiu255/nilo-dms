@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.DeliverAgendaDao">
+
+ <resultMap id="deliverReport" type="com.nilo.dms.dao.dataobject.DeliverAgendaDO">
+     <result property="deliveredMonthNum" column="delivered_month_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+     <result property="deliveredDayNum" column="delivered_day_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+     <result property="taskDayNum" column="task_day_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+     <result property="delayDayNum" column="delay_day_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+     <result property="createdTime" column="created_time" javaType="java.lang.Long" jdbcType="INTEGER"/>
+ </resultMap>
+
+ <select id="queryReport" resultMap="deliverReport">
+
+    SELECT
+	*, UNIX_TIMESTAMP() as created_time
+    FROM
+	(
+		SELECT
+			count(id) AS 'delivered_month_num'
+		FROM
+			t_handle_sign
+		WHERE
+			handle_by = #{riderNo}
+		AND FROM_UNIXTIME(created_time, '%Y') = DATE_FORMAT(NOW(), '%Y')
+	) AS a,
+	(
+		SELECT
+			count(b.id) AS 'task_day_num'
+		FROM
+			t_handle_rider AS a
+		LEFT JOIN t_handle_rider_details AS b ON a.handle_no = b.handle_no
+
+		WHERE a.handle_by = #{riderNo}
+	) AS b,
+	(
+		SELECT
+			count(id) AS 'delivered_day_num'
+		FROM
+			t_handle_sign
+		WHERE
+			handle_by = #{riderNo}
+		AND FROM_UNIXTIME(created_time, '%d') = FROM_UNIXTIME(NOW(), '%d')
+	) AS c,
+	(
+		SELECT
+			count(id) AS 'delay_day_num'
+		FROM
+			t_handle_delay
+		WHERE
+			handle_by = #{riderNo}
+		AND FROM_UNIXTIME(created_time, '%d') = FROM_UNIXTIME(NOW(), '%d')
+	) AS d
+
+</select>
+
+</mapper>
