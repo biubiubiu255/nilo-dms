@@ -1,7 +1,9 @@
+<%@ page import="com.nilo.dms.service.impl.SessionLocal" %>
 <%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+		 pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%  boolean isRider = SessionLocal.getPrincipal().isRider(); %>
 <html>
 <head>
 <meta charset="UTF-8" />
@@ -125,27 +127,33 @@
 
 	</div>
 
-	<div class="model_banner_title">
-		<i class="model_banner_title"></i><div data-locale="today_task"></div>
-	</div>
+	<div
+		<c:if test="${isRider == false}">
+			style="display: none;"
+		</c:if>
+	>
+		<div class="model_banner_title">
+			<i class="model_banner_title"></i><div data-locale="today_task"></div>
+		</div>
 
-	<div class="list card">
-		<a href="#" class="item item-icon-left">
-			<i class="icon ion-home"></i>
-			Month had bean seet：<span id="deliveredMonthNum"></span>
-		</a>
-		<a href="#" class="item item-icon-left">
-			<i class="icon ion-ios-telephone"></i>
-			Today need to sent：<span id="taskDayNum"></span>
-		</a>
-		<a href="#" class="item item-icon-left">
-			<i class="icon ion-wifi"></i>
-			Today delayed：<span id="delayDayNum"></span>
-		</a>
-		<a href="#" class="item item-icon-left">
-			<i class="icon ion-card"></i>
-			Not been sent：<span id="remaining"></span>
-		</a>
+		<div class="list card">
+			<a href="#" class="item item-icon-left">
+				<i class="icon ion-home"></i>
+				Month had bean seet：<span id="deliveredMonthNum"></span>
+			</a>
+			<a href="#" class="item item-icon-left">
+				<i class="icon ion-ios-telephone"></i>
+				Today need to sent：<span id="taskDayNum"></span>
+			</a>
+			<a href="#" class="item item-icon-left">
+				<i class="icon ion-wifi"></i>
+				Today delayed：<span id="delayDayNum"></span>
+			</a>
+			<a href="#" class="item item-icon-left">
+				<i class="icon ion-card"></i>
+				Not been sent：<span id="remaining"></span>
+			</a>
+		</div>
 	</div>
 
 	<script>
