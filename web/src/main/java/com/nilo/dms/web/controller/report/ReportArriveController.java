@@ -81,6 +81,7 @@ public class ReportArriveController extends BaseController {
                 fileType = "pdf";
         }
 
+
         List<ReportArriveDO> list = waybillArriveDao.queryReportArrive(map);
         page.setTotalCount(waybillArriveDao.queryReportArriveCount(map));
         //page.setTotalCount(commonDao.lastFoundRows());
