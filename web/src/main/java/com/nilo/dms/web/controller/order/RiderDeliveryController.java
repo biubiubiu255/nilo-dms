@@ -126,7 +126,7 @@ public class RiderDeliveryController extends BaseController {
     @RequestMapping(value = "/addLoadingPage.html", method = RequestMethod.GET)
     public String addLoadingPage(Model model) {
 
-        List<StaffDO> staffList = getRiderList();
+        List<StaffDO> staffList = getRiderList("");
         model.addAttribute("riderList", staffList);
         Principal me = SessionLocal.getPrincipal();
         List<OutsourceDO> outsourceList = outsourceDao.findAll(me.getMerchantId());
@@ -197,7 +197,7 @@ public class RiderDeliveryController extends BaseController {
         model.addAttribute("outsourceList", outsourceList);
 
         model.addAttribute("list", res);
-        model.addAttribute("riderList", getRiderList());
+        model.addAttribute("riderList", getRiderList(""));
         model.addAttribute("riderDelivery", riderDelivery);
         return "waybill/rider_delivery/edit";
     }

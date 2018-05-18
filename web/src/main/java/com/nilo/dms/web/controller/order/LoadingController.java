@@ -87,7 +87,7 @@ public class LoadingController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        model.addAttribute("riderList", getRiderList());
+        model.addAttribute("riderList", getRiderList(null));
 
         //第三方快递公司及自提点
         List<ThirdExpressDO> expressDOList = thirdExpressDao.findByMerchantId(Long.parseLong(merchantId));
@@ -125,7 +125,7 @@ public class LoadingController extends BaseController {
             Loading loading = loadingService.queryByLoadingNo(merchantId, loadingNo);
             model.addAttribute("loading", loading);
         }
-        model.addAttribute("riderList", getRiderList());
+        model.addAttribute("riderList", getRiderList(null));
         return "loading/details";
     }
 

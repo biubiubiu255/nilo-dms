@@ -43,10 +43,10 @@
             <div class="layui-col-md4 layui-col-lg4">
                 <label class="layui-form-label">Rider:</label>
                 <div class="layui-inline">
-                    <select name="rider" lay-verify="required" lay-filter="orderTypeLay">
+                    <select name="rider" lay-verify="required" lay-filter="rider">
                         <option value="">choose or search....</option>
-                        <c:forEach items="${list}" var="r">
-                            <option value=${r.userId}>${r.nickName}</option>
+                        <c:forEach items="${list}" var="rider">
+                            <option value=${rider.userId}>${rider.staffId}-${rider.realName}</option>
                         </c:forEach>
                     </select>
                     <%--<input type="text" name="orderNo" autocomplete="off" class="layui-input">--%>

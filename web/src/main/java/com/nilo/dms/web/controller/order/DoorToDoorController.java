@@ -79,7 +79,7 @@ public class DoorToDoorController extends BaseController {
     @RequestMapping(value = "/allocatePage.html")
     public String allocatePage(Model model, HttpServletRequest request, @RequestParam(value = "orderNos[]") String[] orderNos) {
         request.getSession().setAttribute("orderNos", orderNos);
-        model.addAttribute("list", getRiderList());
+        model.addAttribute("list", getRiderList(null));
         return "door_to_door/allocatePage";
     }
 

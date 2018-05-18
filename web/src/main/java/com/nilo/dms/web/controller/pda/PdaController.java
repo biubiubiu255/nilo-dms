@@ -250,7 +250,7 @@ public class PdaController extends BaseController {
 		Principal me = SessionLocal.getPrincipal();
 		// 获取merchantId
 		String merchantId = me.getMerchantId();
-		List<StaffDO> list = getRiderList();
+		List<StaffDO> list = getRiderList(null);
 
 		List<PdaRider> pdaRiders = new ArrayList<PdaRider>();
 		for (StaffDO s : list) {

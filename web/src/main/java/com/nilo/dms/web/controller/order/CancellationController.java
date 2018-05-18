@@ -38,7 +38,7 @@ public class CancellationController extends BaseController {
 
     @RequestMapping("/listPage.html")
     public String list(Model model) {
-        model.addAttribute("riderList", getRiderList());
+        model.addAttribute("riderList", getRiderList(null));
         return "delivery_order/cancellation/list";
     }
 

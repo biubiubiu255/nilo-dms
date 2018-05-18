@@ -31,7 +31,7 @@ public class DeliverScanController extends BaseController {
 
     @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
-        model.addAttribute("riderList", getRiderList());
+        model.addAttribute("riderList", getRiderList(null));
         return "mobile/network/deliver_scan/deliverScan";
     }
 

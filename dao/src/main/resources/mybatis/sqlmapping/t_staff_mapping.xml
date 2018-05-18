@@ -178,7 +178,9 @@
         SELECT
         t.user_id,staff_id,company_id,t.merchant_id,department_id,is_rider,real_name,nick_name,job,title,title_time,title_level,employ_time,resigned_time,regular_time,sex,birthday,id_card,t.phone,t.email,t.address,t.status,t.created_time , t.updated_time ,t.version
         FROM t_bas_staff t left join t_sys_user_login l on t.staff_id= l.user_name where company_id =#{companyId} and is_rider = 1 and t.status in (1,2) and l.status=1
-        and outsource = #{outsource}
+        <if test="outsource != null">
+            and outsource = #{outsource}
+        </if>
 
     </select>
 

@@ -141,9 +141,9 @@ public class BaseController {
         return new Pagination(offset, limit);
     }
 
-    protected List<StaffDO> getRiderList() {
+    protected List<StaffDO> getRiderList(String outsource) {
         Principal principal = SessionLocal.getPrincipal();
-        List<StaffDO> riderList = staffDao.queryAllRider(Long.parseLong(principal.getCompanyId()),"");
+        List<StaffDO> riderList = staffDao.queryAllRider(Long.parseLong(principal.getCompanyId()),outsource);
         return riderList;
     }
 
