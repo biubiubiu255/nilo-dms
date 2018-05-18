@@ -23,7 +23,7 @@
 			t_handle_sign
 		WHERE
 			handle_by = #{riderNo}
-		AND FROM_UNIXTIME(created_time, '%Y') = DATE_FORMAT(NOW(), '%Y')
+		AND FROM_UNIXTIME(created_time, '%Y') = date_format(NOW(), '%Y')
 	) AS a,
 	(
 		SELECT
@@ -41,7 +41,7 @@
 			t_handle_sign
 		WHERE
 			handle_by = #{riderNo}
-		AND FROM_UNIXTIME(created_time, '%d') = FROM_UNIXTIME(NOW(), '%d')
+		AND FROM_UNIXTIME(created_time, '%d') = date_format(NOW(), '%d')
 	) AS c,
 	(
 		SELECT
@@ -50,7 +50,7 @@
 			t_handle_delay
 		WHERE
 			handle_by = #{riderNo}
-		AND FROM_UNIXTIME(created_time, '%d') = FROM_UNIXTIME(NOW(), '%d')
+		AND FROM_UNIXTIME(created_time, '%d') = date_format(NOW(), '%d')
 	) AS d
 
 </select>
