@@ -32,7 +32,7 @@
 			t_handle_rider AS a
 		LEFT JOIN t_handle_rider_details AS b ON a.handle_no = b.handle_no
 
-		WHERE a.handle_by = #{riderNo}
+		WHERE a.rider = #{riderNo}
 	) AS b,
 	(
 		SELECT
