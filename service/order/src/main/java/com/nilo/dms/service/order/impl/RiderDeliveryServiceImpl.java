@@ -219,7 +219,7 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
             WaybillDO w = waybillDao.queryByOrderNo(riderDelivery.getMerchantId(), d.getOrderNo());
             DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(riderDelivery.getMerchantId(), d.getOrderNo());
             //送货上门
-            String content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today. Your total order amount is Ksh." + w.getNeedPayAmount() + ".Kindly call " + userInfo.getName() + " " + userInfo.getPhone() + " to notify you the time of delivery. Please keep your phone on. Thank you.";
+            String content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today. Your total order amount is Ksh.0 .Kindly call " + userInfo.getName() + " " + userInfo.getPhone() + " to notify you the time of delivery. Please keep your phone on. Thank you.";
             PhoneMessage message = new PhoneMessage();
             message.setMerchantId("" + riderDelivery.getMerchantId());
             message.setContent(content);

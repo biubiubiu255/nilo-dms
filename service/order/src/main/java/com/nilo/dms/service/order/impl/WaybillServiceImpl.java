@@ -450,10 +450,11 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         List<Waybill> list = new ArrayList<>();
         if (queryList == null)
             return list;
+        List<String> orderNos = new ArrayList<>();
         for (WaybillDO d : queryList) {
-            list.add(convert(d));
+            orderNos.add(d.getOrderNo());
         }
-        return list;
+        return queryByOrderNos(merchantNo, orderNos);
     }
 
     private void updateDeliveryOrderStatus(OrderOptRequest optRequest, String orderNo, OrderHandleConfig handleConfig) {
