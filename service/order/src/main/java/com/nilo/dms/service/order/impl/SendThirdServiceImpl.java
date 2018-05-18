@@ -14,15 +14,12 @@ import com.nilo.dms.dao.HandleRiderDao;
 import com.nilo.dms.dao.HandleThirdDao;
 import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.DeliveryOrderReceiverDO;
-import com.nilo.dms.dao.dataobject.RiderDelivery;
-import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
 import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.handle.SendThirdDetail;
 import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.order.OrderOptRequest;
 import com.nilo.dms.dto.order.PhoneMessage;
 import com.nilo.dms.dto.order.Waybill;
-import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.DeliveryRouteService;
@@ -201,35 +198,40 @@ public class SendThirdServiceImpl implements SendThirdService {
         update.setStatus(1);
         handleThirdDao.editBigBy(update);
 
-
         for (SendThirdDetail d : detailsList) {
             //发送短信
             WaybillDO w = waybillDao.queryByOrderNo(Long.parseLong(principal.getMerchantId()), d.getOrderNo());
-            if(StringUtil.equals(w.getOrderType(),"PK")){
-                continue;
-            }
-
-            DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(Long.parseLong(principal.getMerchantId()), d.getOrderNo());
-            //送货上门
-            String content = "";
-            if (StringUtil.equals(w.getChannel(), "1")) {
-                content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today, the next station is " + w.getStop() + ",and you should pick up it in 1-5 business days at " + r.getAddress() + ". Any question kindly contact us through Social Media and Live Chat.";
+            if (StringUtil.equals(w.getOrderType(), "PK")) {
+                List<WaybillDO> smallWaybill = waybillDao.queryByPackageNo(Long.parseLong(principal.getMerchantId()), w.getOrderNo());
+                for (WaybillDO s : smallWaybill) {
+                    sendSMS(s);
+                }
             } else {
-                content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today, the next station is " + w.getStop() + ". Your total order amount is Ksh." + w.getNeedPayAmount() + ". The courier service provider will contact you before delivery. Please keep your phone on. Thank you.";
-            }
-            PhoneMessage message = new PhoneMessage();
-            message.setMerchantId("" + d.getMerchantId());
-            message.setContent(content);
-            message.setPhoneNum(r.getContactNumber());
-            message.setMsgType(OptTypeEnum.DELIVERY.getCode());
-            try {
-                phoneSMSProducer.sendMessage(message);
-            } catch (Exception e) {
+                sendSMS(w);
             }
         }
 
         deliveryRouteService.addKiliRoute(orderNos, "P30");
+    }
 
+    private void sendSMS(WaybillDO w) {
+        DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(w.getMerchantId(), w.getOrderNo());
+        //送货上门
+        String content = "";
+        if (StringUtil.equals(w.getChannel(), "1")) {
+            content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today, the next station is " + w.getStop() + ",and you should pick up it in 1-5 business days at " + r.getAddress() + ". Any question kindly contact us through Social Media and Live Chat.";
+        } else {
+            content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today, the next station is " + w.getStop() + ". Your total order amount is Ksh." + w.getNeedPayAmount() + ". The courier service provider will contact you before delivery. Please keep your phone on. Thank you.";
+        }
+        PhoneMessage message = new PhoneMessage();
+        message.setMerchantId("" + w.getMerchantId());
+        message.setContent(content);
+        message.setPhoneNum(r.getContactNumber());
+        message.setMsgType(OptTypeEnum.DELIVERY.getCode());
+        try {
+            phoneSMSProducer.sendMessage(message);
+        } catch (Exception e) {
+        }
     }
 }
 
