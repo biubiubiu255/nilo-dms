@@ -201,7 +201,7 @@ public class SendThirdServiceImpl implements SendThirdService {
         for (SendThirdDetail d : detailsList) {
             //发送短信
             WaybillDO w = waybillDao.queryByOrderNo(Long.parseLong(principal.getMerchantId()), d.getOrderNo());
-            if (StringUtil.equals(w.getOrderType(), "PK")) {
+            if (StringUtil.equals(w.getOrderType(), "PG")) {
                 List<WaybillDO> smallWaybill = waybillDao.queryByPackageNo(Long.parseLong(principal.getMerchantId()), w.getOrderNo());
                 for (WaybillDO s : smallWaybill) {
                     sendSMS(s);
