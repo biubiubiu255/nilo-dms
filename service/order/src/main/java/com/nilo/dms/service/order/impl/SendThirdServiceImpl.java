@@ -201,7 +201,7 @@ public class SendThirdServiceImpl implements SendThirdService {
         for (SendThirdDetail d : detailsList) {
             //发送短信
             WaybillDO w = waybillDao.queryByOrderNo(Long.parseLong(principal.getMerchantId()), d.getOrderNo());
-            if (StringUtil.equals(w.getOrderType(), "PK")) {
+            if (StringUtil.equals(w.getOrderType(), "PG")) {
                 List<WaybillDO> smallWaybill = waybillDao.queryByPackageNo(Long.parseLong(principal.getMerchantId()), w.getOrderNo());
                 for (WaybillDO s : smallWaybill) {
                     sendSMS(s);
@@ -221,7 +221,7 @@ public class SendThirdServiceImpl implements SendThirdService {
         if (StringUtil.equals(w.getChannel(), "1")) {
             content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today, the next station is " + w.getStop() + ",and you should pick up it in 1-5 business days at " + r.getAddress() + ". Any question kindly contact us through Social Media and Live Chat.";
         } else {
-            content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today, the next station is " + w.getStop() + ". Your total order amount is Ksh." + w.getNeedPayAmount() + ". The courier service provider will contact you before delivery. Please keep your phone on. Thank you.";
+            content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today, the next station is " + w.getStop() + ". Your total order amount is Ksh.0 . The courier service provider will contact you before delivery. Please keep your phone on. Thank you.";
         }
         PhoneMessage message = new PhoneMessage();
         message.setMerchantId("" + w.getMerchantId());

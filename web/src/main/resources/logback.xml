@@ -9,12 +9,10 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <Pattern>%d{HH:mm:ss.SSS}  %-5level %logger{64} - %msg%n</Pattern>
-            <!--<pattern>%black(控制台-) %red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)</pattern>-->
-        <charset>UTF-8</charset>
-    </encoder>
+        </encoder>
     </appender>
 
-    <appender name="CONSOLE-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="ROLLING-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/${APP_NAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>${LOG_HOME}/${APP_NAME}.%d{yyyy-MM-dd}.log</FileNamePattern>
@@ -25,33 +23,11 @@
         </encoder>
     </appender>
 
-
-    <!-- appender与过滤器整合，一个appender可含一个或多个filter，有多个filter时，按照配置先后顺序执行 -->
-    <appender name="CONSOLE-TEST" class="ch.qos.logback.core.ConsoleAppender">
-
-
-
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
-        </filter>
-
-        <encoder>
-            <!-- pattern部分见我的博客 -->
-            <pattern>%highlight([%-5level]) %red(%d{yyyy-MM-dd HH:mm:ss})  %green(%logger{10}) - %green(%msg%n)</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-        <!-- prudent=true表示日志写入线程安全，会降低效率，默认为false -->
-        <prudent>false</prudent>
-    </appender>
-
-
-
     <logger name="com.nilo.dms.dao" level="DEBUG"/>
     <logger name="com.nilo.dms" level="INFO"/>
 
     <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="CONSOLE-TEST"/>
         <appender-ref ref="ROLLING-FILE"/>
     </root>
 

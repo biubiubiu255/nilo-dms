@@ -67,7 +67,6 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     private DeliveryOrderRequestDao deliveryOrderRequestDao;
 
 
-
     @Autowired
     @Qualifier("createDeliveryOrderProducer")
     private AbstractMQProducer createDeliveryOrderProducer;
@@ -184,6 +183,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     private List<Waybill> batchQuery(List<WaybillDO> waybillDOs, Long merchantId) {
 
         List<Waybill> list = new ArrayList<>();
+
+        if (waybillDOs == null || waybillDOs.size() == 0) return list;
+
         // 构建订单号集合
         List<String> orderNos = new ArrayList<>();
         for (WaybillDO o : waybillDOs) {
@@ -448,10 +450,11 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         List<Waybill> list = new ArrayList<>();
         if (queryList == null)
             return list;
+        List<String> orderNos = new ArrayList<>();
         for (WaybillDO d : queryList) {
-            list.add(convert(d));
+            orderNos.add(d.getOrderNo());
         }
-        return list;
+        return queryByOrderNos(merchantNo, orderNos);
     }
 
     private void updateDeliveryOrderStatus(OrderOptRequest optRequest, String orderNo, OrderHandleConfig handleConfig) {

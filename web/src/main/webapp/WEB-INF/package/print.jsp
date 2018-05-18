@@ -39,13 +39,7 @@
 
     <div class="row">
         <div class="col-xs-3">
-            Loading NO: ${loading.loadingNo}
-        </div>
-        <div class="col-xs-3">
-            Name: ${loading.carrier}
-        </div>
-        <div class="col-xs-3">
-            Rider :${loading.riderName}
+            Order NO: ${packageInfo.orderNo}
         </div>
         <div class="col-xs-3">
             Operator :
@@ -66,12 +60,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                	<c:forEach items="${loading.detailsList}" var="item">
+                	<c:forEach items="${list}" var="item">
 	                   <tr>
 	                        <td>${item.orderNo}</td>
-	                        <td>${item.deliveryOrder.receiverInfo.receiverName}</td>
-	                        <td>${item.deliveryOrder.receiverInfo.receiverPhone}</td>
-	                        <td>${item.deliveryOrder.receiverInfo.receiverAddress}</td>
+	                        <td>${item.receiverInfo.receiverName}</td>
+	                        <td>${item.receiverInfo.receiverPhone}</td>
+	                        <td>${item.receiverInfo.receiverAddress}</td>
                        </tr>
                    </c:forEach> 
                 </tbody>
