@@ -158,12 +158,15 @@
 
 	<script>
 		$(function () {
-		    $.post('/mobile/getTaskReport.html', function (data) {
-		        $("#deliveredMonthNum").html(data.data.deliveredMonthNum);
-		        $("#taskDayNum").html(data.data.taskDayNum);
-		        $("#delayDayNum").html(data.data.delayDayNum);
-		        $("#remaining").html(data.data.taskDayNum-data.data.deliveredDayNum);
-            },"json")
+		    setInterval(function () {
+                $.post('/mobile/getTaskReport.html', function (data) {
+                    $("#deliveredMonthNum").html(data.data.deliveredMonthNum);
+                    $("#taskDayNum").html(data.data.taskDayNum);
+                    $("#delayDayNum").html(data.data.delayDayNum);
+                    $("#remaining").html(data.data.taskDayNum-data.data.deliveredDayNum);
+                },"json")
+            }, 1*60*1000);
+
         });
 
 	</script>
