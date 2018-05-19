@@ -124,6 +124,7 @@
 						$("#remark").val("")
                         $("#lypic").first().hide();
                         $('#lypic').removeAttribute("src");
+                        $('#lypic').removeAttr("src");
 /*                        history.go(0);
                         location=location;
                         document.URL=location.href;*/
