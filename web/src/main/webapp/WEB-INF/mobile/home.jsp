@@ -139,19 +139,19 @@
 		<div class="list card">
 			<a href="#" class="item item-icon-left">
 				<i class="icon ion-home"></i>
-				Month had bean sent：<span id="deliveredMonthNum"></span>
+				Month had been signed：<span id="deliveredMonthNum"></span>
 			</a>
 			<a href="#" class="item item-icon-left">
 				<i class="icon ion-ios-telephone"></i>
-				Today need to sent：<span id="taskDayNum"></span>
+				Today scheduled for send：<span id="taskDayNum"></span>
 			</a>
 			<a href="#" class="item item-icon-left">
 				<i class="icon ion-wifi"></i>
-				Today delayed：<span id="delayDayNum"></span>
+				Today shipment delay：<span id="delayDayNum"></span>
 			</a>
 			<a href="#" class="item item-icon-left">
 				<i class="icon ion-card"></i>
-				Not been sent：<span id="remaining"></span>
+				Today shipment signed：<span id="remaining"></span>
 			</a>
 		</div>
 	</div>
@@ -166,7 +166,7 @@
                     $("#deliveredMonthNum").html(data.data.deliveredMonthNum);
                     $("#taskDayNum").html(data.data.taskDayNum);
                     $("#delayDayNum").html(data.data.delayDayNum);
-                    $("#remaining").html(data.data.taskDayNum-data.data.deliveredDayNum);
+                    $("#remaining").html(data.data.deliveredDayNum);
                 },"json")
         }
 
