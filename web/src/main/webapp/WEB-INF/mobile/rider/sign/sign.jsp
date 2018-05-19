@@ -118,7 +118,9 @@
 					if (res.result) {
 						$('#lypic').attr('src', "");
 						showInfo('submit success');
-						window.location.reload();
+                        history.go(0);
+                        location=location;
+                        document.URL=location.href;
 						//window.location.href = "/mobile/home.html";
 					} else {
 						showError(res.msg);
