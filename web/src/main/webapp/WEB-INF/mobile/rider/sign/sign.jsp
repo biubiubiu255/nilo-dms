@@ -118,9 +118,15 @@
 					if (res.result) {
 						$('#lypic').attr('src', "");
 						showInfo('submit success');
-                        history.go(0);
+                        $('#myForm')[0].reset();
+                        $("#logisticsNo").val(""),
+                        $("#signer").val(""),
+						$("#remark").val("")
+                        $("#lypic").first().hide();
+                        $('#lypic').removeAttribute("src");
+/*                        history.go(0);
                         location=location;
-                        document.URL=location.href;
+                        document.URL=location.href;*/
 						//window.location.href = "/mobile/home.html";
 					} else {
 						showError(res.msg);
