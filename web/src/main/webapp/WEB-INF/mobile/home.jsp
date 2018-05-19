@@ -137,10 +137,10 @@
 		</div>
 
 		<div class="list card">
-			<a href="#" class="item item-icon-left">
+			<!-- <a href="#" class="item item-icon-left">
 				<i class="icon ion-home"></i>
 				Month had been signed：<span id="deliveredMonthNum"></span>
-			</a>
+			</a> -->
 			<a href="#" class="item item-icon-left">
 				<i class="icon ion-ios-telephone"></i>
 				Today scheduled for send：<span id="taskDayNum"></span>
