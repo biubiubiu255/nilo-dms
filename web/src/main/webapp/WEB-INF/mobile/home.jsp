@@ -139,7 +139,7 @@
 		<div class="list card">
 			<a href="#" class="item item-icon-left">
 				<i class="icon ion-home"></i>
-				Month had bean seet：<span id="deliveredMonthNum"></span>
+				Month had bean sent：<span id="deliveredMonthNum"></span>
 			</a>
 			<a href="#" class="item item-icon-left">
 				<i class="icon ion-ios-telephone"></i>
