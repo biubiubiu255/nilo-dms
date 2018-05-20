@@ -47,7 +47,7 @@
         on b.order_no = c.order_no
         INNER JOIN t_waybill_receiver d
         on c.order_no = d.order_no
-        INNER JOIN t_sys_user_info e
+        LEFT JOIN t_sys_user_info e
         on b.handle_by = e.id
         WHERE a.merchant_id=#{merchantId}
         <if test="orderNo !=null and orderNo !='' ">
@@ -77,7 +77,7 @@
         on b.order_no = c.order_no
         INNER JOIN t_waybill_receiver d
         on c.order_no = d.order_no
-        INNER JOIN t_sys_user_info e
+        LEFT JOIN t_sys_user_info e
         on b.handle_by = e.id
         WHERE a.merchant_id=#{merchantId}
         <if test="orderNo !=null and orderNo !='' ">
