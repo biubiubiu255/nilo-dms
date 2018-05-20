@@ -90,7 +90,7 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
     }
 
     @Override
-    public void addKiliRoute(List<String> orderNos, String statusId) {
+    public void addKiliRoute(List<String> orderNos, String statusId,String remark) {
         //写入物流轨迹
         Principal principal = SessionLocal.getPrincipal();
         List<String> transList = new ArrayList<String>();
@@ -109,7 +109,7 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
         param.put("operateTime", operateTime);
         param.put("statusID", statusId);
         param.put("station", "Nairobi");
-        param.put("remark", "");
+        param.put("remark", remark);
         param.put("sign", sign);
         try {
             NotifyRequest notify = new NotifyRequest();

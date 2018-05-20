@@ -78,7 +78,7 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
 
         List<String> list = new ArrayList<>();
         list.add(orderNo);
-        deliveryRouteService.addKiliRoute(list, "P40");
+        deliveryRouteService.addKiliRoute(list, "P40","");
 
     }
 
