@@ -9,7 +9,7 @@
 <script type="text/javascript">window.print();</script>
 <style>
     *{
-        font-size: 10px;
+        font-size: 14px;
     }
     html {
         -webkit-text-size-adjust: none;
