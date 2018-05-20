@@ -13,9 +13,9 @@
 
  <select id="queryReport" resultMap="deliverReport">
 
-    SELECT
-	*, UNIX_TIMESTAMP() as created_time
-    FROM
+SELECT
+	*, UNIX_TIMESTAMP() AS created_time
+FROM
 	(
 		SELECT
 			count(id) AS 'delivered_month_num'
@@ -23,34 +23,41 @@
 			t_handle_sign
 		WHERE
 			handle_by = #{riderNo}
-		AND FROM_UNIXTIME(created_time, '%Y') = date_format(NOW(), '%Y')
+		AND FROM_UNIXTIME(created_time, '%Y%m') = date_format(NOW(), '%Y%m')
 	) AS a,
 	(
-		SELECT
-			count(b.id) AS 'task_day_num'
+		SELECT DISTINCT
+			count(DISTINCT b.order_no) AS 'task_day_num'
 		FROM
 			t_handle_rider AS a
 		LEFT JOIN t_handle_rider_details AS b ON a.handle_no = b.handle_no
-
-		WHERE a.rider = #{riderNo}
+		WHERE
+			b.order_no IS NOT NULL
+		AND a.rider = #{riderNo}
+		AND FROM_UNIXTIME(b.created_time, '%Y%m%d') = date_format(NOW(), '%Y%m%d')
 	) AS b,
 	(
 		SELECT
-			count(id) AS 'delivered_day_num'
+			count(1) AS 'delivered_day_num'
 		FROM
-			t_handle_sign
+			t_handle_sign AS a
+		INNER JOIN t_handle_rider_details AS b ON FROM_UNIXTIME(b.created_time, '%Y%m%d') = date_format(NOW(), '%Y%m%d')
+		AND a.order_no = b.order_no
 		WHERE
-			handle_by = #{riderNo}
-		AND FROM_UNIXTIME(created_time, '%d') = date_format(NOW(), '%d')
+			a.handle_by = #{riderNo}
+		AND FROM_UNIXTIME(a.created_time, '%Y%m%d') = date_format(NOW(), '%Y%m%d')
 	) AS c,
 	(
 		SELECT
-			count(id) AS 'delay_day_num'
+			count(DISTINCT a.order_no) AS 'delay_day_num'
 		FROM
-			t_handle_delay
+			t_handle_delay as a
+		INNER JOIN t_handle_rider_details AS b ON FROM_UNIXTIME(b.created_time, '%Y%m%d') = date_format(NOW(), '%Y%m%d')
+		AND a.order_no = b.order_no
 		WHERE
-			handle_by = #{riderNo}
-		AND FROM_UNIXTIME(created_time, '%d') = date_format(NOW(), '%d')
+			a.handle_by = #{riderNo}
+		AND FROM_UNIXTIME(a.created_time, '%Y%m%d') = date_format(NOW(), '%Y%m%d')
+
 	) AS d
 
 </select>
