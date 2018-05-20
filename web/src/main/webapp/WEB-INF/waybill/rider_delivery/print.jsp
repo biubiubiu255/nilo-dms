@@ -23,8 +23,8 @@
     }
     table, tr, td, th{
         border: 2px solid black !important;
-        border-collapse:collapse;
     }
+
 </style>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="${ctx}/bootstrap/js/bootstrap.min.js"></script>
@@ -60,7 +60,7 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <table class="table table-bordered"  cellspacing="1">
+            <table class="table table-bordered">
                 <thead>
                 <tr>
                     <th>Order No</th>
@@ -72,8 +72,8 @@
                 <tbody>
                 	<c:forEach items="${smalls}" var="item">
 	                   <tr>
-	                        <td border="2px">${item.orderNo}</td>
-	                        <td style="border: 2px solid black">${item.receiverInfo.receiverName}</td>
+	                        <td>${item.orderNo}</td>
+	                        <td>${item.receiverInfo.receiverName}</td>
 	                        <td>${item.receiverInfo.receiverPhone}</td>
 	                        <td>${item.receiverInfo.receiverAddress}</td>
                        </tr>
