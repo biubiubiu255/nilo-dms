@@ -231,7 +231,7 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
 
             }
         }
-        deliveryRouteService.addKiliRoute(orderNos, "P30");
+        deliveryRouteService.addKiliRoute(orderNos, "P30", userInfo.getName() + "-" + userInfo.getPhone());
     }
 
     @Override
