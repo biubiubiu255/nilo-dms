@@ -37,11 +37,11 @@ public class PhoneMessageConsumer extends AbstractMQConsumer {
         PhoneMessage phoneMessage = null;
         try {
             phoneMessage = (PhoneMessage) obj;
-
+            phoneMessage.setPhoneNum(phoneMessage.getPhoneNum().replace("+", ""));
             //发送短信
             Map<String, String> param = new HashMap<>();
             param.put("mobile", phoneMessage.getPhoneNum());
-            param.put("msg", URLEncoder.encode(phoneMessage.getContent(),"utf-8"));
+            param.put("msg", URLEncoder.encode(phoneMessage.getContent(), "utf-8"));
             param.put("sign", sign(phoneMessage.getContent(), phoneMessage.getPhoneNum()));
             String response = HttpUtil.post(sms_url, param);
 
