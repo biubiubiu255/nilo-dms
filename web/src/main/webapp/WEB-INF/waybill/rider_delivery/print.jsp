@@ -6,7 +6,7 @@
     request.setAttribute("nowDate", DateUtil.formatCurrent("yyyy-MM-dd HH:mm:ss"));
 %>
 <%@ include file="../../common/header.jsp" %>
-<script type="text/javascript">//window.print();</script>
+<script type="text/javascript">window.print();</script>
 <style>
     *{
         font-size: 14px;
