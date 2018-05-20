@@ -9,7 +9,7 @@
 <script type="text/javascript">window.print();</script>
 <style>
     *{
-        font-size: large;
+        font-size: 10px;
     }
     html {
         -webkit-text-size-adjust: none;
@@ -19,7 +19,7 @@
         padding: 5px;
     }
     tr {
-        height: 200%;
+        height: 150%;
     }
 </style>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
