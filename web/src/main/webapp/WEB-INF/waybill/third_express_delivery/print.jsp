@@ -21,14 +21,18 @@
     tr {
         height: 200%;
     }
+    table, tr, td, th{
+        border: 2px solid black !important;
+        border-collapse:collapse;
+    }
 </style>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="${ctx}/bootstrap/js/bootstrap.min.js"></script>
 <div class="container">
-    <div class="row">
+    <div class="row" style="text-align: center;">
         <div class="center-block" style="width:400px;">
 
-            <h4>Shipment List</h4>
+            <h4><b><span style="font-weight: bolder; font-size: larger;">Shipment List</span></b></h4>
 
             <h5 style="position:absolute;right: 10px;top: 20px;"> Date ${nowDate}</h5>
         </div>
