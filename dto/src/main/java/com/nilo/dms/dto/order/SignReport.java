@@ -11,6 +11,7 @@ public class SignReport {
     private Double alreadyPaid;
     private String handleBy;
     private Long handleTime;
+    private String rider;
     private String sName;
     private String rName;
     private String signer;
@@ -142,6 +143,15 @@ public class SignReport {
         this.remark = remark;
     }
 
+    public String getRider() {
+        return rider;
+    }
+
+    public void setRider(String rider) {
+        this.rider = rider;
+    }
+
+
     @Override
     public String toString() {
         return "SignReport{" +
@@ -153,12 +163,14 @@ public class SignReport {
                 ", alreadyPaid=" + alreadyPaid +
                 ", handleBy='" + handleBy + '\'' +
                 ", handleTime=" + handleTime +
+                ", rider='" + rider + '\'' +
                 ", sName='" + sName + '\'' +
                 ", rName='" + rName + '\'' +
                 ", signer='" + signer + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +
                 ", address='" + address + '\'' +
                 ", remark='" + remark + '\'' +
+                ", status=" + status +
                 '}';
     }
 }

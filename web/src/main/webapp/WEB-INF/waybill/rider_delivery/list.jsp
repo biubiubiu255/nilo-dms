@@ -49,6 +49,7 @@
                         <label class="layui-form-label" style="width:110px">Rider:</label>
                         <div class="layui-form-item layui-inline" style="margin: 0px">
                             <select lay-filter="select-rider-fy" name="rider">
+                                <option value="">choose or search....</option>
                                 <c:forEach items="${riderList}" var="rider">
                                     <option value="${rider.userId}">${rider.staffId}-${rider.nickName}</option>
                                 </c:forEach>

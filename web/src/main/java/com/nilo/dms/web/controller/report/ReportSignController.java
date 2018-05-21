@@ -27,6 +27,7 @@ public class ReportSignController extends BaseController {
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
+        model.addAttribute("riderList", getRiderList(null));
         return "report/sign/list";
     }
 
@@ -57,20 +58,12 @@ public class ReportSignController extends BaseController {
     }
 */
     @RequestMapping(value = "/list.html")
-    public String getOrderList(Model model, SignOrderParameter parameter, Integer sTime_creat, Integer eTime_creat,
-                                Integer exportType, HttpServletRequest request) {
+    public String getOrderList(Model model, SignOrderParameter parameter, Integer exportType, HttpServletRequest request) {
 
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
-
-        if(sTime_creat!=null){
-            parameter.setFromHandledTime(sTime_creat.toString());
-        }
-        if(eTime_creat!=null){
-            parameter.setToHandledTime(eTime_creat.toString());
-        }
 
         Pagination page = null;
 
