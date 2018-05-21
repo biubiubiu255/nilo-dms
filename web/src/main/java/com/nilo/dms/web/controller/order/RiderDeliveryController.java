@@ -59,6 +59,7 @@ public class RiderDeliveryController extends BaseController {
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model, HttpServletRequest request) {
+        model.addAttribute("riderList", getRiderList(null));
         return "waybill/rider_delivery/list";
     }
 
