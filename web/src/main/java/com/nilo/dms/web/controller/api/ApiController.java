@@ -117,6 +117,13 @@ public class ApiController extends BaseController {
                 waybillOptService.sign(orderNo, remark);
                 break;
             }
+            case SUB_WAYBILL: {
+                JSONObject jsonObject = JSON.parseObject(data);
+                String waybill_number = jsonObject.getString("waybill_number");
+                String sub_waybill_number = jsonObject.getString("sub_waybill_number");
+                waybillOptService.subWaybill(sub_waybill_number, waybill_number);
+                break;
+            }
             default:
                 break;
         }

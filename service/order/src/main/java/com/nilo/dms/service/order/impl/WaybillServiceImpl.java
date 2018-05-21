@@ -457,6 +457,32 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         return queryByOrderNos(merchantNo, orderNos);
     }
 
+    @Override
+    public void subWaybill(String subWaybill, String waybll) {
+        try {
+
+            Principal principal = SessionLocal.getPrincipal();
+            Waybill w = queryByOrderNo(principal.getMerchantId(), waybll);
+            w.setOrderNo(subWaybill);
+            DeliveryOrderRequestDO requestDO = new DeliveryOrderRequestDO();
+            requestDO.setOrderNo(subWaybill);
+            requestDO.setData(JSON.toJSONString(w));
+            requestDO.setMerchantId(Long.parseLong(principal.getMerchantId()));
+            requestDO.setStatus(CreateDeliveryRequestStatusEnum.CREATE.getCode());
+            requestDO.setSign("sub_waybill");
+            deliveryOrderRequestDao.insert(requestDO);
+            CreateDeliverOrderMessage message = new CreateDeliverOrderMessage();
+            message.setRequestId(requestDO.getId());
+            message.setOrderNo(subWaybill);
+            message.setOptBy(principal.getMerchantId());
+            message.setMerchantId(principal.getMerchantId());
+            createDeliveryOrderProducer.sendMessage(message);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     private void updateDeliveryOrderStatus(OrderOptRequest optRequest, String orderNo, OrderHandleConfig handleConfig) {
         long affected = 0;
         // 更新订单信息，循环10次，10次未更新成功，则跳出
