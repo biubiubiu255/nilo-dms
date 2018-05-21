@@ -44,6 +44,19 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="layui-col-md4 layui-col-lg3">
+                        <label class="layui-form-label" style="width:110px">Rider:</label>
+                        <div class="layui-form-item layui-inline" style="margin: 0px">
+                            <select lay-filter="select-rider-fy" name="rider">
+                                <option value="">choose or search....</option>
+                                <c:forEach items="${riderList}" var="rider">
+                                    <option value="${rider.userId}">${rider.staffId}-${rider.nickName}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="layui-col-md1">
                         <button class="layui-btn layui-btn-normal search">Search</button>
                     </div>
@@ -130,6 +143,7 @@
                 where: {
                     handleNo: $("input[name='loadingNo']").val(),
                     status: $("select[name='status']").val(),
+                    rider:  $("select[name='rider']").val()
                 }
             });
         };

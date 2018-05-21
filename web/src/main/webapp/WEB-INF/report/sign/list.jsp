@@ -31,11 +31,25 @@
         </div>
 
 
+
+
     </div>
 
     <!-- 搜索栏的第二行 -->
 
     <div class="layui-form layui-row">
+
+        <div class="layui-col-md4 layui-col-lg3">
+            <label class="layui-form-label" style="width:110px">Rider:</label>
+            <div class="layui-form-item layui-inline" style="margin: 0px">
+                <select lay-filter="select-rider-fy" name="rider">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${riderList}" var="rider">
+                        <option value="${rider.userId}">${rider.staffId}-${rider.nickName}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>
 
         <!-- 搜索按钮 -->
         <div class="layui-col-md4 layui-col-lg4" style="margin-left: 2.4rem;">
@@ -55,15 +69,16 @@
             <tr>
                 <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
                 <th lay-data="{field:'referenceNo', width:170}">ReferenceNo</th>
+                <th lay-data="{field:'rider', width:100}">Rider</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
-                <th lay-data="{field:'alreadyPaid', width:110}">AlreadyPaid</th>
-                <th lay-data="{field:'needPayAmount', width:100}">NeedPayAmount</th>
                 <th lay-data="{field:'statusDesc', width:150}">Status</th>
                 <th lay-data="{field:'handleBy', width:150}">HandleName</th>
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">HandleTime</th>
+                <th lay-data="{field:'remark', width:170}">Remark</th>
                 <th lay-data="{field:'rName', width:150}">Signer</th>
                 <th lay-data="{field:'sName', width:150}">Sender</th>
                 <th lay-data="{field:'address', width:300}">Address</th>
+
             </tr>
             </thead>
         </table>
@@ -150,9 +165,10 @@
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
-                    sTime_creat: sTime_creat,
-                    eTime_creat: eTime_creat,
-                    exportType: dateType
+                    fromHandledTime: sTime_creat,
+                    toHandledTime: eTime_creat,
+                    exportType: dateType,
+                    rider: $("select[name='rider']").val()
                 };
                 if (isPojo===true) return param;
                 else return jQuery.param( param );

@@ -6,26 +6,11 @@ public class SignOrderParameter {
     private String merchantId;
     private String orderNo;
     private String nextNetwork;
+    private String riderId;
     private List<Integer> status;
     private String carrierName;
     private String fromHandledTime;
     private String toHandledTime;
-
-    public String getFromHandledTime() {
-        return fromHandledTime;
-    }
-
-    public void setFromHandledTime(String fromHandledTime) {
-        this.fromHandledTime = fromHandledTime;
-    }
-
-    public String getToHandledTime() {
-        return toHandledTime;
-    }
-
-    public void setToHandledTime(String toHandledTime) {
-        this.toHandledTime = toHandledTime;
-    }
 
     public String getMerchantId() {
         return merchantId;
@@ -51,6 +36,14 @@ public class SignOrderParameter {
         this.nextNetwork = nextNetwork;
     }
 
+    public String getRiderId() {
+        return riderId;
+    }
+
+    public void setRiderId(String riderId) {
+        this.riderId = riderId;
+    }
+
     public List<Integer> getStatus() {
         return status;
     }
@@ -67,12 +60,29 @@ public class SignOrderParameter {
         this.carrierName = carrierName;
     }
 
+    public String getFromHandledTime() {
+        return fromHandledTime;
+    }
+
+    public void setFromHandledTime(String fromHandledTime) {
+        this.fromHandledTime = fromHandledTime;
+    }
+
+    public String getToHandledTime() {
+        return toHandledTime;
+    }
+
+    public void setToHandledTime(String toHandledTime) {
+        this.toHandledTime = toHandledTime;
+    }
+
     @Override
     public String toString() {
         return "SignOrderParameter{" +
                 "merchantId='" + merchantId + '\'' +
                 ", orderNo='" + orderNo + '\'' +
                 ", nextNetwork='" + nextNetwork + '\'' +
+                ", riderId='" + riderId + '\'' +
                 ", status=" + status +
                 ", carrierName='" + carrierName + '\'' +
                 ", fromHandledTime='" + fromHandledTime + '\'' +

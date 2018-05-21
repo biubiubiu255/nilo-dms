@@ -37,9 +37,14 @@ public class SignReportServiceImpl implements SignReportService {
         map.put("nextNetwork", parameter.getNextNetwork());
         map.put("status", parameter.getStatus());
         map.put("carrierName", parameter.getCarrierName());
-        map.put("fromHandledTime", parameter.getFromHandledTime());
-        map.put("toHandledTime", parameter.getToHandledTime());
         map.put("merchantId", parameter.getMerchantId());
+        map.put("rider", parameter.getRiderId());
+        if(!StringUtil.isEmptys(parameter.getFromHandledTime())){
+            map.put("fromHandledTime", Integer.parseInt(parameter.getFromHandledTime()));
+        }
+        if(!StringUtil.isEmptys(parameter.getToHandledTime())){
+            map.put("toHandledTime", Integer.parseInt(parameter.getToHandledTime()));
+        }
 
         if (StringUtil.isEmpty(parameter.getFromHandledTime()) || StringUtil.isEmpty(parameter.getToHandledTime())) {
             if (StringUtil.isEmpty(parameter.getFromHandledTime())) {
@@ -93,6 +98,7 @@ public class SignReportServiceImpl implements SignReportService {
         signReport.setHandleBy(s.getHandleBy());
         signReport.setSigner(s.getSigner());
         signReport.setStatus(s.getStatus());
+        signReport.setRider(s.getRider());
 
         return signReport;
     }

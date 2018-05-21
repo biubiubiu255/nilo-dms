@@ -86,6 +86,9 @@
         <if test="ob.handleNo != null and ob.handleNo != '' ">
             and handle_no = #{ob.handleNo}
         </if>
+        <if test="ob.rider != null">
+            and rider = #{ob.rider}
+        </if>
         order by created_time desc
 
         limit #{offset} , #{limit}

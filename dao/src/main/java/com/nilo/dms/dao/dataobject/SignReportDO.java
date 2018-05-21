@@ -10,6 +10,7 @@ public class SignReportDO {
     private Double needPayAmount;
     private Double alreadyPaid;
     private String handleBy;
+    private String rider;
     private Long handleTime;
     private String sName;    //发件人
     private String rName;    //收件人
@@ -144,6 +145,14 @@ public class SignReportDO {
         this.remark = remark;
     }
 
+    public String getRider() {
+        return rider;
+    }
+
+    public void setRider(String rider) {
+        this.rider = rider;
+    }
+
     @Override
     public String toString() {
         return "SignReportDO{" +
@@ -154,6 +163,7 @@ public class SignReportDO {
                 ", needPayAmount=" + needPayAmount +
                 ", alreadyPaid=" + alreadyPaid +
                 ", handleBy='" + handleBy + '\'' +
+                ", rider='" + rider + '\'' +
                 ", handleTime=" + handleTime +
                 ", sName='" + sName + '\'' +
                 ", rName='" + rName + '\'' +
@@ -161,6 +171,7 @@ public class SignReportDO {
                 ", contactNumber='" + contactNumber + '\'' +
                 ", address='" + address + '\'' +
                 ", remark='" + remark + '\'' +
+                ", status=" + status +
                 '}';
     }
 }
