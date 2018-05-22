@@ -374,8 +374,8 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         orderHeader.setCreatedBy(packageRequest.getOptBy());
         waybillDao.insert(orderHeader);
 
-        // 发件网点信息
-        DistributionNetworkDO networkDO = distributionNetworkDao.queryById(new Long(packageRequest.getNetworkId()));
+        // 收件网点信息
+        DistributionNetworkDO networkDO = distributionNetworkDao.queryById(new Long(packageRequest.getNextNetworkId()));
         DeliveryOrderReceiverDO r = new DeliveryOrderReceiverDO();
         r.setOrderNo(orderNo);
         r.setMerchantId(merchant);
@@ -388,9 +388,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         r.setProvince(networkDO.getProvince());
         deliveryOrderReceiverDao.insert(r);
 
-        // 3、保存收件网点信息
+        // 3、发件网点信息
         DistributionNetworkDO receiverNetwork = distributionNetworkDao
-                .queryById(new Long(packageRequest.getNextNetworkId()));
+                .queryById(new Long(packageRequest.getNetworkId()));
         DeliveryOrderSenderDO s = new DeliveryOrderSenderDO();
         s.setMerchantId(merchant);
         s.setOrderNo(orderNo);
