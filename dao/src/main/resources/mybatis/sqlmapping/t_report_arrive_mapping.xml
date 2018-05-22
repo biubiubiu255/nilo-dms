@@ -49,15 +49,20 @@
             a.order_no = #{orderNo}
         </if>
 
-        <if test="sTime_creat !=null and eTime_creat !=null and  sTime_creat != '' and eTime_creat != ''">
+        <if test="fromCreatedTime !=null and toCreatedTime !=null">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            (a.opt_time<![CDATA[<]]>#{eTime_creat} AND a.opt_time>#{sTime_creat})
+            (a.opt_time<![CDATA[<]]>#{toCreatedTime} AND a.opt_time>#{fromCreatedTime})
         </if>
 
         <if test="scanNetwork != null and scanNetwork != ''">
             AND
             e.name = #{scanNetwork}
+        </if>
+
+        <if test="status != null">
+            AND
+            c.status = #{status}
         </if>
 
         order by a.created_time desc
@@ -91,15 +96,20 @@
             a.order_no = #{orderNo}
         </if>
 
-        <if test="sTime_creat !=null and eTime_creat !=null and  sTime_creat != '' and eTime_creat != ''">
+        <if test="fromCreatedTime !=null and toCreatedTime !=null">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            (a.opt_time<![CDATA[<]]>#{eTime_creat} AND a.opt_time>#{sTime_creat})
+            (a.opt_time<![CDATA[<]]>#{toCreatedTime} AND a.opt_time>#{fromCreatedTime})
         </if>
 
         <if test="scanNetwork != null and scanNetwork != ''">
             AND
             e.name = #{scanNetwork}
+        </if>
+
+        <if test="status != null">
+            AND
+            c.status = #{status}
         </if>
 
     </select>

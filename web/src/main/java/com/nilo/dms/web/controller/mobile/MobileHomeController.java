@@ -31,8 +31,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by admin on 2017/11/22.
@@ -140,7 +140,25 @@ public class MobileHomeController extends BaseController {
     @RequestMapping(value = "/getTaskReport.html")
     public String getTaskReport(String riderNo) {
         Principal principal = SessionLocal.getPrincipal();
-        DeliverAgendaDO result = deliverAgendaDao.queryReport(principal.getUserId());
-        return toJsonTrueData(result);
+
+        Map<String, DeliverAgendaDO> map = new HashMap<String, DeliverAgendaDO>();
+
+        Calendar c = Calendar.getInstance();
+
+        //取昨天的数据，参数：1.当前快递员id 2.要查询的日期，例如：20170503
+        c.add(Calendar.DATE, -1);
+        String dateFormat = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
+        map.put("day", deliverAgendaDao.queryReport(principal.getUserId(), dateFormat));
+
+        c.add(Calendar.DATE, -1);
+        dateFormat = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
+        map.put("yesterday", deliverAgendaDao.queryReport(principal.getUserId(), dateFormat));
+
+        c.add(Calendar.DATE, -1);
+        dateFormat = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
+        map.put("beforeYesterday", deliverAgendaDao.queryReport(principal.getUserId(), dateFormat));
+
+        return toJsonTrueData(map);
     }
+
 }

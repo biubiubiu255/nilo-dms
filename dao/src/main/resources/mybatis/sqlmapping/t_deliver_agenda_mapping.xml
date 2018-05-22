@@ -34,29 +34,29 @@ FROM
 		WHERE
 			b.order_no IS NOT NULL
 		AND a.rider = #{riderNo}
-		AND FROM_UNIXTIME(b.created_time, '%Y%m%d') = date_format(NOW(), '%Y%m%d')
+		AND FROM_UNIXTIME(b.created_time, '%Y%m%d') = #{dateFormat}
 	) AS b,
 	(
 		SELECT
 			count(1) AS 'delivered_day_num'
 		FROM
 			t_handle_sign AS a
-		INNER JOIN t_handle_rider_details AS b ON FROM_UNIXTIME(b.created_time, '%Y%m%d') = date_format(NOW(), '%Y%m%d')
+		INNER JOIN t_handle_rider_details AS b ON FROM_UNIXTIME(b.created_time, '%Y%m%d') = #{dateFormat}
 		AND a.order_no = b.order_no
 		WHERE
 			a.handle_by = #{riderNo}
-		AND FROM_UNIXTIME(a.created_time, '%Y%m%d') = date_format(NOW(), '%Y%m%d')
+		AND FROM_UNIXTIME(a.created_time, '%Y%m%d') = #{dateFormat}
 	) AS c,
 	(
 		SELECT
 			count(DISTINCT a.order_no) AS 'delay_day_num'
 		FROM
 			t_handle_delay as a
-		INNER JOIN t_handle_rider_details AS b ON FROM_UNIXTIME(b.created_time, '%Y%m%d') = date_format(NOW(), '%Y%m%d')
+		INNER JOIN t_handle_rider_details AS b ON FROM_UNIXTIME(b.created_time, '%Y%m%d') = #{dateFormat}
 		AND a.order_no = b.order_no
 		WHERE
 			a.handle_by = #{riderNo}
-		AND FROM_UNIXTIME(a.created_time, '%Y%m%d') = date_format(NOW(), '%Y%m%d')
+		AND FROM_UNIXTIME(a.created_time, '%Y%m%d') = #{dateFormat}
 
 	) AS d
 

@@ -6,6 +6,7 @@ import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.WaybillArriveDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.QO.ReportArriveQO;
 import com.nilo.dms.dao.dataobject.ReportArriveDO;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.web.controller.BaseController;
@@ -43,36 +44,27 @@ public class ReportArriveController extends BaseController {
     }
 
     @RequestMapping(value = "/list.html")
-    public String getOrderList(Model model, String orderNo, Integer sTime_creat, Integer eTime_creat,
-                               String scanNetwork, Integer exportType, HttpServletRequest request) {
+    public String getOrderList(ReportArriveQO reportArriveQO, Model model, HttpServletRequest request) {
 
         Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
-
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        map.put("merchantId", merchantId);
-        map.put("sTime_creat", sTime_creat);
-        map.put("eTime_creat", eTime_creat);
-        map.put("orderNo", orderNo);
-        map.put("scanNetwork", scanNetwork);
-        map.put("offset", page.getOffset());
-        map.put("limit", page.getLimit());
-
+        reportArriveQO.setLimit(page.getLimit());
+        reportArriveQO.setOffset(page.getOffset());
+        reportArriveQO.setMerchantId(Long.parseLong(merchantId));
 
         String fileType;
-        switch (exportType) {
+        switch (reportArriveQO.getExportType()) {
             case 0:
                 fileType = "pdf";
-                map.put("offset", 0);
-                map.put("limit", 1000);
+                reportArriveQO.setOffset(0);
+                reportArriveQO.setLimit(1000);
                 break;
             case 1:
                 fileType = "xls";
-                map.put("offset", 0);
-                map.put("limit", 1000);
+                reportArriveQO.setOffset(0);
+                reportArriveQO.setLimit(1000);
                 break;
             case 2:
                 fileType = "json";
@@ -82,8 +74,8 @@ public class ReportArriveController extends BaseController {
         }
 
 
-        List<ReportArriveDO> list = waybillArriveDao.queryReportArrive(map);
-        page.setTotalCount(waybillArriveDao.queryReportArriveCount(map));
+        List<ReportArriveDO> list = waybillArriveDao.queryReportArrive(reportArriveQO);
+        page.setTotalCount(waybillArriveDao.queryReportArriveCount(reportArriveQO));
         //page.setTotalCount(commonDao.lastFoundRows());
 
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);

@@ -34,6 +34,8 @@
         <result property="address" column="address" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
 
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
     </resultMap>
@@ -64,7 +66,6 @@
     <select id="querySendReport" resultMap="sendDO">
 
         SELECT
-        c. STATUS,
         a.order_no,
         a.weight,
         a.created_time,
@@ -75,6 +76,7 @@
         b.handle_name,
         c.order_type,
         c.reference_no,
+        c.status,
         d.contact_number AS phone,
         d.address,
         d.name AS receive_name,
@@ -127,6 +129,9 @@
         </if>
         <if test="toCreatedTime !=null ">
             and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status != null">
+            and c.status = #{status}
         </if>
 
         order by a.created_time desc
@@ -195,6 +200,9 @@
         <if test="toCreatedTime !=null ">
             and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
         </if>
+        <if test="status != null">
+            and c.status = #{status}
+        </if>
 
     </select>
 
@@ -221,7 +229,7 @@
 
         on c.handled_by=d.id
 
-        WHERE a.merchant_id=#{merchantId} AND ( a.status=50 )
+        WHERE a.merchant_id=#{merchantId}
 
         <if test="orderNo !=null  and orderNo !='' ">
             AND

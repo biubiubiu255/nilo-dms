@@ -93,6 +93,22 @@
             </div>
         </div>
 
+
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">Status:</label>
+            <div class="layui-input-inline">
+                <select name="status" lay-filter="status" lay-search="">
+                    <option value="">Select Status....</option>
+                    <option value="20">Arrived</option>
+                    <option value="30">Delivery</option>
+                    <option value="40">Problem</option>
+                    <option value="60">Refuse</option>
+                    <option value="50">Sign</option>
+
+                </select>
+            </div>
+        </div>
+
         <div class="layui-col-md4 layui-col-lg3">
             <button class="layui-btn layui-btn-normal btn-export">Export</button>
             <button class="layui-btn layui-btn-normal search">Search</button>
@@ -218,7 +234,8 @@
                     deliveryType: $("select[name='deliveryType']").val(),
                     expressCode: $("select[name='expressCode']").val(),
                     nextStationCode: $("select[name='nextStationCode']").val(),
-                    exportType: dateType
+                    exportType: dateType,
+                    status: $("select[name='status']").val()
                 };
 
                 if (isPojo===true) return param;

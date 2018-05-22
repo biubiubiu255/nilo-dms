@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Created by admin on 2017/9/19.
- */
+         */
 @Repository
 public interface SendReportDao extends BaseDao<Long,SendReportDO> {
     List<SendReportDO> querySendReport(SendReportQO sendReportQO);
