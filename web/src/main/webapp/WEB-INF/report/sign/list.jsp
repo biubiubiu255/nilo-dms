@@ -45,7 +45,7 @@
                 <select lay-filter="select-rider-fy" name="rider">
                     <option value="">choose or search....</option>
                     <c:forEach items="${riderList}" var="rider">
-                        <option value="${rider.userId}">${rider.staffId}-${rider.nickName}</option>
+                        <option value="${rider.userId}">${rider.staffId}-${rider.realName}</option>
                     </c:forEach>
                 </select>
             </div>
@@ -168,7 +168,7 @@
                     fromHandledTime: sTime_creat,
                     toHandledTime: eTime_creat,
                     exportType: dateType,
-                    rider: $("select[name='rider']").val()
+                    riderId: $("select[name='rider']").val()
                 };
                 if (isPojo===true) return param;
                 else return jQuery.param( param );
