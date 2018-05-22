@@ -206,7 +206,7 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         }
 
         OrderOptRequest request = new OrderOptRequest();
-        request.setOptType(OptTypeEnum.SEND);
+        request.setOptType(OptTypeEnum.DELIVERY);
         request.setOrderNo(orderNos);
         waybillService.handleOpt(request);
 
