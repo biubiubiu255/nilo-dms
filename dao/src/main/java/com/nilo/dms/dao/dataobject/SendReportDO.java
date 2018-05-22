@@ -13,6 +13,7 @@ public class SendReportDO extends BaseDo<Long> {
     private String remark;
     private String phone;
     private String address;
+    private String receiveName;
 
     private String driver;
     private String nextStation;
@@ -61,13 +62,13 @@ public class SendReportDO extends BaseDo<Long> {
         this.weight = weight;
     }
 
-    public Integer getStatus() {
-        return status;
-    }
-
     public String getStatusDesc() {
         DeliveryOrderStatusEnum statusEnum = DeliveryOrderStatusEnum.getEnum(this.status);
         return statusEnum == null ? "" : statusEnum.getDesc();
+    }
+
+    public Integer getStatus() {
+        return status;
     }
 
     public void setStatus(Integer status) {
@@ -96,6 +97,14 @@ public class SendReportDO extends BaseDo<Long> {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getReceiveName() {
+        return receiveName;
+    }
+
+    public void setReceiveName(String receiveName) {
+        this.receiveName = receiveName;
     }
 
     public String getDriver() {
@@ -158,6 +167,7 @@ public class SendReportDO extends BaseDo<Long> {
                 ", remark='" + remark + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
+                ", receiveName='" + receiveName + '\'' +
                 ", driver='" + driver + '\'' +
                 ", nextStation='" + nextStation + '\'' +
                 ", handleName='" + handleName + '\'' +

@@ -63,6 +63,7 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
+                    <th>No</th>
                     <th>Order No</th>
                     <th>Customer Name</th>
                     <th>Contact No</th>
@@ -70,8 +71,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                	<c:forEach items="${smalls}" var="item">
+                	<c:forEach items="${smalls}" var="item" varStatus="status">
 	                   <tr>
+                            <td>${status.index + 1}</td>
 	                        <td>${item.orderNo}</td>
 	                        <td>${item.receiverInfo.receiverName}</td>
 	                        <td>${item.receiverInfo.receiverPhone}</td>
