@@ -34,4 +34,7 @@ public interface WaybillService {
 
     List<Waybill> queryByPackageNo(String merchantNo, String packageNo);
 
+    void subWaybill(String subWaybill,String waybll);
+
+
 }

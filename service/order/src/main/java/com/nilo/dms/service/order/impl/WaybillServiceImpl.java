@@ -374,8 +374,8 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         orderHeader.setCreatedBy(packageRequest.getOptBy());
         waybillDao.insert(orderHeader);
 
-        // 发件网点信息
-        DistributionNetworkDO networkDO = distributionNetworkDao.queryById(new Long(packageRequest.getNetworkId()));
+        // 收件网点信息
+        DistributionNetworkDO networkDO = distributionNetworkDao.queryById(new Long(packageRequest.getNextNetworkId()));
         DeliveryOrderReceiverDO r = new DeliveryOrderReceiverDO();
         r.setOrderNo(orderNo);
         r.setMerchantId(merchant);
@@ -388,9 +388,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         r.setProvince(networkDO.getProvince());
         deliveryOrderReceiverDao.insert(r);
 
-        // 3、保存收件网点信息
+        // 3、发件网点信息
         DistributionNetworkDO receiverNetwork = distributionNetworkDao
-                .queryById(new Long(packageRequest.getNextNetworkId()));
+                .queryById(new Long(packageRequest.getNetworkId()));
         DeliveryOrderSenderDO s = new DeliveryOrderSenderDO();
         s.setMerchantId(merchant);
         s.setOrderNo(orderNo);
@@ -455,6 +455,27 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             orderNos.add(d.getOrderNo());
         }
         return queryByOrderNos(merchantNo, orderNos);
+    }
+
+    @Override
+    public void subWaybill(String subWaybill, String waybll) {
+        Principal principal = SessionLocal.getPrincipal();
+        Long merchantId = Long.parseLong(principal.getMerchantId());
+        WaybillDO w = waybillDao.queryByOrderNo(merchantId, waybll);
+        DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(merchantId, waybll);
+        DeliveryOrderSenderDO s = deliveryOrderSenderDao.queryByOrderNo(merchantId, waybll);
+        List<DeliveryOrderGoodsDO> gs = deliveryOrderGoodsDao.queryByOrderNo(merchantId,
+                waybll);
+        s.setOrderNo(subWaybill);
+        waybillDao.insert(w);
+        r.setOrderNo(subWaybill);
+        deliveryOrderReceiverDao.insert(r);
+        s.setOrderNo(subWaybill);
+        deliveryOrderSenderDao.insert(s);
+        for (DeliveryOrderGoodsDO g : gs) {
+            g.setOrderNo(subWaybill);
+            deliveryOrderGoodsDao.insert(g);
+        }
     }
 
     private void updateDeliveryOrderStatus(OrderOptRequest optRequest, String orderNo, OrderHandleConfig handleConfig) {

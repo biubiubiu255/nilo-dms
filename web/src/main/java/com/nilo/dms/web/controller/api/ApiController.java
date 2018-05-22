@@ -3,11 +3,13 @@ package com.nilo.dms.web.controller.api;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.MethodEnum;
 import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dto.order.*;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.PaymentService;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -96,6 +99,16 @@ public class ApiController extends BaseController {
                 OrderOptRequest optRequest = new OrderOptRequest();
                 JSONObject jsonObject = JSON.parseObject(data);
                 String orderNo = jsonObject.getString("waybill_number");
+                if (StringUtil.isNotBlank(orderNo)) {
+                    WaybillParameter parameter = new WaybillParameter();
+                    parameter.setReferenceNo(orderNo);
+                    parameter.setMerchantId(principal.getMerchantId());
+                    Pagination pagination = new Pagination(0, 10);
+                    List<Waybill> list = waybillService.queryWaybillBy(parameter, pagination);
+                    if (list != null && list.size() == 1) {
+                        orderNo = list.get(0).getOrderNo();
+                    }
+                }
                 AssertUtil.isNotBlank(orderNo, BizErrorCode.ORDER_NO_EMPTY);
                 optRequest.setOrderNo(Arrays.asList(new String[]{orderNo}));
                 optRequest.setOptType(OptTypeEnum.CANCEL);
@@ -115,6 +128,13 @@ public class ApiController extends BaseController {
                 String orderNo = jsonObject.getString("waybill_number");
                 String remark = jsonObject.getString("remark");
                 waybillOptService.sign(orderNo, remark);
+                break;
+            }
+            case SUB_WAYBILL: {
+                JSONObject jsonObject = JSON.parseObject(data);
+                String waybill_number = jsonObject.getString("waybill_number");
+                String sub_waybill_number = jsonObject.getString("sub_waybill_number");
+                waybillService.subWaybill(sub_waybill_number, waybill_number);
                 break;
             }
             default:

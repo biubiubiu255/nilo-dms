@@ -14,6 +14,7 @@ public enum MethodEnum {
     UPDATE_WEIGHT("nos.waybill.weight", "nos.waybill.weight"),
     ARRIVE_SCAN("nos.waybill.arrive", "Arrive Scan"),
     SIGN("sign", "sign"),
+    SUB_WAYBILL("nos.waybill.sub", "Sub Waybill"),
     ;
     private String code;
     private String value;

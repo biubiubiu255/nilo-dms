@@ -88,7 +88,7 @@ public class NotifyServiceImpl implements NotifyService {
 
                 Map<String, Object> dataMap = new HashMap<>();
 
-                switch (request.getOptType()) {
+                /*switch (request.getOptType()) {
                     case ARRIVE_SCAN: {
                         //到件只通知一次
                         List<WaybillLog> list = waybillLogDao.queryByOrderNos(Long.parseLong(merchantId), Arrays.asList(orderNo));
@@ -128,7 +128,7 @@ public class NotifyServiceImpl implements NotifyService {
                     }
                     default:
                         break;
-                }
+                }*/
 
                 //请求参数
                 WaybillDO deliveryOrder = waybillDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
@@ -140,6 +140,9 @@ public class NotifyServiceImpl implements NotifyService {
 
                         case DELIVERY:
                         case SEND: {
+
+                            logger.info("Notify Kilimall Dispatch,orderNo:" + deliveryOrder.getOrderNo());
+
                             String data = "{\"data\":{\"orderinfo\":[{\"DeliveryNo\":\"" + deliveryOrder.getOrderNo() + "\",\"CustomerID\":\"KILIMALL\",\"WarehouseID\":\"KE01\",\"OrderNo\":\"" + deliveryOrder.getReferenceNo() + "\",\"OrderType\":\"" + orderType +
                                     "\"}]}}";
                             param.put("data", URLEncoder.encode(data, "utf-8"));
@@ -204,7 +207,7 @@ public class NotifyServiceImpl implements NotifyService {
 
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Notify Failed.", e);
         }
     }
 
