@@ -121,7 +121,7 @@ public class ApiController extends BaseController {
                 JSONObject jsonObject = JSON.parseObject(data);
                 String waybill_number = jsonObject.getString("waybill_number");
                 String sub_waybill_number = jsonObject.getString("sub_waybill_number");
-                waybillOptService.subWaybill(sub_waybill_number, waybill_number);
+                waybillService.subWaybill(sub_waybill_number, waybill_number);
                 break;
             }
             default:
