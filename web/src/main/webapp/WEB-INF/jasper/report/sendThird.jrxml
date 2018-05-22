@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sign" language="groovy" pageWidth="1270" pageHeight="802" columnWidth="1270" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="abbb5591-3eef-4ff8-af13-2d294816bebb">
-	<property name="ireport.zoom" value="2.853116706110009"/>
-	<property name="ireport.x" value="602"/>
+	<property name="ireport.zoom" value="0.9090909090909117"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="weight" class="java.lang.Double"/>
@@ -16,7 +16,6 @@
 	<field name="createdTime" class="java.lang.String"/>
 	<field name="phone" class="java.lang.String"/>
 	<field name="address" class="java.lang.String"/>
-	<field name="statusDesc" class="java.lang.String"/>
 	<variable name="weight_1" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{weight}]]></variableExpression>
 	</variable>

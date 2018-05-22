@@ -118,6 +118,7 @@
                 <th lay-data="{field: 'orderType', width:100}">OrderType</th>
                 <th lay-data="{field:'deliveryType' , width:150}">DispatchType</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
+                <th lay-data="{field:'receiveName', width:100}">Name</th>
                 <th lay-data="{field:'driver', width:130}">Driver</th>
                 <th lay-data="{field:'nextStation', width:150}">NextStation</th>
                 <th lay-data="{field:'expressName', width:100}">ExpressName</th>

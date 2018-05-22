@@ -9,7 +9,7 @@
 <script type="text/javascript">window.print();</script>
 <style>
     *{
-        font-size: large;
+        font-size: 14px;
     }
     html {
         -webkit-text-size-adjust: none;
@@ -21,6 +21,10 @@
     tr {
         height: 200%;
     }
+    table, tr, td, th{
+        border: 2px solid black !important;
+        border-collapse:collapse;
+    }
 </style>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="${ctx}/bootstrap/js/bootstrap.min.js"></script>
@@ -28,7 +32,7 @@
     <div class="row">
         <div class="center-block" style="width:400px;">
 
-            <h4>Shipment List</h4>
+            <h4 style="font-weight: bolder; font-size: larger;text-align: center;">Shipment List</h4>
 
             <h5 style="position:absolute;right: 10px;top: 20px;"> Date ${nowDate}</h5>
         </div>
@@ -53,6 +57,7 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
+                    <th>No</th>
                     <th>Order No</th>
                     <th>Customer Name</th>
                     <th>Contact No</th>
@@ -60,8 +65,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                	<c:forEach items="${list}" var="item">
+                	<c:forEach items="${list}" var="item" varStatus="status">
 	                   <tr>
+                            <td>${status.index + 1}</td>
 	                        <td>${item.orderNo}</td>
 	                        <td>${item.receiverInfo.receiverName}</td>
 	                        <td>${item.receiverInfo.receiverPhone}</td>

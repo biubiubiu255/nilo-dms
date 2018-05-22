@@ -20,6 +20,9 @@
         <result property="expressName" column="express_name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
 
+        <result property="receiveName" column="receive_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
         <result property="driver" column="driver" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="handleName" column="handle_name" javaType="java.lang.String"
@@ -60,7 +63,22 @@
 
     <select id="querySendReport" resultMap="sendDO">
 
-        SELECT c.status,a.order_no, a.weight, a.created_time, b.handle_no, b.type as delivery_type, b.driver, b.next_station, b.handle_name, c.order_type, c.reference_no, d.contact_number as phone, d.address, e.express_name
+        SELECT
+        c. STATUS,
+        a.order_no,
+        a.weight,
+        a.created_time,
+        b.handle_no,
+        b.type AS delivery_type,
+        b.driver,
+        b.next_station,
+        b.handle_name,
+        c.order_type,
+        c.reference_no,
+        d.contact_number AS phone,
+        d.address,
+        d.name AS receive_name,
+        e.express_name
 
         FROM t_handle_third_express_details a
 
@@ -127,7 +145,6 @@
     <select id="queryCountBy" resultType="java.lang.Long">
 
         SELECT
-
         count(1)
 
         FROM t_handle_third_express_details a
@@ -159,6 +176,13 @@
         <if test="nextStation !=null and nextStation !='' ">
             and b.next_station = #{nextStation}
         </if>
+        <if test="nextStationCode !=null and nextStationCode !='' ">
+            and b.network_code = #{nextStationCode}
+        </if>
+        <if test="expressCode !=null and expressCode !='' ">
+            and e.express_code = #{expressCode}
+        </if>
+
         <if test="handleNo !=null and handleNo !='' ">
             and b.handle_no = #{handleNo}
         </if>
