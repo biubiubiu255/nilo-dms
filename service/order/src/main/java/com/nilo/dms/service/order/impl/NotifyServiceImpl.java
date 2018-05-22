@@ -69,7 +69,6 @@ public class NotifyServiceImpl implements NotifyService {
     public void updateStatus(OrderOptRequest request) {
 
         String merchantId = SessionLocal.getPrincipal().getMerchantId();
-        String network = SessionLocal.getPrincipal().getFirstNetwork();
 
         OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(merchantId,
                 request.getOptType().getCode());
@@ -235,4 +234,5 @@ public class NotifyServiceImpl implements NotifyService {
     private String createSign(String key, String data) {
         return new String(DigestUtils.md5Hex(key + data + key).toUpperCase());
     }
+
 }

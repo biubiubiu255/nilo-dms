@@ -466,7 +466,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         DeliveryOrderSenderDO s = deliveryOrderSenderDao.queryByOrderNo(merchantId, waybll);
         List<DeliveryOrderGoodsDO> gs = deliveryOrderGoodsDao.queryByOrderNo(merchantId,
                 waybll);
-        s.setOrderNo(subWaybill);
+        w.setOrderNo(subWaybill);
         waybillDao.insert(w);
         r.setOrderNo(subWaybill);
         deliveryOrderReceiverDao.insert(r);
