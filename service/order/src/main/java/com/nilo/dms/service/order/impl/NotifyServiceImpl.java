@@ -85,50 +85,6 @@ public class NotifyServiceImpl implements NotifyService {
 
             for (String orderNo : request.getOrderNo()) {
 
-                Map<String, Object> dataMap = new HashMap<>();
-
-                /*switch (request.getOptType()) {
-                    case ARRIVE_SCAN: {
-                        //到件只通知一次
-                        List<WaybillLog> list = waybillLogDao.queryByOrderNos(Long.parseLong(merchantId), Arrays.asList(orderNo));
-                        if (list == null || list.size() > 0) {
-                            return;
-                        }
-                        DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, "" + network), DistributionNetworkDO.class);
-                        dataMap.put("location", networkDO == null ? "" : networkDO.getName());
-                        break;
-                    }
-                    case DELIVERY: {
-
-                        DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, "" + network), DistributionNetworkDO.class);
-                        UserInfoDO user = handleRiderDao.queryUserInfoBySmallNo(orderNo);
-                        dataMap.put("location", networkDO == null ? "" : networkDO.getName());
-                        dataMap.put("rider_name", user.getName());
-                        dataMap.put("rider_phone", user.getPhone());
-                        break;
-                    }
-                    case SEND: {
-                        break;
-                    }
-                    case PROBLEM: {
-                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
-                        String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.PRBOLEM_REASON, abnormalOrderDO.getReason());
-                        dataMap.put("type", reason);
-                        break;
-                    }
-                    case REFUSE: {
-                        AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
-                        String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.REFUSE_REASON, abnormalOrderDO.getReason());
-                        dataMap.put("type", reason);
-                        break;
-                    }
-                    case SIGN: {
-                        break;
-                    }
-                    default:
-                        break;
-                }*/
-
                 //请求参数
                 WaybillDO deliveryOrder = waybillDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
                 //kilimall 临时方案
@@ -178,31 +134,7 @@ public class NotifyServiceImpl implements NotifyService {
                         default:
                             break;
                     }
-
-
-                    return;
                 }
-
-                dataMap.put("waybill_number", orderNo);
-                dataMap.put("client_order_sn", deliveryOrder.getReferenceNo());
-                dataMap.put("status", convertResult);
-                dataMap.put("track_time", DateUtil.getSysTimeStamp());
-                dataMap.put("remark", request.getRemark());
-                String data = JSON.toJSONString(dataMap);
-
-                Map<String, String> param = new HashMap<>();
-                param.put("method", MethodEnum.STATUS_UPDATE.getCode());
-                param.put("app_key", "dms");
-                param.put("data", data);
-                param.put("sign", createSign(merchantConfig.getKey(), data));
-                param.put("request_id", UUID.randomUUID().toString());
-                param.put("timestamp", "" + DateUtil.getSysTimeStamp());
-                param.put("country_code", "ke");
-
-                NotifyRequest notify = new NotifyRequest();
-                notify.setUrl(interfaceConfig.getUrl());
-                notify.setParam(param);
-                notifyDataBusProducer.sendMessage(notify);
 
             }
         } catch (Exception e) {

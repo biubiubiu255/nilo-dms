@@ -3,6 +3,7 @@ package com.nilo.dms.service.order.consumer;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.rocketmq.common.message.MessageExt;
 import com.nilo.dms.common.utils.HttpUtil;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.NotifyDao;
 import com.nilo.dms.dao.dataobject.NotifyDO;
 import com.nilo.dms.service.mq.consumer.AbstractMQConsumer;
@@ -34,6 +35,9 @@ public class NotifyDataBusConsumer extends AbstractMQConsumer {
 
             request = (NotifyRequest) obj;
             response = HttpUtil.post(request.getUrl(), request.getParam());
+            if(StringUtil.isEmpty(response)){
+                throw new RuntimeException("Http Failed.");
+            }
             NotifyResponse notifyResponse = JSON.parseObject(response, NotifyResponse.class);
             if (notifyResponse != null && notifyResponse.isSuccess()) {
                 saveNotify(request, msgId, response, true);
