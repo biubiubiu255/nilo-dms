@@ -2,11 +2,14 @@ package com.nilo.dms.web.controller.report;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SignReportService;
 import com.nilo.dms.dto.order.SignOrderParameter;
 import com.nilo.dms.dto.order.SignReport;
 import com.nilo.dms.web.controller.BaseController;
+import com.nilo.dms.web.controller.order.PackageController;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +20,34 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping("/report/sign")
 public class ReportSignController extends BaseController {
+
     @Autowired
     private SignReportService signReportService;
 
+    @Autowired
+    private DistributionNetworkDao distributionNetworkDao;
+
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
+
+
+        List<DistributionNetworkDO> networkDOList = distributionNetworkDao.findAllBy(Long.parseLong(SessionLocal.getPrincipal().getMerchantId()));
+        List<PackageController.NextStation> list = new ArrayList<>();
+
+        for (DistributionNetworkDO n : networkDOList) {
+            PackageController.NextStation s = new PackageController.NextStation();
+            s.setCode("" + n.getId());
+            s.setName(n.getName());
+            list.add(s);
+        }
+
+        model.addAttribute("nextStations", list);
         model.addAttribute("riderList", getRiderList(null));
         return "report/sign/list";
     }

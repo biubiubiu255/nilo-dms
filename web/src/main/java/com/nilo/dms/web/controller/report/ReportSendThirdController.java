@@ -65,7 +65,7 @@ public class ReportSendThirdController extends BaseController {
             s.setCode("" + n.getId());
             s.setName(n.getName());
             list.add(s);
-        }
+         }
 
         List<ThirdExpressDO> expressList = userService.findExpressesAll(page);
 
@@ -92,13 +92,11 @@ public class ReportSendThirdController extends BaseController {
         switch (sendReportQO.getExportType()) {
             case 0:
                 fileType = "pdf";
-                sendReportQO.setLimit(1000);
-                sendReportQO.setOffset(0);
+                page = new Pagination(0, 1000);
                 break;
             case 1:
                 fileType = "xls";
-                sendReportQO.setLimit(1000);
-                sendReportQO.setOffset(0);
+                page = new Pagination(0, 1000);
                 break;
             case 2:
                 fileType = "json";

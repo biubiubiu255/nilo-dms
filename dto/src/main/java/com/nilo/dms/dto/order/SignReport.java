@@ -10,6 +10,8 @@ public class SignReport {
     private Double needPayAmount;
     private Double alreadyPaid;
     private String handleBy;
+    private Integer networkCode;
+    private String networkCodeDesc;
     private Long handleTime;
     private String rider;
     private String sName;
@@ -151,6 +153,21 @@ public class SignReport {
         this.rider = rider;
     }
 
+    public Integer getNetworkCode() {
+        return networkCode;
+    }
+
+    public void setNetworkCode(Integer networkCode) {
+        this.networkCode = networkCode;
+    }
+
+    public String getNetworkCodeDesc() {
+        return networkCodeDesc;
+    }
+
+    public void setNetworkCodeDesc(String networkCodeDesc) {
+        this.networkCodeDesc = networkCodeDesc;
+    }
 
     @Override
     public String toString() {
@@ -162,6 +179,8 @@ public class SignReport {
                 ", needPayAmount=" + needPayAmount +
                 ", alreadyPaid=" + alreadyPaid +
                 ", handleBy='" + handleBy + '\'' +
+                ", networkCode=" + networkCode +
+                ", networkCodeDesc='" + networkCodeDesc + '\'' +
                 ", handleTime=" + handleTime +
                 ", rider='" + rider + '\'' +
                 ", sName='" + sName + '\'' +

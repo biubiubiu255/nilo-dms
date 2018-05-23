@@ -40,7 +40,7 @@
         INSERT INTO t_handle_sign
         ( merchant_id,order_no,signer,network_code,handle_by,handle_time,remark,created_time,updated_time,version)
         VALUES
-        (#{merchantId},#{orderNo},#{signer},#{networkCode},#{handleBy},#{handleTime},#{remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{merchantId},#{orderNo},#{signer},${networkCode},#{handleBy},#{handleTime},#{remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
 </mapper>

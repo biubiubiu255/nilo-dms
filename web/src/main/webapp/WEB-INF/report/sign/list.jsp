@@ -11,7 +11,7 @@
 <body>
 <div class="box-body">
     <div class="layui-row">
-        <div class="layui-col-md4 layui-col-lg4">
+        <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">Waybill No:</label>
             <div class="layui-input-inline">
                 <input type="text" name="orderNo" autocomplete="off" class="layui-input">
@@ -19,7 +19,7 @@
         </div>
 
 
-        <div class="layui-col-md6 layui-col-lg4">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">ScanTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="createdTime_s">
@@ -51,6 +51,20 @@
             </div>
         </div>
 
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">NextStation:</label>
+            <div class="layui-inline">
+                <select lay-filter="nextStationCodeLay" name="nextStationCode">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${nextStations}" var="r">
+                        <option value=${r.code}>${r.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>
+
+
+
         <!-- 搜索按钮 -->
         <div class="layui-col-md4 layui-col-lg4" style="margin-left: 2.4rem;">
             <button class="layui-btn layui-btn-normal search">Search</button>
@@ -69,6 +83,7 @@
             <tr>
                 <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
                 <th lay-data="{field:'referenceNo', width:170}">ReferenceNo</th>
+                <th lay-data="{field:'networkCodeDesc', width:150}">Network</th>
                 <th lay-data="{field:'rider', width:100}">Rider</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'statusDesc', width:150}">Status</th>
@@ -168,7 +183,8 @@
                     fromHandledTime: sTime_creat,
                     toHandledTime: eTime_creat,
                     exportType: dateType,
-                    riderId: $("select[name='rider']").val()
+                    riderId: $("select[name='rider']").val(),
+                    networkCode: $("select[name='nextStationCode']").val()
                 };
                 if (isPojo===true) return param;
                 else return jQuery.param( param );

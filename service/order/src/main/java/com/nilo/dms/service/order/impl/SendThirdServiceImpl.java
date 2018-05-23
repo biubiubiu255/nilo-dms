@@ -68,6 +68,8 @@ public class SendThirdServiceImpl implements SendThirdService {
         }
         List<Waybill> list = waybillService.queryByOrderNos(merchantId.toString(), Arrays.asList(smallOrders));
         List<SendThirdDetail> dataList = new ArrayList<SendThirdDetail>();
+
+
         for (Waybill e : list) {
             SendThirdDetail sendThirdDetail = new SendThirdDetail();
             org.springframework.beans.BeanUtils.copyProperties(e, sendThirdDetail);
@@ -77,6 +79,7 @@ public class SendThirdServiceImpl implements SendThirdService {
             sendThirdDetail.setMerchantId(merchantId);
             dataList.add(sendThirdDetail);
         }
+
         handleThirdDao.insertSmalls(dataList);
     }
 

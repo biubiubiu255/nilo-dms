@@ -31,35 +31,12 @@ public class SignReportServiceImpl implements SignReportService {
     @Override
     public List<SignReport> querySignReport(SignOrderParameter parameter, Pagination pagination) {
 
-        Map<String, Object> map = new HashMap<>();
-
-        map.put("orderNo", parameter.getOrderNo());
-        map.put("nextNetwork", parameter.getNextNetwork());
-        map.put("status", parameter.getStatus());
-        map.put("carrierName", parameter.getCarrierName());
-        map.put("merchantId", parameter.getMerchantId());
-        map.put("rider", parameter.getRiderId());
-        if(!StringUtil.isEmptys(parameter.getFromHandledTime())){
-            map.put("fromHandledTime", Integer.parseInt(parameter.getFromHandledTime()));
-        }
-        if(!StringUtil.isEmptys(parameter.getToHandledTime())){
-            map.put("toHandledTime", Integer.parseInt(parameter.getToHandledTime()));
-        }
-
-        if (StringUtil.isEmpty(parameter.getFromHandledTime()) || StringUtil.isEmpty(parameter.getToHandledTime())) {
-            if (StringUtil.isEmpty(parameter.getFromHandledTime())) {
-                parameter.setFromHandledTime(parameter.getToHandledTime());
-            } else {
-                parameter.setToHandledTime(parameter.getFromHandledTime());
-            }
-        }
-
-        map.put("offset", pagination.getOffset());
-        map.put("limit", pagination.getLimit());
+        parameter.setOffset(pagination.getOffset());
+        parameter.setLimit(pagination.getLimit());
 
         // 查询记录
-        List<SignReportDO> queryList = signReportDao.querySignReport(map);
-        Long count = signReportDao.queryCountBy(map);
+        List<SignReportDO> queryList = signReportDao.querySignReport(parameter);
+        Long count = signReportDao.queryCountBy(parameter);
         pagination.setTotalCount(count == null ? 0 : count);
         return batchQuery(queryList, Long.parseLong(parameter.getMerchantId()));
     }
@@ -99,7 +76,8 @@ public class SignReportServiceImpl implements SignReportService {
         signReport.setSigner(s.getSigner());
         signReport.setStatus(s.getStatus());
         signReport.setRider(s.getRider());
-
+        signReport.setNetworkCode(s.getNetworkCode());
+        signReport.setNetworkCodeDesc(s.getNetworkCodeDesc());
         return signReport;
     }
 }

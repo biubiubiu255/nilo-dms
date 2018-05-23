@@ -1,11 +1,15 @@
 package com.nilo.dms.web.controller.order;
 
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.FileUtil;
 import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.common.utils.ReadExcel;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.common.CellData;
 import com.nilo.dms.common.ExcelData;
+import com.nilo.dms.dto.handle.SendThirdHead;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillOptService;
 import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
@@ -34,6 +38,9 @@ public class BatchSignController extends BaseController {
 
     @Autowired
     private WaybillOptService waybillOptService;
+
+    @Autowired
+    private SendThirdService sendThirdService;
 
     @Value("#{configProperties['excel_save_path']}")
     private String savePath;
@@ -64,6 +71,13 @@ public class BatchSignController extends BaseController {
         }
 
         if (list.size() == 0) throw new IllegalArgumentException("Excel Data Error.");
+
+        SendThirdHead sendThirdHead = sendThirdService.queryDetailsByHandleNo(list.get(0));
+
+        Principal principal = SessionLocal.getPrincipal();
+        principal.setUserId(sendThirdHead.getThirdExpressCode());
+
+
         List<String> resultList = new ArrayList<>();
         //批量签收
         for (String orderNo : list) {

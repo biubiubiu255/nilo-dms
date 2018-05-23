@@ -5,12 +5,15 @@ import java.util.List;
 public class SignOrderParameter {
     private String merchantId;
     private String orderNo;
+    private Integer networkCode;
     private String nextNetwork;
     private String riderId;
     private List<Integer> status;
     private String carrierName;
-    private String fromHandledTime;
-    private String toHandledTime;
+    private Integer fromHandledTime;
+    private Integer toHandledTime;
+    private Integer offset;
+    private Integer limit;
 
     public String getMerchantId() {
         return merchantId;
@@ -26,6 +29,14 @@ public class SignOrderParameter {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public Integer getNetworkCode() {
+        return networkCode;
+    }
+
+    public void setNetworkCode(Integer networkCode) {
+        this.networkCode = networkCode;
     }
 
     public String getNextNetwork() {
@@ -60,20 +71,36 @@ public class SignOrderParameter {
         this.carrierName = carrierName;
     }
 
-    public String getFromHandledTime() {
+    public Integer getFromHandledTime() {
         return fromHandledTime;
     }
 
-    public void setFromHandledTime(String fromHandledTime) {
+    public void setFromHandledTime(Integer fromHandledTime) {
         this.fromHandledTime = fromHandledTime;
     }
 
-    public String getToHandledTime() {
+    public Integer getToHandledTime() {
         return toHandledTime;
     }
 
-    public void setToHandledTime(String toHandledTime) {
+    public void setToHandledTime(Integer toHandledTime) {
         this.toHandledTime = toHandledTime;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
     }
 
     @Override
@@ -81,12 +108,15 @@ public class SignOrderParameter {
         return "SignOrderParameter{" +
                 "merchantId='" + merchantId + '\'' +
                 ", orderNo='" + orderNo + '\'' +
+                ", networkCode=" + networkCode +
                 ", nextNetwork='" + nextNetwork + '\'' +
                 ", riderId='" + riderId + '\'' +
                 ", status=" + status +
                 ", carrierName='" + carrierName + '\'' +
-                ", fromHandledTime='" + fromHandledTime + '\'' +
-                ", toHandledTime='" + toHandledTime + '\'' +
+                ", fromHandledTime=" + fromHandledTime +
+                ", toHandledTime=" + toHandledTime +
+                ", offset=" + offset +
+                ", limit=" + limit +
                 '}';
     }
 }
