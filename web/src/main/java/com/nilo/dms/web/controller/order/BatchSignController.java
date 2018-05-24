@@ -72,12 +72,6 @@ public class BatchSignController extends BaseController {
 
         if (list.size() == 0) throw new IllegalArgumentException("Excel Data Error.");
 
-        SendThirdHead sendThirdHead = sendThirdService.queryDetailsByHandleNo(list.get(0));
-
-        Principal principal = SessionLocal.getPrincipal();
-        principal.setUserId(sendThirdHead.getThirdExpressCode());
-
-
         List<String> resultList = new ArrayList<>();
         //批量签收
         for (String orderNo : list) {

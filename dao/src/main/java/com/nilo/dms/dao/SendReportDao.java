@@ -13,6 +13,9 @@ import java.util.Map;
          */
 @Repository
 public interface SendReportDao extends BaseDao<Long,SendReportDO> {
-    List<SendReportDO> querySendReport(SendReportQO sendReportQO);
-    Long queryCountBy(SendReportQO sendReportQO);
+    List<SendReportDO> querySendStationReport(SendReportQO sendReportQO);
+    Long querySendStationCount(SendReportQO sendReportQO);
+
+    List<SendReportDO> querySendExpressReport(SendReportQO sendReportQO);
+    Long querySendExpressCount(SendReportQO sendReportQO);
 }

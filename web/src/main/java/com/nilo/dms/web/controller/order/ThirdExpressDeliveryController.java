@@ -142,7 +142,7 @@ public class ThirdExpressDeliveryController extends BaseController {
         head.setHandleBy(Long.valueOf(me.getUserId()));
         head.setDriver(rider);
         head.setStatus(status);
-        head.setType("waybill");
+        head.setType("thirdExpress");
         head.setHandleName(me.getUserName());
         sendThirdService.insertBigAndSmall(Long.parseLong(merchantId), head, smallPack);
         //如果初次写入直接是ship的话，这里再批量ship一下

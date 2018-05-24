@@ -7,6 +7,7 @@ public class SignOrderParameter {
     private String orderNo;
     private Integer networkCode;
     private String nextNetwork;
+    private String expressName;
     private String riderId;
     private List<Integer> status;
     private String carrierName;
@@ -45,6 +46,14 @@ public class SignOrderParameter {
 
     public void setNextNetwork(String nextNetwork) {
         this.nextNetwork = nextNetwork;
+    }
+
+    public String getExpressName() {
+        return expressName;
+    }
+
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
     }
 
     public String getRiderId() {
@@ -110,6 +119,7 @@ public class SignOrderParameter {
                 ", orderNo='" + orderNo + '\'' +
                 ", networkCode=" + networkCode +
                 ", nextNetwork='" + nextNetwork + '\'' +
+                ", expressName='" + expressName + '\'' +
                 ", riderId='" + riderId + '\'' +
                 ", status=" + status +
                 ", carrierName='" + carrierName + '\'' +

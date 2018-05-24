@@ -12,6 +12,11 @@ import java.util.List;
  * Created by ronny on 2017/9/15.
  */
 public interface SendReportService {
-    List<SendReportDO> querySendReport(SendReportQO sendReportQO, Pagination pagination);
+
+    List<SendReportDO> querySendStationReport(SendReportQO sendReportQO, Pagination pagination);
+
+    List<SendReportDO> querySendExpressReport(SendReportQO sendReportQO, Pagination pagination);
+
+
 
 }

@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="layui-col-md8 layui-col-lg5">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">CreateTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
@@ -56,32 +56,6 @@
         </div>
 
         <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">DeliverType:</label>
-            <div class="layui-inline">
-                <select lay-filter="deliverTypeLay" name="deliverType">
-                    <option value="">Pls select DeliverType...</option>
-                    <option value="package">package</option>
-                    <option value="waybill">waybill</option>
-                </select>
-        </div>
-
-    </div>
-
-
-    <div class="layui-row">
-
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">ExpressName:</label>
-            <div class="layui-inline">
-                <select name="expressCode" lay-verify="required" lay-filter="expressCodeLay" style="display: none">
-                    <option value="">choose or search....</option>
-                    <c:forEach items="${expressList}" var="r">
-                        <option value=${r.expressCode}>${r.expressName}</option>
-                    </c:forEach>
-                </select></div>
-        </div>
-
-        <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">NextStation:</label>
             <div class="layui-inline">
                 <select lay-filter="nextStationCodeLay" name="nextStationCode">
@@ -93,8 +67,14 @@
             </div>
         </div>
 
+    <div class="layui-row">
 
-        <div class="layui-col-md4 layui-col-lg4">
+
+
+
+
+
+        <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">Status:</label>
             <div class="layui-input-inline">
                 <select name="status" lay-filter="status" lay-search="">
@@ -125,21 +105,18 @@
 
     <div id="me_tab">
         <table class="layui-table"
-               lay-data="{ url:'/report/send/list.html?exportType=2',method:'post', page:true,limit:10, id:'${id0}'}"
+               lay-data="{ url:'/report/sendStation/list.html?exportType=2',method:'post', page:true,limit:10, id:'${id0}'}"
                lay-filter="demo">
             <thead>
             <tr>
                 <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
                 <th lay-data="{field:'handleNo', width:100}">HandleNo</th>
                 <th lay-data="{field: 'orderType', width:100}">OrderType</th>
-                <th lay-data="{field:'deliveryType' , width:150}">DispatchType</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'receiveName', width:100}">Name</th>
                 <th lay-data="{field:'driver', width:130}">Driver</th>
                 <th lay-data="{field:'nextStation', width:150}">NextStation</th>
-                <th lay-data="{field:'expressName', width:100}">ExpressName</th>
                 <th lay-data="{field: 'handleName', width:130}">HandleName</th>
-
                 <th lay-data="{field: 'referenceNo', width:170}">ReferenceNo</th>
                 <th lay-data="{field: 'statusDesc', width:130}">Status</th>
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
@@ -150,7 +127,7 @@
         </table>
     </div>
 
-    <iframe scrolling="no" frameborder="0" src="/report/send/list.html?exportType=0" id="ifm" width="100%" height="100%" style="padding: 0px; display: none;"></iframe>
+    <iframe scrolling="no" frameborder="0" src="/report/sendStation/list.html?exportType=0" id="ifm" width="100%" height="100%" style="padding: 0px; display: none;"></iframe>
 
 <%@ include file="../../common/footer.jsp" %>
     <script src="${ctx}/dist/js/ajaxfileupload.js"></script>
@@ -193,9 +170,9 @@
             $(".btn-export").on("click", function () {
                 var param = getParam(1);
                 if(showPattern==1){
-                    url = "/report/send/list.html?limit=1000&" + param;
+                    url = "/report/sendStation/list.html?limit=1000&" + param;
                 }else {
-                    url = "/report/send/list.html?" + param;
+                    url = "/report/sendStation/list.html?" + param;
                 }
                 console.log(url);
                 window.location.href = url;
@@ -212,7 +189,7 @@
                 }else if(showPattern==1){
                     $("#ifm").show();
                     $("#me_tab").hide();
-                    var url = "/report/send/list.html";
+                    var url = "/report/sendStation/list.html";
                     document.getElementById("ifm").src = url + "?limit=1000&" + getParam(0);
                 }
 
@@ -231,7 +208,6 @@
                     toCreatedTime: eTime_creat,
                     handleNo: $("input[name='handleNo']").val(),
                     orderType: $("select[name='orderType']").val(),
-                    deliveryType: $("select[name='deliveryType']").val(),
                     expressCode: $("select[name='expressCode']").val(),
                     nextStationCode: $("select[name='nextStationCode']").val(),
                     exportType: dateType,

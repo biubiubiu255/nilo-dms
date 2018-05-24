@@ -22,6 +22,8 @@ public interface HandleThirdDao extends BaseDao<Long, SendThirdHead> {
 
     Integer queryBigCount(@Param("ob") SendThirdHead sendThirdHead);
 
+    SendThirdHead queryHandleBySmallNo(@Param("merchantId") Long merchantId, @Param("handleNo") String orderNo);
+
     void insertBig(SendThirdHead sendThirdHead);
 
     void editBigBy(SendThirdHead sendThirdHead);

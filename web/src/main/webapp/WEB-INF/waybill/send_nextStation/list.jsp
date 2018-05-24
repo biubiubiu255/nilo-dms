@@ -73,7 +73,7 @@
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="tool-print">Print</a>
         <a class="layui-btn layui-btn-normal  layui-btn-mini" lay-event="tool-detail">Detail</a>
-        <%--<a class="layui-btn layui-btn-danger  layui-btn-mini" lay-event="tool-ship">Ship</a>--%>
+        <a class="layui-btn layui-btn-danger  layui-btn-mini" lay-event="tool-ship">Ship</a>
         <%--
         <shiro:hasPermission name="400062">
             <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail-loading">Detail</a>
@@ -89,6 +89,7 @@
 <%@ include file="../../common/footer.jsp" %>
 <script type="text/javascript">
     $(function () {
+        var layerM;
         layui.use(['form', 'layer', 'element', 'laydate'], function () {
             var layDate = layui.laydate;
             layDate.render({
@@ -99,6 +100,7 @@
                 elem: '#toCreatedTime'
                 , lang: 'en'
             });
+            layerM = layui.layer;
         });
         var table;
         layui.use('table', function () {
@@ -110,6 +112,10 @@
                 if (obj.event === 'tool-detail') {
                     toDetails(handleNo);
                 }else if (obj.event === 'tool-print') {
+                    if(data.status!=1){
+                        layer.msg("Please first shipment", {icon: 2, time: 2000});
+                        return;
+                    }
                     toPrint(handleNo);
                 } else if (obj.event === 'tool-ship') {
                     if(data.status==1){
@@ -182,6 +188,26 @@
                 close: true,
                 url: url
             });
+        }
+
+        function ship(handleNo) {
+
+            var index = layerM.load(0);
+
+            $.post(
+                "/waybill/send_nextStation/updateStatus.html",
+                {handleNo: handleNo},
+                function (data) {
+                    layerM.close(index);
+                    if(data.result){
+                        layer.msg("SUCCESS", {icon: 1, time: 2000});
+                        reloadTable();
+                    }else {
+                        layer.msg(data.msg, {icon: 2, time: 2000});
+                    }
+                },
+                "json"
+            );
         }
 
 
