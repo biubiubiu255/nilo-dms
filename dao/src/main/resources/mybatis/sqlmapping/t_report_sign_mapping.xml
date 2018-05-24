@@ -23,6 +23,10 @@
                 jdbcType="INTEGER"/>
         <result property="networkCodeDesc" column="network_name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+        <result property="expressName" column="express_code" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
 
 
         <result property="handleBy" column="rider" javaType="java.lang.String"
@@ -61,6 +65,7 @@
         b.handle_time,
         b.remark,
         b.network_code,
+        b.express_code,
         c.`name` sname,
         d.`name` rname,
         d.contact_number,
@@ -90,6 +95,10 @@
         <if test="networkCode !=null ">
             and  b.network_code = #{networkCode}
         </if>
+        <if test="expressName !=null ">
+            and  b.express_code = #{expressName}
+        </if>
+
 
         <!--<if test="status !=null and status.size() > 0 ">-->
             <!--<foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">-->
@@ -125,6 +134,9 @@
         </if>
         <if test="networkCode !=null ">
             and  b.network_code = #{networkCode}
+        </if>
+        <if test="expressName !=null ">
+            and  b.express_code = #{expressName}
         </if>
         <!--<if test="status !=null and status.size() > 0 ">-->
             <!--<foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">-->

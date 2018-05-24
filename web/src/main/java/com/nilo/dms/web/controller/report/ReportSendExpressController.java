@@ -106,7 +106,7 @@ public class ReportSendExpressController extends BaseController {
 
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
         // 动态指定报表模板url
-        model.addAttribute("url", "/WEB-INF/jasper/report/sendThird.jasper");
+        model.addAttribute("url", "/WEB-INF/jasper/report/sendExpress.jasper");
         model.addAttribute("format", fileType); // 报表格式
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView"; // 对应jasper-defs.xml中的bean id

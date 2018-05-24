@@ -116,9 +116,7 @@
                 <th lay-data="{field:'receiveName', width:100}">Name</th>
                 <th lay-data="{field:'driver', width:130}">Driver</th>
                 <th lay-data="{field:'nextStation', width:150}">NextStation</th>
-                <th lay-data="{field:'expressName', width:100}">ExpressName</th>
                 <th lay-data="{field: 'handleName', width:130}">HandleName</th>
-
                 <th lay-data="{field: 'referenceNo', width:170}">ReferenceNo</th>
                 <th lay-data="{field: 'statusDesc', width:130}">Status</th>
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>

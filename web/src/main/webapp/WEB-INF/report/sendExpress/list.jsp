@@ -106,7 +106,7 @@
                 <th lay-data="{field: 'orderType', width:100}">OrderType</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'receiveName', width:150}">ReceiveName</th>
-                <th lay-data="{field:'expressName', width:100}">ExpressName</th>
+                <th lay-data="{field:'expressName', width:130}">ExpressName</th>
                 <th lay-data="{field:'driver', width:130}">Driver</th>
                 <th lay-data="{field: 'handleName', width:130}">HandleName</th>
 
