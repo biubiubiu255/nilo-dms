@@ -75,7 +75,7 @@ public class SendNextStationController extends BaseController {
     public String list(SendThirdHead sendThirdHead){
         Principal me = SessionLocal.getPrincipal();
         Pagination page = getPage();
-        sendThirdHead.setType("package");
+        sendThirdHead.setType("station");
         List<SendThirdHead> sendThirdHeads = sendThirdService.queryHead(sendThirdHead, page);
         return toPaginationLayUIData(page, sendThirdHeads);
     }

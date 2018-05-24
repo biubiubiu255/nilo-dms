@@ -28,15 +28,27 @@ public class SendReportServiceImpl implements SendReportService {
 
 
     @Override
-    public List<SendReportDO> querySendReport(SendReportQO sendReportQO, Pagination page) {
+    public List<SendReportDO> querySendStationReport(SendReportQO sendReportQO, Pagination page) {
 
         sendReportQO.setLimit(page.getLimit());
         sendReportQO.setOffset(page.getOffset());
 
         // 查询记录
-        List<SendReportDO> queryList = SendReportDao.querySendReport(sendReportQO);
+        List<SendReportDO> queryList = SendReportDao.querySendStationReport(sendReportQO);
 
-        Long count = SendReportDao.queryCountBy(sendReportQO);
+        Long count = SendReportDao.querySendStationCount(sendReportQO);
+        page.setTotalCount(count == null ? 0 : count);
+        return queryList;
+    }
+
+    @Override
+    public List<SendReportDO> querySendExpressReport(SendReportQO sendReportQO, Pagination page) {
+        sendReportQO.setLimit(page.getLimit());
+        sendReportQO.setOffset(page.getOffset());
+
+        // 查询记录
+        List<SendReportDO> queryList = SendReportDao.querySendExpressReport(sendReportQO);
+        Long count = SendReportDao.querySendExpressCount(sendReportQO);
         page.setTotalCount(count == null ? 0 : count);
         return queryList;
     }

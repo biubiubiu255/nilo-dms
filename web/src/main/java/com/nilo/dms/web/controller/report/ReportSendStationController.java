@@ -11,31 +11,23 @@ import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SendReportService;
-import com.nilo.dms.dto.order.SendOrderParameter;
-import com.nilo.dms.dto.order.SendReport;
-import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.web.controller.BaseController;
 import com.nilo.dms.web.controller.order.PackageController;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import static com.nilo.dms.common.Constant.MAX_EXPORT_COUNT;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
-@RequestMapping("/report/send")
-public class ReportSendThirdController extends BaseController {
+@RequestMapping("/report/sendStation")
+public class ReportSendStationController extends BaseController {
 
     @Autowired
     private SendReportService sendReportService;
@@ -72,7 +64,7 @@ public class ReportSendThirdController extends BaseController {
         model.addAttribute("nextStations", list);
         model.addAttribute("expressList", expressList);
 
-        return "report/send/list";
+        return "report/sendStation/list";
     }
 
 
@@ -105,7 +97,7 @@ public class ReportSendThirdController extends BaseController {
                 fileType = "pdf";
         }
 
-        List<SendReportDO> list = sendReportService.querySendReport(sendReportQO, page);
+        List<SendReportDO> list = sendReportService.querySendStationReport(sendReportQO, page);
 
         if (fileType.equals("json")) {
             request.setAttribute("toDate", toPaginationLayUIData(page, list));
