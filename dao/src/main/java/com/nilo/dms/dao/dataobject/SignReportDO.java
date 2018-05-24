@@ -11,6 +11,7 @@ public class SignReportDO {
     private Double alreadyPaid;
     private Integer networkCode;
     private String networkCodeDesc;
+    private String expressName;
     private String handleBy;
     private String rider;
     private Long handleTime;
@@ -168,7 +169,17 @@ public class SignReportDO {
         return networkCodeDesc;
     }
 
+    public void setNetworkCodeDesc(String networkCodeDesc) {
+        this.networkCodeDesc = networkCodeDesc;
+    }
 
+    public String getExpressName() {
+        return expressName;
+    }
+
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
+    }
 
     @Override
     public String toString() {

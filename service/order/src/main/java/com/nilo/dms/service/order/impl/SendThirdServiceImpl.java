@@ -155,6 +155,11 @@ public class SendThirdServiceImpl implements SendThirdService {
     }
 
     @Override
+    public SendThirdHead queryLoadingBySmallNo(String merchantId, String orderNo) {
+        return handleThirdDao.queryHandleBySmallNo(Long.parseLong(merchantId), orderNo);
+    }
+
+    @Override
     @Transactional
     public void edit(SendThirdHead sendThirdHead, String[] smallOrders) {
 

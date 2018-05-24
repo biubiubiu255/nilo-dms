@@ -498,6 +498,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         Principal principal = SessionLocal.getPrincipal();
         Long merchantId = Long.parseLong(principal.getMerchantId());
         WaybillDO w = waybillDao.queryByOrderNo(merchantId, waybll);
+        //不处理退仓
+        if (w == null) return;
+
         DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(merchantId, waybll);
         DeliveryOrderSenderDO s = deliveryOrderSenderDao.queryByOrderNo(merchantId, waybll);
         List<DeliveryOrderGoodsDO> gs = deliveryOrderGoodsDao.queryByOrderNo(merchantId,
