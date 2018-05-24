@@ -86,12 +86,17 @@
             });
             table = layui.table;
             table.on('tool(demo)', function (obj) {
+                console.log(obj.data);
                 var data = obj.data;
                 var orderNo = data.orderNo;
                 if (obj.event === 'details') {
                     detailsPackage(orderNo);
                 }
                 if (obj.event === 'print') {
+                    if(data.status!='DELIVERY'){
+                        layer.msg("Please first Delivery", {icon: 2, time: 2000});
+                        return;
+                    }
                     printPackage(orderNo);
                 }
                 if (obj.event === 'print_delivery') {
