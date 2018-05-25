@@ -335,6 +335,39 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             waybillDao.update(update);
         }
     }
+    
+    @Override
+    @Transactional
+    public String savePackage(PackageRequest packageRequest,String packageNo) {
+        //String orderNo = "";
+        Long merchant = Long.parseLong(packageRequest.getMerchantId());
+
+        // 判断是否允许打包
+        for (String o : packageRequest.getOrderNos()) {
+            Waybill waybill = queryByOrderNo(packageRequest.getMerchantId(), o);
+           
+        }
+
+        if("1".equals(packageRequest.getStatus())) {
+        	 waybillDao.finishPackage(packageNo);
+        }
+
+        // 关联包裹与子运单
+        for (String o : packageRequest.getOrderNos()) {
+            WaybillDO update = new WaybillDO();
+            update.setMerchantId(merchant);
+            update.setOrderNo(o);
+            update.setParentNo(packageNo);
+            waybillDao.update(update);
+        }
+
+        // 添加操作日志
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setOrderNo(packageRequest.getOrderNos());
+        optRequest.setOptType(OptTypeEnum.PACKAGE);
+        waybillLogService.addOptLog(optRequest);
+        return packageNo;
+    }
 
     @Override
     @Transactional
@@ -365,6 +398,9 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         orderHeader.setIsPackage(IS_PACKAGE);
         orderHeader.setOrderType("PG");
         orderHeader.setStatus(DeliveryOrderStatusEnum.ARRIVED.getCode());
+        if("0".equals(packageRequest.getStatus())) {
+        	orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
+        }
         orderHeader.setNextNetworkId(packageRequest.getNextNetworkId());
         orderHeader.setNetworkId(packageRequest.getNetworkId());
         // 获取订单号

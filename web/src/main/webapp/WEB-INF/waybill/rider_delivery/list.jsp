@@ -192,11 +192,10 @@
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/waybill/rider_delivery/updateStatus.html",
+                url: "/waybill/rider_delivery/ship.html",
                 dataType: "json",
                 data: {
-                    handleNo: handleNo,
-                    status: 1
+                    handleNo: handleNo
                 },
                 success: function (data) {
                     if (data.result) {

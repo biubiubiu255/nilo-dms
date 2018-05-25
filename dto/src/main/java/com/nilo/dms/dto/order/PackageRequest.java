@@ -24,8 +24,19 @@ public class PackageRequest {
     Double width;
 
     String optBy;
+    
+    String status;
 
-    public String getMerchantId() {
+    
+    public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getMerchantId() {
         return merchantId;
     }
 
