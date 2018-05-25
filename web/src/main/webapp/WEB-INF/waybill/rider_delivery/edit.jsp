@@ -41,7 +41,9 @@
                         <select lay-filter="fil-rider" name="rider">
                             <c:forEach items="${riderList}" var="rider">
                                 <option value="${rider.userId}"
-                                        <c:if test="${riderDelivery.rider==rider.userId.toString()}">selected</c:if> > ${rider.staffId.toString()}-${rider.realName}</option>
+                                    <c:if test="${riderDelivery.rider==rider.userId.toString()}">selected</c:if> >
+                                        ${rider.staffId.toString()}-${rider.realName}
+                                </option>
                             </c:forEach>
                         </select>
                         <input type="hidden" name="rider" value="${riderDelivery.rider}">

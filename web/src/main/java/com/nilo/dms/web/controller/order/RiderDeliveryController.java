@@ -208,11 +208,13 @@ public class RiderDeliveryController extends BaseController {
         List<RiderDelivery> templist = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDelivery, page);
         riderDelivery = templist.get(0);
 
+        List<StaffDO> riderList = getRiderList(null);
+
         List<OutsourceDO> outsourceList = outsourceDao.findAll(me.getMerchantId());
         model.addAttribute("outsourceList", outsourceList);
 
         model.addAttribute("list", res);
-        model.addAttribute("riderList", getRiderList(""));
+        model.addAttribute("riderList", riderList);
         model.addAttribute("riderDelivery", riderDelivery);
         return "waybill/rider_delivery/edit";
     }

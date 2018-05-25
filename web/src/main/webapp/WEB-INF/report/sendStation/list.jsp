@@ -115,6 +115,7 @@
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'receiveName', width:100}">Name</th>
                 <th lay-data="{field:'driver', width:130}">Driver</th>
+                <th lay-data="{field:'expressName', width:150}">ExpressName</th>
                 <th lay-data="{field:'nextStation', width:150}">NextStation</th>
                 <th lay-data="{field: 'handleName', width:130}">HandleName</th>
                 <th lay-data="{field:'parentNo', width:150}">parentNo</th>

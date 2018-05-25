@@ -19,9 +19,8 @@
                 jdbcType="VARCHAR"/>
         <result property="deliveryType" column="delivery_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="expressName" column="express_name" javaType="java.lang.String"
+        <result property="expressName" column="third_express_code" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-
 
 
         <result property="receiveName" column="receive_name" javaType="java.lang.String"
@@ -82,6 +81,7 @@
         b.handle_no,
         b.driver,
         b.next_station,
+        b.third_express_code,
         b.handle_name,
         f.order_type,
         f.reference_no,
@@ -113,6 +113,7 @@
         b.handle_no,
         b.driver,
         b.next_station,
+        b.third_express_code,
         b.handle_name,
         c.order_type,
         c.reference_no,
