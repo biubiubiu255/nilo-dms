@@ -1,16 +1,9 @@
 package com.nilo.dms.service.impl;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.dao.ThirdDriverDao;
-import com.nilo.dms.dao.ThirdExpressDao;
 import com.nilo.dms.dao.WaybillExternalDao;
-import com.nilo.dms.dao.WaybillExternalDao;
-import com.nilo.dms.dao.dataobject.ThirdDriverDO;
-import com.nilo.dms.dao.dataobject.ThirdExpressDO;
-import com.nilo.dms.dao.dataobject.WaybillExternalDo;
 import com.nilo.dms.dao.dataobject.WaybillExternalDo;
 import com.nilo.dms.service.org.ExternalService;
-import com.nilo.dms.service.org.ThirdDriverService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

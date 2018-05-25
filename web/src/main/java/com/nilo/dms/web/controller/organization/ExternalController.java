@@ -2,16 +2,10 @@ package com.nilo.dms.web.controller.organization;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.dao.UserNetworkDao;
-import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.dao.dataobject.WaybillExternalDo;
-import com.nilo.dms.service.RoleService;
-import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.org.ExternalService;
-import com.nilo.dms.service.system.DistributionNetworkService;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.ibatis.annotations.Param;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +29,7 @@ public class ExternalController extends BaseController {
     @RequestMapping(value = "/externalList.html", method = RequestMethod.POST)
     public String expressList(WaybillExternalDo external, Integer  sTime_create, Integer eTime_create) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();  //主要的，主体
+        Principal me = SessionLocal.getPrincipal();  //主要的，主体
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
@@ -80,7 +74,7 @@ public class ExternalController extends BaseController {
         try {
             Date date = simpleDateFormat.parse(time);
             external.setReceiveTime((int)(date.getTime()/1000));
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();  //主要的，主体
+            Principal me = SessionLocal.getPrincipal();  //主要的，主体
             if (external.getCreator()==null || external.getCreator().equals("")) external.setCreator(me.getUserName());
             externalService.addExternal(external);
             return toJsonTrueMsg();

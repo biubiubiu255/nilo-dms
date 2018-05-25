@@ -22,21 +22,23 @@
                 jdbcType="VARCHAR"/>
         <result property="phone" column="contact_number" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="queryReportArrive" resultMap="ArriveDo">
 
-        SELECT a.order_no, a.opt_time,  b.name op_name, c.weight, d.name last_network, e.name scan_network, f.contact_number, f.name address_name, f.address
+        SELECT c.status, a.order_no, a.opt_time,  b.name op_name, c.weight, d.name last_network, e.name scan_network, f.contact_number, f.name address_name, f.address
 
         FROM  t_waybill_log_arrive a
 
-        INNER JOIN t_sys_user_info b ON a.opt_by = b.id
+        LEFT JOIN t_sys_user_info b ON a.opt_by = b.id
 
-        INNER JOIN t_waybill c ON a.order_no = c.order_no
+        LEFT JOIN t_waybill c ON a.order_no = c.order_no
 
-        INNER JOIN t_bas_network d ON a.last_network_id = d.id
+        LEFT JOIN t_bas_network d ON a.last_network_id = d.id
 
-        INNER JOIN t_bas_network e ON a.network_id = d.id
+        LEFT JOIN t_bas_network e ON a.network_id = e.id
 
         INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no
 
@@ -47,15 +49,20 @@
             a.order_no = #{orderNo}
         </if>
 
-        <if test="sTime_creat !=null and eTime_creat !=null and  sTime_creat != '' and eTime_creat != ''">
+        <if test="fromCreatedTime !=null and toCreatedTime !=null">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            (a.opt_time<![CDATA[<]]>#{eTime_creat} AND a.opt_time>#{sTime_creat})
+            (a.opt_time<![CDATA[<]]>#{toCreatedTime} AND a.opt_time>#{fromCreatedTime})
         </if>
 
         <if test="scanNetwork != null and scanNetwork != ''">
             AND
             e.name = #{scanNetwork}
+        </if>
+
+        <if test="status != null">
+            AND
+            c.status = #{status}
         </if>
 
         order by a.created_time desc
@@ -70,36 +77,39 @@
 
         SELECT
 
-        count(*)
+        count(1)
 
         FROM  t_waybill_log_arrive a
 
-        INNER JOIN t_sys_user_info b ON a.opt_by = b.id
+        LEFT JOIN t_sys_user_info b ON a.opt_by = b.id
 
-        INNER JOIN t_waybill c ON a.order_no = c.order_no
+        LEFT JOIN t_waybill c ON a.order_no = c.order_no
 
-        INNER JOIN t_bas_network d ON a.last_network_id = d.id
+        LEFT JOIN t_bas_network d ON a.last_network_id = d.id
 
-        INNER JOIN t_bas_network e ON a.network_id = d.id
+        LEFT JOIN t_bas_network e ON a.network_id = e.id
 
         INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no
-
-        WHERE a.merchant_id=#{merchantId}
 
         <if test="orderNo !=null  and orderNo !='' ">
             AND
             a.order_no = #{orderNo}
         </if>
 
-        <if test="sTime_creat !=null and eTime_creat !=null and  sTime_creat != '' and eTime_creat != ''">
+        <if test="fromCreatedTime !=null and toCreatedTime !=null">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            (a.opt_time<![CDATA[<]]>#{eTime_creat} AND a.opt_time>#{sTime_creat})
+            (a.opt_time<![CDATA[<]]>#{toCreatedTime} AND a.opt_time>#{fromCreatedTime})
         </if>
 
         <if test="scanNetwork != null and scanNetwork != ''">
             AND
             e.name = #{scanNetwork}
+        </if>
+
+        <if test="status != null">
+            AND
+            c.status = #{status}
         </if>
 
     </select>

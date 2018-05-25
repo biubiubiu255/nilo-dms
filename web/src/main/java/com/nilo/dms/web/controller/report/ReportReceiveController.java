@@ -2,20 +2,19 @@ package com.nilo.dms.web.controller.report;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.ReportReceiveDao;
 import com.nilo.dms.dao.SendReportDao;
-import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.dataobject.ReportReceiveDO;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.web.controller.BaseController;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +45,7 @@ public class ReportReceiveController extends BaseController {
     public String getOrderList(Model model, String orderNo, Integer sTime_creat, Integer eTime_creat, Integer sTime_receive,
                                Integer eTime_receive, String mother, String clientName) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
@@ -68,6 +67,7 @@ public class ReportReceiveController extends BaseController {
         List<ReportReceiveDO> list = reportReceiveDao.queryReportReceive(map);
         page.setTotalCount(reportReceiveDao.queryReportReceiveCount(map));
         //page.setTotalCount(commonDao.lastFoundRows());
+
 
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
         // 动态指定报表模板url

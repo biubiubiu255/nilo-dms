@@ -1,11 +1,11 @@
 package com.nilo.dms.web.controller.config;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.system.ScheduleService;
-import com.nilo.dms.service.system.model.ScheduleJob;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dto.system.ScheduleJob;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.system.ScheduleService;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +34,7 @@ public class ScheduleConfigController extends BaseController {
     @RequestMapping("/getList.html")
     public String getList() {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<ScheduleJob> list = scheduleService.queryBy(merchantId,null);
@@ -46,7 +46,7 @@ public class ScheduleConfigController extends BaseController {
 
     @RequestMapping(value = "/editPage.html", method = RequestMethod.GET)
     public String updateRulePage(String jobName, Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         return "system_config/order_handle/edit";
@@ -57,7 +57,7 @@ public class ScheduleConfigController extends BaseController {
     @RequestMapping(value = "/edit.html", method = RequestMethod.POST)
     public String updateConfig(ScheduleJob job) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
         } catch (Exception e) {
@@ -77,7 +77,7 @@ public class ScheduleConfigController extends BaseController {
     @RequestMapping(value = "/add.html", method = RequestMethod.POST)
     public String addConfig(ScheduleJob job) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
 

@@ -63,8 +63,6 @@
                     <th>Customer Name</th>
                     <th>Contact No</th>
                     <th>Address</th>
-                    <th>Price</th>
-                    <th>Pending Pay</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -74,8 +72,6 @@
 	                        <td>${item.deliveryOrder.receiverInfo.receiverName}</td>
 	                        <td>${item.deliveryOrder.receiverInfo.receiverPhone}</td>
 	                        <td>${item.deliveryOrder.receiverInfo.receiverAddress}</td>
-	                        <td>${item.deliveryOrder.totalPrice}</td>
-                            <td>${item.deliveryOrder.needPayAmount}</td>
                        </tr>
                    </c:forEach> 
                 </tbody>
@@ -89,9 +85,6 @@
             Total Order :${fn:length(loading.detailsList)}
         </div>
 
-        <div class="col-xs-6">
-            Pending payment :${totalAmount}
-        </div>
         <br><br>
     </div>
     

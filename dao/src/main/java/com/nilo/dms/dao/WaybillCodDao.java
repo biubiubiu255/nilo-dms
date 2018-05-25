@@ -1,14 +1,13 @@
 package com.nilo.dms.dao;
 
-import com.nilo.dms.dao.dataobject.ReportArriveDO;
 import com.nilo.dms.dao.dataobject.ReportCodDO;
+import com.nilo.dms.dto.order.ReportCodQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public interface WaybillCodDao {
-    List<ReportCodDO> queryReportCod(Map map);
-    Integer queryReportCodCount(Map map);
+    List<ReportCodDO> queryReportCod(ReportCodQuery reportCodQuery);
+    Integer queryReportCodCount(ReportCodQuery reportCodQuery);
 }

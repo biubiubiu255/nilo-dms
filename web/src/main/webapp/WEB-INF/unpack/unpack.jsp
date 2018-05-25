@@ -174,7 +174,7 @@
                 type: "POST",
                 url: "/order/unpack/unpack.html",
                 dataType: "json",
-                data: {scanNo: '${scanNo}'},
+                data: {scanNo: '${scanNo}', packageNo: $("#packageNo").val()},
                 success: function (data) {
                     if (data.result) {
                         layer.msg('SUCCESS', {icon: 1, time: 2000}, function () {

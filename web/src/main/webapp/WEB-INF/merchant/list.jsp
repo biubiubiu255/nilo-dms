@@ -1,7 +1,7 @@
 <%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" session="false" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<%@ taglib prefix="shiro" uri="/shiro.tag" %>
 <%
     request.setAttribute("id0", RandomStringUtils.randomAlphabetic(8));
 %>

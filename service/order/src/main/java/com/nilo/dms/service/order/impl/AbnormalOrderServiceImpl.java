@@ -8,19 +8,17 @@ import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
-import com.nilo.dms.dao.DeliveryOrderDao;
+import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
-import com.nilo.dms.service.system.MerchantService;
+import com.nilo.dms.dao.dataobject.WaybillDO;
+import com.nilo.dms.dto.order.AbnormalOptRequest;
+import com.nilo.dms.dto.order.AbnormalOrder;
+import com.nilo.dms.dto.order.OrderOptRequest;
+import com.nilo.dms.dto.order.QueryAbnormalOrderParameter;
 import com.nilo.dms.service.order.AbnormalOrderService;
-import com.nilo.dms.service.order.DeliveryFeeDetailsService;
-import com.nilo.dms.service.order.OrderService;
-import com.nilo.dms.service.order.model.*;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
-import com.nilo.dms.service.system.model.MerchantInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.nilo.dms.common.enums.AbnormalTypeEnum.PROBLEM;
-import static com.nilo.dms.common.enums.AbnormalTypeEnum.REFUSE;
 
 /**
  * Created by admin on 2017/11/9.
@@ -42,29 +39,19 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
     @Autowired
     private AbnormalOrderDao abnormalOrderDao;
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
     @Autowired
-    private DeliveryOrderDao deliveryOrderDao;
+    private WaybillDao waybillDao;
 
     @Override
     @Transactional
     public void addAbnormalOrder(AbnormalOrder abnormalOrder) {
 
-
-        DeliveryOrderDO orderDO = deliveryOrderDao
-                .queryByOrderNo(Long.parseLong(abnormalOrder.getMerchantId()), abnormalOrder.getOrderNo());
+        WaybillDO orderDO = waybillDao.queryByOrderNo(Long.parseLong(abnormalOrder.getMerchantId()), abnormalOrder.getOrderNo());
         if (orderDO == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, abnormalOrder.getOrderNo());
-
-        String abnormalNo = SystemConfig.getNextSerialNo(abnormalOrder.getMerchantId(), SerialTypeEnum.ABNORMAL_DELIVERY_ORDER_NO.getCode());
-        abnormalOrder.setAbnormalNo(abnormalNo);
-        abnormalOrder.setStatus(AbnormalOrderStatusEnum.CREATE);
-        AbnormalOrderDO abnormalOrderDO = convertTo(abnormalOrder);
-        abnormalOrderDao.insert(abnormalOrderDO);
 
         //操作运单状态为问题件
         OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setMerchantId(abnormalOrder.getMerchantId());
-        optRequest.setOptBy(abnormalOrder.getCreatedBy());
 
         switch (abnormalOrder.getAbnormalType()) {
             case PROBLEM: {
@@ -80,7 +67,13 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         orderNoList.add(abnormalOrder.getOrderNo());
         optRequest.setOrderNo(orderNoList);
         optRequest.setRemark(abnormalOrder.getRemark());
-        orderService.handleOpt(optRequest);
+        waybillService.handleOpt(optRequest);
+
+        String abnormalNo = SystemConfig.getNextSerialNo(abnormalOrder.getMerchantId(), SerialTypeEnum.ABNORMAL_DELIVERY_ORDER_NO.getCode());
+        abnormalOrder.setAbnormalNo(abnormalNo);
+        abnormalOrder.setStatus(AbnormalOrderStatusEnum.CREATE);
+        AbnormalOrderDO abnormalOrderDO = convertTo(abnormalOrder);
+        abnormalOrderDao.insert(abnormalOrderDO);
 
     }
 

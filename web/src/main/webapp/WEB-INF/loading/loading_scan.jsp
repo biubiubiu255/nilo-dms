@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page import="org.apache.commons.lang3.RandomStringUtils" %>
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
-<%@ page import="com.nilo.dms.service.model.User" %>
+<%@ page import="com.nilo.dms.dto.common.User" %>
 <html>
 <%@ include file="../common/header.jsp" %>
 <%
@@ -303,7 +303,7 @@
                         $("#sendDriver").prepend("<option value='0'>choose or search....</option>");
                         var driver = data.data;
                         for (var i = 0; i < driver.length; i++) {
-                            $("#sendDriver").append("<option value='" + driver[i].id + "'>" + driver[i].driverName + "</option>");
+                            $("#sendDriver").append("<option value='" + driver[i].code + "'>" + driver[i].name + "</option>");
                         }
                         form.render();
                     }

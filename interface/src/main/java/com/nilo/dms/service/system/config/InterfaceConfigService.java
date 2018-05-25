@@ -1,6 +1,7 @@
 package com.nilo.dms.service.system.config;
 
-import com.nilo.dms.service.system.model.InterfaceConfig;
+
+import com.nilo.dms.dto.system.InterfaceConfig;
 
 import java.util.List;
 

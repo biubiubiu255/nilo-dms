@@ -2,11 +2,11 @@ package com.nilo.dms.web.controller.config;
 
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.system.config.InterfaceConfigService;
-import com.nilo.dms.service.system.model.InterfaceConfig;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dto.system.InterfaceConfig;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.system.config.InterfaceConfigService;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class InterfaceConfigController extends BaseController {
     @ResponseBody
     @RequestMapping("/getList.html")
     public String getUserList(String operation, String operator, String parameter, String fromTime, String toTime) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
@@ -47,7 +47,7 @@ public class InterfaceConfigController extends BaseController {
     @RequestMapping(value = "/edit.html")
     public String edit(InterfaceConfig config) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {

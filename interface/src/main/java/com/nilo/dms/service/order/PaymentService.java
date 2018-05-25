@@ -3,8 +3,8 @@ package com.nilo.dms.service.order;
 import java.util.List;
 
 import com.nilo.dms.dao.dataobject.WaybillTaskDo;
-import com.nilo.dms.service.order.model.WaybillPaymentOrder;
-import com.nilo.dms.service.order.model.WaybillPaymentRecord;
+import com.nilo.dms.dto.order.WaybillPaymentOrder;
+import com.nilo.dms.dto.order.WaybillPaymentRecord;
 
 public interface PaymentService {
 

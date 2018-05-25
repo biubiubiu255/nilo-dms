@@ -1,23 +1,26 @@
 package com.nilo.dms.dao.dataobject;
 
+import com.nilo.dms.common.BaseDo;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 
-public class SendReportDO {
+public class SendReportDO extends BaseDo<Long> {
     private Long merchantId;
     private String referenceNo;
-    private String nextNetwork;
-    private String network;
     private String orderNo;
-    private String orderCategory;
+    private String orderType;
     private Double weight;
-    private String stop;
-    private String carrierName;
-    private Double deliveryFee;
     private Integer status;
     private String remark;
-    private String name;
-    private String contactNumber;
+    private String phone;
     private String address;
+    private String receiveName;
+
+    private String driver;
+    private String nextStation;
+    private String handleName;
+    private String handleNo;
+    private String deliveryType;
+    private String expressName;
 
     public Long getMerchantId() {
         return merchantId;
@@ -35,22 +38,6 @@ public class SendReportDO {
         this.referenceNo = referenceNo;
     }
 
-    public String getNextNetwork() {
-        return nextNetwork;
-    }
-
-    public void setNextNetwork(String nextNetwork) {
-        this.nextNetwork = nextNetwork;
-    }
-
-    public String getNetwork() {
-        return network;
-    }
-
-    public void setNetwork(String network) {
-        this.network = network;
-    }
-
     public String getOrderNo() {
         return orderNo;
     }
@@ -59,12 +46,12 @@ public class SendReportDO {
         this.orderNo = orderNo;
     }
 
-    public String getOrderCategory() {
-        return orderCategory;
+    public String getOrderType() {
+        return orderType;
     }
 
-    public void setOrderCategory(String orderCategory) {
-        this.orderCategory = orderCategory;
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 
     public Double getWeight() {
@@ -75,12 +62,9 @@ public class SendReportDO {
         this.weight = weight;
     }
 
-    public String getStop() {
-        return stop;
-    }
-
-    public void setStop(String stop) {
-        this.stop = stop;
+    public String getStatusDesc() {
+        DeliveryOrderStatusEnum statusEnum = DeliveryOrderStatusEnum.getEnum(this.status);
+        return statusEnum == null ? "" : statusEnum.getDesc();
     }
 
     public Integer getStatus() {
@@ -99,12 +83,12 @@ public class SendReportDO {
         this.remark = remark;
     }
 
-    public String getName() {
-        return name;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getAddress() {
@@ -115,47 +99,81 @@ public class SendReportDO {
         this.address = address;
     }
 
-    public String getCarrierName() {
-        return carrierName;
+    public String getReceiveName() {
+        return receiveName;
     }
 
-    public void setCarrierName(String carrierName) {
-        this.carrierName = carrierName;
+    public void setReceiveName(String receiveName) {
+        this.receiveName = receiveName;
     }
 
-    public Double getDeliveryFee() {
-        return deliveryFee;
+    public String getDriver() {
+        return driver;
     }
 
-    public void setDeliveryFee(Double deliveryFee) {
-        this.deliveryFee = deliveryFee;
+    public void setDriver(String driver) {
+        this.driver = driver;
     }
 
-    public String getContactNumber() {
-        return contactNumber;
+    public String getNextStation() {
+        return nextStation;
     }
 
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
+    public void setNextStation(String nextStation) {
+        this.nextStation = nextStation;
+    }
+
+    public String getHandleName() {
+        return handleName;
+    }
+
+    public void setHandleName(String handleName) {
+        this.handleName = handleName;
+    }
+
+    public String getHandleNo() {
+        return handleNo;
+    }
+
+    public void setHandleNo(String handleNo) {
+        this.handleNo = handleNo;
+    }
+
+    public String getDeliveryType() {
+        return deliveryType;
+    }
+
+    public void setDeliveryType(String deliveryType) {
+        this.deliveryType = deliveryType;
+    }
+
+    public String getExpressName() {
+        return expressName;
+    }
+
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
     }
 
     @Override
     public String toString() {
         return "SendReportDO{" +
-                "referenceNo='" + referenceNo + '\'' +
-                ", nextNetwork='" + nextNetwork + '\'' +
-                ", network='" + network + '\'' +
+                "merchantId=" + merchantId +
+                ", referenceNo='" + referenceNo + '\'' +
                 ", orderNo='" + orderNo + '\'' +
-                ", orderCategory='" + orderCategory + '\'' +
+                ", orderType='" + orderType + '\'' +
                 ", weight=" + weight +
-                ", stop='" + stop + '\'' +
-                ", carrier_name='" + carrierName + '\'' +
-                ", delivery_fee=" + deliveryFee +
-                ", status='" + status + '\'' +
+                ", status=" + status +
                 ", remark='" + remark + '\'' +
-                ", name='" + name + '\'' +
-                ", contact_number='" + contactNumber + '\'' +
+                ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
+                ", receiveName='" + receiveName + '\'' +
+                ", driver='" + driver + '\'' +
+                ", nextStation='" + nextStation + '\'' +
+                ", handleName='" + handleName + '\'' +
+                ", handleNo='" + handleNo + '\'' +
+                ", deliveryType='" + deliveryType + '\'' +
+                ", expressName='" + expressName + '\'' +
                 '}';
     }
 }

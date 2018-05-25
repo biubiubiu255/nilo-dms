@@ -12,13 +12,7 @@
     <div class="box-header with-border">
         <h3 class="box-title">Arrive Scan</h3>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label" style="width:120px">Arrive By:</label>
-        <div class="layui-input-inline">
-            <label class="layui-form-label" style="width:120px">${userName}</label>
-        </div>
-    </div>
-
+    <br>
     <div class="layui-form-item">
         <label class="layui-form-label" style="width:120px">OrderNo:</label>
         <div class="layui-input-inline">
@@ -33,7 +27,7 @@
             <thead>
             <tr>
                 <th lay-data="{field:'orderNo', width:200}">OrderNo</th>
-                <th lay-data="{field:'weight', width:100,edit:'text'}">Weight(KG)</th>
+                <th lay-data="{field:'weight', width:130,edit:'text'}">Weight(KG)</th>
                 <th lay-data="{field:'referenceNo', width:200}">ReferenceNo</th>
                 <th lay-data="{field:'orderType', width:100}">OrderType</th>
                 <th lay-data="{title:'Opt',fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}"></th>
@@ -47,6 +41,7 @@
         </div>
         <script type="text/html" id="barDemo">
             <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="delete">Delete</a>
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="print">Print</a>
         </script>
     </div>
 </div>
@@ -64,13 +59,28 @@
                     deleteDetails(orderNo);
                     obj.del();
                 }
+                if (obj.event === 'print') {
+                    printOrder(orderNo);
+                }
             });
-
             //监听单元格编辑
             table.on('edit(${id0})', function (obj) {
+                var number = parseFloat(obj.value);
+                number = number.toFixed(2);
+                $("cdsf").change()
                 var value = obj.value //得到修改后的值
                         , data = obj.data //得到所在行所有键值
+                if (value.length > 10){
+                    layer.msg("sorry! too heavy");
+                    reloadTable();
+                    return ;
+                }
+                layer.msg("sussess");
                 updateWeight(data.orderNo, value);
+                setTimeout(function () {
+                    reloadTable();
+                }, 500)
+
             });
 
         });
@@ -177,6 +187,10 @@
                 }
             });
         };
+        
+        var printOrder = function (orderNo) {
+            parent.window.open("/waybill/print/" + orderNo + ".html");
+        }
     });
 </script>
 </body>

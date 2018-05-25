@@ -10,11 +10,12 @@ import com.nilo.dms.dao.WaybillScanDao;
 import com.nilo.dms.dao.WaybillScanDetailsDao;
 import com.nilo.dms.dao.dataobject.WaybillScanDO;
 import com.nilo.dms.dao.dataobject.WaybillScanDetailsDO;
-import com.nilo.dms.service.order.OrderService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.dto.order.Waybill;
+import com.nilo.dms.dto.order.WaybillHeader;
 import com.nilo.dms.web.controller.BaseController;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class ArriveScanController extends BaseController {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private OrderService orderService;
+    private WaybillService waybillService;
     @Autowired
     private WaybillScanDao waybillScanDao;
     @Autowired
@@ -44,7 +45,7 @@ public class ArriveScanController extends BaseController {
 
     @RequestMapping(value = "/scanPage.html", method = RequestMethod.GET)
     public String arriveScanPage(Model model) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
 
         //获取merchantId
         String merchantId = me.getMerchantId();
@@ -63,10 +64,10 @@ public class ArriveScanController extends BaseController {
     @RequestMapping(value = "/scanList.html")
     public String scanList(String scanNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<DeliveryOrder> list = new ArrayList<>();
+        List<Waybill> list = new ArrayList<>();
         Pagination pagination = new Pagination(0, 100);
 
         if (StringUtil.isEmpty(scanNo)) return toPaginationLayUIData(pagination, list);
@@ -78,9 +79,9 @@ public class ArriveScanController extends BaseController {
         for (WaybillScanDetailsDO details : scanDetailsDOList) {
             orderNos.add(details.getOrderNo());
         }
-        list = orderService.queryByOrderNos(merchantId, orderNos);
+        list = waybillService.queryByOrderNos(merchantId, orderNos);
 
-        for (DeliveryOrder o : list) {
+        for (Waybill o : list) {
             for (WaybillScanDetailsDO d : scanDetailsDOList) {
                 if (StringUtil.equals(d.getOrderNo(), o.getOrderNo()) && d.getWeight() != null) {
                     o.setWeight(d.getWeight());
@@ -96,11 +97,11 @@ public class ArriveScanController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/scan.html")
     public String scan(String orderNo, String scanNo) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 
-        DeliveryOrder deliveryOrder = orderService.queryByOrderNo(merchantId, orderNo);
+        Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         if (deliveryOrder == null) throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
 
         WaybillScanDetailsDO query = waybillScanDetailsDao.queryBy(orderNo, scanNo);
@@ -114,7 +115,7 @@ public class ArriveScanController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/updateWeight.html")
-    public String updateWeight(String orderNo, String scanNo, String weight) {
+    public String updateWeight(String orderNo, String weight) {
 
         if (!NumberUtils.isNumber(weight)) {
             return toJsonErrorMsg(BizErrorCode.WEIGHT_MORE_THAN_0.getDescription());
@@ -124,19 +125,20 @@ public class ArriveScanController extends BaseController {
             return toJsonErrorMsg(BizErrorCode.WEIGHT_MORE_THAN_0.getDescription());
 
         }
+        Principal principal = SessionLocal.getPrincipal();
+        //更新重量
+        WaybillHeader header = new WaybillHeader();
+        header.setMerchantId(principal.getMerchantId());
+        header.setOrderNo(orderNo);
+        header.setWeight(Double.parseDouble(weight));
+        waybillService.updateWaybill(header);
 
-        WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
-        scanDetailsDO.setScanNo(scanNo);
-        scanDetailsDO.setOrderNo(orderNo);
-        scanDetailsDO.setWeight(w);
-        waybillScanDetailsDao.update(scanDetailsDO);
         return toJsonTrueMsg();
     }
 
     @ResponseBody
     @RequestMapping(value = "/deleteDetails.html")
     public String deleteDetails(String orderNo, String scanNo) {
-
 
         WaybillScanDetailsDO scanDetailsDO = new WaybillScanDetailsDO();
         scanDetailsDO.setScanNo(scanNo);
@@ -149,11 +151,14 @@ public class ArriveScanController extends BaseController {
     @RequestMapping(value = "/arrive.html")
     public String arrive(String scanNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
-        //获取merchantId
-        String merchantId = me.getMerchantId();
         try {
-            orderService.arrive(merchantId, scanNo, "" + me.getNetworks().get(0), me.getUserId());
+            List<WaybillScanDetailsDO> list = waybillScanDetailsDao.queryByScanNo(scanNo);
+            if (list == null) throw new DMSException(BizErrorCode.ARRIVE_EMPTY);
+            List<String> orderNos = new ArrayList<>();
+            for (WaybillScanDetailsDO details : list) {
+                orderNos.add(details.getOrderNo());
+            }
+            waybillService.arrive(orderNos);
         } catch (Exception e) {
             log.error("arrive failed. scanNo:{}", scanNo, e);
             return toJsonErrorMsg(e.getMessage());

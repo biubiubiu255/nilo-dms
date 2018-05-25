@@ -5,7 +5,7 @@
 
 	<!-- 实体bean与数据字段对应关系 -->
 	<resultMap id="weightLog"
-		type="com.nilo.dms.service.order.model.WaybillLogWeight">
+		type="com.nilo.dms.dto.order.WaybillLogWeight">
 		<result property="id" column="id" javaType="java.lang.Long"
 			jdbcType="INTEGER" />
 		<result property="orderNo" column="order_no" javaType="java.lang.String"
@@ -29,7 +29,7 @@
 			jdbcType="NUMERIC" />
 		<result property="weight" column="weight" javaType="java.lang.Double"
 			jdbcType="NUMERIC" />
-		<result property="high" column="high" javaType="java.lang.Double"
+		<result property="height" column="height" javaType="java.lang.Double"
 			jdbcType="NUMERIC" />
 		<result property="width" column="width" javaType="java.lang.Double"
 			jdbcType="NUMERIC" />
@@ -43,21 +43,21 @@
 
 	<sql id="Base_Column_List">
 		id, order_no
-		,merchant_id,opt_by,opt_time,network_id,last_network_Id,old_weight,old_high,old_width,old_length,weight,high,width,length,
+		,merchant_id,opt_by,opt_time,network_id,last_network_Id,old_weight,old_high,old_width,old_length,weight,height,width,length,
 		created_time
 	</sql>
 
 	<!-- 插入语句 -->
-	<insert id="insert" parameterType="com.nilo.dms.service.order.model.WaybillLogWeight"
+	<insert id="insert" parameterType="com.nilo.dms.dto.order.WaybillLogWeight"
 		statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
 		INSERT
 		INTO t_waybill_log_weight
 		( order_no
-		,merchant_id,opt_by,opt_time,network_id,old_weight,old_high,old_width,old_length,weight,high,width,length,
+		,merchant_id,opt_by,opt_time,network_id,old_weight,old_high,old_width,old_length,weight,height,width,length,
 		created_time )
 		VALUES
 		(
-		#{orderNo},#{merchantId},#{optBy},#{optTime},#{networkId},#{oldWeight},#{oldHigh},#{oldWidth},#{oldLength},#{weight},#{high},#{width},#{length},UNIX_TIMESTAMP(NOW()))
+		#{orderNo},#{merchantId},#{optBy},#{optTime},#{networkId},#{oldWeight},#{oldHigh},#{oldWidth},#{oldLength},#{weight},#{height},#{width},#{length},UNIX_TIMESTAMP(NOW()))
 	</insert>
 
 </mapper>

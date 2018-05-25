@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.nilo.dms.dao.WaybillPaymentOrderWaybillDao" >
-  <resultMap id="BaseResultMap" type="com.nilo.dms.service.order.model.WaybillPaymentOrderWaybill" >
+  <resultMap id="BaseResultMap" type="com.nilo.dms.dto.order.WaybillPaymentOrderWaybill" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="payment_order_id" property="paymentOrderId" jdbcType="VARCHAR" />
     <result column="waybill_order_no" property="waybillOrderNo" jdbcType="VARCHAR" />
@@ -19,13 +19,13 @@
     delete from t_waybill_payment_order_waybill
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.nilo.dms.service.order.model.WaybillPaymentOrderWaybill" >
+  <insert id="insert" parameterType="com.nilo.dms.dto.order.WaybillPaymentOrderWaybill" >
     insert into t_waybill_payment_order_waybill (id, payment_order_id, waybill_order_no
       )
     values (#{id,jdbcType=INTEGER}, #{paymentOrderId,jdbcType=VARCHAR}, #{waybillOrderNo,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.nilo.dms.service.order.model.WaybillPaymentOrderWaybill" >
+  <insert id="insertSelective" parameterType="com.nilo.dms.dto.order.WaybillPaymentOrderWaybill" >
     insert into t_waybill_payment_order_waybill
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -50,7 +50,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.nilo.dms.service.order.model.WaybillPaymentOrderWaybill" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.nilo.dms.dto.order.WaybillPaymentOrderWaybill" >
     update t_waybill_payment_order_waybill
     <set >
       <if test="paymentOrderId != null" >
@@ -62,7 +62,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.nilo.dms.service.order.model.WaybillPaymentOrderWaybill" >
+  <update id="updateByPrimaryKey" parameterType="com.nilo.dms.dto.order.WaybillPaymentOrderWaybill" >
     update t_waybill_payment_order_waybill
     set payment_order_id = #{paymentOrderId,jdbcType=VARCHAR},
       waybill_order_no = #{waybillOrderNo,jdbcType=VARCHAR}

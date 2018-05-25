@@ -13,14 +13,14 @@ import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.dataobject.StaffDO;
 import com.nilo.dms.dao.dataobject.UserInfoDO;
+import com.nilo.dms.dto.common.LoginInfo;
+import com.nilo.dms.dto.common.User;
+import com.nilo.dms.dto.common.UserInfo;
+import com.nilo.dms.dto.org.Department;
+import com.nilo.dms.dto.org.Staff;
 import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.model.LoginInfo;
-import com.nilo.dms.service.model.User;
-import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.org.DepartmentService;
 import com.nilo.dms.service.org.StaffService;
-import com.nilo.dms.service.org.model.Department;
-import com.nilo.dms.service.org.model.Staff;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -104,7 +104,7 @@ public class StaffServiceImpl implements StaffService {
                     //添加员工信息
                     staff.setStatus(StaffStatusEnum.REGULAR);
                     StaffDO staffDO = convert(staff);
-                    staffDO.setUserId(Long.parseLong(user.getUserId()));
+                    staffDO.setUserId(user.getUserId());
                     staffDao.insert(staffDO);
 
                 } catch (Exception e) {
@@ -202,6 +202,7 @@ public class StaffServiceImpl implements StaffService {
         staff.setTitle(staffDO.getTitle());
         staff.setTitleLevel(staffDO.getTitleLevel());
         staff.setTitleTime(staffDO.getTitleTime());
+        staff.setOutsource(staffDO.getOutsource() == null ? "" : staffDO.getOutsource());
 
         staff.setIsRider(staffDO.getIsRider() == 1);
         staff.setStatus(StaffStatusEnum.getEnum(staffDO.getStatus()));
@@ -223,7 +224,7 @@ public class StaffServiceImpl implements StaffService {
             staffDO.setIsRider(staff.isRider() ? 1 : 0);
         }
         if (StringUtil.isNotEmpty(staff.getUserId())) {
-            staffDO.setUserId(Long.parseLong(staff.getUserId()));
+            staffDO.setUserId(staff.getUserId());
         }
         staffDO.setBirthday(staff.getBirthday());
         staffDO.setEmail(staff.getEmail());
@@ -243,6 +244,8 @@ public class StaffServiceImpl implements StaffService {
         staffDO.setTitleLevel(staff.getTitleLevel());
         staffDO.setTitleTime(staff.getTitleTime());
         staffDO.setAddress(staff.getAddress());
+        staffDO.setOutsource(staff.getOutsource() == null ? "" : staff.getOutsource());
+
         if (staff.getStatus() != null) {
             staffDO.setStatus(staff.getStatus().getCode());
         }

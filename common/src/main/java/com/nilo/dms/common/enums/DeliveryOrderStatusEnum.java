@@ -8,12 +8,15 @@ import java.util.Map;
  */
 public enum DeliveryOrderStatusEnum implements EnumMessage{
 
+
     CREATE(0, "Create"),
+    ALLOCATED(10, "Allocated"),
     ARRIVED(20, "Arrived"),
+
     DELIVERY(30, "Delivery"),
     PROBLEM(40, "Problem"),
     REFUSE(60, "Refuse"),
-    RECEIVED(50, "Received"),
+    SIGN(50, "Sign"),
     CANCEL(90, "Cancel"),
     ; //change this value
 

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.HandleThirdDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="sendBig" type="com.nilo.dms.dto.handle.SendThirdHead">
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="type" column="type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleNo" column="handle_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="thirdExpressCode" column="third_express_code" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="thirdWaybillNo" column="third_waybill_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="driver" column="driver" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="networkCode" column="network_code" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="nextStation" column="next_station" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleTime" column="handle_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="handleBy" column="handle_by" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="handleName" column="handle_Name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="remark" column="remark" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--实体bean与数据字段对应关系-->
+    <resultMap id="sendSmall" type="com.nilo.dms.dto.handle.SendThirdDetail">
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="thirdHandleNo" column="third_handle_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderNo" column="order_No" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="len" column="length" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="height" column="height" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="width" column="width" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 查询装车打包 -->
+    <select id="queryBig" resultMap="sendBig" statementType="PREPARED"
+            parameterType="com.nilo.dms.dto.handle.SendThirdHead">
+        SELECT
+        *
+        FROM
+        t_handle_third_express
+        WHERE 1 = 1
+        <if test="ob.status != null">
+            and status = #{ob.status}
+        </if>
+        <if test="ob.handleNo != null and ob.handleNo != '' ">
+            and handle_no = #{ob.handleNo}
+        </if>
+        <if test="ob.thirdWaybillNo != null and ob.thirdWaybillNo != '' ">
+            and third_waybill_no = #{ob.thirdWaybillNo}
+        </if>
+        <if test="ob.thirdExpressCode != null and ob.thirdExpressCode != '' ">
+            and third_express_code = #{ob.thirdExpressCode}
+        </if>
+        <if test="ob.networkCode != null and ob.networkCode != '' ">
+            and network_code = #{ob.networkCode}
+        </if>
+        <if test="ob.driver != null and ob.driver != '' ">
+            and driver = #{ob.driver}
+        </if>
+        <if test="ob.type != null and ob.type != '' ">
+            and type = #{ob.type}
+        </if>
+        order by created_time desc
+
+        limit #{offset} , #{limit}
+
+    </select>
+
+    <!-- 查询装车打包数量 -->
+    <select id="queryBigCount" resultType="java.lang.Integer" statementType="PREPARED"
+            parameterType="com.nilo.dms.dto.handle.SendThirdHead">
+        SELECT
+        count(*)
+        FROM
+        t_handle_third_express
+        WHERE 1 = 1
+        <if test="ob.status != null">
+            and status = #{ob.status}
+        </if>
+        <if test="ob.handleNo != null and ob.handleNo != '' ">
+            and handle_no = #{ob.handleNo}
+        </if>
+        <if test="ob.thirdWaybillNo != null and ob.thirdWaybillNo != '' ">
+            and third_waybill_no = #{ob.thirdWaybillNo}
+        </if>
+        <if test="ob.thirdExpressCode != null and ob.thirdExpressCode != '' ">
+            and third_express_code = #{ob.thirdExpressCode}
+        </if>
+        <if test="ob.networkCode != null and ob.networkCode != '' ">
+            and network_code = #{ob.networkCode}
+        </if>
+        <if test="ob.driver != null and ob.driver != '' ">
+            and driver = #{ob.driver}
+        </if>
+        <if test="ob.type != null and ob.type != '' ">
+            and type = #{ob.type}
+        </if>
+    </select>
+
+
+    <!-- 查询装车打包数量 -->
+    <select id="queryBigByHandleNo" resultMap="sendBig" statementType="PREPARED">
+        SELECT *
+        FROM
+        t_handle_third_express
+        WHERE merchant_id =#{merchantId} and handle_no=#{handleNo}
+    </select>
+
+
+    <insert id="insertBig" parameterType="com.nilo.dms.dto.handle.SendThirdHead"
+            statementType="PREPARED" useGeneratedKeys="true" keyProperty="id" >
+        INSERT
+        INTO t_handle_third_express
+        ( merchant_id, type, handle_no, third_express_code, third_waybill_no, driver, network_Code, next_station, handle_time, handle_by, handle_Name,status, remark, created_time, updated_time, version)
+        VALUES
+        (
+        #{merchantId},#{type},#{handleNo},#{thirdExpressCode},#{thirdWaybillNo},#{driver},#{networkCode},#{nextStation},#{handleTime},#{handleBy},#{handleName},#{status},#{remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID()
+        )
+    </insert>
+
+    <update id="editBigBy" statementType="PREPARED" parameterType="com.nilo.dms.dto.handle.SendThirdHead">
+        update t_handle_third_express
+        SET
+        updated_time=UNIX_TIMESTAMP(NOW()),
+        version=UUID()
+        <if test="status != null and status != ''">
+            , status = ${status}
+        </if>
+        <if test="driver != null and driver != ''">
+            , driver = ${driver}
+        </if>
+        <if test="thirdExpressCode != null and thirdExpressCode != ''">
+            , third_express_code = ${thirdExpressCode}
+        </if>
+        <if test="thirdWaybillNo != null and thirdWaybillNo != ''">
+            , third_waybill_no = ${thirdWaybillNo}
+        </if>
+        <if test="networkCode != null">
+            , network_code = ${networkCode}
+        </if>
+
+        <if test="remark != null and remark != ''">
+            , remark = #{remark}
+        </if>
+        WHERE
+        handle_no = #{handleNo}
+    </update>
+
+
+    <!-- 下面是子包分割线 -->
+    <select id="querySmall" resultMap="sendSmall" statementType="PREPARED"
+            parameterType="com.nilo.dms.dto.handle.SendThirdDetail">
+        SELECT
+        *
+        FROM
+        t_handle_third_express_details
+        WHERE merchant_id = #{merchantId} and third_handle_no = #{handleNo}
+        order by created_time desc
+    </select>
+
+    <select id="queryHandleBySmallNo" resultMap="sendBig" statementType="PREPARED"
+            parameterType="java.lang.String">
+        SELECT
+            *
+        FROM
+            t_handle_third_express a
+        INNER JOIN t_handle_third_express_details b ON a.handle_no = b.third_handle_no
+
+        WHERE merchant_id = #{merchantId} and b.order_no = #{orderNo}
+    </select>
+
+
+<!--
+
+    &lt;!&ndash; 下面是批量查询详单 &ndash;&gt;
+    <select id="querySmallsPlus" resultMap="orderDO">
+        SELECT
+        *
+        FROM
+        t_waybill
+        WHERE merchant_id = #{merchantId} and order_no in
+        <foreach collection="orderNos" item="now" open="(" close=")"
+                 separator=",">
+            #{now}
+        </foreach>
+    </select>
+
+-->
+
+
+    <insert id="insertSmalls">
+        INSERT
+        INTO
+        t_handle_third_express_details
+        ( merchant_id,third_handle_no, order_no, weight, length, height, width, status, created_time, updated_time, version )
+        VALUES
+        <foreach collection="list" item="now" separator=",">
+            (#{now.merchantId},#{now.thirdHandleNo},#{now.orderNo},#{now.weight},#{now.len},#{now.height},#{now.width},#{now.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),
+            UUID())
+        </foreach>
+
+    </insert>
+
+
+    <delete id="deleteSmallByHandleNo" parameterType="com.nilo.dms.dto.handle.SendThirdDetail">
+        delete FROM t_handle_third_express_details
+        WHERE merchant_id = #{merchantId} and  third_handle_no = #{handleNo}
+    </delete>
+
+
+</mapper>

@@ -133,7 +133,7 @@
 					<ul class="ni">
 						<li>${m.orderNo}</li>
 						<li>${m.needPayAmount}</li>
-						<li>${m.handledTime}</li>
+						<li>${m.handleTime}</li>
 						<li><input type="checkbox" class="fuxuank" name="fuxuan"
 							value="${m.orderNo}"></li>
 					</ul>

@@ -1,11 +1,20 @@
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="com.nilo.dms.dto.order.Waybill" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+    Waybill deliveryOrder = (Waybill) request.getAttribute("delivery");
+    String createdTimeStr = new SimpleDateFormat("yyyy-MM-dd").format(new Date(Long.valueOf(deliveryOrder.getCreatedTime())*1000));
+%>
+
 <html>
-<%@ include file="../common/header.jsp" %>
+<link href="${ctx}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <script type="text/javascript">window.print();</script>
 <style media="all">
     * {
         font-size: small;
+        font-weight: 500;
     }
 
     html {
@@ -13,11 +22,25 @@
     }
 
     td {
+        border:none;
         padding: 5px;
     }
 
     tr {
         height: 200%;
+    }
+
+    table{border-collapse:collapse;}
+    td{width:100px;height:40px;}
+    tr td{
+        border-right:none !important;
+        border-left: none !important;
+        border-style:none;
+        vertical-align: middle !important;
+    }
+
+    .td-md {
+        vertical-align: middle;
     }
 
     .logo-print {
@@ -29,15 +52,18 @@
         height: 1.53cm;
         width: 5cm;
     }
-    .print-font-large{
+
+    .print-font-large {
         font-size: large;
     }
+
+
 </style>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="${ctx}/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">window.print();</script>
 <body>
-<div style="width:10cm; height:10cm;">
+<div style="width:10cm; height:15cm;">
     <div class="row" style="margin: 2px">
         <table class="table table-bordered">
             <tr style="height: 1.53cm;width: 10cm;">
@@ -53,29 +79,24 @@
                 </td>
                 <td colspan="1" align="center">
                     <div>${delivery.orderType}</div>
-                    <div>Doorstep</div>
+                    <div>
+                        <c:if test="${delivery.channel != null and delivery.channel=='0'}">Doorstep</c:if>
+                        <c:if test="${delivery.channel != null and delivery.channel=='1'}">Self Collect</c:if>
+                    </div>
                 </td>
             </tr>
-            <tr style="height: 2.3cm;width: 10cm;">
-                <td colspan="4" style="padding-left: 10px">
+            <tr style="height: 1cm;width: 10cm;">
+                <td colspan="4" style="padding-left: 10px;vertical-align: middle;">
                     <div class="row">
-                        <div class="col-xs-12">
-                            To:${delivery.receiverInfo.receiverName}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            Address:${delivery.receiverInfo.receiverAddress}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <span class="print-font-large">Tell:${delivery.receiverInfo.receiverPhone}</span>
+                        <div class="col-xs-12" style="font-weight:bolder;">
+                        <b>
+                            Order No:${delivery.referenceNo}
+                        </b>
                         </div>
                     </div>
                 </td>
             </tr>
-            <tr style="height: 2.3cm;width: 10cm;">
+            <%--<tr style="height: 2.3cm;width: 10cm;">
                 <td colspan="4" style="padding-left: 10px">
                     <div class="row">
                         <div class="col-xs-12">
@@ -93,8 +114,8 @@
                         </div>
                     </div>
                 </td>
-            </tr>
-            <tr style="height: 1.53cm;width: 10cm;">
+            </tr>--%>
+            <%--<tr style="height: 1.53cm;width: 10cm;">
                 <td colspan="4" style="padding-left: 10px">
                     <div class="row">
                         <div class="col-xs-8">
@@ -116,20 +137,106 @@
 
                     </div>
                 </td>
-            </tr>
-            <tr style="height: 1.53cm;width: 10cm;">
+            </tr>--%>
+            <tr style="height: 1.7cm;width: 10cm;">
                 <td colspan="4" style="padding-left: 10px">
                     <div class="row">
-                        <div class="col-xs-6">
-                            Signature:
+                        <div class="col-xs-12">
+                            Thank you for shopping at Killmall<br/>
+                            Customer Service Number：254(0) 799 717 001
                         </div>
-                        <div class="col-xs-6">
-                            Date:
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <hr/>
+        <table class="table table-bordered">
+            <tr style="height: 1.53cm;width: 10cm;">
+                <td colspan="3" align="center">
+                    <div>Tracking Number：${delivery.orderNo}</div>
+                    <div><img src="/barCode/${delivery.orderNo}.html" class="barcode-print">
+                    </div>
+                </td>
+                <td colspan="1" align="center">
+                    <div>${delivery.orderType}</div>
+                    <div>
+                        <c:if test="${delivery.channel != null and delivery.channel=='0'}">Doorstep</c:if>
+                        <c:if test="${delivery.channel != null and delivery.channel=='1'}">Self Collect</c:if>
+                    </div>
+                </td>
+            </tr>
+
+
+
+            <tr style="height: 2.3cm;width: 10cm;">
+                <td colspan="4" style="padding-left: 10px">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            To:${delivery.receiverInfo.receiverName}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-6">
-                            Rider:
+                        <div class="col-xs-12">
+                            Address:${delivery.receiverInfo.receiverAddress}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <span class="print-font-large">Tell:${delivery.receiverInfo.receiverPhone}</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>  <!--第二个表格收货信息-->
+
+
+            <tr style="height: 1.53cm;width: 10cm;">
+                <td colspan="4" style="padding-left: 10px;vertical-align: middle;">
+                    <div class="row">
+                        <div class="col-xs-7" >
+                            <b>
+                                Order No：${delivery.referenceNo}
+                            </b>
+                        </div>
+                        <div class="col-xs-5" >
+                            <b>
+                                Weight：${delivery.weight}
+                            </b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-7" >
+                            <b>
+                                From：Killmall International Limited
+                            </b>
+                        </div>
+                        <div class="col-xs-5" >
+                            <b>
+                                Date：<%= createdTimeStr %>
+                            </b>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr style="height: 1.9cm;width: 10cm;">
+                <td colspan="4" style="padding-left: 10px;vertical-align: middle;">
+                    <div class="row">
+                        <div class="col-xs-7" >
+                            <b>
+                                Signature：
+                            </b>
+                        </div>
+                        <div class="col-xs-5" >
+                            <b>
+                                Date：
+                            </b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-7" >
+                            <b>
+                                Rider：
+                            </b>
                         </div>
                     </div>
                 </td>

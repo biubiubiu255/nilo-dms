@@ -6,9 +6,9 @@ import com.nilo.dms.dao.CompanyDao;
 import com.nilo.dms.dao.DepartmentDao;
 import com.nilo.dms.dao.dataobject.CompanyDO;
 import com.nilo.dms.dao.dataobject.DepartmentDO;
-import com.nilo.dms.service.model.ZTree;
+import com.nilo.dms.dto.common.ZTree;
+import com.nilo.dms.dto.org.Department;
 import com.nilo.dms.service.org.DepartmentService;
-import com.nilo.dms.service.org.model.Department;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -2,8 +2,6 @@ package com.nilo.dms.dao;
 
 import com.nilo.dms.common.BaseDao;
 import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
-import com.nilo.dms.dao.dataobject.CompanyDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,10 +15,10 @@ public interface AbnormalOrderDao extends BaseDao<Long, AbnormalOrderDO> {
 
     Long queryCountBy(Map map);
 
-    AbnormalOrderDO queryByReferenceNo(@Param("merchantId")Long merchantId, @Param("referenceNo") String referenceNo);
+    AbnormalOrderDO queryByReferenceNo(@Param("merchantId") Long merchantId, @Param("referenceNo") String referenceNo);
 
-    AbnormalOrderDO queryByOrderNo(@Param("merchantId")Long merchantId,@Param("orderNo")String orderNo);
+    AbnormalOrderDO queryByOrderNo(@Param("merchantId") Long merchantId, @Param("orderNo") String orderNo);
 
-    AbnormalOrderDO queryByAbnormalNo(@Param("merchantId")Long merchantId,@Param("abnormalNo")String abnormalNo);
+    AbnormalOrderDO queryByAbnormalNo(@Param("merchantId") Long merchantId, @Param("abnormalNo") String abnormalNo);
 
 }

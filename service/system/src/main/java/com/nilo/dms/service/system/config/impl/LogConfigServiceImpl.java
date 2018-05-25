@@ -2,8 +2,8 @@ package com.nilo.dms.service.system.config.impl;
 
 import com.nilo.dms.dao.LogConfigDao;
 import com.nilo.dms.dao.dataobject.LogConfigDO;
+import com.nilo.dms.dto.system.LogConfig;
 import com.nilo.dms.service.system.config.LogConfigService;
-import com.nilo.dms.service.system.model.LogConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

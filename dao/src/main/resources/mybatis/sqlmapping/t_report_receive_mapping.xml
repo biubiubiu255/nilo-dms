@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.nilo.dms.dao.ReportReceiveDao">
+<mapper namespace="com.nilo.dms.dao.ReportDispatchDao">
 
     <resultMap id="receiveDO" type="com.nilo.dms.dao.dataobject.ReportReceiveDO">
         <result property="orderNo" column="order_no" javaType="java.lang.String"
@@ -75,7 +75,6 @@
         order by a.created_time desc
         limit #{offset} , #{limit}
 
-
     </select>
 
     <!-- 查询上条查询条件下影响的全部条数 -->
@@ -83,7 +82,7 @@
 
         SELECT
 
-        count(*)
+        count(1)
 
         FROM t_waybill a
 
@@ -107,10 +106,16 @@
             a.order_no = #{orderNo}
         </if>
 
-        <if test="sTime !=null and eTime !=null and  sTime != '' and eTime != ''">
+        <if test="sTime_creat !=null and eTime_creat !=null and  sTime_creat != '' and eTime_creat != ''">
             <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
             AND
-            (a.updated_time<![CDATA[<]]>#{eTime} AND a.updated_time>#{sTime})
+            (a.updated_time<![CDATA[<]]>#{eTime_creat} AND a.updated_time>#{sTime_creat})
+        </if>
+
+        <if test="sTime_receive !=null and eTime_receive !=null and  sTime_receive != '' and eTime_receive != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.updated_time<![CDATA[<]]>#{eTime_receive} AND a.updated_time>#{sTime_receive})
         </if>
 
         <if test="mother !=null and mother != ''">

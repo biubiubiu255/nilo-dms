@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface SMSLogDao extends BaseDao<Long, SMSLogDO> {
 
+    SMSLogDO queryByOrderNo(String orderNo);
+
 }

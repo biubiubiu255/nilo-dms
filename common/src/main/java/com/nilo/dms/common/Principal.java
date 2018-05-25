@@ -52,15 +52,19 @@ public class Principal implements Serializable {
     }
 
     public List<String> getUrlAuthorities() {
-		return urlAuthorities;
-	}
+        return urlAuthorities;
+    }
 
-	public void setUrlAuthorities(List<String> urlAuthorities) {
-		this.urlAuthorities = urlAuthorities;
-	}
+    public void setUrlAuthorities(List<String> urlAuthorities) {
+        this.urlAuthorities = urlAuthorities;
+    }
 
-	public List<Integer> getNetworks() {
+    public List<Integer> getNetworks() {
         return networks;
+    }
+
+    public String getFirstNetwork() {
+        return "" + networks.get(0);
     }
 
     public void setNetworks(List<Integer> networks) {

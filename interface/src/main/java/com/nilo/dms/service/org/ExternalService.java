@@ -1,8 +1,6 @@
 package com.nilo.dms.service.org;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.dao.dataobject.ThirdDriverDO;
-import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.dao.dataobject.WaybillExternalDo;
 
 import java.util.List;

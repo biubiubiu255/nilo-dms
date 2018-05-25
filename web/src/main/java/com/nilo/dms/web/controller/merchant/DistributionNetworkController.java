@@ -1,16 +1,16 @@
 package com.nilo.dms.web.controller.merchant;
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.DistributionStatusEnum;
 import com.nilo.dms.common.enums.DistributionTypeEnum;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.service.system.MerchantService;
+import com.nilo.dms.dto.system.DistributionNetwork;
+import com.nilo.dms.dto.system.MerchantInfo;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.system.DistributionNetworkService;
-import com.nilo.dms.service.system.model.DistributionNetwork;
-import com.nilo.dms.common.Principal;
-import com.nilo.dms.service.system.model.MerchantInfo;
+import com.nilo.dms.service.system.MerchantService;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,7 +42,7 @@ public class DistributionNetworkController extends BaseController {
     @RequestMapping("/getList.html")
     public String getList(String name) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
@@ -54,7 +54,7 @@ public class DistributionNetworkController extends BaseController {
     @RequestMapping(value = "/editPage.html", method = RequestMethod.GET)
     public String updateRulePage(String code, Model model) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         DistributionNetwork network = distributionNetworkService.queryByCode(merchantId, code);
@@ -67,7 +67,7 @@ public class DistributionNetworkController extends BaseController {
     @RequestMapping(value = "/edit.html", method = RequestMethod.POST)
     public String updateConfig(DistributionNetwork network) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             network.setMerchantId(merchantId);
@@ -106,7 +106,7 @@ public class DistributionNetworkController extends BaseController {
     @RequestMapping(value = "/active.html", method = RequestMethod.POST)
     public String active(String code) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             DistributionNetwork network = new DistributionNetwork();
@@ -124,7 +124,7 @@ public class DistributionNetworkController extends BaseController {
     @RequestMapping(value = "/delete.html", method = RequestMethod.POST)
     public String delete(String code) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             DistributionNetwork network = new DistributionNetwork();

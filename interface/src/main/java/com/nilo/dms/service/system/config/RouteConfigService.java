@@ -1,6 +1,6 @@
 package com.nilo.dms.service.system.config;
 
-import com.nilo.dms.service.system.model.RouteConfig;
+import com.nilo.dms.dto.system.RouteConfig;
 
 import java.util.List;
 

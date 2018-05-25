@@ -1,7 +1,7 @@
 package com.nilo.dms.service.system;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.system.model.DistributionNetwork;
+import com.nilo.dms.dto.system.DistributionNetwork;
 
 import java.util.List;
 

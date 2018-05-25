@@ -30,6 +30,7 @@
     		mbObject: mobile ,
             showMsg : false,
     		postUrl : '/mobile/rider/problem/save.html' ,
+            autoLoad : false,
     		callback: function (data) {
                 if (data.result) {
                     mobile.paginate();
@@ -60,7 +61,7 @@
 
 <div class="wap_content">
     <div class="wap_top"><a href="javascript:history.go(-1)" title="Back" class="wap_top_back"></a>
-        <h2 data-locale="refuse">Refuse</h2>
+        <h2 data-locale="problem">Refuse</h2>
     </div>
 
     <div class="formula_modify">

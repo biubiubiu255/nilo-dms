@@ -6,17 +6,17 @@
 package com.nilo.dms.web.controller.system;
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.RoleStatusEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dto.common.Role;
+import com.nilo.dms.dto.common.ZTree;
 import com.nilo.dms.service.PermissionService;
 import com.nilo.dms.service.RoleService;
-import com.nilo.dms.service.model.Role;
-import com.nilo.dms.service.model.ZTree;
-import com.nilo.dms.common.Principal;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,10 +55,10 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
     public String getRoleList(String roleName) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        List<Role> list = roleService.findBy(merchantId,roleName,null);
+        List<Role> list = roleService.findBy(merchantId, roleName, null);
         Pagination page = new Pagination(0, list.size());
         return toPaginationLayUIData(page, list);
     }
@@ -128,7 +128,7 @@ public class RoleController extends BaseController {
                 //更新角色信息
                 roleService.update(role);
             } else {
-                Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+                Principal me = SessionLocal.getPrincipal();
                 //获取merchantId
                 String merchantId = me.getMerchantId();
                 role.setMerchantId(merchantId);

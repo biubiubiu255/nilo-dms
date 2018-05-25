@@ -1,18 +1,11 @@
 package test;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.nilo.dms.common.enums.EnumMessage;
-import com.nilo.dms.service.order.model.DeliveryOrder;
+import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
+import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dto.order.ReportCodQuery;
+import com.nilo.dms.web.controller.report.model.ReportUtil;
 import org.apache.commons.codec.digest.DigestUtils;
-
-import java.io.File;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.SortedMap;
-import java.util.Properties;
+import org.apache.commons.lang3.math.NumberUtils;
 
 
 /**
@@ -21,10 +14,10 @@ import java.util.Properties;
 public class TestDemo {
     public static void main(String[] args) throws Exception {
 
-        String str = "{\"carrier\":\"Nilo\",\"consignee\":\"steve\",\"operateTime\":\"2018-03-09 10:07:48\",\"orderInfo\":[{\"orderNo\":\"10000000507156\",\"status\":\"10\"}],\"orderNo\":\"10000000507156\",\"orderPrice\":\"0\",\"remark\":\"steve\",\"rider\":\"40004\",\"transId\":\"\"}";
+        String str = "123123";
 
 
-        //DeliveryOrder order = JSON.parseObject(str,DeliveryOrder.class);
+        //Waybill order = JSON.parseObject(str,Waybill.class);
 
         System.out.println(DigestUtils.md5Hex("12345678" + str + "12345678").toUpperCase());
 

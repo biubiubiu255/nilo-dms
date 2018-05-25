@@ -19,4 +19,5 @@ public interface DeliveryOrderGoodsDao extends BaseDao<Long,DeliveryOrderGoodsDO
     List<DeliveryOrderGoodsDO> queryByOrderNos(@Param("merchantId")Long merchantId, @Param("orderNos")List<String> orderNo);
 
     void deleteBy(@Param("merchantId")Long merchantId,@Param("orderNo")String orderNo,@Param("goodsId")String goodsId);
+
 }

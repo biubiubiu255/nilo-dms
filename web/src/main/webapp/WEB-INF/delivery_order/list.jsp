@@ -102,7 +102,7 @@
     </div>
 
     <table class="layui-table"
-           lay-data="{ url:'/order/deliveryOrder/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
+           lay-data="{ url:'/waybill/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
@@ -113,13 +113,13 @@
             <th lay-data="{field:'orderTime', width:170, templet:'<div>{{ formatDate(d.orderTime) }}</div>'}">
                 OrderTime
             </th>
-           
+            <th lay-data="{field:'weight', width:100}">Weight</th>
             <th lay-data="{field:'goodsType', width:120}">GoodsType</th>
             <th lay-data="{field:'orderPlatform', width:120}">Platform</th>
             <th lay-data="{field:'totalPrice', width:120}">Order Amount</th>
             <th lay-data="{field:'needPayAmount', width:120}">Need Pay</th>
             <th lay-data="{field:'parentNo', width:100}">PackageNo</th>
-            <th lay-data="{field:'receiverInfo', width:150,templet: '<div>{{d.receiverInfo.receiverName}}</div>' }">
+                <th lay-data="{field:'receiverInfo', width:150,templet: '<div>{{d.receiverInfo.receiverName}}</div>' }">
                 Receiver
                 Name
             </th>
@@ -144,9 +144,9 @@
         <shiro:hasPermission name="400014">
             <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">Detail</a>
         </shiro:hasPermission>
-        <shiro:hasPermission name="400015">
+       <%-- <shiro:hasPermission name="400015">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
-        </shiro:hasPermission>
+        </shiro:hasPermission>--%>
         <shiro:hasPermission name="400017">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="print">Print</a>
         </shiro:hasPermission>
@@ -199,7 +199,6 @@
                         fromCreatedTime: $("#fromCreatedTime").val(),
                         toCreatedTime: $("#toCreatedTime").val(),
                         platform: $("input[name='platform']").val(),
-
                     }
                 });
             };
@@ -207,15 +206,17 @@
 
             $(".btn-export").on("click", function () {
 
-                var orderNo = $("input[name='orderNo']").val(),
-                        referenceNo = $("input[name='referenceNo']").val(),
-                        orderTypes = $("select[name='orderType']").val(),
-                        orderStatus = $("select[name='orderStatus']").val(),
-                        fromCreatedTime = $("#fromCreatedTime").val(),
-                        toCreatedTime = $("#toCreatedTime").val(),
-                        platform = $("input[name='platform']").val();
+                var params = { orderNo : $("input[name='orderNo']").val(),
+                    referenceNo: $("input[name='referenceNo']").val(),
+                    orderTypes: $("select[name='orderType']").val(),
+                    orderStatus: $("select[name='orderStatus']").val(),
+                    fromCreatedTime: $("#fromCreatedTime").val(),
+                    toCreatedTime: $("#toCreatedTime").val(),
+                    platform: $("input[name='platform']").val()};
 
-                var url = "/order/deliveryOrder/export.html?orderNo="+orderNo+"&referenceNo="+referenceNo+"&orderTypes="+orderTypes+"&orderStatus="+orderStatus+"&fromCreatedTime="+fromCreatedTime+"&toCreatedTime="+toCreatedTime+"&platform="+platform;
+
+
+                var url = "/waybill/exportPlus.html?" + jQuery.param(params);
                 window.location.href = url;
             })
 
@@ -230,7 +231,7 @@
                 var load;
                 var uploadInst = upload.render({
                     elem: '#importDeliveryOrder'
-                    , url: '/order/deliveryOrder/importOrderData.html'
+                    , url: '/waybill/importOrderData.html'
                     , accept: 'file' //普通文件
                     , exts: 'xls|xlsx'
                     , before: function () {
@@ -251,29 +252,29 @@
 
             function orderDetails(orderNo) {
                 $.ajax({
-                    url: "/order/deliveryOrder/" + orderNo + ".html",
+                    url: "/waybill/" + orderNo + ".html",
                     type: 'GET',
                     dataType: 'text',
                     success: function (data) {
                         //弹出即全屏
-                        var index = layer.open({
+                        var index = parent.layer.open({
                             type: 1,
                             content: data,
-                            area: ['800px', '600px'],
+                            area: ['800px'],
+                            offset: ['100px', '250px'],
                             maxmin: true
                         });
-                        layer.full(index);
                     }
                 });
             }
 
             function print(orderNo) {
-                parent.window.open("/order/deliveryOrder/print/" + orderNo + ".html");
+                parent.window.open("/waybill/print/" + orderNo + ".html");
             }
 
 
             $(".btn-add").on("click", function () {
-                var url = "/order/deliveryOrder/add.html";
+                var url = "/waybill/add.html";
                 var index = parent.layer.open({
                     type: 2,
                     title: 'Add DELIVERY',
@@ -289,7 +290,7 @@
                     title: 'Edit DELIVERY',
                     shadeClose: true,
                     area: ['800px', '600px'],
-                    content: "/order/deliveryOrder/edit/" + orderNo + ".html",
+                    content: "/waybill/edit/" + orderNo + ".html",
                     maxmin: true,
                     end: function () {
                         reloadCurrentPage();

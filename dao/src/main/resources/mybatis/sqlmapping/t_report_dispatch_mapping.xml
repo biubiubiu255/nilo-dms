@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.ReportDispatchDao">
+
+    <resultMap id="dispatchDO" type="com.nilo.dms.dao.dataobject.ReportDispatchDO">
+        <result property="handleNo" column="handle_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="referenceNo" column="reference_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+        <result property="orderType" column="order_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="country" column="country" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
+        <result property="rider" column="rider" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleName" column="handle_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
+        <result property="status" column="waybill_status" javaType="java.lang.Integer"
+                jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="address" column="address" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="high" column="high" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="width" column="width" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="len" column="length" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+
+    </resultMap>
+
+    <!-- Receive Report 查询语句 -->
+
+    <select id="queryReportDispatch" resultMap="dispatchDO">
+
+        SELECT a.*, c.name as rider , d.name as handle_name, e.order_type,e.status as waybill_status, e.reference_no, e.country, f.contact_number as phone, f.address
+
+        FROM
+
+        t_handle_rider_details a
+
+        INNER JOIN t_handle_rider b
+
+        ON a.handle_no = b.handle_no
+
+        LEFT JOIN t_sys_user_info c
+
+        ON b.rider = c.id
+
+        LEFT JOIN t_sys_user_info d
+
+        ON b.handle_by = d.id
+
+        INNER JOIN t_waybill e
+
+        ON a.order_no = e.order_no
+
+        INNER JOIN t_waybill_receiver f
+
+        ON a.order_no = f.order_no
+
+        WHERE b.merchant_id = #{merchantId}
+        <if test="status !=null ">
+            AND
+            e.status = #{status}
+        </if>
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+        <if test="handleNo !=null and handleNo !='' ">
+            and a.handle_no = #{handleNo}
+        </if>
+        <if test="orderType !=null and orderType !='' ">
+            and e.order_type = #{orderType}
+        </if>
+        <if test="country !=null and country !='' ">
+            and e.country = #{country}
+        </if>
+        <if test="rider !=null and rider !='' ">
+            and c.id = #{rider}
+        </if>
+
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        </if>
+
+        order by a.created_time desc
+
+        <if test="limit !=null ">
+            limit
+            <if test="offset !=null ">
+                #{offset} ,
+            </if>
+            #{limit}
+        </if>
+
+
+    </select>
+
+    <!-- 查询上条查询条件下影响的全部条数 -->
+    <select id="queryReportDispatchCount" resultType="java.lang.Integer">
+
+
+        SELECT
+
+        COUNT(1)
+
+        FROM
+
+        t_handle_rider_details a
+
+        INNER JOIN t_handle_rider b
+
+        ON b.handle_no = a.handle_no
+
+        LEFT JOIN t_sys_user_info c
+
+        ON b.rider = c.id
+
+        LEFT JOIN t_sys_user_info d
+
+        ON b.handle_by = d.id
+
+        INNER JOIN t_waybill e
+
+        ON a.order_no = e.order_no
+
+        INNER JOIN t_waybill_receiver f
+
+        ON a.order_no = f.order_no
+
+        WHERE b.merchant_id = #{merchantId}
+        <if test="status !=null ">
+            AND
+            e.status = #{status}
+        </if>
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+        <if test="handleNo !=null and handleNo !='' ">
+            and a.handle_no = #{handleNo}
+        </if>
+        <if test="orderType !=null and orderType !='' ">
+            and e.order_type = #{orderType}
+        </if>
+        <if test="country !=null and country !='' ">
+            and e.country = #{country}
+        </if>
+
+        <if test="rider !=null and rider !='' ">
+            and c.id = #{rider}
+        </if>
+
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        </if>
+
+    </select>
+
+</mapper>

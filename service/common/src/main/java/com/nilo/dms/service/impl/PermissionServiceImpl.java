@@ -3,8 +3,8 @@ package com.nilo.dms.service.impl;
 import com.nilo.dms.dao.PermissionDao;
 import com.nilo.dms.dao.RoleDao;
 import com.nilo.dms.dao.dataobject.PermissionDO;
+import com.nilo.dms.dto.common.ZTree;
 import com.nilo.dms.service.PermissionService;
-import com.nilo.dms.service.model.ZTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

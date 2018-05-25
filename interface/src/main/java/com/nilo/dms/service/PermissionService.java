@@ -1,6 +1,7 @@
 package com.nilo.dms.service;
 
-import com.nilo.dms.service.model.ZTree;
+
+import com.nilo.dms.dto.common.ZTree;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.nilo.dms.service.system.config;
 
-import com.nilo.dms.service.system.model.BizFeeConfig;
+import com.nilo.dms.dto.system.BizFeeConfig;
 
 import java.util.List;
 

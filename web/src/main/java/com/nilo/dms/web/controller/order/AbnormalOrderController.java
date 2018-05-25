@@ -2,20 +2,14 @@ package com.nilo.dms.web.controller.order;
 
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.common.enums.AbnormalHandleTypeEnum;
 import com.nilo.dms.common.enums.AbnormalOrderStatusEnum;
 import com.nilo.dms.common.enums.AbnormalTypeEnum;
-import com.nilo.dms.common.enums.TaskTypeEnum;
-import com.nilo.dms.common.exception.BizErrorCode;
-import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.dataobject.DeliveryOrderDelayDO;
+import com.nilo.dms.dto.order.AbnormalOrder;
+import com.nilo.dms.dto.order.QueryAbnormalOrderParameter;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.AbnormalOrderService;
-import com.nilo.dms.service.order.RiderOptService;
-import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.*;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,7 +40,7 @@ public class AbnormalOrderController extends BaseController {
     @RequestMapping(value = "/list.html", method = RequestMethod.POST)
     public String getOrderList(QueryAbnormalOrderParameter parameter, String all) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
@@ -69,11 +63,12 @@ public class AbnormalOrderController extends BaseController {
         return "abnormal_order/add";
     }
 
+
     @ResponseBody
     @RequestMapping(value = "/add.html", method = RequestMethod.POST)
     public String addAbnormal(String orderNo, String reason, String remark) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
@@ -95,7 +90,7 @@ public class AbnormalOrderController extends BaseController {
     @RequestMapping(value = "/delete.html", method = RequestMethod.POST)
     public String delete(String abnormalNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {

@@ -17,7 +17,7 @@
         </div>
 
         <div class="layui-col-md8 layui-col-lg5">
-            <label class="layui-form-label">handledTime:</label>
+            <label class="layui-form-label">handleTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromHandledTime" placeholder="From">
             </div>
@@ -41,7 +41,7 @@
     <hr>
 
     <table class="layui-table"
-           lay-data="{ url:'/report/sign/list.html',method:'post', page:true,limit:10, id:'${id0}'}"
+           lay-data="{ url:'/report/sign/list.html?exportType=2',method:'post', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
@@ -50,8 +50,8 @@
             <th lay-data="{field:'weight', width:100}">weight</th>
             <th lay-data="{field:'needPayAmount', width:100}">needPayAmount</th>
             <th lay-data="{field:'alreadyPaid', width:100}">alreadyPaid</th>
-            <th lay-data="{field:'handledBy', width:100}">handledBy</th>
-            <th lay-data="{field:'handledTime', width:170, templet:'<div>{{ formatDate(d.handledTime) }}</div>'}">handledTime</th>
+            <th lay-data="{field:'handleBy', width:100}">handleBy</th>
+            <th lay-data="{field:'handleTime', width:170, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">handleTime</th>
             <th lay-data="{field:'sName', width:100}">sName</th>
             <th lay-data="{field:'rName', width:100}">rName</th>
             <th lay-data="{field:'contactNumber', width:170}">contactNumber</th>
@@ -91,14 +91,9 @@
                 table.reload("${id0}", {
                     where: {
                         orderNo: $("input[name='orderNo']").val(),
-                        carrierNames: $("select[name='express']").val(),
-                        orderTypes: $("select[name='orderType']").val(),
-                        orderStatus: $("select[name='orderStatus']").val(),
                         fromHandledTime: $("#fromHandledTime").val(),
                         toHandledTime: $("#toHandledTime").val(),
-                        weight: $("input[name='weight']").val(),
                         rider: $("input[name='rider']").val(),
-                        sellerCustomer: $("input[name='sellerCustomer']").val(),
                     }
                 });
             };

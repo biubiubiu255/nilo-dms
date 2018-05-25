@@ -1,12 +1,12 @@
 package com.nilo.dms.web.controller.config;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.common.enums.SMSConfigStatusEnum;
-import com.nilo.dms.service.system.config.SMSConfigService;
-import com.nilo.dms.service.system.model.SMSConfig;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.enums.SMSConfigStatusEnum;
+import com.nilo.dms.dto.system.SMSConfig;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.system.config.SMSConfigService;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +35,7 @@ public class SMSConfigController extends BaseController {
     @RequestMapping("/getList.html")
     public String getList(String smsType) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<SMSConfig> list = smsConfigService.queryAllBy(merchantId);
@@ -48,7 +48,7 @@ public class SMSConfigController extends BaseController {
     @RequestMapping(value = "/editPage.html", method = RequestMethod.GET)
     public String updateRulePage(String msgType, Model model) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         SMSConfig smsConfig = smsConfigService.queryBy(merchantId, msgType);
@@ -61,7 +61,7 @@ public class SMSConfigController extends BaseController {
     @RequestMapping(value = "/edit.html", method = RequestMethod.POST)
     public String updateConfig(String optTypeEdit, String content, String remark) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             SMSConfig config = new SMSConfig();
@@ -85,9 +85,9 @@ public class SMSConfigController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/add.html", method = RequestMethod.POST)
-    public String addConfig(String optTypeAdd,  String content, String remark) {
+    public String addConfig(String optTypeAdd, String content, String remark) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             SMSConfig config = new SMSConfig();
@@ -107,7 +107,7 @@ public class SMSConfigController extends BaseController {
     @RequestMapping(value = "/active.html", method = RequestMethod.POST)
     public String active(String optType) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             SMSConfig config = new SMSConfig();
@@ -124,7 +124,7 @@ public class SMSConfigController extends BaseController {
     @RequestMapping(value = "/delete.html", method = RequestMethod.POST)
     public String delete(String optType) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             SMSConfig config = new SMSConfig();

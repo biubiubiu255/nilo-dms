@@ -1,6 +1,7 @@
 package com.nilo.dms.service.system.config;
 
-import com.nilo.dms.service.system.model.LogConfig;
+
+import com.nilo.dms.dto.system.LogConfig;
 
 import java.util.List;
 

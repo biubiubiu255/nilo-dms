@@ -3,8 +3,8 @@ package com.nilo.dms.service.system.config.impl;
 import com.nilo.dms.common.enums.SMSConfigStatusEnum;
 import com.nilo.dms.dao.SMSConfigDao;
 import com.nilo.dms.dao.dataobject.SMSConfigDO;
+import com.nilo.dms.dto.system.SMSConfig;
 import com.nilo.dms.service.system.config.SMSConfigService;
-import com.nilo.dms.service.system.model.SMSConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

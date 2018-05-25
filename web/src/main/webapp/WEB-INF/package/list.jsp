@@ -46,12 +46,13 @@
             <th lay-data="{fixed: 'left',field:'orderNo', width:200}">PackageNo</th>
             <th lay-data="{field:'statusDesc', width:150}">Status</th>
             <th lay-data="{field:'nextNetworkDesc', width:150}">NextStation</th>
+            <th lay-data="{field:'createdBy', width:120}">PackageBy</th>
+            <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreateTime</th>
             <th lay-data="{field:'weight', width:120}">Weight</th>
-            <th lay-data="{field:'length', width:120}">Length</th>
+            <th lay-data="{field:'len', width:120}">Length</th>
             <th lay-data="{field:'width', width:120}">Width</th>
-            <th lay-data="{field:'high', width:120}">High</th>
-            <th lay-data="{field:'remark', width:200}">Remark</th>
-            <th lay-data="{title:'Opt',fixed: 'right', width:150, align:'center', toolbar: '#barDemo'}"></th>
+            <%--<th lay-data="{field:'height', width:120}">High</th>--%>
+            <th lay-data="{title:'Opt',fixed: 'right', width:250, align:'center', toolbar: '#barDemo'}"></th>
 
         </tr>
         </thead>
@@ -62,7 +63,10 @@
             <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="details">Details</a>
         </shiro:hasPermission>
         <shiro:hasPermission name="400084">
-            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="print">Print</a>
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="print">Print Packing</a>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="400085">
+            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="print_delivery">Print Waybill</a>
         </shiro:hasPermission>
     </script>
 </div>
@@ -82,16 +86,30 @@
             });
             table = layui.table;
             table.on('tool(demo)', function (obj) {
+                console.log(obj.data);
                 var data = obj.data;
                 var orderNo = data.orderNo;
                 if (obj.event === 'details') {
                     detailsPackage(orderNo);
                 }
                 if (obj.event === 'print') {
+                    if(data.status!='DELIVERY'){
+                        layer.msg("Please first Delivery", {icon: 2, time: 2000});
+                        return;
+                    }
                     printPackage(orderNo);
+                }
+                if (obj.event === 'print_delivery') {
+                    print(orderNo);
                 }
             });
         });
+
+
+        function print(orderNo) {
+            parent.window.open("/waybill/print/" + orderNo + ".html");
+        }
+
         $(".search").on("click", function () {
             reloadTable();
         })

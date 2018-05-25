@@ -1,9 +1,8 @@
 package com.nilo.dms.service.order;
 
 
-import com.nilo.dms.common.enums.OptTypeEnum;
-import com.nilo.dms.service.order.model.DeliveryRoute;
-import com.nilo.dms.service.order.model.OrderOptRequest;
+import com.nilo.dms.dto.order.DeliveryRoute;
+import com.nilo.dms.dto.order.OrderOptRequest;
 
 import java.util.List;
 
@@ -15,5 +14,7 @@ public interface DeliveryRouteService {
     List<DeliveryRoute> queryRoute(String merchantId, String orderNo);
 
     void addRoute(OrderOptRequest request);
+
+    void addKiliRoute(List<String> orderNos,String statusId,String remark);
 
 }

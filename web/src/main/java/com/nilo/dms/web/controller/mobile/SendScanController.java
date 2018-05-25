@@ -2,19 +2,19 @@ package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DeliveryOrderOptDao;
 import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.ThirdDriverDao;
 import com.nilo.dms.dao.ThirdExpressDao;
+import com.nilo.dms.dao.WaybillLogDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.ThirdDriverDO;
 import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.dto.order.Loading;
+import com.nilo.dms.dto.order.ShipParameter;
+import com.nilo.dms.dto.order.Waybill;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.model.DeliveryOrder;
-import com.nilo.dms.service.order.model.Loading;
-import com.nilo.dms.service.order.model.ShipParameter;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/mobile/send")
@@ -41,14 +40,13 @@ public class SendScanController extends BaseController {
     @Autowired
     private LoadingService loadingService;
     @Autowired
-    private DeliveryOrderOptDao deliveryOrderOptDao;
-//    @Autowired
-//    private StaffDao staffDao;
+    private WaybillLogDao waybillLogDao;
+
 
     @RequestMapping(value = "/list.html")
     public String list(String loadingNo, Integer loadingStatus) {
 
-//        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+//        Principal me = SessionLocal.getPrincipal();
 //        //获取merchantId
 //        String merchantId = me.getMerchantId();
 //        Pagination page = getPage();
@@ -60,7 +58,7 @@ public class SendScanController extends BaseController {
     @RequestMapping(value = "/check.html")
     public String check(String code) {
 
-        Long a = deliveryOrderOptDao.getStateByOrderNo(code);
+        Long a = waybillLogDao.getStateByOrderNo(code);
         if (a == null) {
             return toJsonErrorMsg("There is no OrderNo");
         }
@@ -72,10 +70,10 @@ public class SendScanController extends BaseController {
 
     @RequestMapping(value = "/scan.html")
     public String toPage(Model model, HttpServletRequest request) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        model.addAttribute("riderList", getRiderList(merchantId));
+        model.addAttribute("riderList", getRiderList(null));
 
         //第三方快递公司及自提点
         List<ThirdExpressDO> expressDOList = thirdExpressDao.findByMerchantId(Long.parseLong(merchantId));
@@ -146,7 +144,7 @@ public class SendScanController extends BaseController {
         loading.setCarrier(carrier);
         loading.setTruckNo(plateNo);
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         String loadingNo = "";
@@ -165,7 +163,7 @@ public class SendScanController extends BaseController {
             return toJsonErrorMsg(e.getMessage());
         }
 
-        DeliveryOrder order = null;
+        Waybill order = null;
         for (int i = 0; i < scaned_codes.length; i++) {
             try {
                 loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i], me.getUserId());

@@ -16,14 +16,4 @@
         </websocket:handshake-interceptors>
     </websocket:handlers> -->
 
-
-
-    <bean id="networkServiceFacade" class="com.nilo.dms.service.system.facade.NetworkServiceFacadeImpl"/>
-    <bean name="/networkServiceFacade" class="org.springframework.remoting.caucho.HessianServiceExporter">
-        <property name="serviceInterface"
-                  value="com.nilo.dms.facade.NetworkServiceFacade"/>
-        <property name="service" ref="networkServiceFacade"/>
-    </bean>
-
-
 </beans>

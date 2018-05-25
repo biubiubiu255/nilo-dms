@@ -11,9 +11,10 @@ public enum MethodEnum {
     CANCEL_WAYBILL("nos.waybill.cancel", "nos.waybill.cancel"),
     WAYBILL_TRACE("nos.waybill.trace","waybill.trace"),
     STATUS_UPDATE("nos.waybill.status","waybill.status"),
-
-    ARRIVE_SCAN("arrive_scan", "arrive_scan"),
+    UPDATE_WEIGHT("nos.waybill.weight", "nos.waybill.weight"),
+    ARRIVE_SCAN("nos.waybill.arrive", "Arrive Scan"),
     SIGN("sign", "sign"),
+    SUB_WAYBILL("nos.waybill.sub", "Sub Waybill"),
     ;
     private String code;
     private String value;

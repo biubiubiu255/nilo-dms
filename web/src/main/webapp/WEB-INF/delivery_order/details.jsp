@@ -7,8 +7,8 @@
         <div class="layui-col-md12">
             <h2 class="page-header">
                 <i class="fa fa-shopping-bag"></i> OrderNo:${deliveryOrder.orderNo}
-                <small class="pull-right">Date: <lp:formatTime time="${deliveryOrder.createdTime }"
-                                                               pattern="yyyy-MM-dd"/></small>
+                Date: <lp:formatTime time="${deliveryOrder.createdTime }"
+                                                               pattern="yyyy-MM-dd"/>
             </h2>
         </div>
         <!-- /.col -->
@@ -36,10 +36,9 @@
         </div>
         <!-- /.col -->
         <div class="layui-col-md4">
-            <b>ReferenceNo:</b> ${deliveryOrder.referenceNo}<br>
-            <b>OrderType:</b> ${deliveryOrder.orderType}<br>
-            <b>ServiceType:</b> ${deliveryOrder.serviceType}<br>
-            <b>Account:</b> ${deliveryOrder.totalPrice}
+            ReferenceNo: ${deliveryOrder.referenceNo}<br>
+            OrderType: ${deliveryOrder.orderType}<br>
+            Order Amount: ${deliveryOrder.totalPrice}
         </div>
         <!-- /.col -->
     </div>
@@ -81,7 +80,7 @@
         <hr>
         <c:forEach items="${orderRouteList}" var="route" varStatus="status">
             <span><lp:formatTime time="${route.createdTime }"
-                           pattern="yyyy-MM-dd hh:mm:ss"/> ${route.opt}</span><br>
+                           pattern="yyyy-MM-dd hh:mm:ss"/> ${route.opt}  ${route.optByName}</span><br>
         </c:forEach>
     </div>
 </div>

@@ -39,12 +39,14 @@ public class Constant {
     
     public static final String STAFF_JOB = "job";
 
-    public static final String IS_PACKAGE="Y";
+    public static final String IS_PACKAGE="1";
 
-    public static final String ALLOW_URL="/dashboard.html,/home.html,/account/logout.html," +
+    public static final int MAX_EXPORT_COUNT = 1000;
+
+    public static final String ALLOW_URL="/api.html,/captcha/image.html,/account/login.html,/home.html,/account/logout.html," +
             "/mobile/network/DemoController/toLoginPage.html,/mobile/DemoController/toIndexPage.html,/mobile/DemoController/test.html," +
             "/mobile/StrandedParcelController/test.html,/mobile/SignScanController/test.html,/mobile/CODSignController/test.html," +
         "/mobile/PorblemController/test.html,/mobile/SjArriveScanController/test.html,/mobile/DeliverScanController/test.html," +
-            "/mobile/SendScanController/test.html";
+            "/mobile/SendScanController/test.html,/mobile/password/toPage.html,/mobile/login.html";
 
 }

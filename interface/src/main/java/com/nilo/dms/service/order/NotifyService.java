@@ -1,10 +1,7 @@
 package com.nilo.dms.service.order;
 
 
-import com.nilo.dms.service.order.model.DeliveryRoute;
-import com.nilo.dms.service.order.model.OrderOptRequest;
-
-import java.util.List;
+import com.nilo.dms.dto.order.OrderOptRequest;
 
 /**
  * Created by admin on 2017/11/15.

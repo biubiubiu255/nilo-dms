@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.nilo.dms.dao.DeliveryOrderOptDao">
+<mapper namespace="com.nilo.dms.dao.WaybillLogDao">
 
     <!-- 实体bean与数据字段对应关系 -->
-    <resultMap id="orderOptDO" type="com.nilo.dms.dao.dataobject.DeliveryOrderOptDO">
-        <result property="id" column="id" javaType="java.lang.Long"
-                jdbcType="INTEGER"/>
+    <resultMap id="orderOptDO" type="com.nilo.dms.dto.order.WaybillLog">
         <result property="orderNo" column="order_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+        <result property="merchantId" column="merchant_id" javaType="java.lang.String"
                 jdbcType="INTEGER"/>
         <result property="opt" column="opt" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="optBy" column="opt_by" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="optName" column="name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="remark" column="remark" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
@@ -23,20 +23,20 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, order_no ,merchant_id,opt,opt_by ,remark, created_time
+        id, order_no ,merchant_id,opt,opt_by ,name,remark, created_time
     </sql>
     <select id="getStateByOrderNo" resultType="java.lang.Long">
         SELECT status FROM t_waybill WHERE order_no =#{orderNo}
     </select>
 
     <!-- 插入语句 -->
-    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderOptDO" statementType="PREPARED"
+    <insert id="insert" parameterType="com.nilo.dms.dto.order.WaybillLog" statementType="PREPARED"
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_waybill_log
-        ( order_no ,merchant_id, opt ,  opt_by,remark, created_time )
+        ( order_no ,merchant_id, opt ,  opt_by,name,remark, created_time )
         VALUES
-        ( #{orderNo},#{merchantId},#{opt},#{optBy},#{remark},UNIX_TIMESTAMP(NOW()))
+        ( #{orderNo},#{merchantId},#{opt},#{optBy},#{optName},#{remark},UNIX_TIMESTAMP(NOW()))
     </insert>
     <select id="queryById" resultMap="orderOptDO" statementType="PREPARED">
         SELECT

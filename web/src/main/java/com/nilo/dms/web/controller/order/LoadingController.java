@@ -5,7 +5,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.shiro.SecurityUtils;
+import com.nilo.dms.dao.*;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.ThirdDriverDO;
+import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.dto.order.Loading;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.dto.order.LoadingDetails;
+import com.nilo.dms.dto.order.ShipParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DistributionNetworkDao;
-import com.nilo.dms.dao.ThirdDriverDao;
-import com.nilo.dms.dao.ThirdExpressDao;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
-import com.nilo.dms.dao.dataobject.ThirdDriverDO;
-import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.model.Loading;
-import com.nilo.dms.service.order.model.LoadingDetails;
-import com.nilo.dms.service.order.model.NextStation;
-import com.nilo.dms.service.order.model.ShipParameter;
 import com.nilo.dms.web.controller.BaseController;
 
 /**
@@ -51,7 +48,7 @@ public class LoadingController extends BaseController {
 
     @RequestMapping(value = "/print.html")
     public String print(Model model, HttpServletRequest request) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         String loadingNo = request.getParameter("loadingNo");
@@ -60,7 +57,7 @@ public class LoadingController extends BaseController {
 
         double totalAmount = 0d;
         for (LoadingDetails d : loading.getDetailsList()) {
-            totalAmount = totalAmount + d.getDeliveryOrder().getNeedPayAmount();
+            totalAmount = totalAmount + d.getWaybill().getNeedPayAmount();
         }
         model.addAttribute("totalAmount", totalAmount);
         model.addAttribute("loading", loading);
@@ -77,7 +74,7 @@ public class LoadingController extends BaseController {
     @RequestMapping(value = "/list.html")
     public String list(String loadingNo, Integer loadingStatus) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
@@ -87,10 +84,10 @@ public class LoadingController extends BaseController {
 
     @RequestMapping(value = "/loadingScanPage.html", method = RequestMethod.GET)
     public String addLoadingPage(Model model, HttpServletRequest request) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
-        model.addAttribute("riderList", getRiderList(merchantId));
+        model.addAttribute("riderList", getRiderList(null));
 
         //第三方快递公司及自提点
         List<ThirdExpressDO> expressDOList = thirdExpressDao.findByMerchantId(Long.parseLong(merchantId));
@@ -119,7 +116,7 @@ public class LoadingController extends BaseController {
 
     @RequestMapping(value = "/detailsPage.html", method = RequestMethod.GET)
     public String detailsPage(Model model, HttpServletRequest request) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
 
@@ -128,14 +125,14 @@ public class LoadingController extends BaseController {
             Loading loading = loadingService.queryByLoadingNo(merchantId, loadingNo);
             model.addAttribute("loading", loading);
         }
-        model.addAttribute("riderList", getRiderList(merchantId));
+        model.addAttribute("riderList", getRiderList(null));
         return "loading/details";
     }
 
     @ResponseBody
     @RequestMapping(value = "/addLoading.html")
     public String addLoading(Loading loading, String deliveryRider, String sendDriver) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         String loadingNo = "";
@@ -162,7 +159,7 @@ public class LoadingController extends BaseController {
     @RequestMapping(value = "/loadingScan.html")
     public String loadingScan(String orderNo, String loadingNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
@@ -179,7 +176,7 @@ public class LoadingController extends BaseController {
     @RequestMapping(value = "/loadingDetails.html")
     public String loadingDetails(String loadingNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         Pagination page = getPage();
@@ -195,7 +192,7 @@ public class LoadingController extends BaseController {
     @RequestMapping(value = "/ship.html")
     public String ship(String loadingNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
@@ -216,7 +213,7 @@ public class LoadingController extends BaseController {
     @RequestMapping(value = "/deleteLoading.html")
     public String deleteLoading(String loadingNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
@@ -232,7 +229,7 @@ public class LoadingController extends BaseController {
     @RequestMapping(value = "/deleteDetails.html")
     public String deleteDetails(String loadingNo, String orderNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         try {
@@ -249,7 +246,7 @@ public class LoadingController extends BaseController {
     public String getNextStationDriver(String code) {
 
         List<ThirdDriverDO> thirdDriver = thirdDriverDao.findByExpressCode(code);
-        /*List<Driver> list = new ArrayList<>();
+        List<Driver> list = new ArrayList<>();
         Driver driver = new Driver();
         for (ThirdDriverDO d : thirdDriver) {
             driver = new Driver();
@@ -257,11 +254,11 @@ public class LoadingController extends BaseController {
             driver.setName(d.getDriverName());
             list.add(driver);
         }
-*/
-        return toJsonTrueData(thirdDriver);
+
+        return toJsonTrueData(list);
     }
 
-    /*public static class Driver {
+    public static class Driver {
         private String code;
         private String name;
 
@@ -280,9 +277,9 @@ public class LoadingController extends BaseController {
         public void setName(String name) {
             this.name = name;
         }
-    }*/
+    }
 
-    /*public static class NextStation {
+    public static class NextStation {
         private String code;
         private String name;
         private String type;
@@ -310,5 +307,5 @@ public class LoadingController extends BaseController {
         public void setType(String type) {
             this.type = type;
         }
-    }*/
+    }
 }

@@ -154,7 +154,20 @@ a{ text-decoration:none;}
 .ckh_nr1 li h2 a.ckh_nr1_a2:hover{ background:url(../images/check_add.png) no-repeat 4px 4px #067058;background-size:17px;}
 .ckh_nr1 li h4 a.ckh_nr1_a3:hover{ background:url(../images/check_add.png) no-repeat 4px 4px #940303;background-size:17px;}
 
+.scanner{
+    width:100%;
+    height:48px;
+    position: relative;
+    line-height: 48px;
+}
+/*.scanner label{position: absolute;left:58px;padding: 5px;  font-size:16pt;}*/
 
+/*.scanner span{position: absolute;right:0px;padding: 5px; font-size:20pt;}*/
+.scanner img{ position:absolute; left:2px;top:2px;width:48px;height:48px;}
+
+.scanner input{position:absolute; left:90px;width:65%; top:10px;left:48px;text-align: center; padding:0px;  height:28px; line-height:28px;font-size: 1em; float:right;border:1px solid #d8d8d8;border-radius:10px;}
+
+.scanner button{ position:absolute; right:2px;top:10px;background:url(../images/chk_ok.png) no-repeat 4px 4px #A8D956; border-radius:20px; display:inline-block; background-size:17px; padding:0 8px 0 24px; height:25px;width:65px; line-height:25px; text-align:center; color:#fff; font-size:14px; margin-left:2px; }
 
 .ckh_bootm{ margin-top:70px;}
 .ckh_bot{ position:fixed; bottom:0; border-top:1px solid #d8d8d8;left:0; background-color:#fff; width:100%; font-size:12px;z-index: 100; height:50px; line-height:50px; text-align:center;}

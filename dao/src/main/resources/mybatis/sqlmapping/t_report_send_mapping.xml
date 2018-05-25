@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.SendReportDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="sendDO" type="com.nilo.dms.dao.dataobject.SendReportDO">
+        <result property="referenceNo" column="reference_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="nextStation" column="next_station" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderType" column="order_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="deliveryType" column="delivery_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="expressName" column="express_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+        <result property="receiveName" column="receive_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+        <result property="driver" column="driver" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleName" column="handle_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleNo" column="handle_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="address" column="address" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="receiveDO" type="com.nilo.dms.dao.dataobject.ReportReceiveDO">
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="order_platform" column="order_platform" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="order_platform" column="order_platform" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="created_time" column="created_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="receive_time" column="updated_time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="name" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+
+    <!-- 查询下一个站点 -->
+
+    <select id="querySendStationReport" resultMap="sendDO">
+
+        SELECT
+        a.order_no,
+        a.weight,
+        a.created_time,
+        b.handle_no,
+        b.driver,
+        b.next_station,
+        b.handle_name,
+        c.order_type,
+        c.reference_no,
+        c.status,
+        d.contact_number AS phone,
+        d.address,
+        d.name AS receive_name
+
+        FROM t_handle_third_express_details a
+
+        INNER JOIN t_handle_third_express b
+
+        ON a.third_handle_no = b.handle_no
+
+        INNER JOIN t_waybill c
+
+        ON a.order_no = c.order_no
+
+        INNER JOIN t_waybill_receiver d
+
+        ON a.order_no = d.order_no
+
+        LEFT JOIN t_waybill f
+
+        ON a.order_no = f.parent_no
+
+        WHERE a.merchant_id=1 and b.status = 1 and  b.type='station'
+
+
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="driver !=null and driver !='' ">
+            and b.driver = #{driver}
+        </if>
+        <if test="nextStation !=null and nextStation !='' ">
+            and b.next_station = #{nextStation}
+        </if>
+        <if test="nextStationCode !=null and nextStationCode !='' ">
+            and b.network_code = #{nextStationCode}
+        </if>
+
+        <if test="handleNo !=null and handleNo !='' ">
+            and b.handle_no = #{handleNo}
+        </if>
+        <if test="orderType !=null and orderType !='' ">
+            and c.order_type = #{orderType}
+        </if>
+        <if test="deliveryType !=null and deliveryType !='' ">
+            and b.type = #{deliveryType}
+        </if>
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status != null">
+            and c.status = #{status}
+        </if>
+
+        order by a.created_time desc
+
+        <if test="limit !=null ">
+            limit
+            <if test="offset !=null ">
+                #{offset} ,
+            </if>
+            #{limit}
+        </if>
+
+
+    </select>
+
+    <select id="querySendStationCount" resultType="java.lang.Long">
+
+        SELECT
+        count(1)
+
+        FROM t_handle_third_express_details a
+
+        INNER JOIN t_handle_third_express b
+
+        ON a.third_handle_no = b.handle_no
+
+        INNER JOIN t_waybill c
+
+        ON a.order_no = c.order_no
+
+        INNER JOIN t_waybill_receiver d
+
+        ON a.order_no = d.order_no
+
+        WHERE a.merchant_id=#{merchantId} and b.status = 1
+
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="driver !=null and driver !='' ">
+            and b.driver = #{driver}
+        </if>
+        <if test="nextStation !=null and nextStation !='' ">
+            and b.next_station = #{nextStation}
+        </if>
+        <if test="nextStationCode !=null and nextStationCode !='' ">
+            and b.network_code = #{nextStationCode}
+        </if>
+
+        <if test="handleNo !=null and handleNo !='' ">
+            and b.handle_no = #{handleNo}
+        </if>
+        <if test="orderType !=null and orderType !='' ">
+            and c.order_type = #{orderType}
+        </if>
+        <if test="deliveryType !=null and deliveryType !='' ">
+            and b.type = #{deliveryType}
+        </if>
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status != null">
+            and c.status = #{status}
+        </if>
+
+    </select>
+
+    <!-- 查询第三方物流 -->
+
+    <select id="querySendExpressReport" resultMap="sendDO">
+
+        SELECT
+        a.order_no,
+        a.weight,
+        a.created_time,
+        b.handle_no,
+        b.driver,
+        b.next_station,
+        b.handle_name,
+        c.order_type,
+        c.reference_no,
+        c.status,
+        d.contact_number AS phone,
+        d.address,
+        d.name AS receive_name,
+        e.express_name
+
+        FROM t_handle_third_express_details a
+
+        INNER JOIN t_handle_third_express b
+
+        ON a.third_handle_no = b.handle_no
+
+        INNER JOIN t_waybill c
+
+        ON a.order_no = c.order_no
+
+        INNER JOIN t_waybill_receiver d
+
+        ON a.order_no = d.order_no
+
+        LEFT JOIN t_bas_third_express e
+
+        ON b.third_express_code = e.express_code
+
+        WHERE a.merchant_id=1 and b.status = 1 and b.type='thirdExpress'
+
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="driver !=null and driver !='' ">
+            and b.driver = #{driver}
+        </if>
+
+        <if test="expressCode !=null and expressCode !='' ">
+            and e.express_code = #{expressCode}
+        </if>
+
+        <if test="handleNo !=null and handleNo !='' ">
+            and b.handle_no = #{handleNo}
+        </if>
+        <if test="orderType !=null and orderType !='' ">
+            and c.order_type = #{orderType}
+        </if>
+        <if test="deliveryType !=null and deliveryType !='' ">
+            and b.type = #{deliveryType}
+        </if>
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status != null">
+            and c.status = #{status}
+        </if>
+
+        order by a.created_time desc
+
+        <if test="limit !=null ">
+            limit
+            <if test="offset !=null ">
+                #{offset} ,
+            </if>
+            #{limit}
+        </if>
+
+
+    </select>
+
+    <select id="querySendExpressCount" resultType="java.lang.Long">
+
+        SELECT
+        count(1)
+
+        FROM t_handle_third_express_details a
+
+        INNER JOIN t_handle_third_express b
+
+        ON a.third_handle_no = b.handle_no
+
+        INNER JOIN t_waybill c
+
+        ON a.order_no = c.order_no
+
+        INNER JOIN t_waybill_receiver d
+
+        ON a.order_no = d.order_no
+
+        LEFT JOIN t_bas_third_express e
+
+        ON b.third_express_code = e.express_code
+
+        WHERE a.merchant_id=#{merchantId} and b.status = 1
+
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="driver !=null and driver !='' ">
+            and b.driver = #{driver}
+        </if>
+        <if test="expressCode !=null and expressCode !='' ">
+            and e.express_code = #{expressCode}
+        </if>
+
+        <if test="handleNo !=null and handleNo !='' ">
+            and b.handle_no = #{handleNo}
+        </if>
+        <if test="orderType !=null and orderType !='' ">
+            and c.order_type = #{orderType}
+        </if>
+        <if test="deliveryType !=null and deliveryType !='' ">
+            and b.type = #{deliveryType}
+        </if>
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status != null">
+            and c.status = #{status}
+        </if>
+
+    </select>
+
+
+
+    <!-- Receive Report 查询语句 -->
+
+    <select id="queryReportReceive" resultMap="receiveDO">
+
+        SELECT a.order_no,a.merchant_id,a.order_platform,a.order_platform,a.created_time, a.updated_time, a.weight, d.name
+
+        FROM t_waybill a
+
+        INNER JOIN
+
+        t_waybill_receiver b
+
+        on a.order_no = b.order_no
+
+        INNER JOIN t_waybill_task c
+        on b.order_no = c.order_no
+
+        INNER JOIN t_sys_user_info d
+
+        on c.handled_by=d.id
+
+        WHERE a.merchant_id=#{merchantId}
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test="sTime !=null and eTime !=null and  sTime != '' and eTime != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.created_time<![CDATA[<]]>#{eTime} AND a.created_time>#{sTime})
+        </if>
+
+        <if test="mother !=null and mother != ''">
+            AND
+            DATE_FORMAT(FROM_UNIXTIME(a.created_time),"%Y%m") = #{mother}
+        </if>
+
+        <if test="clientName != null and clientName != ''">
+            AND
+            a.order_platform = #{clientName}
+        </if>
+
+        order by a.created_time desc
+        limit #{offset} , #{limit}
+
+
+    </select>
+
+    <!-- 查询上条查询条件下影响的全部条数 -->
+    <select id="queryReportReceiveCount" resultType="java.lang.Integer">
+
+        SELECT
+
+        count(*)
+
+        FROM t_waybill a
+
+        INNER JOIN
+
+        t_waybill_receiver b
+
+        on a.order_no = b.order_no
+
+        INNER JOIN t_waybill_task c
+
+        on b.order_no = c.order_no
+
+        INNER JOIN t_sys_user_info d
+
+        on c.handled_by=d.id
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test="sTime !=null and eTime !=null and  sTime != '' and eTime != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.created_time<![CDATA[<]]>#{eTime} AND a.created_time>#{sTime})
+        </if>
+
+        <if test="mother !=null and mother != ''">
+            AND
+            DATE_FORMAT(FROM_UNIXTIME(a.created_time),"%Y%m") = #{mother}
+        </if>
+
+        <if test="clientName != null and clientName != ''">
+            AND
+            a.order_platform = #{clientName}
+        </if>
+
+    </select>
+
+</mapper>

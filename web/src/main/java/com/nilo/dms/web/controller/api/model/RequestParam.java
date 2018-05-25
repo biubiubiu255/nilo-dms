@@ -5,8 +5,8 @@ import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dto.system.MerchantConfig;
 import com.nilo.dms.service.system.SystemConfig;
-import com.nilo.dms.service.system.model.MerchantConfig;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -108,5 +108,17 @@ public class RequestParam {
     private boolean checkSign(String key, String data, String sign) {
         String checkSign = DigestUtils.md5Hex(key + data + key);
         return StringUtil.equalsIgnoreCase(checkSign, sign);
+    }
+
+    @Override
+    public String toString() {
+        return "RequestParam{" +
+                "data='" + data + '\'' +
+                ", sign='" + sign + '\'' +
+                ", app_key='" + app_key + '\'' +
+                ", timestamp=" + timestamp +
+                ", method='" + method + '\'' +
+                ", app_id='" + app_id + '\'' +
+                '}';
     }
 }

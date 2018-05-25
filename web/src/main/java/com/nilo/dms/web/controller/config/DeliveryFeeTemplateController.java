@@ -1,6 +1,7 @@
 package com.nilo.dms.web.controller.config;
 
 import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.FeeTemplateStatusEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
@@ -8,9 +9,8 @@ import com.nilo.dms.dao.DeliveryFeeFactorDao;
 import com.nilo.dms.dao.DeliveryFeeTemplateDao;
 import com.nilo.dms.dao.dataobject.DeliveryFeeFactorDO;
 import com.nilo.dms.dao.dataobject.DeliveryFeeTemplateDO;
-import com.nilo.dms.common.Principal;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,7 +42,7 @@ public class DeliveryFeeTemplateController extends BaseController {
     @ResponseBody
     @RequestMapping("/getList.html")
     public String getList(String country, String orderType, String orderPlatform, String goodsType, String area) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<DeliveryFeeTemplateDO> list = deliveryFeeTemplateDao.findAllBy(Long.parseLong(merchantId), country, orderType, orderPlatform, goodsType, area);
@@ -56,16 +56,16 @@ public class DeliveryFeeTemplateController extends BaseController {
     @RequestMapping(value = "/editPage.html", method = RequestMethod.GET)
     public String updateRulePage(Model model, String id) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
 
         DeliveryFeeTemplateDO templateDO = deliveryFeeTemplateDao.queryById(Long.parseLong(id));
 
         List<DeliveryFeeFactorDO> factorDO = deliveryFeeFactorDao.queryBy(Long.parseLong(id));
 
-        Map<String,DeliveryFeeFactorDO> factorDOMap = new HashMap<>();
-        if(factorDO!=null && factorDO.size() >0){
-            for (DeliveryFeeFactorDO f : factorDO){
-                factorDOMap.put(f.getFactorType(),f);
+        Map<String, DeliveryFeeFactorDO> factorDOMap = new HashMap<>();
+        if (factorDO != null && factorDO.size() > 0) {
+            for (DeliveryFeeFactorDO f : factorDO) {
+                factorDOMap.put(f.getFactorType(), f);
             }
         }
 
@@ -97,7 +97,7 @@ public class DeliveryFeeTemplateController extends BaseController {
     @RequestMapping(value = "/addBasic.html", method = RequestMethod.POST)
     public String addConfig(DeliveryFeeTemplateDO templateDO, String fromTime, String toTime) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             templateDO.setMerchantId(Long.parseLong(merchantId));
@@ -120,7 +120,7 @@ public class DeliveryFeeTemplateController extends BaseController {
     @RequestMapping(value = "/addFactor.html", method = RequestMethod.POST)
     public String addConfig(String templateId, Factors factorDOs) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             for (DeliveryFeeFactorDO factorDO : factorDOs.getFactorDOs()) {
@@ -133,7 +133,7 @@ public class DeliveryFeeTemplateController extends BaseController {
         return toJsonTrueMsg();
     }
 
-    private static class Factors{
+    private static class Factors {
         private List<DeliveryFeeFactorDO> factorDOs;
 
         public List<DeliveryFeeFactorDO> getFactorDOs() {
@@ -149,7 +149,7 @@ public class DeliveryFeeTemplateController extends BaseController {
     @RequestMapping(value = "/editBasic.html", method = RequestMethod.POST)
     public String editBasic(DeliveryFeeTemplateDO templateDO, String fromTime, String toTime) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
 
@@ -180,7 +180,7 @@ public class DeliveryFeeTemplateController extends BaseController {
     @RequestMapping(value = "/editFactor.html", method = RequestMethod.POST)
     public String editFactor(String templateId, Factors factorDOs) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
 
             //修改之前记录为历史状态
             deliveryFeeFactorDao.updateStatus(Long.parseLong(templateId), FeeTemplateStatusEnum.HISTORY.getCode());
@@ -201,7 +201,7 @@ public class DeliveryFeeTemplateController extends BaseController {
     @RequestMapping(value = "/active.html", method = RequestMethod.POST)
     public String active(String id) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
 
@@ -221,7 +221,7 @@ public class DeliveryFeeTemplateController extends BaseController {
     @RequestMapping(value = "/delete.html", method = RequestMethod.POST)
     public String delete(String id) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
 

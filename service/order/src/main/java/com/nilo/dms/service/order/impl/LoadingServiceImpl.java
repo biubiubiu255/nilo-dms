@@ -1,24 +1,9 @@
 package com.nilo.dms.service.order.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.enums.LoadingStatusEnum;
 import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.enums.SerialTypeEnum;
-import com.nilo.dms.common.enums.TaskStatusEnum;
-import com.nilo.dms.common.enums.TaskTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.AssertUtil;
@@ -27,21 +12,27 @@ import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.LoadingDao;
 import com.nilo.dms.dao.LoadingDetailsDao;
-import com.nilo.dms.dao.ThirdDriverDao;
 import com.nilo.dms.dao.dataobject.LoadingDO;
 import com.nilo.dms.dao.dataobject.LoadingDetailsDO;
-import com.nilo.dms.dao.dataobject.ThirdDriverDO;
+import com.nilo.dms.dto.common.UserInfo;
+import com.nilo.dms.dto.order.Loading;
+import com.nilo.dms.dto.order.LoadingDetails;
+import com.nilo.dms.dto.order.OrderOptRequest;
+import com.nilo.dms.dto.order.ShipParameter;
 import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.model.UserInfo;
 import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.OrderService;
-import com.nilo.dms.service.order.TaskService;
-import com.nilo.dms.service.order.model.Loading;
-import com.nilo.dms.service.order.model.LoadingDetails;
-import com.nilo.dms.service.order.model.OrderOptRequest;
-import com.nilo.dms.service.order.model.ShipParameter;
-import com.nilo.dms.service.order.model.Task;
+import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.system.SystemConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by admin on 2017/10/31.
@@ -49,366 +40,313 @@ import com.nilo.dms.service.system.SystemConfig;
 @Service
 public class LoadingServiceImpl implements LoadingService {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private CommonDao commonDao;
+    @Autowired
+    private LoadingDao loadingDao;
+    @Autowired
+    private LoadingDetailsDao loadingDetailsDao;
+    @Autowired
+    private WaybillService waybillService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private CommonDao commonDao;
+    @Override
+    public String addLoading(Loading loading) {
 
-	@Autowired
-	private LoadingDao loadingDao;
+        //校验 loading 信息
+        AssertUtil.isNotBlank(loading.getRider(), BizErrorCode.RIDER_IS_EMPTY);
 
-	@Autowired
-	private LoadingDetailsDao loadingDetailsDao;
-	@Autowired
-	private TaskService taskService;
-	@Autowired
-	private OrderService orderService;
-	@Autowired
-	private UserService userService;
 
-	@Autowired
-	private ThirdDriverDao thirdDriverDao;
+        String loadingNo = SystemConfig.getNextSerialNo(loading.getMerchantId(), SerialTypeEnum.LOADING_NO.getCode());
 
-	@Override
-	public String addLoading(Loading loading) {
+        //1、
+        loading.setStatus(LoadingStatusEnum.CREATE);
+        loading.setLoadingNo(loadingNo);
+        LoadingDO loadingDO = convert(loading);
+        loadingDO.setLoadingFromTime(DateUtil.getSysTimeStamp());
+        loadingDao.insert(loadingDO);
+        //2、
+        if (loading.getDetailsList() != null) {
+            for (LoadingDetails details : loading.getDetailsList()) {
+                LoadingDetailsDO detailsDO = convert(details);
+                loadingDetailsDao.insert(detailsDO);
+            }
+        }
 
-		// 校验 loading 信息
-		AssertUtil.isNotBlank(loading.getRider(), BizErrorCode.RIDER_IS_EMPTY);
+        return loadingNo;
+    }
 
-		String loadingNo = SystemConfig.getNextSerialNo(loading.getMerchantId(), SerialTypeEnum.LOADING_NO.getCode());
+    @Override
+    public List<Loading> queryBy(String merchantId, String loadingNo, Integer status, Pagination pagination) {
 
-		// 1、
-		loading.setStatus(LoadingStatusEnum.CREATE);
-		loading.setLoadingNo(loadingNo);
-		LoadingDO loadingDO = convert(loading);
-		loadingDO.setLoadingFromTime(DateUtil.getSysTimeStamp());
-		loadingDao.insert(loadingDO);
-		// 2、
-		if (loading.getDetailsList() != null) {
-			for (LoadingDetails details : loading.getDetailsList()) {
-				LoadingDetailsDO detailsDO = convert(details);
-				loadingDetailsDao.insert(detailsDO);
-			}
-		}
+        List<Loading> list = new ArrayList<>();
+        List<LoadingDO> loadingDOList = loadingDao.queryListBy(Long.parseLong(merchantId), loadingNo, status, pagination.getOffset(), pagination.getLimit());
+        Long count = commonDao.lastFoundRows();
+        if (count == null || count == 0) return list;
+        pagination.setTotalCount(count);
 
-		return loadingNo;
-	}
+        Set<String> userIds = new HashSet<>();
+        List<String> loadingNos = new ArrayList<>();
+        for (LoadingDO d : loadingDOList) {
+            userIds.add(d.getRider());
+            userIds.add("" + d.getLoadingBy());
+            loadingNos.add(d.getLoadingNo());
+        }
+        List<String> userIdList = new ArrayList<>();
+        userIdList.addAll(userIds);
 
-	@Override
-	public List<Loading> queryBy(String merchantId, String loadingNo, Integer status, Pagination pagination) {
+        List<UserInfo> users = userService.findUserInfoByUserIds(merchantId, userIdList);
+        List<LoadingDetailsDO> detailsDOs = loadingDetailsDao.queryByLoadingNos(loadingNos);
 
-		List<Loading> list = new ArrayList<>();
-		List<LoadingDO> loadingDOList = loadingDao.queryListBy(Long.parseLong(merchantId), loadingNo, status,
-				pagination.getOffset(), pagination.getLimit());
-		Long count = commonDao.lastFoundRows();
-		if (count == null || count == 0)
-			return list;
-		pagination.setTotalCount(count);
+        for (LoadingDO d : loadingDOList) {
+            Loading loading = convert(d);
+            List<LoadingDetails> detailsList = new ArrayList<>();
+            for (LoadingDetailsDO detailsDO : detailsDOs) {
+                if (StringUtil.equals(detailsDO.getLoadingNo(), d.getLoadingNo())) {
+                    LoadingDetails details = convert(detailsDO);
+                    detailsList.add(details);
+                }
+            }
+            loading.setDetailsList(detailsList);
 
-		Set<String> userIds = new HashSet<>();
-		List<String> loadingNos = new ArrayList<>();
+            for (UserInfo u : users) {
+                if (StringUtil.equals(u.getUserId(), d.getRider())) {
+                    loading.setRiderName(u.getName());
+                }
+                if (StringUtil.equals(u.getUserId(), "" + d.getLoadingBy())) {
+                    loading.setLoadingName(u.getName());
+                }
+            }
+            list.add(loading);
+        }
 
-		for (LoadingDO d : loadingDOList) {
-			if (d.getCarrier() == null || d.getCarrier().equals("")) {
-				userIds.add(d.getRider());
-				userIds.add("" + d.getLoadingBy());
-				loadingNos.add(d.getLoadingNo());
-			}
-		}
-		List<String> userIdList = new ArrayList<>();
-		userIdList.addAll(userIds);
+        return list;
+    }
 
-		List<UserInfo> users = userService.findUserInfoByUserIds(merchantId, userIdList);
-		// List<LoadingDetailsDO> detailsDOs =
-		// loadingDetailsDao.queryByLoadingNos(loadingNos);
 
-		Map<String, String> userMap = new HashMap<>();
-		if (users != null) {
-			for (UserInfo u : users) {
-				userMap.put(u.getUserId(), u.getName());
-			}
-		}
+    @Override
+    @Transactional
+    public Loading queryByLoadingNo(String merchantId, String loadingNo) {
 
-		Map<String, String> driverMap = new HashMap<>();
-		ThirdDriverDO express = new ThirdDriverDO();
-		List<ThirdDriverDO> drivers = thirdDriverDao.findByExpressMultiple(express);
-		if(drivers!=null) {
-			for (ThirdDriverDO driver : drivers) {
-				driverMap.put(driver.getId() + "", driver.getDriverName());
-			}
-		}
-		for (LoadingDO d : loadingDOList) {
-			Loading loading = convert(d);
+        LoadingDO loadingDO = loadingDao.queryByLoadingNo(Long.parseLong(merchantId), loadingNo);
+        if (loadingDO == null) {
+            return null;
+        }
 
-			String loadingName = userMap.get(d.getLoadingBy() + "");
-			if (loadingName != null) {
-				loading.setLoadingName(loadingName);
-			}
-			// 判断是发运还是派件，如果是发运，rider字段存储的是driver
-			if (d.getCarrier() == null || d.getCarrier().equals("")) {
-				String riderName = userMap.get(d.getRider());
-				if (riderName != null) {
-					loading.setRiderName(riderName);
-				}
-			} else {
-				String driverName = driverMap.get(d.getRider());
-				loading.setRiderName(driverName);
-			}
+        Loading loading = convert(loadingDO);
+        UserInfo riderInfo = userService.findUserInfoByUserId(merchantId, loading.getRider());
+        UserInfo loadingInfo = userService.findUserInfoByUserId(merchantId, loading.getLoadingBy());
 
-			/*
-			 * List<LoadingDetails> detailsList = new ArrayList<>(); for (LoadingDetailsDO
-			 * detailsDO : detailsDOs) { if (StringUtil.equals(detailsDO.getLoadingNo(),
-			 * d.getLoadingNo())) { LoadingDetails details = convert(detailsDO);
-			 * detailsList.add(details); } } loading.setDetailsList(detailsList);
-			 */
+        loading.setRiderName(riderInfo == null ? "" : riderInfo.getName());
+        loading.setLoadingName(loadingInfo == null ? "" : loadingInfo.getName());
 
-			list.add(loading);
-		}
+        List<LoadingDetailsDO> detailsDOList = loadingDetailsDao.queryByLoadingNo(loadingDO.getLoadingNo());
+        List<LoadingDetails> detailsList = new ArrayList<>();
+        int inx = 0;
+        for (LoadingDetailsDO detailsDO : detailsDOList) {
+            inx++;
+            LoadingDetails details = convert(detailsDO);
+            details.setNum(inx);
+            details.setWaybill(waybillService.queryByOrderNo(merchantId, details.getOrderNo()));
+            detailsList.add(details);
+        }
+        loading.setDetailsList(detailsList);
+        return loading;
+    }
 
-		return list;
-	}
+    @Override
+    @Transactional
+    public void loadingScan(String merchantId, String loadingNo, String orderNo, String optBy) {
 
-	@Override
-	@Transactional
-	public Loading queryByLoadingNo(String merchantId, String loadingNo) {
+        LoadingDO loadingDO = loadingDao.queryByLoadingNo(Long.parseLong(merchantId), loadingNo);
+        if (loadingDO == null) {
+            throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
+        }
+        if (loadingDO.getStatus() == LoadingStatusEnum.SHIP.getCode()) {
+            throw new DMSException(BizErrorCode.LOADING_STATUS_LIMITED, loadingNo);
+        }
 
-		LoadingDO loadingDO = loadingDao.queryByLoadingNo(Long.parseLong(merchantId), loadingNo);
-		if (loadingDO == null) {
-			return null;
-		}
+        LoadingDetailsDO loadingDetailsDO = loadingDetailsDao.queryByOrderNo(loadingNo, orderNo);
+        if (loadingDetailsDO != null) {
+            throw new DMSException(BizErrorCode.DELIVERY_NO_EXIST);
+        }
 
-		Loading loading = convert(loadingDO);
-		UserInfo riderInfo = userService.findUserInfoByUserId(merchantId, loading.getRider());
-		UserInfo loadingInfo = userService.findUserInfoByUserId(merchantId, loading.getLoadingBy());
+        //添加订单到发运明细中
+        LoadingDetailsDO detailsDO = new LoadingDetailsDO();
+        detailsDO.setStatus(LoadingStatusEnum.CREATE.getCode());
+        detailsDO.setOrderNo(orderNo);
+        detailsDO.setLoadingBy(Long.parseLong(optBy));
+        detailsDO.setLoadingNo(loadingNo);
+        loadingDetailsDao.insert(detailsDO);
 
-		loading.setRiderName(riderInfo == null ? "" : riderInfo.getName());
-		loading.setLoadingName(loadingInfo == null ? "" : loadingInfo.getName());
+        if (loadingDO.getStatus() == LoadingStatusEnum.CREATE.getCode()) {
+            // 更新发运状态
+            LoadingDO update = new LoadingDO();
+            update.setId(loadingDO.getId());
+            update.setLoadingNo(loadingDO.getLoadingNo());
+            update.setVersion(loadingDO.getVersion());
+            update.setStatus(LoadingStatusEnum.LOADING.getCode());
+            loadingDao.update(update);
+        }
+    }
 
-		List<LoadingDetailsDO> detailsDOList = loadingDetailsDao.queryByLoadingNo(loadingDO.getLoadingNo());
-		List<LoadingDetails> detailsList = new ArrayList<>();
-		int inx = 0;
-		for (LoadingDetailsDO detailsDO : detailsDOList) {
-			inx++;
-			LoadingDetails details = convert(detailsDO);
-			details.setNum(inx);
-			details.setDeliveryOrder(orderService.queryByOrderNo(merchantId, details.getOrderNo()));
-			detailsList.add(details);
-		}
-		loading.setDetailsList(detailsList);
-		return loading;
-	}
+    @Override
+    @Transactional
+    public void deleteLoadingDetails(String merchantId, String loadingNo, String orderNo, String optBy) {
 
-	@Override
-	@Transactional
-	public void loadingScan(String merchantId, String loadingNo, String orderNo, String optBy) {
+        LoadingDO loadingDO = loadingDao.queryByLoadingNo(Long.parseLong(merchantId), loadingNo);
+        if (loadingDO == null) {
+            throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
+        }
+        if (!(loadingDO.getStatus() == LoadingStatusEnum.CREATE.getCode() || loadingDO.getStatus() == LoadingStatusEnum.LOADING.getCode())) {
+            throw new DMSException(BizErrorCode.LOADING_STATUS_LIMITED, loadingNo);
+        }
 
-		LoadingDO loadingDO = loadingDao.queryByLoadingNo(Long.parseLong(merchantId), loadingNo);
-		if (loadingDO == null) {
-			throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
-		}
-		if (loadingDO.getStatus() == LoadingStatusEnum.SHIP.getCode()) {
-			throw new DMSException(BizErrorCode.LOADING_STATUS_LIMITED, loadingNo);
-		}
+        List<LoadingDetailsDO> detailsDO = loadingDetailsDao.queryByLoadingNo(loadingNo);
+        if (detailsDO == null || detailsDO.size() == 0) {
+            throw new DMSException(BizErrorCode.LOADING_NOT_EXIST);
+        }
+        boolean exist = false;
+        for (LoadingDetailsDO d : detailsDO) {
+            if (d.getOrderNo().equals(orderNo)) {
+                exist = true;
+            }
+        }
+        if (!exist) {
+            throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
+        }
 
-		LoadingDetailsDO loadingDetailsDO = loadingDetailsDao.queryByOrderNo(loadingNo, orderNo);
-		if (loadingDetailsDO != null) {
-			throw new DMSException(BizErrorCode.DELIVERY_NO_EXIST);
-		}
+        loadingDetailsDao.deleteBy(loadingNo, orderNo);
 
-		// 添加订单到发运明细中
-		LoadingDetailsDO detailsDO = new LoadingDetailsDO();
-		detailsDO.setStatus(LoadingStatusEnum.CREATE.getCode());
-		detailsDO.setOrderNo(orderNo);
-		detailsDO.setLoadingBy(Long.parseLong(optBy));
-		detailsDO.setLoadingNo(loadingNo);
-		loadingDetailsDao.insert(detailsDO);
+    }
 
-		if (loadingDO.getStatus() == LoadingStatusEnum.CREATE.getCode()) {
-			// 更新发运状态
-			LoadingDO update = new LoadingDO();
-			update.setId(loadingDO.getId());
-			update.setLoadingNo(loadingDO.getLoadingNo());
-			update.setVersion(loadingDO.getVersion());
-			update.setStatus(LoadingStatusEnum.LOADING.getCode());
-			loadingDao.update(update);
-		}
-	}
+    @Override
+    @Transactional
+    public void ship(ShipParameter parameter) {
 
-	@Override
-	@Transactional
-	public void deleteLoadingDetails(String merchantId, String loadingNo, String orderNo, String optBy) {
+        Long merchantId = Long.parseLong(parameter.getMerchantId());
+        String loadingNo = parameter.getLoadingNo();
+        LoadingDO loadingDO = loadingDao.queryByLoadingNo(merchantId, loadingNo);
+        if (loadingDO == null) {
+            throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
+        }
+        if (loadingDO.getStatus() != LoadingStatusEnum.LOADING.getCode()) {
+            throw new DMSException(BizErrorCode.LOADING_STATUS_LIMITED, loadingNo);
+        }
+        List<LoadingDetailsDO> detailsDO = loadingDetailsDao.queryByLoadingNo(loadingNo);
+        if (detailsDO == null || detailsDO.size() == 0) {
+            throw new DMSException(BizErrorCode.LOADING_EMPTY, loadingNo);
+        }
 
-		LoadingDO loadingDO = loadingDao.queryByLoadingNo(Long.parseLong(merchantId), loadingNo);
-		if (loadingDO == null) {
-			throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
-		}
-		if (!(loadingDO.getStatus() == LoadingStatusEnum.CREATE.getCode()
-				|| loadingDO.getStatus() == LoadingStatusEnum.LOADING.getCode())) {
-			throw new DMSException(BizErrorCode.LOADING_STATUS_LIMITED, loadingNo);
-		}
+        List<String> orderNoList = new ArrayList<>();
 
-		List<LoadingDetailsDO> detailsDO = loadingDetailsDao.queryByLoadingNo(loadingNo);
-		if (detailsDO == null || detailsDO.size() == 0) {
-			throw new DMSException(BizErrorCode.LOADING_NOT_EXIST);
-		}
-		boolean exist = false;
-		for (LoadingDetailsDO d : detailsDO) {
-			if (d.getOrderNo().equals(orderNo)) {
-				exist = true;
-			}
-		}
-		if (!exist) {
-			throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
-		}
+        for (LoadingDetailsDO details : detailsDO) {
+            orderNoList.add(details.getOrderNo());
+        }
 
-		loadingDetailsDao.deleteBy(loadingNo, orderNo);
+        //修改订单状态为发运
+        OrderOptRequest optRequest = new OrderOptRequest();
+        if (StringUtil.isNotEmpty(loadingDO.getNextStation())) {
+            optRequest.setOptType(OptTypeEnum.SEND);
+        } else {
+            optRequest.setOptType(OptTypeEnum.DELIVERY);
+        }
+        optRequest.setOrderNo(orderNoList);
+        optRequest.setRider(loadingDO.getRider());
+        waybillService.handleOpt(optRequest);
 
-	}
+        // 更新发运状态
+        LoadingDO update = new LoadingDO();
+        update.setId(loadingDO.getId());
+        update.setLoadingNo(loadingDO.getLoadingNo());
+        update.setVersion(loadingDO.getVersion());
+        update.setStatus(LoadingStatusEnum.SHIP.getCode());
+        update.setLoadingToTime(DateUtil.getSysTimeStamp());
+        loadingDao.update(update);
+    }
 
-	@Override
-	@Transactional
-	public void ship(ShipParameter parameter) {
+    @Override
+    public void deleteLoading(String merchantId, String loadingNo, String optBy) {
+        LoadingDO loadingDO = loadingDao.queryByLoadingNo(Long.parseLong(merchantId), loadingNo);
+        if (loadingDO == null) {
+            throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
+        }
+        if (!(loadingDO.getStatus() == LoadingStatusEnum.CREATE.getCode() || loadingDO.getStatus() == LoadingStatusEnum.LOADING.getCode())) {
+            throw new DMSException(BizErrorCode.LOADING_STATUS_LIMITED, loadingNo);
+        }
+        // 更新发运状态
+        LoadingDO update = new LoadingDO();
+        update.setLoadingNo(loadingNo);
+        update.setStatus(LoadingStatusEnum.CANCEL.getCode());
+        loadingDao.update(update);
+    }
 
-		Long merchantId = Long.parseLong(parameter.getMerchantId());
-		String loadingNo = parameter.getLoadingNo();
-		LoadingDO loadingDO = loadingDao.queryByLoadingNo(merchantId, loadingNo);
-		if (loadingDO == null) {
-			throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
-		}
-		if (loadingDO.getStatus() != LoadingStatusEnum.LOADING.getCode()) {
-			throw new DMSException(BizErrorCode.LOADING_STATUS_LIMITED, loadingNo);
-		}
-		List<LoadingDetailsDO> detailsDO = loadingDetailsDao.queryByLoadingNo(loadingNo);
-		if (detailsDO == null || detailsDO.size() == 0) {
-			throw new DMSException(BizErrorCode.LOADING_EMPTY, loadingNo);
-		}
+    private LoadingDO convert(Loading l) {
+        if (l == null) {
+            return null;
+        }
+        LoadingDO loading = new LoadingDO();
+        loading.setStatus(l.getStatus().getCode());
+        loading.setCarrier(l.getCarrier());
+        loading.setRider(l.getRider());
+        loading.setLoadingBy(Long.parseLong(l.getLoadingBy()));
+        loading.setLoadingFromTime(l.getLoadingFromTime());
+        loading.setLoadingNo(l.getLoadingNo());
+        loading.setLoadingToTime(l.getLoadingToTime());
+        loading.setMerchantId(Long.parseLong(l.getMerchantId()));
+        loading.setRemark(l.getRemark());
+        loading.setTruckNo(l.getTruckNo());
+        loading.setTruckType(l.getTruckType());
 
-		List<String> orderNoList = new ArrayList<>();
+        loading.setNextStation(l.getNextStation());
 
-		for (LoadingDetailsDO details : detailsDO) {
+        return loading;
+    }
 
-			// 添加发运任务
-			Task task = new Task();
-			task.setMerchantId("" + merchantId);
-			task.setStatus(TaskStatusEnum.CREATE);
-			task.setCreatedBy(parameter.getOptBy());
-			task.setOrderNo(details.getOrderNo());
-			task.setHandledBy(loadingDO.getRider());
-			if (StringUtil.isNotEmpty(loadingDO.getNextStation())) {
-				task.setTaskType(TaskTypeEnum.SEND);
-			} else {
-				task.setTaskType(TaskTypeEnum.DELIVERY);
-			}
-			taskService.addTask(task);
+    private Loading convert(LoadingDO l) {
+        if (l == null) {
+            return null;
+        }
+        Loading loading = new Loading();
+        loading.setStatus(LoadingStatusEnum.getEnum(l.getStatus()));
+        loading.setCarrier(l.getCarrier());
+        loading.setRider(l.getRider());
+        loading.setLoadingBy("" + l.getLoadingBy());
+        loading.setLoadingFromTime(l.getLoadingFromTime());
+        loading.setLoadingNo("" + l.getLoadingNo());
+        loading.setLoadingToTime(l.getLoadingToTime());
+        loading.setMerchantId("" + l.getMerchantId());
+        loading.setRemark(l.getRemark());
+        loading.setTruckNo(l.getTruckNo());
+        loading.setTruckType(l.getTruckType());
+        loading.setNextStation(l.getNextStation());
 
-			orderNoList.add(details.getOrderNo());
-		}
+        return loading;
+    }
 
-		// 修改订单状态为发运
-		OrderOptRequest optRequest = new OrderOptRequest();
-		optRequest.setMerchantId("" + merchantId);
-		optRequest.setOptBy(parameter.getOptBy());
-		if (StringUtil.isNotEmpty(loadingDO.getNextStation())) {
-			optRequest.setOptType(OptTypeEnum.SEND);
-		} else {
-			optRequest.setOptType(OptTypeEnum.DELIVERY);
-		}
-		optRequest.setOrderNo(orderNoList);
-		optRequest.setRider(loadingDO.getRider());
-		optRequest.setNetworkId(parameter.getNetworkId());
-		orderService.handleOpt(optRequest);
+    private LoadingDetails convert(LoadingDetailsDO detailsDO) {
+        if (detailsDO == null) {
+            return null;
+        }
+        LoadingDetails details = new LoadingDetails();
+        details.setLoadingNo("" + detailsDO.getLoadingNo());
+        details.setLoadingBy(detailsDO.getLoadingBy());
+        details.setOrderNo(detailsDO.getOrderNo());
+        details.setStatus(detailsDO.getStatus());
+        return details;
+    }
 
-		// 更新发运状态
-		LoadingDO update = new LoadingDO();
-		update.setId(loadingDO.getId());
-		update.setLoadingNo(loadingDO.getLoadingNo());
-		update.setVersion(loadingDO.getVersion());
-		update.setStatus(LoadingStatusEnum.SHIP.getCode());
-		update.setLoadingToTime(DateUtil.getSysTimeStamp());
-		loadingDao.update(update);
-	}
-
-	@Override
-	public void deleteLoading(String merchantId, String loadingNo, String optBy) {
-		LoadingDO loadingDO = loadingDao.queryByLoadingNo(Long.parseLong(merchantId), loadingNo);
-		if (loadingDO == null) {
-			throw new DMSException(BizErrorCode.LOADING_NOT_EXIST, loadingNo);
-		}
-		if (!(loadingDO.getStatus() == LoadingStatusEnum.CREATE.getCode()
-				|| loadingDO.getStatus() == LoadingStatusEnum.LOADING.getCode())) {
-			throw new DMSException(BizErrorCode.LOADING_STATUS_LIMITED, loadingNo);
-		}
-		// 更新发运状态
-		LoadingDO update = new LoadingDO();
-		update.setLoadingNo(loadingNo);
-		update.setStatus(LoadingStatusEnum.CANCEL.getCode());
-		loadingDao.update(update);
-	}
-
-	private LoadingDO convert(Loading l) {
-		if (l == null) {
-			return null;
-		}
-		LoadingDO loading = new LoadingDO();
-		loading.setStatus(l.getStatus().getCode());
-		loading.setCarrier(l.getCarrier());
-		loading.setRider(l.getRider());
-		loading.setLoadingBy(Long.parseLong(l.getLoadingBy()));
-		loading.setLoadingFromTime(l.getLoadingFromTime());
-		loading.setLoadingNo(l.getLoadingNo());
-		loading.setLoadingToTime(l.getLoadingToTime());
-		loading.setMerchantId(Long.parseLong(l.getMerchantId()));
-		loading.setRemark(l.getRemark());
-		loading.setTruckNo(l.getTruckNo());
-		loading.setTruckType(l.getTruckType());
-
-		loading.setNextStation(l.getNextStation());
-
-		return loading;
-	}
-
-	private Loading convert(LoadingDO l) {
-		if (l == null) {
-			return null;
-		}
-		Loading loading = new Loading();
-		loading.setStatus(LoadingStatusEnum.getEnum(l.getStatus()));
-		loading.setCarrier(l.getCarrier());
-		loading.setRider(l.getRider());
-		loading.setLoadingBy("" + l.getLoadingBy());
-		loading.setLoadingFromTime(l.getLoadingFromTime());
-		loading.setLoadingNo("" + l.getLoadingNo());
-		loading.setLoadingToTime(l.getLoadingToTime());
-		loading.setMerchantId("" + l.getMerchantId());
-		loading.setRemark(l.getRemark());
-		loading.setTruckNo(l.getTruckNo());
-		loading.setTruckType(l.getTruckType());
-		loading.setNextStation(l.getNextStation());
-
-		return loading;
-	}
-
-	private LoadingDetails convert(LoadingDetailsDO detailsDO) {
-		if (detailsDO == null) {
-			return null;
-		}
-		LoadingDetails details = new LoadingDetails();
-		details.setLoadingNo("" + detailsDO.getLoadingNo());
-		details.setLoadingBy(detailsDO.getLoadingBy());
-		details.setOrderNo(detailsDO.getOrderNo());
-		details.setStatus(detailsDO.getStatus());
-		return details;
-	}
-
-	private LoadingDetailsDO convert(LoadingDetails details) {
-		if (details == null) {
-			return null;
-		}
-		LoadingDetailsDO detailsDO = new LoadingDetailsDO();
-		detailsDO.setLoadingNo(details.getLoadingNo());
-		detailsDO.setLoadingBy(details.getLoadingBy());
-		detailsDO.setOrderNo(details.getOrderNo());
-		detailsDO.setStatus(details.getStatus());
-		return detailsDO;
-	}
+    private LoadingDetailsDO convert(LoadingDetails details) {
+        if (details == null) {
+            return null;
+        }
+        LoadingDetailsDO detailsDO = new LoadingDetailsDO();
+        detailsDO.setLoadingNo(details.getLoadingNo());
+        detailsDO.setLoadingBy(details.getLoadingBy());
+        detailsDO.setOrderNo(details.getOrderNo());
+        detailsDO.setStatus(details.getStatus());
+        return detailsDO;
+    }
 }

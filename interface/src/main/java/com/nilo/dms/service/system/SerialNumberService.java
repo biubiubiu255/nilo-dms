@@ -1,7 +1,7 @@
 package com.nilo.dms.service.system;
 
 
-import com.nilo.dms.service.system.model.SerialNumberRule;
+import com.nilo.dms.dto.system.SerialNumberRule;
 
 import java.util.List;
 

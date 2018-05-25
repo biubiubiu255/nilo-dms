@@ -1,7 +1,7 @@
 package com.nilo.dms.service.org;
 
-import com.nilo.dms.service.model.ZTree;
-import com.nilo.dms.service.org.model.Department;
+import com.nilo.dms.dto.common.ZTree;
+import com.nilo.dms.dto.org.Department;
 
 import java.util.List;
 

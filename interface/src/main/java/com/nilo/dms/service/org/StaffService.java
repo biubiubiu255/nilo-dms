@@ -1,7 +1,7 @@
 package com.nilo.dms.service.org;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.service.org.model.Staff;
+import com.nilo.dms.dto.org.Staff;
 
 import java.util.List;
 

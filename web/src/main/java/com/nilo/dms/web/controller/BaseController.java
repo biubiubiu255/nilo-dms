@@ -5,20 +5,16 @@
  */
 package com.nilo.dms.web.controller;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.EnumMessage;
+import com.nilo.dms.common.utils.WebUtil;
 import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.dataobject.StaffDO;
-import com.nilo.dms.service.org.model.Staff;
+import com.nilo.dms.service.impl.SessionLocal;
+import nl.bitwalker.useragentutils.UserAgent;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
@@ -28,15 +24,13 @@ import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.nilo.dms.common.Pagination;
-import com.nilo.dms.common.utils.WebUtil;
-import com.nilo.dms.dao.UserInfoDao;
-import com.nilo.dms.dao.dataobject.UserInfoDO;
-import com.nilo.dms.service.model.UserInfo;
-
-import nl.bitwalker.useragentutils.UserAgent;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller - 基类
@@ -147,8 +141,9 @@ public class BaseController {
         return new Pagination(offset, limit);
     }
 
-    protected List<StaffDO> getRiderList(String companyId) {
-        List<StaffDO> riderList = staffDao.queryAllRider(Long.parseLong(companyId));
+    protected List<StaffDO> getRiderList(String outsource) {
+        Principal principal = SessionLocal.getPrincipal();
+        List<StaffDO> riderList = staffDao.queryAllRider(Long.parseLong(principal.getCompanyId()),outsource);
         return riderList;
     }
 

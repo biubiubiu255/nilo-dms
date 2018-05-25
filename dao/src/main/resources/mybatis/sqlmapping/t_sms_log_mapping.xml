@@ -39,4 +39,9 @@
         (#{merchantId},#{msgType}, #{content},#{receiver},#{status}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
+    <select id="queryByOrderNo" resultMap="smsLogDo" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_log_sms where order_no = #{orderNo}
+    </select>
 </mapper>

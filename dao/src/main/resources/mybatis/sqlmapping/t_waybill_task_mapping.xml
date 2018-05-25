@@ -12,9 +12,9 @@
 			javaType="java.lang.Double" jdbcType="DOUBLE" />
 		<result property="alreadyPaid" column="already_paid" javaType="java.lang.Double"
 			jdbcType="DOUBLE" />
-		<result property="handledBy" column="handled_by" javaType="java.lang.String"
+		<result property="handleBy" column="handled_by" javaType="java.lang.String"
 			jdbcType="VARCHAR" />
-		<result property="handledTime" column="handled_time" javaType="java.lang.Long"
+		<result property="handleTime" column="handled_time" javaType="java.lang.Long"
 			jdbcType="INTEGER" />
 		<result property="status" column="status" javaType="java.lang.Integer"
 			jdbcType="INTEGER" />

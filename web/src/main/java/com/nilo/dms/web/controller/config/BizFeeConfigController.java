@@ -1,12 +1,12 @@
 package com.nilo.dms.web.controller.config;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.common.enums.BizFeeConfigStatusEnum;
-import com.nilo.dms.service.system.config.BizFeeConfigService;
-import com.nilo.dms.service.system.model.BizFeeConfig;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.enums.BizFeeConfigStatusEnum;
+import com.nilo.dms.dto.system.BizFeeConfig;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.system.config.BizFeeConfigService;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +35,7 @@ public class BizFeeConfigController extends BaseController {
     @RequestMapping("/getList.html")
     public String getList() {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<BizFeeConfig> list = bizFeeConfigService.queryAllBy(merchantId);
@@ -48,7 +48,7 @@ public class BizFeeConfigController extends BaseController {
     @RequestMapping(value = "/editPage.html", method = RequestMethod.GET)
     public String updateRulePage(String optType, Model model) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         BizFeeConfig bizFeeConfig = bizFeeConfigService.queryBy(merchantId, optType);
@@ -61,7 +61,7 @@ public class BizFeeConfigController extends BaseController {
     @RequestMapping(value = "/edit.html", method = RequestMethod.POST)
     public String updateConfig(String bizTypeEdit, Double fee, String remark) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             BizFeeConfig config = new BizFeeConfig();
@@ -87,7 +87,7 @@ public class BizFeeConfigController extends BaseController {
     @RequestMapping(value = "/add.html", method = RequestMethod.POST)
     public String addConfig(String bizTypeAdd, Double fee, String remark) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             BizFeeConfig config = new BizFeeConfig();
@@ -107,7 +107,7 @@ public class BizFeeConfigController extends BaseController {
     @RequestMapping(value = "/active.html", method = RequestMethod.POST)
     public String active(String bizType) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             BizFeeConfig config = new BizFeeConfig();
@@ -125,7 +125,7 @@ public class BizFeeConfigController extends BaseController {
     @RequestMapping(value = "/delete.html", method = RequestMethod.POST)
     public String delete(String bizType) {
         try {
-            Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+            Principal me = SessionLocal.getPrincipal();
             //获取merchantId
             String merchantId = me.getMerchantId();
             BizFeeConfig config = new BizFeeConfig();

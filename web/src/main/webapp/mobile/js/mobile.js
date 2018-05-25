@@ -1,7 +1,7 @@
 // JavaScript Document
 function MobileData(DataJson){
 	DataJson = $.extend({},MobileData.defaults, DataJson); 	
-	if(isEmpty(DataJson.controller)){
+	/*if(isEmpty(DataJson.controller)){
         DataJson.controller='../controller/basecontroller.php';
     }
     //find url setting
@@ -10,7 +10,8 @@ function MobileData(DataJson){
 	    if(DataJson.viewModel != ''){
 		    DataJson.findUrl='../controller/basecontroller.php?model='+DataJson.viewModel+'&action=Find';	
 	    }
-    }
+    }*/
+    DataJson.controller='';
 	this.requestIng = false;
 	this.DataJson = DataJson;
 	this.isComboSelect = DataJson.isComboSelect;
@@ -720,7 +721,9 @@ MobileData.prototype.paginate = function(options) {
                     invokeCallBack(callback, response);
                 }
             } catch (e) {
-                showError(response.msg);
+            	if(response.msg!='' || response.msg!='undefiend'){
+                    showError(response	.msg);
+				}
             }
 			mbObject.requestIng = false;
             closeMask();
@@ -1074,7 +1077,7 @@ function getI18nAttr(value) {
 		}else {
 			language = 'en';
 		}
-		
+		language = 'en'; //目前实际只有英语环境
 		var content=null;
 		
 		$.i18n.properties({
@@ -1089,5 +1092,9 @@ function getI18nAttr(value) {
 		
 		return content;
 	
+}
+
+function toHome(){
+	window.location.href = "/mobile/home.html";
 }
 

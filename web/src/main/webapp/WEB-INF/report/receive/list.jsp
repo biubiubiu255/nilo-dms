@@ -12,7 +12,7 @@
 <div class="box-body">
     <div class="layui-row">
         <div class="layui-col-md4 layui-col-lg4">
-            <label class="layui-form-label">OrderNo:</label>
+            <label class="layui-form-label">Waybill No:</label>
             <div class="layui-input-inline">
                 <input type="text" name="orderNo" autocomplete="off" class="layui-input">
             </div>
@@ -157,7 +157,7 @@
                     toCreatedTime = $("#toCreatedTime").val(),
                     platform = $("input[name='platform']").val();
 
-                var url = "/order/deliveryOrder/export.html?orderNo="+orderNo+"&referenceNo="+referenceNo+"&orderTypes="+orderTypes+"&orderStatus="+orderStatus+"&fromCreatedTime="+fromCreatedTime+"&toCreatedTime="+toCreatedTime+"&platform="+platform;
+                var url = "/waybill/export.html?orderNo="+orderNo+"&referenceNo="+referenceNo+"&orderTypes="+orderTypes+"&orderStatus="+orderStatus+"&fromCreatedTime="+fromCreatedTime+"&toCreatedTime="+toCreatedTime+"&platform="+platform;
                 window.location.href = url;
             });
 

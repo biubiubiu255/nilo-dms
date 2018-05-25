@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.SignReportDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="signDO" type="com.nilo.dms.dao.dataobject.SignReportDO">
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="referenceNo" column="reference_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="needPayAmount" column="need_pay_amount" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="alreadyPaid" column="already_paid" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <!--
+        <result property="handleBy" column="handled_by" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>-->
+
+        <result property="networkCode" column="network_code" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="networkCodeDesc" column="network_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="expressName" column="express_code" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
+
+
+        <result property="handleBy" column="rider" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleTime" column="handle_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="rider" column="rider" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="sName" column="sname" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="rName" column="rname" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="signer" column="sign_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+        <result property="contactNumber" column="contact_number" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="address" column="address" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="querySignReport" resultMap="signDO">
+        SELECT
+        a. STATUS,
+        a.order_no,
+        a.reference_no,
+        a.weight,
+        a.need_pay_amount,
+        a.already_paid,
+        b.signer AS sign_name,
+        b.handle_by,
+        b.handle_time,
+        b.remark,
+        b.network_code,
+        b.express_code,
+        c.`name` sname,
+        d.`name` rname,
+        d.contact_number,
+        d.address,
+        e. NAME rider,
+        f.name network_name
+        FROM
+        t_waybill a
+        INNER JOIN t_handle_sign b ON a.order_no = b.order_no
+        INNER JOIN t_waybill_sender c ON b.order_no = c.order_no
+        INNER JOIN t_waybill_receiver d ON c.order_no = d.order_no
+        LEFT JOIN t_sys_user_info e ON b.handle_by = e.id
+        INNER JOIN t_bas_network f ON f.id = b.network_code
+        WHERE a.merchant_id=#{merchantId}
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="fromHandledTime !=null ">
+            and b.handle_time >= #{fromHandledTime}
+        </if>
+        <if test="toHandledTime !=null ">
+            and  <![CDATA[ b.handle_time <= #{toHandledTime} ]]>
+        </if>
+        <if test="riderId !=null and riderId != '' ">
+            and  b.handle_by = #{riderId}
+        </if>
+        <if test="networkCode !=null ">
+            and  b.network_code = #{networkCode}
+        </if>
+        <if test="expressName !=null ">
+            and  b.express_code = #{expressName}
+        </if>
+
+
+        <!--<if test="status !=null and status.size() > 0 ">-->
+            <!--<foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">-->
+                <!--b.status=#{item}-->
+            <!--</foreach>-->
+        <!--</if>-->
+        order by a.created_time desc
+        limit #{offset} , #{limit}
+    </select>
+
+    <select id="queryCountBy" resultType="java.lang.Long">
+        select
+        COUNT(1)
+        from
+        t_waybill a
+        INNER JOIN t_handle_sign b ON a.order_no = b.order_no
+        INNER JOIN t_waybill_sender c ON b.order_no = c.order_no
+        INNER JOIN t_waybill_receiver d ON c.order_no = d.order_no
+        LEFT JOIN t_sys_user_info e ON b.handle_by = e.id
+        INNER JOIN t_bas_network f ON f.id = b.network_code
+        WHERE a.merchant_id=#{merchantId}
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="fromHandledTime !=null ">
+            and b.handle_time >= #{fromHandledTime}
+        </if>
+        <if test="toHandledTime !=null ">
+            and  <![CDATA[ b.handle_time <= #{toHandledTime} ]]>
+        </if>
+        <if test="riderId !=null and riderId != '' ">
+            and  b.handle_by = #{riderId}
+        </if>
+        <if test="networkCode !=null ">
+            and  b.network_code = #{networkCode}
+        </if>
+        <if test="expressName !=null ">
+            and  b.express_code = #{expressName}
+        </if>
+        <!--<if test="status !=null and status.size() > 0 ">-->
+            <!--<foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">-->
+                <!--b.status=#{item}-->
+            <!--</foreach>-->
+        <!--</if>-->
+    </select>
+</mapper>

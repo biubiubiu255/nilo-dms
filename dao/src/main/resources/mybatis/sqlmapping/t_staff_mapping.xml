@@ -7,8 +7,8 @@
     <resultMap id="staffDO" type="com.nilo.dms.dao.dataobject.StaffDO">
         <result property="id" column="id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="userId" column="user_id" javaType="java.lang.Long"
-                jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
         <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="companyId" column="company_id" javaType="java.lang.Long"
@@ -49,6 +49,9 @@
         <result property="address" column="address" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
 
+        <result property="outsource" column="outsource" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
         <result property="isRider" column="is_rider" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
         <result property="status" column="status" javaType="java.lang.Integer"
@@ -62,7 +65,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id ,user_id,staff_id,company_id,merchant_id,department_id,is_rider,real_name,nick_name,job,title,title_time,title_level,employ_time,resigned_time,regular_time,sex,birthday,id_card,phone,email,address,status,created_time , updated_time ,version
+        id ,outsource,user_id,staff_id,company_id,merchant_id,department_id,is_rider,real_name,nick_name,job,title,title_time,title_level,employ_time,resigned_time,regular_time,sex,birthday,id_card,phone,email,address,status,created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -70,9 +73,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_bas_staff
-        (user_id,staff_id,company_id,merchant_id,department_id,is_rider,real_name,nick_name,job,title,title_time,title_level,employ_time,resigned_time,regular_time,sex,birthday,id_card,phone,email,address,status,created_time , updated_time ,version)
+        (outsource,user_id,staff_id,company_id,merchant_id,department_id,is_rider,real_name,nick_name,job,title,title_time,title_level,employ_time,resigned_time,regular_time,sex,birthday,id_card,phone,email,address,status,created_time , updated_time ,version)
         VALUES
-        (#{userId},#{staffId},#{companyId},#{merchantId}, #{departmentId},#{isRider},#{realName},#{nickName},#{job},#{title},#{titleTime},#{titleLevel},#{employTime},#{resignedTime},#{regularTime},#{sex},#{birthday},#{idCard},#{phone},#{email},#{address},#{status}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{outsource},#{userId},#{staffId},#{companyId},#{merchantId}, #{departmentId},#{isRider},#{realName},#{nickName},#{job},#{title},#{titleTime},#{titleLevel},#{employTime},#{resignedTime},#{regularTime},#{sex},#{birthday},#{idCard},#{phone},#{email},#{address},#{status}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
     <!-- 动态更新语句 -->
     <update id="update" parameterType="com.nilo.dms.dao.dataobject.StaffDO" statementType="PREPARED">
@@ -92,6 +95,9 @@
             </if>
             <if test="isRider != null">
                 is_rider = #{isRider},
+            </if>
+            <if test="outsource != null and outsource != ''">
+                outsource = #{outsource},
             </if>
             <if test="title != null and title != ''">
                 title = #{title},
@@ -172,6 +178,9 @@
         SELECT
         t.user_id,staff_id,company_id,t.merchant_id,department_id,is_rider,real_name,nick_name,job,title,title_time,title_level,employ_time,resigned_time,regular_time,sex,birthday,id_card,t.phone,t.email,t.address,t.status,t.created_time , t.updated_time ,t.version
         FROM t_bas_staff t left join t_sys_user_login l on t.staff_id= l.user_name where company_id =#{companyId} and is_rider = 1 and t.status in (1,2) and l.status=1
+        <if test="outsource != null">
+            and outsource = #{outsource}
+        </if>
 
     </select>
 
@@ -182,6 +191,16 @@
 	    t_bas_staff s LEFT join t_sys_user_network n on s.user_id = n.user_id
         WHERE
 	    n.distribution_network_id = #{networkId}
+    </select>
+
+
+    <select id="findstaffByIDs" resultMap="staffDO" statementType="PREPARED" parameterType="java.util.ArrayList">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_bas_staff where user_id in
+        <foreach collection="arr" index="index" item="now" open="(" close=")" separator=",">
+            #{now}
+        </foreach>
     </select>
 
 

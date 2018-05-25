@@ -10,8 +10,8 @@ import com.nilo.dms.dao.DeliverReportDao;
 import com.nilo.dms.dao.dataobject.DeliverReportDO;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.service.order.DeliverReportService;
-import com.nilo.dms.service.order.model.DeliverOrderParameter;
-import com.nilo.dms.service.order.model.DeliverReport;
+import com.nilo.dms.dto.order.DeliverOrderParameter;
+import com.nilo.dms.dto.order.DeliverReport;
 import com.nilo.dms.service.system.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +62,7 @@ public class DeliverReportServiceImpl implements DeliverReportService {
         // 查询记录
         List<DeliverReportDO> queryList = seliverReportDao.queryDeliverReport(map);
 //        for(DeliverReportDO d:queryList){
-//            System.out.println(d.getHandledBy());
+//            System.out.println(d.getHandleBy());
 //        }
         Long count = seliverReportDao.queryCountBy(map);
         pagination.setTotalCount(count == null ? 0 : count);

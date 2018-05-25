@@ -119,7 +119,7 @@
                     <li><input type='text' required="required" placeholder="Weight" id="weight" property_name="packing_weight" set_attr="placeholder" class='input_value i18n-input' name='weight'/></li>
                     <li><input type='text' required="required" placeholder="Length" id="length" property_name="packing_length" set_attr="placeholder" class='input_value i18n-input' name='length'/></li>
                     <li><input type='text' required="required" placeholder="Width" id="width" property_name="packing_width" set_attr="placeholder" class='input_value i18n-input' name='width'/></li>
-                    <li><input type='text' required="required" placeholder="High" id="high" property_name="packing_high" set_attr="placeholder" class='input_value i18n-input' name='high'/></li>
+                    <li><input type='text' required="required" placeholder="High" id="height" property_name="packing_high" set_attr="placeholder" class='input_value i18n-input' name='height'/></li>
                     <%--<li><label>Scan Logistics No</label><div class="xq">scan</div></li>--%>
                     <li><input type='text' placeholder="Logistics No" required="required" maxlength='100' property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input' id="logisticsNo" name='logisticsNo'/><span class="scanner" id="scan" data-locale="all_scan">scan</span></li>
                 </ul>

@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt" %>
-<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<%@ taglib prefix="shiro" uri="/shiro.tag" %>
 <%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
 <%
     request.setAttribute("ctx", WebUtil.getContextPath());
@@ -27,5 +27,8 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="${ctx}/dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="${ctx}/dist/css/skins/all-skins.min.css">
+    <script src="${ctx}/public/js/jquery-2.2.3.min.js"></script>
+    <script src="${ctx}/public/js/iwens.js"></script>
+
 
 </head>

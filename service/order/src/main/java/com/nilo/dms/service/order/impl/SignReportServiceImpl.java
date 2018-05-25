@@ -1,19 +1,13 @@
 package com.nilo.dms.service.order.impl;
 
 import com.nilo.dms.common.Pagination;
-import com.nilo.dms.common.enums.TaskStatusEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DeliverReportDao;
 import com.nilo.dms.dao.SignReportDao;
-import com.nilo.dms.dao.dataobject.DeliverReportDO;
 import com.nilo.dms.dao.dataobject.SignReportDO;
-import com.nilo.dms.service.order.DeliverReportService;
 import com.nilo.dms.service.order.SignReportService;
-import com.nilo.dms.service.order.model.DeliverOrderParameter;
-import com.nilo.dms.service.order.model.DeliverReport;
-import com.nilo.dms.service.order.model.SignOrderParameter;
-import com.nilo.dms.service.order.model.SignReport;
+import com.nilo.dms.dto.order.SignOrderParameter;
+import com.nilo.dms.dto.order.SignReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,34 +31,12 @@ public class SignReportServiceImpl implements SignReportService {
     @Override
     public List<SignReport> querySignReport(SignOrderParameter parameter, Pagination pagination) {
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("orderNo", parameter.getOrderNo());
-        map.put("nextNetwork", parameter.getNextNetwork());
-        map.put("status", parameter.getStatus());
-        map.put("carrierName", parameter.getCarrierName());
-
-        if (StringUtil.isEmpty(parameter.getFromHandledTime()) || StringUtil.isEmpty(parameter.getToHandledTime())) {
-            if (StringUtil.isEmpty(parameter.getFromHandledTime())) {
-                parameter.setFromHandledTime(parameter.getToHandledTime());
-            } else {
-                parameter.setToHandledTime(parameter.getFromHandledTime());
-            }
-        }
-        if (StringUtil.isNotEmpty(parameter.getFromHandledTime())) {
-            Long fromTime = DateUtil.parse(parameter.getFromHandledTime(), "yyyy-MM-dd");
-            map.put("fromHandledTime", fromTime);
-        }
-        if (StringUtil.isNotEmpty(parameter.getToHandledTime())) {
-            Long toTime = DateUtil.parse(parameter.getToHandledTime(), "yyyy-MM-dd") + 24 * 60 * 60 - 1;
-            map.put("toHandledTime", toTime);
-        }
-
-        map.put("offset", pagination.getOffset());
-        map.put("limit", pagination.getLimit());
+        parameter.setOffset(pagination.getOffset());
+        parameter.setLimit(pagination.getLimit());
 
         // 查询记录
-        List<SignReportDO> queryList = signReportDao.querySignReport(map);
-        Long count = signReportDao.queryCountBy(map);
+        List<SignReportDO> queryList = signReportDao.querySignReport(parameter);
+        Long count = signReportDao.queryCountBy(parameter);
         pagination.setTotalCount(count == null ? 0 : count);
         return batchQuery(queryList, Long.parseLong(parameter.getMerchantId()));
     }
@@ -97,11 +69,15 @@ public class SignReportServiceImpl implements SignReportService {
         signReport.setRemark(s.getRemark());
         signReport.setsName(s.getsName());
         signReport.setrName(s.getrName());
-        signReport.setHandledTime(s.getHandledTime());
+        signReport.setHandleTime(s.getHandleTime());
         signReport.setNeedPayAmount(s.getNeedPayAmount());
         signReport.setAlreadyPaid(s.getAlreadyPaid());
-        signReport.setHandledBy(s.getHandledBy());
-
+        signReport.setHandleBy(s.getHandleBy());
+        signReport.setSigner(s.getSigner());
+        signReport.setStatus(s.getStatus());
+        signReport.setRider(s.getRider());
+        signReport.setNetworkCode(s.getNetworkCode());
+        signReport.setNetworkCodeDesc(s.getNetworkCodeDesc());
         return signReport;
     }
 }

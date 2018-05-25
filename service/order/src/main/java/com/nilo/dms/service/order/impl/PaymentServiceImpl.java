@@ -3,25 +3,23 @@ package com.nilo.dms.service.order.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.apache.shiro.SecurityUtils;
+import com.nilo.dms.dao.dataobject.WaybillDO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.IdWorker;
-import com.nilo.dms.dao.DeliveryOrderDao;
+import com.nilo.dms.dao.WaybillDao;
 import com.nilo.dms.dao.WaybillPaymentOrderDao;
 import com.nilo.dms.dao.WaybillPaymentOrderWaybillDao;
 import com.nilo.dms.dao.WaybillPaymentRecordDao;
 import com.nilo.dms.dao.WaybillTaskDao;
-import com.nilo.dms.dao.dataobject.DeliveryOrderDO;
 import com.nilo.dms.dao.dataobject.WaybillTaskDo;
 import com.nilo.dms.service.order.PaymentService;
-import com.nilo.dms.service.order.model.WaybillPaymentOrder;
-import com.nilo.dms.service.order.model.WaybillPaymentOrderWaybill;
-import com.nilo.dms.service.order.model.WaybillPaymentRecord;
+import com.nilo.dms.dto.order.WaybillPaymentOrder;
+import com.nilo.dms.dto.order.WaybillPaymentOrderWaybill;
+import com.nilo.dms.dto.order.WaybillPaymentRecord;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -38,7 +36,7 @@ public class PaymentServiceImpl implements PaymentService {
 	private WaybillPaymentRecordDao waybillPaymentRecordDao;
 
 	@Autowired
-	private DeliveryOrderDao deliveryOrderDao;
+	private WaybillDao waybillDao;
 
 	@Autowired
 	private WaybillPaymentOrderDao waybillPaymentOrderDao;
@@ -79,7 +77,7 @@ public class PaymentServiceImpl implements PaymentService {
 		}
 
 		/*
-		 * DeliveryOrderDO orderDO = new DeliveryOrderDO();
+		 * WaybillDO orderDO = new WaybillDO();
 		 * 
 		 * orderDO.setOrderNo(waybillPaymentRecord.getPaymentOrderId());
 		 * //orderDO.setAlreadyPaid(amount);
@@ -115,10 +113,10 @@ public class PaymentServiceImpl implements PaymentService {
 		if(null==orderNos||orderNos.size()==0) {
 			return;
 		}
-		List<DeliveryOrderDO> deliveryOrderDOList = deliveryOrderDao.selectByOrderNos(orderNos);
-		for (DeliveryOrderDO deliveryOrderDO : deliveryOrderDOList) {
-			deliveryOrderDO.setAlreadyPaid(deliveryOrderDO.getNeedPayAmount());
-			deliveryOrderDao.update(deliveryOrderDO);
+		List<WaybillDO> waybillDOList = waybillDao.selectByOrderNos(orderNos);
+		for (WaybillDO waybillDO : waybillDOList) {
+			waybillDO.setAlreadyPaid(waybillDO.getNeedPayAmount());
+			waybillDao.update(waybillDO);
 		}
 	}
 	
@@ -131,10 +129,10 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public WaybillPaymentOrder savePaymentOrderByWaybill(Long merchantId ,Integer networks,String createdBy, List<String> waybillNos) {
 		
-		List<DeliveryOrderDO> deliveryOrders = deliveryOrderDao.queryByOrderNos(merchantId, waybillNos);
+		List<WaybillDO> deliveryOrders = waybillDao.queryByOrderNos(merchantId, waybillNos);
 		double totalNeedPayAmount = 0;
-		for (DeliveryOrderDO deliveryOrderDO : deliveryOrders) {
-			totalNeedPayAmount = totalNeedPayAmount + deliveryOrderDO.getNeedPayAmount();
+		for (WaybillDO waybillDO : deliveryOrders) {
+			totalNeedPayAmount = totalNeedPayAmount + waybillDO.getNeedPayAmount();
 		}
 		totalNeedPayAmount = totalNeedPayAmount*100;
 		

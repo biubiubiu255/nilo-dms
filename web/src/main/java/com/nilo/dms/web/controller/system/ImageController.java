@@ -1,19 +1,14 @@
 package com.nilo.dms.web.controller.system;
 
 
-import com.nilo.dms.common.enums.ImageStatusEnum;
-import com.nilo.dms.common.enums.ImageTypeEnum;
-import com.nilo.dms.common.utils.FileUtil;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.common.utils.ImageCut;
 import com.nilo.dms.dao.ImageDao;
 import com.nilo.dms.dao.dataobject.ImageDO;
-import com.nilo.dms.common.Principal;
 import com.nilo.dms.service.FileService;
+import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.web.controller.BaseController;
-import org.apache.shiro.SecurityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -47,7 +42,7 @@ public class ImageController extends BaseController {
 
     @RequestMapping(value = "/show.html")
     public String getList(Model model, String orderNo, String imageType) {
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String merchantId = me.getMerchantId();
         List<ImageDO> list = imageDao.findBy(Long.parseLong(merchantId), orderNo, imageType);
@@ -62,7 +57,7 @@ public class ImageController extends BaseController {
     @RequestMapping(value = "/upload/sign/{orderNo}.html")
     public String sign(MultipartFile file, @PathVariable String orderNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String fileName = "";
         try {
@@ -79,7 +74,7 @@ public class ImageController extends BaseController {
     @RequestMapping(value = "/upload/problem/{orderNo}.html")
     public String problem(MultipartFile file, @PathVariable String orderNo) {
 
-        Principal me = (Principal) SecurityUtils.getSubject().getPrincipal();
+        Principal me = SessionLocal.getPrincipal();
         //获取merchantId
         String fileName = "";
         try {

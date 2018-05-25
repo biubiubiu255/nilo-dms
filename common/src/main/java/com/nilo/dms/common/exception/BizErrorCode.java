@@ -40,8 +40,8 @@ public enum BizErrorCode implements ErrorCode {
     REQUEST_ID_EMPTY("request id is empty", "100026"),
     SERVICE_ID_EMPTY("service id is empty", "100027"),
 
-    ORDER_NOT_EXIST("DELIVERY order {0} is not exist.", "100028"),
-    ORDER_STATUS_LIMITED("DELIVERY order {0} status is limited", "100029"),
+    ORDER_NOT_EXIST("Waybill Number {0} is not exist.", "100028"),
+    ORDER_STATUS_LIMITED("Waybill Number {0} status is limited", "100029"),
     TASK_NOT_EXIST("Task {0}  not exist.", "100030"),
     TASK_NOT_ALLOW("Task {0}  not allow.", "100031"),
 
@@ -91,14 +91,32 @@ public enum BizErrorCode implements ErrorCode {
     ARRIVE_EMPTY("Arrive Scan is empty.", "100064"),
     ALREADY_SCAN("{0}  already scan", "100065"),
     NEW_PASSWORD_NOT_EQUAL("New Password not equal.", "100066"),
-    PACKAGE_NOT_ALLOW("Delivery No {0} can not package.", "100067"),
+    PACKAGE_ALREADY_PACKAGE("Delivery No {0} already in package.", "100067"),
     UNPACK_NOT_ALLOW("Delivery No {0} can not unpack.", "100068"),
     DELIVERY_NO_EXIST("Delivery No {0}  exist.", "100069"),
     PACKAGE_EMPTY("Package is empty", "100070"),
     WEIGHT_MORE_THAN_0("Weight needs more than 0 ", "100071"),
 
     ORDER_NO_ARRIVE("The order has not arrived", "100071"),  //订单未到达
-    STAFF_NOT_EXIST("Staff not exist", "100072"),;
+    STAFF_NOT_EXIST("Staff not exist", "100072"),
+
+    HandleNO_NOT_EXIST("The loading list does not exist", "100073"),
+    //STAFF_NOT_EXIST("Staff not exist", "100074"),
+
+    PASSWORD_ERROR("Password Error.", "100073"),
+    SIGN_PHOTO_EMPTY("Sign Photo Empty.", "100074"),
+
+    NOT_STATION_INFO("No site information found.", "100075"),
+    THIRD_EXPRESS_EMPTY("Third Express Empty.", "100076"),
+    THIRD_DRIVER_EMPTY("Third Driver Empty.", "100077"),
+    WAYBILL_EMPTY("Waybill Empty.", "100078"),
+
+    REFUSE_ALREADY_EXISTS("The refuse package already exists", "100079"),
+
+    NOT_FOUND_NEXTWORK("Do not found nextWork, please contact administrator.", "100080"),
+    NOT_BECAME_DELAY("The order does not exist or has been signed, and no further delay is allowed", "100081"),
+
+    ;
 
     private final String description;
     private final String code;

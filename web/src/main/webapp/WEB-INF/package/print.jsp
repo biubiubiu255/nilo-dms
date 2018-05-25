@@ -1,15 +1,16 @@
+<%@ page import="com.nilo.dms.common.utils.DateUtil" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html>
+<%
+    request.setAttribute("nowDate", DateUtil.formatCurrent("yyyy-MM-dd HH:mm:ss"));
+%>
 <%@ include file="../common/header.jsp" %>
-
 <script type="text/javascript">window.print();</script>
 <style>
-    * {
-        font-size: large;
+    *{
+        font-size: 14px;
     }
-
     html {
         -webkit-text-size-adjust: none;
     }
@@ -17,78 +18,81 @@
     td {
         padding: 5px;
     }
-
-    .col-center-block {
-        float: none;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
     tr {
         height: 200%;
     }
-
+    table, tr, td, th{
+        border: 2px solid black !important;
+        border-collapse:collapse;
+    }
 </style>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="/js/bootstrap.min.js"></script>
+<script src="${ctx}/bootstrap/js/bootstrap.min.js"></script>
 <div class="container">
     <div class="row">
         <div class="center-block" style="width:400px;">
-            <h4>Package List</h4>
+
+            <h4 style="font-weight: bolder; font-size: larger;text-align: center;">Shipment List</h4>
+
+            <h5 style="position:absolute;right: 10px;top: 20px;"> Date ${nowDate}</h5>
         </div>
+
         <br><br>
     </div>
 
 
     <div class="row">
-        <div class="col-xs-4">
-            Package NO: ${packageInfo.orderNo}
+        <div class="col-xs-3">
+            Order NO: ${packageInfo.orderNo}
         </div>
         <div class="col-xs-3">
-            NextStation: ${packageInfo.nextNetworkDesc}
-        </div>
-        <div class="col-xs-3">
-            Date: <lp:formatTime time="${packageInfo.createdTime }"
-                                 pattern="yyyy-MM-dd"/>
-        </div>
-        <div class="col-xs-2">
-            Weight: ${packageInfo.weight}
+            Operator :
+            ${sessionScope.userName}
         </div>
         <br><br>
     </div>
-
     <br><br>
-    <div class="layui-row">
-        <div class="layui-col-md12 layui-col-lg12">
+    <div class="row">
+        <div class="col-xs-12">
             <table class="table table-bordered">
                 <thead>
                 <tr>
+                    <th>No</th>
                     <th>Order No</th>
-                    <th>Order Type</th>
-                    <th>Price</th>
-                    <th>Weight</th>
+                    <th>Customer Name</th>
+                    <th>Contact No</th>
+                    <th>Address</th>
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${list}" var="item">
-                    <tr>
-                        <td>${item.orderNo}</td>
-                        <td>${item.orderType}</td>
-                        <td>${item.totalPrice}</td>
-                        <td>${item.weight}</td>
-                    </tr>
-                </c:forEach>
+                	<c:forEach items="${list}" var="item" varStatus="status">
+	                   <tr>
+                            <td>${status.index + 1}</td>
+	                        <td>${item.orderNo}</td>
+	                        <td>${item.receiverInfo.receiverName}</td>
+	                        <td>${item.receiverInfo.receiverPhone}</td>
+	                        <td>${item.receiverInfo.receiverAddress}</td>
+                       </tr>
+                   </c:forEach> 
                 </tbody>
             </table>
         </div>
         <br><br>
 
     </div>
+    <div class="row">
+        <div class="col-xs-6">
+            Total Order :${fn:length(loading.detailsList)}
+        </div>
 
-    <br><br>
-
-    <br><br>
-</div>
-
+        <br><br>
+    </div>
+    
+<br><br>
+        <div class="col-xs-12" style="float: right" >
+            Rider's Name:____________________________
+        </div>
+        <br><br>
+    </div>
+    
 </html>

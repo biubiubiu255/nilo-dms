@@ -1,5 +1,7 @@
 package com.nilo.dms.dao.dataobject;
 
+import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
+
 public class SignReportDO {
     private Long merchantId;
     private String orderNo;
@@ -7,13 +9,32 @@ public class SignReportDO {
     private Double weight;
     private Double needPayAmount;
     private Double alreadyPaid;
-    private String handledBy;
-    private Long handledTime;
-    private String sName;
-    private String rName;
+    private Integer networkCode;
+    private String networkCodeDesc;
+    private String expressName;
+    private String handleBy;
+    private String rider;
+    private Long handleTime;
+    private String sName;    //发件人
+    private String rName;    //收件人
+    private String signer; //签收人
     private String contactNumber;
     private String address;
     private String remark;
+    private Integer status;
+
+    public String getStatusDesc() {
+        DeliveryOrderStatusEnum statusEnum = DeliveryOrderStatusEnum.getEnum(this.status);
+        return statusEnum == null ? "" : statusEnum.getDesc();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public Long getMerchantId() {
         return merchantId;
@@ -63,20 +84,20 @@ public class SignReportDO {
         this.alreadyPaid = alreadyPaid;
     }
 
-    public String getHandledBy() {
-        return handledBy;
+    public String getHandleBy() {
+        return handleBy;
     }
 
-    public void setHandledBy(String handledBy) {
-        this.handledBy = handledBy;
+    public void setHandleBy(String handleBy) {
+        this.handleBy = handleBy;
     }
 
-    public Long getHandledTime() {
-        return handledTime;
+    public Long getHandleTime() {
+        return handleTime;
     }
 
-    public void setHandledTime(Long handledTime) {
-        this.handledTime = handledTime;
+    public void setHandleTime(Long handleTime) {
+        this.handleTime = handleTime;
     }
 
     public String getsName() {
@@ -93,6 +114,14 @@ public class SignReportDO {
 
     public void setrName(String rName) {
         this.rName = rName;
+    }
+
+    public String getSigner() {
+        return signer;
+    }
+
+    public void setSigner(String signer) {
+        this.signer = signer;
     }
 
     public String getContactNumber() {
@@ -119,6 +148,39 @@ public class SignReportDO {
         this.remark = remark;
     }
 
+    public String getRider() {
+        return rider;
+    }
+
+    public void setRider(String rider) {
+        this.rider = rider;
+    }
+
+    public Integer getNetworkCode() {
+        return networkCode;
+    }
+
+    public void setNetworkCode(Integer networkCode) {
+        this.networkCode = networkCode;
+    }
+
+    public String getNetworkCodeDesc() {
+
+        return networkCodeDesc;
+    }
+
+    public void setNetworkCodeDesc(String networkCodeDesc) {
+        this.networkCodeDesc = networkCodeDesc;
+    }
+
+    public String getExpressName() {
+        return expressName;
+    }
+
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
+    }
+
     @Override
     public String toString() {
         return "SignReportDO{" +
@@ -128,12 +190,18 @@ public class SignReportDO {
                 ", weight=" + weight +
                 ", needPayAmount=" + needPayAmount +
                 ", alreadyPaid=" + alreadyPaid +
-                ", handledBy='" + handledBy + '\'' +
-                ", handledTime=" + handledTime +
+                ", networkCode=" + networkCode +
+                ", networkCodeDesc='" + networkCodeDesc + '\'' +
+                ", handleBy='" + handleBy + '\'' +
+                ", rider='" + rider + '\'' +
+                ", handleTime=" + handleTime +
                 ", sName='" + sName + '\'' +
                 ", rName='" + rName + '\'' +
+                ", signer='" + signer + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +
                 ", address='" + address + '\'' +
+                ", remark='" + remark + '\'' +
+                ", status=" + status +
                 '}';
     }
 }

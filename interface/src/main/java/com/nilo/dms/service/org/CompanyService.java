@@ -1,6 +1,7 @@
 package com.nilo.dms.service.org;
 
-import com.nilo.dms.service.org.model.Company;
+
+import com.nilo.dms.dto.org.Company;
 
 /**
  * Created by ronny on 2017/8/30.
