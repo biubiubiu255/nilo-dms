@@ -8,6 +8,8 @@ public class SendReportDO extends BaseDo<Long> {
     private String referenceNo;
     private String orderNo;
     private String orderType;
+    private String parentNo;
+
     private Double weight;
     private Integer status;
     private String remark;
@@ -153,6 +155,14 @@ public class SendReportDO extends BaseDo<Long> {
 
     public void setExpressName(String expressName) {
         this.expressName = expressName;
+    }
+
+    public String getParentNo() {
+        return parentNo;
+    }
+
+    public void setParentNo(String parentNo) {
+        this.parentNo = parentNo;
     }
 
     @Override

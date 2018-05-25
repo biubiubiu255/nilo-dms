@@ -106,7 +106,7 @@
 						return;
 					}
 					this.data = {
-						logisticsNo : $("#logisticsNo").val(),
+						logisticsNo : $.trim($("#logisticsNo").val()),
 						signer : $("#signer").val(),
 						remark : $("#remark").val()
 					};

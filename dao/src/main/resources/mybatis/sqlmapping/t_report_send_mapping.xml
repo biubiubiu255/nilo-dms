@@ -15,10 +15,13 @@
                 jdbcType="VARCHAR"/>
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
+        <result property="parentNo" column="parent_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
         <result property="deliveryType" column="delivery_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="expressName" column="express_name" javaType="java.lang.String"
+        <result property="expressName" column="third_express_code" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+
 
         <result property="receiveName" column="receive_name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
@@ -67,74 +70,105 @@
     <select id="querySendStationReport" resultMap="sendDO">
 
         SELECT
-        a.order_no,
+        *
+        FROM
+        (
+        (
+        SELECT
+        f.order_no,
+        f.weight,
+        f.created_time,
+        b.handle_no,
+        b.driver,
+        b.next_station,
+        b.third_express_code,
+        b.handle_name,
+        f.order_type,
+        f.reference_no,
+        f. STATUS,
+        d.contact_number AS phone,
+        d.address,
+        d. NAME AS receive_name,
+        f.parent_no
+        FROM
+        t_handle_third_express_details a
+        INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
+        INNER JOIN t_waybill c ON a.order_no = c.order_no
+        INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
+        LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
+        WHERE
+        a.merchant_id = #{merchantId}
+        AND b. STATUS = 1
+        AND b.type = 'package'
+
+        ORDER BY
+        a.created_time DESC
+        )
+        UNION ALL
+        (
+        SELECT
+        c.order_no,
         a.weight,
         a.created_time,
         b.handle_no,
         b.driver,
         b.next_station,
+        b.third_express_code,
         b.handle_name,
         c.order_type,
         c.reference_no,
-        c.status,
+        c. STATUS,
         d.contact_number AS phone,
         d.address,
-        d.name AS receive_name
+        d. NAME AS receive_name,
+        c.parent_no
+        FROM
+        t_handle_third_express_details a
+        INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
+        INNER JOIN t_waybill c ON a.order_no = c.order_no
+        INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
+        WHERE
+        a.merchant_id = #{merchantId}
+        AND b. STATUS = 1
+        AND c.is_package = "1"
+        AND b.type = 'package'
+        ORDER BY
+        a.created_time DESC
+        )
+        ) AS d
 
-        FROM t_handle_third_express_details a
-
-        INNER JOIN t_handle_third_express b
-
-        ON a.third_handle_no = b.handle_no
-
-        INNER JOIN t_waybill c
-
-        ON a.order_no = c.order_no
-
-        INNER JOIN t_waybill_receiver d
-
-        ON a.order_no = d.order_no
-
-        LEFT JOIN t_waybill f
-
-        ON a.order_no = f.parent_no
-
-        WHERE a.merchant_id=1 and b.status = 1 and  b.type='station'
-
+        WHERE 1
 
         <if test="orderNo !=null and orderNo !='' ">
-            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+            and d.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>
         <if test="driver !=null and driver !='' ">
-            and b.driver = #{driver}
+            and d.driver = #{driver}
         </if>
         <if test="nextStation !=null and nextStation !='' ">
-            and b.next_station = #{nextStation}
+            and d.next_station = #{nextStation}
         </if>
         <if test="nextStationCode !=null and nextStationCode !='' ">
-            and b.network_code = #{nextStationCode}
+            and d.network_code = #{nextStationCode}
         </if>
 
         <if test="handleNo !=null and handleNo !='' ">
-            and b.handle_no = #{handleNo}
+            and d.handle_no = #{handleNo}
         </if>
         <if test="orderType !=null and orderType !='' ">
-            and c.order_type = #{orderType}
-        </if>
-        <if test="deliveryType !=null and deliveryType !='' ">
-            and b.type = #{deliveryType}
+            and d.order_type = #{orderType}
         </if>
         <if test="fromCreatedTime !=null ">
-            and a.created_time >= #{fromCreatedTime}
+            and d.created_time >= #{fromCreatedTime}
         </if>
         <if test="toCreatedTime !=null ">
-            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+            and  <![CDATA[ d.created_time <= #{toCreatedTime} ]]>
         </if>
         <if test="status != null">
-            and c.status = #{status}
+            and d.status = #{status}
         </if>
 
-        order by a.created_time desc
+        order by d.created_time desc
 
         <if test="limit !=null ">
             limit
@@ -151,53 +185,98 @@
 
         SELECT
         count(1)
+        FROM
+        (
+        (
+        SELECT
+        f.order_no,
+        a.weight,
+        a.created_time,
+        b.handle_no,
+        b.driver,
+        b.next_station,
+        b.handle_name,
+        c.order_type,
+        c.reference_no,
+        c. STATUS,
+        d.contact_number AS phone,
+        d.address,
+        d. NAME AS receive_name,
+        f.parent_no
+        FROM
+        t_handle_third_express_details a
+        INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
+        INNER JOIN t_waybill c ON a.order_no = c.order_no
+        INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
+        LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
+        WHERE
+        a.merchant_id = #{merchantId}
+        AND b. STATUS = 1
+        AND b.type = 'package'
+        ORDER BY
+        a.created_time DESC
+        )
+        UNION ALL
+        (
+        SELECT
+        c.order_no,
+        a.weight,
+        a.created_time,
+        b.handle_no,
+        b.driver,
+        b.next_station,
+        b.handle_name,
+        c.order_type,
+        c.reference_no,
+        c. STATUS,
+        d.contact_number AS phone,
+        d.address,
+        d. NAME AS receive_name,
+        c.parent_no
+        FROM
+        t_handle_third_express_details a
+        INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
+        INNER JOIN t_waybill c ON a.order_no = c.order_no
+        INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
+        WHERE
+        a.merchant_id = #{merchantId}
+        AND b. STATUS = 1
+        AND c.is_package = "1"
+        AND b.type = 'package'
+        ORDER BY
+        a.created_time DESC
+        )
+        ) AS d
 
-        FROM t_handle_third_express_details a
-
-        INNER JOIN t_handle_third_express b
-
-        ON a.third_handle_no = b.handle_no
-
-        INNER JOIN t_waybill c
-
-        ON a.order_no = c.order_no
-
-        INNER JOIN t_waybill_receiver d
-
-        ON a.order_no = d.order_no
-
-        WHERE a.merchant_id=#{merchantId} and b.status = 1
+        WHERE 1
 
         <if test="orderNo !=null and orderNo !='' ">
-            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+            and d.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>
         <if test="driver !=null and driver !='' ">
-            and b.driver = #{driver}
+            and d.driver = #{driver}
         </if>
         <if test="nextStation !=null and nextStation !='' ">
-            and b.next_station = #{nextStation}
+            and d.next_station = #{nextStation}
         </if>
         <if test="nextStationCode !=null and nextStationCode !='' ">
-            and b.network_code = #{nextStationCode}
+            and d.network_code = #{nextStationCode}
         </if>
 
         <if test="handleNo !=null and handleNo !='' ">
             and b.handle_no = #{handleNo}
         </if>
         <if test="orderType !=null and orderType !='' ">
-            and c.order_type = #{orderType}
-        </if>
-        <if test="deliveryType !=null and deliveryType !='' ">
-            and b.type = #{deliveryType}
+            and d.order_type = #{orderType}
         </if>
         <if test="fromCreatedTime !=null ">
-            and a.created_time >= #{fromCreatedTime}
+            and d.created_time >= #{fromCreatedTime}
         </if>
         <if test="toCreatedTime !=null ">
-            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+            and  <![CDATA[ d.created_time <= #{toCreatedTime} ]]>
         </if>
         <if test="status != null">
-            and c.status = #{status}
+            and d.status = #{status}
         </if>
 
     </select>
@@ -240,7 +319,7 @@
 
         ON b.third_express_code = e.express_code
 
-        WHERE a.merchant_id=1 and b.status = 1 and b.type='thirdExpress'
+        WHERE a.merchant_id=1 and b.status = 1 and b.type='waybill'
 
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
@@ -308,7 +387,7 @@
 
         ON b.third_express_code = e.express_code
 
-        WHERE a.merchant_id=#{merchantId} and b.status = 1
+        WHERE a.merchant_id=1 and b.status = 1 and b.type='waybill'
 
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')

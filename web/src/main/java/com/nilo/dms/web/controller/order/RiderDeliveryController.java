@@ -16,6 +16,7 @@ import com.nilo.dms.dto.org.Staff;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.RiderDeliveryService;
+import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.system.SystemConfig;
 import com.nilo.dms.web.controller.BaseController;
@@ -46,6 +47,10 @@ public class RiderDeliveryController extends BaseController {
     private RiderDeliveryService riderDeliveryService;
     @Autowired
     private WaybillService waybillService;
+    
+    @Autowired
+	private SendThirdService sendThirdService;
+    
     @Autowired
     private WaybillDao waybillDao;
 
@@ -175,7 +180,16 @@ public class RiderDeliveryController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/updateStatus.html", method = RequestMethod.POST)
     public String updateStatus(String handleNo, Integer status) {
-        handleRiderDao.upBigStatus(handleNo, status);
+    	
+       
+        return toJsonTrueMsg();
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/ship.html", method = RequestMethod.POST)
+    public String ship(String handleNo) {
+    	riderDeliveryService.ship(handleNo);
+    	handleRiderDao.upBigStatus(handleNo, 1);
         return toJsonTrueMsg();
     }
 
@@ -194,11 +208,13 @@ public class RiderDeliveryController extends BaseController {
         List<RiderDelivery> templist = riderDeliveryService.queryRiderDelivery(me.getMerchantId(), riderDelivery, page);
         riderDelivery = templist.get(0);
 
+        List<StaffDO> riderList = getRiderList(null);
+
         List<OutsourceDO> outsourceList = outsourceDao.findAll(me.getMerchantId());
         model.addAttribute("outsourceList", outsourceList);
 
         model.addAttribute("list", res);
-        model.addAttribute("riderList", getRiderList(""));
+        model.addAttribute("riderList", riderList);
         model.addAttribute("riderDelivery", riderDelivery);
         return "waybill/rider_delivery/edit";
     }
