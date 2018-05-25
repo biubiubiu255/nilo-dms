@@ -86,7 +86,7 @@
         <if test="ob.handleNo != null and ob.handleNo != '' ">
             and handle_no = #{ob.handleNo}
         </if>
-        <if test="ob.rider != null">
+        <if test="ob.rider != null and ob.rider != ''">
             and rider = #{ob.rider}
         </if>
         order by created_time desc
@@ -107,6 +107,9 @@
         </if>
         <if test="ob.handleNo != null and ob.handleNo != '' ">
             and handle_no = #{ob.handleNo}
+        </if>
+        <if test="ob.rider != null and ob.rider != ''">
+            and rider = #{ob.rider}
         </if>
     </select>
 
