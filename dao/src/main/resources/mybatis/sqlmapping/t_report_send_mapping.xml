@@ -77,15 +77,15 @@
         (
         SELECT
         f.order_no,
-        a.weight,
-        a.created_time,
+        f.weight,
+        f.created_time,
         b.handle_no,
         b.driver,
         b.next_station,
         b.handle_name,
-        c.order_type,
-        c.reference_no,
-        c. STATUS,
+        f.order_type,
+        f.reference_no,
+        f. STATUS,
         d.contact_number AS phone,
         d.address,
         d. NAME AS receive_name,
@@ -95,11 +95,12 @@
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT JOIN t_waybill f ON a.order_no = f.parent_no
+        LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
         AND b.type = 'package'
+
         ORDER BY
         a.created_time DESC
         )
@@ -134,6 +135,8 @@
         a.created_time DESC
         )
         ) AS d
+
+        WHERE 1
 
         <if test="orderNo !=null and orderNo !='' ">
             and d.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
@@ -204,7 +207,7 @@
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT JOIN t_waybill f ON a.order_no = f.parent_no
+        LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
@@ -243,6 +246,8 @@
         a.created_time DESC
         )
         ) AS d
+
+        WHERE 1
 
         <if test="orderNo !=null and orderNo !='' ">
             and d.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
