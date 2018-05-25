@@ -93,14 +93,14 @@
                     detailsPackage(orderNo);
                 }
                 if (obj.event === 'print') {
-                    if(data.status!='DELIVERY'){
+                    if(data.status!='DELIVERY' && data.status!='ARRIVED'){
                         layer.msg("The package is not finish", {icon: 2, time: 2000});
                         return;
                     }
                     printPackage(orderNo);
                 }
                 if (obj.event === 'print_delivery') {
-                    if(data.status!='DELIVERY'){
+                    if(data.status!='DELIVERY' && data.status!='ARRIVED'){
                         layer.msg("The package is not finish", {icon: 2, time: 2000});
                         return;
                     }
