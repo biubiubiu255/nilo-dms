@@ -286,7 +286,7 @@ public class PdaController extends BaseController {
 				.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
 		riderDelivery.setRider(rider);
 		riderDelivery.setHandleBy(Long.valueOf(me.getUserId()));
-		riderDelivery.setStatus(1);
+		riderDelivery.setStatus(0);
 		riderDeliveryService.addRiderPackAndDetail(Long.valueOf(merchantId), riderDelivery, scaned_codes);
 		if (riderDelivery.getStatus().equals(HandleRiderStatusEnum.SHIP.getCode())) {
 			riderDeliveryService.ship(riderDelivery.getHandleNo());
@@ -347,7 +347,7 @@ public class PdaController extends BaseController {
 		head.setThirdExpressCode(carrier);
 		head.setHandleBy(Long.valueOf(me.getUserId()));
 		head.setDriver(sendDriver);
-		head.setStatus(1);
+		head.setStatus(0);
 		head.setType("waybill");
 		head.setHandleName(me.getUserName());
 		sendThirdService.insertBigAndSmall(Long.parseLong(merchantId), head, scaned_codes);
@@ -434,30 +434,77 @@ public class PdaController extends BaseController {
 		}
 		return toJsonTrueMsg();
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getPackages.html")
+	public String getPackages(String netWork) {
+
+		
+		// 获取merchantId
+		List<String> thirdDriver = waybillDao.findCreatePackageByNetWork(netWork);
+		List<SendScanController.Driver> list = new ArrayList<>();
+		for (String d : thirdDriver) {
+			SendScanController.Driver driver = new SendScanController.Driver();
+			driver.setCode(d);
+			driver.setName(d);
+			list.add(driver);
+		}
+		if(thirdDriver==null||thirdDriver.size()==0) {
+			SendScanController.Driver driver = new SendScanController.Driver();
+			driver.setCode(" ");
+			driver.setName(" ");
+			list.add(driver);
+		}
+		return toJsonTrueData(list);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/createPackages.html")
+	public String createPackages(String netWork) {
+		Principal me = SessionLocal.getPrincipal();
+		try {
+			PackageRequest packageRequest = new PackageRequest();
+			packageRequest.setOrderNos(new ArrayList<String> ());
+			packageRequest.setMerchantId(me.getMerchantId());
+			packageRequest.setOptBy(me.getUserId());
+			packageRequest.setWeight(0d);
+			packageRequest.setLength(0d);
+			packageRequest.setWidth(0d);
+			packageRequest.setHigh(0d);
+			packageRequest.setOptBy(me.getUserId());
+			packageRequest.setNextNetworkId(Integer.parseInt(netWork) );
+			packageRequest.setStatus("0");
+			waybillService.addPackage(packageRequest);
+		} catch (Exception e) {
+			return toJsonErrorMsg(e.getMessage());
+		}
+		return toJsonTrueMsg();
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/addPackage.html")
-	public String addLoading(String waybillnosBill, Double weight, Double length, Double width, Double height,
-			Integer nextNetworkId) {
+	public String addLoading(String waybillnosBill,String packageNo, Double weight, double length, double width, double height,
+			Integer nextNetworkId,String status) {
 
 		Principal me = SessionLocal.getPrincipal();
 		// 获取merchantId
 		String merchantId = me.getMerchantId();
-
-		List<String> orderNos = Arrays.asList(waybillnosBill.split(","));
-		// 验证
-		for (String waybillNo : orderNos) {
-			Waybill order = null;
-			try {
-				order = waybillService.queryByOrderNo(merchantId, waybillNo);
-				if (order == null)
-					throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, waybillNo);
-			} catch (Exception e) {
-				log.error("loadingScan failed. orderNo:{}", waybillNo, e);
-				return toJsonErrorMsg(e.getMessage());
+		List<String> orderNos = new ArrayList<>();
+		if(waybillnosBill!=null&&!waybillnosBill.equals("")) {
+			orderNos = Arrays.asList(waybillnosBill.split(","));
+			// 验证
+			for (String waybillNo : orderNos) {
+				Waybill order = null;
+				try {
+					order = waybillService.queryByOrderNo(merchantId, waybillNo);
+					if (order == null)
+						throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, waybillNo);
+				} catch (Exception e) {
+					log.error("loadingScan failed. orderNo:{}", waybillNo, e);
+					return toJsonErrorMsg(e.getMessage());
+				}
 			}
 		}
-
 		String orderNo = "";
 		try {
 			PackageRequest packageRequest = new PackageRequest();
@@ -465,15 +512,16 @@ public class PdaController extends BaseController {
 			packageRequest.setMerchantId(merchantId);
 			packageRequest.setOptBy(me.getUserId());
 			packageRequest.setWeight(weight);
-			packageRequest.setLength(length);
-			packageRequest.setWidth(width);
-			packageRequest.setHigh(height);
+			packageRequest.setLength(0d);
+			packageRequest.setWidth(0d);
+			packageRequest.setHigh(0d);
 			packageRequest.setOptBy(me.getUserId());
 			packageRequest.setNextNetworkId(nextNetworkId);
+			packageRequest.setStatus(status);
 			if (me.getNetworks() != null && me.getNetworks().size() != 0) {
 				packageRequest.setNetworkId(me.getNetworks().get(0));
 			}
-			orderNo = waybillService.addPackage(packageRequest);
+			orderNo = waybillService.savePackage(packageRequest,packageNo);
 		} catch (Exception e) {
 			return toJsonErrorMsg(e.getMessage());
 		}
@@ -500,7 +548,7 @@ public class PdaController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
-	public String addLoading(String smallPacks, String driver, String thirdExpressCode) {
+	public String addLoading(String smallPacks, String driver,String nextNetWork, String thirdExpressCode) {
 		String[] smallPack = smallPacks.split(",");
 		Principal me = SessionLocal.getPrincipal();
 		Long merchantId = Long.valueOf(me.getMerchantId());
@@ -508,27 +556,27 @@ public class PdaController extends BaseController {
 		//校验
 		for (String waybillno : smallPack) {
 			WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.valueOf(merchantId), waybillno);
-			if (waybillDO == null || !waybillDO.getIsPackage().equals("1")) {
+			if (waybillDO == null ) {
 				// if (StringUtil.isEmptys(waybillDO, waybillDO.getIsPackage()) ||
 				// !waybillDO.getIsPackage().equals("1")) {
-				return toJsonErrorMsg(waybillno + " is wrong or not packaged");
+				return toJsonErrorMsg(waybillno + " is wrong ");
 			}
 		}
 
-		List<Waybill> waybills = waybillService.queryByOrderNos(me.getMerchantId(), Arrays.asList(smallPack));
-
-		int networkCode = waybills.get(0).getNetworkId();
-		int nextStation = waybills.get(0).getNextNetworkId();
-		for (Waybill waybill : waybills) {
+		//List<Waybill> waybills = waybillService.queryByOrderNos(me.getMerchantId(), Arrays.asList(smallPack));
+		String networkCode = me.getFirstNetwork()  ;
+		//int networkCode = waybills.get(0).getNetworkId();
+		//int nextStation = waybills.get(0).getNextNetworkId();
+		//for (Waybill waybill : waybills) {
 			/*
 			 * if (!waybill.isPackage()) { return toJsonErrorMsg("Waybill No " +
 			 * waybill.getOrderNo() + " is not a package!"); }
 			 */
-			if (networkCode != waybill.getNetworkId() || nextStation != waybill.getNextNetworkId()) {
+			//if (networkCode != waybill.getNetworkId() || nextStation != waybill.getNextNetworkId()) {
 				// throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, waybill.getOrderNo());
-				return toJsonErrorMsg("WaybillNo " + waybill.getOrderNo() + " is wrong!");
-			}
-		}
+			//	return toJsonErrorMsg("WaybillNo " + waybill.getOrderNo() + " is wrong!");
+			//}
+		//}
 
 		SendThirdHead sendThirdHead = new SendThirdHead();
 		sendThirdHead.setMerchantId(merchantId);
@@ -537,9 +585,9 @@ public class PdaController extends BaseController {
 		sendThirdHead.setType("package");
 		sendThirdHead.setDriver(driver);
 		sendThirdHead.setThirdExpressCode(thirdExpressCode);
-		sendThirdHead.setNetworkCode(networkCode + "");
-		sendThirdHead.setNextStation(nextStation + "");
-		sendThirdHead.setStatus(1);
+		sendThirdHead.setNetworkCode(networkCode);
+		sendThirdHead.setNextStation(nextNetWork);
+		sendThirdHead.setStatus(0);
 
 		sendThirdService.insertBigAndSmall(merchantId, sendThirdHead, smallPack);
 

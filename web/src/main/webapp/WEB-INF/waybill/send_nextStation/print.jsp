@@ -65,6 +65,7 @@
                 <tr>
                     <th>No</th>
                     <th>Order No</th>
+                    <th>Weight</th>
                     <th>Customer Name</th>
                     <th>Contact No</th>
                     <th>Address</th>
@@ -75,6 +76,7 @@
 	                   <tr>
                             <td>${status.index + 1}</td>
 	                        <td>${item.orderNo}</td>
+                            <td>${item.weight}</td>
 	                        <td>${item.receiverInfo.receiverName}</td>
 	                        <td>${item.receiverInfo.receiverPhone}</td>
 	                        <td>${item.receiverInfo.receiverAddress}</td>

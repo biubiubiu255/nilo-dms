@@ -31,5 +31,8 @@ public interface WaybillDao extends BaseDao<Long,WaybillDO> {
     Long queryAllNotCancellationCount(@Param("merchantId")Long merchantId,@Param("userId") String userId);
 
     List<WaybillDO> selectByOrderNos(@Param("orderNos")List<String> orderNos);
+    
+    List<String> findCreatePackageByNetWork(@Param("nextNetwork") String nextNetwork);
 
+    void finishPackage(@Param("packageNo") String packageNo);
 }
