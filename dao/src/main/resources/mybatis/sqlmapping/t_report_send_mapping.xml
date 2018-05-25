@@ -7,8 +7,12 @@
     <resultMap id="sendDO" type="com.nilo.dms.dao.dataobject.SendReportDO">
         <result property="referenceNo" column="reference_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="nextStation" column="next_station" javaType="java.lang.String"
+        <result property="nextStation" column="next_station_name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+        <result property="nextStationCode" column="next_station" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
         <result property="orderNo" column="order_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="orderType" column="order_type" javaType="java.lang.String"
@@ -21,6 +25,8 @@
                 jdbcType="VARCHAR"/>
         <result property="expressName" column="third_express_code" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+
+
 
 
         <result property="receiveName" column="receive_name" javaType="java.lang.String"
@@ -89,12 +95,14 @@
         d.contact_number AS phone,
         d.address,
         d. NAME AS receive_name,
-        f.parent_no
+        f.parent_no,
+        e.name next_station_name
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
+        LEFT  JOIN t_bas_network e ON e.id = b.next_station
         LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
@@ -121,12 +129,14 @@
         d.contact_number AS phone,
         d.address,
         d. NAME AS receive_name,
-        c.parent_no
+        c.parent_no,
+        e.name next_station_name
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
+        LEFT  JOIN t_bas_network e ON e.id = b.next_station
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
@@ -145,13 +155,9 @@
         <if test="driver !=null and driver !='' ">
             and d.driver = #{driver}
         </if>
-        <if test="nextStation !=null and nextStation !='' ">
-            and d.next_station = #{nextStation}
-        </if>
         <if test="nextStationCode !=null and nextStationCode !='' ">
-            and d.network_code = #{nextStationCode}
+            and d.next_station = #{nextStationCode}
         </if>
-
         <if test="handleNo !=null and handleNo !='' ">
             and d.handle_no = #{handleNo}
         </if>
@@ -190,29 +196,33 @@
         (
         SELECT
         f.order_no,
-        a.weight,
-        a.created_time,
+        f.weight,
+        f.created_time,
         b.handle_no,
         b.driver,
         b.next_station,
+        b.third_express_code,
         b.handle_name,
-        c.order_type,
-        c.reference_no,
-        c. STATUS,
+        f.order_type,
+        f.reference_no,
+        f. STATUS,
         d.contact_number AS phone,
         d.address,
         d. NAME AS receive_name,
-        f.parent_no
+        f.parent_no,
+        e.name next_station_name
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
+        LEFT  JOIN t_bas_network e ON e.id = b.next_station
         LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
         AND b.type = 'package'
+
         ORDER BY
         a.created_time DESC
         )
@@ -225,6 +235,7 @@
         b.handle_no,
         b.driver,
         b.next_station,
+        b.third_express_code,
         b.handle_name,
         c.order_type,
         c.reference_no,
@@ -232,12 +243,14 @@
         d.contact_number AS phone,
         d.address,
         d. NAME AS receive_name,
-        c.parent_no
+        c.parent_no,
+        e.name next_station_name
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
+        LEFT  JOIN t_bas_network e ON e.id = b.next_station
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
@@ -256,15 +269,11 @@
         <if test="driver !=null and driver !='' ">
             and d.driver = #{driver}
         </if>
-        <if test="nextStation !=null and nextStation !='' ">
-            and d.next_station = #{nextStation}
-        </if>
         <if test="nextStationCode !=null and nextStationCode !='' ">
-            and d.network_code = #{nextStationCode}
+            and d.next_station = #{nextStationCode}
         </if>
-
         <if test="handleNo !=null and handleNo !='' ">
-            and b.handle_no = #{handleNo}
+            and d.handle_no = #{handleNo}
         </if>
         <if test="orderType !=null and orderType !='' ">
             and d.order_type = #{orderType}

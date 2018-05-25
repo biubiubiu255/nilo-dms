@@ -23,6 +23,7 @@ public class SendReportDO extends BaseDo<Long> {
     private String handleNo;
     private String deliveryType;
     private String expressName;
+    private String nextStationCode;
 
     public Long getMerchantId() {
         return merchantId;
@@ -163,6 +164,14 @@ public class SendReportDO extends BaseDo<Long> {
 
     public void setParentNo(String parentNo) {
         this.parentNo = parentNo;
+    }
+
+    public String getNextStationCode() {
+        return nextStationCode;
+    }
+
+    public void setNextStationCode(String nextStationCode) {
+        this.nextStationCode = nextStationCode;
     }
 
     @Override
