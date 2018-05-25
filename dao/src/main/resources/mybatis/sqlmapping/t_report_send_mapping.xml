@@ -99,7 +99,7 @@
 
         ON a.order_no = f.parent_no
 
-        WHERE a.merchant_id=1 and b.status = 1 and  b.type='station'
+        WHERE a.merchant_id=1 and b.status = 1 and  b.type='package'
 
 
         <if test="orderNo !=null and orderNo !='' ">
@@ -166,7 +166,7 @@
 
         ON a.order_no = d.order_no
 
-        WHERE a.merchant_id=#{merchantId} and b.status = 1
+        WHERE a.merchant_id=1 and b.status = 1 and  b.type='package'
 
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
@@ -240,7 +240,7 @@
 
         ON b.third_express_code = e.express_code
 
-        WHERE a.merchant_id=1 and b.status = 1 and b.type='thirdExpress'
+        WHERE a.merchant_id=1 and b.status = 1 and b.type='waybill'
 
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
@@ -308,7 +308,7 @@
 
         ON b.third_express_code = e.express_code
 
-        WHERE a.merchant_id=#{merchantId} and b.status = 1
+        WHERE a.merchant_id=1 and b.status = 1 and b.type='waybill'
 
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')

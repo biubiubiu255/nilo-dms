@@ -17,7 +17,7 @@ public interface HandleRiderDao extends BaseDao<Long, RiderDelivery> {
 
     List<RiderDelivery> queryRiderDeliveryBig(@Param("ob") RiderDelivery riderDelivery, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
-    Integer queryRiderDeliveryBigCount(@Param("ob") RiderDelivery riderDelivery, @Param("offset") Integer offset, @Param("limit") Integer limit);
+    Integer queryRiderDeliveryBigCount(@Param("ob") RiderDelivery riderDelivery);
 
     List<RiderDeliverySmallDO> queryDeliverySmall(RiderDeliverySmallDO riderDeliverySmallDO);
 
