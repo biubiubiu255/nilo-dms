@@ -86,7 +86,7 @@
         f.created_time,
         b.handle_no,
         b.driver,
-        b.next_station,
+        e.id next_station,
         b.third_express_code,
         b.handle_name,
         f.order_type,
@@ -102,7 +102,7 @@
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = b.next_station
+        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
         LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
@@ -120,7 +120,7 @@
         a.created_time,
         b.handle_no,
         b.driver,
-        b.next_station,
+        e.id next_station,
         b.third_express_code,
         b.handle_name,
         c.order_type,
@@ -136,7 +136,7 @@
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = b.next_station
+        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
@@ -200,7 +200,7 @@
         f.created_time,
         b.handle_no,
         b.driver,
-        b.next_station,
+        e.id next_station,
         b.third_express_code,
         b.handle_name,
         f.order_type,
@@ -216,7 +216,7 @@
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = b.next_station
+        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
         LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
@@ -234,7 +234,7 @@
         a.created_time,
         b.handle_no,
         b.driver,
-        b.next_station,
+        e.id next_station,
         b.third_express_code,
         b.handle_name,
         c.order_type,
@@ -250,7 +250,7 @@
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = b.next_station
+        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
@@ -300,7 +300,7 @@
         a.created_time,
         b.handle_no,
         b.driver,
-        b.next_station,
+        e.id next_station,
         b.handle_name,
         c.order_type,
         c.reference_no,

@@ -349,7 +349,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         }
 
         if("1".equals(packageRequest.getStatus())) {
-        	 waybillDao.finishPackage(packageNo);
+        	 waybillDao.finishPackage(packageNo,packageRequest.getWeight());
         }
 
         // 关联包裹与子运单

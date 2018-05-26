@@ -73,15 +73,15 @@
                     </div>
                 </td>
                 <td colspan="2" align="center">
-                    <div>${delivery.orderNo}</div>
+                    <div><b>${delivery.orderNo}</b></div>
                     <div><img src="/barCode/${delivery.orderNo}.html" class="barcode-print">
                     </div>
                 </td>
                 <td colspan="1" align="center">
                     <div>${delivery.orderType}</div>
                     <div>
-                        <c:if test="${delivery.channel != null and delivery.channel=='0'}">Doorstep</c:if>
-                        <c:if test="${delivery.channel != null and delivery.channel=='1'}">Self Collect</c:if>
+                        <c:if test="${delivery.channel != null and delivery.channel=='0'}"><b>Doorstep</b></c:if>
+                        <c:if test="${delivery.channel != null and delivery.channel=='1'}"><b>Self Collect</b></c:if>
                     </div>
                 </td>
             </tr>
@@ -89,11 +89,18 @@
                 <td colspan="4" style="padding-left: 10px;vertical-align: middle;">
                     <div class="row">
                         <div class="col-xs-12" style="font-weight:bolder;">
-                        <b>
-                            Order No:${delivery.referenceNo}
+                            Order No:<b>${delivery.referenceNo}
                         </b>
+                        
                         </div>
                     </div>
+                    <div class="row">
+                    	<div class="col-xs-7" >
+                            <b>  &nbsp;
+                            </b>
+                        </div>
+                    </div>
+                    
                 </td>
             </tr>
             <%--<tr style="height: 2.3cm;width: 10cm;">
@@ -143,25 +150,32 @@
                     <div class="row">
                         <div class="col-xs-12">
                             Thank you for shopping at Killmall<br/>
-                            Customer Service Number：254(0) 799 717 001
+                            Customer Service Number：<b>+254(0) 799 717 001</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                    	<div class="col-xs-7" >
+                            <b>  &nbsp;
+                            </b>
                         </div>
                     </div>
                 </td>
+                
             </tr>
         </table>
         <hr/>
         <table class="table table-bordered">
             <tr style="height: 1.53cm;width: 10cm;">
                 <td colspan="3" align="center">
-                    <div>Tracking Number：${delivery.orderNo}</div>
+                    <div>Tracking Number：<b>${delivery.orderNo}</b></div>
                     <div><img src="/barCode/${delivery.orderNo}.html" class="barcode-print">
                     </div>
                 </td>
                 <td colspan="1" align="center">
                     <div>${delivery.orderType}</div>
                     <div>
-                        <c:if test="${delivery.channel != null and delivery.channel=='0'}">Doorstep</c:if>
-                        <c:if test="${delivery.channel != null and delivery.channel=='1'}">Self Collect</c:if>
+                        <c:if test="${delivery.channel != null and delivery.channel=='0'}"><b>Doorstep</b></c:if>
+                        <c:if test="${delivery.channel != null and delivery.channel=='1'}"><b>Self Collect</b></c:if>
                     </div>
                 </td>
             </tr>
@@ -172,45 +186,54 @@
                 <td colspan="4" style="padding-left: 10px">
                     <div class="row">
                         <div class="col-xs-12">
-                            To:${delivery.receiverInfo.receiverName}
+                            To:<b>${delivery.receiverInfo.receiverName}</b>
+                        </div>
+                        <div class="row">
+                    	<div class="col-xs-7" >
+                              &nbsp;
+                        </div>
+                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            Address:<b>${delivery.receiverInfo.receiverAddress}</b>
+                        </div>
+                         
+                    </div>
+                    <div class="row">
+                    	<div class="col-xs-7" >
+                            <b>  &nbsp;
+                            </b>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
-                            Address:${delivery.receiverInfo.receiverAddress}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <span class="print-font-large">Tell:${delivery.receiverInfo.receiverPhone}</span>
+                            Tell:<b>${delivery.receiverInfo.receiverPhone}</b>
                         </div>
                     </div>
                 </td>
             </tr>  <!--第二个表格收货信息-->
 
 
-            <tr style="height: 1.53cm;width: 10cm;">
+            <tr style="height: 1.53cm;width: 16cm;">
                 <td colspan="4" style="padding-left: 10px;vertical-align: middle;">
                     <div class="row">
                         <div class="col-xs-7" >
-                            <b>
-                                Order No：${delivery.referenceNo}
+                            
+                                Order No：<b>${delivery.referenceNo}
                             </b>
                         </div>
                         <div class="col-xs-5" >
-                            <b>
-                                Weight：${delivery.weight}
+                            
+                                Weight：<b>${delivery.weight}
                             </b>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-7" >
-                            <b>
-                                From：Killmall International Limited
-                            </b>
+                                From：Killmall
                         </div>
                         <div class="col-xs-5" >
-                            <b>
                                 Date：<%= createdTimeStr %>
                             </b>
                         </div>
@@ -226,9 +249,16 @@
                                 Signature：
                             </b>
                         </div>
+                         
                         <div class="col-xs-5" >
                             <b>
                                 Date：
+                            </b>
+                        </div>
+                    </div>
+                    <div class="row">
+                    	<div class="col-xs-7" >
+                            <b>  &nbsp;
                             </b>
                         </div>
                     </div>

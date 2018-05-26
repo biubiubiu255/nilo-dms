@@ -548,7 +548,7 @@ public class PdaController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping(value = "/addLoading.html", method = RequestMethod.POST)
-	public String addLoading(String smallPacks, String driver,String nextNetWork, String thirdExpressCode) {
+	public String addLoading(String smallPacks, String driver,String thirdExpressCode) {
 		String[] smallPack = smallPacks.split(",");
 		Principal me = SessionLocal.getPrincipal();
 		Long merchantId = Long.valueOf(me.getMerchantId());
@@ -586,7 +586,7 @@ public class PdaController extends BaseController {
 		sendThirdHead.setDriver(driver);
 		sendThirdHead.setThirdExpressCode(thirdExpressCode);
 		sendThirdHead.setNetworkCode(networkCode);
-		sendThirdHead.setNextStation(nextNetWork);
+		//sendThirdHead.setNextStation(nextNetWork);
 		sendThirdHead.setStatus(0);
 
 		sendThirdService.insertBigAndSmall(merchantId, sendThirdHead, smallPack);

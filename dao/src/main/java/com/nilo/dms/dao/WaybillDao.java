@@ -34,5 +34,5 @@ public interface WaybillDao extends BaseDao<Long,WaybillDO> {
     
     List<String> findCreatePackageByNetWork(@Param("nextNetwork") String nextNetwork);
 
-    void finishPackage(@Param("packageNo") String packageNo);
+    void finishPackage(@Param("packageNo") String packageNo,@Param("weight") Double weight);
 }
