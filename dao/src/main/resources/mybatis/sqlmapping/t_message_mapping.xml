@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.MessageDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="messageDo" type="com.nilo.dms.dao.dataobject.MessageDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="messageId" column="message_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="messageType" column="message_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="content" column="content" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="sender" column="sender" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="receiver" column="receiver" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="viewTime" column="view_time" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="version" column="version" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id ,message_id,message_type,content,sender,receiver, view_time,status,created_time , updated_time ,version
+    </sql>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.MessageDO" statementType="PREPARED"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_message
+        ( message_id,message_type,content,sender,receiver, view_time,status,created_time , updated_time ,version)
+        VALUES
+        ( #{messageId}, #{messageType},#{content},#{sender},#{receiver},#{viewTime}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+    </insert>
+    <!-- 动态更新语句 -->
+    <update id="update" parameterType="com.nilo.dms.dao.dataobject.MessageDO" statementType="PREPARED">
+        update t_message
+        <trim prefix="set" suffixOverrides="," suffix="where message_id=#{messageId}">
+            <if test="status != null ">
+                status = #{status},
+            </if>
+
+            <if test="viewTime != null and viewTime != ''">
+                view_time = #{viewTime},
+            </if>
+
+            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+        </trim>
+    </update>
+
+
+    <!-- 查询所有用户信息 -->
+    <select id="queryBy" resultMap="messageDo" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_message where receiver = #{receiver}
+        <foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">
+           status=#{item}
+        </foreach>
+        order by created_time desc
+    </select>
+
+    <select id="queryAllCreated" resultMap="messageDo" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_message where
+            status= 1
+        order by created_time desc
+    </select>
+
+</mapper>

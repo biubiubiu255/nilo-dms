@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.MerchantInfoDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="merchantInfoDO" type="com.nilo.dms.dao.dataobject.MerchantInfoDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="merchantName" column="merchant_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="country" column="country" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="contactName" column="contact_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="contactEmail" column="contact_email" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="contactPhone" column="contact_phone" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="description" column="description" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="website" column="website" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="appLogo" column="app_logo" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="pcLogo" column="pc_logo" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="address" column="address" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="type" column="type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="nature" column="nature" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="vip" column="vip" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="level" column="level" javaType="java.lang.String"
+                jdbcType="INTEGER"/>
+        <result property="licence" column="licence" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="idCard" column="id_card" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="version" column="version" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id ,merchant_name,country,contact_name,contact_email,contact_phone,description,website,app_logo,pc_logo, address,type,nature,vip,level,licence,id_card, status, created_time , updated_time ,version
+    </sql>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.MerchantInfoDO" statementType="PREPARED"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_sys_merchant_info
+        ( merchant_name,country,contact_name,contact_email,contact_phone,description,website,app_logo,pc_logo, address,type,nature,vip,level,licence,id_card, status,created_time , updated_time ,version)
+        VALUES
+        (#{merchantName}, #{country},#{contactName},#{contactEmail},#{contactPhone},#{description},#{website},#{appLogo},#{pcLogo},#{address},#{type},#{nature},#{vip},#{level},#{licence},#{idCard},#{status}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+    </insert>
+
+    <!-- 动态更新语句 -->
+    <update id="update" parameterType="com.nilo.dms.dao.dataobject.MerchantInfoDO" statementType="PREPARED">
+        update t_sys_merchant_info
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+            <if test="merchantName != null and merchantName != ''">
+                merchant_name = #{merchantName},
+            </if>
+            <if test="contactName != null and contactName != ''">
+                contact_name = #{contactName},
+            </if>
+            <if test="contactEmail != null and contactEmail != ''">
+                contact_email = #{contactEmail},
+            </if>
+            <if test="contactPhone != null and contactPhone != ''">
+                contact_phone = #{contactPhone},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="website != null and website != ''">
+                website = #{website},
+            </if>
+            <if test="appLogo != null and appLogo != ''">
+                app_logo = #{appLogo},
+            </if>
+            <if test="pcLogo != null and pcLogo != ''">
+                pc_Logo = #{pcLogo},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="type != null and type != ''">
+                type = #{type},
+            </if>
+            <if test="nature != null and nature != ''">
+                nature = #{nature},
+            </if>
+            <if test="vip != null">
+                vip = #{vip},
+            </if>
+            <if test="level != null">
+                level = #{level},
+            </if>
+            <if test="licence != null and licence != ''">
+                licence = #{licence},
+            </if>
+            <if test="idCard != null and idCard != ''">
+                id_card = #{idCard},
+            </if>
+
+            <if test="status != null ">
+                status = #{status},
+            </if>
+            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+        </trim>
+    </update>
+
+
+    <select id="findAll" resultMap="merchantInfoDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_merchant_info
+    </select>
+
+    <select id="findBy" resultMap="merchantInfoDO" statementType="PREPARED">
+        SELECT   <include refid="Base_Column_List"/>
+        FROM t_sys_merchant_info where  1 =1
+        <if test="merchantName != null and merchantName != ''">
+            and merchant_name like CONCAT( CONCAT('%',#{merchantName}),'%')
+        </if>
+        order by created_time desc
+
+        limit #{offset} , #{limit}
+
+    </select>
+
+    <select id="findCountBy" resultType="java.lang.Integer" statementType="PREPARED">
+        SELECT count(1)
+        FROM t_sys_merchant_info
+        where  1 =1
+        <if test="merchantName != null and merchantName != ''">
+            and merchant_name like CONCAT( CONCAT('%',#{merchantName}),'%')
+        </if>
+    </select>
+
+    <select id="queryById" resultMap="merchantInfoDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_merchant_info where id = #{id}
+    </select>
+</mapper>

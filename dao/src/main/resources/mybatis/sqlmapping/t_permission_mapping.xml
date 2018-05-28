@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.PermissionDao">
+
+    <resultMap id="permissionDO" type="com.nilo.dms.dao.dataobject.PermissionDO">
+        <result property="id" column="id"/>
+        <result property="pId" column="pid"/>
+        <result property="name" column="name"/>
+        <result property="value" column="value"/>
+        <result property="isMenu" column="is_menu"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, pid , name, value , is_menu
+    </sql>
+
+
+    <select id="findAll" resultMap="permissionDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_permission where status = 1
+    </select>
+
+
+</mapper>

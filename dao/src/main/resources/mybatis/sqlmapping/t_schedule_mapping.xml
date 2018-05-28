@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.ScheduleDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="scheduleDO" type="com.nilo.dms.dao.dataobject.ScheduleDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="jobName" column="job_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="className" column="class_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="cornExpression" column="corn_expression" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+
+    </resultMap>
+
+    <select id="queryByJobName" resultMap="scheduleDO" statementType="PREPARED">
+        SELECT id, merchant_id,job_name,class_name,corn_expression,remark,status,created_time,updated_time,version
+        FROM t_sys_schedule where job_name= #{jobName}
+    </select>
+
+
+    <select id="findAll" resultMap="scheduleDO" statementType="PREPARED">
+        SELECT id,merchant_id, job_name,class_name,corn_expression,remark,status,created_time,updated_time,version
+        FROM t_sys_schedule where 1 = 1
+        <if test="merchantId != null ">
+            and merchant_Id = #{merchantId}
+        </if>
+        <if test="status != null ">
+            and status = #{status}
+        </if>
+    </select>
+
+    <update id="update" parameterType="com.nilo.dms.dao.dataobject.ScheduleDO" statementType="PREPARED">
+        update t_sys_schedule
+        <trim prefix="set" suffixOverrides="," suffix="where merchant_id = #{merchantId} and job_name = #{jobName}">
+            <if test="status != null ">
+                status = #{status},
+            </if>
+            <if test="className != null and className != ''">
+                class_name = #{className},
+            </if>
+            <if test="cornExpression != null and cornExpression != ''">
+                corn_expression = #{cornExpression},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+        </trim>
+    </update>
+
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.ScheduleDO" statementType="PREPARED"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_sys_schedule
+        ( merchant_id,job_name,class_name,corn_expression,remark,status,created_time,updated_time,version)
+        VALUES
+        ( #{merchantId},#{jobName}, #{className},#{cornExpression},#{remark},#{status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+    </insert>
+</mapper>

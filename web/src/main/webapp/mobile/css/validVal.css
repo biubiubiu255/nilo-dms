@@ -1,0 +1,79 @@
+/*input[maxlength='3'] {	width: 30px;	}
+input[maxlength='4'] {	width: 40px;	}
+input[maxlength='5'] {	width: 45px;	}
+
+input[type='text'].focus,
+input[type='password'].focus,
+input[type='number'].focus,
+input[type='email'].focus,
+input[type='url'].focus,
+textarea.focus,
+select.focus
+{ 
+    border-color: #000; 
+}
+input[type='text'].inactive,
+input[type='number'].inactive,
+input[type='email'].inactive,
+input[type='url'].inactive,
+textarea.inactive,
+select.inactive,
+option.inactive
+{
+    color: #999;
+    font-style: italic;
+}*/
+
+/*input[type='text'].invalid,
+input[type='password'].invalid,
+input[type='number'].invalid,
+input[type='email'].invalid,
+input[type='url'].invalid, 
+textarea.invalid, select.invalid
+{
+    border-color: red;
+}*/
+
+/*span.checkbox-container
+{
+    border: 1px solid transparent;
+    display: block;
+    width: 145px;
+    padding: 2px 5px;
+    float: left;
+}
+span.checkbox-container.invalid
+{
+    border-color: red;
+}
+
+select.inactive option
+{
+    color: #000;
+    font-style: normal;
+}
+select option.inactive,
+select.inactive option.inactive
+{
+    color: #999;
+    font-style: italic;
+}*/
+
+
+
+/*input[type='text'], textarea, select {
+    border: solid 1px #999;
+}
+input[type='text'].focus, textarea.focus, select.focus {
+    border-color: #000 !important;
+}
+input[type='text'].invalid, textarea.invalid, select.invalid {
+    border-color: red;
+}
+input[type='text'].inactive, textarea.inactive, select.inactive, option.inactive {
+    color: #999;
+    font-style: italic;
+}
+input[type='text'].required, textarea.required {
+    background: url(required-input.png) right 5px no-repeat;
+}*/

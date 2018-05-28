@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.LoadingDetailsDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="loadingDetailsDO" type="com.nilo.dms.dao.dataobject.LoadingDetailsDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="loadingNo" column="loading_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="loadingBy" column="loading_by" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="version" column="version" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id ,loading_no,order_no,loading_by,status ,created_time , updated_time ,version
+    </sql>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.LoadingDetailsDO" statementType="PREPARED"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_handle_loading_details
+        ( loading_no,order_no,loading_by,status ,created_time , updated_time ,version)
+        VALUES
+        (#{loadingNo},#{orderNo}, #{loadingBy},#{status},  UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+    </insert>
+    <!-- 动态更新语句 -->
+    <update id="update" parameterType="com.nilo.dms.dao.dataobject.LoadingDetailsDO" statementType="PREPARED">
+        update t_handle_loading_details
+        <trim prefix="set" suffixOverrides="," suffix="where loading_no=#{loadingNo} and num = #{num}">
+            <if test="status != null ">
+                status = #{status},
+            </if>
+            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+        </trim>
+    </update>
+
+    <select id="queryByLoadingNo" resultMap="loadingDetailsDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_handle_loading_details where loading_no = #{loadingNo}
+    </select>
+
+    <select id="queryByLoadingNos" resultMap="loadingDetailsDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_handle_loading_details where
+        loading_no in
+        <foreach collection="loadingNos" item="loadingNo" index="index"
+                 open="(" close=")" separator=",">
+            #{loadingNo}
+        </foreach>
+    </select>
+
+    <delete id="deleteBy">
+        delete from t_handle_loading_details where loading_no = #{loadingNo} and order_no = #{orderNo}
+    </delete>
+
+    <select id="queryByOrderNo" resultMap="loadingDetailsDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_handle_loading_details where loading_no = #{loadingNo} and order_no = #{orderNo}
+    </select>
+
+
+</mapper>

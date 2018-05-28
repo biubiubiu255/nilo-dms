@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.DeliveryOrderReceiverDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="receiverDO" type="com.nilo.dms.dao.dataobject.DeliveryOrderReceiverDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="country" column="country" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="province" column="province" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="city" column="city" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="area" column="area" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="address" column="address" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="name" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="contactNumber" column="contact_number" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
+        <result property="countryId" column="country_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="provinceId" column="province_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="cityId" column="city_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="areaId" column="area_id" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
+
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="version" column="version" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, merchant_id , order_no ,country, province ,  city,area,country_id,province_id,city_id,area_id,name ,address,contact_number, created_time , updated_time ,version
+    </sql>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderReceiverDO" statementType="PREPARED"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_waybill_receiver
+        ( merchant_id ,order_no ,country, province ,  city,area,country_id,province_id,city_id,area_id,name ,address,contact_number, created_time , updated_time ,version)
+        VALUES
+        ( #{merchantId}, #{orderNo}, #{country}, #{province},#{city},#{area},#{countryId}, #{provinceId},#{cityId},#{areaId},#{name},#{address},#{contactNumber},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+    </insert>
+
+
+    <select id="queryByOrderNo" resultMap="receiverDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill_receiver
+        WHERE merchant_id = #{merchantId} and order_no=#{orderNo}
+    </select>
+
+    <select id="queryByOrderNos" resultMap="receiverDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill_receiver
+        WHERE merchant_id = #{merchantId}
+        <if test="orderNos !=null and orderNos.size() > 0">
+            and order_no in
+            <foreach collection="orderNos" item="orderNo" index="index"
+                     open="(" close=")" separator=",">
+                #{orderNo}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 动态更新语句 -->
+    <update id="update" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderReceiverDO" statementType="PREPARED">
+        update t_waybill_receiver
+        <trim prefix="set" suffixOverrides="," suffix="where merchant_id=#{merchantId} and order_no = #{orderNo}">
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="contactNumber != null and contactNumber != ''">
+                contact_Number = #{contactNumber},
+            </if>
+            <if test="country != null or country != ''">
+                country = #{country},
+            </if>
+            <if test="province != null and province != ''">
+                province = #{province},
+            </if>
+            <if test="city != null and city != ''">
+                city = #{city},
+            </if>
+            <if test="area != null and area != ''">
+                area = #{area},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+        </trim>
+    </update>
+
+</mapper>

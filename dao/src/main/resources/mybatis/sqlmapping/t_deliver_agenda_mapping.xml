@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.DeliverAgendaDao">
+
+ <resultMap id="deliverReport" type="com.nilo.dms.dao.dataobject.DeliverAgendaDO">
+     <result property="deliveredMonthNum" column="delivered_month_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+     <result property="deliveredDayNum" column="delivered_day_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+     <result property="taskDayNum" column="task_day_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+     <result property="delayDayNum" column="delay_day_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+     <result property="createdTime" column="created_time" javaType="java.lang.Long" jdbcType="INTEGER"/>
+ </resultMap>
+
+ <select id="queryReport" resultMap="deliverReport">
+
+SELECT
+	*, UNIX_TIMESTAMP() AS created_time
+FROM
+	(
+		SELECT
+			count(id) AS 'delivered_month_num'
+		FROM
+			t_handle_sign
+		WHERE
+			handle_by = #{riderNo}
+		AND FROM_UNIXTIME(created_time, '%Y%m') = date_format(NOW(), '%Y%m')
+	) AS a,
+	(
+		SELECT DISTINCT
+			count(DISTINCT b.order_no) AS 'task_day_num'
+		FROM
+			t_handle_rider AS a
+		LEFT JOIN t_handle_rider_details AS b ON a.handle_no = b.handle_no
+		WHERE
+			b.order_no IS NOT NULL
+		AND a.rider = #{riderNo}
+		AND FROM_UNIXTIME(b.created_time, '%Y%m%d') = #{dateFormat}
+	) AS b,
+	(
+		SELECT
+			count(1) AS 'delivered_day_num'
+		FROM
+			t_handle_sign AS a
+		INNER JOIN t_handle_rider_details AS b ON FROM_UNIXTIME(b.created_time, '%Y%m%d') = #{dateFormat}
+		AND a.order_no = b.order_no
+		WHERE
+			a.handle_by = #{riderNo}
+		AND FROM_UNIXTIME(a.created_time, '%Y%m%d') = #{dateFormat}
+	) AS c,
+	(
+		SELECT
+			count(DISTINCT a.order_no) AS 'delay_day_num'
+		FROM
+			t_handle_delay as a
+		INNER JOIN t_handle_rider_details AS b ON FROM_UNIXTIME(b.created_time, '%Y%m%d') = #{dateFormat}
+		AND a.order_no = b.order_no
+		WHERE
+			a.handle_by = #{riderNo}
+		AND FROM_UNIXTIME(a.created_time, '%Y%m%d') = #{dateFormat}
+
+	) AS d
+
+</select>
+
+</mapper>

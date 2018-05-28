@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.DeliveryOrderRequestDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="requestDO" type="com.nilo.dms.dao.dataobject.DeliveryOrderRequestDO">
+        <result property="id" column="id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="merchantId" column="merchant_Id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="data" column="data" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="sign" column="sign" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="status" column="status" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="version" column="version" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id ,merchant_id,data,sign,order_no,status,msg,created_time , updated_time ,version
+    </sql>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderRequestDO" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_sys_log_create_waybill
+        ( merchant_id,data,sign,order_no,status,msg,created_time , updated_time ,version)
+        VALUES
+        (#{merchantId},#{data}, #{sign},#{orderNo},#{status},#{msg},  UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+    </insert>
+    <update id="update" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderRequestDO" statementType="PREPARED">
+        update t_sys_log_create_waybill
+        <trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+            <if test="status != null  ">
+                status = #{status},
+            </if>
+            <if test="msg != null and msg != ''">
+                msg = #{msg},
+            </if>
+            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+        </trim>
+    </update>
+
+    <!-- 查询所有用户信息 -->
+    <select id="queryById" resultMap="requestDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_log_create_waybill where id=#{id};
+    </select>
+
+    <select id="queryBy" resultMap="requestDO" statementType="PREPARED">
+        SELECT SQL_CALC_FOUND_ROWS
+        <include refid="Base_Column_List"/>
+        FROM t_sys_log_create_waybill where merchant_id=#{merchantId}
+        <if test="orderNo !=null and orderNo !='' ">
+            and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="data !=null and data !='' ">
+            and data like CONCAT( CONCAT('%',#{data}),'%')
+        </if>
+        <if test="sign !=null and sign !='' ">
+            and sign like CONCAT( CONCAT('%',#{sign}),'%')
+        </if>
+        order by created_time desc
+        limit #{offset} , #{limit}
+    </select>
+
+    <select id="queryByOrderNo" resultMap="requestDO" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_log_create_waybill where merchant_id=#{merchantId}
+            and order_no = #{orderNo}
+    </select>
+</mapper>

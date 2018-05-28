@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"
+       default-autowire="byName">
+    <bean class="com.nilo.dms.service.mq.producer.ProducerStartup" init-method="initial"
+          destroy-method="destroy">
+        <property name="namesrvAddr" value="${mq.namesrvAddr}"/>
+        <property name="producers">
+            <list>
+                <ref bean="notifyDataBusProducer"/>
+                <ref bean="routeProducer"/>
+                <ref bean="createDeliveryOrderProducer"/>
+                <ref bean="phoneSMSProducer"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="notifyDataBusProducer" class="com.nilo.dms.service.order.producer.NotifyDataBusProducer"/>
+    <bean id="routeProducer" class="com.nilo.dms.service.order.producer.RouteProducer"/>
+    <bean id="createDeliveryOrderProducer" class="com.nilo.dms.service.order.producer.CreateDeliveryOrderProducer"/>
+    <bean id="phoneSMSProducer" class="com.nilo.dms.service.order.producer.PhoneMessageProducer"/>
+
+
+    <bean class="com.nilo.dms.service.mq.consumer.ConsumerStartup" init-method="initial"
+          destroy-method="destroy">
+        <property name="namesrvAddr" value="${mq.namesrvAddr}"/>
+        <property name="consumers">
+            <list>
+                <ref bean="notifyDataBusConsumer"/>
+                <ref bean="routeConsumer"/>
+                <ref bean="createDeliveryOrderConsumer"/>
+                <ref bean="phoneSMSConsumer"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="notifyDataBusConsumer" class="com.nilo.dms.service.order.consumer.NotifyDataBusConsumer"/>
+    <bean id="routeConsumer" class="com.nilo.dms.service.order.consumer.RouteConsumer"/>
+    <bean id="createDeliveryOrderConsumer" class="com.nilo.dms.service.order.consumer.CreateDeliveryOrderConsumer"/>
+    <bean id="phoneSMSConsumer" class="com.nilo.dms.service.order.consumer.PhoneMessageConsumer"/>
+
+</beans>

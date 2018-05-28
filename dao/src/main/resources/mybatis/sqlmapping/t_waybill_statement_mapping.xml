@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.WaybillStatementDao">
+
+ <resultMap id="WaybillStatement" type="com.nilo.dms.dao.dataobject.WaybillStatementDo">
+      <result property="orderNo" column="order_no" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <result property="order_type" column="order_type" javaType="java.lang.String" jdbcType="VARCHAR"/>
+      <result property="money" column="money" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+      <result property="statement_time" column="settlement_time" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+      <result property="sign_time" column="sign_time" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+      <result property="status" column="status" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+ </resultMap>
+
+ <select id="queryAllWaybillStatement" resultMap="WaybillStatement" >
+    SELECT id, order_type, order_no, money, statement_time, sign_time, status
+    from t_waybill_statement
+    where `status`= 1
+    AND  statement_time > #{sTime}
+    AND  statement_time <![CDATA[<]]>  #{eTime}
+</select>
+
+</mapper>

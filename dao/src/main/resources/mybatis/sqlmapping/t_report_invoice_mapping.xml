@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.WaybillInvoiceDao">
+
+    <resultMap id="ReportInvoice" type="com.nilo.dms.dao.dataobject.ReportInvoiceDO">
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="orderType" column="order_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="rider" column="rider" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="network" column="station" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="createTime" column="time" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="queryReportInvoiceInput" resultMap="ReportInvoice">
+
+        SELECT a.order_no, a.weight, a.order_type, b.updated_time time, d.name rider, c.next_station station
+
+        FROM t_waybill a
+
+        INNER JOIN t_handle_loading_details b
+
+        on a.order_no = b.order_no
+
+
+        INNER JOIN t_handle_loading c
+
+        on b.loading_no = c.loading_no
+
+
+        INNER JOIN t_sys_user_info d
+
+        on c.rider=d.id
+
+        WHERE a.merchant_id=#{merchantId} AND is_cod = 1
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test="rider !=null  and rider !='' ">
+            AND
+            c.name = #{rider}
+        </if>
+
+        <if test="eTime_creat !=null and sTime_creat !=null and  eTime_creat != '' and sTime_creat != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.created_time<![CDATA[<]]>#{eTime_creat} AND a.created_time>#{sTime_creat})
+        </if>
+        <!--
+        <if test="sTime_sign !=null and eTime_sign !=null and  sTime_sign != '' and eTime_sign != ''">
+            &lt;!&ndash;AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')&ndash;&gt;
+            AND
+            (a.updated_time<![CDATA[<]]>#{eTime_sign} AND a.updated_time>#{sTime_sign})
+        </if>
+
+        -->
+
+        order by a.created_time desc
+
+        limit #{offset} , #{limit}
+
+    </select>
+
+    <select id="queryReportInvoiceCountInput" resultType="java.lang.Integer">
+
+        SELECT
+
+        count(*)
+
+        FROM t_waybill a
+
+        INNER JOIN t_handle_loading_details b
+
+        on a.order_no = b.order_no
+
+
+        INNER JOIN t_handle_loading c
+
+        on b.loading_no = c.loading_no
+
+
+        INNER JOIN t_sys_user_info d
+
+        on c.rider=d.id
+
+        WHERE a.merchant_id=#{merchantId} AND is_cod = 1
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test="rider !=null  and rider !='' ">
+            AND
+            c.name = #{rider}
+        </if>
+
+        <if test="eTime_creat !=null and sTime_creat !=null and  eTime_creat != '' and sTime_creat != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.created_time<![CDATA[<]]>#{eTime_creat} AND a.created_time>#{sTime_creat})
+        </if>
+        <!--
+        <if test="sTime_sign !=null and eTime_sign !=null and  sTime_sign != '' and eTime_sign != ''">
+            &lt;!&ndash;AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')&ndash;&gt;
+            AND
+            (a.updated_time<![CDATA[<]]>#{eTime_sign} AND a.updated_time>#{sTime_sign})
+        </if>
+
+        -->
+
+    </select>
+
+
+    <select id="queryReportInvoiceOut" resultMap="ReportInvoice">
+
+        SELECT a.order_no, a.weight, a.order_type, b.created_time time, c.name network_name station, d.name rider
+
+        FROM t_waybill a
+
+        INNER JOIN t_waybill_log_arrive b
+
+        ON a.order_no = b.order_no
+
+        INNER JOIN t_bas_network c
+
+        ON b.network_id = c.id
+
+        INNER JOIN t_sys_user_info d
+
+        ON b.opt_by = d.id
+
+        WHERE a.merchant_id=#{merchantId} AND is_cod = 1
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test="rider !=null  and rider !='' ">
+            AND
+            c.name = #{rider}
+        </if>
+
+        <if test="eTime_creat !=null and sTime_creat !=null and  eTime_creat != '' and sTime_creat != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.created_time<![CDATA[<]]>#{eTime_creat} AND a.created_time>#{sTime_creat})
+        </if>
+        <!--
+        <if test="sTime_sign !=null and eTime_sign !=null and  sTime_sign != '' and eTime_sign != ''">
+            &lt;!&ndash;AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')&ndash;&gt;
+            AND
+            (a.updated_time<![CDATA[<]]>#{eTime_sign} AND a.updated_time>#{sTime_sign})
+        </if>
+
+        -->
+
+        order by a.created_time desc
+
+        limit #{offset} , #{limit}
+
+    </select>
+
+    <select id="queryReportInvoiceCountOut" resultType="java.lang.Integer">
+
+        SELECT
+
+        count(*)
+
+        FROM t_waybill a
+
+        INNER JOIN t_waybill_log_arrive b
+
+        ON a.order_no = b.order_no
+
+        INNER JOIN t_bas_network c
+
+        ON b.network_id = c.id
+
+        INNER JOIN t_sys_user_info d
+
+        ON b.opt_by = d.id
+
+        WHERE a.merchant_id=#{merchantId} AND is_cod = 1
+
+        <if test="orderNo !=null  and orderNo !='' ">
+            AND
+            a.order_no = #{orderNo}
+        </if>
+
+        <if test="rider !=null  and rider !='' ">
+            AND
+            c.name = #{rider}
+        </if>
+
+        <if test="eTime_creat !=null and sTime_creat !=null and  eTime_creat != '' and sTime_creat != ''">
+            <!--AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')-->
+            AND
+            (a.created_time<![CDATA[<]]>#{eTime_creat} AND a.created_time>#{sTime_creat})
+        </if>
+        <!--
+        <if test="sTime_sign !=null and eTime_sign !=null and  sTime_sign != '' and eTime_sign != ''">
+            &lt;!&ndash;AND a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')&ndash;&gt;
+            AND
+            (a.updated_time<![CDATA[<]]>#{eTime_sign} AND a.updated_time>#{sTime_sign})
+        </if>
+
+        -->
+
+        order by a.created_time desc
+
+        limit #{offset} , #{limit}
+    </select>
+
+</mapper>

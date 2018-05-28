@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nilo.dms.dao.WaybillPaymentOrderWaybillDao" >
+  <resultMap id="BaseResultMap" type="com.nilo.dms.dto.order.WaybillPaymentOrderWaybill" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="payment_order_id" property="paymentOrderId" jdbcType="VARCHAR" />
+    <result column="waybill_order_no" property="waybillOrderNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, payment_order_id, waybill_order_no
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_waybill_payment_order_waybill
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_waybill_payment_order_waybill
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.nilo.dms.dto.order.WaybillPaymentOrderWaybill" >
+    insert into t_waybill_payment_order_waybill (id, payment_order_id, waybill_order_no
+      )
+    values (#{id,jdbcType=INTEGER}, #{paymentOrderId,jdbcType=VARCHAR}, #{waybillOrderNo,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.nilo.dms.dto.order.WaybillPaymentOrderWaybill" >
+    insert into t_waybill_payment_order_waybill
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="paymentOrderId != null" >
+        payment_order_id,
+      </if>
+      <if test="waybillOrderNo != null" >
+        waybill_order_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="paymentOrderId != null" >
+        #{paymentOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="waybillOrderNo != null" >
+        #{waybillOrderNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.nilo.dms.dto.order.WaybillPaymentOrderWaybill" >
+    update t_waybill_payment_order_waybill
+    <set >
+      <if test="paymentOrderId != null" >
+        payment_order_id = #{paymentOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="waybillOrderNo != null" >
+        waybill_order_no = #{waybillOrderNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.nilo.dms.dto.order.WaybillPaymentOrderWaybill" >
+    update t_waybill_payment_order_waybill
+    set payment_order_id = #{paymentOrderId,jdbcType=VARCHAR},
+      waybill_order_no = #{waybillOrderNo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- add sql -->
+<select id="queryByPaymentOrderId" resultType="java.lang.String" parameterType="java.lang.String" >
+    select waybill_order_no
+    from t_waybill_payment_order_waybill
+    where payment_order_id = #{id,jdbcType=INTEGER}
+  </select>
+</mapper>
