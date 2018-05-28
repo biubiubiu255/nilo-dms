@@ -346,5 +346,13 @@
             and t.handled_by = #{userId}
         </if>
     </select>
+    <select id="findCreatePackageByNetWork" resultType="java.lang.String">
+        SELECT order_no from t_waybill t where t.is_package = 1  and t.`status` = 0 and t.next_network_id = #{nextNetwork} ORDER BY order_no desc 
+    </select>
+    
+    <update id="finishPackage" >
+        update t_waybill t set t.`status` = 20,t.weight = #{weight} where t.is_package = 1  and t.`status` = 0 and order_no = #{packageNo}
+    </update>
+    
 
 </mapper>

@@ -88,19 +88,20 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
     @Override
     public List<RiderDelivery> queryRiderDelivery(String merchantId, RiderDelivery riderDelivery, Pagination page) {
         List<RiderDelivery> list = handleRiderDao.queryRiderDeliveryBig(riderDelivery, page.getOffset(), page.getLimit());
-        page.setTotalCount(handleRiderDao.queryRiderDeliveryBigCount(riderDelivery, page.getOffset(), page.getLimit()));
+        page.setTotalCount(handleRiderDao.queryRiderDeliveryBigCount(riderDelivery));
 
         Set<Long> userIDList = new HashSet<>();
         for (int i = 0; i < list.size(); i++) {
             userIDList.add(Long.parseLong(list.get(i).getRider()));
         }
-
-        List<StaffDO> staff = staffDao.findstaffByIDs(userIDList.toArray(new Long[userIDList.size()]));
-        //这里两个for循环是将list结果中与当前成员表（riderInfoList、opNameInfoList）中对应的ID找到，然后赋值name
-        for (RiderDelivery r : list) {
-            for (StaffDO s : staff) {
-                if (StringUtil.equals(s.getUserId().toString(), r.getRider())) {
-                    r.setRiderName(s.getStaffId() + "-" + s.getRealName());
+        if(userIDList.size()>0){
+            List<StaffDO> staff = staffDao.findstaffByIDs(userIDList.toArray(new Long[userIDList.size()]));
+            //这里两个for循环是将list结果中与当前成员表（riderInfoList、opNameInfoList）中对应的ID找到，然后赋值name
+            for (RiderDelivery r : list) {
+                for (StaffDO s : staff) {
+                    if (StringUtil.equals(s.getUserId().toString(), r.getRider())) {
+                        r.setRiderName(s.getStaffId() + "-" + s.getRealName());
+                    }
                 }
             }
         }

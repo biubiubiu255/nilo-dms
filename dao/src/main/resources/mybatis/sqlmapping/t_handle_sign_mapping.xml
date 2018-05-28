@@ -41,9 +41,9 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_handle_sign
-        ( merchant_id,order_no,signer,network_code, expressCode, handle_by,handle_time,remark,created_time,updated_time,version)
+        ( merchant_id,order_no,signer,network_code, express_Code, handle_by,handle_time,remark,created_time,updated_time,version)
         VALUES
-        (#{merchantId},#{orderNo},#{signer},${networkCode},${expressCode},#{handleBy},#{handleTime},#{remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{merchantId},#{orderNo},#{signer},#{networkCode},#{expressCode},#{handleBy},#{handleTime},#{remark},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
 </mapper>

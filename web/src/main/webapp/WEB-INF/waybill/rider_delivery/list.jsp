@@ -115,7 +115,7 @@
                     toDetails(handleNo);
                 }else if (obj.event === 'tool-print') {
                     if(data.status!=1){
-                        layer.msg("Please first shipment", {icon: 2, time: 2000});
+                        layer.msg("Please shipment it first", {icon: 2, time: 2000});
                         return;
                     }
                     toPrint(handleNo);
@@ -192,11 +192,10 @@
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/waybill/rider_delivery/updateStatus.html",
+                url: "/waybill/rider_delivery/ship.html",
                 dataType: "json",
                 data: {
-                    handleNo: handleNo,
-                    status: 1
+                    handleNo: handleNo
                 },
                 success: function (data) {
                     if (data.result) {

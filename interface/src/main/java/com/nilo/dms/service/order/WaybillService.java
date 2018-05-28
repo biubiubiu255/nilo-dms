@@ -36,5 +36,6 @@ public interface WaybillService {
 
     void subWaybill(String subWaybill,String waybll);
 
+    String savePackage(PackageRequest packageRequest,String packageNo);
 
 }

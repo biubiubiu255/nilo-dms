@@ -227,9 +227,8 @@
                             templet: '<div>{{d.index }}</div>'
                         }
                         , {field: 'orderNo', title: 'OrderNo', width: 160, align: 'center'}
-                        , {field: 'orderType', title: 'OrderType', width: 150, align: 'center'}
-                        , {field: 'referenceNo', title: 'ReferenceNo', width: 130, align: 'center'}
                         , {field: 'weight', title: 'Weight(KG)', width: 130, align: 'center'}
+                        , {field: 'createdTime', title: 'CreateTime', width: 200, align: 'center', templet: '<div>{{ formatDate(d.createdTime) }}</div>'  }
                         , {field: '', title: 'opt', width: 80, toolbar: '#barDemo', fixed: 'right', align: 'center'}
                     ]]
 

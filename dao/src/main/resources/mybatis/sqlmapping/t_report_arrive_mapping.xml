@@ -16,7 +16,7 @@
                 jdbcType="INTEGER"/>
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
-        <result property="recipients" column="address_name" javaType="java.lang.String"
+        <result property="recipients" column="receive_name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="address" column="address" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
@@ -28,7 +28,7 @@
 
     <select id="queryReportArrive" resultMap="ArriveDo">
 
-        SELECT c.status, a.order_no, a.opt_time,  b.name op_name, c.weight, d.name last_network, e.name scan_network, f.contact_number, f.name address_name, f.address
+        SELECT c.status, a.order_no, a.opt_time,  b.name op_name, c.weight, d.name last_network, e.name scan_network, f.contact_number, f.name receive_name, f.address
 
         FROM  t_waybill_log_arrive a
 
