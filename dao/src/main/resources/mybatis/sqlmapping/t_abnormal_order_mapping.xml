@@ -57,7 +57,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_waybill_abnormal
-        WHERE merchant_id = #{merchantId} and order_no=#{orderNo} and status = 1 limit 1
+        WHERE merchant_id = #{merchantId} and order_no=#{orderNo} and status = 1 order by created_time desc limit 1
     </select>
 
     <select id="queryByReferenceNo" resultMap="abnormalDO" statementType="PREPARED">

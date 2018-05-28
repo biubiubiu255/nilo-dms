@@ -8,7 +8,7 @@
     request.setAttribute("refuse_reason", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.REFUSE_REASON));
     request.setAttribute("id0", RandomStringUtils.randomAlphabetic(8));
     request.setAttribute("imageType", "abnormal");
-    request.setAttribute(Constant.PRBOLEM_REASON, SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.PRBOLEM_REASON));
+    request.setAttribute(Constant.PROBLEM_REASON, SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), Constant.PROBLEM_REASON));
 %>
 <body>
 <div class="box-body">

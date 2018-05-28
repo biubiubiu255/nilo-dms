@@ -2,18 +2,18 @@ package com.nilo.dms.service.order.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Constant;
+import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.enums.MethodEnum;
+import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.AbnormalOrderDao;
 import com.nilo.dms.dao.WaybillLogDao;
 import com.nilo.dms.dao.HandleRiderDao;
 import com.nilo.dms.dao.WaybillDao;
-import com.nilo.dms.dao.dataobject.AbnormalOrderDO;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
-import com.nilo.dms.dao.dataobject.UserInfoDO;
-import com.nilo.dms.dao.dataobject.WaybillDO;
+import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.order.NotifyRequest;
 import com.nilo.dms.dto.order.OrderOptRequest;
 import com.nilo.dms.dto.order.WaybillLog;
@@ -23,6 +23,8 @@ import com.nilo.dms.dto.system.OrderHandleConfig;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.NotifyService;
+import com.nilo.dms.service.order.RiderDeliveryService;
+import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
@@ -50,113 +52,104 @@ public class NotifyServiceImpl implements NotifyService {
     @Qualifier("notifyDataBusProducer")
     private AbstractMQProducer notifyDataBusProducer;
     @Autowired
-    private WaybillDao waybillDao;
-    @Autowired
     private AbnormalOrderDao abnormalOrderDao;
     @Autowired
-    private WaybillLogDao waybillLogDao;
+    private SendThirdService sendThirdService;
     @Autowired
     private HandleRiderDao handleRiderDao;
-
-    @Value("#{configProperties['kili_dispatch']}")
-    private String kili_dispatch;
-    @Value("#{configProperties['kili_refuse']}")
-    private String kili_refuse;
-    @Value("#{configProperties['kili_sign']}")
-    private String kili_sign;
 
     @Override
     public void updateStatus(OrderOptRequest request) {
 
-        String merchantId = SessionLocal.getPrincipal().getMerchantId();
+        Principal p = SessionLocal.getPrincipal();
+        String merchantId = p.getMerchantId();
+        String network = p.getFirstNetwork();
 
-        OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(merchantId,
-                request.getOptType().getCode());
-        String convertResult = StatusConvert.convert(DeliveryOrderStatusEnum.getEnum(handleConfig.getUpdateStatus()));
+        String convertResult = StatusConvert.convert(request.getOptType());
         if (convertResult == null) return;
-        try {
-            MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + merchantId),
-                    MerchantConfig.class);
-            InterfaceConfig interfaceConfig = JSON.parseObject(
-                    RedisUtil.hget(Constant.INTERFACE_CONF + merchantId, "update_status"), InterfaceConfig.class);
-            if (interfaceConfig == null) {
-                return;
-            }
 
-            for (String orderNo : request.getOrderNo()) {
+        MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + merchantId),
+                MerchantConfig.class);
+        InterfaceConfig interfaceConfig = JSON.parseObject(
+                RedisUtil.hget(Constant.INTERFACE_CONF + merchantId, "update_status"), InterfaceConfig.class);
+        if (interfaceConfig == null) {
+            return;
+        }
 
-                //请求参数
-                WaybillDO deliveryOrder = waybillDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
-                //kilimall 临时方案
-                if (StringUtil.equals(deliveryOrder.getOrderPlatform(), "kilimall")) {
-                    String orderType = StringUtil.equals(deliveryOrder.getOrderType(), "FBK") ? "SELL" : "YK";
-                    Map<String, String> param = new HashMap<>();
-                    switch (request.getOptType()) {
+        for (String orderNo : request.getOrderNo()) {
+            NotifyRequest notify = new NotifyRequest();
+            Map<String, Object> routeData = new HashMap<>();
 
-                        case DELIVERY:
-                        case SEND: {
-
-                            logger.info("Notify Kilimall Dispatch,orderNo:" + deliveryOrder.getOrderNo());
-
-                            String data = "{\"data\":{\"orderinfo\":[{\"DeliveryNo\":\"" + deliveryOrder.getOrderNo() + "\",\"CustomerID\":\"KILIMALL\",\"WarehouseID\":\"KE01\",\"OrderNo\":\"" + deliveryOrder.getReferenceNo() + "\",\"OrderType\":\"" + orderType +
-                                    "\"}]}}";
-                            param.put("data", URLEncoder.encode(data, "utf-8"));
-                            param.put("sign", createSign(merchantConfig.getKey(), data));
-                            param.put("op", "confirmSOData");
-                            NotifyRequest notify = new NotifyRequest();
-                            notify.setUrl(kili_dispatch);
-                            notify.setParam(param);
-                            notifyDataBusProducer.sendMessage(notify);
-                            break;
-                        }
-                        case REFUSE: {
-                            String data = "{\"orderInfo\":[{\"orderNo\":\"" + deliveryOrder.getReferenceNo() + "\",\"status\":\"20\"}]}";
-                            param.put("data", URLEncoder.encode(data, "utf-8"));
-                            param.put("sign", createSign(merchantConfig.getKey(), data));
-                            param.put("op", "confirmorder");
-                            NotifyRequest notify = new NotifyRequest();
-                            notify.setUrl(kili_refuse);
-                            notify.setParam(param);
-                            notifyDataBusProducer.sendMessage(notify);
-                            break;
-                        }
-                        case SIGN: {
-                            String data = "{\"orderInfo\":[{\"orderNo\":\"" + deliveryOrder.getReferenceNo() + "\",\"status\":\"10\"}]}";
-                            param.put("data", URLEncoder.encode(data, "utf-8"));
-                            param.put("sign", createSign(merchantConfig.getKey(), data));
-                            param.put("op", "confirmorder");
-                            NotifyRequest notify = new NotifyRequest();
-                            notify.setUrl(kili_sign);
-                            notify.setParam(param);
-                            notifyDataBusProducer.sendMessage(notify);
-                            break;
-                        }
-                        default:
-                            break;
-                    }
+            switch (request.getOptType()) {
+                case ARRIVE_SCAN: {
+                    break;
                 }
-
+                case DELIVERY: {
+                    UserInfoDO userInfoDO = handleRiderDao.queryUserInfoBySmallNo(orderNo);
+                    routeData.put("rider_name", userInfoDO.getName());
+                    routeData.put("rider_phone", userInfoDO.getPhone());
+                    break;
+                }
+                case SEND: {
+                    SendThirdHead sendThirdHead = sendThirdService.queryLoadingBySmallNo(merchantId, orderNo);
+                    routeData.put("third_express", sendThirdHead.getThirdExpressCode());
+                    break;
+                }
+                case PROBLEM: {
+                    AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
+                    String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.PROBLEM_REASON, abnormalOrderDO.getReason());
+                    routeData.put("type", reason);
+                    break;
+                }
+                case SIGN: {
+                    routeData.put("sign_name", convertResult);
+                    break;
+                }
+                default:
+                    break;
             }
-        } catch (Exception e) {
-            logger.error("Notify Failed.", e);
+
+            DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, network), DistributionNetworkDO.class);
+            routeData.put("location", networkDO == null ? "" : networkDO.getName());
+            routeData.put("waybill_number", orderNo);
+            routeData.put("status", convertResult);
+            routeData.put("track_time", DateUtil.getSysTimeStamp());
+            routeData.put("remark", request.getRemark());
+            String data = JSON.toJSONString(routeData);
+            Map<String, String> param = new HashMap<>();
+            try {
+                param.put("method", interfaceConfig.getOp());
+                param.put("app_key", "dms");
+                param.put("data", data);
+                param.put("request_id", UUID.randomUUID().toString());
+                param.put("timestamp", "" + DateUtil.getSysTimeStamp());
+                param.put("data", URLEncoder.encode(data, "utf-8"));
+                param.put("sign", createSign(merchantConfig.getKey(), data));
+                notify.setUrl(interfaceConfig.getUrl());
+                notify.setParam(param);
+                notifyDataBusProducer.sendMessage(notify);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private static class StatusConvert {
-        private static Map<DeliveryOrderStatusEnum, String> convertRelation = new HashMap<>();
+        private static Map<OptTypeEnum, String> convertRelation = new HashMap<>();
 
         static {
-            convertRelation.put(DeliveryOrderStatusEnum.ARRIVED, "170");
-            convertRelation.put(DeliveryOrderStatusEnum.DELIVERY, "180");
-            convertRelation.put(DeliveryOrderStatusEnum.SIGN, "190");
-            convertRelation.put(DeliveryOrderStatusEnum.PROBLEM, "197");
-            convertRelation.put(DeliveryOrderStatusEnum.REFUSE, "195");
+            convertRelation.put(OptTypeEnum.ARRIVE_SCAN, "162");
+            convertRelation.put(OptTypeEnum.DELIVERY, "180");
+            convertRelation.put(OptTypeEnum.SEND, "185");
+            convertRelation.put(OptTypeEnum.SIGN, "190");
+            convertRelation.put(OptTypeEnum.PROBLEM, "197");
+            convertRelation.put(OptTypeEnum.REFUSE, "195");
 
         }
 
-        public static String convert(DeliveryOrderStatusEnum status) {
-            if (convertRelation.containsKey(status)) {
-                return convertRelation.get(status);
+        public static String convert(OptTypeEnum opt) {
+            if (convertRelation.containsKey(opt)) {
+                return convertRelation.get(opt);
             } else {
                 return null;
             }

@@ -308,7 +308,6 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     public void arrive(List<String> waybillNos) {
 
 
-        Principal principal = SessionLocal.getPrincipal();
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
         optRequest.setOrderNo(waybillNos);

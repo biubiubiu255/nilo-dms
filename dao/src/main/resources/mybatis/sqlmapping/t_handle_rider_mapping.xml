@@ -198,7 +198,7 @@
 
     <!-- 查询其他的信息 -->
 
-    <select id="queryUserInfoBySmallNo" resultMap="orderSmall" statementType="PREPARED">
+    <select id="queryUserInfoBySmallNo" resultMap="userInfoDO" statementType="PREPARED">
         SELECT
 
         c.*
@@ -215,7 +215,7 @@
 
         on b.rider = c.id
 
-        WHERE a.order_no = #{orderNo}
+        WHERE a.order_no = #{orderNo} order by a.created_time desc limit 1
     </select>
 
 

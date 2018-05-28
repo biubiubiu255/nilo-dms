@@ -218,8 +218,6 @@ public class SendThirdServiceImpl implements SendThirdService {
                 sendSMS(w);
             }
         }
-
-        deliveryRouteService.addKiliRoute(orderNos, "P30",head.getThirdExpressCode());
     }
 
     private void sendSMS(WaybillDO w) {

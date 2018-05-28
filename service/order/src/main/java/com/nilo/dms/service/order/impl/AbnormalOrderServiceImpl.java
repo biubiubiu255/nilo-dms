@@ -194,7 +194,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         abnormalOrder.setAbnormalType(type);
         String reasonDesc = "";
         if (type == PROBLEM) {
-            reasonDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.PRBOLEM_REASON, abnormalOrderDO.getReason());
+            reasonDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.PROBLEM_REASON, abnormalOrderDO.getReason());
         } else {
             reasonDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.REFUSE_REASON, abnormalOrderDO.getReason());
         }
