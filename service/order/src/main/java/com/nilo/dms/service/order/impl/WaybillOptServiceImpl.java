@@ -103,7 +103,7 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
 
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOptType(OptTypeEnum.REFUSE);
-        optRequest.setRemark(handleRefuse.getRemark());
+        optRequest.setRemark(handleRefuse.getReason());
         optRequest.setOrderNo(new ArrayList<String>(Arrays.asList(new String[]{handleRefuse.getOrderNo()})));
         waybillService.handleOpt(optRequest);
     }
