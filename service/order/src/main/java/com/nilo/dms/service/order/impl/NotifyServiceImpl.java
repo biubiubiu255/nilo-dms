@@ -112,7 +112,8 @@ public class NotifyServiceImpl implements NotifyService {
             }
 
             DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, network), DistributionNetworkDO.class);
-            routeData.put("location", networkDO == null ? "" : networkDO.getName());
+            routeData.put("network_code", networkDO == null ? "" : networkDO.getCode());
+            routeData.put("network", networkDO == null ? "" : networkDO.getName());
             routeData.put("waybill_number", orderNo);
             routeData.put("status", convertResult);
             routeData.put("track_time", DateUtil.getSysTimeStamp());
