@@ -8,10 +8,7 @@ import com.nilo.dms.common.enums.MethodEnum;
 import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.AbnormalOrderDao;
-import com.nilo.dms.dao.WaybillLogDao;
-import com.nilo.dms.dao.HandleRiderDao;
-import com.nilo.dms.dao.WaybillDao;
+import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.order.NotifyRequest;
@@ -57,6 +54,8 @@ public class NotifyServiceImpl implements NotifyService {
     private SendThirdService sendThirdService;
     @Autowired
     private HandleRiderDao handleRiderDao;
+    @Autowired
+    private DeliveryOrderReceiverDao deliveryOrderReceiverDao;
 
     @Override
     public void updateStatus(OrderOptRequest request) {
@@ -99,10 +98,13 @@ public class NotifyServiceImpl implements NotifyService {
                     AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
                     String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.PROBLEM_REASON, abnormalOrderDO.getReason());
                     routeData.put("type", reason);
+                    routeData.put("type_code", abnormalOrderDO.getReason());
+
                     break;
                 }
                 case SIGN: {
-                    routeData.put("sign_name", convertResult);
+                    DeliveryOrderReceiverDO receiverDO = deliveryOrderReceiverDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
+                    routeData.put("sign_name", receiverDO.getName());
                     break;
                 }
                 default:
@@ -120,6 +122,7 @@ public class NotifyServiceImpl implements NotifyService {
             try {
                 param.put("method", interfaceConfig.getOp());
                 param.put("app_key", "dms");
+                param.put("country_code", "ke");
                 param.put("data", data);
                 param.put("request_id", UUID.randomUUID().toString());
                 param.put("timestamp", "" + DateUtil.getSysTimeStamp());
