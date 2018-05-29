@@ -35,6 +35,7 @@ public class DefaultExceptionHandler implements HandlerExceptionResolver {
             Map<String, Object> result = new HashMap<String, Object>();
             result.put("result", false);
             result.put("status", "fail");
+            result.put("error", ex.getMessage());
             result.put("msg", ex.getMessage());
             view.setAttributesMap(result);
             mv.setView(view);
