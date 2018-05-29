@@ -146,7 +146,7 @@ public class NotifyServiceImpl implements NotifyService {
         private static Map<OptTypeEnum, String> convertRelation = new HashMap<>();
 
         static {
-            convertRelation.put(OptTypeEnum.ARRIVE_SCAN, "162");
+            convertRelation.put(OptTypeEnum.ARRIVE_SCAN, "120");
             convertRelation.put(OptTypeEnum.DELIVERY, "180");
             convertRelation.put(OptTypeEnum.SEND, "185");
             convertRelation.put(OptTypeEnum.SIGN, "190");
