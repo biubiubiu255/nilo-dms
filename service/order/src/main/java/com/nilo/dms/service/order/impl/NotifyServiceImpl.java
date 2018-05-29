@@ -95,11 +95,15 @@ public class NotifyServiceImpl implements NotifyService {
                     break;
                 }
                 case PROBLEM: {
-                    AbnormalOrderDO abnormalOrderDO = abnormalOrderDao.queryByOrderNo(Long.parseLong(merchantId), orderNo);
-                    String reason = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.PROBLEM_REASON, abnormalOrderDO.getReason());
+                    String reason = SystemCodeUtil.getCodeVal(merchantId, Constant.PROBLEM_REASON, request.getRemark());
                     routeData.put("type", reason);
-                    routeData.put("type_code", abnormalOrderDO.getReason());
-
+                    routeData.put("type_code", request.getRemark());
+                    break;
+                }
+                case REFUSE: {
+                    String reason = SystemCodeUtil.getCodeVal(merchantId, Constant.REFUSE_REASON, request.getRemark());
+                    routeData.put("type", reason);
+                    routeData.put("type_code", request.getRemark());
                     break;
                 }
                 case SIGN: {

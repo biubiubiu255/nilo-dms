@@ -66,7 +66,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(abnormalOrder.getOrderNo());
         optRequest.setOrderNo(orderNoList);
-        optRequest.setRemark(abnormalOrder.getRemark());
+        optRequest.setRemark(abnormalOrder.getReason());
         waybillService.handleOpt(optRequest);
 
         String abnormalNo = SystemConfig.getNextSerialNo(abnormalOrder.getMerchantId(), SerialTypeEnum.ABNORMAL_DELIVERY_ORDER_NO.getCode());
