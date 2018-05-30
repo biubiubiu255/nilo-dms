@@ -177,6 +177,10 @@
         handle_no = #{handleNo}
     </update>
 
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete FROM t_handle_third_express
+        WHERE id = #{id}
+    </delete>
 
     <!-- 下面是子包分割线 -->
     <select id="querySmall" resultMap="sendSmall" statementType="PREPARED"
@@ -219,15 +223,14 @@
 -->
 
 
-    <insert id="insertSmalls">
+    <insert id="insertSmalls" parameterType="java.util.List">
         INSERT
         INTO
         t_handle_third_express_details
         ( merchant_id,third_handle_no, order_no, weight, length, height, width, status, created_time, updated_time, version )
         VALUES
         <foreach collection="list" item="now" separator=",">
-            (#{now.merchantId},#{now.thirdHandleNo},#{now.orderNo},#{now.weight},#{now.len},#{now.height},#{now.width},#{now.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),
-            UUID())
+            (#{now.merchantId},#{now.thirdHandleNo},#{now.orderNo},#{now.weight},#{now.len},#{now.height},#{now.width},#{now.status},UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()), UUID())
         </foreach>
 
     </insert>

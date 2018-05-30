@@ -66,6 +66,9 @@ public class SendThirdServiceImpl implements SendThirdService {
         if (handleNo == null) {
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
+        if(smallOrders==null || smallOrders.length==0){
+            return;
+        }
         List<Waybill> list = waybillService.queryByOrderNos(merchantId.toString(), Arrays.asList(smallOrders));
         List<SendThirdDetail> dataList = new ArrayList<SendThirdDetail>();
 
@@ -161,7 +164,7 @@ public class SendThirdServiceImpl implements SendThirdService {
 
     @Override
     @Transactional
-    public void edit(SendThirdHead sendThirdHead, String[] smallOrders) {
+    public void editSmalls(SendThirdHead sendThirdHead, String[] smallOrders) {
 
         AssertUtil.isNotNull(sendThirdHead, BizErrorCode.HandleNO_NOT_EXIST);
         AssertUtil.isNotBlank(sendThirdHead.getHandleNo(), BizErrorCode.HandleNO_NOT_EXIST);
@@ -173,7 +176,6 @@ public class SendThirdServiceImpl implements SendThirdService {
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
 
-        handleThirdDao.editBigBy(sendThirdHead);
         handleThirdDao.deleteSmallByHandleNo(merchantId, sendThirdHead.getHandleNo());
         //插入小包
         insertSmallAll(merchantId, sendThirdHead.getHandleNo(), smallOrders);
@@ -241,5 +243,16 @@ public class SendThirdServiceImpl implements SendThirdService {
         } catch (Exception e) {
         }
     }
+
+    @Override
+    public void deleteHandle(String handleNo) {
+        Long merchantId = Long.parseLong(SessionLocal.getPrincipal().getMerchantId());
+        SendThirdHead sendThirdHead = handleThirdDao.queryBigByHandleNo(merchantId, handleNo);
+        AssertUtil.isNotNull(sendThirdHead, BizErrorCode.HandleNO_NOT_EXIST);
+        handleThirdDao.deleteById(sendThirdHead.getId().longValue());
+        handleThirdDao.deleteSmallByHandleNo(merchantId, handleNo);
+    }
+
+
 }
 

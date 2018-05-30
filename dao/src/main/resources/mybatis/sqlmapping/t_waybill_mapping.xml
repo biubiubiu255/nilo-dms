@@ -181,10 +181,10 @@
         FROM t_waybill
         WHERE merchant_id=#{merchantId}
         <if test="orderNo !=null and orderNo !='' ">
-            and order_no = #{orderNo}
+            and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>
         <if test="referenceNo !=null and referenceNo !='' ">
-            and reference_no = #{referenceNo}
+            and reference_no like CONCAT( CONCAT('%',#{referenceNo}),'%')
         </if>
         <if test="orderPlatform !=null and orderPlatform !='' ">
             and order_platform = #{orderPlatform}
@@ -223,10 +223,10 @@
         FROM t_waybill
         WHERE merchant_id=#{merchantId}
         <if test="orderNo !=null and orderNo !='' ">
-            and order_no = #{orderNo}
+            and order_no like CONCAT( CONCAT('%',#{orderNo}),'%')
         </if>
         <if test="referenceNo !=null and referenceNo !='' ">
-            and reference_no = #{referenceNo}
+            and reference_no like CONCAT( CONCAT('%',#{referenceNo}),'%')
         </if>
         <if test="orderPlatform !=null and orderPlatform !='' ">
             and order_platform = #{orderPlatform}
@@ -253,7 +253,6 @@
         <if test="nextStation !=null and nextStation !='' ">
             and nextStation = #{nextStation}
         </if>
-        order by null
     </select>
 
 
