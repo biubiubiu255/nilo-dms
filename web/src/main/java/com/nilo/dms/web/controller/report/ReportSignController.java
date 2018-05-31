@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +107,11 @@ public class ReportSignController extends BaseController {
             default:
                 fileType = "pdf";
                 page = getPage();
+        }
+
+        if(parameter.getToHandledTime()==null && parameter.getFromHandledTime()==null){
+            parameter.setFromHandledTime(new Long(LocalDateTime.now().withHour(0).withMinute(0).toEpochSecond(ZoneOffset.of("+8"))).intValue());
+            parameter.setToHandledTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
         }
 
         List<SignReport> list = signReportService.querySignReport(parameter, page);

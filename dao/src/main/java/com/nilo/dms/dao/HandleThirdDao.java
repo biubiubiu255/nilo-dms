@@ -28,6 +28,8 @@ public interface HandleThirdDao extends BaseDao<Long, SendThirdHead> {
 
     void editBigBy(SendThirdHead sendThirdHead);
 
+    void editAllSmallbyHandleNo(SendThirdDetail sendThirdDetail);
+
     //下面是子包
     List<SendThirdDetail> querySmall(@Param("merchantId") Long merchantId, @Param("handleNo") String handleNo);
 

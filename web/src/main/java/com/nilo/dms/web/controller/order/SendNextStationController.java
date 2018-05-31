@@ -165,11 +165,8 @@ public class SendNextStationController extends BaseController {
         Principal me = SessionLocal.getPrincipal();
         Long merchantId = Long.valueOf(me.getMerchantId());
 
-
-
         //这里有两种增加方式，一种是页面之间添加，所以session-model里没有值，全在当前参数里，另外一种是站点在session-model里，driver在当前参数
         //从session取出刚刚打包好的大包发运信息（下一站点ID、名字）
-
         if(StringUtil.isEmpty(sendThirdHead.getNetworkCode()) || StringUtil.isEmpty(sendThirdHead.getNetworkCode())){
             if(session.getAttribute("packageInfo")==null){
                 throw new DMSException(BizErrorCode.NOT_STATION_INFO);
@@ -217,16 +214,12 @@ public class SendNextStationController extends BaseController {
         return toJsonTrueData(list);
     }
 
-
-
     @ResponseBody
     @RequestMapping(value = "/updateStatus.html", method = RequestMethod.POST)
     public String updateStatus(String handleNo, Integer status) {
         sendThirdService.ship(handleNo);
         return toJsonTrueMsg();
     }
-
-
 
     @RequestMapping(value = "/editPage.html", method = RequestMethod.GET)
     public String editPage(SendThirdHead sendThirdHead, String tempScanNo, Model model, HttpServletRequest request) {
@@ -256,6 +249,31 @@ public class SendNextStationController extends BaseController {
         return "waybill/send_nextStation/edit";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/edit.html", method = RequestMethod.POST)
+    public String edit(SendThirdHead sendThirdHead, String[] smallNos) {
+
+        String merchantId = SessionLocal.getPrincipal().getMerchantId();
+
+        Pagination page = getPage();
+
+        //sendThirdHead 有两个参数，handleNo和status
+
+        sendThirdService.editSmalls(sendThirdHead, smallNos);
+
+        if(sendThirdHead.getStatus().equals(1)){
+            sendThirdService.ship(sendThirdHead.getHandleNo());
+        }
+        return toJsonTrueMsg();
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/deleteHandle.html", method = RequestMethod.POST)
+    public String deleteHandle(String handleNo) {
+        sendThirdService.deleteHandle(handleNo);
+        return toJsonTrueMsg();
+    }
 
 
 }

@@ -92,9 +92,13 @@
                         layer.msg('Finished loading');
                         return;
                     }
-                    for (var i = 0; i < tableData.length; i++) {
-                        if (tableData.splice(i, 1));
-                        break;
+
+                    for(var i=0;i<tableData.length;i++){
+                        console.log(obj.data.orderNo, tableData[i].orderNo);
+                        if(obj.data.orderNo==tableData[i].orderNo){
+                            tableData.splice(i, 1);
+                            break;
+                        }
                     }
                     view();
                 }
