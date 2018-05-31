@@ -155,6 +155,7 @@
                 #{orderNo}
             </foreach>
         </if>
+        ORDER BY updated_time desc
     </select>
     
     <select id="selectByOrderNos" resultMap="orderDO" statementType="PREPARED">
