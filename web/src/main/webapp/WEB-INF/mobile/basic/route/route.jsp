@@ -95,7 +95,20 @@
 			break;
 
             case 'send':
-                point = map.send_scan + '，' + map.home_network + '：' + d.optByName;
+                var info = '';
+                console.log(d);
+                console.log(d.nextNetwork);
+
+                if(d.nextNetwork!=null){
+                    info += 'SendType：' + d.nextNetwork;
+				}
+                if(d.expressName!=null){
+                    info += 'SendType：' + d.expressName;
+                }
+                if(d.rider!=null){
+                    info += '，rider:'+d.rider + '，phone：'+optByNamePhone+'，jobID:'+jobId;
+				}
+                point = map.send_scan + '，' + map.home_network + '：' + d.optByName + '，' + info;
                 break;
 
 		case 'delivery':

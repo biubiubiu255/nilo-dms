@@ -3,11 +3,11 @@ package com.nilo.dms.web.controller.report;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.SendReportDao;
 import com.nilo.dms.dao.ThirdExpressDao;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.*;
+import com.nilo.dms.dao.dataobject.QO.ReportRepeatQO;
 import com.nilo.dms.dao.dataobject.QO.SendReportQO;
-import com.nilo.dms.dao.dataobject.SendReportDO;
-import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SendReportService;
@@ -22,26 +22,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/report/sendExpress")
-public class ReportSendExpressController extends BaseController {
+@RequestMapping("/report/repeat_send")
+public class ReportRepeatSendController extends BaseController {
 
     @Autowired
-    private SendReportService sendReportService;
-
-    @Autowired
-    private ThirdExpressDao thirdExpressDao;
-
-    @Autowired
-    private DistributionNetworkDao distributionNetworkDao;
+    private SendReportDao sendReportDao;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DistributionNetworkDao distributionNetworkDao;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
@@ -59,31 +58,35 @@ public class ReportSendExpressController extends BaseController {
             s.setCode("" + n.getId());
             s.setName(n.getName());
             list.add(s);
-         }
+        }
 
         List<ThirdExpressDO> expressList = userService.findExpressesAll(page);
 
+        List<StaffDO> riderList = getRiderList(null);
+
+
         model.addAttribute("nextStations", list);
         model.addAttribute("expressList", expressList);
+        model.addAttribute("riderList", riderList);
 
-        return "report/sendExpress/list";
+
+        return "report/repeatDispatch/list";
     }
 
 
     @RequestMapping(value = "/list.html")
-    public String getOrderList(Model model,  HttpServletRequest request, SendReportQO sendReportQO) {
+    public String getOrderList(Model model,  HttpServletRequest request, ReportRepeatQO reportRepeatQO) {
 
         Principal me = SessionLocal.getPrincipal();
 
         Pagination page = getPage();
 
-
         //获取merchantId
         Long merchantId = Long.parseLong(me.getMerchantId());
-        sendReportQO.setMerchantId(merchantId);
+        reportRepeatQO.setMerchantId(merchantId);
         
         String fileType;
-        switch (sendReportQO.getExportType()) {
+        switch (reportRepeatQO.getExportType()) {
             case 0:
                 fileType = "pdf";
                 page = new Pagination(0, 1000);
@@ -98,13 +101,15 @@ public class ReportSendExpressController extends BaseController {
             default:
                 fileType = "pdf";
         }
-
-        if(sendReportQO.getToCreatedTime()==null && sendReportQO.getFromCreatedTime()==null){
-            sendReportQO.setFromCreatedTime(new Long(LocalDateTime.now().withHour(0).withMinute(0).toEpochSecond(ZoneOffset.of("+8"))).intValue());
-            sendReportQO.setToCreatedTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
+        if(reportRepeatQO.getToCreatedTime()==null && reportRepeatQO.getFromCreatedTime()==null){
+            reportRepeatQO.setFromCreatedTime(new Long(LocalDateTime.now().withHour(0).withMinute(0).toEpochSecond(ZoneOffset.of("+8"))).intValue());
+            reportRepeatQO.setToCreatedTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
         }
 
-        List<SendReportDO> list = sendReportService.querySendExpressReport(sendReportQO, page);
+        reportRepeatQO.setLimit(page.getLimit());
+        reportRepeatQO.setOffset(page.getOffset());
+        List<ReportRepeatDO> list = sendReportDao.queryRepeatDispatch(reportRepeatQO);
+        page.setTotalCount(sendReportDao.queryRepeatDispatchCount(reportRepeatQO));
 
         if (fileType.equals("json")) {
             request.setAttribute("toDate", toPaginationLayUIData(page, list));
@@ -113,7 +118,7 @@ public class ReportSendExpressController extends BaseController {
 
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
         // 动态指定报表模板url
-        model.addAttribute("url", "/WEB-INF/jasper/report/sendExpress.jasper");
+        model.addAttribute("url", "/WEB-INF/jasper/report/repeat.jasper");
         model.addAttribute("format", fileType); // 报表格式
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView"; // 对应jasper-defs.xml中的bean id

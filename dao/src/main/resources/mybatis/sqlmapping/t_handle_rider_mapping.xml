@@ -219,6 +219,10 @@
 
         WHERE a.order_no = #{orderNo}
 
+        ORDER BY a.created_time DESC
+
+        limit 1
+
     </select>
 
 

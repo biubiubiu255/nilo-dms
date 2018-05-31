@@ -206,7 +206,14 @@ public class SendThirdServiceImpl implements SendThirdService {
         update.setHandleNo(handleNo);
         update.setMerchantId(Long.parseLong(principal.getMerchantId()));
         update.setStatus(1);
+
         handleThirdDao.editBigBy(update);
+
+        SendThirdDetail sendThirdDetail = new SendThirdDetail();
+        sendThirdDetail.setMerchantId(Long.parseLong(principal.getMerchantId()));
+        sendThirdDetail.setThirdHandleNo(handleNo);
+        sendThirdDetail.setStatus(HandleRiderStatusEnum.SHIP.getCode());
+        handleThirdDao.editAllSmallbyHandleNo(sendThirdDetail);
 
         for (SendThirdDetail d : detailsList) {
             //发送短信

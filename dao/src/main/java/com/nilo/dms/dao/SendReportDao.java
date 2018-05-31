@@ -1,7 +1,9 @@
 package com.nilo.dms.dao;
 
 import com.nilo.dms.common.BaseDao;
+import com.nilo.dms.dao.dataobject.QO.ReportRepeatQO;
 import com.nilo.dms.dao.dataobject.QO.SendReportQO;
+import com.nilo.dms.dao.dataobject.ReportRepeatDO;
 import com.nilo.dms.dao.dataobject.SendReportDO;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +16,15 @@ import java.util.Map;
 @Repository
 public interface SendReportDao extends BaseDao<Long,SendReportDO> {
     List<SendReportDO> querySendStationReport(SendReportQO sendReportQO);
+
     Long querySendStationCount(SendReportQO sendReportQO);
 
     List<SendReportDO> querySendExpressReport(SendReportQO sendReportQO);
+
     Long querySendExpressCount(SendReportQO sendReportQO);
+
+
+    List<ReportRepeatDO>queryRepeatDispatch(ReportRepeatQO reportRepeatQO);
+
+    Long queryRepeatDispatchCount(ReportRepeatQO reportRepeatQO);
 }
