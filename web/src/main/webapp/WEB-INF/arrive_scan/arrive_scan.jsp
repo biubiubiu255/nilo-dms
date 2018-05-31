@@ -189,7 +189,7 @@
         };
         
         var printOrder = function (orderNo) {
-            parent.window.open("/waybill/print/" + orderNo + ".html");
+            parent.window.open("/waybill/arriveScanPrint/" + orderNo + ".html");
         }
     });
 </script>
