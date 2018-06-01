@@ -116,11 +116,15 @@
                     }
                     ship(handleNo);
                 }else if (obj.event === 'tool-delete') {
-                    if (data.status == 1) {
-                        layer.msg("Has been shipped", {icon: 2, time: 2000});
-                        return;
-                    }
-                    deleteHandle(handleNo);
+                    layer.confirm('Are you sure？', {
+                        btn: ['Yes','No'] //按钮
+                    }, function(){
+                        if (data.status == 1) {
+                            layer.msg("Has been shipped", {icon: 2, time: 2000});
+                            return;
+                        }
+                        deleteHandle(handleNo);
+                    });
                 }
 
             });

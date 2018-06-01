@@ -193,7 +193,7 @@
 
     </insert>
 
-    <delete id="deleteSmallByHandleNo" parameterType="com.nilo.dms.dao.dataobject.RiderDeliverySmallDO">
+    <delete id="deleteSmallsByHandleNo">
         delete FROM t_handle_rider_details
         WHERE handle_no = #{handleNo}
     </delete>
@@ -235,5 +235,10 @@
         WHERE
         handle_no = #{handleNo}
     </update>
+
+    <delete id="deleteHandleBy">
+        delete FROM t_handle_rider
+        WHERE merchant_id = #{merchantId} and  handle_no = #{handleNo}
+    </delete>
 
 </mapper>

@@ -33,4 +33,6 @@ public interface RiderDeliveryService {
 
     List<StaffDO> findUserInfoByUserIds(Long merchantId, Long[] userIDs);
 
+    void deleteHandleAndSmalls(String handleNo);
+
 }

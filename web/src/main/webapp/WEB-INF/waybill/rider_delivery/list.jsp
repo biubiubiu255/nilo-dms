@@ -88,11 +88,13 @@
         <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="tool-print">Print</a>
         <a class="layui-btn layui-btn-primary  layui-btn-mini" lay-event="tool-edit">Detail</a>
         <a class="layui-btn layui-btn-danger  layui-btn-mini" lay-event="tool-ship">Ship</a>
+        <a class="layui-btn layui-btn-danger  layui-btn-mini" lay-event="tool-detele">Delete</a>
     </script>
 </div>
 <%@ include file="../../common/footer.jsp" %>
 <script type="text/javascript">
     $(function () {
+        var layerM;
         layui.use(['form', 'layer', 'element', 'laydate'], function () {
             var layDate = layui.laydate;
             layDate.render({
@@ -103,6 +105,8 @@
                 elem: '#toCreatedTime'
                 , lang: 'en'
             });
+
+            layerM = layui.layer;
         });
         var table;
         layui.use('table', function () {
@@ -127,6 +131,16 @@
                     ship(handleNo);
                 } else if (obj.event === 'tool-edit') {
                     edit(handleNo);
+                }else if (obj.event === 'tool-detele') {
+                    layer.confirm('Are you sure？', {
+                        btn: ['Yes','No'] //按钮
+                    }, function(){
+                        if(data.status==1){
+                            layer.msg("Has been shipped", {icon: 2, time: 2000});
+                            return;
+                        }
+                        deleteHandle(handleNo);
+                    });
                 }
 
             });
@@ -185,6 +199,24 @@
                 close: true,
                 url: url
             });
+        }
+
+        function deleteHandle(handleNo) {
+            var index = layerM.load(0);
+            $.post(
+                "/waybill/rider_delivery/deleteHandle.html",
+                {handleNo: handleNo},
+                function (data) {
+                    layerM.close(index);
+                    if(data.result){
+                        layer.msg("SUCCESS", {icon: 1, time: 2000});
+                        reloadTable();
+                    }else {
+                        layer.msg(data.msg, {icon: 2, time: 2000});
+                    }
+                },
+                "json"
+            );
         }
 
         //暂时停用

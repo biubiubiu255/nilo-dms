@@ -492,16 +492,18 @@
         FROM
         t_handle_rider_details AS a
         INNER JOIN (
-        SELECT
-        order_no,
-        count(1) AS occur_num,
-        max(created_time) AS created_time
-        FROM
-        t_handle_rider_details
-        GROUP BY
-        order_no
-        HAVING
-        COUNT(order_no) > 2
+            SELECT
+            a.order_no,
+            count(a.id) AS occur_num,
+            max(a.created_time) AS created_time
+            FROM
+            t_handle_rider_details AS a
+            INNER JOIN t_handle_rider AS c ON a.handle_no = c.handle_no
+            AND c.`status` = 1
+            GROUP BY
+            a.order_no
+            HAVING
+            COUNT(a.order_no) > 1
         ) AS b ON a.order_no = b.order_no
         AND a.created_time = b.created_time
         INNER JOIN t_handle_rider AS c ON a.handle_no = c.handle_no
@@ -532,16 +534,17 @@
         FROM
         t_handle_third_express_details AS a
         INNER JOIN (
-        SELECT
-        order_no,
-        count(1) AS occur_num,
-        max(created_time) AS created_time
-        FROM
-        t_handle_third_express_details
-        GROUP BY
-        order_no
-        HAVING
-        COUNT(order_no) > 2
+            SELECT
+            a.order_no,
+            count(a.id) AS occur_num,
+            max(a.created_time) AS created_time
+            FROM
+            t_handle_third_express_details as a
+            INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no and c.`status`=1
+            GROUP BY
+            a.order_no
+            HAVING
+            COUNT(a.order_no) > 1
         ) AS b ON a.order_no = b.order_no
         AND a.created_time = b.created_time
         INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no
