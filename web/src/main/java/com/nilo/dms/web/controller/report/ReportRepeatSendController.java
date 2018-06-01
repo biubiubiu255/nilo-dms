@@ -109,6 +109,7 @@ public class ReportRepeatSendController extends BaseController {
         reportRepeatQO.setLimit(page.getLimit());
         reportRepeatQO.setOffset(page.getOffset());
         List<ReportRepeatDO> list = sendReportDao.queryRepeatDispatch(reportRepeatQO);
+
         page.setTotalCount(sendReportDao.queryRepeatDispatchCount(reportRepeatQO));
 
         if (fileType.equals("json")) {

@@ -75,6 +75,18 @@
 
     <div class="layui-row">
 
+        <div class="layui-col-md4 layui-col-lg3">
+            <label class="layui-form-label">DeliveryType:</label>
+            <div class="layui-input-inline">
+                <select name="dispatchType" lay-filter="status" lay-search="">
+                    <option value="">Select Status....</option>
+                    <option value="riderDelivery">RiderDelivery</option>
+                    <option value="package">Station</option>
+                    <option value="waybill">Express</option>
+                </select>
+            </div>
+        </div>
+
 
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">Status:</label>
@@ -112,13 +124,13 @@
             <thead>
             <tr>
                 <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
+                <th lay-data="{field: 'referenceNo', width:190}">ReferenceNo</th>
                 <th lay-data="{field:'handleNo', width:100}">HandleNo</th>
                 <th lay-data="{field:'dispatchNum', width:116}">Times</th>
-                <th lay-data="{field:'dispatchType', width:119}">DispatchType</th>
+<%--                <th lay-data="{field:'dispatchType', width:119}">DispatchType</th>--%>
                 <th lay-data="{field: 'handleName', width:130}">HandleName</th>
                 <th lay-data="{field:'expressName', width:130}">ExpressName</th>
                 <th lay-data="{field:'nextStation', width:130}">NextStation</th>
-                <th lay-data="{field: 'referenceNo', width:190}">ReferenceNo</th>
                 <th lay-data="{field: 'orderType', width:100}">OrderType</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'rider', width:130}">Rider</th>
@@ -217,6 +229,7 @@
                     expressCode: $("select[name='expressCode']").val(),
                     nextStationCode: $("select[name='nextStationCode']").val(),
                     exportType: dateType,
+                    dispatchType: $("select[name='dispatchType']").val(),
                     status: $("select[name='status']").val()
                 };
 

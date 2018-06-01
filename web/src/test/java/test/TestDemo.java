@@ -8,14 +8,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -24,6 +20,11 @@ import java.util.List;
 public class TestDemo {
     public static void main(String[] args) throws Exception {
 
+long a = System.currentTimeMillis();
+
+        //System.out.println(System.currentTimeMillis()-a);
+
+        System.exit(1);
         System.out.println( -1L ^ (-1L << 6L));
 
         LocalDateTime time = LocalDateTime.now();
@@ -32,6 +33,29 @@ public class TestDemo {
 
         list.add("sfd");
         list.add("sfddfd");
+
+        System.out.println("本次测试 = " + LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")));
+        LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        LocalDateTime time1 = LocalDateTime.now();
+        LocalDate localDate = time1.toLocalDate();
+
+        //System.out.println("本次测试 = " + localDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        StringBuilder serialStr = new StringBuilder();
+        serialStr.append(localDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        serialStr.append("1");
+        serialStr.append(new Random().nextInt(9));
+        serialStr.append(time1.toLocalTime().toSecondOfDay());
+        serialStr.append(time1.getSecond());
+
+
+        System.out.println("本次测试d = " + time1.toLocalTime().toSecondOfDay() );
+
+        System.out.println("本次测试a = " + new Random().nextInt(9));
+
+
+        System.out.println("本次测试2 = " + serialStr.toString());
+
+        System.out.println("本次测试 = " + LocalDateTime.now().toString());
 
         String[] larsr = new String[5];
         System.out.println("本次测试 = " + list.toArray(larsr));

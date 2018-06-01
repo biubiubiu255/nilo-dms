@@ -566,6 +566,9 @@
         <if test="orderType !=null and orderType !='' ">
             and a.order_type = #{orderType}
         </if>
+        <if test="dispatchType !=null and dispatchType !='' ">
+            and a.type = #{dispatchType}
+        </if>
         <if test="fromCreatedTime !=null ">
             and a.created_time >= #{fromCreatedTime}
         </if>

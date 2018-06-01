@@ -152,6 +152,7 @@
             form.render();
             //监听提交
             form.on('submit(edit-staff)', function (data) {
+
                 var load = layer.load(2);
                 $.ajax({
                     url: "/staff/editStaff.html",
