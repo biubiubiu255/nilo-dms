@@ -88,7 +88,6 @@
         <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="tool-print">Print</a>
         <a class="layui-btn layui-btn-primary  layui-btn-mini" lay-event="tool-edit">Detail</a>
         <a class="layui-btn layui-btn-danger  layui-btn-mini" lay-event="tool-ship">Ship</a>
-
     </script>
 </div>
 <%@ include file="../../common/footer.jsp" %>

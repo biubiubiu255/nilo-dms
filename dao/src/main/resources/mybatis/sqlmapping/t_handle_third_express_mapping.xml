@@ -249,7 +249,7 @@
 
     <update id="editAllSmallbyHandleNo" statementType="PREPARED" parameterType="com.nilo.dms.dto.handle.SendThirdDetail">
         update t_handle_third_express_details
-        <trim prefix="set" suffixOverrides="," suffix="where merchant_id = #{merchantId} and handle_no = #{thirdHandleNo}">
+        <trim prefix="set" suffixOverrides="," suffix="where merchant_id = #{merchantId} and third_handle_no = #{thirdHandleNo}">
             <if test="status != null ">
                 status = #{status},
             </if>
