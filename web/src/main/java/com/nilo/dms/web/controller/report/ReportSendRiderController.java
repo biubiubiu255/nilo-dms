@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +69,11 @@ public class ReportSendRiderController extends BaseController {
                 break;
             default:
                 fileType = "pdf";
+        }
+
+        if(reportDispatchQO.getToCreatedTime()==null && reportDispatchQO.getFromCreatedTime()==null){
+            reportDispatchQO.setFromCreatedTime(new Long(LocalDateTime.now().withHour(0).withMinute(0).toEpochSecond(ZoneOffset.of("+8"))).intValue());
+            reportDispatchQO.setToCreatedTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
         }
 
         List<ReportDispatchDO> list = reportDispatchDao.queryReportDispatch(reportDispatchQO);

@@ -70,6 +70,41 @@
                 jdbcType="INTEGER"/>
     </resultMap>
 
+    <resultMap id="repeatDO" type="com.nilo.dms.dao.dataobject.ReportRepeatDO">
+
+        <result property="handleNo" column="handle_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="dispatchNum" column="occur_num" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="dispatchType" column="type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleName" column="handle_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="expressName" column="third_express_code" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="referenceNo" column="reference_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderType" column="order_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="nextStation" column="network" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="address" column="address" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="receiveName" column="receive_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="rider" column="rider" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="parentNo" column="parent_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+    </resultMap>
 
     <!-- 查询下一个站点 -->
 
@@ -429,6 +464,245 @@
 
     </select>
 
+
+    <!-- 重复报表物流 -->
+    <select id="queryRepeatDispatch" resultMap="repeatDO">
+
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        a.handle_no,
+        a.order_no,
+        b.occur_num,
+        b.created_time,
+        'riderDelivery' AS 'type',
+        e.`name` handle_name,
+        '' AS 'third_express_code',
+        d.reference_no,
+        d.order_type,
+        d.weight,
+        d.`status`,
+        '' AS 'network',
+        g.contact_number AS phone,
+        g.address,
+        g. NAME AS receive_name,
+        f.`name` rider
+        FROM
+        t_handle_rider_details AS a
+        INNER JOIN (
+        SELECT
+        order_no,
+        count(1) AS occur_num,
+        max(created_time) AS created_time
+        FROM
+        t_handle_rider_details
+        GROUP BY
+        order_no
+        HAVING
+        COUNT(order_no) > 2
+        ) AS b ON a.order_no = b.order_no
+        AND a.created_time = b.created_time
+        INNER JOIN t_handle_rider AS c ON a.handle_no = c.handle_no
+        AND c.`status` = 1
+        AND c.merchant_id = #{merchantId}
+        INNER JOIN t_waybill AS d ON a.order_no = d.order_no
+        INNER JOIN t_sys_user_info AS e ON c.handle_by = e.id
+        INNER JOIN t_sys_user_info AS f ON c.rider = f.id
+        INNER JOIN t_waybill_receiver AS g ON a.order_no = g.order_no
+        UNION
+        SELECT
+        a.third_handle_no AS handle_no,
+        a.order_no,
+        b.occur_num,
+        b.created_time,
+        c.type,
+        c.handle_name,
+        c.third_express_code,
+        d.reference_no,
+        d.order_type,
+        d.weight,
+        d.`status`,
+        e.`name` network,
+        f.contact_number AS phone,
+        f.address,
+        f. NAME AS receive_name,
+        '' AS 'rider'
+        FROM
+        t_handle_third_express_details AS a
+        INNER JOIN (
+        SELECT
+        order_no,
+        count(1) AS occur_num,
+        max(created_time) AS created_time
+        FROM
+        t_handle_third_express_details
+        GROUP BY
+        order_no
+        HAVING
+        COUNT(order_no) > 2
+        ) AS b ON a.order_no = b.order_no
+        AND a.created_time = b.created_time
+        INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no
+        AND c.`status` = 1
+        AND c.merchant_id = #{merchantId}
+        INNER JOIN t_waybill AS d ON a.order_no = d.order_no
+        LEFT JOIN t_bas_network AS e ON e.id = c.network_code
+        INNER JOIN t_waybill_receiver AS f ON a.order_no = f.order_no
+        ) AS a
+
+        WHERE 1
+
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="nextStation !=null and nextStation !='' ">
+            and a.network = #{nextStation}
+        </if>
+        <if test="handleNo !=null and handleNo !='' ">
+            and a.handle_no = #{handleNo}
+        </if>
+        <if test="orderType !=null and orderType !='' ">
+            and a.order_type = #{orderType}
+        </if>
+        <if test="dispatchType !=null and dispatchType !='' ">
+            and a.type = #{dispatchType}
+        </if>
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status != null">
+            and a.status = #{status}
+        </if>
+
+        order by a.created_time desc
+
+        <if test="limit !=null ">
+            limit
+            <if test="offset !=null ">
+                #{offset} ,
+            </if>
+            #{limit}
+        </if>
+
+
+    </select>
+
+    <select id="queryRepeatDispatchCount" resultType="java.lang.Long">
+
+        SELECT
+        count(1)
+        FROM
+        (
+        SELECT
+        a.handle_no,
+        a.order_no,
+        b.occur_num,
+        b.created_time,
+        'riderDelivery' AS 'type',
+        e.`name` handle_name,
+        '' AS 'third_express_code',
+        d.reference_no,
+        d.order_type,
+        d.weight,
+        d.`status`,
+        '' AS 'network',
+        g.contact_number AS phone,
+        g.address,
+        g. NAME AS receive_name,
+        f.`name` rider
+        FROM
+        t_handle_rider_details AS a
+        INNER JOIN (
+        SELECT
+        order_no,
+        count(1) AS occur_num,
+        max(created_time) AS created_time
+        FROM
+        t_handle_rider_details
+        GROUP BY
+        order_no
+        HAVING
+        COUNT(order_no) > 2
+        ) AS b ON a.order_no = b.order_no
+        AND a.created_time = b.created_time
+        INNER JOIN t_handle_rider AS c ON a.handle_no = c.handle_no
+        AND c.`status` = 1
+        AND c.merchant_id = 1
+        INNER JOIN t_waybill AS d ON a.order_no = d.order_no
+        INNER JOIN t_sys_user_info AS e ON c.handle_by = e.id
+        INNER JOIN t_sys_user_info AS f ON c.rider = f.id
+        INNER JOIN t_waybill_receiver AS g ON a.order_no = g.order_no
+        UNION
+        SELECT
+        a.third_handle_no AS handle_no,
+        a.order_no,
+        b.occur_num,
+        b.created_time,
+        c.type,
+        c.handle_name,
+        c.third_express_code,
+        d.reference_no,
+        d.order_type,
+        d.weight,
+        d.`status`,
+        e.`name` network,
+        f.contact_number AS phone,
+        f.address,
+        f. NAME AS receive_name,
+        '' AS 'rider'
+        FROM
+        t_handle_third_express_details AS a
+        INNER JOIN (
+        SELECT
+        order_no,
+        count(1) AS occur_num,
+        max(created_time) AS created_time
+        FROM
+        t_handle_third_express_details
+        GROUP BY
+        order_no
+        HAVING
+        COUNT(order_no) > 2
+        ) AS b ON a.order_no = b.order_no
+        AND a.created_time = b.created_time
+        INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no
+        AND c.`status` = 1
+        AND c.merchant_id = 1
+        INNER JOIN t_waybill AS d ON a.order_no = d.order_no
+        LEFT JOIN t_bas_network AS e ON e.id = c.network_code
+        INNER JOIN t_waybill_receiver AS f ON a.order_no = f.order_no
+        ) AS a
+
+        WHERE 1
+
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="nextStation !=null and nextStation !='' ">
+            and a.network = #{nextStation}
+        </if>
+        <if test="handleNo !=null and handleNo !='' ">
+            and a.handle_no = #{handleNo}
+        </if>
+        <if test="orderType !=null and orderType !='' ">
+            and a.order_type = #{orderType}
+        </if>
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status != null">
+            and a.status = #{status}
+        </if>
+
+    </select>
 
 
     <!-- Receive Report 查询语句 -->

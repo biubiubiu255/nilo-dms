@@ -74,6 +74,7 @@
         <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="tool-print">Print</a>
         <a class="layui-btn layui-btn-normal  layui-btn-mini" lay-event="tool-detail">Detail</a>
         <a class="layui-btn layui-btn-danger  layui-btn-mini" lay-event="tool-ship">Ship</a>
+        <a class="layui-btn layui-btn-danger  layui-btn-mini" lay-event="tool-delete">Delete</a>
         <%--
         <shiro:hasPermission name="400062">
             <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail-loading">Detail</a>
@@ -125,6 +126,12 @@
                     ship(handleNo);
                 } else if (obj.event === 'tool-edit') {
                     edit(handleNo);
+                }else if (obj.event === 'tool-delete') {
+                    if(data.status==1){
+                        layer.msg("Has been shipped", {icon: 2, time: 2000});
+                        return;
+                    }
+                    deleteHandle(handleNo);
                 }
 
             });
@@ -210,22 +217,39 @@
             );
         }
 
+        function edit(handleNo) {
+            layer.open({
+                type: 2,
+                title: 'Edit',
+                shadeClose: true,
+                shade: false,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['900px', '600px'],
+                offset: ['100px', '250px'],
+                content: '/waybill/send_nextStation/editPage.html?handleNo='+handleNo,
+            });
+
+        }
+
+        function deleteHandle(handleNo) {
+            var index = layerM.load(0);
+            $.post(
+                "/waybill/send_nextStation/deleteHandle.html",
+                {handleNo: handleNo},
+                function (data) {
+                    layerM.close(index);
+                    if(data.result){
+                        layer.msg("SUCCESS", {icon: 1, time: 2000});
+                        reloadTable();
+                    }else {
+                        layer.msg(data.msg, {icon: 2, time: 2000});
+                    }
+                },
+                "json"
+            );
+        }
 
     });
-
-    function edit(handleNo) {
-        layer.open({
-            type: 2,
-            title: 'Edit',
-            shadeClose: true,
-            shade: false,
-            maxmin: true, //开启最大化最小化按钮
-            area: ['900px', '600px'],
-            offset: ['100px', '250px'],
-            content: '/waybill/send_nextStation/editPage.html?handleNo='+handleNo,
-        });
-
-    }
 
     function strainerValue(str){
         if(typeof(str)=='undefined') str='';

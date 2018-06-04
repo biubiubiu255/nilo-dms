@@ -3,6 +3,8 @@ package com.nilo.dms.web.controller.order;
 import com.alibaba.fastjson.JSON;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.exception.BizErrorCode;
+import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.*;
 import com.nilo.dms.dto.order.*;
 import com.nilo.dms.common.CellData;
@@ -242,6 +244,24 @@ public class WaybillController extends BaseController {
         String merchantId = me.getMerchantId();
         //查询订单详情
         Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
+        
+        model.addAttribute("delivery", deliveryOrder);
+
+        return "delivery_order/print";
+    }
+    
+    @RequestMapping(value = "/arriveScanPrint/{orderNo}.html", method = RequestMethod.GET)
+    public String arriveScanPrint(Model model, @PathVariable String orderNo) {
+        Principal me = SessionLocal.getPrincipal();
+        //获取merchantId
+        String merchantId = me.getMerchantId();
+        //查询订单详情
+        Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
+        
+        if(deliveryOrder.getWeight()==null||deliveryOrder.getWeight()==0) {
+        	throw new DMSException(BizErrorCode.WEIGHT_MORE_THAN_0);
+        };
+        
         model.addAttribute("delivery", deliveryOrder);
 
         return "delivery_order/print";

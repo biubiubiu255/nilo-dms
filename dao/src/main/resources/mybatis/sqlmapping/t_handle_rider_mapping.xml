@@ -35,6 +35,8 @@
                 jdbcType="VARCHAR"/>
         <result property="orderNo" column="order_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+<!--        <result property="handleByName" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>-->
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
         <result property="length" column="length" javaType="java.lang.Double"
@@ -198,7 +200,7 @@
 
     <!-- 查询其他的信息 -->
 
-    <select id="queryUserInfoBySmallNo" resultMap="orderSmall" statementType="PREPARED">
+    <select id="queryUserInfoBySmallNo" resultMap="userInfoDO" statementType="PREPARED">
         SELECT
 
         c.*
@@ -216,6 +218,11 @@
         on b.rider = c.id
 
         WHERE a.order_no = #{orderNo}
+
+        ORDER BY a.created_time DESC
+
+        limit 1
+
     </select>
 
 

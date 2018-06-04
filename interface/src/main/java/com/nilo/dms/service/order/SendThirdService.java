@@ -26,8 +26,9 @@ public interface SendThirdService {
 
     SendThirdHead queryLoadingBySmallNo(String merchantId, String orderNo);
 
-    void edit(SendThirdHead sendThirdHead, String[] smallOrders);
+    void editSmalls(SendThirdHead sendThirdHead, String[] smallOrders);
 
     void ship(String handleNo);
 
+    void deleteHandle(String handleNo);
 }
