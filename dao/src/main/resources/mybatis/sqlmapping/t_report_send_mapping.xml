@@ -138,7 +138,7 @@
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
+        LEFT  JOIN t_bas_network e ON e.id = b.network_code
         LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
@@ -172,7 +172,7 @@
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
+        LEFT  JOIN t_bas_network e ON e.id = b.network_code
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
