@@ -87,6 +87,7 @@
                 <select lay-filter="nextStationCodeLay" name="nextStationCode">
                     <option value="">choose or search....</option>
                     <c:forEach items="${nextStations}" var="r">
+                        <%--<option value=${r.code}>${r.name}</option>--%>
                         <option value=${r.code}>${r.name}</option>
                     </c:forEach>
                 </select>

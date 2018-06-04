@@ -480,6 +480,7 @@
         'riderDelivery' AS 'type',
         e.`name` handle_name,
         '' AS 'third_express_code',
+        '' AS 'network_code',
         d.reference_no,
         d.order_type,
         d.weight,
@@ -522,6 +523,7 @@
         c.type,
         c.handle_name,
         c.third_express_code,
+        c.network_code,
         d.reference_no,
         d.order_type,
         d.weight,
@@ -562,6 +564,9 @@
         </if>
         <if test="nextStation !=null and nextStation !='' ">
             and a.network = #{nextStation}
+        </if>
+        <if test="nextStationCode!=null">
+            AND a.network_code = #{nextStationCode}
         </if>
         <if test="handleNo !=null and handleNo !='' ">
             and a.handle_no = #{handleNo}
