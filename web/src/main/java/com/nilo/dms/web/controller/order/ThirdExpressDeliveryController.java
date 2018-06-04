@@ -168,6 +168,7 @@ public class ThirdExpressDeliveryController extends BaseController {
         SendThirdHead head = new SendThirdHead();
         head.setHandleName(handleNo);
         head.setDriver(rider);
+        head.setHandleNo(handleNo);
         sendThirdService.editSmalls(head, smallPack);
         if (saveStatus == 1) {
             sendThirdService.ship(handleNo);

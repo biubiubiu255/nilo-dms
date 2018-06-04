@@ -23,9 +23,10 @@
                 jdbcType="VARCHAR"/>
         <result property="deliveryType" column="delivery_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="expressName" column="third_express_code" javaType="java.lang.String"
+        <result property="expressName" column="express_name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-
+        <result property="expressCode" column="third_express_code" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
 
 
 
@@ -118,7 +119,7 @@
         SELECT
         f.order_no,
         f.weight,
-        f.created_time,
+        a.created_time,
         b.handle_no,
         b.driver,
         e.id next_station,

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sign" language="groovy" pageWidth="1300" pageHeight="802" columnWidth="1300" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="abbb5591-3eef-4ff8-af13-2d294816bebb">
-	<property name="ireport.zoom" value="1.6105100000000054"/>
-	<property name="ireport.x" value="673"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sign" language="groovy" pageWidth="1370" pageHeight="802" columnWidth="1370" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="abbb5591-3eef-4ff8-af13-2d294816bebb">
+	<property name="ireport.zoom" value="1.1000000000000036"/>
+	<property name="ireport.x" value="67"/>
 	<property name="ireport.y" value="0"/>
 	<field name="orderNo" class="java.lang.String"/>
 	<field name="weight" class="java.lang.Double"/>
@@ -10,7 +10,7 @@
 	<field name="deliveryType" class="java.lang.String"/>
 	<field name="driver" class="java.lang.String"/>
 	<field name="nextStation" class="java.lang.String"/>
-	<field name="expressName" class="java.lang.String"/>
+	<field name="expressCode" class="java.lang.String"/>
 	<field name="handleName" class="java.lang.String"/>
 	<field name="referenceNo" class="java.lang.String"/>
 	<field name="createdTime" class="java.lang.String"/>
@@ -36,21 +36,21 @@
 				<text><![CDATA[Send Station]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1104" y="54" width="81" height="23" uuid="3b5376e0-2df0-4fd5-82ad-b84a74ff450a"/>
+				<reportElement x="1173" y="54" width="81" height="23" uuid="3b5376e0-2df0-4fd5-82ad-b84a74ff450a"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Total weight:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1104" y="34" width="81" height="20" uuid="8672da76-3ddf-49d2-8a7d-5934bb178e78"/>
+				<reportElement x="1173" y="34" width="81" height="20" uuid="8672da76-3ddf-49d2-8a7d-5934bb178e78"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Count:]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="1193" y="54" width="105" height="23" uuid="51e46c4f-8f00-49b2-b535-f1cce3459190"/>
+				<reportElement x="1262" y="54" width="105" height="23" uuid="51e46c4f-8f00-49b2-b535-f1cce3459190"/>
 				<textFieldExpression><![CDATA[$V{weight_1}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="1193" y="34" width="105" height="20" uuid="a3ccdd97-dbb2-4f37-a6cb-b8da2cdb2b67"/>
+				<reportElement x="1262" y="34" width="105" height="20" uuid="a3ccdd97-dbb2-4f37-a6cb-b8da2cdb2b67"/>
 				<textFieldExpression><![CDATA[$V{orderNo_1}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -72,14 +72,14 @@
 				<text><![CDATA[ReferenceNo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="683" y="0" width="66" height="20" uuid="759e8ee1-6613-4b9f-abbf-b04f22696c05"/>
+				<reportElement x="752" y="0" width="66" height="20" uuid="759e8ee1-6613-4b9f-abbf-b04f22696c05"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Weight]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1135" y="0" width="163" height="20" uuid="0f020aac-9c37-4a9b-a06e-0808d322f975"/>
+				<reportElement x="1204" y="0" width="163" height="20" uuid="0f020aac-9c37-4a9b-a06e-0808d322f975"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
@@ -107,28 +107,28 @@
 				<text><![CDATA[Driver]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="558" y="0" width="125" height="20" uuid="59ebb1ce-9d48-4bc1-9d58-0f3e7392ba97"/>
+				<reportElement x="644" y="0" width="108" height="20" uuid="59ebb1ce-9d48-4bc1-9d58-0f3e7392ba97"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[NextStation]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="749" y="0" width="73" height="20" uuid="82d5f943-62fe-4e31-bb64-431f845e7d37"/>
+				<reportElement x="818" y="0" width="73" height="20" uuid="82d5f943-62fe-4e31-bb64-431f845e7d37"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[HandleName]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="929" y="0" width="119" height="20" uuid="27e132f5-6174-42a1-bdc7-e4a512d03bf7"/>
+				<reportElement x="998" y="0" width="119" height="20" uuid="27e132f5-6174-42a1-bdc7-e4a512d03bf7"/>
 				<textElement textAlignment="Center">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[CreatedTime]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1048" y="0" width="87" height="20" uuid="3f8ce0df-e252-4019-b2d5-5d36b7f26ca3"/>
+				<reportElement x="1117" y="0" width="87" height="20" uuid="3f8ce0df-e252-4019-b2d5-5d36b7f26ca3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true" isItalic="false"/>
 				</textElement>
@@ -149,11 +149,18 @@
 				<text><![CDATA[Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="822" y="0" width="107" height="20" uuid="8b4c9783-b342-422e-8ac8-97a48487cc3f"/>
+				<reportElement x="891" y="0" width="107" height="20" uuid="8b4c9783-b342-422e-8ac8-97a48487cc3f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[parentNo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="558" y="0" width="86" height="20" uuid="dfe7f35b-29a2-40b3-9868-e5be6f0b7745"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[expressCode]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -167,21 +174,21 @@
 				<textFieldExpression><![CDATA[$F{orderNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="683" y="0" width="66" height="20" uuid="ebe39e90-1da5-4359-8f8c-c0d5e8349c3b"/>
+				<reportElement x="752" y="0" width="66" height="20" uuid="ebe39e90-1da5-4359-8f8c-c0d5e8349c3b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1135" y="0" width="163" height="20" uuid="01098200-bf9e-43bd-adbe-9934df7a8ef8"/>
+				<reportElement x="1204" y="0" width="163" height="20" uuid="01098200-bf9e-43bd-adbe-9934df7a8ef8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="929" y="0" width="119" height="20" uuid="9ce41700-f298-4d1e-a262-d36270aa6675"/>
+				<reportElement x="998" y="0" width="119" height="20" uuid="9ce41700-f298-4d1e-a262-d36270aa6675"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
@@ -209,21 +216,21 @@
 				<textFieldExpression><![CDATA[$F{driver}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="558" y="0" width="125" height="20" uuid="ba53b7b5-20b1-424c-9a0b-7076a3ba02d9"/>
+				<reportElement x="644" y="0" width="108" height="20" uuid="ba53b7b5-20b1-424c-9a0b-7076a3ba02d9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nextStation}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="749" y="0" width="73" height="20" uuid="10cb54f4-11d2-4dc6-9449-3b2386baaf12"/>
+				<reportElement x="818" y="0" width="73" height="20" uuid="10cb54f4-11d2-4dc6-9449-3b2386baaf12"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{handleName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1048" y="0" width="87" height="20" uuid="7554cc1c-705b-4a93-8987-c6427ec56020"/>
+				<reportElement x="1117" y="0" width="87" height="20" uuid="7554cc1c-705b-4a93-8987-c6427ec56020"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
@@ -251,11 +258,18 @@
 				<textFieldExpression><![CDATA[$F{receiveName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="822" y="0" width="107" height="20" uuid="3dd9ce5a-d9fb-46ff-b4ba-f07ffe787233"/>
+				<reportElement x="891" y="0" width="107" height="20" uuid="3dd9ce5a-d9fb-46ff-b4ba-f07ffe787233"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{parentNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="558" y="0" width="86" height="20" uuid="c2463c5b-d025-456c-a703-35a8be2c56eb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="微软雅黑"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{expressCode}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

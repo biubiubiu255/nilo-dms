@@ -212,6 +212,8 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         OrderOptRequest request = new OrderOptRequest();
         request.setOptType(OptTypeEnum.DELIVERY);
         request.setOrderNo(orderNos);
+        request.setRider(riderDelivery.getRider());
+
         waybillService.handleOpt(request);
 
         handleRiderDao.upBigStatus(handleNo, HandleRiderStatusEnum.SHIP.getCode());

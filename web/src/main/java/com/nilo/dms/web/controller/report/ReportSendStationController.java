@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +97,11 @@ public class ReportSendStationController extends BaseController {
                 break;
             default:
                 fileType = "pdf";
+        }
+
+        if(sendReportQO.getToCreatedTime()==null && sendReportQO.getFromCreatedTime()==null){
+            sendReportQO.setFromCreatedTime(new Long(LocalDateTime.now().withHour(0).withMinute(0).toEpochSecond(ZoneOffset.of("+8"))).intValue());
+            sendReportQO.setToCreatedTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
         }
 
         List<SendReportDO> list = sendReportService.querySendStationReport(sendReportQO, page);
