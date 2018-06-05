@@ -16,7 +16,7 @@
             <input type="text" id="loadingNo" value="${pack.handleNo}" autocomplete="off" disabled
                    class="layui-input layui-disabled">
         </div>
-        <label class="layui-form-label" style="width:120px">Loading By</label>
+        <label class="layui-form-label" style="width:120px">Next Station</label>
         <div class="layui-input-inline">
             <input type="text" name="handleName" value="${pack.nextStation}" autocomplete="off"
                    class="layui-input layui-disabled" disabled>

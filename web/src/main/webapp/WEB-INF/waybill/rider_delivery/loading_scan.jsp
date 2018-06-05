@@ -253,6 +253,7 @@
             layui.use('table', function () {
                 var table = layui.table;
                 console.log("条目：" + tableData.length);
+                console.log(tableData);
                 //第一个实例
                 table.render({
                     page: false //开启分页

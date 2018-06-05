@@ -154,6 +154,7 @@ public class SendNextStationController extends BaseController {
         if (StringUtil.isEmptys(waybillDO, waybillDO.getIsPackage()) || !waybillDO.getIsPackage().equals("1")){
             return toJsonErrorMsg("Empty or not packaged");
         }
+        waybillDO.setLength(null);
         return toJsonTrueData(toPaginationLayUIData(page, waybillDO));
     }
 

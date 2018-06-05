@@ -247,4 +247,14 @@ public class RiderDeliveryController extends BaseController {
 
         return toJsonTrueData(outsourceRider);
     }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/deleteHandle.html", method = RequestMethod.POST)
+    public String deleteHandle(String handleNo) {
+        //riderDeliveryService.
+        //sendThirdService.deleteHandle(handleNo);
+        riderDeliveryService.deleteHandleAndSmalls(handleNo);
+        return toJsonTrueMsg();
+    }
 }

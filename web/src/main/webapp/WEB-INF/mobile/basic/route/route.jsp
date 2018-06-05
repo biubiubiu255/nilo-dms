@@ -106,7 +106,7 @@
                     info += 'SendType：' + d.expressName;
                 }
                 if(d.rider!=null){
-                    info += '，rider:'+d.rider + '，phone：'+optByNamePhone+'，jobID:'+jobId;
+                    info += '，rider：'+d.rider + '，phone：'+d.optByNamePhone+'，jobID：'+d.jobId;
 				}
                 point = map.send_scan + '，' + map.home_network + '：' + d.optByName + '，' + info;
                 break;

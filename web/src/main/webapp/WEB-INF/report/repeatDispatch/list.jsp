@@ -17,64 +17,6 @@
             </div>
         </div>
 
-
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">Rider:</label>
-            <div class="layui-inline">
-                <select lay-filter="riderLay" name="rider">
-                    <option value="">choose or search....</option>
-                    <c:forEach items="${riderList}" var="rider">
-                        <option value=${rider.userId}>${rider.staffId}-${rider.realName}</option>
-                    </c:forEach>
-                </select>
-            </div>
-        </div>
-
-        <div class="layui-col-md4 layui-col-lg4">
-            <label class="layui-form-label">CreateTime:</label>
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
-            </div>
-            -
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="toCreatedTime" placeholder="To">
-            </div>
-        </div>
-    </div>
-    <div class="layui-form layui-row">
-
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">HandleNo:</label>
-            <div class="layui-input-inline">
-                <input type="text" name="handleNo" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">OrderType:</label>
-            <div class="layui-inline">
-                <select name="orderType" lay-verify="required" lay-filter="orderTypeLay" style="display: none">
-                    <option value="">choose or search....</option>
-                    <c:forEach items="${orderTypeList}" var="r">
-                        <option value=${r.code}>${r.code}</option>
-                    </c:forEach>
-                </select></div>
-        </div>
-
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">NextStation:</label>
-            <div class="layui-inline">
-                <select lay-filter="nextStationCodeLay" name="nextStationCode">
-                    <option value="">choose or search....</option>
-                    <c:forEach items="${nextStations}" var="r">
-                        <option value=${r.code}>${r.name}</option>
-                    </c:forEach>
-                </select>
-            </div>
-        </div>
-
-    <div class="layui-row">
-
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">DeliveryType:</label>
             <div class="layui-input-inline">
@@ -103,6 +45,70 @@
             </div>
         </div>
 
+
+
+<%--        <div class="layui-col-md4 layui-col-lg3">
+            <label class="layui-form-label">Rider:</label>
+            <div class="layui-inline">
+                <select lay-filter="riderLay" name="rider">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${riderList}" var="rider">
+                        <option value=${rider.userId}>${rider.staffId}-${rider.realName}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>--%>
+
+
+    </div>
+    <div class="layui-form layui-row">
+
+        <div class="layui-col-md4 layui-col-lg3">
+            <label class="layui-form-label">HandleNo:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="handleNo" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-col-md4 layui-col-lg3">
+            <label class="layui-form-label">OrderType:</label>
+            <div class="layui-inline">
+                <select name="orderType" lay-verify="required" lay-filter="orderTypeLay" style="display: none">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${orderTypeList}" var="r">
+                        <option value=${r.code}>${r.code}</option>
+                    </c:forEach>
+                </select></div>
+        </div>
+
+        <div class="layui-col-md4 layui-col-lg3">
+            <label class="layui-form-label">NextStation:</label>
+            <div class="layui-inline">
+                <select lay-filter="nextStationCodeLay" name="nextStationCode">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${nextStations}" var="r">
+                        <%--<option value=${r.code}>${r.name}</option>--%>
+                        <option value=${r.code}>${r.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>
+
+    <div class="layui-row">
+
+
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">CreateTime:</label>
+            <div class="layui-inline">
+                <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
+            </div>
+            -
+            <div class="layui-inline">
+                <input type="text" class="layui-input" id="toCreatedTime" placeholder="To">
+            </div>
+        </div>
+
+
         <div class="layui-col-md4 layui-col-lg3">
             <button class="layui-btn layui-btn-normal btn-export">Export</button>
             <button class="layui-btn layui-btn-normal search">Search</button>
@@ -125,15 +131,15 @@
             <tr>
                 <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
                 <th lay-data="{field: 'referenceNo', width:190}">ReferenceNo</th>
-                <th lay-data="{field:'handleNo', width:100}">HandleNo</th>
+                <th lay-data="{field:'dispatchType', width:119}">DispatchType</th>
                 <th lay-data="{field:'dispatchNum', width:116}">Times</th>
-<%--                <th lay-data="{field:'dispatchType', width:119}">DispatchType</th>--%>
+                <th lay-data="{field:'handleNo', width:100}">HandleNo</th>
                 <th lay-data="{field: 'handleName', width:130}">HandleName</th>
                 <th lay-data="{field:'expressName', width:130}">ExpressName</th>
                 <th lay-data="{field:'nextStation', width:130}">NextStation</th>
                 <th lay-data="{field: 'orderType', width:100}">OrderType</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
-                <th lay-data="{field:'rider', width:130}">Rider</th>
+<%--                <th lay-data="{field:'rider', width:130}">Rider</th>--%>
                 <%--<th lay-data="{field:'parentNo', width:150}">parentNo</th>--%>
                 <th lay-data="{field: 'statusDesc', width:130}">Status</th>
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>

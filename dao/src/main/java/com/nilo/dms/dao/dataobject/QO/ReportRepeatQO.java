@@ -15,6 +15,7 @@ public class ReportRepeatQO extends BaseDo<Long> {
     private String  orderType;
     private Double  weight;
     private String  nextStation;
+    private Integer nextStationCode;
     private String  phone;
     private String  address;
     private String  receiveName;
@@ -216,5 +217,13 @@ public class ReportRepeatQO extends BaseDo<Long> {
 
     public void setExportType(Integer exportType) {
         this.exportType = exportType;
+    }
+
+    public Integer getNextStationCode() {
+        return nextStationCode;
+    }
+
+    public void setNextStationCode(Integer nextStationCode) {
+        this.nextStationCode = nextStationCode;
     }
 }

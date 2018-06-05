@@ -82,7 +82,7 @@
     </div>
     <div class="row">
         <div class="col-xs-6">
-            Total Order :${fn:length(loading.detailsList)}
+            Total Order :${fn:length(list)}
         </div>
 
         <br><br>

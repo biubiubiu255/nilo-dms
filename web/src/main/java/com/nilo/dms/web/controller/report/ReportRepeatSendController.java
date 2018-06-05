@@ -112,6 +112,22 @@ public class ReportRepeatSendController extends BaseController {
 
         page.setTotalCount(sendReportDao.queryRepeatDispatchCount(reportRepeatQO));
 
+        for (ReportRepeatDO e : list){
+            switch (e.getDispatchType()){
+
+                case "package":
+                    e.setDispatchType("Station");
+                    break;
+                case "waybill":
+                    e.setDispatchType("Express");
+                    break;
+                case "riderDelivery":
+                    e.setDispatchType("RiderDelivery");
+                    break;
+            }
+        }
+
+
         if (fileType.equals("json")) {
             request.setAttribute("toDate", toPaginationLayUIData(page, list));
             return "common/toResponseBody";
