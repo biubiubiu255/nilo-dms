@@ -76,7 +76,7 @@ public class BatchSignController extends BaseController {
         //批量签收
         for (String orderNo : list) {
             try {
-                waybillOptService.sign(orderNo, "Batch Sign");
+                waybillOptService.sign(orderNo, SessionLocal.getPrincipal().getUserName(), "Batch Sign");
                 resultList.add(orderNo + ": success");
             } catch (Exception e) {
                 resultList.add("<font color='red'>" + orderNo + "</font>:" + e.getMessage());
@@ -113,7 +113,7 @@ public class BatchSignController extends BaseController {
         //批量签收
         for (String orderNo : list) {
             try {
-                waybillOptService.sign(orderNo, "Batch Sign");
+                waybillOptService.sign(orderNo, SessionLocal.getPrincipal().getUserName(), "Batch Sign");
                 resultList.add(orderNo + ": success");
             } catch (Exception e) {
                 resultList.add("<font color='red'>" + orderNo + "</font>:" + e.getMessage());

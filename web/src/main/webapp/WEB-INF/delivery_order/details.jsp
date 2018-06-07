@@ -2,6 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
+
+
 <div class="box-body">
     <div class="layui-row">
         <div class="layui-col-md12">
@@ -78,9 +80,13 @@
     <div class="layui-row">
         Trace:
         <hr>
+        <jsp:useBean id="dateValue" class="java.util.Date"/>
         <c:forEach items="${orderRouteList}" var="route" varStatus="status">
-            <span><lp:formatTime time="${route.createdTime }"
-                           pattern="yyyy-MM-dd hh:mm:ss"/> ${route.opt}  ${route.optByName}</span><br>
+            <span>
+            <jsp:setProperty name="dateValue" property="time" value="${route.createdTime*1000 }"/>
+            <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/>
+            ${route.opt}  ${route.optByName}
+            </span><br>
         </c:forEach>
     </div>
 </div>

@@ -211,6 +211,8 @@ public class WaybillController extends BaseController {
         }
     }
 
+
+    //获取订单详情
     @RequestMapping(value = "/{orderNo}.html", method = RequestMethod.GET)
     public String details(Model model, @PathVariable String orderNo) {
         Principal me = SessionLocal.getPrincipal();

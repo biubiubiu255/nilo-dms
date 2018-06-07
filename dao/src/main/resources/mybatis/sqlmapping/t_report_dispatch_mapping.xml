@@ -15,6 +15,8 @@
                 jdbcType="VARCHAR"/>
         <result property="country" column="country" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+        <result property="outsource" column="outsource" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
 
 
         <result property="rider" column="rider" javaType="java.lang.String"
@@ -48,31 +50,23 @@
 
     <select id="queryReportDispatch" resultMap="dispatchDO">
 
-        SELECT a.*, c.name as rider , d.name as handle_name, e.order_type,e.status as waybill_status, e.reference_no, e.country, f.contact_number as phone, f.address
-
+        SELECT
+        a.*, CONCAT_WS('-',c.staff_id, c.real_name) AS rider,
+        c.outsource,
+        d. NAME AS handle_name,
+        e.order_type,
+        e. STATUS AS waybill_status,
+        e.reference_no,
+        e.country,
+        f.contact_number AS phone,
+        f.address
         FROM
-
         t_handle_rider_details a
-
-        INNER JOIN t_handle_rider b
-
-        ON a.handle_no = b.handle_no
-
-        LEFT JOIN t_sys_user_info c
-
-        ON b.rider = c.id
-
-        LEFT JOIN t_sys_user_info d
-
-        ON b.handle_by = d.id
-
-        INNER JOIN t_waybill e
-
-        ON a.order_no = e.order_no
-
-        INNER JOIN t_waybill_receiver f
-
-        ON a.order_no = f.order_no
+        INNER JOIN t_handle_rider b ON a.handle_no = b.handle_no
+        INNER JOIN t_bas_staff c ON b.rider = c.user_id
+        LEFT JOIN t_sys_user_info d ON b.handle_by = d.id
+        INNER JOIN t_waybill e ON a.order_no = e.order_no
+        INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no
 
         WHERE b.merchant_id = #{merchantId}
         <if test="status !=null ">
@@ -93,7 +87,10 @@
             and e.country = #{country}
         </if>
         <if test="rider !=null and rider !='' ">
-            and c.id = #{rider}
+            and c.user_id = #{rider}
+        </if>
+        <if test="outsource !=null and outsource !='' ">
+            and c.outsource = #{outsource}
         </if>
 
         <if test="fromCreatedTime !=null ">
@@ -125,28 +122,12 @@
         COUNT(1)
 
         FROM
-
         t_handle_rider_details a
-
-        INNER JOIN t_handle_rider b
-
-        ON b.handle_no = a.handle_no
-
-        LEFT JOIN t_sys_user_info c
-
-        ON b.rider = c.id
-
-        LEFT JOIN t_sys_user_info d
-
-        ON b.handle_by = d.id
-
-        INNER JOIN t_waybill e
-
-        ON a.order_no = e.order_no
-
-        INNER JOIN t_waybill_receiver f
-
-        ON a.order_no = f.order_no
+        INNER JOIN t_handle_rider b ON a.handle_no = b.handle_no
+        INNER JOIN t_bas_staff c ON b.rider = c.user_id
+        LEFT JOIN t_sys_user_info d ON b.handle_by = d.id
+        INNER JOIN t_waybill e ON a.order_no = e.order_no
+        INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no
 
         WHERE b.merchant_id = #{merchantId}
         <if test="status !=null ">
@@ -166,9 +147,11 @@
         <if test="country !=null and country !='' ">
             and e.country = #{country}
         </if>
-
         <if test="rider !=null and rider !='' ">
-            and c.id = #{rider}
+            and c.user_id = #{rider}
+        </if>
+        <if test="outsource !=null and outsource !='' ">
+            and c.outsource = #{outsource}
         </if>
 
         <if test="fromCreatedTime !=null ">

@@ -71,11 +71,6 @@ public class ReportSendRiderController extends BaseController {
                 fileType = "pdf";
         }
 
-        if(reportDispatchQO.getToCreatedTime()==null && reportDispatchQO.getFromCreatedTime()==null){
-            reportDispatchQO.setFromCreatedTime(new Long(LocalDateTime.now().withHour(0).withMinute(0).toEpochSecond(ZoneOffset.of("+8"))).intValue());
-            reportDispatchQO.setToCreatedTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
-        }
-
         List<ReportDispatchDO> list = reportDispatchDao.queryReportDispatch(reportDispatchQO);
         page.setTotalCount(reportDispatchDao.queryReportDispatchCount(reportDispatchQO));
         //page.setTotalCount(commonDao.lastFoundRows());

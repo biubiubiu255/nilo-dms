@@ -99,10 +99,6 @@ public class ReportSendStationController extends BaseController {
                 fileType = "pdf";
         }
 
-        if(sendReportQO.getToCreatedTime()==null && sendReportQO.getFromCreatedTime()==null){
-            sendReportQO.setFromCreatedTime(new Long(LocalDateTime.now().withHour(0).withMinute(0).toEpochSecond(ZoneOffset.of("+8"))).intValue());
-            sendReportQO.setToCreatedTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
-        }
 
         List<SendReportDO> list = sendReportService.querySendStationReport(sendReportQO, page);
 

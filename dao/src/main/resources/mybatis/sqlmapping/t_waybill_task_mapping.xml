@@ -21,6 +21,31 @@
 	</resultMap>
 
 
+	<resultMap id="DeliverySmall" type="com.nilo.dms.dao.dataobject.WaybillDeliveryDeatilDO">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
+		<result column="handle_no" jdbcType="VARCHAR" property="handleNo" />
+		<result column="package_no" jdbcType="VARCHAR" property="packageNo" />
+		<result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+		<result column="weight" jdbcType="DOUBLE" property="weight" />
+		<result column="length" jdbcType="DOUBLE" property="length" />
+		<result column="height" jdbcType="DOUBLE" property="height" />
+		<result column="width" jdbcType="DOUBLE" property="width" />
+		<result column="rider" jdbcType="VARCHAR" property="rider" />
+		<result column="driver" jdbcType="VARCHAR" property="driver" />
+		<result column="network" jdbcType="VARCHAR" property="network" />
+		<result column="next_station" jdbcType="VARCHAR" property="nextStation" />
+		<result column="express_name" jdbcType="VARCHAR" property="expressName" />
+		<result column="handle_by" jdbcType="VARCHAR" property="handleBy" />
+		<result column="handle_time" jdbcType="BIGINT" property="handleTime" />
+		<result column="parent_no" jdbcType="VARCHAR" property="parentNo" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="created_time" jdbcType="BIGINT" property="createdTime" />
+		<result column="updated_time" jdbcType="BIGINT" property="updatedTime" />
+		<result column="version" jdbcType="VARCHAR" property="version" />
+	</resultMap>
+
+
 
 	<select id="queryNeedPayOrderByRider" resultMap="WaybillTask"
 		parameterType="java.lang.String">
@@ -32,5 +57,10 @@
 		is null or a.already_paid = 0)
 		and handled_by = #{userId}
 	</select>
+
+	<select id="queryDeliveryDetailInbound" resultMap="DeliverySmall">
+
+	</select>
+
 
 </mapper>

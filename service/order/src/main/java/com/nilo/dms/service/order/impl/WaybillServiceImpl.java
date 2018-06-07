@@ -218,6 +218,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             order.setGoodsInfoList(convert(goodsList));
             list.add(order);
         }
+
         return list;
     }
 
@@ -292,6 +293,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
                     notifyService.updateStatus(optRequest);
                     // 记录物流轨迹
                     deliveryRouteService.addRoute(optRequest);
+
                     // 添加操作记录
                     waybillLogService.addOptLog(optRequest);
                 } catch (Exception e) {

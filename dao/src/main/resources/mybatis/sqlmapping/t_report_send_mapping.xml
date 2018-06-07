@@ -7,7 +7,7 @@
     <resultMap id="sendDO" type="com.nilo.dms.dao.dataobject.SendReportDO">
         <result property="referenceNo" column="reference_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="nextStation" column="next_station_name" javaType="java.lang.String"
+        <result property="nextStation" column="next_station" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="nextStationCode" column="next_station" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
@@ -122,7 +122,8 @@
         a.created_time,
         b.handle_no,
         b.driver,
-        e.id next_station,
+        e.id network_code,
+        b.next_station,
         b.third_express_code,
         b.handle_name,
         f.order_type,
@@ -132,14 +133,15 @@
         d.address,
         d. NAME AS receive_name,
         f.parent_no,
-        e.name next_station_name
+        e.name next_station_name,
+        f.is_package
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
         LEFT  JOIN t_bas_network e ON e.id = b.network_code
-        LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
+        INNER JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
@@ -156,7 +158,8 @@
         a.created_time,
         b.handle_no,
         b.driver,
-        e.id next_station,
+        e.id network_code,
+        b.next_station,
         b.third_express_code,
         b.handle_name,
         c.order_type,
@@ -166,7 +169,8 @@
         d.address,
         d. NAME AS receive_name,
         c.parent_no,
-        e.name next_station_name
+        e.name next_station_name,
+        c.is_package
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
@@ -193,6 +197,9 @@
         </if>
         <if test="nextStationCode !=null and nextStationCode !='' ">
             and d.next_station = #{nextStationCode}
+        </if>
+        <if test="isPackage !=null and isPackage !='' ">
+            and d.is_package = #{isPackage}
         </if>
         <if test="handleNo !=null and handleNo !='' ">
             and d.handle_no = #{handleNo}
@@ -233,10 +240,11 @@
         SELECT
         f.order_no,
         f.weight,
-        f.created_time,
+        a.created_time,
         b.handle_no,
         b.driver,
-        e.id next_station,
+        e.id network_code,
+        b.next_station,
         b.third_express_code,
         b.handle_name,
         f.order_type,
@@ -246,14 +254,15 @@
         d.address,
         d. NAME AS receive_name,
         f.parent_no,
+        f.is_package,
         e.name next_station_name
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
-        LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
+        LEFT  JOIN t_bas_network e ON e.id = b.network_code
+        INNER JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
@@ -270,7 +279,8 @@
         a.created_time,
         b.handle_no,
         b.driver,
-        e.id next_station,
+        e.id network_code,
+        b.next_station,
         b.third_express_code,
         b.handle_name,
         c.order_type,
@@ -280,13 +290,14 @@
         d.address,
         d. NAME AS receive_name,
         c.parent_no,
+        c.is_package,
         e.name next_station_name
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
+        LEFT  JOIN t_bas_network e ON e.id = b.network_code
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
@@ -307,6 +318,9 @@
         </if>
         <if test="nextStationCode !=null and nextStationCode !='' ">
             and d.next_station = #{nextStationCode}
+        </if>
+        <if test="isPackage !=null and isPackage !='' ">
+            and d.is_package = #{isPackage}
         </if>
         <if test="handleNo !=null and handleNo !='' ">
             and d.handle_no = #{handleNo}
@@ -336,7 +350,8 @@
         a.created_time,
         b.handle_no,
         b.driver,
-        e.id next_station,
+        b.third_express_code,
+        e.express_name,
         b.handle_name,
         c.order_type,
         c.reference_no,
@@ -473,9 +488,9 @@
         *
         FROM
         (
-        SELECT
+            SELECT
         a.handle_no,
-        a.order_no,
+        COALESCE(h.order_no, a.order_no) AS order_no,
         b.occur_num,
         b.created_time,
         'riderDelivery' AS 'type',
@@ -494,68 +509,72 @@
         FROM
         t_handle_rider_details AS a
         INNER JOIN (
-            SELECT
-            a.order_no,
-            count(a.id) AS occur_num,
-            max(a.created_time) AS created_time
-            FROM
-            t_handle_rider_details AS a
-            INNER JOIN t_handle_rider AS c ON a.handle_no = c.handle_no
-            AND c.`status` = 1
-            GROUP BY
-            a.order_no
-            HAVING
-            COUNT(a.order_no) > 1
-        ) AS b ON a.order_no = b.order_no
-        AND a.created_time = b.created_time
+        SELECT
+        a.order_no,
+        count(a.id) AS occur_num,
+        max(a.created_time) AS created_time
+        FROM
+        t_handle_rider_details AS a
         INNER JOIN t_handle_rider AS c ON a.handle_no = c.handle_no
         AND c.`status` = 1
-        AND c.merchant_id = #{merchantId}
-        INNER JOIN t_waybill AS d ON a.order_no = d.order_no
+        GROUP BY
+        a.order_no
+        HAVING
+        COUNT(a.order_no) > 1
+        ) AS b ON a.order_no = b.order_no
+        AND a.created_time = b.created_time
+
+
+        INNER JOIN t_handle_rider AS c ON a.handle_no = c.handle_no
+        AND c.`status` = 1
+        AND c.merchant_id = 1
+        INNER JOIN t_waybill AS d ON b.order_no = d.parent_no
         INNER JOIN t_sys_user_info AS e ON c.handle_by = e.id
         INNER JOIN t_sys_user_info AS f ON c.rider = f.id
         INNER JOIN t_waybill_receiver AS g ON a.order_no = g.order_no
+        LEFT  JOIN t_waybill AS h ON d.is_package='1' and b.order_no = h.parent_no
+        WHERE d.is_package='0' or (d.is_package='1' and h.order_no != null)
         UNION
-        SELECT
-        a.third_handle_no AS handle_no,
-        a.order_no,
-        b.occur_num,
-        b.created_time,
-        c.type,
-        c.handle_name,
-        c.third_express_code,
-        c.network_code,
-        d.reference_no,
-        d.order_type,
-        d.weight,
-        d.`status`,
-        e.`name` network,
-        f.contact_number AS phone,
-        f.address,
-        f. NAME AS receive_name,
-        '' AS 'rider'
-        FROM
-        t_handle_third_express_details AS a
-        INNER JOIN (
             SELECT
+            a.third_handle_no AS handle_no,
             a.order_no,
-            count(a.id) AS occur_num,
-            max(a.created_time) AS created_time
+            b.occur_num,
+            b.created_time,
+            c.type,
+            c.handle_name,
+            c.third_express_code,
+            c.network_code,
+            d.reference_no,
+            d.order_type,
+            d.weight,
+            d.`status`,
+            e.`name` network,
+            f.contact_number AS phone,
+            f.address,
+            f. NAME AS receive_name,
+            '' AS 'rider'
             FROM
-            t_handle_third_express_details as a
-            INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no and c.`status`=1
-            GROUP BY
-            a.order_no
-            HAVING
-            COUNT(a.order_no) > 1
-        ) AS b ON a.order_no = b.order_no
-        AND a.created_time = b.created_time
-        INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no
-        AND c.`status` = 1
-        AND c.merchant_id = #{merchantId}
-        INNER JOIN t_waybill AS d ON a.order_no = d.order_no
-        LEFT JOIN t_bas_network AS e ON e.id = c.network_code
-        INNER JOIN t_waybill_receiver AS f ON a.order_no = f.order_no
+            t_handle_third_express_details AS a
+            INNER JOIN (
+                SELECT
+                a.order_no,
+                count(a.id) AS occur_num,
+                max(a.created_time) AS created_time
+                FROM
+                t_handle_third_express_details as a
+                INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no and c.`status`=1
+                GROUP BY
+                a.order_no
+                HAVING
+                COUNT(a.order_no) > 1
+            ) AS b ON a.order_no = b.order_no
+            AND a.created_time = b.created_time
+            INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no
+            AND c.`status` = 1
+            AND c.merchant_id = #{merchantId}
+            INNER JOIN t_waybill AS d ON a.order_no = d.order_no
+            LEFT JOIN t_bas_network AS e ON e.id = c.network_code
+            INNER JOIN t_waybill_receiver AS f ON a.order_no = f.order_no
         ) AS a
 
         WHERE 1

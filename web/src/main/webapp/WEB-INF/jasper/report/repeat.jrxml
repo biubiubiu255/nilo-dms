@@ -166,106 +166,106 @@
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="110" height="20" uuid="d5f825e3-8941-48b3-bd6f-6339772532a8"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="110" height="20" uuid="d5f825e3-8941-48b3-bd6f-6339772532a8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{orderNo}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="788" y="0" width="66" height="20" uuid="ebe39e90-1da5-4359-8f8c-c0d5e8349c3b"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="788" y="0" width="66" height="20" uuid="ebe39e90-1da5-4359-8f8c-c0d5e8349c3b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="1201" y="0" width="163" height="20" uuid="01098200-bf9e-43bd-adbe-9934df7a8ef8"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1201" y="0" width="163" height="20" uuid="01098200-bf9e-43bd-adbe-9934df7a8ef8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="901" y="0" width="119" height="20" uuid="9ce41700-f298-4d1e-a262-d36270aa6675"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="901" y="0" width="119" height="20" uuid="9ce41700-f298-4d1e-a262-d36270aa6675"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(Long.valueOf($F{createdTime})*1000))]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="714" y="0" width="74" height="20" uuid="cd50d797-d60d-4c0b-bc72-2a31690310d0"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="714" y="0" width="74" height="20" uuid="cd50d797-d60d-4c0b-bc72-2a31690310d0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{orderType}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="614" y="0" width="100" height="20" uuid="ba53b7b5-20b1-424c-9a0b-7076a3ba02d9"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="614" y="0" width="100" height="20" uuid="ba53b7b5-20b1-424c-9a0b-7076a3ba02d9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nextStation}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="425" y="0" width="89" height="20" uuid="10cb54f4-11d2-4dc6-9449-3b2386baaf12"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="425" y="0" width="89" height="20" uuid="10cb54f4-11d2-4dc6-9449-3b2386baaf12"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{handleName}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="1114" y="0" width="87" height="20" uuid="7554cc1c-705b-4a93-8987-c6427ec56020"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1114" y="0" width="87" height="20" uuid="7554cc1c-705b-4a93-8987-c6427ec56020"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="110" y="0" width="107" height="20" uuid="b215db24-650f-463b-929d-bc193c8e8cb9"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="110" y="0" width="107" height="20" uuid="b215db24-650f-463b-929d-bc193c8e8cb9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{referenceNo}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="854" y="0" width="47" height="20" uuid="3222aaa4-7c19-46be-a491-f24a06749965"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="854" y="0" width="47" height="20" uuid="3222aaa4-7c19-46be-a491-f24a06749965"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{statusDesc}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="309" y="0" width="46" height="20" uuid="4804b974-5622-477d-9d05-3b44137dc6af"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="309" y="0" width="46" height="20" uuid="4804b974-5622-477d-9d05-3b44137dc6af"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" isStrikeThrough="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dispatchNum}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="217" y="0" width="92" height="20" uuid="fc8d80fc-dd67-4a80-99aa-fa65d98d17b0"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="217" y="0" width="92" height="20" uuid="fc8d80fc-dd67-4a80-99aa-fa65d98d17b0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑" isStrikeThrough="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dispatchType}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="1020" y="0" width="94" height="20" uuid="edfa71a8-afc6-4d29-ad2c-3b1932ed5c20"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="1020" y="0" width="94" height="20" uuid="edfa71a8-afc6-4d29-ad2c-3b1932ed5c20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{receiveName}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="355" y="0" width="70" height="20" uuid="ae51f72f-1fa9-4657-8395-e77861a197e0"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="355" y="0" width="70" height="20" uuid="ae51f72f-1fa9-4657-8395-e77861a197e0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{handleNo}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="514" y="0" width="100" height="20" uuid="078db358-8386-43eb-80d3-b2cea34e5f63"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="514" y="0" width="100" height="20" uuid="078db358-8386-43eb-80d3-b2cea34e5f63"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="微软雅黑"/>
 				</textElement>

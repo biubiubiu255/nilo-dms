@@ -108,27 +108,29 @@
 
             showPattern = 0;
 
-
             layui.use(['element', 'form', 'laydate'], function () {
                 var layDate = layui.laydate;
                 layDate.render({
                     elem: '#fromCreatedTime'
                     , lang: 'en'
+                    , value: new Date()
                 });
                 layDate.render({
                     elem: '#toCreatedTime'
                     , lang: 'en'
+
                 });
 
             });
 
+            var initLoading = true;
             var table = layui.table;
             layui.use('table', function () {
                 table = layui.table;
                 table.on('tool(demo)');
+                reloadTable();
             });
 
-            //reloadTable();
 
             $(".btn-export").on("click", function () {
                 if(showPattern==1){
@@ -166,17 +168,17 @@
 
             };
 
+            reloadTable();
+
             function getParam(dateType, isPojo){
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("input[name='createdTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val()))/1000;
                 var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
-                /*if (sTime_creat!="" && eTime_creat=="" || eTime_creat!="" && sTime_creat==""){
-                    layui.use('layer', function () {
-                        var layer = layui.layer;
-                        layer.msg('Please select the full date', {icon: 0, time: 2000});
-                    });
-                    return ;
-                }*/
+                if(initLoading==true){
+                    sTime_creat = Date.parse(new Date())/1000;
+                    eTime_creat = Date.parse(new Date(new Date().getTime()+24*60*60*1000))/1000;
+                    initLoading = false;
+                }
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),

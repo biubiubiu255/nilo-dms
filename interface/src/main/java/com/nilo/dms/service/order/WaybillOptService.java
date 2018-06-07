@@ -15,9 +15,10 @@ public interface WaybillOptService {
     /**
      * 签收
      * @param orderNo
+     * @param signer
      * @param remark
      */
-    void sign(String orderNo, String remark);
+    void sign(String orderNo, String signer, String remark);
 
     /**
      * 拒收

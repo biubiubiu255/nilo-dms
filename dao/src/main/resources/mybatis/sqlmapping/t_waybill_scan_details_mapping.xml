@@ -39,6 +39,9 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_waybill_scan_details where scan_no = #{scanNo}
+
+        order by created_time desc
+
     </select>
     <select id="queryBy" resultMap="waybillScanDetails" statementType="PREPARED">
         SELECT

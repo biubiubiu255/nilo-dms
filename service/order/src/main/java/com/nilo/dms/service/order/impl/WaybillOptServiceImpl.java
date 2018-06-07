@@ -7,6 +7,7 @@ import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.common.utils.BeanUtils;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.dao.HandleAllocateDao;
 import com.nilo.dms.dao.HandleDelayDao;
@@ -53,7 +54,7 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
     private DeliveryRouteService deliveryRouteService;
 
     @Override
-    public void sign(String orderNo, String remark) {
+    public void sign(String orderNo, String signer, String remark) {
 
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOptType(OptTypeEnum.SIGN);
@@ -73,7 +74,7 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
         signDO.setHandleBy(principal.getUserId());
         signDO.setHandleTime(DateUtil.getSysTimeStamp());
         signDO.setNetworkCode(principal.getFirstNetwork());
-        signDO.setSigner("Self");
+        signDO.setSigner(BeanUtils.getNotNullValue(signer, "Self").toString());
         handleSignDao.insert(signDO);
 
         List<String> list = new ArrayList<>();
