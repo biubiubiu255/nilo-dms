@@ -33,6 +33,8 @@ public class DeliveryOrderRouteDO extends BaseDo<Long> {
 
     private String jobId;
 
+    private String signer;
+
     public String getPhone() {
         return phone;
     }
@@ -135,5 +137,13 @@ public class DeliveryOrderRouteDO extends BaseDo<Long> {
 
     public void setRider(String rider) {
         this.rider = rider;
+    }
+
+    public String getSigner() {
+        return signer;
+    }
+
+    public void setSigner(String signer) {
+        this.signer = signer;
     }
 }

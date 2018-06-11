@@ -114,7 +114,7 @@ public class SignScanController extends BaseController {
             throw new RuntimeException(e.getMessage());
         }
         // 签收
-        waybillOptService.sign(logisticsNo, remark);
+        waybillOptService.sign(logisticsNo, signer, remark);
         return toJsonTrueMsg();
     }
 

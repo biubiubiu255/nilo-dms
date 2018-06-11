@@ -21,8 +21,7 @@ public class ReportRepeatQO extends BaseDo<Long> {
     private String  receiveName;
     private String  rider;
     private String  parentNo;
-    private Short   status;
-
+    private Integer status;
     private Integer offset;
     private Integer limit;
     private Integer total;
@@ -158,11 +157,11 @@ public class ReportRepeatQO extends BaseDo<Long> {
         this.parentNo = parentNo;
     }
 
-    public Short getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Short status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

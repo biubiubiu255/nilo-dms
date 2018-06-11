@@ -211,6 +211,8 @@ public class WaybillController extends BaseController {
         }
     }
 
+
+    //获取订单详情
     @RequestMapping(value = "/{orderNo}.html", method = RequestMethod.GET)
     public String details(Model model, @PathVariable String orderNo) {
         Principal me = SessionLocal.getPrincipal();
@@ -219,6 +221,7 @@ public class WaybillController extends BaseController {
         //查询订单详情
         Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         List<DeliveryRoute> orderRouteList = deliveryRouteService.queryRoute(merchantId, orderNo);
+
         model.addAttribute("deliveryOrder", deliveryOrder);
         model.addAttribute("orderRouteList", orderRouteList);
 

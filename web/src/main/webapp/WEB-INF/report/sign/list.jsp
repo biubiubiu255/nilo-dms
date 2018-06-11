@@ -10,7 +10,7 @@
 %>
 <body>
 <div class="box-body">
-    <div class="layui-row">
+    <div class="layui-row layui-form">
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">Waybill No:</label>
             <div class="layui-input-inline">
@@ -30,15 +30,6 @@
             </div>
         </div>
 
-
-
-
-    </div>
-
-    <!-- 搜索栏的第二行 -->
-
-    <div class="layui-form layui-row">
-
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label" style="width:110px">Rider:</label>
             <div class="layui-form-item layui-inline" style="margin: 0px">
@@ -51,13 +42,35 @@
             </div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg4">
+
+    </div>
+
+    <!-- 搜索栏的第二行 -->
+
+    <div class="layui-form layui-row">
+
+
+
+        <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">NextStation:</label>
             <div class="layui-inline">
                 <select lay-filter="nextStationCodeLay" name="nextStationCode">
                     <option value="">choose or search....</option>
                     <c:forEach items="${nextStations}" var="r">
                         <option value=${r.code}>${r.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-col-md4 layui-col-lg3">
+            <label class="layui-form-label" style="width:120px">Outsource：</label>
+            <div class="layui-input-inline">
+                <select name="outsource" lay-filter="outsource" lay-search=""
+                        <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${outsourceList}" var="outsource">
+                        <option value="${outsource.outsource}"> ${outsource.outsourceName}</option>
                     </c:forEach>
                 </select>
             </div>
@@ -108,27 +121,29 @@
 
             showPattern = 0;
 
-
             layui.use(['element', 'form', 'laydate'], function () {
                 var layDate = layui.laydate;
                 layDate.render({
                     elem: '#fromCreatedTime'
                     , lang: 'en'
+                    , value: new Date()
                 });
                 layDate.render({
                     elem: '#toCreatedTime'
                     , lang: 'en'
+
                 });
 
             });
 
+            var initLoading = true;
             var table = layui.table;
             layui.use('table', function () {
                 table = layui.table;
                 table.on('tool(demo)');
+                reloadTable();
             });
 
-            //reloadTable();
 
             $(".btn-export").on("click", function () {
                 if(showPattern==1){
@@ -166,17 +181,17 @@
 
             };
 
+            reloadTable();
+
             function getParam(dateType, isPojo){
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("input[name='createdTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val()))/1000;
                 var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
-                /*if (sTime_creat!="" && eTime_creat=="" || eTime_creat!="" && sTime_creat==""){
-                    layui.use('layer', function () {
-                        var layer = layui.layer;
-                        layer.msg('Please select the full date', {icon: 0, time: 2000});
-                    });
-                    return ;
-                }*/
+                if(initLoading==true){
+                    sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
+                    eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
+                    initLoading = false;
+                }
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),

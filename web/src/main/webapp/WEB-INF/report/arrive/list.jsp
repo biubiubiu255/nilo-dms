@@ -112,18 +112,22 @@
                 layDate.render({
                     elem: '#fromCreatedTime'
                     , lang: 'en'
+                    , value: new Date()
                 });
                 layDate.render({
                     elem: '#toCreatedTime'
                     , lang: 'en'
+                    , value: new Date(new Date().getTime()+24*60*60*1000)
                 });
 
             });
 
+            var initLoading = true;
             var table = layui.table;
             layui.use('table', function () {
                 table = layui.table;
                 table.on('tool(demo)');
+                reloadTable();
             });
 
             //reloadTable();
@@ -167,10 +171,17 @@
 
             };
 
+            reloadTable();
+
             function getParam(dateType, isPojo){
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("input[name='createdTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val()))/1000;
                 var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
+                if(initLoading==true){
+                    sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
+                    eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
+                    initLoading = false;
+                }
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),

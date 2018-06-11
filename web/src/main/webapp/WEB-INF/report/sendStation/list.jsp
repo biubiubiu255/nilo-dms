@@ -71,23 +71,34 @@
 
 
 
+        <div class="layui-col-md4 layui-col-lg3">
+            <label class="layui-form-label">isPackage:</label>
+            <div class="layui-input-inline">
+                <select name="isPackage" lay-filter="isPackage" lay-search="">
+                    <option value="">Select packageType....</option>
+                    <option value="0">small</option>
+                    <option value="1">package</option>
+                </select>
+            </div>
+        </div>
 
 
 
         <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">Status:</label>
-            <div class="layui-input-inline">
-                <select name="status" lay-filter="status" lay-search="">
-                    <option value="">Select Status....</option>
-                    <option value="20">Arrived</option>
-                    <option value="30">Delivery</option>
-                    <option value="40">Problem</option>
-                    <option value="60">Refuse</option>
-                    <option value="50">Sign</option>
+        <label class="layui-form-label">Status:</label>
+        <div class="layui-input-inline">
+            <select name="status" lay-filter="status" lay-search="">
+                <option value="">Select Status....</option>
+                <option value="20">Arrived</option>
+                <option value="30">Delivery</option>
+                <option value="40">Problem</option>
+                <option value="60">Refuse</option>
+                <option value="50">Sign</option>
 
-                </select>
-            </div>
+            </select>
         </div>
+
+    </div>
 
         <div class="layui-col-md4 layui-col-lg3">
             <button class="layui-btn layui-btn-normal btn-export">Export</button>
@@ -144,18 +155,23 @@
                 layDate.render({
                     elem: '#fromCreatedTime'
                     , lang: 'en'
+                    , isInitValue: true
+                    , value: new Date()
                 });
                 layDate.render({
                     elem: '#toCreatedTime'
                     , lang: 'en'
+                    , isInitValue: true
+                    , value: new Date(new Date().getTime()+24*60*60*1000)
                 });
-
             });
 
+            var initLoading = true;
             var table = layui.table;
             layui.use('table', function () {
                 table = layui.table;
                 table.on('tool(demo)');
+                reloadTable();
             });
 
             //reloadTable();
@@ -195,13 +211,17 @@
                     document.getElementById("ifm").src = url + "?limit=1000&" + getParam(0);
                 }
 
-
             };
 
             function getParam(dateType, isPojo){
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : Date.parse(new Date($("#fromCreatedTime").val()))/1000;
                 var eTime_creat = $("#toCreatedTime").val()==""   ? "" : Date.parse(new Date($("#toCreatedTime").val()))/1000+86400;
+                if(initLoading==true){
+                    sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
+                    eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
+                    initLoading = false;
+                }
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
@@ -213,6 +233,7 @@
                     expressCode: $("select[name='expressCode']").val(),
                     nextStationCode: $("select[name='nextStationCode']").val(),
                     exportType: dateType,
+                    isPackage: $("select[name='isPackage']").val(),
                     status: $("select[name='status']").val()
                 };
 
@@ -220,6 +241,9 @@
                 else return jQuery.param( param );
 
             }
+
+
+
         });
 
     </script>

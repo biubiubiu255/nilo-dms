@@ -26,6 +26,7 @@ public class SendReportDO extends BaseDo<Long> {
     private String expressCode;
     private String nextStationCode;
 
+
     public Long getMerchantId() {
         return merchantId;
     }

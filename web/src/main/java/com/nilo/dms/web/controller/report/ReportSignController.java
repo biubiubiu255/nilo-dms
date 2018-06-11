@@ -3,7 +3,9 @@ package com.nilo.dms.web.controller.report;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.OutsourceDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.OutsourceDO;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SignReportService;
 import com.nilo.dms.dto.order.SignOrderParameter;
@@ -35,6 +37,10 @@ public class ReportSignController extends BaseController {
     @Autowired
     private DistributionNetworkDao distributionNetworkDao;
 
+    @Autowired
+    private OutsourceDao outsourceDao;
+
+
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
 
@@ -48,7 +54,9 @@ public class ReportSignController extends BaseController {
             s.setName(n.getName());
             list.add(s);
         }
+        List<OutsourceDO> outsourceList = outsourceDao.findAll(SessionLocal.getPrincipal().getMerchantId());
 
+        model.addAttribute("outsourceList", outsourceList);
         model.addAttribute("nextStations", list);
         model.addAttribute("riderList", getRiderList(null));
         return "report/sign/list";
@@ -107,11 +115,6 @@ public class ReportSignController extends BaseController {
             default:
                 fileType = "pdf";
                 page = getPage();
-        }
-
-        if(parameter.getToHandledTime()==null && parameter.getFromHandledTime()==null){
-            parameter.setFromHandledTime(new Long(LocalDateTime.now().withHour(0).withMinute(0).toEpochSecond(ZoneOffset.of("+8"))).intValue());
-            parameter.setToHandledTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
         }
 
         List<SignReport> list = signReportService.querySignReport(parameter, page);

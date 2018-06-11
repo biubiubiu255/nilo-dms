@@ -77,4 +77,17 @@ public class BeanUtils {
             }
         }
     }
+
+    public static void setNotNullValue(Object oriVal, Object valueA, Object valueB){
+        oriVal = valueA==null ? valueB : valueA;
+    }
+
+    public static Object getNotNullValue(Object... vals){
+        for (int i=0;i<vals.length;i++){
+            if (vals[i]!=null){
+                return vals[i];
+            }
+        }
+        return null;
+    }
 }

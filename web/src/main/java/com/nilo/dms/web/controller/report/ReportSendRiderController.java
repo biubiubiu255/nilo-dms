@@ -4,7 +4,9 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.OutsourceDao;
 import com.nilo.dms.dao.ReportDispatchDao;
+import com.nilo.dms.dao.dataobject.OutsourceDO;
 import com.nilo.dms.dao.dataobject.QO.ReportDispatchQO;
 import com.nilo.dms.dao.dataobject.ReportArriveDO;
 import com.nilo.dms.dao.dataobject.ReportDispatchDO;
@@ -35,9 +37,15 @@ public class ReportSendRiderController extends BaseController {
     @Autowired
     private ReportDispatchDao reportDispatchDao;
 
+    @Autowired
+    private OutsourceDao outsourceDao;
+
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model, HttpServletRequest http) {
         model.addAttribute("list", getRiderList(null));
+
+        List<OutsourceDO> outsourceList = outsourceDao.findAll(SessionLocal.getPrincipal().getMerchantId());
+        model.addAttribute("outsourceList", outsourceList);
         return "report/dispatch";
     }
 
@@ -69,11 +77,6 @@ public class ReportSendRiderController extends BaseController {
                 break;
             default:
                 fileType = "pdf";
-        }
-
-        if(reportDispatchQO.getToCreatedTime()==null && reportDispatchQO.getFromCreatedTime()==null){
-            reportDispatchQO.setFromCreatedTime(new Long(LocalDateTime.now().withHour(0).withMinute(0).toEpochSecond(ZoneOffset.of("+8"))).intValue());
-            reportDispatchQO.setToCreatedTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
         }
 
         List<ReportDispatchDO> list = reportDispatchDao.queryReportDispatch(reportDispatchQO);

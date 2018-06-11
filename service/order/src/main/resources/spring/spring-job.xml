@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+
+    <!-- 定义trigger 触发器 -->
+    <bean id="cronTriggerPlus" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="quartzTaskDetail"></property>
+        <property name="cronExpression" value="0 /5 * * * ?"></property>
+        <!--<property name="cronExpression" value="0 /5 * * * ? "></property>-->
+    </bean>
+
+    <bean id="schedulerPlus" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="cronTriggerPlus"/>
+            </list>
+        </property>
+    </bean>
+
+
+    <!-- 定义一个定时任务类 -->
+    <bean id="quartzTaskPlus" class="com.nilo.dms.service.system.schedule.ScheduleMsn"></bean>
+
+    <!-- jobDetail -->
+    <bean id="quartzTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="quartzTaskPlus"></property>
+        <property name="targetMethod" value="run"></property>
+        <property name="concurrent" value="false" /><!-- 作业不并发调度  -->
+    </bean>
+
+
+
+</beans>
