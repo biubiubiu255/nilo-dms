@@ -90,7 +90,7 @@
         a.updated_time
         FROM
         t_handle_third_express_details AS a
-        INNER JOIN t_handle_third_express AS b ON b.handle_no = a.third_handle_no and a.updated_time > UNIX_TIMESTAMP(NOW()) - 3000
+        INNER JOIN t_handle_third_express AS b ON b.handle_no = a.third_handle_no and a.updated_time > UNIX_TIMESTAMP(NOW()) - 300
 		LEFT  JOIN t_waybill as c ON c.parent_no = a.order_no
 
         UNION
@@ -116,7 +116,7 @@
         a.updated_time
         FROM
         t_handle_rider_details AS a
-        INNER JOIN t_handle_rider AS b ON b.handle_no=a.handle_no and a.updated_time > UNIX_TIMESTAMP(NOW()) - 65
+        INNER JOIN t_handle_rider AS b ON b.handle_no=a.handle_no and a.updated_time > UNIX_TIMESTAMP(NOW()) - 300
         LEFT  JOIN t_waybill as c ON c.order_no = a.order_no
 
     </select>

@@ -7,7 +7,7 @@
     <!-- 定义trigger 触发器 -->
     <bean id="cronTriggerPlus" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="quartzTaskDetail"></property>
-        <property name="cronExpression" value="0 /1 * * * ?"></property>
+        <property name="cronExpression" value="0 /5 * * * ?"></property>
         <!--<property name="cronExpression" value="0 /5 * * * ? "></property>-->
     </bean>
 
