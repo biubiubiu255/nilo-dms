@@ -178,8 +178,8 @@
                 var sTime_creat = $("input[name='createdTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val()))/1000;
                 var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
                 if(initLoading==true){
-                    sTime_creat = Date.parse(new Date())/1000;
-                    eTime_creat = Date.parse(new Date(new Date().getTime()+24*60*60*1000))/1000;
+                    sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
+                    eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
                     initLoading = false;
                 }
 

@@ -22,8 +22,8 @@ public class WaybillDeliveryDeatilDO extends BaseDo<Integer> {
     private String network;
     private String nextStation;
     private String expressName;
-    private Integer handleBy;
-    private Integer handleTime;
+    private String handleBy;
+    private Long    handleTime;
     private String  parentNo;
     private Integer status;
 
@@ -123,19 +123,19 @@ public class WaybillDeliveryDeatilDO extends BaseDo<Integer> {
         this.expressName = expressName;
     }
 
-    public Integer getHandleBy() {
+    public String getHandleBy() {
         return handleBy;
     }
 
-    public void setHandleBy(Integer handleBy) {
+    public void setHandleBy(String handleBy) {
         this.handleBy = handleBy;
     }
 
-    public Integer getHandleTime() {
+    public Long getHandleTime() {
         return handleTime;
     }
 
-    public void setHandleTime(Integer handleTime) {
+    public void setHandleTime(Long handleTime) {
         this.handleTime = handleTime;
     }
 

@@ -42,6 +42,8 @@ public class DeliveryRoute {
 
     private Long createdTime;
 
+    private String signer;
+
     public String getMerchantId() {
         return merchantId;
     }
@@ -168,5 +170,13 @@ public class DeliveryRoute {
 
     public void setOptByNamePhone(String optByNamePhone) {
         this.optByNamePhone = optByNamePhone;
+    }
+
+    public String getSigner() {
+        return signer;
+    }
+
+    public void setSigner(String signer) {
+        this.signer = signer;
     }
 }

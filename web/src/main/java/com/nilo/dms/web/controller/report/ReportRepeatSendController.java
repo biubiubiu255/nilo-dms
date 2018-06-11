@@ -101,10 +101,10 @@ public class ReportRepeatSendController extends BaseController {
             default:
                 fileType = "pdf";
         }
-        if(reportRepeatQO.getToCreatedTime()==null && reportRepeatQO.getFromCreatedTime()==null){
+/*        if(reportRepeatQO.getToCreatedTime()==null && reportRepeatQO.getFromCreatedTime()==null){
             reportRepeatQO.setFromCreatedTime(new Long(LocalDateTime.now().withHour(0).withMinute(0).toEpochSecond(ZoneOffset.of("+8"))).intValue());
             reportRepeatQO.setToCreatedTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
-        }
+        }*/
 
         reportRepeatQO.setLimit(page.getLimit());
         reportRepeatQO.setOffset(page.getOffset());
@@ -112,7 +112,7 @@ public class ReportRepeatSendController extends BaseController {
 
         page.setTotalCount(sendReportDao.queryRepeatDispatchCount(reportRepeatQO));
 
-        for (ReportRepeatDO e : list){
+/*        for (ReportRepeatDO e : list){
             switch (e.getDispatchType()){
 
                 case "package":
@@ -125,7 +125,7 @@ public class ReportRepeatSendController extends BaseController {
                     e.setDispatchType("RiderDelivery");
                     break;
             }
-        }
+        }*/
 
 
         if (fileType.equals("json")) {

@@ -67,6 +67,9 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
     @Autowired
     private HandleRiderDao handleRiderDao;
 
+    @Autowired
+    private HandleSignDao handleSignDao;
+
     @Override
     public List<DeliveryRoute> queryRoute(String merchantId, String orderNo) {
 
@@ -78,7 +81,7 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
         UserInfoDO userInfoDO = handleRiderDao.queryUserInfoBySmallNo(orderNo);
 
         for(DeliveryOrderRouteDO e :routeDOs){
-            if(e.getOpt().equals("send")) {
+            if(e.getOpt().equals("send") || e.getOpt().equals("delivery")) {
                 if(bigOrderDO!=null){
                     if(bigOrderDO.getNextStation()!=null){
                         e.setNextNetwork(bigOrderDO.getNextStation());
@@ -99,6 +102,11 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
                 }
 
             }
+            if(e.getOpt().equals("receive")) {
+                HandleSignDO handleSignDO = handleSignDao.queryByNo(e.getMerchantId(), e.getOrderNo());
+                e.setSigner(handleSignDO.getSigner());
+            }
+
         }
 
 
@@ -174,6 +182,7 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
         route.setPhone(routeDO.getPhone());
         route.setOptBy(routeDO.getOptBy());
         route.setOptTime(routeDO.getCreatedTime());
+        route.setSigner(routeDO.getSigner());
 
         if (StringUtil.isNotEmpty(routeDO.getOptNetwork())) {
             DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + routeDO.getMerchantId(), "" + routeDO.getOptNetwork()), DistributionNetworkDO.class);

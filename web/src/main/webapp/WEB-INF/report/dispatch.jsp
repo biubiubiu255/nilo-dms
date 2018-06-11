@@ -76,13 +76,14 @@
     <div class="layui-form layui-row">
 
         <div class="layui-col-md4 layui-col-lg4">
-            <label class="layui-form-label">Outsource:</label>
+            <label class="layui-form-label" style="width:120px">Outsource：</label>
             <div class="layui-input-inline">
-                <select name="outsource" lay-filter="outsource" lay-search="">
-                    <option value="">Select Status....</option>
-                    <option value="Exdous">Exdous</option>
-                    <option value="Ecolink">Ecolink</option>
-                    <option value="KiliExpress">KiliExpress</option>
+                <select name="outsource" lay-filter="outsource" lay-search=""
+                        <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${outsourceList}" var="outsource">
+                        <option value="${outsource.outsource}"> ${outsource.outsourceName}</option>
+                    </c:forEach>
                 </select>
             </div>
         </div>
@@ -196,7 +197,7 @@
 
             };
 
-            reloadTable();
+            //reloadTable();
 
             function getParam(dateType, isPojo) {
                 if (dateType == "" || dateType == 'undefind') dateType = 0;
@@ -206,8 +207,8 @@
                 var rider  = $("select[name='rider']").val();
                 var outsource  = $("select[name='outsource']").val();
                 if(initLoading==true){
-                    sTime_creat = Date.parse(new Date())/1000;
-                    eTime_creat = Date.parse(new Date(new Date().getTime()+24*60*60*1000))/1000;
+                    sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
+                    eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
                     initLoading = false;
                 }
 

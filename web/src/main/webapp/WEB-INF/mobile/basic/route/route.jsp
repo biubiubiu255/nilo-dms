@@ -100,15 +100,15 @@
                 console.log(d.nextNetwork);
 
                 if(d.nextNetwork!=null){
-                    info += 'SendType：' + d.nextNetwork;
+                    info += 'NextNetwork：' + d.nextNetwork;
 				}
                 if(d.expressName!=null){
-                    info += 'SendType：' + d.expressName;
+                    info += 'ExpressName：' + d.expressName;
                 }
                 if(d.rider!=null){
                     info += '，rider：'+d.rider + '，phone：'+d.optByNamePhone+'，jobID：'+d.jobId;
 				}
-                point = map.send_scan + '，' + map.home_network + '：' + d.optByName + '，' + info;
+                point = map.send_scan + '，Opt：' + d.optByName + '，' + info;
                 break;
 
 		case 'delivery':
@@ -116,7 +116,7 @@
 			break;
 
 		case 'receive':
-			point = map.route_const_signed + '，' + map.sign_scan_signer + '：' + d.optByName;
+			point = map.route_const_signed + '，' + map.sign_scan_signer + '：' + d.signer;
 			break;
 
 		default:

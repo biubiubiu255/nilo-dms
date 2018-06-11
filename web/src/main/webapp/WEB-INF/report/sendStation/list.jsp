@@ -97,6 +97,7 @@
 
             </select>
         </div>
+
     </div>
 
         <div class="layui-col-md4 layui-col-lg3">
@@ -217,8 +218,8 @@
                 var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : Date.parse(new Date($("#fromCreatedTime").val()))/1000;
                 var eTime_creat = $("#toCreatedTime").val()==""   ? "" : Date.parse(new Date($("#toCreatedTime").val()))/1000+86400;
                 if(initLoading==true){
-                    sTime_creat = Date.parse(new Date())/1000;
-                    eTime_creat = Date.parse(new Date(new Date().getTime()+24*60*60*1000))/1000;
+                    sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
+                    eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
                     initLoading = false;
                 }
 

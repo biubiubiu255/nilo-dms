@@ -16,7 +16,7 @@
                 <input type="text" name="orderNo" autocomplete="off" class="layui-input">
             </div>
         </div>
-
+<%--
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">DeliveryType:</label>
             <div class="layui-input-inline">
@@ -27,7 +27,7 @@
                     <option value="waybill">Express</option>
                 </select>
             </div>
-        </div>
+        </div>--%>
 
 
         <div class="layui-col-md4 layui-col-lg3">
@@ -46,7 +46,6 @@
         </div>
 
 
-
 <%--        <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">Rider:</label>
             <div class="layui-inline">
@@ -63,12 +62,7 @@
     </div>
     <div class="layui-form layui-row">
 
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">HandleNo:</label>
-            <div class="layui-input-inline">
-                <input type="text" name="handleNo" autocomplete="off" class="layui-input">
-            </div>
-        </div>
+
 
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">OrderType:</label>
@@ -80,21 +74,6 @@
                     </c:forEach>
                 </select></div>
         </div>
-
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">NextStation:</label>
-            <div class="layui-inline">
-                <select lay-filter="nextStationCodeLay" name="nextStationCode">
-                    <option value="">choose or search....</option>
-                    <c:forEach items="${nextStations}" var="r">
-                        <%--<option value=${r.code}>${r.name}</option>--%>
-                        <option value=${r.code}>${r.name}</option>
-                    </c:forEach>
-                </select>
-            </div>
-        </div>
-
-    <div class="layui-row">
 
 
         <div class="layui-col-md4 layui-col-lg4">
@@ -114,7 +93,21 @@
             <button class="layui-btn layui-btn-normal search">Search</button>
             <button class="layui-btn layui-btn-normal btn-pdf">View</button>
         </div>
-    </div>
+
+<%--        <div class="layui-col-md4 layui-col-lg3">
+            <label class="layui-form-label">NextStation:</label>
+            <div class="layui-inline">
+                <select lay-filter="nextStationCodeLay" name="nextStationCode">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${nextStations}" var="r">
+                        &lt;%&ndash;<option value=${r.code}>${r.name}</option>&ndash;%&gt;
+                        <option value=${r.code}>${r.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>--%>
+
+
     <hr>
 </div>
 
@@ -131,12 +124,12 @@
             <tr>
                 <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
                 <th lay-data="{field: 'referenceNo', width:190}">ReferenceNo</th>
-                <th lay-data="{field:'dispatchType', width:119}">DispatchType</th>
+                <%--<th lay-data="{field:'dispatchType', width:119}">DispatchType</th>--%>
                 <th lay-data="{field:'dispatchNum', width:116}">Times</th>
-                <th lay-data="{field:'handleNo', width:100}">HandleNo</th>
+<%--                <th lay-data="{field:'handleNo', width:100}">HandleNo</th>
                 <th lay-data="{field: 'handleName', width:130}">HandleName</th>
                 <th lay-data="{field:'expressName', width:130}">ExpressName</th>
-                <th lay-data="{field:'nextStation', width:130}">NextStation</th>
+                <th lay-data="{field:'nextStation', width:130}">NextStation</th>--%>
                 <th lay-data="{field: 'orderType', width:100}">OrderType</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
 <%--                <th lay-data="{field:'rider', width:130}">Rider</th>--%>
@@ -224,29 +217,29 @@
 
             };
 
-            reloadTable();
+            //reloadTable();
 
             function getParam(dateType, isPojo){
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : Date.parse(new Date($("#fromCreatedTime").val()))/1000;
                 var eTime_creat = $("#toCreatedTime").val()==""   ? "" : Date.parse(new Date($("#toCreatedTime").val()))/1000+86400;
                 if(initLoading==true){
-                    sTime_creat = Date.parse(new Date())/1000;
-                    eTime_creat = Date.parse(new Date(new Date().getTime()+24*60*60*1000))/1000;
+                    sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
+                    eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
                     initLoading = false;
                 }
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
-                    driver: $("input[name='driver']").val(),
+                    //driver: $("input[name='driver']").val(),
                     fromCreatedTime: sTime_creat,
                     toCreatedTime: eTime_creat,
-                    handleNo: $("input[name='handleNo']").val(),
+                    //handleNo: $("input[name='handleNo']").val(),
                     orderType: $("select[name='orderType']").val(),
                     expressCode: $("select[name='expressCode']").val(),
-                    nextStationCode: $("select[name='nextStationCode']").val(),
+                    //nextStationCode: $("select[name='nextStationCode']").val(),
                     exportType: dateType,
-                    dispatchType: $("select[name='dispatchType']").val(),
+                    //dispatchType: $("select[name='dispatchType']").val(),
                     status: $("select[name='status']").val()
                 };
 

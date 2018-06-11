@@ -25,6 +25,7 @@
                 City: ${deliveryOrder.senderInfo.senderCity}<br>
                 Address: ${deliveryOrder.senderInfo.senderAddress}<br>
             </address>
+
         </div>
         <!-- /.col -->
         <div class="layui-col-md4">
@@ -85,7 +86,21 @@
             <span>
             <jsp:setProperty name="dateValue" property="time" value="${route.createdTime*1000 }"/>
             <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/>
-            ${route.opt}  ${route.optByName}
+            【${route.opt}】 ${route.optByName}
+            <c:choose>
+                <c:when test="${route.opt=='arrive_scan'}">
+                    【Netwrork】：${route.networkDesc}
+                </c:when>
+                <c:when test="${route.opt=='send' || route.opt=='delivery'}">
+                    <c:if test="${route.nextNetwork!=null}">，【NextNetwork】：${route.nextNetwork}</c:if>
+                    <c:if test="${route.expressName!=null}">，【ExpressName】：${route.expressName}</c:if>
+                    <c:if test="${route.rider!=null}">，【Rider】：${route.rider}</c:if>
+                    <c:if test="${route.phone!=null}">，【Phone】：${route.phone}</c:if>
+                </c:when>
+                <c:when test="${route.opt=='receive'}">
+                    ，Signer：${route.signer}
+                </c:when>
+            </c:choose>
             </span><br>
         </c:forEach>
     </div>

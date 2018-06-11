@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.HandleSmallDao">
+
+    <resultMap id="DeliverySmall" type="com.nilo.dms.dao.dataobject.WaybillDeliveryDeatilDO">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="merchant_id" jdbcType="BIGINT" property="merchantId" javaType="java.lang.Long" />
+        <result column="handle_no" jdbcType="VARCHAR" property="handleNo" javaType="java.lang.String" />
+        <result column="package_no" jdbcType="VARCHAR" property="packageNo" javaType="java.lang.String" />
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo" javaType="java.lang.String" />
+        <result column="weight" jdbcType="DOUBLE" property="weight" javaType="java.lang.Double"/>
+        <result column="len" jdbcType="DOUBLE" property="length" javaType="java.lang.Double"/>
+        <result column="high" jdbcType="DOUBLE" property="height" javaType="java.lang.Double"/>
+        <result column="width" jdbcType="DOUBLE" property="width" javaType="java.lang.Double"/>
+        <result column="rider" jdbcType="VARCHAR" property="rider" javaType="java.lang.String"/>
+        <result column="driver" jdbcType="VARCHAR" property="driver" javaType="java.lang.String"/>
+        <result column="network" jdbcType="VARCHAR" property="network" javaType="java.lang.String"/>
+        <result column="next_station" jdbcType="VARCHAR" property="nextStation" javaType="java.lang.String"/>
+        <result column="express_name" jdbcType="VARCHAR" property="expressName" javaType="java.lang.String"/>
+        <result column="handle_by" jdbcType="VARCHAR" property="handleBy" javaType="java.lang.String"/>
+        <result column="handle_time" jdbcType="BIGINT" property="handleTime" javaType="java.lang.Long"/>
+        <result column="parent_no" jdbcType="VARCHAR" property="parentNo" javaType="java.lang.String"/>
+        <result column="status" jdbcType="INTEGER" property="status" javaType="java.lang.Integer"/>
+        <result column="created_time" jdbcType="BIGINT" property="createdTime" javaType="java.lang.Long"/>
+        <result column="updated_time" jdbcType="BIGINT" property="updatedTime" javaType="java.lang.Long"/>
+        <result column="version" jdbcType="VARCHAR" property="version" javaType="java.lang.String"/>
+    </resultMap>
+
+
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.WaybillDeliveryDeatilDO"
+            statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
+    insert ignore into t_handle_delivery_small ( merchant_id, handle_no,
+      order_no, weight, length,
+      height, width, rider,
+      driver, network, next_station,
+      express_name, handle_by, handle_time,
+      parent_no, status, created_time,
+      updated_time, version)
+    values ( #{merchantId,jdbcType=INTEGER}, #{handleNo,jdbcType=VARCHAR},
+      #{orderNo,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, #{len,jdbcType=DOUBLE},
+      #{high,jdbcType=DOUBLE}, #{width,jdbcType=DOUBLE}, #{rider,jdbcType=VARCHAR},
+      #{driver,jdbcType=VARCHAR}, #{network,jdbcType=VARCHAR}, #{nextStation,jdbcType=VARCHAR},
+      #{expressName,jdbcType=VARCHAR}, #{handleBy,jdbcType=VARCHAR}, #{handleTime,jdbcType=BIGINT},
+      #{parentNo,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createdTime,jdbcType=BIGINT},
+            #{updatedTime,jdbcType=BIGINT},UUID())
+
+    </insert>
+
+    <insert id="insertAll" statementType="PREPARED" >
+        insert ignore into t_handle_delivery_small ( merchant_id, handle_no,
+        order_no, weight, length,
+        height, width, rider,
+        driver, network, next_station,
+        express_name, handle_by, handle_time,
+        parent_no, status, created_time,
+        updated_time, version)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.merchantId,jdbcType=INTEGER}, #{item.handleNo,jdbcType=VARCHAR},
+            #{item.orderNo,jdbcType=VARCHAR}, #{item.weight,jdbcType=DOUBLE}, #{item.len,jdbcType=DOUBLE},
+            #{item.high,jdbcType=DOUBLE}, #{item.width,jdbcType=DOUBLE}, #{item.rider,jdbcType=VARCHAR},
+            #{item.driver,jdbcType=VARCHAR}, #{item.network,jdbcType=VARCHAR}, #{item.nextStation,jdbcType=VARCHAR},
+            #{item.expressName,jdbcType=VARCHAR}, #{item.handleBy,jdbcType=VARCHAR}, #{item.handleTime,jdbcType=BIGINT},
+            #{item.parentNo,jdbcType=VARCHAR}, #{item.status,jdbcType=INTEGER}, #{item.createdTime,jdbcType=BIGINT},
+            #{item.updatedTime,jdbcType=BIGINT},UUID())
+        </foreach>
+    </insert>
+
+
+    <select id="queryDeliveryDetailInbound" resultMap="DeliverySmall">
+        SELECT
+        a.third_handle_no as handle_no,
+		COALESCE (c.order_no, a.order_no) AS order_no,
+        a.weight,
+        a.length,
+        a.height,
+        a.width,
+        b.merchant_id,
+        '' as rider,
+        b.driver as driver,
+        b.network_code as network,
+        b.next_station,
+        b.third_express_code as express_name,
+        b.handle_by,
+        b.handle_time,
+        c.parent_no as parent_no,
+        b.`status` as STATUS,
+        a.created_time,
+        a.updated_time
+        FROM
+        t_handle_third_express_details AS a
+        INNER JOIN t_handle_third_express AS b ON b.handle_no = a.third_handle_no and a.updated_time > UNIX_TIMESTAMP(NOW()) - 3000
+		LEFT  JOIN t_waybill as c ON c.parent_no = a.order_no
+
+        UNION
+
+        SELECT
+        a.handle_no,
+        a.order_no,
+        a.weight,
+        a.length,
+        a.height,
+        a.width,
+        b.merchant_id,
+        b.rider,
+        '' as driver,
+        b.network_id as network,
+        '' as next_station,
+        '' as express_name,
+        b.handle_by,
+        b.handle_time,
+        c.parent_no as parent_no,
+        b.`status` as STATUS,
+        a.created_time,
+        a.updated_time
+        FROM
+        t_handle_rider_details AS a
+        INNER JOIN t_handle_rider AS b ON b.handle_no=a.handle_no and a.updated_time > UNIX_TIMESTAMP(NOW()) - 65
+        LEFT  JOIN t_waybill as c ON c.order_no = a.order_no
+
+    </select>
+
+</mapper>

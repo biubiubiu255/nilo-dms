@@ -221,6 +221,7 @@ public class WaybillController extends BaseController {
         //查询订单详情
         Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
         List<DeliveryRoute> orderRouteList = deliveryRouteService.queryRoute(merchantId, orderNo);
+
         model.addAttribute("deliveryOrder", deliveryOrder);
         model.addAttribute("orderRouteList", orderRouteList);
 

@@ -10,6 +10,4 @@ import java.util.List;
 public interface WaybillTaskDao{
 
     List<WaybillTaskDo> queryNeedPayOrderByRider(String userId);
-
-    List<WaybillDeliveryDeatilDO>queryDeliveryDetailInbound();
 }
