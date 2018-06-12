@@ -55,6 +55,9 @@ public class ReportArriveController extends BaseController {
         reportArriveQO.setLimit(page.getLimit());
         reportArriveQO.setOffset(page.getOffset());
         reportArriveQO.setMerchantId(Long.parseLong(merchantId));
+        if(reportArriveQO.getToCreatedTime()==null && reportArriveQO.getFromCreatedTime()==null){
+            return "common/toResponseBody";
+        }
 
         String fileType;
         switch (reportArriveQO.getExportType()) {
@@ -81,6 +84,7 @@ public class ReportArriveController extends BaseController {
             reportArriveQO.setToCreatedTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
         }
 */
+
 
         List<ReportArriveDO> list = waybillArriveDao.queryReportArrive(reportArriveQO);
         page.setTotalCount(waybillArriveDao.queryReportArriveCount(reportArriveQO));

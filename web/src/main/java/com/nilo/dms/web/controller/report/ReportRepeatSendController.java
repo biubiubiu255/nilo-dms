@@ -84,6 +84,10 @@ public class ReportRepeatSendController extends BaseController {
         //获取merchantId
         Long merchantId = Long.parseLong(me.getMerchantId());
         reportRepeatQO.setMerchantId(merchantId);
+
+        if(reportRepeatQO.getToCreatedTime()==null && reportRepeatQO.getFromCreatedTime()==null){
+            return "common/toResponseBody";
+        }
         
         String fileType;
         switch (reportRepeatQO.getExportType()) {
