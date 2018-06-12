@@ -59,6 +59,7 @@ public class ReportArriveController extends BaseController {
             return "common/toResponseBody";
         }
 
+
         String fileType;
         switch (reportArriveQO.getExportType()) {
             case 0:
