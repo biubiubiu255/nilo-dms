@@ -81,6 +81,9 @@ public class ReportSendStationController extends BaseController {
         //获取merchantId
         Long merchantId = Long.parseLong(me.getMerchantId());
         sendReportQO.setMerchantId(merchantId);
+        if(sendReportQO.getToCreatedTime()==null && sendReportQO.getFromCreatedTime()==null){
+            return "common/toResponseBody";
+        }
         
         String fileType;
         switch (sendReportQO.getExportType()) {

@@ -130,7 +130,7 @@
                 reloadTable();
             });
 
-            //reloadTable();
+
 
             $(".search").on("click", function () {
                 reloadTable();
@@ -170,8 +170,6 @@
 
 
             };
-
-            reloadTable();
 
             function getParam(dateType, isPojo){
                 if (dateType=="" || dateType=='undefind') dateType=0;
