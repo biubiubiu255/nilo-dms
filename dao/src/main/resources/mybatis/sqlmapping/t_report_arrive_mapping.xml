@@ -34,13 +34,13 @@
 
         LEFT JOIN t_sys_user_info b ON a.opt_by = b.id
 
-        LEFT JOIN t_waybill c ON a.order_no = c.order_no
+        LEFT JOIN t_waybill c ON a.order_no = c.order_no AND c.merchant_id = a.merchant_id
 
         LEFT JOIN t_bas_network d ON a.last_network_id = d.id
 
         LEFT JOIN t_bas_network e ON a.network_id = e.id
 
-        INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no
+        INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no AND f.merchant_id = a.merchant_id
 
         WHERE a.merchant_id=#{merchantId}
 
@@ -83,13 +83,13 @@
 
         LEFT JOIN t_sys_user_info b ON a.opt_by = b.id
 
-        LEFT JOIN t_waybill c ON a.order_no = c.order_no
+        LEFT JOIN t_waybill c ON a.order_no = c.order_no AND c.merchant_id = a.merchant_id
 
         LEFT JOIN t_bas_network d ON a.last_network_id = d.id
 
         LEFT JOIN t_bas_network e ON a.network_id = e.id
 
-        INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no
+        INNER JOIN t_waybill_receiver f ON a.order_no = f.order_no AND f.merchant_id = a.merchant_id
 
         WHERE a.merchant_id=#{merchantId}
 
