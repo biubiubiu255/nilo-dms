@@ -55,9 +55,7 @@ public class ReportArriveController extends BaseController {
         reportArriveQO.setLimit(page.getLimit());
         reportArriveQO.setOffset(page.getOffset());
         reportArriveQO.setMerchantId(Long.parseLong(merchantId));
-        if(reportArriveQO.getToCreatedTime()==null && reportArriveQO.getFromCreatedTime()==null){
-            return "common/toResponseBody";
-        }
+
 
         String fileType;
         switch (reportArriveQO.getExportType()) {
