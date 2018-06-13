@@ -61,6 +61,7 @@ public class ReportArriveController extends BaseController {
 
 
 
+
         String fileType;
         switch (reportArriveQO.getExportType()) {
             case 0:

@@ -65,6 +65,7 @@ public class ReportSendRiderController extends BaseController {
 
 
 
+
         String fileType;
         switch (reportDispatchQO.getExportType()) {
             case 0:
