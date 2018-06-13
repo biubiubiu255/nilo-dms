@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +56,7 @@ public class ReportArriveController extends BaseController {
         reportArriveQO.setOffset(page.getOffset());
         reportArriveQO.setMerchantId(Long.parseLong(merchantId));
 
+
         String fileType;
         switch (reportArriveQO.getExportType()) {
             case 0:
@@ -73,6 +76,13 @@ public class ReportArriveController extends BaseController {
                 fileType = "pdf";
         }
 
+/*
+        if(reportArriveQO.getToCreatedTime()==null && reportArriveQO.getFromCreatedTime()==null){
+            reportArriveQO.setFromCreatedTime(new Long(LocalDateTime.now().withHour(0).withMinute(0).toEpochSecond(ZoneOffset.of("+8"))).intValue());
+            reportArriveQO.setToCreatedTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
+        }
+*/
+
 
         List<ReportArriveDO> list = waybillArriveDao.queryReportArrive(reportArriveQO);
         page.setTotalCount(waybillArriveDao.queryReportArriveCount(reportArriveQO));
@@ -85,6 +95,7 @@ public class ReportArriveController extends BaseController {
             request.setAttribute("toDate", toPaginationLayUIData(page, list));
             return "common/toResponseBody";
         }
+
 
         // 动态指定报表模板url
         model.addAttribute("url", "/WEB-INF/jasper/report/arrive.jasper");

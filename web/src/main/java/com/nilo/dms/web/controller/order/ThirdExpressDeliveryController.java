@@ -168,7 +168,8 @@ public class ThirdExpressDeliveryController extends BaseController {
         SendThirdHead head = new SendThirdHead();
         head.setHandleName(handleNo);
         head.setDriver(rider);
-        sendThirdService.edit(head, smallPack);
+        head.setHandleNo(handleNo);
+        sendThirdService.editSmalls(head, smallPack);
         if (saveStatus == 1) {
             sendThirdService.ship(handleNo);
         }
@@ -190,6 +191,14 @@ public class ThirdExpressDeliveryController extends BaseController {
         }
 
         return toJsonTrueData(list);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/deleteHandle.html", method = RequestMethod.POST)
+    public String deleteHandle(String handleNo) {
+        sendThirdService.deleteHandle(handleNo);
+        return toJsonTrueMsg();
     }
 
 }

@@ -3,7 +3,9 @@ package com.nilo.dms.web.controller.report;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.OutsourceDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.OutsourceDO;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SignReportService;
 import com.nilo.dms.dto.order.SignOrderParameter;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +36,10 @@ public class ReportSignController extends BaseController {
 
     @Autowired
     private DistributionNetworkDao distributionNetworkDao;
+
+    @Autowired
+    private OutsourceDao outsourceDao;
+
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
@@ -46,7 +54,9 @@ public class ReportSignController extends BaseController {
             s.setName(n.getName());
             list.add(s);
         }
+        List<OutsourceDO> outsourceList = outsourceDao.findAll(SessionLocal.getPrincipal().getMerchantId());
 
+        model.addAttribute("outsourceList", outsourceList);
         model.addAttribute("nextStations", list);
         model.addAttribute("riderList", getRiderList(null));
         return "report/sign/list";
@@ -106,6 +116,8 @@ public class ReportSignController extends BaseController {
                 fileType = "pdf";
                 page = getPage();
         }
+
+
 
         List<SignReport> list = signReportService.querySignReport(parameter, page);
         //page.setTotalCount(commonDao.lastFoundRows());

@@ -21,6 +21,7 @@ public class SendReportQO extends BaseDo<Long> {
     private String deliveryType;
     private String expressName;
     private String expressCode;
+    private String isPackage;
 
     private Integer offset;
     private Integer limit;
@@ -28,6 +29,7 @@ public class SendReportQO extends BaseDo<Long> {
     private Integer fromCreatedTime;
     private Integer toCreatedTime;
     private Integer exportType;
+
 
     public Long getMerchantId() {
         return merchantId;
@@ -211,6 +213,14 @@ public class SendReportQO extends BaseDo<Long> {
 
     public void setExportType(Integer exportType) {
         this.exportType = exportType;
+    }
+
+    public String getIsPackage() {
+        return isPackage;
+    }
+
+    public void setIsPackage(String isPackage) {
+        this.isPackage = isPackage;
     }
 
     @Override

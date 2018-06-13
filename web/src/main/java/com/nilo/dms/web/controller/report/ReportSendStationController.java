@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,11 +77,12 @@ public class ReportSendStationController extends BaseController {
 
         Pagination page = getPage();
 
-
+        //
         //获取merchantId
         Long merchantId = Long.parseLong(me.getMerchantId());
         sendReportQO.setMerchantId(merchantId);
-        
+
+
         String fileType;
         switch (sendReportQO.getExportType()) {
             case 0:
@@ -96,6 +99,7 @@ public class ReportSendStationController extends BaseController {
             default:
                 fileType = "pdf";
         }
+
 
         List<SendReportDO> list = sendReportService.querySendStationReport(sendReportQO, page);
 

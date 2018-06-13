@@ -14,16 +14,63 @@
     html {
         -webkit-text-size-adjust: none;
     }
-
     td {
         padding: 5px;
     }
     tr {
-        height: 200%;
+        height: 150%;
     }
     table, tr, td, th{
         border: 2px solid black !important;
-        border-collapse:collapse;
+    }
+
+    .printer li {
+        border-bottom: 1px dashed #ddd;
+        padding-bottom: 1em;
+    }
+
+    .printer li.r3 {
+        border-bottom: none;
+    }
+
+    .lister tr td, .lister tr th {
+        border: 1px solid #333;
+        padding: 0 2px;
+        color: #000;
+    }
+
+    .lister tr.title td {
+        font-size: 18px;
+        border: none;
+    }
+
+    .lister tr.total th {
+        font-size: 14px;
+    }
+
+    .lister tr.total td {
+        padding-right: 12px;
+    }
+
+    .lister tr th span.grey {
+        font-weight: lighter;
+    }
+
+    .intro td {
+        font-size: 15px;
+        font-weight: bold;
+        text-align: center;
+        color: #000;
+    }
+
+    .intro2 td {
+        font-size: 13px;
+        text-align: left;
+        color: #000;
+    }
+
+    .intro2 {
+        margin: 5px 0;
     }
 </style>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
@@ -60,7 +107,7 @@
     <br><br>
     <div class="row">
         <div class="col-xs-12">
-            <table class="table table-bordered">
+            <table class="lister table">
                 <thead>
                 <tr>
                     <th>No</th>

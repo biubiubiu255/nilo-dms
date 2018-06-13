@@ -16,7 +16,7 @@
             <input type="text" id="loadingNo" value="${pack.handleNo}" autocomplete="off" disabled
                    class="layui-input layui-disabled">
         </div>
-        <label class="layui-form-label" style="width:120px">Loading By</label>
+        <label class="layui-form-label" style="width:120px">Next Station</label>
         <div class="layui-input-inline">
             <input type="text" name="handleName" value="${pack.nextStation}" autocomplete="off"
                    class="layui-input layui-disabled" disabled>
@@ -59,7 +59,8 @@
 
     <div class="layui-form-item">
         <div class="layui-input-block shipDiv" style="margin-left:120px;">
-            <button class="layui-btn layui-btn-danger commit" value="0">Ship</button>
+            <button class="layui-btn layui-btn-danger commit" value="0">Save</button>
+            <button class="layui-btn layui-btn-danger commit" value="1">Ship</button>
         </div>
     </div>
 
@@ -84,6 +85,7 @@
             form.render();
             tableData = JSON.parse('${smallsJson}');
             tableData = tableData.data;
+            //console.log(tableData);
 
             //alert(tableData.length);
             table1 = layui.table;
@@ -96,9 +98,13 @@
                         layer.msg('Finished loading');
                         return ;
                     }
+
                     for(var i=0;i<tableData.length;i++){
-                        if (tableData.splice(i, 1));
-                        break;
+                        console.log(obj.data.orderNo, tableData[i].orderNo);
+                        if(obj.data.orderNo==tableData[i].orderNo){
+                            tableData.splice(i, 1);
+                            break;
+                        }
                     }
                     view();
                 }
@@ -159,23 +165,31 @@
                     , {field: 'orderNo', title: 'OrderNo', width: 190}
                     , {field: 'weight' , title: 'Weight' , width: 90}
                     , {title: 'CreateTime', width: 200, templet: '<div>{{formatDate(d.createdTime)}}</div>'}
-                    //, {field: '', title: 'opt', width:80, toolbar: '#barDemo', fixed: 'right', align:'center'}
+                    , {field: '', title: 'opt', width:80, toolbar: '#barDemo', fixed: 'right', align:'center'}
                 ]]
                 , id: '${id2}'
-                , width: 565
+                , width: 640
             });
         }
 
         //Ship
         $('.commit').on('click', function (e) {
+
+            var smallPack = "";
+            for (var i = 0; i < tableData.length; i++) {
+                smallPack += tableData[i].orderNo + ",";
+            }
+            smallPack = smallPack.substring(0, smallPack.length - 1);
+
             var load = layer.load(2);
             $.ajax({
                 type: "POST",
-                url: "/waybill/send_nextStation/updateStatus.html",
+                url: "/waybill/send_nextStation/edit.html",
                 dataType: "json",
                 data: {
                     handleNo: "${pack.handleNo}",
-                    status: 1
+                    smallNos: smallPack,
+                    status: e.currentTarget.value
                 },
                 success: function (data) {
                     if (data.result) {

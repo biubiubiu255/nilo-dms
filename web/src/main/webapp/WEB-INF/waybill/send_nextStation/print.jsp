@@ -1,67 +1,109 @@
 <%@ page import="com.nilo.dms.common.utils.DateUtil" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<html>
 <%
-    request.setAttribute("nowDate", DateUtil.formatCurrent("yyyy-MM-dd HH:mm:ss"));
+    request.setAttribute("nowDate", DateUtil.formatCurrent("yyyy-MM-dd HH:mm"));
 %>
-<%@ include file="../../common/header.jsp" %>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1">
+    <title>print</title>
+    <script src="${ctx}/plugins/jQuery/jquery-2.2.3.min.js"></script>
+</head>
+
+<body>
 <script type="text/javascript">window.print();</script>
 <style>
-    *{
-        font-size: 14px;
-    }
-    html {
-        -webkit-text-size-adjust: none;
+
+    .printer {
+        padding: 0;
     }
 
-    td {
-        padding: 5px;
+    .printer li {
+        border-bottom: 1px dashed #ddd;
+        padding-bottom: 1em;
     }
-    tr {
-        height: 200%;
+
+    .printer li.r3 {
+        border-bottom: none;
     }
-    table, tr, td, th{
-        border: 2px solid black !important;
-        border-collapse:collapse;
+
+    .lister tr td, .lister tr th {
+        border: 1px solid #333;
+        padding: 0 2px;
+        color: #000;
+    }
+
+    .lister tr.title td {
+        font-size: 18px;
+        border: none;
+    }
+
+    .lister tr.total th {
+        font-size: 14px;
+    }
+
+    .lister tr.total td {
+        padding-right: 12px;
+    }
+
+    .lister tr th span.grey {
+        font-weight: lighter;
+    }
+
+    .intro td {
+        font-size: 15px;
+        font-weight: bold;
+        text-align: center;
+        color: #000;
+    }
+
+    .intro2 td {
+        font-size: 13px;
+        text-align: left;
+        color: #000;
+    }
+
+    .intro2 {
+        margin: 5px 0;
     }
 </style>
+
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="${ctx}/bootstrap/js/bootstrap.min.js"></script>
 <div class="container">
     <div class="row" style="text-align: center;">
-        <div class="center-block" style="width:400px;">
+        <div class="center-block" style="width:600px;">
 
             <h4><b><span style="font-weight: bolder; font-size: larger;">Shipment List</span></b></h4>
 
             <h5 style="position:absolute;right: 10px;top: 20px;"> Date ${nowDate}</h5>
         </div>
-
-        <br><br>
     </div>
-
-
-    <div class="row">
-        <div class="col-xs-3">
-            Loading NO: ${pack.handleNo}
-        </div>
-        <div class="col-xs-3">
-            Name: ${pack.thirdExpressCode}
-        </div>
-        <div class="col-xs-3">
-            Rider :${pack.driver}
-        </div>
-        <div class="col-xs-3">
-            Operator :
-            ${sessionScope.userName}
-        </div>
-        <br><br>
-    </div>
-    <br><br>
-    <div class="row">
-        <div class="col-xs-12">
-            <table class="table table-bordered">
-                <thead>
+</br>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="intro2">
+                <tbody>
+                <tr style="background: rgb(255, 255, 255);">
+                    <td style="font-size:14px">Loading NO: ${pack.handleNo}
+                    </td>
+                    <td style="font-size:14px">Name: ${pack.thirdExpressCode}
+                    </td>
+                    <td style="font-size:14px">Rider: ${pack.driver}
+                    </td>
+                    <td style="font-size:14px">Operator: ${sessionScope.userName}
+                    </td>
+                </tr>
+                
+                </tbody>
+                </table>
+ 
+      </br>  
+            <table  width="100%" border="0" cellspacing="0" cellpadding="0" class="lister">
+                 <tbody>
                 <tr>
                     <th>No</th>
                     <th>Order No</th>
@@ -70,13 +112,14 @@
                     <th>Contact No</th>
                     <th>Address</th>
                 </tr>
-                </thead>
-                <tbody>
+                
+               
                 	<c:forEach items="${smalls}" var="item" varStatus="status">
-	                   <tr>
-                            <td>${status.index + 1}</td>
+	                   <tr  style="background: rgb(255, 255, 255);">
+	                   <th><strong>${status.index + 1}</strong></th>
+                            
 	                        <td>${item.orderNo}</td>
-                            <td>${item.weight}</td>
+                        <th><strong>${item.weight}</strong></th>
 	                        <td>${item.receiverInfo.receiverName}</td>
 	                        <td>${item.receiverInfo.receiverPhone}</td>
 	                        <td>${item.receiverInfo.receiverAddress}</td>
@@ -84,10 +127,10 @@
                    </c:forEach> 
                 </tbody>
             </table>
+            
+           
         </div>
-        <br><br>
 
-    </div>
     <div class="row">
         <div class="col-xs-6">
             Total Order :${fn:length(smalls)}
@@ -102,5 +145,5 @@
         </div>
         <br><br>
     </div>
-    
+    </body>
 </html>

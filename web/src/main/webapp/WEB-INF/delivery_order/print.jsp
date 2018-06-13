@@ -200,12 +200,7 @@
                         </div>
                          
                     </div>
-                    <div class="row">
-                    	<div class="col-xs-7" >
-                            <b>  &nbsp;
-                            </b>
-                        </div>
-                    </div>
+                    
                     <div class="row">
                         <div class="col-xs-12">
                             Tell:<b>${delivery.receiverInfo.receiverPhone}</b>

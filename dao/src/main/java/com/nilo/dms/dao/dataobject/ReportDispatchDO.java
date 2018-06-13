@@ -11,6 +11,7 @@ public class ReportDispatchDO extends BaseDo<Long> {
     private String referenceNo;
     private String country;
     private String orderType;
+    private String outsource;
 
     private Double weight;
     private Double len;
@@ -153,6 +154,14 @@ public class ReportDispatchDO extends BaseDo<Long> {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getOutsource() {
+        return outsource;
+    }
+
+    public void setOutsource(String outsource) {
+        this.outsource = outsource;
     }
 
     @Override

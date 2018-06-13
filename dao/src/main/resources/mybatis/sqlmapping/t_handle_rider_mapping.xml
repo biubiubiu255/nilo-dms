@@ -35,6 +35,8 @@
                 jdbcType="VARCHAR"/>
         <result property="orderNo" column="order_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
+<!--        <result property="handleByName" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>-->
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
         <result property="length" column="length" javaType="java.lang.Double"
@@ -191,7 +193,7 @@
 
     </insert>
 
-    <delete id="deleteSmallByHandleNo" parameterType="com.nilo.dms.dao.dataobject.RiderDeliverySmallDO">
+    <delete id="deleteSmallsByHandleNo">
         delete FROM t_handle_rider_details
         WHERE handle_no = #{handleNo}
     </delete>
@@ -215,7 +217,12 @@
 
         on b.rider = c.id
 
-        WHERE a.order_no = #{orderNo} order by a.created_time desc limit 1
+        WHERE a.order_no = #{orderNo}
+
+        ORDER BY a.created_time DESC
+
+        limit 1
+
     </select>
 
 
@@ -228,5 +235,10 @@
         WHERE
         handle_no = #{handleNo}
     </update>
+
+    <delete id="deleteHandleBy">
+        delete FROM t_handle_rider
+        WHERE merchant_id = #{merchantId} and  handle_no = #{handleNo}
+    </delete>
 
 </mapper>

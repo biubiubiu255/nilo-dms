@@ -15,11 +15,25 @@ public class DeliveryOrderRouteDO extends BaseDo<Long> {
 
     private String optNetwork;
 
+    private String expressName;
+
+    private String nextNetwork;
+
     private String optBy;
+
+    private String optByName;
+
+    private String rider;
+
+    private String optByNamePhone;
 
     private Long optTime;
 
     private String phone;
+
+    private String jobId;
+
+    private String signer;
 
     public String getPhone() {
         return phone;
@@ -75,5 +89,61 @@ public class DeliveryOrderRouteDO extends BaseDo<Long> {
 
     public void setMerchantId(Long merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public String getOptByName() {
+        return optByName;
+    }
+
+    public void setOptByName(String optByName) {
+        this.optByName = optByName;
+    }
+
+    public String getOptByNamePhone() {
+        return optByNamePhone;
+    }
+
+    public void setOptByNamePhone(String optByNamePhone) {
+        this.optByNamePhone = optByNamePhone;
+    }
+
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
+    }
+
+    public String getExpressName() {
+        return expressName;
+    }
+
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
+    }
+
+    public String getNextNetwork() {
+        return nextNetwork;
+    }
+
+    public void setNextNetwork(String nextNetwork) {
+        this.nextNetwork = nextNetwork;
+    }
+
+    public String getRider() {
+        return rider;
+    }
+
+    public void setRider(String rider) {
+        this.rider = rider;
+    }
+
+    public String getSigner() {
+        return signer;
+    }
+
+    public void setSigner(String signer) {
+        this.signer = signer;
     }
 }

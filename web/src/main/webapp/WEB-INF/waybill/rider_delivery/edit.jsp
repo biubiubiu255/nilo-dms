@@ -35,7 +35,7 @@
     <%--第二排--%>
         <div class="layui-form">
             <div class="layui-form-item">
-                <div style="float: left; width: 39%; margin-left: 10px;">
+<%--                <div style="float: left; width: 39%; margin-left: 10px;">
                     <label class="layui-form-label">Rider:</label>
                     <div class="layui-form-item layui-inline" style="width: 190px">
                         <select lay-filter="fil-rider" name="rider">
@@ -48,7 +48,7 @@
                         </select>
                         <input type="hidden" name="rider" value="${riderDelivery.rider}">
                     </div>
-                </div>
+                </div>--%>
 
                 <div style="float: left; width: 50%; margin-left: -3%;">
                     <div class="layui-form-item">
@@ -80,7 +80,7 @@
     <div class="layui-form-item">
         <div class="layui-input-block shipDiv" style="margin-left:120px;">
             <button class="layui-btn commit" value="0">Save</button>
-            <button class="layui-btn commit" value="1">Ship</button>
+            <%--<button class="layui-btn commit" value="1">Ship</button>--%>
         </div>
     </div>
 

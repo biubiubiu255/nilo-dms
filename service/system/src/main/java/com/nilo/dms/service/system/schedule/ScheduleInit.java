@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * Created by admin on 2017/11/30.
  */
-@Component
 public class ScheduleInit implements InitializingBean {
 
     @Autowired

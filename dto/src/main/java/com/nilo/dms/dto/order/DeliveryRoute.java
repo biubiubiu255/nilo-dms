@@ -22,6 +22,14 @@ public class DeliveryRoute {
 
     private String optByName;
 
+    private String expressName;
+
+    private String nextNetwork;
+
+    private String optByNamePhone;
+
+    private String rider;
+
     private String optBy;
 
     private Long optTime;
@@ -30,7 +38,11 @@ public class DeliveryRoute {
 
     private String remark;
 
+    private String jobId;
+
     private Long createdTime;
+
+    private String signer;
 
     public String getMerchantId() {
         return merchantId;
@@ -118,5 +130,53 @@ public class DeliveryRoute {
 
     public void setCreatedTime(Long createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public String getExpressName() {
+        return expressName;
+    }
+
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
+    }
+
+    public String getNextNetwork() {
+        return nextNetwork;
+    }
+
+    public void setNextNetwork(String nextNetwork) {
+        this.nextNetwork = nextNetwork;
+    }
+
+    public String getRider() {
+        return rider;
+    }
+
+    public void setRider(String rider) {
+        this.rider = rider;
+    }
+
+    public String getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
+    }
+
+    public String getOptByNamePhone() {
+        return optByNamePhone;
+    }
+
+    public void setOptByNamePhone(String optByNamePhone) {
+        this.optByNamePhone = optByNamePhone;
+    }
+
+    public String getSigner() {
+        return signer;
+    }
+
+    public void setSigner(String signer) {
+        this.signer = signer;
     }
 }

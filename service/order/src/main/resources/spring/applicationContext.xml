@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd"
        default-autowire="byName">
+
+
+
+
+
+
+
     <bean class="com.nilo.dms.service.mq.producer.ProducerStartup" init-method="initial"
           destroy-method="destroy">
         <property name="namesrvAddr" value="${mq.namesrvAddr}"/>
@@ -39,5 +46,8 @@
     <bean id="routeConsumer" class="com.nilo.dms.service.order.consumer.RouteConsumer"/>
     <bean id="createDeliveryOrderConsumer" class="com.nilo.dms.service.order.consumer.CreateDeliveryOrderConsumer"/>
     <bean id="phoneSMSConsumer" class="com.nilo.dms.service.order.consumer.PhoneMessageConsumer"/>
+
+
+
 
 </beans>

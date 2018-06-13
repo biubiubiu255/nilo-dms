@@ -149,6 +149,14 @@ public class BaseController {
         return riderList;
     }
 
+/*
+    protected List<StaffDO> get(String outsource) {
+        Principal principal = SessionLocal.getPrincipal();
+        List<StaffDO> riderList = staffDao.queryAllRider(Long.parseLong(principal.getCompanyId()),outsource);
+        return riderList;
+    }
+*/
+
     protected void setProperty(Field field, String value, Object obj) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         if (field.getType() == String.class) {
             PropertyUtils.setProperty(obj, field.getName(), value);

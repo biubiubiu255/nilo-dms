@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +81,8 @@ public class ReportSendExpressController extends BaseController {
         //获取merchantId
         Long merchantId = Long.parseLong(me.getMerchantId());
         sendReportQO.setMerchantId(merchantId);
-        
+
+
         String fileType;
         switch (sendReportQO.getExportType()) {
             case 0:

@@ -33,5 +33,7 @@ public interface HandleRiderDao extends BaseDao<Long, RiderDelivery> {
 
     void upSmallStatus(@Param("handleNo") String handleNo, @Param("status") Integer status);
 
-    void deleteSmallByHandleNo(RiderDeliverySmallDO riderDeliverySmallDO);
+    void deleteSmallsByHandleNo(@Param("merchantId") Long merchantId, @Param("handleNo") String handleNo);
+
+    void deleteHandleBy(@Param("merchantId") Long merchantId, @Param("handleNo") String handleNo);
 }

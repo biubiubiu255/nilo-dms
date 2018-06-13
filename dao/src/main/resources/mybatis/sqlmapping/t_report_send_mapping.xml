@@ -7,7 +7,7 @@
     <resultMap id="sendDO" type="com.nilo.dms.dao.dataobject.SendReportDO">
         <result property="referenceNo" column="reference_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="nextStation" column="next_station_name" javaType="java.lang.String"
+        <result property="nextStation" column="next_station" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="nextStationCode" column="next_station" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
@@ -23,9 +23,10 @@
                 jdbcType="VARCHAR"/>
         <result property="deliveryType" column="delivery_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="expressName" column="third_express_code" javaType="java.lang.String"
+        <result property="expressName" column="express_name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-
+        <result property="expressCode" column="third_express_code" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
 
 
 
@@ -70,6 +71,41 @@
                 jdbcType="INTEGER"/>
     </resultMap>
 
+    <resultMap id="repeatDO" type="com.nilo.dms.dao.dataobject.ReportRepeatDO">
+
+        <result property="handleNo" column="handle_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderNo" column="order_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="dispatchNum" column="occur_num" javaType="java.lang.Integer"
+                jdbcType="INTEGER"/>
+        <result property="dispatchType" column="type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="handleName" column="handle_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="expressName" column="third_express_code" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="referenceNo" column="reference_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="orderType" column="order_type" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="weight" column="weight" javaType="java.lang.Double"
+                jdbcType="DOUBLE"/>
+        <result property="nextStation" column="network" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="address" column="address" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="receiveName" column="receive_name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="rider" column="rider" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="parentNo" column="parent_no" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" javaType="java.lang.Long"
+                jdbcType="INTEGER"/>
+    </resultMap>
 
     <!-- 查询下一个站点 -->
 
@@ -83,10 +119,11 @@
         SELECT
         f.order_no,
         f.weight,
-        f.created_time,
+        a.created_time,
         b.handle_no,
         b.driver,
-        e.id next_station,
+        e.id network_code,
+        b.next_station,
         b.third_express_code,
         b.handle_name,
         f.order_type,
@@ -96,14 +133,15 @@
         d.address,
         d. NAME AS receive_name,
         f.parent_no,
-        e.name next_station_name
+        e.name next_station_name,
+        f.is_package
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
-        LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
+        LEFT  JOIN t_bas_network e ON e.id = b.network_code
+        INNER JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
@@ -120,7 +158,8 @@
         a.created_time,
         b.handle_no,
         b.driver,
-        e.id next_station,
+        e.id network_code,
+        b.next_station,
         b.third_express_code,
         b.handle_name,
         c.order_type,
@@ -130,13 +169,14 @@
         d.address,
         d. NAME AS receive_name,
         c.parent_no,
-        e.name next_station_name
+        e.name next_station_name,
+        c.is_package
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
+        LEFT  JOIN t_bas_network e ON e.id = b.network_code
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
@@ -157,6 +197,9 @@
         </if>
         <if test="nextStationCode !=null and nextStationCode !='' ">
             and d.next_station = #{nextStationCode}
+        </if>
+        <if test="isPackage !=null and isPackage !='' ">
+            and d.is_package = #{isPackage}
         </if>
         <if test="handleNo !=null and handleNo !='' ">
             and d.handle_no = #{handleNo}
@@ -197,10 +240,11 @@
         SELECT
         f.order_no,
         f.weight,
-        f.created_time,
+        a.created_time,
         b.handle_no,
         b.driver,
-        e.id next_station,
+        e.id network_code,
+        b.next_station,
         b.third_express_code,
         b.handle_name,
         f.order_type,
@@ -210,14 +254,15 @@
         d.address,
         d. NAME AS receive_name,
         f.parent_no,
+        f.is_package,
         e.name next_station_name
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
-        LEFT JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
+        LEFT  JOIN t_bas_network e ON e.id = b.network_code
+        INNER JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
@@ -234,7 +279,8 @@
         a.created_time,
         b.handle_no,
         b.driver,
-        e.id next_station,
+        e.id network_code,
+        b.next_station,
         b.third_express_code,
         b.handle_name,
         c.order_type,
@@ -244,13 +290,14 @@
         d.address,
         d. NAME AS receive_name,
         c.parent_no,
+        c.is_package,
         e.name next_station_name
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
+        LEFT  JOIN t_bas_network e ON e.id = b.network_code
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
@@ -271,6 +318,9 @@
         </if>
         <if test="nextStationCode !=null and nextStationCode !='' ">
             and d.next_station = #{nextStationCode}
+        </if>
+        <if test="isPackage !=null and isPackage !='' ">
+            and d.is_package = #{isPackage}
         </if>
         <if test="handleNo !=null and handleNo !='' ">
             and d.handle_no = #{handleNo}
@@ -300,7 +350,8 @@
         a.created_time,
         b.handle_no,
         b.driver,
-        e.id next_station,
+        b.third_express_code,
+        e.express_name,
         b.handle_name,
         c.order_type,
         c.reference_no,
@@ -429,6 +480,218 @@
 
     </select>
 
+
+    <!-- 重复报表物流 -->
+    <select id="queryRepeatDispatch" resultMap="repeatDO">
+
+
+        SELECT
+        a.order_no,
+        a.occur_num,
+        a.created_time,
+        b.reference_no,
+        b.order_type,
+        b.weight,
+        b.`status`,
+        c.contact_number AS phone,
+        c.address,
+        c. NAME AS receive_name
+        FROM
+        (
+        SELECT
+        d.order_no,
+        count(d.created_time) AS occur_num,
+        max(d.created_time) AS created_time
+        FROM
+        (
+        SELECT
+        e.order_no,
+        d.handle_no,
+        d.created_time
+        FROM
+        (
+        SELECT
+        a.order_no,
+        a.third_handle_no AS handle_no,
+        a.created_time
+        FROM
+        t_handle_third_express_details AS a
+        INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no
+        AND c.`status` = 1
+        ) AS d
+        INNER JOIN t_waybill AS e ON e.parent_no = d.order_no
+        AND e.merchant_id = #{merchantId}
+        UNION
+        SELECT
+        e.order_no,
+        d.handle_no,
+        d.created_time
+        FROM
+        (
+        SELECT
+        a.order_no,
+        a.third_handle_no AS handle_no,
+        a.created_time
+        FROM
+        t_handle_third_express_details AS a
+        INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no
+        AND c.`status` = 1
+        UNION ALL
+        SELECT
+        order_no,
+        '0' AS handle_no,
+        created_time
+        FROM
+        t_handle_rider_details
+        ) AS d
+        INNER JOIN t_waybill AS e ON e.order_no = d.order_no
+        AND e.merchant_id = #{merchantId}
+        AND e.is_package != "1"
+        ) AS d
+        GROUP BY
+        d.order_no
+        HAVING
+        COUNT(d.order_no) > 1
+        ) AS a
+        INNER JOIN t_waybill AS b ON a.order_no = b.order_no
+        AND b.merchant_id = #{merchantId}
+        LEFT JOIN t_waybill_receiver AS c ON c.order_no = a.order_no
+        AND c.merchant_id = #{merchantId}
+        WHERE 1
+
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+<!--        <if test="nextStation !=null and nextStation !='' ">
+            and a.network = #{nextStation}
+        </if>
+        <if test="nextStationCode!=null">
+            AND a.network_code = #{nextStationCode}
+        </if>
+        <if test="handleNo !=null and handleNo !='' ">
+            and a.handle_no = #{handleNo}
+        </if>
+        <if test="dispatchType !=null and dispatchType !='' ">
+            and a.type = #{dispatchType}
+        </if>
+        -->
+        <if test="orderType !=null and orderType !='' ">
+            and b.order_type = #{orderType}
+        </if>
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status != null">
+            and b.status = #{status}
+        </if>
+
+        order by a.created_time desc
+
+        <if test="limit !=null ">
+            limit
+            <if test="offset !=null ">
+                #{offset} ,
+            </if>
+            #{limit}
+        </if>
+
+
+    </select>
+
+    <select id="queryRepeatDispatchCount" resultType="java.lang.Long">
+
+        SELECT
+        count(1)
+        FROM
+        (
+        SELECT
+        d.order_no,
+        count(d.created_time) AS occur_num,
+        max(d.created_time) AS created_time
+        FROM
+        (
+        SELECT
+        e.order_no,
+        d.handle_no,
+        d.created_time
+        FROM
+        (
+        SELECT
+        a.order_no,
+        a.third_handle_no AS handle_no,
+        a.created_time
+        FROM
+        t_handle_third_express_details AS a
+        INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no
+        AND c.`status` = 1
+        ) AS d
+        INNER JOIN t_waybill AS e ON e.parent_no = d.order_no
+        AND e.merchant_id = #{merchantId}
+        UNION
+        SELECT
+        e.order_no,
+        d.handle_no,
+        d.created_time
+        FROM
+        (
+        SELECT
+        a.order_no,
+        a.third_handle_no AS handle_no,
+        a.created_time
+        FROM
+        t_handle_third_express_details AS a
+        INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no
+        AND c.`status` = 1
+        UNION ALL
+        SELECT
+        order_no,
+        '0' AS handle_no,
+        created_time
+        FROM
+        t_handle_rider_details
+        ) AS d
+        INNER JOIN t_waybill AS e ON e.order_no = d.order_no
+        AND e.merchant_id = #{merchantId}
+        AND e.is_package != "1"
+        ) AS d
+        GROUP BY
+        d.order_no
+        HAVING
+        COUNT(d.order_no) > 1
+        ) AS a
+        INNER JOIN t_waybill AS b ON a.order_no = b.order_no
+        AND b.merchant_id = #{merchantId}
+        LEFT JOIN t_waybill_receiver AS c ON c.order_no = a.order_no
+        AND c.merchant_id = #{merchantId}
+
+        WHERE 1
+
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+<!--        <if test="nextStation !=null and nextStation !='' ">
+            and a.network = #{nextStation}
+        </if>
+        <if test="handleNo !=null and handleNo !='' ">
+            and a.handle_no = #{handleNo}
+        </if>-->
+        <if test="orderType !=null and orderType !='' ">
+            and b.order_type = #{orderType}
+        </if>
+        <if test="fromCreatedTime !=null ">
+            and a.created_time >= #{fromCreatedTime}
+        </if>
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        </if>
+        <if test="status != null">
+            and b.status = #{status}
+        </if>
+
+    </select>
 
 
     <!-- Receive Report 查询语句 -->

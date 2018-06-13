@@ -7,10 +7,12 @@ import com.nilo.dms.common.enums.HandleRiderStatusEnum;
 import com.nilo.dms.common.enums.OptTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.common.utils.AssertUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.dto.common.UserInfo;
+import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.order.NotifyRequest;
 import com.nilo.dms.dto.order.OrderOptRequest;
 import com.nilo.dms.dto.order.PhoneMessage;
@@ -137,7 +139,7 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
     @Transactional
     public void editRiderPackAndDetail(RiderDelivery riderDelivery, String[] smallOrders) {
 
-        RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
+
         //以小包DO的order，调用deliveryOrderDao接口查询多条该订单的信息
         //然后把查询到的list中每条信息，比如weight等合并到小包list的每条信息中，这里用的是bean合并，因为常用字段都一样
         //这里因为查询是自定义，也就是以有参数，就有什么查询条件查询，所有统为list，这里只需要查一个大包，也只有一条结果，但还是得取get(0)
@@ -147,14 +149,15 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         }
         riderDelivery = tempList.get(0);
 
-        riderDeliverySmallDO.setHandleNo(riderDelivery.getHandleNo());
-        handleRiderDao.deleteSmallByHandleNo(riderDeliverySmallDO);
+        handleRiderDao.deleteSmallsByHandleNo(riderDelivery.getMerchantId(), riderDelivery.getHandleNo());
+
         insertSmalls(riderDelivery.getMerchantId(), riderDelivery.getHandleNo(), smallOrders);
 
         if (riderDelivery.getHandleNo() == null) {
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
         handleRiderDao.upBigBy(riderDelivery);
+
     }
 
     @Override
@@ -209,6 +212,8 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         OrderOptRequest request = new OrderOptRequest();
         request.setOptType(OptTypeEnum.DELIVERY);
         request.setOrderNo(orderNos);
+        request.setRider(riderDelivery.getRider());
+
         waybillService.handleOpt(request);
 
         handleRiderDao.upBigStatus(handleNo, HandleRiderStatusEnum.SHIP.getCode());
@@ -237,6 +242,19 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
     @Override
     public List<StaffDO> findUserInfoByUserIds(Long merchantId, Long[] userIDs) {
         return staffDao.findstaffByIDs(userIDs);
+    }
+
+    @Override
+    public void deleteHandleAndSmalls(String handleNo) {
+        AssertUtil.isNotNull(handleNo, BizErrorCode.HandleNO_NOT_EXIST);
+        Long merchantId = Long.parseLong(SessionLocal.getPrincipal().getMerchantId());
+        RiderDelivery riderDelivery = new RiderDelivery();
+        riderDelivery.setMerchantId(merchantId);
+        riderDelivery.setHandleNo(handleNo);
+        List<RiderDelivery> riderDeliveries = queryRiderDelivery(merchantId.toString(), riderDelivery, new Pagination());
+        AssertUtil.isTrue(!riderDeliveries.isEmpty(), BizErrorCode.HandleNO_NOT_EXIST);
+        handleRiderDao.deleteHandleBy(merchantId, handleNo);
+        handleRiderDao.deleteSmallsByHandleNo(merchantId, handleNo);
     }
 
 }

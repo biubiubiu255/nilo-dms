@@ -8,6 +8,7 @@ import com.nilo.dms.common.enums.UserStatusEnum;
 import com.nilo.dms.common.enums.UserTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.common.utils.PickUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.CommonDao;
 import com.nilo.dms.dao.StaffDao;
@@ -162,6 +163,9 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public List<Staff> findAllStaffBy(String companyId, String departmentId) {
         List<StaffDO> queryList = staffDao.queryAllBy(Long.parseLong(companyId), departmentId);
+
+
+
         List<Staff> list = new ArrayList<>();
         if (queryList != null) {
             for (StaffDO s : queryList) {

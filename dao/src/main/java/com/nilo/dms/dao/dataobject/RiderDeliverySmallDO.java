@@ -15,6 +15,7 @@ public class RiderDeliverySmallDO extends BaseDo<Long> {
     private Double height;
     private Double width;
     private Long handleBy;
+    private String handleByName;
     private Integer status;
     private Integer created_time;
     private Integer updated_time;
@@ -118,6 +119,14 @@ public class RiderDeliverySmallDO extends BaseDo<Long> {
 
     public void setHeight(Double height) {
         this.height = height;
+    }
+
+    public String getHandleByName() {
+        return handleByName;
+    }
+
+    public void setHandleByName(String handleByName) {
+        this.handleByName = handleByName;
     }
 
     @Override

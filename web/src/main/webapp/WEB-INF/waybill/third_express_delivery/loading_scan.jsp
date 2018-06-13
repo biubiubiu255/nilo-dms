@@ -121,7 +121,9 @@
                         if (data.result) {
                             $("#orderNo").focus();
                             $("#orderNo").val('');
-                            var res = JSON.parse(data.data).data
+                            var res = JSON.parse(data.data).data;
+
+                            console.log("express", res, data);
                             for (var i = 0; i < tableData.length; i++) {
                                 if (res.orderNo == tableData[i].orderNo) {
                                     layer.msg("Order already exists", {icon: 2, time: 2000});

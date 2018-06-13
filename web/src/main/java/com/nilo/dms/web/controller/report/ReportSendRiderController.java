@@ -4,7 +4,9 @@ import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.OutsourceDao;
 import com.nilo.dms.dao.ReportDispatchDao;
+import com.nilo.dms.dao.dataobject.OutsourceDO;
 import com.nilo.dms.dao.dataobject.QO.ReportDispatchQO;
 import com.nilo.dms.dao.dataobject.ReportArriveDO;
 import com.nilo.dms.dao.dataobject.ReportDispatchDO;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +37,15 @@ public class ReportSendRiderController extends BaseController {
     @Autowired
     private ReportDispatchDao reportDispatchDao;
 
+    @Autowired
+    private OutsourceDao outsourceDao;
+
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model, HttpServletRequest http) {
         model.addAttribute("list", getRiderList(null));
+
+        List<OutsourceDO> outsourceList = outsourceDao.findAll(SessionLocal.getPrincipal().getMerchantId());
+        model.addAttribute("outsourceList", outsourceList);
         return "report/dispatch";
     }
 

@@ -10,7 +10,7 @@ public class ReportArriveQO {
     private Integer limit;
     private Integer total;
     private Integer fromCreatedTime;
-    private Integer toCreatedTime;
+    private Long toCreatedTime;
     private Integer exportType;
     private Integer status;
 
@@ -70,11 +70,11 @@ public class ReportArriveQO {
         this.fromCreatedTime = fromCreatedTime;
     }
 
-    public Integer getToCreatedTime() {
+    public Long getToCreatedTime() {
         return toCreatedTime;
     }
 
-    public void setToCreatedTime(Integer toCreatedTime) {
+    public void setToCreatedTime(Long toCreatedTime) {
         this.toCreatedTime = toCreatedTime;
     }
 
@@ -92,21 +92,5 @@ public class ReportArriveQO {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "ReportArriveQO{" +
-                "merchantId=" + merchantId +
-                ", orderNo='" + orderNo + '\'' +
-                ", scanNetwork='" + scanNetwork + '\'' +
-                ", offset=" + offset +
-                ", limit=" + limit +
-                ", total=" + total +
-                ", fromCreatedTime=" + fromCreatedTime +
-                ", toCreatedTime=" + toCreatedTime +
-                ", exportType=" + exportType +
-                ", status=" + status +
-                '}';
     }
 }

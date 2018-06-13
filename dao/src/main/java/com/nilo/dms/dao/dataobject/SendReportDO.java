@@ -23,7 +23,9 @@ public class SendReportDO extends BaseDo<Long> {
     private String handleNo;
     private String deliveryType;
     private String expressName;
+    private String expressCode;
     private String nextStationCode;
+
 
     public Long getMerchantId() {
         return merchantId;
@@ -194,5 +196,13 @@ public class SendReportDO extends BaseDo<Long> {
                 ", deliveryType='" + deliveryType + '\'' +
                 ", expressName='" + expressName + '\'' +
                 '}';
+    }
+
+    public String getExpressCode() {
+        return expressCode;
+    }
+
+    public void setExpressCode(String expressCode) {
+        this.expressCode = expressCode;
     }
 }

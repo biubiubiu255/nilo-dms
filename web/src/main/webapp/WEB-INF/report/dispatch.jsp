@@ -72,7 +72,21 @@
 
     <!-- 搜索栏的第二行 -->
 
+
     <div class="layui-form layui-row">
+
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label" style="width:120px">Outsource：</label>
+            <div class="layui-input-inline">
+                <select name="outsource" lay-filter="outsource" lay-search=""
+                        <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${outsourceList}" var="outsource">
+                        <option value="${outsource.outsource}"> ${outsource.outsourceName}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>
 
         <!-- 搜索按钮 -->
         <div class="layui-col-md4 layui-col-lg4" style="margin-left: 2.4rem;">
@@ -96,6 +110,7 @@
                 <th lay-data="{field:'orderType', width:100}">OrderType</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'rider', width:130}">Rider</th>
+                <th lay-data="{field:'outsource', width:130}">Outsource</th>
                 <th lay-data="{field:'statusDesc', width:130}">Status</th>
                 <th lay-data="{field:'handleName', width:130}">HandleName</th>
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
@@ -125,19 +140,23 @@
                 layDate.render({
                     elem: '#fromCreatedTime'
                     , lang: 'en'
+                    , value: new Date()
                 });
                 layDate.render({
                     elem: '#toCreatedTime'
                     , lang: 'en'
+                    , value: new Date(new Date().getTime()+24*60*60*1000)
                 });
                 var form = layui.form;
                 form.render();
             });
 
+            var initLoading = true;
             var table = layui.table;
             layui.use('table', function () {
                 table = layui.table;
                 table.on('tool(demo)');
+                reloadTable();
             });
 
             //reloadTable();
@@ -178,12 +197,21 @@
 
             };
 
+            //reloadTable();
+
             function getParam(dateType, isPojo) {
                 if (dateType == "" || dateType == 'undefind') dateType = 0;
                 var sTime_creat = $("input[name='createdTime_s']").val() == "" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val())) / 1000;
                 var eTime_creat = $("input[name='createdTime_e']").val() == "" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val())) / 1000 + 86400;
                 var status = $("select[name='status']").val();
                 var rider  = $("select[name='rider']").val();
+                var outsource  = $("select[name='outsource']").val();
+                if(initLoading==true){
+                    sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
+                    eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
+                    initLoading = false;
+                }
+
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
@@ -191,7 +219,7 @@
                     toCreatedTime: eTime_creat,
                     exportType: dateType,
                     status:status,
-                    rider: rider
+                    outsource: outsource
                 };
                 if (isPojo === true) return param;
                 else return jQuery.param(param);

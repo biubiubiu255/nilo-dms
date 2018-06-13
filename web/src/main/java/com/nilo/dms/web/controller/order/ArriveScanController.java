@@ -24,8 +24,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -89,6 +92,19 @@ public class ArriveScanController extends BaseController {
                 }
             }
         }
+
+        List<Waybill> resultList = new ArrayList<Waybill>();
+
+        for (int i = 0; i < scanDetailsDOList.size(); i++) {
+            for (Waybill e : list){
+                if(scanDetailsDOList.get(i).getOrderNo().equals(e.getOrderNo())){
+                    //resultList.set(i, e);
+                    resultList.add(e);
+                }
+            }
+        }
+
+        list = resultList;
 
         pagination.setTotalCount(list.size());
         return toPaginationLayUIData(pagination, list);
