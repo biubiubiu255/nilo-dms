@@ -82,7 +82,7 @@ public class ReportSendStationController extends BaseController {
         Long merchantId = Long.parseLong(me.getMerchantId());
         sendReportQO.setMerchantId(merchantId);
 
-        
+
         String fileType;
         switch (sendReportQO.getExportType()) {
             case 0:
