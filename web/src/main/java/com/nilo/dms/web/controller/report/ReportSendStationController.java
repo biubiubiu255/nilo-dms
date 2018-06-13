@@ -77,7 +77,7 @@ public class ReportSendStationController extends BaseController {
 
         Pagination page = getPage();
 
-
+        //
         //获取merchantId
         Long merchantId = Long.parseLong(me.getMerchantId());
         sendReportQO.setMerchantId(merchantId);
