@@ -59,12 +59,6 @@ public class ReportSendRiderController extends BaseController {
 
         reportDispatchQO.setLimit(page.getLimit());
         reportDispatchQO.setOffset(page.getOffset());
-        if(reportDispatchQO.getToCreatedTime()==null && reportDispatchQO.getFromCreatedTime()==null){
-            return "common/toResponseBody";
-        }
-
-
-
 
         String fileType;
         switch (reportDispatchQO.getExportType()) {
