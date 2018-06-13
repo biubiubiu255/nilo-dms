@@ -19,7 +19,6 @@
 <script type="text/javascript">window.print();</script>
 <style>
 
-    <style type="text/css">
     .printer {
         padding: 0;
     }

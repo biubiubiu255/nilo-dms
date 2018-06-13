@@ -484,6 +484,7 @@
     <!-- 重复报表物流 -->
     <select id="queryRepeatDispatch" resultMap="repeatDO">
 
+
         SELECT
         a.order_no,
         a.occur_num,
@@ -504,7 +505,25 @@
         FROM
         (
         SELECT
-        COALESCE(e.order_no, d.order_no) as order_no,
+        e.order_no,
+        d.handle_no,
+        d.created_time
+        FROM
+        (
+        SELECT
+        a.order_no,
+        a.third_handle_no AS handle_no,
+        a.created_time
+        FROM
+        t_handle_third_express_details AS a
+        INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no
+        AND c.`status` = 1
+        ) AS d
+        INNER JOIN t_waybill AS e ON e.parent_no = d.order_no
+        AND e.merchant_id = #{merchantId}
+        UNION
+        SELECT
+        e.order_no,
         d.handle_no,
         d.created_time
         FROM
@@ -525,16 +544,19 @@
         FROM
         t_handle_rider_details
         ) AS d
-        LEFT JOIN t_waybill AS e ON e.parent_no = d.order_no
+        INNER JOIN t_waybill AS e ON e.order_no = d.order_no
+        AND e.merchant_id = #{merchantId}
+        AND e.is_package != "1"
         ) AS d
         GROUP BY
         d.order_no
         HAVING
         COUNT(d.order_no) > 1
         ) AS a
-        INNER JOIN t_waybill AS b ON a.order_no = b.order_no and b.merchant_id = #{merchantId}
-        INNER JOIN t_waybill_receiver AS c ON c.order_no = a.order_no
-
+        INNER JOIN t_waybill AS b ON a.order_no = b.order_no
+        AND b.merchant_id = #{merchantId}
+        LEFT JOIN t_waybill_receiver AS c ON c.order_no = a.order_no
+        AND c.merchant_id = #{merchantId}
         WHERE 1
 
         <if test="orderNo !=null and orderNo !='' ">
@@ -592,7 +614,25 @@
         FROM
         (
         SELECT
-        COALESCE(e.order_no, d.order_no) as order_no,
+        e.order_no,
+        d.handle_no,
+        d.created_time
+        FROM
+        (
+        SELECT
+        a.order_no,
+        a.third_handle_no AS handle_no,
+        a.created_time
+        FROM
+        t_handle_third_express_details AS a
+        INNER JOIN t_handle_third_express AS c ON a.third_handle_no = c.handle_no
+        AND c.`status` = 1
+        ) AS d
+        INNER JOIN t_waybill AS e ON e.parent_no = d.order_no
+        AND e.merchant_id = #{merchantId}
+        UNION
+        SELECT
+        e.order_no,
         d.handle_no,
         d.created_time
         FROM
@@ -613,15 +653,19 @@
         FROM
         t_handle_rider_details
         ) AS d
-        LEFT JOIN t_waybill AS e ON e.parent_no = d.order_no
+        INNER JOIN t_waybill AS e ON e.order_no = d.order_no
+        AND e.merchant_id = #{merchantId}
+        AND e.is_package != "1"
         ) AS d
         GROUP BY
         d.order_no
         HAVING
         COUNT(d.order_no) > 1
         ) AS a
-        INNER JOIN t_waybill AS b ON a.order_no = b.order_no and b.merchant_id = #{merchantId}
-        INNER JOIN t_waybill_receiver AS c ON c.order_no = a.order_no
+        INNER JOIN t_waybill AS b ON a.order_no = b.order_no
+        AND b.merchant_id = #{merchantId}
+        LEFT JOIN t_waybill_receiver AS c ON c.order_no = a.order_no
+        AND c.merchant_id = #{merchantId}
 
         WHERE 1
 
