@@ -95,12 +95,6 @@ public class ReportSignController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
         parameter.setMerchantId(merchantId);
-        if(parameter.getToHandledTime()==null && parameter.getFromHandledTime()==null){
-            return "common/toResponseBody";
-        }
-
-
-
 
         Pagination page = null;
 
