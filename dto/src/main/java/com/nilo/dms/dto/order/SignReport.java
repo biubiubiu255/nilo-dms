@@ -14,6 +14,7 @@ public class SignReport {
     private String networkCodeDesc;
     private Long handleTime;
     private String rider;
+    private String outsource;
     private String sName;
     private String rName;
     private String signer;
@@ -167,6 +168,14 @@ public class SignReport {
 
     public void setNetworkCodeDesc(String networkCodeDesc) {
         this.networkCodeDesc = networkCodeDesc;
+    }
+
+    public String getOutsource() {
+        return outsource;
+    }
+
+    public void setOutsource(String outsource) {
+        this.outsource = outsource;
     }
 
     @Override

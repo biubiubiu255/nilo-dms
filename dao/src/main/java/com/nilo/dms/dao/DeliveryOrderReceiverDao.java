@@ -15,6 +15,7 @@ import java.util.List;
 public interface DeliveryOrderReceiverDao extends BaseDao<Long,DeliveryOrderReceiverDO> {
 
     List<DeliveryOrderReceiverDO> queryByOrderNos(@Param("merchantId")Long merchantId, @Param("orderNos")List<String> orderNo);
+
     DeliveryOrderReceiverDO queryByOrderNo(@Param("merchantId")Long merchantId, @Param("orderNo")String orderNo);
 
 

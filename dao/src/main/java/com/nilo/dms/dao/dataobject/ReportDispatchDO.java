@@ -20,6 +20,7 @@ public class ReportDispatchDO extends BaseDo<Long> {
     private Long handleBy;
     private String handleName;
     private String rider;
+    private String riderId;
     private String phone;
     private String address;
 
@@ -163,6 +164,16 @@ public class ReportDispatchDO extends BaseDo<Long> {
     public void setOutsource(String outsource) {
         this.outsource = outsource;
     }
+
+    public String getRiderId() {
+        return riderId;
+    }
+
+    public void setRiderId(String riderId) {
+        this.riderId = riderId;
+    }
+
+
 
     @Override
     public String toString() {

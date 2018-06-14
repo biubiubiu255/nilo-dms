@@ -14,6 +14,7 @@ public class SignReportDO {
     private String expressName;
     private String handleBy;
     private String rider;
+    private String outsource;
     private Long handleTime;
     private String sName;    //发件人
     private String rName;    //收件人
@@ -179,6 +180,14 @@ public class SignReportDO {
 
     public void setExpressName(String expressName) {
         this.expressName = expressName;
+    }
+
+    public String getOutsource() {
+        return outsource;
+    }
+
+    public void setOutsource(String outsource) {
+        this.outsource = outsource;
     }
 
     @Override
