@@ -13,16 +13,16 @@ import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
-import com.nilo.dms.dao.dataobject.QO.ReportDispatchQO;
 import com.nilo.dms.dto.order.*;
+import com.nilo.dms.dto.system.OrderHandleConfig;
+import com.nilo.dms.dto.system.SMSConfig;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.*;
 import com.nilo.dms.service.system.RedisUtil;
+import com.nilo.dms.service.system.SendMessageService;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
-import com.nilo.dms.dto.system.OrderHandleConfig;
-import com.nilo.dms.dto.system.SMSConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.text.MessageFormat;
 import java.util.*;
 
 import static com.nilo.dms.common.Constant.IS_PACKAGE;
@@ -54,6 +55,8 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Autowired
     private WaybillLogService waybillLogService;
     @Autowired
+    private SendMessageService sendMessageService;
+    @Autowired
     private DeliveryOrderGoodsDao deliveryOrderGoodsDao;
     @Autowired
     private WaybillDao waybillDao;
@@ -66,10 +69,10 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Autowired
     private DeliveryOrderRequestDao deliveryOrderRequestDao;
 
-
     @Autowired
     @Qualifier("createDeliveryOrderProducer")
     private AbstractMQProducer createDeliveryOrderProducer;
+
 
     public String createWaybillRequest(String merchantId, String data, String sign) {
 
@@ -282,8 +285,6 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
                     OrderHandleConfig handleConfig = SystemConfig.getOrderHandleConfig(merchantId,
                             optRequest.getOptType().getCode());
                     for (String orderNo : optRequest.getOrderNo()) {
-                        WaybillDO orderDO = waybillDao
-                                .queryByOrderNo(Long.parseLong(merchantId), orderNo);
                         if (handleConfig.getUpdateStatus() != null) {
                             // 更新订单状态
                             updateDeliveryOrderStatus(optRequest, orderNo, handleConfig);
@@ -293,7 +294,6 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
                     notifyService.updateStatus(optRequest);
                     // 记录物流轨迹
                     deliveryRouteService.addRoute(optRequest);
-
                     // 添加操作记录
                     waybillLogService.addOptLog(optRequest);
                 } catch (Exception e) {
@@ -308,15 +308,25 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
 
     @Override
     public void arrive(List<String> waybillNos) {
-
-
-        Principal principal = SessionLocal.getPrincipal();
         OrderOptRequest optRequest = new OrderOptRequest();
         optRequest.setOptType(OptTypeEnum.ARRIVE_SCAN);
         optRequest.setOrderNo(waybillNos);
-
         //checkHandleOpt(optRequest);
         handleOpt(optRequest);
+
+        //自提点到件发送短信
+        Principal principal = SessionLocal.getPrincipal();
+        String merchantId = principal.getMerchantId();
+        DistributionNetworkDO networkDO = JSON.parseObject(RedisUtil.hget(Constant.NETWORK_INFO + merchantId, "" + principal.getFirstNetwork()), DistributionNetworkDO.class);
+        if (!StringUtil.equals(networkDO.getIsSelfCollect(), "1")) {
+            return;
+        }
+        for (String waybill : waybillNos) {
+            WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.parseLong(merchantId), waybill);
+            DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(Long.parseLong(merchantId), waybill);
+            sendMessageService.sendMessage(waybill, SendMessageService.SELF_COLLECT_ARRIVED, r.getContactNumber(), waybillDO.getReferenceNo(), networkDO.getName(), networkDO.getAddress(), networkDO.getContactPhone());
+        }
+
     }
 
     @Override
@@ -337,21 +347,22 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             waybillDao.update(update);
         }
     }
-    
+
+
     @Override
     @Transactional
-    public String savePackage(PackageRequest packageRequest,String packageNo) {
+    public String savePackage(PackageRequest packageRequest, String packageNo) {
         //String orderNo = "";
         Long merchant = Long.parseLong(packageRequest.getMerchantId());
 
         // 判断是否允许打包
         for (String o : packageRequest.getOrderNos()) {
             Waybill waybill = queryByOrderNo(packageRequest.getMerchantId(), o);
-           
+
         }
 
-        if("1".equals(packageRequest.getStatus())) {
-        	 waybillDao.finishPackage(packageNo,packageRequest.getWeight());
+        if ("1".equals(packageRequest.getStatus())) {
+            waybillDao.finishPackage(packageNo, packageRequest.getWeight());
         }
 
         // 关联包裹与子运单
@@ -374,7 +385,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Override
     @Transactional
     public String addPackage(PackageRequest packageRequest) {
-        String orderNo = "";
+
         Long merchant = Long.parseLong(packageRequest.getMerchantId());
 
         // 判断是否允许打包
@@ -390,6 +401,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             */
         }
 
+
         // 1、保存订单信息
         WaybillDO orderHeader = new WaybillDO();
         orderHeader.setMerchantId(merchant);
@@ -400,14 +412,13 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         orderHeader.setIsPackage(IS_PACKAGE);
         orderHeader.setOrderType("PG");
         orderHeader.setStatus(DeliveryOrderStatusEnum.ARRIVED.getCode());
-        if("0".equals(packageRequest.getStatus())) {
-        	orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
+        if ("0".equals(packageRequest.getStatus())) {
+            orderHeader.setStatus(DeliveryOrderStatusEnum.CREATE.getCode());
         }
         orderHeader.setNextNetworkId(packageRequest.getNextNetworkId());
         orderHeader.setNetworkId(packageRequest.getNetworkId());
         // 获取订单号
-        orderNo = SystemConfig.getNextSerialNo(packageRequest.getMerchantId(),
-                SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
+        String orderNo = getOrderNo(merchant);
         orderHeader.setOrderNo(orderNo);
         orderHeader.setCreatedBy(packageRequest.getOptBy());
         waybillDao.insert(orderHeader);
@@ -458,6 +469,16 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         return orderNo;
     }
 
+    private synchronized String getOrderNo(Long merchantId) {
+        String orderNo = SystemConfig.getNextSerialNo(merchantId.toString(),
+                SerialTypeEnum.DELIVERY_ORDER_NO.getCode());
+        WaybillDO waybill = waybillDao.queryByOrderNo(merchantId, orderNo);
+        if (waybill != null) {
+            orderNo = getOrderNo(merchantId);
+        }
+        return orderNo;
+    }
+
     @Override
     @Transactional
     public void unpack(UnpackRequest unpackRequest) {
@@ -502,6 +523,11 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         WaybillDO w = waybillDao.queryByOrderNo(merchantId, waybll);
         //不处理退仓
         if (w == null) return;
+
+        WaybillDO subWaybillQuery = waybillDao.queryByOrderNo(merchantId, subWaybill);
+        if (subWaybillQuery != null) {
+            return;
+        }
 
         DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(merchantId, waybll);
         DeliveryOrderSenderDO s = deliveryOrderSenderDao.queryByOrderNo(merchantId, waybll);

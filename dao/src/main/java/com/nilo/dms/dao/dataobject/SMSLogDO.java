@@ -7,9 +7,9 @@ import com.nilo.dms.common.BaseDo;
  */
 public class SMSLogDO extends BaseDo<Long> {
 
-    private Long merchantId;
-
     private String msgType;
+
+    private String waybill;
 
     private String receiver;
 
@@ -17,13 +17,14 @@ public class SMSLogDO extends BaseDo<Long> {
 
     private Integer status;
 
-    public Long getMerchantId() {
-        return merchantId;
+    public String getWaybill() {
+        return waybill;
     }
 
-    public void setMerchantId(Long merchantId) {
-        this.merchantId = merchantId;
+    public void setWaybill(String waybill) {
+        this.waybill = waybill;
     }
+
 
     public String getMsgType() {
         return msgType;

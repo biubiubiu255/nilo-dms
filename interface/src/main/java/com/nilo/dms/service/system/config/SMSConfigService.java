@@ -11,6 +11,10 @@ import java.util.List;
  */
 public interface SMSConfigService {
 
+    String IS_SELF_COLLECT = "1";
+
+    String SELF_COLLECT_ARRIVED = "self_collect_arrived";
+
     SMSConfig queryBy(String merchantId, String smsType);
 
     void add(SMSConfig smsConfig);

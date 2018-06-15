@@ -7,13 +7,13 @@
     <resultMap id="smsLogDo" type="com.nilo.dms.dao.dataobject.SMSLogDO">
         <result property="id" column="id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
-                jdbcType="INTEGER"/>
         <result property="msgType" column="msg_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="content" column="content" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="receiver" column="receiver" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="waybill" column="waybill" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="status" column="status" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
@@ -26,7 +26,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id ,merchant_id,msg_type,content,receiver,status,created_time , updated_time ,version
+        id ,msg_type,waybill,content,receiver,status,created_time , updated_time ,version
     </sql>
 
     <!-- 插入语句 -->
@@ -34,14 +34,14 @@
             useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO t_sys_log_sms
-        ( merchant_id,msg_type,content,receiver,status,created_time , updated_time ,version)
+        ( msg_type,waybill,content,receiver,status,created_time , updated_time ,version)
         VALUES
-        (#{merchantId},#{msgType}, #{content},#{receiver},#{status}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
+        (#{msgType},#{waybill}, #{content},#{receiver},#{status}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
     </insert>
 
-    <select id="queryByOrderNo" resultMap="smsLogDo" statementType="PREPARED">
+    <select id="getByWaybill" resultMap="smsLogDo" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_sys_log_sms where order_no = #{orderNo}
+        FROM t_sys_log_sms where waybill = #{waybill}
     </select>
 </mapper>

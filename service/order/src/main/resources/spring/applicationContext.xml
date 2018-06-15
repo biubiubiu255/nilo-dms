@@ -26,7 +26,7 @@
     <bean id="notifyDataBusProducer" class="com.nilo.dms.service.order.producer.NotifyDataBusProducer"/>
     <bean id="routeProducer" class="com.nilo.dms.service.order.producer.RouteProducer"/>
     <bean id="createDeliveryOrderProducer" class="com.nilo.dms.service.order.producer.CreateDeliveryOrderProducer"/>
-    <bean id="phoneSMSProducer" class="com.nilo.dms.service.order.producer.PhoneMessageProducer"/>
+    <bean id="phoneSMSProducer" class="com.nilo.dms.service.system.PhoneMessageProducer"/>
 
 
     <bean class="com.nilo.dms.service.mq.consumer.ConsumerStartup" init-method="initial"
@@ -45,7 +45,7 @@
     <bean id="notifyDataBusConsumer" class="com.nilo.dms.service.order.consumer.NotifyDataBusConsumer"/>
     <bean id="routeConsumer" class="com.nilo.dms.service.order.consumer.RouteConsumer"/>
     <bean id="createDeliveryOrderConsumer" class="com.nilo.dms.service.order.consumer.CreateDeliveryOrderConsumer"/>
-    <bean id="phoneSMSConsumer" class="com.nilo.dms.service.order.consumer.PhoneMessageConsumer"/>
+    <bean id="phoneSMSConsumer" class="com.nilo.dms.service.system.PhoneMessageConsumer"/>
 
 
 

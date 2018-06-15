@@ -7,21 +7,23 @@ import com.nilo.dms.common.BaseDo;
  */
 public class SMSConfigDO extends BaseDo<Long>{
 
-    private Long merchantId;
+    private String merchantId;
 
     private String smsType;
 
-    private String content;
+    private String name;
 
-    private String remark;
+    private String content;
 
     private Integer status;
 
-    public Long getMerchantId() {
+    private String param;
+
+    public String getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(Long merchantId) {
+    public void setMerchantId(String merchantId) {
         this.merchantId = merchantId;
     }
 
@@ -33,6 +35,14 @@ public class SMSConfigDO extends BaseDo<Long>{
         this.smsType = smsType;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getContent() {
         return content;
     }
@@ -41,13 +51,6 @@ public class SMSConfigDO extends BaseDo<Long>{
         this.content = content;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
 
     public Integer getStatus() {
         return status;
@@ -55,5 +58,13 @@ public class SMSConfigDO extends BaseDo<Long>{
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getParam() {
+        return param;
+    }
+
+    public void setParam(String param) {
+        this.param = param;
     }
 }

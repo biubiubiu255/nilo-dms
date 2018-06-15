@@ -7,11 +7,19 @@ public class PhoneMessage {
 
     private String msgType;
 
-    private String merchantId;
-
     private String phoneNum;
 
+    private String waybill;
+
     private String content;
+
+    public String getWaybill() {
+        return waybill;
+    }
+
+    public void setWaybill(String waybill) {
+        this.waybill = waybill;
+    }
 
     public String getMsgType() {
         return msgType;
@@ -21,13 +29,6 @@ public class PhoneMessage {
         this.msgType = msgType;
     }
 
-    public String getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(String merchantId) {
-        this.merchantId = merchantId;
-    }
 
     public String getPhoneNum() {
         return phoneNum;
@@ -49,7 +50,6 @@ public class PhoneMessage {
     public String toString() {
         return "PhoneMessage{" +
                 "msgType='" + msgType + '\'' +
-                ", merchantId='" + merchantId + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +
                 ", content='" + content + '\'' +
                 '}';

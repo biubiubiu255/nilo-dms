@@ -22,7 +22,12 @@
             <artifactId>dms-service-common</artifactId>
             <version>1.0.0</version>
         </dependency>
-        
+        <dependency>
+            <groupId>com.nilo.dms</groupId>
+            <artifactId>dms-service-mq</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-websocket</artifactId>

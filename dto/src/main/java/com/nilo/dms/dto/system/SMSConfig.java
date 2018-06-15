@@ -1,7 +1,5 @@
 package com.nilo.dms.dto.system;
 
-import com.nilo.dms.common.enums.SMSConfigStatusEnum;
-
 /**
  * Created by admin on 2017/12/1.
  */
@@ -11,11 +9,73 @@ public class SMSConfig {
 
     private String smsType;
 
+    private String name;
+
     private String content;
 
-    private String remark;
+    private Integer status;
 
-    private SMSConfigStatusEnum status;
+    private String param;
+
+    private String createdBy;
+
+    private Long createdTime;
+
+    private Long updatedTime;
+
+    private String updatedBy;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getParam() {
+        return param;
+    }
+
+    public void setParam(String param) {
+        this.param = param;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Long getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Long createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Long getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(Long updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
 
     public String getMerchantId() {
         return merchantId;
@@ -41,19 +101,7 @@ public class SMSConfig {
         this.content = content;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public SMSConfigStatusEnum getStatus() {
+    public Integer getStatus() {
         return status;
-    }
-
-    public void setStatus(SMSConfigStatusEnum status) {
-        this.status = status;
     }
 }
