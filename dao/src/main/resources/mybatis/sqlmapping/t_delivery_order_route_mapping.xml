@@ -4,7 +4,7 @@
 <mapper namespace="com.nilo.dms.dao.DeliveryOrderRouteDao">
 
     <!-- 实体bean与数据字段对应关系 -->
-    <resultMap id="routeDO" type="com.nilo.dms.dao.dataobject.DeliveryOrderRouteDO">
+<!--    <resultMap id="routeDO" type="com.nilo.dms.dao.dataobject.DeliveryOrderRouteDO">
         <result property="id" column="id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
         <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
@@ -34,7 +34,7 @@
         id ,merchant_id,order_no,opt,opt_by,opt_network,phone, created_time , updated_time ,version
     </sql>
 
-    <!-- 插入语句 -->
+    &lt;!&ndash; 插入语句 &ndash;&gt;
     <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.DeliveryOrderRouteDO" statementType="PREPARED"
             useGeneratedKeys="true"
             keyProperty="id">
@@ -53,5 +53,5 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_waybill_route where merchant_id=#{merchantId} and order_no = #{orderNo} and opt = #{type} limit 0;
-    </select>
+    </select>-->
 </mapper>

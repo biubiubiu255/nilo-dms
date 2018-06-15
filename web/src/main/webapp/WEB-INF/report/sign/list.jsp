@@ -50,9 +50,8 @@
     <div class="layui-form layui-row">
 
 
-
         <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">NextStation:</label>
+            <label class="layui-form-label">Network:</label>
             <div class="layui-inline">
                 <select lay-filter="nextStationCodeLay" name="nextStationCode">
                     <option value="">choose or search....</option>
@@ -98,6 +97,7 @@
                 <th lay-data="{field:'referenceNo', width:170}">ReferenceNo</th>
                 <th lay-data="{field:'networkCodeDesc', width:150}">Network</th>
                 <th lay-data="{field:'rider', width:100}">Rider</th>
+                <th lay-data="{field:'outsource', width:130}">Outsource</th>
                 <th lay-data="{field:'weight', width:100}">Weight</th>
                 <th lay-data="{field:'statusDesc', width:150}">Status</th>
                 <th lay-data="{field:'handleBy', width:150}">HandleName</th>
@@ -131,7 +131,7 @@
                 layDate.render({
                     elem: '#toCreatedTime'
                     , lang: 'en'
-
+                    , value: new Date(new Date().getTime()+24*60*60*1000)
                 });
 
             });
@@ -187,6 +187,7 @@
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("input[name='createdTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val()))/1000;
                 var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
+                var outsource  = $("select[name='outsource']").val();
                 if(initLoading==true){
                     sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
                     eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
@@ -199,7 +200,8 @@
                     toHandledTime: eTime_creat,
                     exportType: dateType,
                     riderId: $("select[name='rider']").val(),
-                    networkCode: $("select[name='nextStationCode']").val()
+                    networkCode: $("select[name='nextStationCode']").val(),
+                    outsource: outsource
                 };
                 if (isPojo===true) return param;
                 else return jQuery.param( param );

@@ -78,6 +78,7 @@ public class SignReportServiceImpl implements SignReportService {
         signReport.setRider(s.getRider());
         signReport.setNetworkCode(s.getNetworkCode());
         signReport.setNetworkCodeDesc(s.getNetworkCodeDesc());
+        signReport.setOutsource(s.getOutsource());
         return signReport;
     }
 }

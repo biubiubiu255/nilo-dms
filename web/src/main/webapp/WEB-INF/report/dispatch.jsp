@@ -43,7 +43,7 @@
             <div class="layui-col-md4 layui-col-lg4">
                 <label class="layui-form-label">Rider:</label>
                 <div class="layui-inline">
-                    <select name="rider" lay-verify="required" lay-filter="rider">
+                    <select name="riderId" lay-verify="required" lay-filter="rider">
                         <option value="">choose or search....</option>
                         <c:forEach items="${list}" var="rider">
                             <option value=${rider.userId}>${rider.staffId}-${rider.realName}</option>
@@ -116,7 +116,6 @@
                 <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
                 <th lay-data="{field:'phone', width:150}">Phone</th>
                 <th lay-data="{field:'address', width:270}">Address</th>
-
             </tr>
             </thead>
         </table>
@@ -204,7 +203,7 @@
                 var sTime_creat = $("input[name='createdTime_s']").val() == "" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val())) / 1000;
                 var eTime_creat = $("input[name='createdTime_e']").val() == "" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val())) / 1000 + 86400;
                 var status = $("select[name='status']").val();
-                var rider  = $("select[name='rider']").val();
+                var riderId= $("select[name='riderId']").val();
                 var outsource  = $("select[name='outsource']").val();
                 if(initLoading==true){
                     sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
@@ -219,7 +218,8 @@
                     toCreatedTime: eTime_creat,
                     exportType: dateType,
                     status:status,
-                    outsource: outsource
+                    outsource: outsource,
+                    riderId: riderId
                 };
                 if (isPojo === true) return param;
                 else return jQuery.param(param);

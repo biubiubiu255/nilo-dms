@@ -15,6 +15,8 @@
                 jdbcType="DOUBLE"/>
         <result property="alreadyPaid" column="already_paid" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
+        <result property="outsource" column="outsource" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
         <!--
         <result property="handleBy" column="handled_by" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>-->
@@ -70,14 +72,15 @@
         d.`name` rname,
         d.contact_number,
         d.address,
-        e. NAME rider,
+        CONCAT_WS('-',e.staff_id, e.real_name) AS rider,
+        e.outsource,
         f.name network_name
         FROM
         t_waybill a
         INNER JOIN t_handle_sign b ON a.order_no = b.order_no
         INNER JOIN t_waybill_sender c ON b.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON c.order_no = d.order_no
-        LEFT JOIN t_sys_user_info e ON b.handle_by = e.id
+        LEFT JOIN t_bas_staff e ON b.handle_by = e.user_id
         INNER JOIN t_bas_network f ON f.id = b.network_code
         WHERE a.merchant_id=#{merchantId}
         <if test="orderNo !=null and orderNo !='' ">
@@ -91,6 +94,9 @@
         </if>
         <if test="riderId !=null and riderId != '' ">
             and  b.handle_by = #{riderId}
+        </if>
+        <if test="outsource !=null and outsource !='' ">
+            and e.outsource = #{outsource}
         </if>
         <if test="networkCode !=null ">
             and  b.network_code = #{networkCode}
@@ -117,7 +123,7 @@
         INNER JOIN t_handle_sign b ON a.order_no = b.order_no
         INNER JOIN t_waybill_sender c ON b.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON c.order_no = d.order_no
-        LEFT JOIN t_sys_user_info e ON b.handle_by = e.id
+        LEFT JOIN t_bas_staff e ON b.handle_by = e.user_id
         INNER JOIN t_bas_network f ON f.id = b.network_code
         WHERE a.merchant_id=#{merchantId}
         <if test="orderNo !=null and orderNo !='' ">
@@ -131,6 +137,9 @@
         </if>
         <if test="riderId !=null and riderId != '' ">
             and  b.handle_by = #{riderId}
+        </if>
+        <if test="outsource !=null and outsource !='' ">
+            and e.outsource = #{outsource}
         </if>
         <if test="networkCode !=null ">
             and  b.network_code = #{networkCode}

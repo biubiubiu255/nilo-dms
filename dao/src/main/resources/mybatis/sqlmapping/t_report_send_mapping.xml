@@ -67,8 +67,6 @@
                 jdbcType="VARCHAR"/>
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
-        <result property="status" column="status" javaType="java.lang.Integer"
-                jdbcType="INTEGER"/>
     </resultMap>
 
     <resultMap id="repeatDO" type="com.nilo.dms.dao.dataobject.ReportRepeatDO">
@@ -100,8 +98,6 @@
         <result property="receiveName" column="receive_name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="rider" column="rider" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
-        <result property="parentNo" column="parent_no" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
@@ -196,7 +192,7 @@
             and d.driver = #{driver}
         </if>
         <if test="nextStationCode !=null and nextStationCode !='' ">
-            and d.next_station = #{nextStationCode}
+            and d.network_code = #{nextStationCode}
         </if>
         <if test="isPackage !=null and isPackage !='' ">
             and d.is_package = #{isPackage}
@@ -254,8 +250,8 @@
         d.address,
         d. NAME AS receive_name,
         f.parent_no,
-        f.is_package,
-        e.name next_station_name
+        e.name next_station_name,
+        f.is_package
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
@@ -290,8 +286,8 @@
         d.address,
         d. NAME AS receive_name,
         c.parent_no,
-        c.is_package,
-        e.name next_station_name
+        e.name next_station_name,
+        c.is_package
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
@@ -317,7 +313,7 @@
             and d.driver = #{driver}
         </if>
         <if test="nextStationCode !=null and nextStationCode !='' ">
-            and d.next_station = #{nextStationCode}
+            and d.network_code = #{nextStationCode}
         </if>
         <if test="isPackage !=null and isPackage !='' ">
             and d.is_package = #{isPackage}
@@ -337,6 +333,7 @@
         <if test="status != null">
             and d.status = #{status}
         </if>
+
 
     </select>
 
