@@ -67,8 +67,6 @@
                 jdbcType="VARCHAR"/>
         <result property="weight" column="weight" javaType="java.lang.Double"
                 jdbcType="DOUBLE"/>
-        <result property="status" column="status" javaType="java.lang.Integer"
-                jdbcType="INTEGER"/>
     </resultMap>
 
     <resultMap id="repeatDO" type="com.nilo.dms.dao.dataobject.ReportRepeatDO">
@@ -101,8 +99,6 @@
                 jdbcType="VARCHAR"/>
         <result property="rider" column="rider" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="parentNo" column="parent_no" javaType="java.lang.String"
-                jdbcType="VARCHAR"/>
         <result property="createdTime" column="created_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
     </resultMap>
@@ -123,7 +119,7 @@
         b.handle_no,
         b.driver,
         e.id network_code,
-        b.next_station,
+        e.`name` next_station,
         b.third_express_code,
         b.handle_name,
         f.order_type,
@@ -140,12 +136,12 @@
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = b.network_code
+        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
         INNER JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
-        AND b.type = 'package'
+       
 
         ORDER BY
         a.created_time DESC
@@ -159,7 +155,7 @@
         b.handle_no,
         b.driver,
         e.id network_code,
-        b.next_station,
+        e.`name` next_station,
         b.third_express_code,
         b.handle_name,
         c.order_type,
@@ -176,12 +172,12 @@
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
-        LEFT  JOIN t_bas_network e ON e.id = b.network_code
+        LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
         AND c.is_package = "1"
-        AND b.type = 'package'
+        
         ORDER BY
         a.created_time DESC
         )
@@ -196,7 +192,7 @@
             and d.driver = #{driver}
         </if>
         <if test="nextStationCode !=null and nextStationCode !='' ">
-            and d.next_station = #{nextStationCode}
+            and d.network_code = #{nextStationCode}
         </if>
         <if test="isPackage !=null and isPackage !='' ">
             and d.is_package = #{isPackage}
@@ -254,8 +250,8 @@
         d.address,
         d. NAME AS receive_name,
         f.parent_no,
-        f.is_package,
-        e.name next_station_name
+        e.name next_station_name,
+        f.is_package
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
@@ -266,7 +262,7 @@
         WHERE
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
-        AND b.type = 'package'
+        
 
         ORDER BY
         a.created_time DESC
@@ -290,8 +286,8 @@
         d.address,
         d. NAME AS receive_name,
         c.parent_no,
-        c.is_package,
-        e.name next_station_name
+        e.name next_station_name,
+        c.is_package
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
@@ -302,7 +298,7 @@
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
         AND c.is_package = "1"
-        AND b.type = 'package'
+        
         ORDER BY
         a.created_time DESC
         )
@@ -317,7 +313,7 @@
             and d.driver = #{driver}
         </if>
         <if test="nextStationCode !=null and nextStationCode !='' ">
-            and d.next_station = #{nextStationCode}
+            and d.network_code = #{nextStationCode}
         </if>
         <if test="isPackage !=null and isPackage !='' ">
             and d.is_package = #{isPackage}
@@ -337,6 +333,7 @@
         <if test="status != null">
             and d.status = #{status}
         </if>
+
 
     </select>
 
