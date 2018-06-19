@@ -1,6 +1,7 @@
 package com.nilo.dms.service.system;
 
 import com.alibaba.rocketmq.common.message.MessageExt;
+import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.HttpUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.SMSLogDao;
@@ -42,8 +43,9 @@ public class PhoneMessageConsumer extends AbstractMQConsumer {
             //查询运单是否已经发送过改业务短信
             List<SMSLogDO> list = smsLogDao.getByWaybill(phoneMessage.getWaybill());
             if (list != null) {
+                String nowDate = DateUtil.formatCurrent("yyyy-MM-dd");
                 for (SMSLogDO l : list) {
-                    if (StringUtil.equals(l.getMsgType(), phoneMessage.getMsgType())) {
+                    if (StringUtil.equals(l.getMsgType(), phoneMessage.getMsgType()) && StringUtil.equals(nowDate, DateUtil.format(l.getCreatedTime(), "yyyy-MM-dd"))) {
                         return;
                     }
                 }
