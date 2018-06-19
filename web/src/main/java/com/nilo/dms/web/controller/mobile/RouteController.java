@@ -1,6 +1,7 @@
 package com.nilo.dms.web.controller.mobile;
 
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.dao.dataobject.WaybillRouteDO;
 import com.nilo.dms.dto.order.DeliveryRoute;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.DeliveryRouteService;
@@ -45,9 +46,9 @@ public class RouteController extends BaseController {
         //获取merchantId
         String merchantId = me.getMerchantId();
 
-        List<DeliveryRoute> queryRoute = deliveryRouteService.queryRoute(merchantId, orderNo);
+        List<WaybillRouteDO> waybillRouteDOS = deliveryRouteService.queryRoute(merchantId, orderNo);
 
-        return toJsonTrueData(queryRoute);
+        return toJsonTrueData(waybillRouteDOS);
 
     }
 

@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 public interface DeliveryOrderRouteDao extends BaseDao<Long, WaybillRouteDO> {
 
-    List<DeliveryOrderRouteDO> findBy(@Param("merchantId") Long merchantId, @Param("orderNo") String orderNo);
+    List<WaybillRouteDO> findBy(@Param("merchantId") Long merchantId, @Param("orderNo") String orderNo);
 
-    DeliveryOrderRouteDO findByType(@Param("merchantId") Long merchantId, @Param("orderNo") String orderNo,@Param("type") String type);
+    WaybillRouteDO findByType(@Param("merchantId") Long merchantId, @Param("orderNo") String orderNo,@Param("type") String type);
 
 }

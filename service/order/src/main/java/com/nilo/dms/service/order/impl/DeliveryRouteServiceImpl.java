@@ -71,53 +71,17 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
     private HandleSignDao handleSignDao;
 
     @Override
-    public List<DeliveryRoute> queryRoute(String merchantId, String orderNo) {
+    public List<WaybillRouteDO> queryRoute(String merchantId, String orderNo) {
 
-        List<DeliveryOrderRouteDO> routeDOs = deliveryOrderRouteDao.findBy(Long.parseLong(merchantId), orderNo);
-        if (routeDOs == null) return null;
-
-        SendThirdHead bigOrderDO = handleThirdDao.queryHandleBySmallNo(Long.parseLong(SessionLocal.getPrincipal().getMerchantId()), orderNo);
-
-        UserInfoDO userInfoDO = handleRiderDao.queryUserInfoBySmallNo(orderNo);
-
-        for(DeliveryOrderRouteDO e :routeDOs){
-            if(e.getOpt().equals("send") || e.getOpt().equals("delivery")) {
-                if(bigOrderDO!=null){
-                    if(bigOrderDO.getNextStation()!=null){
-                        e.setNextNetwork(bigOrderDO.getNextStation());
-                        break;
-                    }
-                    if(bigOrderDO.getThirdExpressCode()!=null){
-                        e.setExpressName(bigOrderDO.getThirdExpressCode());
-                        break;
-                    }
-                    e.setOptByName(bigOrderDO.getHandleName());
-
-                }else if(userInfoDO!=null){
-                    List<StaffDO> staffInfo = staffDao.findstaffByIDs(new Long[]{userInfoDO.getId()});
-                    String name = staffInfo.get(0).getNickName()==null ? staffInfo.get(0).getRealName() : staffInfo.get(0).getNickName();
-                    e.setRider(name);
-                    e.setOptByNamePhone(staffInfo.get(0).getPhone());
-                    e.setJobId(staffInfo.get(0).getStaffId());
-                }
-
-            }
-            if(e.getOpt().equals("receive")) {
-                HandleSignDO handleSignDO = handleSignDao.queryByNo(e.getMerchantId(), e.getOrderNo());
-                e.setSigner(handleSignDO.getSigner());
-            }
-
-        }
-
+        List<WaybillRouteDO> routeDOs = deliveryOrderRouteDao.findBy(Long.parseLong(merchantId), orderNo);
 
         //查询并赋值出当前路由信息的list的操作人名字、电话、工号 - - end
 
-        List<DeliveryRoute> routeList = new ArrayList<>();
-        for (DeliveryOrderRouteDO routeDO : routeDOs) {
+/*        List<DeliveryRoute> routeList = new ArrayList<>();
+        for (WaybillRouteDO routeDO : routeDOs) {
             routeList.add(convert(routeDO));
-        }
-
-        return routeList;
+        }*/
+        return routeDOs;
     }
 
     @Override
@@ -131,6 +95,7 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
         message.setRider(request.getRider());
         message.setMerchantId(principal.getMerchantId());
         message.setOptBy(principal.getUserId());
+        message.setOptName(principal.getUserName());
         message.setNetworkId(principal.getFirstNetwork());
         try {
             routeProducer.sendMessage(message);
@@ -170,7 +135,7 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
         }
     }
 
-
+    @Deprecated
     private DeliveryRoute convert(DeliveryOrderRouteDO routeDO) {
 
         DeliveryRoute route = new DeliveryRoute();

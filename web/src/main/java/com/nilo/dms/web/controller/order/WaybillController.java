@@ -6,6 +6,7 @@ import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.*;
+import com.nilo.dms.dao.dataobject.WaybillRouteDO;
 import com.nilo.dms.dto.order.*;
 import com.nilo.dms.common.CellData;
 import com.nilo.dms.common.ExcelData;
@@ -220,10 +221,10 @@ public class WaybillController extends BaseController {
         String merchantId = me.getMerchantId();
         //查询订单详情
         Waybill deliveryOrder = waybillService.queryByOrderNo(merchantId, orderNo);
-        List<DeliveryRoute> orderRouteList = deliveryRouteService.queryRoute(merchantId, orderNo);
+        List<WaybillRouteDO> waybillRouteDOS = deliveryRouteService.queryRoute(merchantId, orderNo);
 
         model.addAttribute("deliveryOrder", deliveryOrder);
-        model.addAttribute("orderRouteList", orderRouteList);
+        model.addAttribute("orderRouteList", waybillRouteDOS);
 
         return "delivery_order/details";
     }

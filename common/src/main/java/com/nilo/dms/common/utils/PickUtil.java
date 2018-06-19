@@ -97,5 +97,16 @@ public class PickUtil {
         return rList;
     }
 
+    public static Object coalesce(Object... vals) {
+
+        for (Object e : vals) {
+            if (e != null) {
+                return e;
+            }
+        }
+        return null;
+
+    }
+
 
 }

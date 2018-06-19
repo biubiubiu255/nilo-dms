@@ -23,6 +23,8 @@ public class WaybillRouteDO {
 
     private String driver;
 
+    private String signer;
+
     private String phone;
 
     private String receiveName;
@@ -169,5 +171,13 @@ public class WaybillRouteDO {
 
     public void setVersion(String version) {
         this.version = version == null ? null : version.trim();
+    }
+
+    public String getSigner() {
+        return signer;
+    }
+
+    public void setSigner(String signer) {
+        this.signer = signer;
     }
 }

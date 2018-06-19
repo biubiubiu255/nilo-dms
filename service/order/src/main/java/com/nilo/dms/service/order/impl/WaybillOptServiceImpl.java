@@ -53,17 +53,9 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
     @Autowired
     private DeliveryRouteService deliveryRouteService;
 
+    @Transactional
     @Override
     public void sign(String orderNo, String signer, String remark) {
-
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setOptType(OptTypeEnum.SIGN);
-        optRequest.setRemark(remark);
-        List<String> orderNoList = new ArrayList<>();
-        orderNoList.add(orderNo);
-        optRequest.setOrderNo(orderNoList);
-        waybillService.handleOpt(optRequest);
-
         //写入 t_handler_sign
         Principal principal = SessionLocal.getPrincipal();
 
@@ -76,6 +68,14 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
         signDO.setNetworkCode(principal.getFirstNetwork());
         signDO.setSigner(BeanUtils.getNotNullValue(signer, "Self").toString());
         handleSignDao.insert(signDO);
+
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setOptType(OptTypeEnum.SIGN);
+        optRequest.setRemark(remark);
+        List<String> orderNoList = new ArrayList<>();
+        orderNoList.add(orderNo);
+        optRequest.setOrderNo(orderNoList);
+        waybillService.handleOpt(optRequest);
 
         List<String> list = new ArrayList<>();
         list.add(orderNo);

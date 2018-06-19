@@ -17,6 +17,8 @@ public class DeliveryRouteMessage {
 
     private String optBy;
 
+    private String optName;
+
     private String rider;
 
     private String networkId;
@@ -67,6 +69,14 @@ public class DeliveryRouteMessage {
 
     public void setOptBy(String optBy) {
         this.optBy = optBy;
+    }
+
+    public String getOptName() {
+        return optName;
+    }
+
+    public void setOptName(String optName) {
+        this.optName = optName;
     }
 
     @Override
