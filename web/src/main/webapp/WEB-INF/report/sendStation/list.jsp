@@ -114,30 +114,8 @@
 
 
 
-    <div id="me_tab">
-        <table class="layui-table"
-               lay-data="{ url:'/report/sendStation/list.html?exportType=2',method:'post', page:true,limit:10, id:'${id0}'}"
-               lay-filter="demo">
-            <thead>
-            <tr>
-                <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
-                <th lay-data="{field:'handleNo', width:100}">HandleNo</th>
-                <th lay-data="{field: 'orderType', width:100}">OrderType</th>
-                <th lay-data="{field:'weight', width:100}">Weight</th>
-                <th lay-data="{field:'receiveName', width:100}">Name</th>
-                <th lay-data="{field:'driver', width:130}">Driver</th>
-                <th lay-data="{field:'expressCode', width:150}">ExpressName</th>
-                <th lay-data="{field:'nextStation', width:150}">NextStation</th>
-                <th lay-data="{field: 'handleName', width:130}">HandleName</th>
-                <th lay-data="{field:'parentNo', width:150}">parentNo</th>
-                <th lay-data="{field: 'referenceNo', width:170}">ReferenceNo</th>
-                <th lay-data="{field: 'statusDesc', width:130}">Status</th>
-                <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
-                <th lay-data="{field:'phone', width:150}">Phone</th>
-                <th lay-data="{field:'address', width:200}">Address</th>
-            </tr>
-            </thead>
-        </table>
+    <div id="me_tab" style="margin-top: -20px;">
+        <table class="layui-table" lay-filter="demo" id="${id0}"></table>
     </div>
 
     <iframe scrolling="no" frameborder="0" src="/report/sendStation/list.html?exportType=0" id="ifm" width="100%" height="100%" style="padding: 0px; display: none;"></iframe>
@@ -148,7 +126,6 @@
         $(function () {
 
             showPattern = 0;
-
 
             layui.use(['element', 'form', 'laydate'], function () {
                 var layDate = layui.laydate;
@@ -167,14 +144,40 @@
             });
 
             var initLoading = true;
-            var table = layui.table;
+            var table = null;
             layui.use('table', function () {
                 table = layui.table;
-                table.on('tool(demo)');
-                reloadTable();
+                table.render({
+                    elem: '#${id0}'
+                    ,url: '/report/sendStation/list.html' //数据接口
+                    ,page: true //开启分页
+                    ,limit:10
+                    ,cols: [[ //表头
+                        {field: 'orderNo', title: 'Waybill No', width:200, fixed: 'left'}
+                       ,{field: 'handleNo', title: 'HandleNo', width:100}
+                       ,{field: 'orderType', title: 'OrderType', width:100}
+                       ,{field: 'weight', title: 'Weight', width:100}
+                       ,{field: 'receiveName', title: 'Name', width:100}
+                       ,{field: 'driver', title: 'Driver', width:130}
+                       ,{field: 'expressCode', title: 'ExpressName', width:150}
+                       ,{field: 'nextStation', title: 'NextStation', width:150}
+                       ,{field: 'handleName', title: 'HandleName', width:130}
+                       ,{field: 'parentNo', title: 'ParentNo', width:130}
+                       ,{field: 'referenceNo', title: 'ReferenceNo', width:170}
+                       ,{field: 'statusDesc', title: 'Status', width:130}
+                       ,{field: 'referenceNo', title: 'ReferenceNo', width:170}
+                       ,{field: 'referenceNo', title: 'CreatedTime', width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}
+                       ,{field: 'phone', title: 'Phone', width:150}
+                       ,{field: 'address', title: 'Address', width:200}
+                    ]]
+                    ,where: getParam(2, true)
+                });
+
+                //table.on('tool(demo)');
+                //reloadTable();
             });
 
-            //reloadTable();
+
 
             $(".search").on("click", function () {
                 reloadTable();
@@ -226,8 +229,8 @@
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
                     driver: $("input[name='driver']").val(),
-                    fromCreatedTime: sTime_creat,
-                    toCreatedTime: eTime_creat,
+                    //fromCreatedTime: sTime_creat,
+                    //toCreatedTime: eTime_creat,
                     handleNo: $("input[name='handleNo']").val(),
                     orderType: $("select[name='orderType']").val(),
                     expressCode: $("select[name='expressCode']").val(),
