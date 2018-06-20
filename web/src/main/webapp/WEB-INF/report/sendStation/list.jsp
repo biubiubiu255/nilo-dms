@@ -126,7 +126,7 @@
         $(function () {
 
             var showPattern = 0;
-            var tableMe = null;
+            var tableMe;
             layui.use(['laydate','table'], function () {
 
                 var layDate = layui.laydate;

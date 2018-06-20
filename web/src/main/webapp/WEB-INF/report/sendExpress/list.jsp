@@ -108,6 +108,7 @@
         $(function () {
 
             var showPattern = 0;
+            var tableMe = null;
 
             layui.use(['laydate', 'table'], function () {
                 var layDate = layui.laydate;
@@ -124,10 +125,9 @@
                     , value: new Date(new Date().getTime()+24*60*60*1000)
                 });
 
-               var tableMe = null;
-               var tab = layui.table;
 
-                tableMe = tab.render({
+               var tab = layui.table;
+               tableMe = tab.render({
                     elem: '#${id0}'
                     ,url: '/report/sendExpress/list.html?exportType=2' //数据接口
                     ,page: true //开启分页
@@ -141,7 +141,6 @@
                         ,{field: 'receiveName', title: 'Name', width:100}
                         ,{field: 'driver', title: 'Driver', width:130}
                         ,{field: 'expressCode', title: 'ExpressName', width:150}
-                        ,{field: 'nextStation', title: 'NextStation', width:150}
                         ,{field: 'handleName', title: 'HandleName', width:130}
                         ,{field: 'referenceNo', title: 'ReferenceNo', width:170}
                         ,{field: 'statusDesc', title: 'Status', width:130}
