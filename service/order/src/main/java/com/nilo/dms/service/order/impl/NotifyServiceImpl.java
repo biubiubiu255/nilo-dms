@@ -43,13 +43,11 @@ import java.util.*;
 @Service
 public class NotifyServiceImpl implements NotifyService {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
+    @Value("#{configProperties['country_code']}")
+    private String country_code;
     @Autowired
     @Qualifier("notifyDataBusProducer")
     private AbstractMQProducer notifyDataBusProducer;
-    @Autowired
-    private AbnormalOrderDao abnormalOrderDao;
     @Autowired
     private SendThirdService sendThirdService;
     @Autowired
@@ -127,7 +125,7 @@ public class NotifyServiceImpl implements NotifyService {
             try {
                 param.put("method", interfaceConfig.getOp());
                 param.put("app_key", "dms");
-                param.put("country_code", "ke");
+                param.put("country_code", country_code);
                 param.put("data", data);
                 param.put("request_id", UUID.randomUUID().toString());
                 param.put("timestamp", "" + DateUtil.getSysTimeStamp());
