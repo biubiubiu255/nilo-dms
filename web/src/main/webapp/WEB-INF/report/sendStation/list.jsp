@@ -126,9 +126,8 @@
         $(function () {
 
             var showPattern = 0;
-            var initLoading = true;
             var tableMe = null;
-            layui.use(['element', 'form', 'laydate','table'], function () {
+            layui.use(['laydate','table'], function () {
 
                 var layDate = layui.laydate;
                 layDate.render({
@@ -150,6 +149,7 @@
                     ,url: '/report/sendStation/list.html?exportType=2' //数据接口
                     ,page: true //开启分页
                     ,limit:10
+                    ,method: 'post'
                     ,cols: [[ //表头
                         {field: 'orderNo', title: 'Waybill No', width:200, fixed: 'left'}
                        ,{field: 'handleNo', title: 'HandleNo', width:100}
@@ -216,13 +216,9 @@
 
             function getParam(dateType, isPojo){
 
-                console.log($("#fromCreatedTime").val(), $("#toCreatedTime").val(), "aa");
-                //alert("sd");
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : new Date($("#fromCreatedTime").val()+' 00:00:00').getTime()/1000;
                 var eTime_creat = $("#toCreatedTime").val()==""   ? "" : new Date($("#toCreatedTime").val()+' 00:00:00').getTime()/1000;
-                console.log(sTime_creat, eTime_creat);
-
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),

@@ -77,25 +77,10 @@
     </div>
     <hr>
 
-    <div id="me_tab">
-    <table class="layui-table"
-           lay-data="{ url:'/report/arrive/list.html?exportType=2',method:'post', page:true,limit:10, id:'${id0}'}"
-           lay-filter="demo">
-        <thead>
-        <tr>
-            <th lay-data="{fixed: 'left',field:'orderNo', width:200}"><O></O>Waybill No</th>
-            <th lay-data="{field:'lastNetwork' , width:200}">LastNetwork</th>
-            <th lay-data="{field:'scanNetwork', width:200}">ScanNetwork</th>
-            <th lay-data="{field:'scanTime', width:200, templet:'<div>{{ formatDate(d.scanTime) }}</div>'}">ScanTime</th>
-            <th lay-data="{field:'statusDesc', width:200}">Status</th>
-            <th lay-data="{field:'weight', width:100}">weight</th>
-            <th lay-data="{field:'phone', width:200}">Phone</th>
-            <th lay-data="{field: 'recipients', width:170}">ReceiveName</th>
-            <th lay-data="{field:'address', width:200}">address</th>
-        </tr>
-        </thead>
-    </table>
+    <div id="me_tab" style="margin-top: -20px;">
+        <table class="layui-table" lay-filter="demo" id="${id0}"></table>
     </div>
+
 
     <iframe scrolling="no" frameborder="0" src="/report/arrive/list.html?exportType=0" id="ifm" width="100%" height="100%" style="padding: 0px; display: none;"></iframe>
 
@@ -104,30 +89,47 @@
     <script type="text/javascript">
         $(function () {
 
-            showPattern = 0;
+            var showPattern = 0;
+            var tableMe = null;
 
-
-            layui.use(['element', 'form', 'laydate'], function () {
+            layui.use(['laydate', 'table'], function () {
                 var layDate = layui.laydate;
                 layDate.render({
                     elem: '#fromCreatedTime'
                     , lang: 'en'
+                    , isInitValue: true
                     , value: new Date()
                 });
                 layDate.render({
                     elem: '#toCreatedTime'
                     , lang: 'en'
+                    , isInitValue: true
                     , value: new Date(new Date().getTime()+24*60*60*1000)
                 });
 
-            });
 
-            var initLoading = true;
-            var table = layui.table;
-            layui.use('table', function () {
-                table = layui.table;
-                table.on('tool(demo)');
-                reloadTable();
+                var tab = layui.table;
+                tableMe = tab.render({
+                    elem: '#${id0}'
+                    ,url: '/report/arrive/list.html?exportType=2' //数据接口
+                    ,page: true //开启分页
+                    ,limit:10
+                    ,method: 'post'
+                    ,cols: [[ //表头
+                        {field: 'orderNo', title: 'Waybill No', width:200, fixed: 'left'}
+                        ,{field: 'lastNetwork', title: 'LastNetwork', width:200}
+                        ,{field: 'scanNetwork', title: 'ScanNetwork', width:200}
+                        ,{field: '', title: 'scanTime', width:200, templet:'<div>{{ formatDate(d.scanTime) }}</div>'}
+                        ,{field: 'statusDesc', title: 'Status', width:200}
+                        ,{field: 'weight', title: 'Weight', width:100}
+                        ,{field: 'phone', title: 'Phone', width:200}
+                        ,{field: 'recipients', title: 'ReceiveName', width:130}
+                        ,{field: 'address', title: 'Address', width:300}
+
+                    ]]
+                    ,where: getParam(2, true)
+                });
+
             });
 
 
@@ -155,10 +157,9 @@
             function reloadTable() {
 
                 if (showPattern==0){
-
                     $("#me_tab").show();
                     $("#ifm").hide();
-                    table.reload("${id0}", {
+                    tableMe.reload({
                         where: getParam(2, true)
                     });
                 }else if(showPattern==1){
@@ -173,13 +174,8 @@
 
             function getParam(dateType, isPojo){
                 if (dateType=="" || dateType=='undefind') dateType=0;
-                var sTime_creat = $("input[name='createdTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val()))/1000;
-                var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
-                if(initLoading==true){
-                    sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
-                    eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
-                    initLoading = false;
-                }
+                var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : new Date($("#fromCreatedTime").val()+' 00:00:00').getTime()/1000;
+                var eTime_creat = $("#toCreatedTime").val()==""   ? "" : new Date($("#toCreatedTime").val()+' 00:00:00').getTime()/1000;
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
