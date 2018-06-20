@@ -125,9 +125,11 @@
     <script type="text/javascript">
         $(function () {
 
-            showPattern = 0;
+            var showPattern = 0;
+            var initLoading = true;
+            var tableMe = null;
+            layui.use(['element', 'form', 'laydate','table'], function () {
 
-            layui.use(['element', 'form', 'laydate'], function () {
                 var layDate = layui.laydate;
                 layDate.render({
                     elem: '#fromCreatedTime'
@@ -141,11 +143,7 @@
                     , isInitValue: true
                     , value: new Date(new Date().getTime()+24*60*60*1000)
                 });
-            });
 
-            var initLoading = true;
-            var tableMe = null;
-            layui.use('table', function () {
                 var tab = layui.table;
                 tableMe = tab.render({
                     elem: '#${id0}'
@@ -218,17 +216,11 @@
 
             function getParam(dateType, isPojo){
 
-                console.log($("#fromCreatedTime"), $("#toCreatedTime"));
+                //console.log($("#fromCreatedTime").val(), $("#toCreatedTime").val(), "aa");
+                //alert("sd");
                 if (dateType=="" || dateType=='undefind') dateType=0;
-                var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : Date.parse(new Date($("#fromCreatedTime").val()))/1000;
-                var eTime_creat = $("#toCreatedTime").val()==""   ? "" : Date.parse(new Date($("#toCreatedTime").val()))/1000+86400;
-                console.log(sTime_creat, eTime_creat);
-
-                if(initLoading==true){
-                    sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
-                    eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
-                    initLoading = false;
-                }
+                sTime_creat = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime()/1000;
+                eTime_creat = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000).getTime()/1000;
                 console.log(sTime_creat, eTime_creat);
 
 
