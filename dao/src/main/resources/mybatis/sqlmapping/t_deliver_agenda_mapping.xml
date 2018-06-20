@@ -50,7 +50,7 @@ FROM
 				AND a.rider = #{riderNo}
 				AND FROM_UNIXTIME(b.created_time, '%Y%m%d') = #{dateFormat}
 			) AS d
-		INNER JOIN t_handle_sign AS a ON a.order_no = d.order_no;
+		INNER JOIN t_handle_sign AS a ON a.order_no = d.order_no
 	) AS c,
 	(
 		SELECT
