@@ -133,15 +133,13 @@
         f.is_package
         FROM
         t_handle_third_express_details a
-        INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
+        INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no AND b.status=1
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
         LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
         INNER JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
-        AND b. STATUS = 1
-       
 
         ORDER BY
         a.created_time DESC
@@ -169,13 +167,12 @@
         c.is_package
         FROM
         t_handle_third_express_details a
-        INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
+        INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no AND b.status=1
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
         LEFT  JOIN t_bas_network e ON e.id = c.next_network_id
         WHERE
         a.merchant_id = #{merchantId}
-        AND b. STATUS = 1
         AND c.is_package = "1"
         
         ORDER BY
@@ -254,16 +251,13 @@
         f.is_package
         FROM
         t_handle_third_express_details a
-        INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
+        INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no AND b.status=1
         INNER JOIN t_waybill c ON a.order_no = c.order_no
         INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
         LEFT  JOIN t_bas_network e ON e.id = b.network_code
         INNER JOIN t_waybill f ON a.order_no = f.parent_no and f.is_package != "1"
         WHERE
         a.merchant_id = #{merchantId}
-        AND b. STATUS = 1
-        
-
         ORDER BY
         a.created_time DESC
         )
@@ -362,7 +356,7 @@
 
         INNER JOIN t_handle_third_express b
 
-        ON a.third_handle_no = b.handle_no
+        ON a.third_handle_no = b.handle_no AND b.status=1
 
         INNER JOIN t_waybill c
 
@@ -376,7 +370,7 @@
 
         ON b.third_express_code = e.express_code
 
-        WHERE a.merchant_id=1 and b.status = 1 and b.type='waybill'
+        WHERE a.merchant_id=1 and b.type='waybill'
 
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
@@ -430,7 +424,7 @@
 
         INNER JOIN t_handle_third_express b
 
-        ON a.third_handle_no = b.handle_no
+        ON a.third_handle_no = b.handle_no AND b.status=1
 
         INNER JOIN t_waybill c
 
@@ -444,7 +438,7 @@
 
         ON b.third_express_code = e.express_code
 
-        WHERE a.merchant_id=1 and b.status = 1 and b.type='waybill'
+        WHERE a.merchant_id=1 and b.type='waybill'
 
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')

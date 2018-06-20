@@ -63,7 +63,7 @@
         f.address
         FROM
         t_handle_rider_details a
-        INNER JOIN t_handle_rider b ON a.handle_no = b.handle_no
+        INNER JOIN t_handle_rider b ON a.handle_no = b.handle_no AND b.status=1
         INNER JOIN t_bas_staff c ON b.rider = c.user_id
         LEFT JOIN t_sys_user_info d ON b.handle_by = d.id
         INNER JOIN t_waybill e ON a.order_no = e.order_no
@@ -124,7 +124,7 @@
 
         FROM
         t_handle_rider_details a
-        INNER JOIN t_handle_rider b ON a.handle_no = b.handle_no
+        INNER JOIN t_handle_rider b ON a.handle_no = b.handle_no AND b.status=1
         INNER JOIN t_bas_staff c ON b.rider = c.user_id
         LEFT JOIN t_sys_user_info d ON b.handle_by = d.id
         INNER JOIN t_waybill e ON a.order_no = e.order_no
