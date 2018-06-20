@@ -18,9 +18,6 @@
         <result column="rider_phone" jdbcType="VARCHAR" property="riderPhone" />
         <result column="driver" jdbcType="VARCHAR" property="driver" />
         <result column="signer" jdbcType="VARCHAR" property="signer" />
-        <result column="phone" jdbcType="VARCHAR" property="phone" />
-        <result column="receive_name" jdbcType="VARCHAR" property="receiveName" />
-        <result column="address" jdbcType="VARCHAR" property="address" />
         <result column="created_time" jdbcType="INTEGER" property="createdTime" />
         <result column="updated_time" jdbcType="INTEGER" property="updatedTime" />
         <result column="version" jdbcType="VARCHAR" property="version" />
@@ -30,8 +27,7 @@
         merchant_id, order_no,
       opt, opt_network, opt_by_name,
       next_station, express_name, rider,
-      rider_phone, driver, signer, phone,
-      receive_name, address, created_time,
+      rider_phone, driver, signer, created_time,
       updated_time, version
     </sql>
 
@@ -45,8 +41,7 @@
         (#{merchantId,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR},
         #{opt,jdbcType=VARCHAR}, #{optNetwork,jdbcType=VARCHAR}, #{optByName,jdbcType=VARCHAR},
         #{nextStation,jdbcType=VARCHAR}, #{expressName,jdbcType=VARCHAR}, #{rider,jdbcType=VARCHAR},
-        #{riderPhone,jdbcType=VARCHAR}, #{driver,jdbcType=VARCHAR}, #{signer,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
-        #{receiveName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{createdTime,jdbcType=INTEGER},
+        #{riderPhone,jdbcType=VARCHAR}, #{driver,jdbcType=VARCHAR}, #{signer,jdbcType=VARCHAR}, #{createdTime,jdbcType=INTEGER},
         #{updatedTime,jdbcType=INTEGER}, UUID())
     </insert>
 

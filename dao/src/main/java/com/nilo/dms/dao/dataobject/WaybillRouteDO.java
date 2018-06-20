@@ -25,11 +25,6 @@ public class WaybillRouteDO {
 
     private String signer;
 
-    private String phone;
-
-    private String receiveName;
-
-    private String address;
 
     private Integer createdTime;
 
@@ -125,29 +120,6 @@ public class WaybillRouteDO {
         this.driver = driver == null ? null : driver.trim();
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
-    }
-
-    public String getReceiveName() {
-        return receiveName;
-    }
-
-    public void setReceiveName(String receiveName) {
-        this.receiveName = receiveName == null ? null : receiveName.trim();
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
-    }
 
     public Integer getCreatedTime() {
         return createdTime;
