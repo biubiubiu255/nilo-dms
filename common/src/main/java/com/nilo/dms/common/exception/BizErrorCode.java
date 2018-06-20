@@ -116,6 +116,7 @@ public enum BizErrorCode implements ErrorCode {
     NOT_FOUND_NEXTWORK("Do not found nextWork, please contact administrator.", "100080"),
     NOT_BECAME_DELAY("The order does not exist or has been signed, and no further delay is allowed", "100081"),
 
+    ADDRSS_NOT_RIGHT("Waybill Number {0} address is not the same others", "100082"),
     ;
 
     private final String description;
