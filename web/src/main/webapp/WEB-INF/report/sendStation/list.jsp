@@ -216,11 +216,11 @@
 
             function getParam(dateType, isPojo){
 
-                //console.log($("#fromCreatedTime").val(), $("#toCreatedTime").val(), "aa");
+                console.log($("#fromCreatedTime").val(), $("#toCreatedTime").val(), "aa");
                 //alert("sd");
                 if (dateType=="" || dateType=='undefind') dateType=0;
-                sTime_creat = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime()/1000;
-                eTime_creat = new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000).getTime()/1000;
+                var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : new Date($("#fromCreatedTime").val()+'00:00:00').getTime()/1000;
+                var eTime_creat = $("#toCreatedTime").val()==""   ? "" : new Date($("#toCreatedTime").val()+'00:00:00').getTime()/1000;
                 console.log(sTime_creat, eTime_creat);
 
 
