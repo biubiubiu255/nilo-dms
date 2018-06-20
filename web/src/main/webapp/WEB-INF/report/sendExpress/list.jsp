@@ -96,27 +96,7 @@
 
 
     <div id="me_tab">
-        <table class="layui-table"
-               lay-data="{ url:'/report/sendExpress/list.html?exportType=2',method:'post', page:true,limit:10, id:'${id0}'}"
-               lay-filter="demo">
-            <thead>
-            <tr>
-                <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
-                <th lay-data="{field:'handleNo', width:100}">HandleNo</th>
-                <th lay-data="{field: 'orderType', width:100}">OrderType</th>
-                <th lay-data="{field:'weight', width:100}">Weight</th>
-                <th lay-data="{field:'receiveName', width:150}">ReceiveName</th>
-                <th lay-data="{field:'expressName', width:130}">ExpressName</th>
-                <th lay-data="{field:'driver', width:130}">Driver</th>
-                <th lay-data="{field: 'handleName', width:130}">HandleName</th>
-
-                <th lay-data="{field: 'referenceNo', width:170}">ReferenceNo</th>
-                <th lay-data="{field: 'statusDesc', width:130}">Status</th>
-                <th lay-data="{width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}">CreatedTime</th>
-                <th lay-data="{field:'phone', width:150}">Phone</th>
-                <th lay-data="{field:'address', width:200}">Address</th>
-            </tr>
-            </thead>
+        <table class="layui-table" lay-filter="demo" id="${id0}">
         </table>
     </div>
 
@@ -146,11 +126,31 @@
             });
 
             var initLoading = true;
-            var table = layui.table;
+            var tableMe = null;
             layui.use('table', function () {
-                table = layui.table;
-                table.on('tool(demo)');
-                reloadTable();
+               var tab = layui.table;
+                tableMe = tab.render({
+                    elem: '#${id0}'
+                    ,url: '/report/sendExpress/list.html?exportType=2' //数据接口
+                    ,page: true //开启分页
+                    ,limit:10
+                    ,cols: [[ //表头
+                        {field: 'orderNo', title: 'Waybill No', width:200, fixed: 'left'}
+                        ,{field: 'handleNo', title: 'HandleNo', width:100}
+                        ,{field: 'orderType', title: 'OrderType', width:100}
+                        ,{field: 'weight', title: 'Weight', width:100}
+                        ,{field: 'receiveName', title: 'Name', width:100}
+                        ,{field: 'driver', title: 'Driver', width:130}
+                        ,{field: 'expressCode', title: 'ExpressName', width:150}
+                        ,{field: 'nextStation', title: 'NextStation', width:150}
+                        ,{field: 'handleName', title: 'HandleName', width:130}
+                        ,{field: 'referenceNo', title: 'ReferenceNo', width:170}
+                        ,{field: 'statusDesc', title: 'Status', width:130}
+                        ,{field: '', title: 'CreatedTime', width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}
+                        ,{field: 'phone', title: 'Phone', width:150}
+                        ,{field: 'address', title: 'Address', width:200}
+                    ]]
+                });
             });
 
             //reloadTable();
@@ -171,7 +171,7 @@
                 }else {
                     url = "/report/sendExpress/list.html?" + param;
                 }
-                console.log(url);
+                //console.log(url);
                 window.location.href = url;
 
             });
@@ -180,7 +180,7 @@
                 if (showPattern==0){
                     $("#me_tab").show();
                     $("#ifm").hide();
-                    table.reload("${id0}", {
+                    tableMe.reload({
                         where: getParam(2, true)
                     });
                 }else if(showPattern==1){
@@ -193,7 +193,7 @@
 
             };
 
-            reloadTable();
+            //reloadTable();
 
             function getParam(dateType, isPojo){
                 if (dateType=="" || dateType=='undefind') dateType=0;

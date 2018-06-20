@@ -144,12 +144,12 @@
             });
 
             var initLoading = true;
-            var table = null;
+            var tableMe = null;
             layui.use('table', function () {
-                table = layui.table;
-                table.render({
+                var tab = layui.table;
+                tableMe = tab.render({
                     elem: '#${id0}'
-                    ,url: '/report/sendStation/list.html' //数据接口
+                    ,url: '/report/sendStation/list.html?exportType=2' //数据接口
                     ,page: true //开启分页
                     ,limit:10
                     ,cols: [[ //表头
@@ -165,12 +165,12 @@
                        ,{field: 'parentNo', title: 'ParentNo', width:130}
                        ,{field: 'referenceNo', title: 'ReferenceNo', width:170}
                        ,{field: 'statusDesc', title: 'Status', width:130}
-                       ,{field: 'referenceNo', title: 'ReferenceNo', width:170}
-                       ,{field: 'referenceNo', title: 'CreatedTime', width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}
+                       ,{field: '', title: 'CreatedTime', width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}
                        ,{field: 'phone', title: 'Phone', width:150}
                        ,{field: 'address', title: 'Address', width:200}
                     ]]
                     ,where: getParam(2, true)
+
                 });
 
                 //table.on('tool(demo)');
@@ -204,7 +204,7 @@
                 if (showPattern==0){
                     $("#me_tab").show();
                     $("#ifm").hide();
-                    table.reload("${id0}", {
+                    tableMe.reload({
                         where: getParam(2, true)
                     });
                 }else if(showPattern==1){
@@ -220,17 +220,21 @@
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : Date.parse(new Date($("#fromCreatedTime").val()))/1000;
                 var eTime_creat = $("#toCreatedTime").val()==""   ? "" : Date.parse(new Date($("#toCreatedTime").val()))/1000+86400;
+                console.log(sTime_creat, eTime_creat);
+
                 if(initLoading==true){
                     sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
                     eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
                     initLoading = false;
                 }
+                //console.log(sTime_creat, eTime_creat);
+
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
                     driver: $("input[name='driver']").val(),
-                    //fromCreatedTime: sTime_creat,
-                    //toCreatedTime: eTime_creat,
+                    fromCreatedTime: sTime_creat,
+                    toCreatedTime: eTime_creat,
                     handleNo: $("input[name='handleNo']").val(),
                     orderType: $("select[name='orderType']").val(),
                     expressCode: $("select[name='expressCode']").val(),
@@ -240,6 +244,7 @@
                     status: $("select[name='status']").val()
                 };
 
+                //console.log(param);
                 if (isPojo===true) return param;
                 else return jQuery.param( param );
 
