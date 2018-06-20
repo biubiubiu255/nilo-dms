@@ -217,6 +217,8 @@
             };
 
             function getParam(dateType, isPojo){
+
+                console.log($("#fromCreatedTime"), $("#toCreatedTime"));
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : Date.parse(new Date($("#fromCreatedTime").val()))/1000;
                 var eTime_creat = $("#toCreatedTime").val()==""   ? "" : Date.parse(new Date($("#toCreatedTime").val()))/1000+86400;
@@ -227,7 +229,7 @@
                     eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
                     initLoading = false;
                 }
-                //console.log(sTime_creat, eTime_creat);
+                console.log(sTime_creat, eTime_creat);
 
 
                 var param = {
