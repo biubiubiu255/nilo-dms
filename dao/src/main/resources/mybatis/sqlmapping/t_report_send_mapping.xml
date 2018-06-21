@@ -174,7 +174,7 @@
         WHERE
         a.merchant_id = #{merchantId}
         AND c.is_package = "1"
-        
+
         ORDER BY
         a.created_time DESC
         )
@@ -292,7 +292,7 @@
         a.merchant_id = #{merchantId}
         AND b. STATUS = 1
         AND c.is_package = "1"
-        
+
         ORDER BY
         a.created_time DESC
         )
