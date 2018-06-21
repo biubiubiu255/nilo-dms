@@ -166,7 +166,7 @@
 <script>
     $(function () {
         getReport();
-        //setInterval(getReport, 2*60*1000);
+        setInterval(getReport, 2*60*1000);
     });
 
     function getReport() {
