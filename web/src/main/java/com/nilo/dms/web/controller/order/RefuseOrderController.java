@@ -96,4 +96,10 @@ public class RefuseOrderController extends BaseController {
         return toJsonTrueMsg();
     }
 
+    public static void main(String[] args) {
+        Instant instant = Instant.ofEpochMilli(new Long(1529485482 + "000"));
+        LocalDateTime locaTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        String res = locaTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        System.out.println("本次测试 = " + res);
+    }
 }
