@@ -95,25 +95,4 @@ public class RefuseOrderController extends BaseController {
 
         return toJsonTrueMsg();
     }
-
-/*    public static void main(String[] args) {
-        LocalDateTime now = LocalDateTime.now();
-        String format = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        System.out.println("本次测试 = " + format);
-
-        System.out.println("本次测试 = " + ZoneId.systemDefault().getId());
-        ZoneId america = ZoneId.of("America/New_York");
-
-        System.out.println("本次测试 = " + america);
-
-
-        TimeZone aDefault = TimeZone.getDefault();
-        //System.out.println("本次测试 = " + aDefault);
-        //ZoneOffset.of(ZoneId.systemDefault().getId())
-        Instant instant = Instant.ofEpochMilli(1529485482000L);
-
-        LocalDateTime time3 = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        //LocalDateTime time2 =LocalDateTime.ofEpochSecond(1529485482,0,ZoneOffset.of(ZoneId.systemDefault().getId()));
-        System.out.println("本次测试 = " + time3.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-    }*/
 }
