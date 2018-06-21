@@ -83,9 +83,6 @@
         <jsp:useBean id="dateValue" class="java.util.Date"/>
         <c:forEach items="${orderRouteList}" var="route" varStatus="status">
             <span>
-<%--            <jsp:setProperty name="dateValue" property="time" value="${route.createdTime*1000 }"/>
-            <fmt:setTimeZone value="Locale.ENGLISH"/>
-            <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/>--%>
             <lp:formatTime time="${route.createdTime}" pattern="yyyy-MM-dd"/>
             【${route.opt}】${route.optNetwork}(${route.optByName})
             <c:if test="${route.nextStation!=null}">，[NextNetwork] ${route.nextStation}</c:if>
