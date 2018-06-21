@@ -9,8 +9,7 @@
         <div class="layui-col-md12">
             <h2 class="page-header">
                 <i class="fa fa-shopping-bag"></i> OrderNo:${deliveryOrder.orderNo}
-                Date: <lp:formatTime time="${deliveryOrder.createdTime }"
-                                                               pattern="yyyy-MM-dd"/>
+                Date: <lp:formatTime time="${deliveryOrder.createdTime }" pattern="yyyy-MM-dd"/>
             </h2>
         </div>
         <!-- /.col -->
@@ -84,8 +83,10 @@
         <jsp:useBean id="dateValue" class="java.util.Date"/>
         <c:forEach items="${orderRouteList}" var="route" varStatus="status">
             <span>
-            <jsp:setProperty name="dateValue" property="time" value="${route.createdTime*1000 }"/>
-            <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/>
+<%--            <jsp:setProperty name="dateValue" property="time" value="${route.createdTime*1000 }"/>
+            <fmt:setTimeZone value="Locale.ENGLISH"/>
+            <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/>--%>
+            <lp:formatTime time="${route.createdTime}" pattern="yyyy-MM-dd"/>
             【${route.opt}】${route.optNetwork}(${route.optByName})
             <c:if test="${route.nextStation!=null}">，[NextNetwork] ${route.nextStation}</c:if>
             <c:if test="${route.expressName!=null}">，[ExpressName] ${route.expressName}</c:if>

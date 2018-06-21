@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -77,9 +80,22 @@
     };
 
 
-	function getResult(d) {
+    function RiQi(sj)
+    {
+        var now = new Date(sj*1000);
+        var   year=now.getFullYear();
+        var   month=now.getMonth()+1;
+        var   date=now.getDate();
+        var   hour=now.getHours();
+        var   minute=now.getMinutes();
+        var   second=now.getSeconds();
+        return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;
 
-		var dataStr = GetCurrentTime('YYYY-MM-DD hh:mm:ss', d.optTime);
+    }
+
+	function getResult(d) {
+        //console.log(d.createdTime);
+		var dataStr = GetCurrentTime('YYYY-MM-DD hh:mm:ss', d.createdTime);
 		var point = '';
 		console.log(d);
 
