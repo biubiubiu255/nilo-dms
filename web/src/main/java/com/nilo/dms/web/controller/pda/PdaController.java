@@ -493,12 +493,18 @@ public class PdaController extends BaseController {
 		if(waybillnosBill!=null&&!waybillnosBill.equals("")) {
 			orderNos = Arrays.asList(waybillnosBill.split(","));
 			// 验证
+			String address = "";
 			for (String waybillNo : orderNos) {
 				Waybill order = null;
 				try {
 					order = waybillService.queryByOrderNo(merchantId, waybillNo);
 					if (order == null)
 						throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, waybillNo);
+					if(!address.equals("")&&!address.equals(order.getReceiverInfo().getReceiverAddress())) {
+						throw new DMSException(BizErrorCode.ADDRSS_NOT_RIGHT,waybillNo);
+					}
+					
+					address = order.getReceiverInfo().getReceiverAddress();
 				} catch (Exception e) {
 					log.error("loadingScan failed. orderNo:{}", waybillNo, e);
 					return toJsonErrorMsg(e.getMessage());

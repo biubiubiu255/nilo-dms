@@ -86,21 +86,12 @@
             <span>
             <jsp:setProperty name="dateValue" property="time" value="${route.createdTime*1000 }"/>
             <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/>
-            【${route.opt}】 ${route.optByName}
-            <c:choose>
-                <c:when test="${route.opt=='arrive_scan'}">
-                    【Netwrork】：${route.networkDesc}
-                </c:when>
-                <c:when test="${route.opt=='send' || route.opt=='delivery'}">
-                    <c:if test="${route.nextNetwork!=null}">，【NextNetwork】：${route.nextNetwork}</c:if>
-                    <c:if test="${route.expressName!=null}">，【ExpressName】：${route.expressName}</c:if>
-                    <c:if test="${route.rider!=null}">，【Rider】：${route.rider}</c:if>
-                    <c:if test="${route.phone!=null}">，【Phone】：${route.phone}</c:if>
-                </c:when>
-                <c:when test="${route.opt=='receive'}">
-                    ，Signer：${route.signer}
-                </c:when>
-            </c:choose>
+            【${route.opt}】${route.optNetwork}(${route.optByName})
+            <c:if test="${route.nextStation!=null}">，[NextNetwork] ${route.nextStation}</c:if>
+            <c:if test="${route.expressName!=null}">，[ExpressName] ${route.expressName}</c:if>
+            <c:if test="${route.driver!=null}">，[Driver] ${route.driver}</c:if>
+            <c:if test="${route.rider!=null}">，[Rider] ${route.rider}</c:if>
+            <c:if test="${route.riderPhone!=null}">，[RiderPhone] ${route.riderPhone}</c:if>
             </span><br>
         </c:forEach>
     </div>

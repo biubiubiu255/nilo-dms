@@ -260,7 +260,7 @@
                         var index = parent.layer.open({
                             type: 1,
                             content: data,
-                            area: ['800px'],
+                            area: ['1000px'],
                             offset: ['100px', '250px'],
                             maxmin: true
                         });

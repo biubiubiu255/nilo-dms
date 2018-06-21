@@ -49,7 +49,7 @@
     <select id="queryByNo" resultMap="handleSign" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_handle_sign where merchant_id = #{merchantId} and order_no = #{orderNo} limit 1
+        FROM t_handle_sign where merchant_id = #{merchantId} and order_no = #{orderNo} order by created_time desc limit 1
     </select>
 
 </mapper>
