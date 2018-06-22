@@ -12,7 +12,7 @@
           class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
             <list>
-                <value>file:${user.home}/ug-platform-dms.properties</value>
+                <value>file:${user.home}/platform-dms.properties</value>
                 <!--要是有多个配置文件，只需在这里继续添加即可 -->
             </list>
         </property>

@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Created by admin on 2017/10/18.
  */
-@ConsumerDesc(topic = "ug_data_bus_notify", group = "ug_notify_group", filterExpression = "notify")
+@ConsumerDesc(topic = "data_bus_notify", group = "notify_group", filterExpression = "notify")
 public class NotifyDataBusConsumer extends AbstractMQConsumer {
 
     private static Logger logger = LoggerFactory.getLogger(NotifyDataBusConsumer.class);

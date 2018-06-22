@@ -7,7 +7,7 @@ import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 /**
  * Created by admin on 2017/11/18.
  */
-@ProducerDesc(group = "ug_create_order_group",topic = "ug_create_order",tags = "create")
+@ProducerDesc(group = "create_order_group",topic = "create_order",tags = "create")
 public class CreateDeliveryOrderProducer extends AbstractMQProducer {
 
     @Override

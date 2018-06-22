@@ -7,7 +7,7 @@ import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 /**
  * Created by admin on 2017/11/18.
  */
-@ProducerDesc(group = "ug_route_group",topic = "ug_delivery_order_route",tags = "route")
+@ProducerDesc(group = "route_group",topic = "delivery_order_route",tags = "route")
 public class RouteProducer extends AbstractMQProducer {
     @Override
     protected void beforeSend(Object obj) {

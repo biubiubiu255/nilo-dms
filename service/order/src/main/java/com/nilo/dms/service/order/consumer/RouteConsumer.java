@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by admin on 2017/10/18.
  */
-@ConsumerDesc(topic = "ug_delivery_order_route", group = "ug_route_group", filterExpression = "route")
+@ConsumerDesc(topic = "delivery_order_route", group = "route_group", filterExpression = "route")
 public class RouteConsumer extends AbstractMQConsumer {
 
     private static Logger logger = LoggerFactory.getLogger(RouteConsumer.class);

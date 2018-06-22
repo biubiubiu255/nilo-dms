@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Created by admin on 2017/10/18.
  */
-@ConsumerDesc(topic = "ug_sms", group = "ug_phone_message_group", filterExpression = "phone")
+@ConsumerDesc(topic = "sms", group = "phone_message_group", filterExpression = "phone")
 public class PhoneMessageConsumer extends AbstractMQConsumer {
 
     private static Logger logger = LoggerFactory.getLogger(PhoneMessageConsumer.class);
