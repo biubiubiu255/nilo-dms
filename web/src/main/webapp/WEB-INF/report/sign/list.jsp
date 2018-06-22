@@ -50,9 +50,8 @@
     <div class="layui-form layui-row">
 
 
-
         <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">NextStation:</label>
+            <label class="layui-form-label">Network:</label>
             <div class="layui-inline">
                 <select lay-filter="nextStationCodeLay" name="nextStationCode">
                     <option value="">choose or search....</option>
@@ -62,6 +61,7 @@
                 </select>
             </div>
         </div>
+<%--
 
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label" style="width:120px">Outsource：</label>
@@ -75,6 +75,7 @@
                 </select>
             </div>
         </div>
+--%>
 
 
 
@@ -88,28 +89,8 @@
     </div>
     <hr>
 
-    <div id="me_tab">
-        <table class="layui-table"
-               lay-data="{ url:'/report/sign/list.html?exportType=2',method:'post', page:true,limit:10, id:'${id0}'}"
-               lay-filter="demo">
-            <thead>
-            <tr>
-                <th lay-data="{fixed: 'left',field:'orderNo', width:200}">Waybill No</th>
-                <th lay-data="{field:'referenceNo', width:170}">ReferenceNo</th>
-                <th lay-data="{field:'networkCodeDesc', width:150}">Network</th>
-                <th lay-data="{field:'rider', width:100}">Rider</th>
-                <th lay-data="{field:'weight', width:100}">Weight</th>
-                <th lay-data="{field:'statusDesc', width:150}">Status</th>
-                <th lay-data="{field:'handleBy', width:150}">HandleName</th>
-                <th lay-data="{width:200, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}">HandleTime</th>
-                <th lay-data="{field:'remark', width:170}">Remark</th>
-                <th lay-data="{field:'rName', width:150}">Signer</th>
-                <th lay-data="{field:'sName', width:150}">Sender</th>
-                <th lay-data="{field:'address', width:300}">Address</th>
-
-            </tr>
-            </thead>
-        </table>
+    <div id="me_tab" style="margin-top: -20px;">
+        <table class="layui-table" lay-filter="demo" id="${id0}"></table>
     </div>
 
     <iframe scrolling="no" frameborder="0" src="/report/sign/list.html?exportType=0" id="ifm" width="100%" height="100%" style="padding: 0px; display: none;"></iframe>
@@ -120,28 +101,51 @@
         $(function () {
 
             showPattern = 0;
+            var tableMe = null;
 
-            layui.use(['element', 'form', 'laydate'], function () {
+            layui.use(['laydate','table'], function () {
                 var layDate = layui.laydate;
                 layDate.render({
                     elem: '#fromCreatedTime'
                     , lang: 'en'
+                    , isInitValue: true
                     , value: new Date()
                 });
                 layDate.render({
                     elem: '#toCreatedTime'
                     , lang: 'en'
+                    , isInitValue: true
+                    , value: new Date(new Date().getTime()+24*60*60*1000)
+                });
+
+                var tab = layui.table;
+                tableMe = tab.render({
+                    elem: '#${id0}'
+                    ,url: '/report/sign/list.html?exportType=2' //数据接口
+                    ,page: true //开启分页
+                    ,limit:10
+                    ,method: 'post'
+                    ,cols: [[ //表头
+                        {field: 'orderNo', title: 'Waybill No', width:200, fixed: 'left'}
+                        ,{field: 'referenceNo', title: 'ReferenceNo', width:170}
+                        ,{field: 'networkCodeDesc', title: 'Network', width:150}
+                        ,{field: 'rider', title: 'Rider', width:100}
+                        //,{field: 'outsource', title: 'Outsource', width:130}
+                        ,{field: 'weight', title: 'Weight', width:100}
+                        ,{field: 'statusDesc', title: 'Status', width:150}
+                        ,{field: 'handleBy', title: 'HandleName', width:150}
+                        ,{field: '', title: 'HandleTime', width:200, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}
+                        ,{field: 'remark', title: 'Remark', width:170}
+                        ,{field: 'rName', title: 'Signer', width:150}
+                        ,{field: 'sName', title: 'Sender', width:150}
+                        ,{field: 'address', title: 'Address', width:300}
+                    ]]
+                    ,where: getParam(2, true)
 
                 });
 
-            });
 
-            var initLoading = true;
-            var table = layui.table;
-            layui.use('table', function () {
-                table = layui.table;
-                table.on('tool(demo)');
-                reloadTable();
+                //reloadTable();
             });
 
 
@@ -168,7 +172,7 @@
 
                     $("#me_tab").show();
                     $("#ifm").hide();
-                    table.reload("${id0}", {
+                    tableMe.reload({
                         where: getParam(2, true)
                     });
                 }else if(showPattern==1){
@@ -181,17 +185,11 @@
 
             };
 
-            reloadTable();
-
             function getParam(dateType, isPojo){
+
                 if (dateType=="" || dateType=='undefind') dateType=0;
-                var sTime_creat = $("input[name='createdTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_s']").val()))/1000;
-                var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
-                if(initLoading==true){
-                    sTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()))/1000;
-                    eTime_creat = Date.parse(new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1))/1000;
-                    initLoading = false;
-                }
+                var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : new Date($("#fromCreatedTime").val()+' 00:00:00').getTime()/1000;
+                var eTime_creat = $("#toCreatedTime").val()==""   ? "" : new Date($("#toCreatedTime").val()+' 00:00:00').getTime()/1000;
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
@@ -199,7 +197,8 @@
                     toHandledTime: eTime_creat,
                     exportType: dateType,
                     riderId: $("select[name='rider']").val(),
-                    networkCode: $("select[name='nextStationCode']").val()
+                    networkCode: $("select[name='nextStationCode']").val(),
+                    //outsource: outsource
                 };
                 if (isPojo===true) return param;
                 else return jQuery.param( param );

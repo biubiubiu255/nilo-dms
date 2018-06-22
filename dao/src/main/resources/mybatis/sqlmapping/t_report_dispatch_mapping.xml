@@ -52,6 +52,7 @@
 
         SELECT
         a.*, CONCAT_WS('-',c.staff_id, c.real_name) AS rider,
+        b.rider as rider_id,
         c.outsource,
         d. NAME AS handle_name,
         e.order_type,
@@ -86,8 +87,8 @@
         <if test="country !=null and country !='' ">
             and e.country = #{country}
         </if>
-        <if test="rider !=null and rider !='' ">
-            and c.user_id = #{rider}
+        <if test="riderId !=null and riderId !='' ">
+            and b.rider = #{riderId}
         </if>
         <if test="outsource !=null and outsource !='' ">
             and c.outsource = #{outsource}
@@ -147,8 +148,8 @@
         <if test="country !=null and country !='' ">
             and e.country = #{country}
         </if>
-        <if test="rider !=null and rider !='' ">
-            and c.user_id = #{rider}
+        <if test="riderId !=null and riderId !='' ">
+            and b.rider = #{riderId}
         </if>
         <if test="outsource !=null and outsource !='' ">
             and c.outsource = #{outsource}

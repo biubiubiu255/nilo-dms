@@ -146,7 +146,6 @@ public class MobileHomeController extends BaseController {
         Calendar c = Calendar.getInstance();
 
         //取昨天的数据，参数：1.当前快递员id 2.要查询的日期，例如：20170503
-        c.add(Calendar.DATE, -1);
         String dateFormat = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
         map.put("day", deliverAgendaDao.queryReport(principal.getUserId(), dateFormat));
 

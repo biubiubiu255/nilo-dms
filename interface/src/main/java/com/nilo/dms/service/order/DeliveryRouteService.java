@@ -1,8 +1,10 @@
 package com.nilo.dms.service.order;
 
 
+import com.nilo.dms.dao.dataobject.WaybillRouteDO;
 import com.nilo.dms.dto.order.DeliveryRoute;
 import com.nilo.dms.dto.order.OrderOptRequest;
+import com.nilo.dms.dto.order.Waybill;
 
 import java.util.List;
 
@@ -11,7 +13,7 @@ import java.util.List;
  */
 public interface DeliveryRouteService {
 
-    List<DeliveryRoute> queryRoute(String merchantId, String orderNo);
+    List<WaybillRouteDO> queryRoute(String merchantId, String orderNo);
 
     void addRoute(OrderOptRequest request);
 

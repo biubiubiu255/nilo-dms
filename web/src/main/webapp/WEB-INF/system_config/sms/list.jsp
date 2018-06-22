@@ -9,36 +9,17 @@
 <body>
 <div class="box-body">
 
-    <div class="layui-form layui-row">
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">Message Type:</label>
-            <div class="layui-inline">
-                <lp:enumTag selectId="smsType" selectName="smsType" className="OptTypeEnum"
-                            code="" disabled="false" />            </div>
-        </div>
-        <div class="layui-col-md1">
-            <shiro:hasPermission name="800055">
-                <button class="layui-btn layui-btn-normal search">Search</button>
-            </shiro:hasPermission>
-        </div>
-    </div>
-    <hr>
-    <div class="layui-row">
-        <div class="layui-col-md1">
-            <shiro:hasPermission name="800051">
-                <button class="layui-btn layui-btn-normal add">Add</button>
-            </shiro:hasPermission>
-        </div>
-    </div>
     <table class="layui-table"
            lay-data="{ url:'/systemConfig/sms/getList.html',method:'post', page:true,limit:10, id:'${id0}'}"
            lay-filter="demo">
         <thead>
         <tr>
-            <th lay-data="{field:'smsType', width:150}">Message Type</th>
-            <th lay-data="{field:'content', width:300}">Content</th>
-            <th lay-data="{field:'remark', width:200}">Remark</th>
-            <th lay-data="{field:'status', width:200}">Status</th>
+            <th lay-data="{field:'status', width:200,templet:'#statusTpl'}">是否启用</th>
+            <th lay-data="{field:'smsType', width:200}">Message Type</th>
+            <th lay-data="{field:'name', width:200}">Name</th>
+            <th lay-data="{field:'content', width:400}">Content</th>
+            <th lay-data="{field:'param', width:200}">Param</th>
+
             <th lay-data="{title:'Opt',fixed: 'right', width:200, align:'center', toolbar: '#barDemo'}"></th>
         </tr>
         </thead>
@@ -49,18 +30,16 @@
         <shiro:hasPermission name="800052">
             <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="edit">Edit</a>
         </shiro:hasPermission>
-        <shiro:hasPermission name="800054">
-            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="active">Active</a>
-        </shiro:hasPermission>
-        <shiro:hasPermission name="800053">
-            <a class="layui-btn layui-btn-normal layui-btn-mini" lay-event="delete">Delete</a>
-        </shiro:hasPermission>
     </script>
+    <!-- 表格状态列 -->
+    <script type="text/html" id="statusTpl">
+        {{ d.status== 1?'是' : '否' }}
+    </script>
+
 </div>
 
 <%@ include file="../../common/footer.jsp" %>
 <script type="text/javascript">
-
 
     $(function () {
 
@@ -70,13 +49,7 @@
             table.on('tool(demo)', function (obj) {
                 var data = obj.data;
                 if (obj.event === 'edit') {
-                    editConfig(data);
-                }
-                if (obj.event === 'delete') {
-                    activeConfig(data.optType);
-                }
-                if (obj.event === 'active') {
-                    editConfig(data.optType);
+                    editConfig(data.smsType);
                 }
             });
 
@@ -95,41 +68,15 @@
 
         });
 
-        $(".add").on("click", function () {
-            addConfig();
-        })
 
-        function addConfig() {
-
-            var title = "Add";
-            var url = "/systemConfig/sms/addPage.html";
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: {},
-                dataType: 'text',
-                success: function (data) {
-                    parent.layer.open({
-                        type: 1,
-                        title: title,
-                        area: ['800px'],
-                        content: data,
-                        end: function () {
-                            reloadCurrentPage();
-                        }
-                    });
-                }
-            });
-        }
-
-        function editConfig(data) {
+        function editConfig(msgType) {
 
             var title = "Edit";
             var url = "/systemConfig/sms/editPage.html";
             $.ajax({
                 url: url,
                 type: 'GET',
-                data: {msgType: data.msgType},
+                data: {msgType: msgType},
                 dataType: 'text',
                 success: function (data) {
                     parent.layer.open({
@@ -145,58 +92,6 @@
             });
         }
 
-
-        function deleteConfig(data) {
-            //询问框
-            layer.confirm('Confirm to Delete?', {
-                btn: ['OK', 'Cancel']
-                //按钮
-            }, function () {
-                $.ajax({
-                    type: "POST",
-                    url: "/systemConfig/sms/delete.html",
-                    dataType: "json",
-                    data: {
-                        optType: data,
-                    },
-                    success: function (data) {
-                        if (data.result) {
-                            layer.msg('SUCCESS', {icon: 1, time: 1000}, function () {
-                                reloadCurrentPage();
-                            });
-                        } else {
-                            layer.msg(data.msg, {icon: 2, time: 2000});
-                        }
-                    }
-                });
-            });
-        }
-
-        function activeConfig(data) {
-            //询问框
-            layer.confirm('Confirm to Active?', {
-                btn: ['OK', 'Cancel']
-                //按钮
-            }, function () {
-                $.ajax({
-                    type: "POST",
-                    url: "/systemConfig/sms/active.html",
-                    dataType: "json",
-                    data: {
-                        optType: data,
-                    },
-                    success: function (data) {
-                        if (data.result) {
-                            layer.msg('SUCCESS', {icon: 1, time: 1000}, function () {
-                                reloadCurrentPage();
-                            });
-                        } else {
-                            layer.msg(data.msg, {icon: 2, time: 2000});
-                        }
-                    }
-                });
-            });
-        }
     });
 
 

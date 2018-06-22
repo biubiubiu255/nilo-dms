@@ -25,6 +25,7 @@ import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.DeliveryRouteService;
 import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.system.SendMessageService;
 import com.nilo.dms.service.system.SystemConfig;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,7 @@ public class SendThirdServiceImpl implements SendThirdService {
     @Autowired
     private WaybillService waybillService;
     @Autowired
-    @Qualifier("phoneSMSProducer")
-    private AbstractMQProducer phoneSMSProducer;
+    private SendMessageService sendMessageService;
     @Autowired
     private HandleRiderDao handleRiderDao;
     @Autowired
@@ -66,7 +66,7 @@ public class SendThirdServiceImpl implements SendThirdService {
         if (handleNo == null) {
             throw new DMSException(BizErrorCode.HandleNO_NOT_EXIST);
         }
-        if(smallOrders==null || smallOrders.length==0){
+        if (smallOrders == null || smallOrders.length == 0) {
             return;
         }
         List<Waybill> list = waybillService.queryByOrderNos(merchantId.toString(), Arrays.asList(smallOrders));
@@ -109,10 +109,20 @@ public class SendThirdServiceImpl implements SendThirdService {
         Principal principal = SessionLocal.getPrincipal();
 
         sendThirdHead.setMerchantId(Long.parseLong(principal.getMerchantId()));
-        sendThirdHead.setHandleNo(SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode()));
+        sendThirdHead.setHandleNo(getHandleNo(merchantId));
 
         insertBig(sendThirdHead);
         insertSmallAll(merchantId, sendThirdHead.getHandleNo(), smallOrders);
+    }
+
+    private String getHandleNo(Long merchantId) {
+
+        String handleNo = SystemConfig.getNextSerialNo(merchantId.toString(), SerialTypeEnum.LOADING_NO.getCode());
+        SendThirdHead head = handleThirdDao.queryBigByHandleNo(merchantId, handleNo);
+        if (head != null) {
+            handleNo = getHandleNo(merchantId);
+        }
+        return handleNo;
     }
 
     //根据大包号，获取子包list，并且自动渲染driver、操作人名字
@@ -218,34 +228,14 @@ public class SendThirdServiceImpl implements SendThirdService {
         for (SendThirdDetail d : detailsList) {
             //发送短信
             WaybillDO w = waybillDao.queryByOrderNo(Long.parseLong(principal.getMerchantId()), d.getOrderNo());
-            if (StringUtil.equals(w.getOrderType(), "PG")) {
-                List<WaybillDO> smallWaybill = waybillDao.queryByPackageNo(Long.parseLong(principal.getMerchantId()), w.getOrderNo());
-                for (WaybillDO s : smallWaybill) {
-                    sendSMS(s);
+            DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(w.getMerchantId(), w.getOrderNo());
+            if (!StringUtil.equals(w.getOrderType(), "PG")) {
+                if (StringUtil.equals(w.getChannel(), "1")) {
+                    sendMessageService.sendMessage(w.getOrderNo(), SendMessageService.THIRD_SELF_COLLECT, r.getContactNumber(), w.getReferenceNo(), head.getThirdExpressCode(), w.getStop(), r.getAddress());
+                } else {
+                    sendMessageService.sendMessage(w.getOrderNo(), SendMessageService.THIRD_DOORSTEP, r.getContactNumber(), w.getReferenceNo(), head.getThirdExpressCode());
                 }
-            } else {
-                sendSMS(w);
             }
-        }
-    }
-
-    private void sendSMS(WaybillDO w) {
-        DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(w.getMerchantId(), w.getOrderNo());
-        //送货上门
-        String content = "";
-        if (StringUtil.equals(w.getChannel(), "1")) {
-            content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today, the next station is " + w.getStop() + ",and you should pick up it in 1-5 business days at " + r.getAddress() + ". Any question kindly contact us through Social Media and Live Chat.";
-        } else {
-            content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today, the next station is " + w.getStop() + ". Your total order amount is Ksh.0 . The courier service provider will contact you before delivery. Please keep your phone on. Thank you.";
-        }
-        PhoneMessage message = new PhoneMessage();
-        message.setMerchantId("" + w.getMerchantId());
-        message.setContent(content);
-        message.setPhoneNum(r.getContactNumber());
-        message.setMsgType(OptTypeEnum.DELIVERY.getCode());
-        try {
-            phoneSMSProducer.sendMessage(message);
-        } catch (Exception e) {
         }
     }
 

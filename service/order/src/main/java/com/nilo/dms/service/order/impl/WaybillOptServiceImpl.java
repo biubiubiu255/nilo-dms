@@ -1,6 +1,7 @@
 package com.nilo.dms.service.order.impl;
 
 import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.enums.AbnormalTypeEnum;
 import com.nilo.dms.common.enums.DelayStatusEnum;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 import com.nilo.dms.common.enums.OptTypeEnum;
@@ -17,16 +18,10 @@ import com.nilo.dms.dto.common.UserInfo;
 import com.nilo.dms.dto.handle.HandleAllocate;
 import com.nilo.dms.dto.handle.HandleDelay;
 import com.nilo.dms.dto.handle.HandleRefuse;
-import com.nilo.dms.dto.order.DelayParam;
-import com.nilo.dms.dto.order.OrderOptRequest;
-import com.nilo.dms.dto.order.Waybill;
-import com.nilo.dms.dto.order.WaybillHeader;
+import com.nilo.dms.dto.order.*;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.AbnormalOrderService;
-import com.nilo.dms.service.order.AbstractOrderOpt;
-import com.nilo.dms.service.order.WaybillOptService;
-import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.order.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,18 +50,12 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
     private HandleRefuseDao handleRefuseDao;
     @Autowired
     private HandleSignDao handleSignDao;
+    @Autowired
+    private DeliveryRouteService deliveryRouteService;
 
+    @Transactional
     @Override
     public void sign(String orderNo, String signer, String remark) {
-
-        OrderOptRequest optRequest = new OrderOptRequest();
-        optRequest.setOptType(OptTypeEnum.SIGN);
-        optRequest.setRemark(remark);
-        List<String> orderNoList = new ArrayList<>();
-        orderNoList.add(orderNo);
-        optRequest.setOrderNo(orderNoList);
-        waybillService.handleOpt(optRequest);
-
         //写入 t_handler_sign
         Principal principal = SessionLocal.getPrincipal();
 
@@ -79,6 +68,18 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
         signDO.setNetworkCode(principal.getFirstNetwork());
         signDO.setSigner(BeanUtils.getNotNullValue(signer, "Self").toString());
         handleSignDao.insert(signDO);
+
+        OrderOptRequest optRequest = new OrderOptRequest();
+        optRequest.setOptType(OptTypeEnum.SIGN);
+        optRequest.setRemark(remark);
+        List<String> orderNoList = new ArrayList<>();
+        orderNoList.add(orderNo);
+        optRequest.setOrderNo(orderNoList);
+        waybillService.handleOpt(optRequest);
+
+        List<String> list = new ArrayList<>();
+        list.add(orderNo);
+        deliveryRouteService.addKiliRoute(list, "P40","");
 
     }
 

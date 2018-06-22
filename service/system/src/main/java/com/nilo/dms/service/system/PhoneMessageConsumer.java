@@ -1,8 +1,9 @@
-package com.nilo.dms.service.order.consumer;
+package com.nilo.dms.service.system;
 
 import com.alibaba.rocketmq.common.message.MessageExt;
-import com.nilo.dms.common.enums.SMSSendStatusEnum;
+import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.HttpUtil;
+import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.SMSLogDao;
 import com.nilo.dms.dao.dataobject.SMSLogDO;
 import com.nilo.dms.dto.order.PhoneMessage;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,6 +39,19 @@ public class PhoneMessageConsumer extends AbstractMQConsumer {
         try {
             phoneMessage = (PhoneMessage) obj;
             phoneMessage.setPhoneNum(phoneMessage.getPhoneNum().replace("+", ""));
+
+            //查询运单是否已经发送过改业务短信
+            List<SMSLogDO> list = smsLogDao.getByWaybill(phoneMessage.getWaybill());
+            if (list != null) {
+                String nowDate = DateUtil.formatCurrent("yyyy-MM-dd");
+                for (SMSLogDO l : list) {
+                    if (StringUtil.equals(l.getMsgType(), phoneMessage.getMsgType()) && StringUtil.equals(nowDate, DateUtil.format(l.getCreatedTime(), "yyyy-MM-dd"))) {
+                        return;
+                    }
+                }
+            }
+
+
             //发送短信
             Map<String, String> param = new HashMap<>();
             param.put("mobile", phoneMessage.getPhoneNum());
@@ -46,15 +61,22 @@ public class PhoneMessageConsumer extends AbstractMQConsumer {
             String response = HttpUtil.post(sms_url, param);
             logger.info("SMS Response:{}", response);
             SMSLogDO logDO = new SMSLogDO();
-            logDO.setMerchantId(Long.parseLong(phoneMessage.getMerchantId()));
             logDO.setMsgType(phoneMessage.getMsgType());
             logDO.setContent(phoneMessage.getContent());
             logDO.setReceiver(phoneMessage.getPhoneNum());
-            logDO.setStatus(SMSSendStatusEnum.SUCCESS.getCode());
+            logDO.setWaybill(phoneMessage.getWaybill());
+            logDO.setStatus(1);
             smsLogDao.insert(logDO);
         } catch (Exception e) {
             logger.error("PhoneMessageConsumer Failed. Message:{} ", phoneMessage, e);
             if (messageExt.getReconsumeTimes() == 4) {
+                SMSLogDO logDO = new SMSLogDO();
+                logDO.setMsgType(phoneMessage.getMsgType());
+                logDO.setContent(phoneMessage.getContent());
+                logDO.setReceiver(phoneMessage.getPhoneNum());
+                logDO.setWaybill(phoneMessage.getWaybill());
+                logDO.setStatus(0);
+                smsLogDao.insert(logDO);
                 return;
             }
             throw e;
@@ -67,24 +89,4 @@ public class PhoneMessageConsumer extends AbstractMQConsumer {
         return DigestUtils.md5Hex(str.toString());
     }
 
-    public static void main(String[] args) {
-
-        String sms_url = "https://mobile.kilimall.co.ke/index.php?act=send_short";
-        String phone = "254729038955";
-        String msg = "Dear customer, your order 10000000572843 has been dispatched today. Your total order amount is Ksh.0 .Kindly call Joshua Matianyi Shatimba 254718138094 to notify you the time of delivery. Please keep your phone on. Thank you.";
-        //发送短信
-        Map<String, String> param = new HashMap<>();
-        param.put("mobile", phone);
-        param.put("msg", msg);
-        param.put("sign", sign(msg, phone));
-        logger.info("SMS URL:{},Param:{}", sms_url, param);
-        String response = null;
-        try {
-            response = HttpUtil.post(sms_url, param);
-            System.out.println(111 + response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 }

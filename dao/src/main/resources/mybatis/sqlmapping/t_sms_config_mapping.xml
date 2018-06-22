@@ -7,13 +7,15 @@
     <resultMap id="smsConfigDo" type="com.nilo.dms.dao.dataobject.SMSConfigDO">
         <result property="id" column="id" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
-        <result property="merchantId" column="merchant_id" javaType="java.lang.Long"
+        <result property="merchantId" column="merchant_id" javaType="java.lang.String"
                 jdbcType="INTEGER"/>
         <result property="smsType" column="sms_type" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="content" column="content" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
-        <result property="remark" column="remark" javaType="java.lang.String"
+        <result property="name" column="name" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="param" column="param" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="status" column="status" javaType="java.lang.Integer"
                 jdbcType="INTEGER"/>
@@ -21,26 +23,22 @@
                 jdbcType="INTEGER"/>
         <result property="updatedTime" column="updated_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
+
+        <result property="createdBy" column="created_by" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+        <result property="updatedBy" column="updated_by" javaType="java.lang.String"
+                jdbcType="VARCHAR"/>
+
         <result property="version" column="version" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id ,merchant_id,sms_type,content,remark,status,created_time , updated_time ,version
+        id ,merchant_id,sms_type,content,status,param,name,created_time,created_by , updated_time ,updated_by,version
     </sql>
 
-    <!-- 插入语句 -->
-    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.SMSConfigDO" statementType="PREPARED"
-            useGeneratedKeys="true"
-            keyProperty="id">
-        INSERT INTO t_sys_config_sms
-        ( merchant_id,sms_type,content,remark,created_time , updated_time ,version)
-        VALUES
-        (#{merchantId},#{smsType}, #{content},#{remark}, UNIX_TIMESTAMP(NOW()),UNIX_TIMESTAMP(NOW()),UUID())
-    </insert>
 
-
-    <select id="queryBy" resultMap="smsConfigDo" statementType="PREPARED">
+    <select id="getBy" resultMap="smsConfigDo" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_sys_config_sms where merchant_id = #{merchantId}
@@ -49,17 +47,15 @@
         </if>
     </select>
 
-    <select id="queryAllBy" resultMap="smsConfigDo" statementType="PREPARED">
+    <select id="listBy" resultMap="smsConfigDo" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_sys_config_sms where merchant_id = #{merchantId}
+        FROM t_sys_config_sms where 1
+        <if test="merchantId != null ">
+            and merchant_id = #{merchantId}
+        </if>
     </select>
 
-    <select id="queryAll" resultMap="smsConfigDo" statementType="PREPARED">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_sys_config_sms
-    </select>
 
     <!-- 动态更新语句 -->
     <update id="update" parameterType="com.nilo.dms.dao.dataobject.SMSConfigDO" statementType="PREPARED">
@@ -71,10 +67,10 @@
             <if test="status != null ">
                 status = #{status},
             </if>
-            <if test="remark != null and remark != ''">
-                remark = #{remark},
+            <if test="name != null ">
+                name = #{name},
             </if>
-            updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+            updated_time=UNIX_TIMESTAMP(NOW()),created_by=#{updatedBy},version=UUID()
         </trim>
     </update>
 

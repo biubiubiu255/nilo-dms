@@ -1,4 +1,4 @@
-package com.nilo.dms.service.order.producer;
+package com.nilo.dms.service.system;
 
 import com.alibaba.rocketmq.client.producer.SendResult;
 import com.nilo.dms.service.mq.model.ProducerDesc;

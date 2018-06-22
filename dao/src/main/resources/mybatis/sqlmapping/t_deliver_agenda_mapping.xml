@@ -26,39 +26,48 @@ FROM
 		AND FROM_UNIXTIME(created_time, '%Y%m') = date_format(NOW(), '%Y%m')
 	) AS a,
 	(
-		SELECT DISTINCT
+		SELECT
 			count(DISTINCT b.order_no) AS 'task_day_num'
 		FROM
 			t_handle_rider AS a
-		LEFT JOIN t_handle_rider_details AS b ON a.handle_no = b.handle_no
-		WHERE
-			b.order_no IS NOT NULL
-		AND a.rider = #{riderNo}
+		INNER JOIN t_handle_rider_details AS b ON a.handle_no = b.handle_no
+		AND a. STATUS = 1
+		AND a.rider =  #{riderNo}
 		AND FROM_UNIXTIME(b.created_time, '%Y%m%d') = #{dateFormat}
 	) AS b,
 	(
 		SELECT
-			count(1) AS 'delivered_day_num'
+			count(*) AS delivered_day_num
 		FROM
-			t_handle_sign AS a
-		INNER JOIN t_handle_rider_details AS b ON FROM_UNIXTIME(b.created_time, '%Y%m%d') = #{dateFormat}
-		AND a.order_no = b.order_no
-		WHERE
-			a.handle_by = #{riderNo}
-		AND FROM_UNIXTIME(a.created_time, '%Y%m%d') = #{dateFormat}
-	) AS c,
-	(
-		SELECT
-			count(DISTINCT a.order_no) AS 'delay_day_num'
-		FROM
-			t_handle_delay as a
-		INNER JOIN t_handle_rider_details AS b ON FROM_UNIXTIME(b.created_time, '%Y%m%d') = #{dateFormat}
-		AND a.order_no = b.order_no
-		WHERE
-			a.handle_by = #{riderNo}
-		AND FROM_UNIXTIME(a.created_time, '%Y%m%d') = #{dateFormat}
+			(
+				SELECT DISTINCT
+					DISTINCT b.order_no
+				FROM
+					t_handle_rider AS a
+				INNER JOIN t_handle_rider_details AS b ON a.handle_no = b.handle_no
+				AND a. STATUS = 1
+				AND a.rider = #{riderNo}
+				AND FROM_UNIXTIME(b.created_time, '%Y%m%d') =  #{dateFormat}
+			) AS d
+		INNER JOIN t_handle_sign AS a ON a.order_no = d.order_no
+		AND a.handle_by = #{riderNo}
 
-	) AS d
+
+) AS c,
+ (
+	SELECT
+		count(DISTINCT a.order_no) AS 'delay_day_num'
+	FROM
+		t_handle_delay AS a
+	INNER JOIN t_handle_rider_details AS b ON FROM_UNIXTIME(b.created_time, '%Y%m%d') =  #{dateFormat}
+	AND a.order_no = b.order_no
+	AND a.handle_by =  #{riderNo}
+	AND FROM_UNIXTIME(a.created_time, '%Y%m%d') =  #{dateFormat}
+	INNER JOIN t_handle_rider AS c ON b.handle_no = c.handle_no
+	AND c. STATUS = 1
+) AS d
+
+
 
 </select>
 

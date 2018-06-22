@@ -81,8 +81,10 @@
         //tableData = tableData.data;
         var tableData = new Array();
         view();
+        var layMe;
         var form;
-        layui.use('form', function () {
+        layui.use(['form', 'layer'], function () {
+            layMe= layui.layer;
             form = layui.form;
             form.on('select(deliveryRiderLay)', function (data) {
                 //alert(data.value);
@@ -219,6 +221,7 @@
             }
             smallPack = smallPack.substring(0, smallPack.length - 1);
             var load = layer.load(2);
+
             $.ajax({
                 type: "POST",
                 url: "/waybill/rider_delivery/addLoading.html",
@@ -234,7 +237,8 @@
                             if (printed == true) {
                                 //这里需要返回一个大包号，才能打印，因为是在后台创建时生成订单号
                                 parent.window.open("/waybill/rider_delivery/print.html?loadingNo=" + data.data.handleNo);
-                                location.reload();
+                                window.location.reload();
+                                window.history.go(0);
                             }
                         });
                     } else {
@@ -243,6 +247,7 @@
                 },
                 complete: function () {
                     layer.close(load);
+                    window.history.go(0);
                 }
             });
         }

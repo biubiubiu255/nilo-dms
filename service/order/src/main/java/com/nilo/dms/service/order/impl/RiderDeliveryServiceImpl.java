@@ -22,6 +22,7 @@ import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.DeliveryRouteService;
 import com.nilo.dms.service.order.RiderDeliveryService;
 import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.system.SendMessageService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,7 @@ import java.util.*;
 @Service
 public class RiderDeliveryServiceImpl implements RiderDeliveryService {
     @Autowired
-    @Qualifier("phoneSMSProducer")
-    private AbstractMQProducer phoneSMSProducer;
+    private SendMessageService sendMessageService;
     @Autowired
     private HandleRiderDao handleRiderDao;
     @Autowired
@@ -222,20 +222,10 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
         UserInfo userInfo = userService.findUserInfoByUserId("" + riderDelivery.getMerchantId(), "" + riderDelivery.getRider());
         //发送短信
         for (RiderDeliverySmallDO d : riderDeliverySmallDOS) {
-            WaybillDO w = waybillDao.queryByOrderNo(riderDelivery.getMerchantId(), d.getOrderNo());
-            DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(riderDelivery.getMerchantId(), d.getOrderNo());
-            //送货上门
-            String content = "Dear customer, your order " + w.getReferenceNo() + " has been dispatched today. Your total order amount is Ksh.0 .Kindly call " + userInfo.getName() + " " + userInfo.getPhone() + " to notify you the time of delivery. Please keep your phone on. Thank you.";
-            PhoneMessage message = new PhoneMessage();
-            message.setMerchantId("" + riderDelivery.getMerchantId());
-            message.setContent(content);
-            message.setPhoneNum(r.getContactNumber());
-            message.setMsgType(OptTypeEnum.DELIVERY.getCode());
-            try {
-                phoneSMSProducer.sendMessage(message);
-            } catch (Exception e) {
-
-            }
+            Long merchantId=riderDelivery.getMerchantId();
+            WaybillDO w = waybillDao.queryByOrderNo(merchantId, d.getOrderNo());
+            DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(merchantId, d.getOrderNo());
+            sendMessageService.sendMessage(w.getOrderNo(),SendMessageService.RIDER_DELIVERY,r.getContactNumber(),w.getReferenceNo(),userInfo.getName(),userInfo.getPhone());
         }
     }
 

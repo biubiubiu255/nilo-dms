@@ -11,10 +11,9 @@ import java.util.List;
 @Repository
 public interface SMSConfigDao extends BaseDao<Long, SMSConfigDO> {
 
-    List<SMSConfigDO> queryAll();
 
-    List<SMSConfigDO> queryAllBy(@Param("merchantId") Long merchantId);
+    List<SMSConfigDO> listBy(@Param("merchantId") String merchantId);
 
-    SMSConfigDO queryBy(@Param("merchantId") Long merchantId, @Param("smsType") String smsType);
+    SMSConfigDO getBy(@Param("merchantId") String merchantId, @Param("smsType") String smsType);
 
 }

@@ -12,13 +12,13 @@ import com.nilo.dms.dao.dataobject.MerchantConfigDO;
 import com.nilo.dms.dto.system.*;
 import com.nilo.dms.service.system.DictionaryService;
 import com.nilo.dms.service.system.RedisUtil;
+import com.nilo.dms.service.system.SendMessageService;
 import com.nilo.dms.service.system.config.*;
 import com.nilo.dms.service.system.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class SystemServiceImpl implements SystemService {
     private OrderHandleConfigService orderHandleConfigService;
 
     @Autowired
-    private SMSConfigService smsConfigService;
+    private SendMessageService smsConfigService;
 
     @Autowired
     private RouteConfigService routeConfigService;
@@ -100,7 +100,7 @@ public class SystemServiceImpl implements SystemService {
         List<DistributionNetworkDO> list = distributionNetworkDao.findAll();
 
         for (DistributionNetworkDO r : list) {
-            RedisUtil.hset(Constant.NETWORK_INFO + r.getMerchantId(),""+r.getId(), JSON.toJSONString(r));
+            RedisUtil.hset(Constant.NETWORK_INFO + r.getMerchantId(), "" + r.getId(), JSON.toJSONString(r));
         }
     }
 
@@ -190,13 +190,7 @@ public class SystemServiceImpl implements SystemService {
     @Override
     public void loadingAndRefreshSMSConfig(String merchantId) {
 
-        List<SMSConfig> list = null;
-
-        if (StringUtil.isNotEmpty(merchantId)) {
-            list = smsConfigService.queryAllBy(merchantId);
-        } else {
-            list = smsConfigService.queryAll();
-        }
+        List<SMSConfig> list = smsConfigService.listConfigBy(merchantId);
         if (list == null || list.size() == 0) return;
 
         Set<String> keys = RedisUtil.keys(Constant.SMS_CONF + (merchantId == null ? "" : merchantId) + "*");
@@ -205,7 +199,6 @@ public class SystemServiceImpl implements SystemService {
                 RedisUtil.del(k);
             }
         }
-
         for (SMSConfig c : list) {
             RedisUtil.hset(Constant.SMS_CONF + c.getMerchantId(), c.getSmsType(), JSON.toJSONString(c));
         }
@@ -260,34 +253,34 @@ public class SystemServiceImpl implements SystemService {
     @Override
     public void loadingAndRefreshAddressConfig() {
 
-        String[] countrys = new String[]{"CN","KE"};
+        String[] countrys = new String[]{"CN", "KE"};
 
         try {
-            for(String c : countrys) {
-                InputStream in = this.getClass().getResourceAsStream("/"+c+".json");
-                BufferedReader br=new BufferedReader(new InputStreamReader(in,"UTF-8"));
+            for (String c : countrys) {
+                InputStream in = this.getClass().getResourceAsStream("/" + c + ".json");
+                BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
                 String result = "";
                 String line = null;
                 while ((line = br.readLine()) != null) {
-                    result +=line;
+                    result += line;
                 }
                 br.close();
-                List<AddressNode> address = JSON.parseArray(result,AddressNode.class);
-                for(AddressNode n : address){
-                    parsAddress(n,c);
+                List<AddressNode> address = JSON.parseArray(result, AddressNode.class);
+                for (AddressNode n : address) {
+                    parsAddress(n, c);
                 }
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
             e.printStackTrace();
         }
     }
 
-    private void parsAddress(AddressNode addressNode,String country){
-        if(addressNode.getChilds() != null){
-            for(AddressNode node : addressNode.getChilds()){
+    private void parsAddress(AddressNode addressNode, String country) {
+        if (addressNode.getChilds() != null) {
+            for (AddressNode node : addressNode.getChilds()) {
                 parsAddress(node, country);
             }
         }
@@ -308,7 +301,7 @@ public class SystemServiceImpl implements SystemService {
     }
 
 
-    private static class AddressNode{
+    private static class AddressNode {
 
         private List<AddressNode> childs;
 

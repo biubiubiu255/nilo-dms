@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -44,7 +47,7 @@
 								if (!res.result) {
 									showError(res.msg);
 								}else{
-				
+									//console.log(res.data);
 									content = '';
 				                    for (var int = 0; int < res.data.length; int++) {
 				                    	content += getResult(res.data[int]) + ' ';
@@ -77,42 +80,52 @@
     };
 
 
+    function RiQi(sj)
+    {
+        var now = new Date(sj*1000);
+        var   year=now.getFullYear();
+        var   month=now.getMonth()+1;
+        var   date=now.getDate();
+        var   hour=now.getHours();
+        var   minute=now.getMinutes();
+        var   second=now.getSeconds();
+        return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;
+
+    }
+
 	function getResult(d) {
-
-		var dataStr = GetCurrentTime('YYYY-MM-DD hh:mm:ss', d.optTime);
-		
+        //console.log(d.createdTime);
+		var dataStr = GetCurrentTime('YYYY-MM-DD hh:mm:ss', d.createdTime);
 		var point = '';
-	
-    	//alert(d.opt);
-    	//alert(dataStr);
+		console.log(d);
 
-    	
 		switch (d.opt) {
 
-		case 'arrive_scan':
-			point = map.arrive_scan + '：' + d.optByName + '<br/>' + map.home_network + '：' + d.networkDesc;
-			//alert(point);
-			break;
+			case 'arrive_scan':
+				point = map.arrive_scan + '：' + d.optByName + '，' + map.home_network + '：' + d.optNetwork;
+				//alert(point);
+				break;
 
             case 'send':
-                var info = '';
-                console.log(d);
-                console.log(d.nextNetwork);
+                //console.log(d);
+                //console.log(d.nextNetwork);
 
-                if(d.nextNetwork!=null){
-                    info += 'NextNetwork：' + d.nextNetwork;
+                if(d.nextStation!=null){
+                    point += 'NextNetwork：' + d.nextStation + '，';
 				}
                 if(d.expressName!=null){
-                    info += 'ExpressName：' + d.expressName;
+                    point += 'ExpressName：' + d.expressName + '，';
                 }
-                if(d.rider!=null){
-                    info += '，rider：'+d.rider + '，phone：'+d.optByNamePhone+'，jobID：'+d.jobId;
-				}
-                point = map.send_scan + '，Opt：' + d.optByName + '，' + info;
+                if(d.driver!=null){
+                    point += 'Driver：' + d.driver
+                }
+                //point = map.send_scan + '，Opt：' + d.optByName + '，' + info;
                 break;
 
 		case 'delivery':
-			point = map.route_const_delivering  + '，' + map.home_rider + '【' + d.optByName + '，' + d.phone+'】';
+            if(d.rider!=null){
+                point += 'rider：'+d.rider + '，riderPhone：'+d.riderPhone
+            }
 			break;
 
 		case 'receive':
@@ -124,7 +137,7 @@
 			break;
 		}
 		
-		point = '<span>' + dataStr + '<br/></span><span>' + point + '</span><br/><hr/><br/>';
+		point =  '<span>' + dataStr + '<br/></span><span>' + '【' + d.opt + '】' + point + '</span><br/><hr/><br/>';
     	//alert(point);
 		return point;
 	}

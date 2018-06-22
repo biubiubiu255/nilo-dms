@@ -3,30 +3,39 @@
 <%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
 <div class="box-body">
     <form id="myForm" class="layui-form" action="">
+        <input type="hidden" name="smsType" value="${smsConfig.smsType}">
         <div class="layui-form-item">
             <label class="layui-form-label">Message Type:</label>
             <div class="layui-input-block">
-                <lp:enumTag selectId="optTypeEdit" selectName="optTypeEdit" className="OptTypeEnum"
-                            code="${smsConfig.smsType}" disabled="true" />
+                <label class="layui-form-label">${smsConfig.smsType}</label>
             </div>
         </div>
-        <hr>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Name:</label>
+            <div class="layui-input-inline">
+                <input class="layui-input" name="name" autocomplete="off" value="${smsConfig.name}">
+            </div>
+            <label class="layui-form-label">是否启用:</label>
+            <div class="layui-input-inline">
+                <select name="status" lay-filter="status" lay-verify="required" lay-search="" style="display: none">
+                    <option value="1" <c:if test="${smsConfig.status == 1}"> selected</c:if>>是</option>
+                    <option value="0" <c:if test="${smsConfig.status == 0}"> selected</c:if>>否</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">Param:</label>
+            <label class="layui-label">${smsConfig.param}</label>
+        </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">Message Content:</label>
             <div class="layui-input-block">
-                <textarea name="content" placeholder="Message Content"
+                <textarea name="content" maxlength="250" placeholder="Message Content"
                           class="layui-textarea">${smsConfig.content}</textarea>
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">Remark:</label>
-            <div class="layui-input-block">
-                <textarea name="remark" placeholder="Remark" class="layui-textarea">${smsConfig.remark}</textarea>
-
-            </div>
-        </div>
-
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="add-route-config">Submit</button>
@@ -46,12 +55,7 @@
                 var load = layer.load(2);
                 $.ajax({
                     url: "/systemConfig/sms/edit.html",
-                    data: {
-                        optTypeEdit: $("select[name='optTypeEdit']").val(),
-                        content: $("textarea[name='content']").val(),
-                        remark: $("textarea[name='remark']").val(),
-
-                    },
+                    data: data.field,
                     dataType: "json",
                     type: "POST",
                     success: function (data) {

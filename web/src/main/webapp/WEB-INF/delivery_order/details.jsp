@@ -2,15 +2,18 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="lp" tagdir="/WEB-INF/tags" %>
-
+<script src="/mobile/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/mobile/js/functions.js"></script>
+<script type="text/javascript" src="/mobile/js/mobile_valid.js"></script>
+<script type="text/javascript" src="/mobile/js/mobile.js"></script>
+<script type="text/javascript" src="/mobile/js/jquery.scanner.js"></script>
 
 <div class="box-body">
     <div class="layui-row">
         <div class="layui-col-md12">
             <h2 class="page-header">
                 <i class="fa fa-shopping-bag"></i> OrderNo:${deliveryOrder.orderNo}
-                Date: <lp:formatTime time="${deliveryOrder.createdTime }"
-                                                               pattern="yyyy-MM-dd"/>
+                Date: <lp:formatTime time="${deliveryOrder.createdTime }" pattern="yyyy-MM-dd"/>
             </h2>
         </div>
         <!-- /.col -->
@@ -84,24 +87,20 @@
         <jsp:useBean id="dateValue" class="java.util.Date"/>
         <c:forEach items="${orderRouteList}" var="route" varStatus="status">
             <span>
-            <jsp:setProperty name="dateValue" property="time" value="${route.createdTime*1000 }"/>
-            <fmt:formatDate value="${dateValue}" pattern="yyyy-MM-dd HH:mm:ss"/>
-            【${route.opt}】 ${route.optByName}
-            <c:choose>
-                <c:when test="${route.opt=='arrive_scan'}">
-                    【Netwrork】：${route.networkDesc}
-                </c:when>
-                <c:when test="${route.opt=='send' || route.opt=='delivery'}">
-                    <c:if test="${route.nextNetwork!=null}">，【NextNetwork】：${route.nextNetwork}</c:if>
-                    <c:if test="${route.expressName!=null}">，【ExpressName】：${route.expressName}</c:if>
-                    <c:if test="${route.rider!=null}">，【Rider】：${route.rider}</c:if>
-                    <c:if test="${route.phone!=null}">，【Phone】：${route.phone}</c:if>
-                </c:when>
-                <c:when test="${route.opt=='receive'}">
-                    ，Signer：${route.signer}
-                </c:when>
-            </c:choose>
+            <span class="unformatted">${route.createdTime}</span>
+            【${route.opt}】${route.optNetwork}(${route.optByName})
+            <c:if test="${route.nextStation!=null}">，[NextNetwork] ${route.nextStation}</c:if>
+            <c:if test="${route.expressName!=null}">，[ExpressName] ${route.expressName}</c:if>
+            <c:if test="${route.driver!=null}">，[Driver] ${route.driver}</c:if>
+            <c:if test="${route.rider!=null}">，[Rider] ${route.rider}</c:if>
+            <c:if test="${route.riderPhone!=null}">，[RiderPhone] ${route.riderPhone}</c:if>
             </span><br>
         </c:forEach>
     </div>
 </div>
+
+<script>
+    $(".unformatted").each(function(index, elem){
+        $(this).text(GetCurrentTime('YYYY-MM-DD hh:mm:ss', $(this).text()));
+    });
+</script>

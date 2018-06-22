@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.DeliveryOrderRouteDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+
+    <resultMap id="routeMap" type="com.nilo.dms.dao.dataobject.WaybillRouteDO">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="merchant_id" jdbcType="INTEGER" property="merchantId" />
+        <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+        <result column="opt" jdbcType="VARCHAR" property="opt" />
+        <result column="opt_network" jdbcType="VARCHAR" property="optNetwork" />
+        <result column="opt_by_name" jdbcType="VARCHAR" property="optByName" />
+        <result column="next_station" jdbcType="VARCHAR" property="nextStation" />
+        <result column="express_name" jdbcType="VARCHAR" property="expressName" />
+        <result column="rider" jdbcType="VARCHAR" property="rider" />
+        <result column="rider_phone" jdbcType="VARCHAR" property="riderPhone" />
+        <result column="driver" jdbcType="VARCHAR" property="driver" />
+        <result column="signer" jdbcType="VARCHAR" property="signer" />
+        <result column="created_time" jdbcType="INTEGER" property="createdTime" />
+        <result column="updated_time" jdbcType="INTEGER" property="updatedTime" />
+        <result column="version" jdbcType="VARCHAR" property="version" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        merchant_id, order_no,
+      opt, opt_network, opt_by_name,
+      next_station, express_name, rider,
+      rider_phone, driver, signer, created_time,
+      updated_time, version
+    </sql>
+
+    <!-- 插入语句 -->
+    <insert id="insert" parameterType="com.nilo.dms.dao.dataobject.WaybillRouteDO" statementType="PREPARED"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_waybill_route
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        (#{merchantId,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR},
+        #{opt,jdbcType=VARCHAR}, #{optNetwork,jdbcType=VARCHAR}, #{optByName,jdbcType=VARCHAR},
+        #{nextStation,jdbcType=VARCHAR}, #{expressName,jdbcType=VARCHAR}, #{rider,jdbcType=VARCHAR},
+        #{riderPhone,jdbcType=VARCHAR}, #{driver,jdbcType=VARCHAR}, #{signer,jdbcType=VARCHAR}, #{createdTime,jdbcType=INTEGER},
+        #{updatedTime,jdbcType=INTEGER}, UUID())
+    </insert>
+
+
+    <!-- 动态更新语句 -->
+
+
+    <select id="findBy" resultMap="routeMap" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill_route where merchant_id=#{merchantId} and order_no = #{orderNo} order by created_time desc;
+    </select>
+
+
+    <select id="findByType" resultMap="routeMap" statementType="PREPARED">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_waybill_route where merchant_id=#{merchantId} and order_no = #{orderNo} and opt = #{type} limit 0;
+    </select>
+
+
+</mapper>

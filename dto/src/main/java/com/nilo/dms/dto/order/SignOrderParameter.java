@@ -9,6 +9,7 @@ public class SignOrderParameter {
     private String nextNetwork;
     private String expressName;
     private String riderId;
+    private String outsource;
     private List<Integer> status;
     private String carrierName;
     private Integer fromHandledTime;
@@ -110,6 +111,14 @@ public class SignOrderParameter {
 
     public void setLimit(Integer limit) {
         this.limit = limit;
+    }
+
+    public String getOutsource() {
+        return outsource;
+    }
+
+    public void setOutsource(String outsource) {
+        this.outsource = outsource;
     }
 
     @Override

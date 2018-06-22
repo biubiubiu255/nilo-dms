@@ -5,6 +5,7 @@ import com.nilo.dms.dao.dataobject.ReportDispatchDO;
 
 public class ReportDispatchQO extends ReportDispatchDO {
 
+
     private Integer offset;
     private Integer limit;
     private Integer total;

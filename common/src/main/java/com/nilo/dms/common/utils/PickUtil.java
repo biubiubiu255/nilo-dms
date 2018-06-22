@@ -7,6 +7,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -41,15 +42,15 @@ public class PickUtil {
         list.add(principal2);
         list.add(principal3);
 
-        String[] userNames = buildArray(list, "userName", String.class);
-        System.out.println("本次测试 = " + Arrays.toString(userNames));
+        //String[] userNames = buildArray(list, "userName", String.class);
+        //System.out.println("本次测试 = " + Arrays.toString(userNames));
         //System.out.println("本次测试 = " + "sd");
         //System.exit(1);
         //System.out.println("本次测试 = " + Arrays.toString(userNames));
 
     }
 
-    public static <T> T[] buildArray(List list, String fname, Class<T> clazz){
+    public static <T> T[] recombineArray(List list, String fname, Class<T> clazz){
 
         //通过反射在运行时构出实际类型为type[]的对象数组，避免了类型擦除，从而转换成功，无ClassCastException
         T[] arr = (T[]) Array.newInstance(clazz, list.size());
@@ -71,6 +72,40 @@ public class PickUtil {
             }
         }
         return arr;
+    }
+
+    public static <T> List<T> recombineList(List list, String fname, Class<T> clazz) {
+        //T obj = null;
+        //obj = clazz.newInstance();
+        List<T> rList = new LinkedList<T>();
+        try {
+            for (int i=0;i< list.size(); i++) {
+                Field[] fs = list.get(i).getClass().getDeclaredFields();
+                for (int j = 0; j < fs.length; j++) {
+                    Field f = fs[j];
+                    f.setAccessible(true); // 设置些属性是可以访问的
+                    if (f.getName().endsWith(fname)) {
+                        rList.add(clazz.cast(f.get(list.get(i))));
+                    }
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return rList;
+    }
+
+    public static Object coalesce(Object... vals) {
+
+        for (Object e : vals) {
+            if (e != null) {
+                return e;
+            }
+        }
+        return null;
+
     }
 
 
