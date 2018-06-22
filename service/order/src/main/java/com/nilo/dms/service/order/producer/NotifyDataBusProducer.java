@@ -7,7 +7,7 @@ import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 /**
  * Created by admin on 2017/11/18.
  */
-@ProducerDesc(topic = "data_bus_notify", group = "notify_group", tags = "notify")
+@ProducerDesc(topic = "ug_data_bus_notify", group = "ug_notify_group", tags = "notify")
 public class NotifyDataBusProducer extends AbstractMQProducer {
 
     @Override

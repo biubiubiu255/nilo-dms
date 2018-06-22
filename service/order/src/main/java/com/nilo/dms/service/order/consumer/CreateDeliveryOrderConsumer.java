@@ -22,7 +22,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 /**
  * Created by admin on 2017/10/18.
  */
-@ConsumerDesc(topic = "create_order", group = "create_order_group", filterExpression = "create")
+@ConsumerDesc(topic = "ug_create_order", group = "ug_create_order_group", filterExpression = "create")
 public class CreateDeliveryOrderConsumer extends AbstractMQConsumer {
 
     private static Logger logger = LoggerFactory.getLogger(CreateDeliveryOrderConsumer.class);
