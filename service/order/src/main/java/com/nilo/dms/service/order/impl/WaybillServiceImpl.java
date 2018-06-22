@@ -13,16 +13,15 @@ import com.nilo.dms.common.utils.DateUtil;
 import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
-import com.nilo.dms.dao.dataobject.QO.ReportDispatchQO;
 import com.nilo.dms.dto.order.*;
+import com.nilo.dms.dto.system.OrderHandleConfig;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.*;
 import com.nilo.dms.service.system.RedisUtil;
+import com.nilo.dms.service.system.SendMessageService;
 import com.nilo.dms.service.system.SystemCodeUtil;
 import com.nilo.dms.service.system.SystemConfig;
-import com.nilo.dms.dto.system.OrderHandleConfig;
-import com.nilo.dms.dto.system.SMSConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +72,7 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     private AbstractMQProducer createDeliveryOrderProducer;
 
 
+    @Override
     public String createWaybillRequest(String merchantId, String data, String sign) {
 
         try {
@@ -349,21 +349,21 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
             waybillDao.update(update);
         }
     }
-    
+
     @Override
     @Transactional
-    public String savePackage(PackageRequest packageRequest,String packageNo) {
+    public String savePackage(PackageRequest packageRequest, String packageNo) {
         //String orderNo = "";
         Long merchant = Long.parseLong(packageRequest.getMerchantId());
 
         // 判断是否允许打包
         for (String o : packageRequest.getOrderNos()) {
             Waybill waybill = queryByOrderNo(packageRequest.getMerchantId(), o);
-           
+
         }
 
-        if("1".equals(packageRequest.getStatus())) {
-        	 waybillDao.finishPackage(packageNo,packageRequest.getWeight());
+        if ("1".equals(packageRequest.getStatus())) {
+            waybillDao.finishPackage(packageNo, packageRequest.getWeight());
         }
 
         // 关联包裹与子运单
@@ -386,7 +386,6 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     @Override
     @Transactional
     public String addPackage(PackageRequest packageRequest) {
-        String orderNo = "";
         Long merchant = Long.parseLong(packageRequest.getMerchantId());
 
         // 判断是否允许打包

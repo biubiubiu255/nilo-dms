@@ -77,10 +77,6 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
         optRequest.setOrderNo(orderNoList);
         waybillService.handleOpt(optRequest);
 
-        List<String> list = new ArrayList<>();
-        list.add(orderNo);
-        deliveryRouteService.addKiliRoute(list, "P40","");
-
     }
 
     @Override
