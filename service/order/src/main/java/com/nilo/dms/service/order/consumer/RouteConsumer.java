@@ -77,7 +77,6 @@ public class RouteConsumer extends AbstractMQConsumer {
                         break;
                     }
                     case DELIVERY: {
-
                         //UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(message.getMerchantId()), Long.parseLong(message.getRider()));
                         List<StaffDO> staffDOS = staffDao.findstaffByIDs(new Long[]{Long.parseLong(message.getRider())});
                         if (!staffDOS.isEmpty()) {
@@ -95,15 +94,16 @@ public class RouteConsumer extends AbstractMQConsumer {
                         routeInfo.setOptByName(bigDO.getHandleName());
                         routeInfo.setCreatedTime(DateUtil.getSysTimeStamp().intValue());
 
-                        if (bigDO.getType().equals("package")){
-                            if (bigDO.getNextStation() == null) {
-                                WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.parseLong(message.getMerchantId()), routeInfo.getOrderNo());
+                        if (bigDO.getNextStation() == null) {
+                            WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.parseLong(message.getMerchantId()), routeInfo.getOrderNo());
+                            if (waybillDO.getNextNetworkId()!=null){
                                 DistributionNetworkDO networkDO = distributionNetworkDao.queryById(waybillDO.getNextNetworkId().longValue());
                                 routeInfo.setNextStation(networkDO.getName());
-                            } else {
-                                routeInfo.setNextStation(bigDO.getNextStation());
                             }
+                        } else {
+                            routeInfo.setNextStation(bigDO.getNextStation());
                         }
+
 
                         List<WaybillDO> smallBags = waybillDao.queryByPackageNo(routeInfo.getMerchantId().longValue(), routeInfo.getOrderNo());
                         //判断当前是大包，则写入小包轨迹，大包正常往下执行
