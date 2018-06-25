@@ -95,12 +95,14 @@ public class RouteConsumer extends AbstractMQConsumer {
                         routeInfo.setOptByName(bigDO.getHandleName());
                         routeInfo.setCreatedTime(DateUtil.getSysTimeStamp().intValue());
 
-                        if (bigDO.getNextStation() == null) {
-                            WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.parseLong(message.getMerchantId()), routeInfo.getOrderNo());
-                            DistributionNetworkDO networkDO = distributionNetworkDao.queryById(waybillDO.getNextNetworkId().longValue());
-                            routeInfo.setNextStation(networkDO.getName());
-                        } else {
-                            routeInfo.setNextStation(bigDO.getNextStation());
+                        if (bigDO.getType().equals("package")){
+                            if (bigDO.getNextStation() == null) {
+                                WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.parseLong(message.getMerchantId()), routeInfo.getOrderNo());
+                                DistributionNetworkDO networkDO = distributionNetworkDao.queryById(waybillDO.getNextNetworkId().longValue());
+                                routeInfo.setNextStation(networkDO.getName());
+                            } else {
+                                routeInfo.setNextStation(bigDO.getNextStation());
+                            }
                         }
 
                         List<WaybillDO> smallBags = waybillDao.queryByPackageNo(routeInfo.getMerchantId().longValue(), routeInfo.getOrderNo());
