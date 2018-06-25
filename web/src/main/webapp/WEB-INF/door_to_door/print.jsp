@@ -109,7 +109,7 @@
                     <th><strong>contact name:</strong></th>
                     <td>${delivery.senderInfo.senderName}</td>
                     <th><strong>contact name:</strong></th>
-                    <td>everlyne</td>
+                    <td>Peter</td>
                     <th></th>
                     <td></td>
                 </tr>
