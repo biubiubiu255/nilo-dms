@@ -80,7 +80,7 @@ public class RouteConsumer extends AbstractMQConsumer {
                         //UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(message.getMerchantId()), Long.parseLong(message.getRider()));
                         List<StaffDO> staffDOS = staffDao.findstaffByIDs(new Long[]{Long.parseLong(message.getRider())});
                         if (!staffDOS.isEmpty()) {
-                            routeInfo.setRider(staffDOS.get(0).getNickName() + "-" + staffDOS.get(0).getStaffId());
+                            routeInfo.setRider(staffDOS.get(0).getRealName() + "-" + staffDOS.get(0).getStaffId());
                             routeInfo.setRiderPhone(staffDOS.get(0).getPhone());
                         }
                         break;
