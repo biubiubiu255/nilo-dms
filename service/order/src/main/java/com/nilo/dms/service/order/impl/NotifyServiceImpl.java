@@ -88,8 +88,7 @@ public class NotifyServiceImpl implements NotifyService {
                     break;
                 }
                 case SEND: {
-                    SendThirdHead sendThirdHead = sendThirdService.queryLoadingBySmallNo(merchantId, orderNo);
-                    routeData.put("third_express", sendThirdHead.getThirdExpressCode());
+                    routeData.put("third_express", request.getRemark());
                     break;
                 }
                 case PROBLEM: {

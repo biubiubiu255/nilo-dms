@@ -211,6 +211,7 @@ public class SendThirdServiceImpl implements SendThirdService {
         OrderOptRequest request = new OrderOptRequest();
         request.setOptType(OptTypeEnum.SEND);
         request.setOrderNo(orderNos);
+        request.setRemark(head.getThirdExpressCode());
         waybillService.handleOpt(request);
         SendThirdHead update = new SendThirdHead();
         update.setHandleNo(handleNo);
