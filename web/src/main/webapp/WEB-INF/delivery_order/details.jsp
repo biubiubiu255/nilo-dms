@@ -99,6 +99,7 @@
     </div>
 </div>
 
+
 <script>
     $(".unformatted").each(function(index, elem){
         $(this).text(GetCurrentTime('YYYY-MM-DD hh:mm:ss', $(this).text()));
