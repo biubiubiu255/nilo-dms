@@ -61,7 +61,7 @@
                 </select>
             </div>
         </div>
-<%--
+
 
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label" style="width:120px">Outsource：</label>
@@ -75,7 +75,7 @@
                 </select>
             </div>
         </div>
---%>
+
 
 
 
