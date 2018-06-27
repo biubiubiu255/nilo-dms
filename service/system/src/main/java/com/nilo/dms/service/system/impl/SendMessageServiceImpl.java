@@ -73,7 +73,7 @@ public class SendMessageServiceImpl implements SendMessageService {
         if (config == null) {
             log.error("send message failed. sms config is null");
         }
-        if (config.getStatus() == DISABLED) {
+        if (config.getStatus().equals(DISABLED)) {
             return;
         }
 
