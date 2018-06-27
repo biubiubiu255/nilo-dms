@@ -129,16 +129,16 @@
                         {field: 'orderNo', title: 'Waybill No', width:200, fixed: 'left'}
                         ,{field: 'referenceNo', title: 'ReferenceNo', width:170}
                         ,{field: 'networkCodeDesc', title: 'Network', width:150}
-                        ,{field: 'rider', title: 'Rider', width:100}
-                        ,{field: 'outsource', title: 'Outsource', width:130}
                         ,{field: 'weight', title: 'Weight', width:100}
                         ,{field: 'statusDesc', title: 'Status', width:150}
-                        ,{field: 'handleBy', title: 'HandleName', width:150}
                         ,{field: '', title: 'HandleTime', width:200, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}
-                        ,{field: 'remark', title: 'Remark', width:170}
                         ,{field: 'rName', title: 'Signer', width:150}
-                        ,{field: 'sName', title: 'Sender', width:150}
                         ,{field: 'address', title: 'Address', width:300}
+                        ,{field: 'handleBy', title: 'HandleName', width:150}
+                        ,{field: 'rider', title: 'Rider', width:100}
+                        ,{field: 'outsource', title: 'Outsource', width:130}
+                        ,{field: 'sName', title: 'Sender', width:150}
+                        ,{field: 'remark', title: 'Remark', width:170}
                     ]]
                     ,where: getParam(2, true)
 

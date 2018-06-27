@@ -72,8 +72,10 @@
         d.`name` rname,
         d.contact_number,
         d.address,
-        CONCAT_WS('-',e.staff_id, e.real_name) AS rider,
-        e.outsource,
+        <if test="networkCode ==null ">
+        	CONCAT_WS('-',e.staff_id, e.real_name) AS rider,
+        	e.outsource,
+        </if>
         f.name network_name
         FROM
         t_waybill a
