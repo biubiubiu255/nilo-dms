@@ -18,23 +18,23 @@ public class SystemConfigInit implements InitializingBean {
     public void afterPropertiesSet() {
 
         // 加载客户配置信息
-        systemService.loadingAndRefreshCustomerConfig("1");
+        systemService.loadingAndRefreshCustomerConfig();
 
         systemService.loadingAndRefreshNetwork();
 
-        systemService.loadingAndRefreshSerialNumRule("1");
+        systemService.loadingAndRefreshSerialNumRule();
         // 加载日志配置
         systemService.loadingAndRefreshLogConfig();
 
-        systemService.loadingAndRefreshSystemCode("1");
+        systemService.loadingAndRefreshSystemCode();
 
-        systemService.loadingAndRefreshOrderHandleConfig("1");
+        systemService.loadingAndRefreshOrderHandleConfig();
 
-        systemService.loadingAndRefreshSMSConfig("1");
+        systemService.loadingAndRefreshSMSConfig();
 
-        systemService.loadingAndRefreshRouteConfig("1");
+        systemService.loadingAndRefreshRouteConfig();
 
-        systemService.loadingAndRefreshBizFeeConfig("1");
+        systemService.loadingAndRefreshBizFeeConfig();
 
         systemService.loadingAndRefreshAddressConfig();
     }
