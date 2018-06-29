@@ -1,32 +1,11 @@
 package com.nilo.dms.web.controller.pda;
 
-import com.alibaba.druid.sql.visitor.functions.Char;
-import com.nilo.dms.common.Pagination;
-import com.nilo.dms.common.Principal;
-import com.nilo.dms.common.enums.HandleRiderStatusEnum;
-import com.nilo.dms.common.enums.SerialTypeEnum;
-import com.nilo.dms.common.exception.BizErrorCode;
-import com.nilo.dms.common.exception.DMSException;
-import com.nilo.dms.common.exception.SysErrorCode;
-import com.nilo.dms.common.utils.AssertUtil;
-import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.*;
-import com.nilo.dms.dao.dataobject.*;
-import com.nilo.dms.dto.common.LoginInfo;
-import com.nilo.dms.dto.common.User;
-import com.nilo.dms.dto.handle.SendThirdHead;
-import com.nilo.dms.dto.order.*;
-import com.nilo.dms.dto.pda.PdaRider;
-import com.nilo.dms.dto.pda.PdaWaybill;
-import com.nilo.dms.service.UserService;
-import com.nilo.dms.service.impl.SessionLocal;
-import com.nilo.dms.service.order.LoadingService;
-import com.nilo.dms.service.order.RiderDeliveryService;
-import com.nilo.dms.service.order.SendThirdService;
-import com.nilo.dms.service.order.WaybillService;
-import com.nilo.dms.service.system.SystemConfig;
-import com.nilo.dms.web.controller.BaseController;
-import com.nilo.dms.web.controller.mobile.SendScanController;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -38,13 +17,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.nilo.dms.common.Pagination;
+import com.nilo.dms.common.Principal;
+import com.nilo.dms.common.enums.HandleRiderStatusEnum;
+import com.nilo.dms.common.enums.SerialTypeEnum;
+import com.nilo.dms.common.exception.BizErrorCode;
+import com.nilo.dms.common.exception.DMSException;
+import com.nilo.dms.common.exception.SysErrorCode;
+import com.nilo.dms.common.utils.AssertUtil;
+import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.HandleRiderDao;
+import com.nilo.dms.dao.HandleThirdDao;
+import com.nilo.dms.dao.OutsourceDao;
+import com.nilo.dms.dao.StaffDao;
+import com.nilo.dms.dao.ThirdDriverDao;
+import com.nilo.dms.dao.ThirdExpressDao;
+import com.nilo.dms.dao.WaybillDao;
+import com.nilo.dms.dao.WaybillLogDao;
+import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.OutsourceDO;
+import com.nilo.dms.dao.dataobject.RiderDelivery;
+import com.nilo.dms.dao.dataobject.RiderDeliverySmallDO;
+import com.nilo.dms.dao.dataobject.StaffDO;
+import com.nilo.dms.dao.dataobject.ThirdDriverDO;
+import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.dao.dataobject.WaybillDO;
+import com.nilo.dms.dto.common.LoginInfo;
+import com.nilo.dms.dto.common.User;
+import com.nilo.dms.dto.handle.SendThirdDetail;
+import com.nilo.dms.dto.handle.SendThirdHead;
+import com.nilo.dms.dto.order.PackageRequest;
+import com.nilo.dms.dto.order.Waybill;
+import com.nilo.dms.dto.order.WaybillHeader;
+import com.nilo.dms.dto.pda.PdaRider;
+import com.nilo.dms.dto.pda.PdaWaybill;
+import com.nilo.dms.service.UserService;
+import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.order.LoadingService;
+import com.nilo.dms.service.order.RiderDeliveryService;
+import com.nilo.dms.service.order.SendThirdService;
+import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.system.SystemConfig;
+import com.nilo.dms.web.controller.BaseController;
+import com.nilo.dms.web.controller.mobile.SendScanController;
 
 @Controller
 @RequestMapping("/pda")
@@ -76,7 +92,10 @@ public class PdaController extends BaseController {
 	private OutsourceDao outsourceDao;
 	@Autowired
 	private StaffDao staffDao;
-
+	@Autowired
+    private HandleRiderDao handleRiderDao;
+    @Autowired
+    private HandleThirdDao handleThirdDao;
 	@RequestMapping(value = "/scan.html")
 	public String toPage() {
 		return "mobile/network/arrive_scan/arriveScan";
@@ -605,4 +624,27 @@ public class PdaController extends BaseController {
 
 		return toJsonTrueMsg();
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getWaybillsByloadingNo.html")
+	public String getWaybillsByloadingNo(String loadingNo) {
+
+		Principal me = SessionLocal.getPrincipal();
+		Long merchantId = Long.valueOf(me.getMerchantId());
+		List<String> waybillNos= new ArrayList<String>();
+		// rider
+		RiderDeliverySmallDO riderDeliverySmallDO = new RiderDeliverySmallDO();
+		riderDeliverySmallDO.setHandleNo(loadingNo);
+		List<RiderDeliverySmallDO> list = handleRiderDao.queryDeliverySmall(riderDeliverySmallDO);
+		for (RiderDeliverySmallDO riderDeliverySmallDO2 : list) {
+			waybillNos.add(riderDeliverySmallDO2.getOrderNo());
+		}
+		List<SendThirdDetail> sendList =  handleThirdDao.querySmall(merchantId, loadingNo);
+		for (SendThirdDetail sendThirdDetail : sendList) {
+			waybillNos.add(sendThirdDetail.getOrderNo());
+		}
+		
+		return toJsonTrueData(waybillNos);
+	}
+	
 }
