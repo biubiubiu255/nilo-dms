@@ -155,7 +155,7 @@ public class MobileHomeController extends BaseController {
 
         c.add(Calendar.DATE, -1);
         dateFormat = new SimpleDateFormat("yyyyMMdd").format(c.getTime());
-        map.put("beforeYesterday", deliverAgendaDao.queryReport(principal.getUserId(), dateFormat));
+        map.put("month", deliverAgendaDao.querySumSignReport(principal.getUserId()));
 
         return toJsonTrueData(map);
     }

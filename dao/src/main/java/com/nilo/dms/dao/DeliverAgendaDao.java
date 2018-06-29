@@ -15,4 +15,5 @@ import java.util.Map;
 @Repository
 public interface DeliverAgendaDao extends BaseDao<Long,DeliverAgendaDO> {
     DeliverAgendaDO queryReport(@Param("riderNo") String riderNo, @Param("dateFormat") String dateFormat);
+    DeliverAgendaDO querySumSignReport(@Param("riderNo") String riderNo);
 }

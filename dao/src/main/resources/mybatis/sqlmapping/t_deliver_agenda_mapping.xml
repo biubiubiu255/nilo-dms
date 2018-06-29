@@ -14,7 +14,7 @@
  <select id="queryReport" resultMap="deliverReport">
 
 SELECT
-	*, UNIX_TIMESTAMP() AS created_time
+	0 as delivered_month_num,b.*,c.*,d.*, UNIX_TIMESTAMP() AS created_time
 FROM
 	(
 		SELECT
@@ -62,13 +62,22 @@ FROM
 	INNER JOIN t_handle_rider_details AS b ON FROM_UNIXTIME(b.created_time, '%Y%m%d') =  #{dateFormat}
 	AND a.order_no = b.order_no
 	AND a.handle_by =  #{riderNo}
-	AND FROM_UNIXTIME(a.created_time, '%Y%m%d') =  #{dateFormat}
+	AND FROM_UNIXTIME(b.created_time, '%Y%m%d') =  #{dateFormat}
 	INNER JOIN t_handle_rider AS c ON b.handle_no = c.handle_no
 	AND c. STATUS = 1
 ) AS d
 
 
 
+</select> 
+
+<select id="querySumSignReport" resultMap="deliverReport">
+SELECT
+	count(1) deliveredMonthNum
+FROM
+	t_handle_sign t
+WHERE
+	handle_by = #{riderNo} and  FROM_UNIXTIME(t.handle_time, '%Y%m') = date_format(NOW(), '%Y%m') 
 </select>
 
 </mapper>
