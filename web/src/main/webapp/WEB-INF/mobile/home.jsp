@@ -152,14 +152,15 @@
                         Task / delay / signed
                     </a>--%>
         <a href="#" class="item">
+            <span id="beforeYesterday"></span>
+        </a>
+        <a href="#" class="item">
             <span id="day"></span>
         </a>
         <a href="#" class="item">
             <span id="yesterday"></span>
         </a>
-        <a href="#" class="item">
-            <span id="beforeYesterday"></span>
-        </a>
+        
     </div>
 </div>
 
@@ -175,12 +176,13 @@
             var today = date.Format("MM-dd");
             date.setDate(date.getDate() - 1);
             var yesterday = date.Format("MM-dd");
-            date.setDate(date.getDate() - 1);
-            var bfYesterday = date.Format("MM-dd");
+            //date.setDate(date.getDate() - 1);
+            var bfYesterday = new Date().toDateString().split(" ")[1];
+            //var bfYesterday = " month"
 
-            $("#day").html(today + ' task:' + data.data.day.taskDayNum + ",delay:" + data.data.day.delayDayNum + ",singed:" + data.data.day.deliveredDayNum);
-            $("#yesterday").html(yesterday + ' task:' + data.data.yesterday.taskDayNum + ",delay:" + data.data.yesterday.delayDayNum + ",singed:" + data.data.yesterday.deliveredDayNum);
-            $("#beforeYesterday").html(bfYesterday + ' task:' + data.data.beforeYesterday.taskDayNum + ",delay:" + data.data.beforeYesterday.delayDayNum + ",singed:" + data.data.beforeYesterday.deliveredDayNum);
+            $("#day").html('<font size="3" color="red">'+today+'</font> pending task:' + data.data.day.taskDayNum + ",delay:" + data.data.day.delayDayNum + ",singed:" + data.data.day.deliveredDayNum);
+            $("#yesterday").html('<font size="3" color="red">'+yesterday+'</font> pending task:' + data.data.yesterday.taskDayNum + ",delay:" + data.data.yesterday.delayDayNum + ",singed:" + data.data.yesterday.deliveredDayNum);
+            $("#beforeYesterday").html('<font size="3" color="red">'+bfYesterday+'</font> total singed:' + data.data.month.deliveredMonthNum);
         }, "json")
     }
 

@@ -85,11 +85,14 @@
         <div class="center-block" style="width:400px;">
 
             <h4><b><span style="font-weight: bolder; font-size: larger;">Shipment List</span></b></h4>
-
+			<div
+				style="position: absolute; left: 2px; top: 10px; height: 1.53cm; width: 5cm;">
+				<img src="/barCode/${pack.handleNo}.html">
+			</div>
             <h5 style="position:absolute;right: 10px;top: 20px;"> Date ${nowDate}</h5>
         </div>
 
-    <br><br>
+    <br><br><br>
     </div>
 
 

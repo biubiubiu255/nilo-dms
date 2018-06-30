@@ -61,7 +61,7 @@
                 </select>
             </div>
         </div>
-<%--
+
 
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label" style="width:120px">Outsource：</label>
@@ -75,7 +75,7 @@
                 </select>
             </div>
         </div>
---%>
+
 
 
 
@@ -129,16 +129,16 @@
                         {field: 'orderNo', title: 'Waybill No', width:200, fixed: 'left'}
                         ,{field: 'referenceNo', title: 'ReferenceNo', width:170}
                         ,{field: 'networkCodeDesc', title: 'Network', width:150}
-                        ,{field: 'rider', title: 'Rider', width:100}
-                        //,{field: 'outsource', title: 'Outsource', width:130}
                         ,{field: 'weight', title: 'Weight', width:100}
                         ,{field: 'statusDesc', title: 'Status', width:150}
-                        ,{field: 'handleBy', title: 'HandleName', width:150}
                         ,{field: '', title: 'HandleTime', width:200, templet:'<div>{{ formatDate(d.handleTime) }}</div>'}
-                        ,{field: 'remark', title: 'Remark', width:170}
                         ,{field: 'rName', title: 'Signer', width:150}
-                        ,{field: 'sName', title: 'Sender', width:150}
                         ,{field: 'address', title: 'Address', width:300}
+                        ,{field: 'handleBy', title: 'HandleName', width:150}
+                        ,{field: 'rider', title: 'Rider', width:100}
+                        ,{field: 'outsource', title: 'Outsource', width:130}
+                        ,{field: 'sName', title: 'Sender', width:150}
+                        ,{field: 'remark', title: 'Remark', width:170}
                     ]]
                     ,where: getParam(2, true)
 
@@ -190,7 +190,7 @@
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : new Date($("#fromCreatedTime").val()+' 00:00:00').getTime()/1000;
                 var eTime_creat = $("#toCreatedTime").val()==""   ? "" : new Date($("#toCreatedTime").val()+' 00:00:00').getTime()/1000;
-
+                var outsource  = $("select[name='outsource']").val();
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
                     fromHandledTime: sTime_creat,
@@ -198,7 +198,7 @@
                     exportType: dateType,
                     riderId: $("select[name='rider']").val(),
                     networkCode: $("select[name='nextStationCode']").val(),
-                    //outsource: outsource
+                    outsource: outsource
                 };
                 if (isPojo===true) return param;
                 else return jQuery.param( param );

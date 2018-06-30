@@ -370,7 +370,7 @@
 
         ON b.third_express_code = e.express_code
 
-        WHERE a.merchant_id=1 and b.type='waybill'
+        WHERE a.merchant_id=1 
 
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
@@ -438,7 +438,7 @@
 
         ON b.third_express_code = e.express_code
 
-        WHERE a.merchant_id=1 and b.type='waybill'
+        WHERE a.merchant_id=1 
 
         <if test="orderNo !=null and orderNo !='' ">
             and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')

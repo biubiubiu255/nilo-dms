@@ -6,23 +6,23 @@ package com.nilo.dms.service.system;
  */
 public interface SystemService {
 
-    void loadingAndRefreshCustomerConfig(String merchantId);
+    void loadingAndRefreshCustomerConfig();
 
     void loadingAndRefreshNetwork();
 
-    void loadingAndRefreshSerialNumRule(String merchantId);
+    void loadingAndRefreshSerialNumRule();
 
     void loadingAndRefreshLogConfig();
 
-    void loadingAndRefreshSystemCode(String merchantId);
+    void loadingAndRefreshSystemCode();
 
-    void loadingAndRefreshOrderHandleConfig(String merchantId);
+    void loadingAndRefreshOrderHandleConfig();
 
-    void loadingAndRefreshSMSConfig(String merchantId);
+    void loadingAndRefreshSMSConfig();
 
-    void loadingAndRefreshRouteConfig(String merchantId);
+    void loadingAndRefreshRouteConfig();
 
-    void loadingAndRefreshBizFeeConfig(String merchantId);
+    void loadingAndRefreshBizFeeConfig();
 
     void loadingAndRefreshAddressConfig();
 

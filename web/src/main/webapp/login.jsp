@@ -29,7 +29,7 @@
 <body class="hold-transition" style="background: url('/public/img/bg02.jpg'); background-size: cover;">
 <div class="login-box">
     <div class="login-logo">
-        DMS
+        KE-DMS
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
@@ -66,47 +66,47 @@
 <script src="./bootstrap/js/bootstrap.min.js"></script>
 <script>
 
-        $(function () {
-            $.get('account/verify.html', function (resp) {
-                if (resp.result) {
-                    setVerifyStyle(true);
-                } else {
-                    setVerifyStyle(false);
-                }
-            }, "json");
-        });
-
-        var loginNum = 0;
-        $('#login-form').submit(function () {
-            $('.login-box-msg').html("Waiting...");
-            var params = $(this).serialize();
-            $.post('account/login.html', params, function (resp) {
-                if (resp.result) {
-                    location.href = 'dashboard.html';
-                } else {
-                    $('.login-box-msg').html(resp.msg);
-                    if(++loginNum >= 3){
-                        setVerifyStyle(true);
-                    }
-                }
-            }, "json");
-            return false;
-        });
-
-        $('#captcha_img').click(function () {
-            var src = "captcha/image.html?";
-            $(this).attr('src', src + Math.random());
-        }).trigger('click');
-
-        function setVerifyStyle(bool) {
-            if(bool===false){
-                $(".has-captcha").first().attr("style", "display:none;");
-                $(".col-xs-8").first().attr("style", "display:none;");
-            }else {
-                $(".has-captcha").first().attr("style", "display:block;");
-                $(".col-xs-8").first().attr("style", "display:block;");
+    $(function () {
+        $.get('account/verify.html', function (resp) {
+            if (resp.result) {
+                setVerifyStyle(true);
+            } else {
+                setVerifyStyle(false);
             }
+        }, "json");
+    });
+
+    var loginNum = 0;
+    $('#login-form').submit(function () {
+        $('.login-box-msg').html("Waiting...");
+        var params = $(this).serialize();
+        $.post('account/login.html', params, function (resp) {
+            if (resp.result) {
+                location.href = 'dashboard.html';
+            } else {
+                $('.login-box-msg').html(resp.msg);
+                if (++loginNum >= 3) {
+                    setVerifyStyle(true);
+                }
+            }
+        }, "json");
+        return false;
+    });
+
+    $('#captcha_img').click(function () {
+        var src = "captcha/image.html?";
+        $(this).attr('src', src + Math.random());
+    }).trigger('click');
+
+    function setVerifyStyle(bool) {
+        if (bool === false) {
+            $(".has-captcha").first().attr("style", "display:none;");
+            $(".col-xs-8").first().attr("style", "display:none;");
+        } else {
+            $(".has-captcha").first().attr("style", "display:block;");
+            $(".col-xs-8").first().attr("style", "display:block;");
         }
+    }
 
 </script>
 </body>
