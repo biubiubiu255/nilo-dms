@@ -9,7 +9,9 @@
     request.setAttribute("orderTypeList", SystemCodeUtil.getSystemCodeList((String) session.getAttribute("merchantId"), "delivery_order_type"));
 %>
 <div class="box-body">
-    <div class="layui-row">
+    <button class="layui-btn btn-search">Search</button>
+    <div class="layui-colla-content ">
+    <div class="layui-form layui-row">
         <div class="layui-col-md4 layui-col-lg3">
             <label class="layui-form-label">Waybill No:</label>
             <div class="layui-input-inline">
@@ -18,29 +20,9 @@
         </div>
 
         <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">Driver:</label>
+            <label class="layui-form-label">ReferenceNo:</label>
             <div class="layui-form-item layui-inline">
-                <input type="text" name="driver" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-col-md4 layui-col-lg4">
-            <label class="layui-form-label">CreateTime:</label>
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
-            </div>
-            -
-            <div class="layui-inline">
-                <input type="text" class="layui-input" id="toCreatedTime" placeholder="To">
-            </div>
-        </div>
-    </div>
-    <div class="layui-form layui-row">
-
-        <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">HandleNo:</label>
-            <div class="layui-input-inline">
-                <input type="text" name="handleNo" autocomplete="off" class="layui-input">
+                <input type="text" name="referenceNo" autocomplete="off" class="layui-input">
             </div>
         </div>
 
@@ -52,13 +34,33 @@
                     <c:forEach items="${orderTypeList}" var="r">
                         <option value=${r.code}>${r.code}</option>
                     </c:forEach>
-                </select></div>
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <div class="layui-form layui-row">
+
+
+        <div class="layui-col-md4 layui-col-lg3">
+            <label class="layui-form-label">Status:</label>
+            <div class="layui-input-inline">
+                <select name="orderStatus" lay-filter="orderStatus" lay-search="">
+                    <option value="">Select Status....</option>
+                    <option value="20">Arrived</option>
+                    <option value="30">Delivery</option>
+                    <option value="40">Problem</option>
+                    <option value="60">Refuse</option>
+                    <option value="50">Sign</option>
+
+                </select>
+            </div>
         </div>
 
         <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">NextStation:</label>
+            <label class="layui-form-label">ArrivedNetWork:</label>
             <div class="layui-inline">
-                <select lay-filter="nextStationCodeLay" name="nextStationCode">
+                <select lay-filter="firstArriveNetworkId" name="firstArriveNetworkId">
                     <option value="">choose or search....</option>
                     <c:forEach items="${nextStations}" var="r">
                         <option value=${r.code}>${r.name}</option>
@@ -67,48 +69,183 @@
             </div>
         </div>
 
-    <div class="layui-row">
-
-
-
         <div class="layui-col-md4 layui-col-lg3">
-            <label class="layui-form-label">isPackage:</label>
-            <div class="layui-input-inline">
-                <select name="isPackage" lay-filter="isPackage" lay-search="">
-                    <option value="">Select packageType....</option>
-                    <option value="0">small</option>
-                    <option value="1">package</option>
+            <label class="layui-form-label">DeliverNetWork:</label>
+            <div class="layui-inline">
+                <select lay-filter="lastDeliverNetworkId" name="lastDeliverNetworkId">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${nextStations}" var="r">
+                        <option value=${r.code}>${r.name}</option>
+                    </c:forEach>
                 </select>
             </div>
         </div>
 
-
+    <div class="layui-form layui-row">
 
         <div class="layui-col-md4 layui-col-lg3">
-        <label class="layui-form-label">Status:</label>
-        <div class="layui-input-inline">
-            <select name="status" lay-filter="status" lay-search="">
-                <option value="">Select Status....</option>
-                <option value="20">Arrived</option>
-                <option value="30">Delivery</option>
-                <option value="40">Problem</option>
-                <option value="60">Refuse</option>
-                <option value="50">Sign</option>
+            <label class="layui-form-label">SignNetWork:</label>
+            <div class="layui-inline">
+                <select lay-filter="signNetworkId" name="signNetworkId">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${nextStations}" var="r">
+                        <option value=${r.code}>${r.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>
 
-            </select>
+        <div class="layui-col-md4 layui-col-lg3">
+            <label class="layui-form-label">SignName:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="signHandleByName" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-col-md4 layui-col-lg3">
+            <label class="layui-form-label" style="width:120px">Outsource：</label>
+            <div class="layui-input-inline">
+                <select name="signOutsourceCode" lay-filter="signOutsourceCode" lay-search=""
+                        <c:if test="${ not empty loading.rider}">disabled</c:if> style="display: none">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${outsourceList}" var="outsource">
+                        <option value="${outsource.outsource}"> ${outsource.outsourceName}</option>
+                    </c:forEach>
+                </select>
+            </div>
         </div>
 
     </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
-            <button class="layui-btn layui-btn-normal btn-export">Export</button>
-            <button class="layui-btn layui-btn-normal search">Search</button>
-            <button class="layui-btn layui-btn-normal btn-pdf">View</button>
-        </div>
-    </div>
-    <hr>
-</div>
+    <div class="layui-form layui-row">
 
+            <div class="layui-col-md4 layui-col-lg3">
+                <label class="layui-form-label">ExpressName:</label>
+                <div class="layui-inline">
+                    <select name="lastDeliverExpressCode" lay-verify="required" lay-filter="lastDeliverExpressCode">
+                        <option value="">choose or search....</option>
+                        <c:forEach items="${expressList}" var="r">
+                            <option value=${r.expressCode}>${r.expressName}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-col-md4 layui-col-lg3">
+                <label class="layui-form-label">Rider:</label>
+                <div class="layui-inline">
+                    <select name="lastDeliverRiderId" lay-verify="required" lay-filter="lastDeliverRiderId">
+                        <option value="">choose or search....</option>
+                        <c:forEach items="${riderList}" var="rider">
+                            <option value=${rider.userId}>${rider.staffId}-${rider.realName}</option>
+                        </c:forEach>
+                    </select>
+                    <%--<input type="text" name="orderNo" autocomplete="off" class="layui-input">--%>
+                </div>
+            </div>
+
+            <div class="layui-col-md4 layui-col-lg4">
+                <label class="layui-form-label">OrderTime:</label>
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="fromOrderTime" placeholder="From" lay-type="date_a" lay-key="1">
+                </div>
+                -
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="toOrderTime" placeholder="To" lay-type="date_b" lay-key="2">
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="layui-form layui-row">
+
+            <div class="layui-col-md4 layui-col-lg4">
+                <label class="layui-form-label">OrderCreateTime:</label>
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="fromOrderCreatedTime" placeholder="From" lay-type="date_a" lay-key="3">
+                </div>
+                -
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="toOrderCreatedTime" placeholder="To" lay-type="date_b" lay-key="4">
+                </div>
+            </div>
+
+            <div class="layui-col-md4 layui-col-lg4">
+                <label class="layui-form-label">ArriveTime:</label>
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="fromFirstArriveTime" placeholder="From" lay-type="date_a" lay-key="5">
+                </div>
+                -
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="toFirstArriveTime" placeholder="To" lay-type="date_b" lay-key="6">
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="layui-form layui-row">
+
+
+            <div class="layui-col-md4 layui-col-lg4">
+                <label class="layui-form-label">DeliverTime:</label>
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="fromLastDeliverTime" placeholder="From"  lay-type="date_a" lay-key="7">
+                </div>
+                -
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="toLastDeliverTime" placeholder="To" lay-type="date_b" lay-key="8">
+                </div>
+            </div>
+
+            <div class="layui-col-md4 layui-col-lg5">
+                <label class="layui-form-label">SignTime:</label>
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="fromSignTime" placeholder="From" lay-type="date_a" lay-key="9">
+                </div>
+                -
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="toSignTime" placeholder="To" lay-type="date_b" lay-key="10">
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+
+        <div class="layui-form layui-row">
+
+            <div class="layui-col-md4 layui-col-lg5">
+                <label class="layui-form-label">CreatedTime:</label>
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" lay-type="date_a" lay-key="11" lay-layd-init="1">
+                </div>
+                -
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="toCreatedTime" placeholder="To" lay-type="date_b" lay-key="12" lay-layd-init="1">
+                </div>
+            </div>
+
+            <div class="layui-col-md4 layui-col-lg3">
+                <button class="layui-btn layui-btn-normal btn-export">Export</button>
+                <button class="layui-btn layui-btn-normal search">Search</button>
+                <button class="layui-btn layui-btn-normal btn-pdf">View</button>
+            </div>
+
+
+        </div>
+
+
+
+
+        <hr>
+        </div>
+
+    </div>
 </div>
 
 
@@ -125,22 +262,35 @@
     <script type="text/javascript">
         $(function () {
 
+            $(".btn-search").on("click", function () {
+                $(".layui-colla-content").toggleClass("layui-show");
+                $(".btn-search").toggleClass("layui-btn-warm");
+            });
+
             var showPattern = 0;
             var tableMe;
             layui.use(['laydate','table'], function () {
 
-                var layDate = layui.laydate;
-                layDate.render({
-                    elem: '#fromCreatedTime'
-                    , lang: 'en'
-                    , isInitValue: true
-                    , value: new Date()
+                var laydate = layui.laydate;
+
+                var laydateParam = { elem: this, lang: 'en' };
+
+                lay("input[lay-type='date_a']").each(function(i, e){
+                    //console.log($(e).attr("lay-layd-init"));
+
+                    if($(e).attr("lay-layd-init")=="1"){
+                        laydateParam['isInitValue'] = true;
+                        laydateParam['value'] = new Date();
+                    };
+                    laydate.render(laydateParam);
                 });
-                layDate.render({
-                    elem: '#toCreatedTime'
-                    , lang: 'en'
-                    , isInitValue: true
-                    , value: new Date(new Date().getTime()+24*60*60*1000)
+                lay("input[lay-type='date_b']").each(function(){
+                    laydate.render({
+                        elem: this
+                        , lang: 'en'
+                        , isInitValue: false
+                        , value: new Date(new Date().getTime()+24*60*60*1000)
+                    });
                 });
 
                 var tab = layui.table;
@@ -155,7 +305,7 @@
                        ,{field: 'referenceNo', title: 'ReferenceNo', width:170}
                        ,{field: 'orderType', title: 'OrderType', width:100}
                        ,{field: 'orderStatusDesc', title: 'OrderStatus', width:130}
-                       ,{field: 'firstArriveNetworkName', title: 'FirstArriveNetworkName', width:200}
+                       ,{field: 'firstArrive30NetworkName', title: 'FirstArriveNetworkName', width:200}
                        ,{field: 'lastDeliverNetworkName', title: 'LastDeliverNetworkName', width:200}
                        ,{field: 'lastDeliverExpressCode', title: 'LastDeliverExpressCode', width:200}
                        ,{field: 'signHandleByName', title: 'SignHandleByName', width:150}
@@ -218,21 +368,61 @@
             function getParam(dateType, isPojo){
 
                 if (dateType=="" || dateType=='undefind') dateType=0;
-                var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : new Date($("#fromCreatedTime").val()+' 00:00:00').getTime()/1000;
-                var eTime_creat = $("#toCreatedTime").val()==""   ? "" : new Date($("#toCreatedTime").val()+' 00:00:00').getTime()/1000;
+
+                var fromOrderTime = $("#fromOrderTime").val()=="" ? "" : new Date($("#fromOrderTime").val()+' 00:00:00').getTime()/1000;
+                var toOrderTime   = $("#toOrderTime").val()==""   ? "" : new Date($("#toOrderTime").val()+' 00:00:00').getTime()/1000;
+
+                var fromOrderCreatedTime = $("#fromOrderCreatedTime").val()=="" ? "" : new Date($("#fromOrderCreatedTime").val()+' 00:00:00').getTime()/1000;
+                var toOrderCreatedTime   = $("#toOrderCreatedTime").val()==""   ? "" : new Date($("#toOrderCreatedTime").val()+' 00:00:00').getTime()/1000;
+
+                var fromFirstArriveTime = $("#fromFirstArriveTime").val()=="" ? "" : new Date($("#fromFirstArriveTime").val()+' 00:00:00').getTime()/1000;
+                var toFirstArriveTime   = $("#toFirstArriveTime").val()==""   ? "" : new Date($("#toFirstArriveTime").val()+' 00:00:00').getTime()/1000;
+
+                var fromLastDeliverTime = $("#fromLastDeliverTime").val()=="" ? "" : new Date($("#fromLastDeliverTime").val()+' 00:00:00').getTime()/1000;
+                var toLastDeliverTime   = $("#toLastDeliverTime").val()==""   ? "" : new Date($("#toLastDeliverTime").val()+' 00:00:00').getTime()/1000;
+
+                var fromSignTime = $("#fromSignTime").val()=="" ? "" : new Date($("#fromSignTime").val()+' 00:00:00').getTime()/1000;
+                var toSignTime   = $("#toSignTime").val()==""   ? "" : new Date($("#toSignTime").val()+' 00:00:00').getTime()/1000;
+
+                var fromCreatedTime = $("#fromCreatedTime").val()=="" ? "" : new Date($("#fromCreatedTime").val()+' 00:00:00').getTime()/1000;
+                var toCreatedTime   = $("#toCreatedTime").val()==""   ? "" : new Date($("#toCreatedTime").val()+' 00:00:00').getTime()/1000;
+
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
-                    driver: $("input[name='driver']").val(),
-                    fromCreatedTime: sTime_creat,
-                    toCreatedTime: eTime_creat,
-                    handleNo: $("input[name='handleNo']").val(),
+                    referenceNo: $("input[name='referenceNo']").val(),
+
                     orderType: $("select[name='orderType']").val(),
-                    expressCode: $("select[name='expressCode']").val(),
-                    nextStationCode: $("select[name='nextStationCode']").val(),
-                    exportType: dateType,
-                    isPackage: $("select[name='isPackage']").val(),
-                    status: $("select[name='status']").val()
+                    orderStatus: $("select[name='orderStatus']").val(),
+                    firstArriveNetworkId: $("select[name='firstArriveNetworkId']").val(),
+                    lastDeliverNetworkId: $("select[name='lastDeliverNetworkId']").val(),
+
+                    signNetworkId: $("select[name='signNetworkId']").val(),
+                    signHandleByName: $("input[name='signHandleByName']").val(),
+                    signOutsourceCode: $("select[name='signOutsourceCode']").val(),
+                    lastDeliverExpressCode: $("select[name='lastDeliverExpressCode']").val(),
+                    lastDeliverRiderId: $("select[name='lastDeliverRiderId']").val(),
+
+
+
+                    fromOrderTime: fromOrderTime,
+                    toOrderTime  : toOrderTime,
+
+                    fromOrderCreatedTime : fromOrderCreatedTime,
+                    toOrderCreatedTime   : toOrderCreatedTime,
+
+                    fromFirstArriveTime  : fromFirstArriveTime,
+                    toFirstArriveTime    : toFirstArriveTime,
+
+                    fromLastDeliverTime  : fromLastDeliverTime,
+                    toLastDeliverTime    : toLastDeliverTime,
+
+                    fromSignTime : fromSignTime,
+                    toSignTime   : toSignTime,
+
+                    fromCreatedTime : fromCreatedTime,
+                    toCreatedTime   : toCreatedTime
+
                 };
 
                 //console.log(param);

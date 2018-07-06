@@ -3,14 +3,12 @@ package com.nilo.dms.web.controller.report;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.OutsourceDao;
 import com.nilo.dms.dao.ReportWaybillDao;
 import com.nilo.dms.dao.ThirdExpressDao;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.dao.dataobject.QO.ReportWaybillQO;
 import com.nilo.dms.dao.dataobject.QO.SendReportQO;
-import com.nilo.dms.dao.dataobject.ReportWaybillDO;
-import com.nilo.dms.dao.dataobject.SendReportDO;
-import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SendReportService;
@@ -41,6 +39,9 @@ public class ReportWaybillController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private OutsourceDao outsourceDao;
+
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
 
@@ -60,9 +61,12 @@ public class ReportWaybillController extends BaseController {
          }
 
         List<ThirdExpressDO> expressList = userService.findExpressesAll(page);
+        List<OutsourceDO> outsourceList = outsourceDao.findAll(SessionLocal.getPrincipal().getMerchantId());
 
+        model.addAttribute("outsourceList", outsourceList);
         model.addAttribute("nextStations", list);
         model.addAttribute("expressList", expressList);
+        model.addAttribute("riderList", getRiderList(null));
 
         return "report/waybill/list";
     }
@@ -109,7 +113,7 @@ public class ReportWaybillController extends BaseController {
 
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
         // 动态指定报表模板url
-        model.addAttribute("url", "/WEB-INF/jasper/report/sendStation.jasper");
+        model.addAttribute("url", "/WEB-INF/jasper/report/waybill.jasper");
         model.addAttribute("format", fileType); // 报表格式
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView"; // 对应jasper-defs.xml中的bean id
