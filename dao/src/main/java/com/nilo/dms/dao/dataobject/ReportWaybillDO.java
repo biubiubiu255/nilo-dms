@@ -52,6 +52,8 @@ public class ReportWaybillDO{
     private Long lastDeliverRiderId;
 
     private String lastDeliverRiderName;
+    
+    private Integer updatedTime;
 
     public Integer getId() {
         return id;
@@ -250,4 +252,13 @@ public class ReportWaybillDO{
         this.lastDeliverRiderName = lastDeliverRiderName == null ? null : lastDeliverRiderName.trim();
     }
 
+	public Integer getUpdatedTime() {
+		return updatedTime;
+	}
+
+	public void setUpdatedTime(Integer updatedTime) {
+		this.updatedTime = updatedTime;
+	}
+
+    
 }

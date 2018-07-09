@@ -29,13 +29,14 @@
         <result column="sign_outsource_code" jdbcType="VARCHAR" property="signOutsourceCode" />
         <result column="last_deliver_rider_id" jdbcType="BIGINT" property="lastDeliverRiderId" />
         <result column="last_deliver_rider_name" jdbcType="VARCHAR" property="lastDeliverRiderName" />
+        <result column="updated_time" jdbcType="INTEGER" property="updatedTime" />
     </resultMap>
 
     <sql id="Base_Column_List">
         id, order_no, order_type, reference_no, order_time, order_status, order_created_time,
         first_arrive_time, first_arrive_network_id, first_arrive_network_name, last_deliver_time,
         last_deliver_network_id, last_deliver_network_name, last_deliver_express_code, sign_time, sign_handle_by_id,
-        sign_handle_by_name, sign_network_id, sign_network_name, created_time
+        sign_handle_by_name, sign_network_id, sign_network_name, created_time, updated_time
     </sql>
 
     <select id="queryWaybillReport" resultMap="waybillMap">
@@ -84,6 +85,121 @@
         order by created_time desc
         limit #{offset} , #{limit}
     </select>
+    
+    <select id="queryWaybillReportFormWaybill" resultMap="waybillMap">
+        SELECT 
+        order_no,order_type,reference_no,order_time ,order_status, created_time order_created_time ,updated_time
+        FROM
+        t_waybill
+        WHERE order_no = #{order_no} 
+    </select>
+    
+    <select id="queryWaybillReportByUpdateTime" resultMap="waybillMap">
+        SELECT
+        order_no,order_type,reference_no,order_time ,order_status, created_time order_created_time ,updated_time
+        FROM
+        t_waybill
+        WHERE 1
+        <if test="toCreatedTime !=null ">
+            and  <![CDATA[ updated_time > #{updated_time} ]]>
+        </if>
+    </select>
+    
+    <select id="queryWaybillReportByOrderNo" resultMap="waybillMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        t_report_waybill
+        WHERE  order_no = #{orderNo} 
+    </select>
+    
+    <select id="queryWaybillReportMaxUpdatedTime" resultType="java.lang.Long">
+        SELECT  ifnull(max(updated_time),1526743852) from t_report_waybill 
+    </select>
+    <select id="queryWaybillReportMaxCreatTime" resultType="java.lang.Long">
+        SELECT  ifnull(max(created_time),1526743852) from t_report_waybill 
+    </select>
+    <select id="queryWaybillArriveLog" resultMap="waybillMap">
+        SELECT t.opt_time first_arrive_time ,t.order_no order_no first_arrive_network_id,t.network_id first_arrive_network_name from t_waybill_log_arrive t WHERE id = (SELECT min(id) from t_waybill_log_arrive where order_no = #{orderNo})
+    </select>
+    <select id="queryWaybillDeliverExpressLog" resultMap="waybillMap">
+        SELECT updated_time last_deliver_time,network_code last_deliver_network_id,third_express_code last_deliver_express_code from t_handle_third_express t2 where id = (SELECT max(t1.id) from t_handle_third_express_details t,t_handle_third_express t1 where t.third_handle_no = t1.handle_no and t.`status` =1 AND t.order_no = #{orderNo})
+    </select>
+    <select id="queryWaybillDeliverRiderLog" resultMap="waybillMap">
+        SELECT updated_time last_deliver_time,network_id last_deliver_network_id , rider last_deliver_rider_id from t_handle_rider t2 where id = (SELECT max(t1.id) from t_handle_rider_details t,t_handle_rider t1 where t.handle_no = t1.handle_no and t.`status` =1 AND t.order_no = #{orderNo})
+    </select>
+    <select id="queryWaybillDeliverStationLog" resultMap="waybillMap">
+        SELECT updated_time last_deliver_time,network_code last_deliver_network_id,third_express_code last_deliver_express_code from t_handle_third_express t2 where id = (SELECT max(t1.id) from t_handle_third_express_details t,t_handle_third_express t1 where t.third_handle_no = t1.handle_no and t.`status` =1 AND t.order_no = #{parentNo})
+    </select>
+    
+    <!-- 动态更新语句 -->
+    <update id="updateWaybillReport" parameterType="com.nilo.dms.dao.dataobject.ReportWaybillDO" statementType="PREPARED">
+        update t_report_waybill
+        <trim prefix="set" suffixOverrides="," suffix="where order_no=#{orderNo}">
+            <if test="orderStatus != null ">
+                order_status = #{orderStatus},
+            </if>
+            <if test="firstArriveTime != null ">
+                first_arrive_time = #{firstArriveTime},
+            </if>
+            <if test="firstArriveNetworkId != null ">
+                first_arrive_network_id = #{firstArriveNetworkId},
+            </if>
+            <if test="firstArriveNetworkName != null">
+                first_arrive_network_name = #{firstArriveNetworkName},
+            </if>
+            <if test="lastDeliverTime != null">
+                last_deliver_time = #{lastDeliverTime},
+            </if>
+            <if test="lastDeliverNetworkId != null">
+                last_deliver_network_id = #{lastDeliverNetworkId},
+            </if>
+            <if test="lastDeliverNetworkName != null">
+                last_deliver_network_name = #{lastDeliverNetworkName},
+            </if>
+            <if test="lastDeliverExpressCode != null">
+                last_deliver_express_code = #{lastDeliverExpressCode},
+            </if>
+            <if test="signTime != null">
+                sign_time = #{signTime},
+            </if>
+            <if test="signHandleById != null">
+                sign_handle_by_id = #{signHandleById},
+            </if>
+            <if test="signHandleByName != null">
+                sign_handle_by_name = #{signHandleByName},
+            </if>
+            <if test="signNetworkId != null">
+                sign_network_id = #{signNetworkId},
+            </if>
+            <if test="signNetworkName != null">
+                sign_network_name = #{signNetworkName},
+            </if>
+            <if test="signOutsourceName != null">
+                sign_outsource_name = #{signOutsourceName},
+            </if>
+            <if test="signOutsourceCode != null">
+                sign_outsource_code = #{signOutsourceCode},
+            </if>
+            <if test="lastDeliverRiderId != null">
+                last_deliver_rider_id = #{lastDeliverRiderId},
+            </if>
+            <if test="lastDeliverRiderName != null">
+                last_deliver_rider_name = #{lastDeliverRiderName},
+            </if>
+        updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+    </trim>
+    </update>
+    
+     <!-- 插入语句 -->
+    <insert id="insertReportWaybill" parameterType="com.nilo.dms.dao.dataobject.ReportWaybillDO" statementType="PREPARED"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO t_reprot_waybill
+        ( order_no,order_type,reference_no,order_time ,order_status, order_created_time,first_arrive_time,first_arrive_network_id, first_arrive_network_name,last_deliver_time,last_deliver_network_id, last_deliver_network_name,last_deliver_express_code,sign_time, sign_handle_by_id ,sign_handle_by_name,sign_network_id,sign_network_name,sign_outsource_name,sign_outsource_code,last_deliver_rider_id,last_deliver_rider_name,created_time,updated_time)
+        VALUES
+        ( #{orderNo},#{orderType},#{referenceNo},#{orderTime},#{orderStatus},#{orderCreatedTime},firstArriveTime,firstArriveNetworkId, firstArriveNetworkName, lastDeliverTime,lastDeliverNetworkId,lastDeliverNetworkName, lastDeliverExpressCode,signTime,signHandleById,signHandleByName,signNetworkId,signNetworkName,signOutsourceName,signOutsourceCode,lastDeliverRiderId,lastDeliverRiderName, UNIX_TIMESTAMP(NOW()),UUID()),UNIX_TIMESTAMP(NOW()),UUID())
+    </insert>
 
     <select id="queryCountBy" resultType="java.lang.Long">
         SELECT

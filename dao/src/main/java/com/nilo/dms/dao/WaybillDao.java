@@ -35,4 +35,6 @@ public interface WaybillDao extends BaseDao<Long,WaybillDO> {
     List<String> findCreatePackageByNetWork(@Param("nextNetwork") String nextNetwork);
 
     void finishPackage(@Param("packageNo") String packageNo,@Param("weight") Double weight);
+    
+    List<WaybillDO> queryByUpdateTime(@Param("updatedTime") Long updatedTime);
 }

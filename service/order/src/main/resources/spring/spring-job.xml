@@ -21,11 +21,12 @@
 
 
     <!-- 定义一个定时任务类 -->
-    <bean id="quartzTaskPlus" class="com.nilo.dms.service.system.schedule.ScheduleMsn"></bean>
-
+    <!-- <bean id="quartzTaskPlus" class="com.nilo.dms.service.system.schedule.ScheduleMsn"></bean> -->
+	<bean id="quartzTaskReportWaybill" class="com.nilo.dms.service.system.schedule.ReportWaybill"></bean>
     <!-- jobDetail -->
     <bean id="quartzTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="quartzTaskPlus"></property>
+        <!-- <property name="targetObject" ref="quartzTaskPlus"></property> -->
+        <property name="targetObject" ref="quartzTaskReportWaybill"></property>
         <property name="targetMethod" value="run"></property>
         <property name="concurrent" value="false" /><!-- 作业不并发调度  -->
     </bean>
