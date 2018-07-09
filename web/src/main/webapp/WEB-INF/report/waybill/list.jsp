@@ -160,10 +160,9 @@
 
 
         <div class="layui-form layui-row">
-
             <div class="layui-col-md4 layui-col-lg4">
                 <label class="layui-form-label">OrderCreateTime:</label>
-                <div class="layui-inline">
+                <div class="layui-input-inline">
                     <input type="text" class="layui-input" id="fromOrderCreatedTime" placeholder="From" lay-type="date_a" lay-key="3">
                 </div>
                 -
@@ -272,25 +271,25 @@
             layui.use(['laydate','table'], function () {
 
                 var laydate = layui.laydate;
-
-                var laydateParam = { elem: this, lang: 'en' };
+                var laydateParam = {};
 
                 lay("input[lay-type='date_a']").each(function(i, e){
-                    //console.log($(e).attr("lay-layd-init"));
-
-                    if($(e).attr("lay-layd-init")=="1"){
+                    laydateParam = {elem: this, lang: 'en'};
+                    //console.log($(this).attr("lay-layd-init"));
+                    if($(this).attr("lay-layd-init")=="1"){
                         laydateParam['isInitValue'] = true;
                         laydateParam['value'] = new Date();
                     };
+                    //console.log(e);
                     laydate.render(laydateParam);
                 });
-                lay("input[lay-type='date_b']").each(function(){
-                    laydate.render({
-                        elem: this
-                        , lang: 'en'
-                        , isInitValue: false
-                        , value: new Date(new Date().getTime()+24*60*60*1000)
-                    });
+                lay("input[lay-type='date_b']").each(function(i, e){
+                    laydateParam = {elem: this, lang: 'en'};
+                    if($(e).attr("lay-layd-init")=="1"){
+                        laydateParam['isInitValue'] = true;
+                        laydateParam['value'] = new Date(new Date().getTime()+24*60*60*1000);
+                    };
+                    laydate.render(laydateParam);
                 });
 
                 var tab = layui.table;
@@ -421,7 +420,9 @@
                     toSignTime   : toSignTime,
 
                     fromCreatedTime : fromCreatedTime,
-                    toCreatedTime   : toCreatedTime
+                    toCreatedTime   : toCreatedTime,
+
+                    exportType: dateType
 
                 };
 

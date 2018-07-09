@@ -7,6 +7,21 @@ public class ReportWaybillQO extends ReportWaybillDO {
     private Integer offset;
     private Integer limit;
     private Integer total;
+
+    private Integer fromOrderTime;
+    private Integer toOrderTime;
+
+    private Integer fromOrderCreatedTime;
+    private Integer toOrderCreatedTime;
+
+    private Integer fromFirstArriveTime;
+    private Integer toFirstArriveTime;
+
+    private Integer fromLastDeliverTime;
+    private Integer toLastDeliverTime;
+
+    private Integer fromSignTime;
+    private Integer toSignTime;
     private Integer fromCreatedTime;
     private Integer toCreatedTime;
     private Integer exportType;
@@ -33,6 +48,86 @@ public class ReportWaybillQO extends ReportWaybillDO {
 
     public void setTotal(Integer total) {
         this.total = total;
+    }
+
+    public Integer getFromOrderTime() {
+        return fromOrderTime;
+    }
+
+    public void setFromOrderTime(Integer fromOrderTime) {
+        this.fromOrderTime = fromOrderTime;
+    }
+
+    public Integer getToOrderTime() {
+        return toOrderTime;
+    }
+
+    public void setToOrderTime(Integer toOrderTime) {
+        this.toOrderTime = toOrderTime;
+    }
+
+    public Integer getFromOrderCreatedTime() {
+        return fromOrderCreatedTime;
+    }
+
+    public void setFromOrderCreatedTime(Integer fromOrderCreatedTime) {
+        this.fromOrderCreatedTime = fromOrderCreatedTime;
+    }
+
+    public Integer getToOrderCreatedTime() {
+        return toOrderCreatedTime;
+    }
+
+    public void setToOrderCreatedTime(Integer toOrderCreatedTime) {
+        this.toOrderCreatedTime = toOrderCreatedTime;
+    }
+
+    public Integer getFromFirstArriveTime() {
+        return fromFirstArriveTime;
+    }
+
+    public void setFromFirstArriveTime(Integer fromFirstArriveTime) {
+        this.fromFirstArriveTime = fromFirstArriveTime;
+    }
+
+    public Integer getToFirstArriveTime() {
+        return toFirstArriveTime;
+    }
+
+    public void setToFirstArriveTime(Integer toFirstArriveTime) {
+        this.toFirstArriveTime = toFirstArriveTime;
+    }
+
+    public Integer getFromLastDeliverTime() {
+        return fromLastDeliverTime;
+    }
+
+    public void setFromLastDeliverTime(Integer fromLastDeliverTime) {
+        this.fromLastDeliverTime = fromLastDeliverTime;
+    }
+
+    public Integer getToLastDeliverTime() {
+        return toLastDeliverTime;
+    }
+
+    public void setToLastDeliverTime(Integer toLastDeliverTime) {
+        this.toLastDeliverTime = toLastDeliverTime;
+    }
+
+    public Integer getFromSignTime() {
+        return fromSignTime;
+    }
+
+    public void setFromSignTime(Integer fromSignTime) {
+        this.fromSignTime = fromSignTime;
+    }
+
+    public Integer getToSignTime() {
+        return toSignTime;
+    }
+
+    public void setToSignTime(Integer toSignTime) {
+        this.toSignTime = toSignTime;
     }
 
     public Integer getFromCreatedTime() {

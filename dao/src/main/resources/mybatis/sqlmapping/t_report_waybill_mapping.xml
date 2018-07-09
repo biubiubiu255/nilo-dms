@@ -71,16 +71,27 @@
         <if test="lastDeliverRiderId !=null">
             and last_deliver_rider_id = #{lastDeliverRiderId}
         </if>
-        <if test="signOutsourceCode !=null">
+        <if test="signOutsourceCode !=null and signOutsourceCode != ''">
             and sign_outsource_code = #{signOutsourceCode}
         </if>
 
-        <if test="fromCreatedTime !=null ">
-            and created_time >= #{fromCreatedTime}
-        </if>
-        <if test="toCreatedTime !=null ">
-            and  <![CDATA[ created_time <= #{toCreatedTime} ]]>
-        </if>
+        <if test="fromCreatedTime !=null ">and created_time >= #{fromCreatedTime}</if>
+        <if test="toCreatedTime !=null ">and  <![CDATA[ created_time <= #{toCreatedTime} ]]></if>
+
+        <if test="fromOrderTime !=null ">and order_time >= #{fromOrderTime}</if>
+        <if test="toOrderTime !=null ">and  <![CDATA[ order_time <= #{toOrderTime} ]]></if>
+
+        <if test="fromOrderCreatedTime !=null ">and order_created_time >= #{fromOrderCreatedTime}</if>
+        <if test="toOrderCreatedTime !=null ">and  <![CDATA[ order_created_time <= #{toOrderCreatedTime} ]]></if>
+
+        <if test="fromFirstArriveTime !=null ">and first_arrive_time >= #{fromFirstArriveTime}</if>
+        <if test="toFirstArriveTime !=null ">and  <![CDATA[ first_arrive_time <= #{toFirstArriveTime} ]]></if>
+
+        <if test="fromLastDeliverTime !=null ">and last_deliver_time >= #{fromLastDeliverTime}</if>
+        <if test="toLastDeliverTime !=null ">and  <![CDATA[ last_deliver_time <= #{toLastDeliverTime} ]]></if>
+
+        <if test="fromSignTime !=null ">and sign_time >= #{fromSignTime}</if>
+        <if test="toSignTime !=null ">and  <![CDATA[ sign_time <= #{toSignTime} ]]></if>
         <if test="orderStatus != null">
             and order_status = #{orderStatus}
         </if>
@@ -121,15 +132,27 @@
         <if test="lastDeliverRiderId !=null">
             and last_deliver_rider_id = #{lastDeliverRiderId}
         </if>
-        <if test="signOutsourceCode !=null">
+        <if test="signOutsourceCode !=null and signOutsourceCode != ''">
             and sign_outsource_code = #{signOutsourceCode}
         </if>
-        <if test="fromCreatedTime !=null ">
-            and created_time >= #{fromCreatedTime}
-        </if>
-        <if test="toCreatedTime !=null ">
-            and  <![CDATA[ created_time <= #{toCreatedTime} ]]>
-        </if>
+        <if test="fromCreatedTime !=null ">and created_time >= #{fromCreatedTime}</if>
+        <if test="toCreatedTime !=null ">and  <![CDATA[ created_time <= #{toCreatedTime} ]]></if>
+
+        <if test="fromOrderTime !=null ">and order_time >= #{fromOrderTime}</if>
+        <if test="toOrderTime !=null ">and  <![CDATA[ order_time <= #{toOrderTime} ]]></if>
+
+        <if test="fromOrderCreatedTime !=null ">and order_created_time >= #{fromOrderCreatedTime}</if>
+        <if test="toOrderCreatedTime !=null ">and  <![CDATA[ order_created_time <= #{toOrderCreatedTime} ]]></if>
+
+        <if test="fromFirstArriveTime !=null ">and first_arrive_time >= #{fromFirstArriveTime}</if>
+        <if test="toFirstArriveTime !=null ">and  <![CDATA[ first_arrive_time <= #{toFirstArriveTime} ]]></if>
+
+        <if test="fromLastDeliverTime !=null ">and last_deliver_time >= #{fromLastDeliverTime}</if>
+        <if test="toLastDeliverTime !=null ">and  <![CDATA[ last_deliver_time <= #{toLastDeliverTime} ]]></if>
+
+        <if test="fromSignTime !=null ">and sign_time >= #{fromSignTime}</if>
+        <if test="toSignTime !=null ">and  <![CDATA[ sign_time <= #{toSignTime} ]]></if>
+
         <if test="orderStatus != null">
             and order_status = #{orderStatus}
         </if>
