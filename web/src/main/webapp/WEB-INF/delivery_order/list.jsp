@@ -223,7 +223,7 @@
             $(".btn-search").on("click", function () {
                 $(".layui-colla-content").toggleClass("layui-show");
                 $(".btn-search").toggleClass("layui-btn-warm");
-            })
+            });
 
 
             layui.use('upload', function () {
