@@ -124,6 +124,8 @@
                var eTime_creat = $("input[name='createdTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='createdTime_e']").val()))/1000+86400;
                var sTime_receive = $("input[name='receiveTime_s']").val()=="" ? "" : Date.parse(new Date($("input[name='receiveTime_s']").val()))/1000;
                var eTime_receive = $("input[name='receiveTime_e']").val()=="" ? "" : Date.parse(new Date($("input[name='receiveTime_e']").val()))/1000+86400;
+               if(sTime_creat==eTime_creat) eTime_creat += 86400;
+               if(sTime_receive==eTime_receive) eTime_receive += 86400;
                if ((sTime_creat!="" && eTime_creat=="") || (eTime_creat!="" && sTime_creat=="") || (sTime_receive!="" && eTime_receive=="") || (eTime_receive!="" && sTime_receive=="")){
                    layui.use('layer', function () {
                        var layer = layui.layer;
