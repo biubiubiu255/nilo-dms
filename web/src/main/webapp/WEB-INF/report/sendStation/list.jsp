@@ -140,7 +140,7 @@
                     elem: '#toCreatedTime'
                     , lang: 'en'
                     , isInitValue: true
-                    , value: new Date(new Date().getTime()+24*60*60*1000)
+                    , value: new Date()
                 });
 
                 var tab = layui.table;
@@ -219,7 +219,7 @@
                 if (dateType=="" || dateType=='undefind') dateType=0;
                 var sTime_creat = $("#fromCreatedTime").val()=="" ? "" : new Date($("#fromCreatedTime").val()+' 00:00:00').getTime()/1000;
                 var eTime_creat = $("#toCreatedTime").val()==""   ? "" : new Date($("#toCreatedTime").val()+' 00:00:00').getTime()/1000;
-
+                if(sTime_creat==eTime_creat) eTime_creat += 86400;
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
                     driver: $("input[name='driver']").val(),

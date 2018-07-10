@@ -163,11 +163,11 @@
             <div class="layui-col-md4 layui-col-lg4">
                 <label class="layui-form-label">OrderCreateTime:</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="fromOrderCreatedTime" placeholder="From" lay-type="date_a" lay-key="3">
+                    <input type="text" class="layui-input" id="fromOrderCreatedTime" placeholder="From" lay-type="date_a" lay-key="3" lay-layd-init="1">
                 </div>
                 -
                 <div class="layui-inline">
-                    <input type="text" class="layui-input" id="toOrderCreatedTime" placeholder="To" lay-type="date_b" lay-key="4">
+                    <input type="text" class="layui-input" id="toOrderCreatedTime" placeholder="To" lay-type="date_b" lay-key="4" lay-layd-init="1">
                 </div>
             </div>
 
@@ -221,11 +221,11 @@
             <div class="layui-col-md4 layui-col-lg5">
                 <label class="layui-form-label">CreatedTime:</label>
                 <div class="layui-inline">
-                    <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" lay-type="date_a" lay-key="11" lay-layd-init="1">
+                    <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" lay-type="date_a" lay-key="11">
                 </div>
                 -
                 <div class="layui-inline">
-                    <input type="text" class="layui-input" id="toCreatedTime" placeholder="To" lay-type="date_b" lay-key="12" lay-layd-init="1">
+                    <input type="text" class="layui-input" id="toCreatedTime" placeholder="To" lay-type="date_b" lay-key="12">
                 </div>
             </div>
 
@@ -287,7 +287,7 @@
                     laydateParam = {elem: this, lang: 'en'};
                     if($(e).attr("lay-layd-init")=="1"){
                         laydateParam['isInitValue'] = true;
-                        laydateParam['value'] = new Date(new Date().getTime()+24*60*60*1000);
+                        laydateParam['value'] = new Date();
                     };
                     laydate.render(laydateParam);
                 });
@@ -383,9 +383,13 @@
                 var fromSignTime = $("#fromSignTime").val()=="" ? "" : new Date($("#fromSignTime").val()+' 00:00:00').getTime()/1000;
                 var toSignTime   = $("#toSignTime").val()==""   ? "" : new Date($("#toSignTime").val()+' 00:00:00').getTime()/1000;
 
-                var fromCreatedTime = $("#fromCreatedTime").val()=="" ? "" : new Date($("#fromCreatedTime").val()+' 00:00:00').getTime()/1000;
-                var toCreatedTime   = $("#toCreatedTime").val()==""   ? "" : new Date($("#toCreatedTime").val()+' 00:00:00').getTime()/1000;
-
+                //var fromCreatedTime = $("#fromCreatedTime").val()=="" ? "" : new Date($("#fromCreatedTime").val()+' 00:00:00').getTime()/1000;
+                //var toCreatedTime   = $("#toCreatedTime").val()==""   ? "" : new Date($("#toCreatedTime").val()+' 00:00:00').getTime()/1000;
+                if(fromOrderTime==toOrderTime) toOrderTime += 86400;
+                if(fromOrderCreatedTime==toOrderCreatedTime) toOrderCreatedTime += 86400;
+                if(fromFirstArriveTime==toFirstArriveTime) toFirstArriveTime += 86400;
+                if(fromLastDeliverTime==toLastDeliverTime) toLastDeliverTime += 86400;
+                if(fromSignTime==toSignTime) toSignTime += 86400;
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
@@ -419,8 +423,8 @@
                     fromSignTime : fromSignTime,
                     toSignTime   : toSignTime,
 
-                    fromCreatedTime : fromCreatedTime,
-                    toCreatedTime   : toCreatedTime,
+                    //fromCreatedTime : fromCreatedTime,
+                    //toCreatedTime   : toCreatedTime,
 
                     exportType: dateType
 
