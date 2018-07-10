@@ -148,7 +148,7 @@ table, tr, td, th {
 
 	<br>
 	<br>
-	<div class="col-xs-12" style="float: right">Rider's
+	<div class="col-xs-12" style="float: right">Driver's
 		Name:____________________________</div>
 	<br>
 	<br>
