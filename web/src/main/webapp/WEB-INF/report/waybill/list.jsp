@@ -283,17 +283,17 @@
                        ,{field: 'referenceNo', title: 'ReferenceNo', width:170}
                        ,{field: 'orderType', title: 'OrderType', width:100}
                        ,{field: 'orderStatusDesc', title: 'OrderStatus', width:130}
-                       ,{field: 'firstArrive30NetworkName', title: 'FirstArriveNetworkName', width:200}
-                       ,{field: 'lastDeliverNetworkName', title: 'LastDeliverNetworkName', width:200}
-                       ,{field: 'lastDeliverExpressCode', title: 'LastDeliverExpressCode', width:200}
-                       ,{field: 'signHandleByName', title: 'SignHandleByName', width:150}
-                       ,{field: 'signNetworkName', title: 'SignNetworkName', width:150}
-                       ,{field: 'lastDeliverRiderName', title: 'LastDeliverRiderName', width:170}
                        ,{title: 'OrderTime', width:200, templet:'<div>{{ formatDate(d.orderTime) }}</div>'}
                        ,{title: 'OrderCreatedTime', width:200, templet:'<div>{{ formatDate(d.orderCreatedTime) }}</div>'}
                        ,{title: 'FirstArriveTime', width:200, templet:'<div>{{ formatDate(d.firstArriveTime) }}</div>'}
+                       ,{field: 'firstArriveNetworkName', title: 'FirstArriveNetworkName', width:200}
+                       ,{field: 'lastDeliverRiderName', title: 'LastDeliverRiderName', width:170}
+                       ,{field: 'lastDeliverNetworkName', title: 'LastDeliverNetworkName', width:200}
+                       ,{field: 'lastDeliverExpressCode', title: 'LastDeliverExpressCode', width:200}
                        ,{title: 'LastDeliverTime', width:200, templet:'<div>{{ formatDate(d.lastDeliverTime) }}</div>'}
-                       ,{title: 'SignTime', width:200, templet:'<div>{{ formatDate(d.signTime) }}</div>'}
+                       ,{field: 'signHandleByName', title: 'SignHandleByName', width:150}
+                       ,{field: 'signNetworkName', title: 'SignNetworkName', width:150}
+                        ,{title: 'SignTime', width:200, templet:'<div>{{ formatDate(d.signTime) }}</div>'}
                        ,{title: 'CreatedTime', width:200, templet:'<div>{{ formatDate(d.createdTime) }}</div>'}
                     ]]
                     ,where: getParam(2, true)

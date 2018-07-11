@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by ronny on 2017/9/15.
+ * Created by alvin on 2018/07/11.
  */
 public enum DeliveryOrderStatusEnum implements EnumMessage{
 
