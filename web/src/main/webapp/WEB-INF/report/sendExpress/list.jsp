@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">OrderType:</label>
             <div class="layui-inline">
                 <select name="orderType" lay-verify="required" lay-filter="orderTypeLay" style="display: none">
@@ -55,7 +55,7 @@
                 </select></div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">ExpressName:</label>
             <div class="layui-inline">
                 <select name="expressCode" lay-verify="required" lay-filter="expressCodeLay" style="display: none">
@@ -68,7 +68,7 @@
 
     <div class="layui-row">
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">Status:</label>
             <div class="layui-input-inline">
                 <select name="status" lay-filter="status" lay-search="">

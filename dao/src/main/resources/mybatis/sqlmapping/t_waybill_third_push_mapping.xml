@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.ThirdPushDao">
+
+	<resultMap id="BaseResultMap" type="com.nilo.dms.dao.dataobject.ThirdPushDo">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="order_id" jdbcType="BIGINT" property="orderId" />
+		<result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+		<result column="reference_no" jdbcType="VARCHAR" property="referenceNo" />
+		<result column="created_time" jdbcType="BIGINT" property="createdTime" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id, order_id, order_no, reference_no, created_time, status
+	</sql>
+
+	<select id="queryBy" parameterType="com.nilo.dms.dao.dataobject.ThirdPushDo" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_waybill_third_push
+		where 1
+		<if test="orderId != null">and order_id = #{orderId}</if>
+		<if test="orderNo != null">and order_no = #{orderNo}</if>
+		<if test="referenceNo != null">and reference_no = #{referenceNo}</if>
+		<if test="status != null">and status = #{status}</if>
+	</select>
+
+
+	<select id="queryById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_waybill_third_push
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from t_waybill_third_push
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insert" parameterType="com.nilo.dms.dao.dataobject.ThirdPushDo">
+		insert into t_waybill_third_push (id, order_id, order_no,
+		reference_no, created_time, status
+		)
+		values (#{id,jdbcType=INTEGER}, #{orderId,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR},
+		#{referenceNo,jdbcType=VARCHAR}, UNIX_TIMESTAMP(NOW()), #{status,jdbcType=INTEGER}
+		)
+	</insert>
+
+</mapper>

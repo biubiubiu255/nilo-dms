@@ -2,6 +2,8 @@ package com.nilo.dms.dao.dataobject.QO;
 
 import com.nilo.dms.common.BaseDo;
 
+import java.util.List;
+
 public class SendReportQO extends BaseDo<Long> {
     private Long merchantId;
     private String referenceNo;
@@ -29,7 +31,7 @@ public class SendReportQO extends BaseDo<Long> {
     private Integer fromCreatedTime;
     private Integer toCreatedTime;
     private Integer exportType;
-
+    private List<Integer> networks;
 
     public Long getMerchantId() {
         return merchantId;
@@ -221,6 +223,14 @@ public class SendReportQO extends BaseDo<Long> {
 
     public void setIsPackage(String isPackage) {
         this.isPackage = isPackage;
+    }
+
+    public List<Integer> getNetworks() {
+        return networks;
+    }
+
+    public void setNetworks(List<Integer> networks) {
+        this.networks = networks;
     }
 
     @Override

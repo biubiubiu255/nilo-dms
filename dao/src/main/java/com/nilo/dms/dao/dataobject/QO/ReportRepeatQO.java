@@ -3,6 +3,8 @@ package com.nilo.dms.dao.dataobject.QO;
 import com.nilo.dms.common.BaseDo;
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 
+import java.util.List;
+
 public class ReportRepeatQO extends BaseDo<Long> {
     private Long    merchantId;
     private String  handleNo;
@@ -28,6 +30,7 @@ public class ReportRepeatQO extends BaseDo<Long> {
     private Integer fromCreatedTime;
     private Integer toCreatedTime;
     private Integer exportType;
+    private List<Integer> networks;
 
     public Long getMerchantId() {
         return merchantId;
@@ -224,5 +227,13 @@ public class ReportRepeatQO extends BaseDo<Long> {
 
     public void setNextStationCode(Integer nextStationCode) {
         this.nextStationCode = nextStationCode;
+    }
+
+    public List<Integer> getNetworks() {
+        return networks;
+    }
+
+    public void setNetworks(List<Integer> networks) {
+        this.networks = networks;
     }
 }

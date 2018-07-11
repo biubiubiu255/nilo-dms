@@ -16,6 +16,7 @@ public class SignOrderParameter {
     private Integer toHandledTime;
     private Integer offset;
     private Integer limit;
+    private List<Integer> networks;
 
     public String getMerchantId() {
         return merchantId;
@@ -119,6 +120,14 @@ public class SignOrderParameter {
 
     public void setOutsource(String outsource) {
         this.outsource = outsource;
+    }
+
+    public List<Integer> getNetworks() {
+        return networks;
+    }
+
+    public void setNetworks(List<Integer> networks) {
+        this.networks = networks;
     }
 
     @Override
