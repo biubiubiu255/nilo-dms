@@ -100,6 +100,7 @@ public class ReportSendExpressController extends BaseController {
                 fileType = "pdf";
         }
 
+        sendReportQO.setNetworks(me.getNetworks());
         List<SendReportDO> list = sendReportService.querySendExpressReport(sendReportQO, page);
 
         if (fileType.equals("json")) {

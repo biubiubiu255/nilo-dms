@@ -19,7 +19,7 @@
         </div>
 
 
-        <div class="layui-col-md4 layui-col-lg4">
+        <div class="layui-col-md4 layui-col-lg5">
             <label class="layui-form-label">ScanTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="createdTime_s">
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label" style="width:110px">Rider:</label>
             <div class="layui-form-item layui-inline" style="margin: 0px">
                 <select lay-filter="select-rider-fy" name="rider">
@@ -50,7 +50,7 @@
     <div class="layui-form layui-row">
 
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">Network:</label>
             <div class="layui-inline">
                 <select lay-filter="nextStationCodeLay" name="nextStationCode">
@@ -63,7 +63,7 @@
         </div>
 
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label" style="width:120px">Outsource：</label>
             <div class="layui-input-inline">
                 <select name="outsource" lay-filter="outsource" lay-search=""

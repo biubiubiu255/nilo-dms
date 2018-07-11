@@ -69,6 +69,8 @@ public class ReportWaybill {
 				} else {
 					newFlag = false;
 				}
+				
+				newReportWaybill.setUpdatedTime(waybillDO.getUpdatedTime().intValue());
 				// 取最早一次到件信息
 				ReportWaybillDO updateArriveReportWaybill = reportWaybillDao
 						.queryWaybillArriveLog(waybillDO.getOrderNo());

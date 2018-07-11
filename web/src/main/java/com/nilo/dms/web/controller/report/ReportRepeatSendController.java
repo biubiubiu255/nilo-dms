@@ -109,7 +109,7 @@ public class ReportRepeatSendController extends BaseController {
             reportRepeatQO.setFromCreatedTime(new Long(LocalDateTime.now().withHour(0).withMinute(0).toEpochSecond(ZoneOffset.of("+8"))).intValue());
             reportRepeatQO.setToCreatedTime(new Long(LocalDateTime.now().withHour(23).withMinute(59).toEpochSecond(ZoneOffset.of("+8"))).intValue());
         }*/
-
+        reportRepeatQO.setNetworks(SessionLocal.getPrincipal().getNetworks());
         reportRepeatQO.setLimit(page.getLimit());
         reportRepeatQO.setOffset(page.getOffset());
         List<ReportRepeatDO> list = sendReportDao.queryRepeatDispatch(reportRepeatQO);

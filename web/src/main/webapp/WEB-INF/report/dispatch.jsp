@@ -55,7 +55,7 @@
             </div>
 
 
-            <div class="layui-col-md4 layui-col-lg4">
+            <div class="layui-col-md4 layui-col-lg5">
                 <label class="layui-form-label">CreatedTime:</label>
                 <div class="layui-inline">
                     <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="createdTime_s">

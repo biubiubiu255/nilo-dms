@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg4">
+        <div class="layui-col-md4 layui-col-lg5">
             <label class="layui-form-label">CreateTime:</label>
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From">
@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">OrderType:</label>
             <div class="layui-inline">
                 <select name="orderType" lay-verify="required" lay-filter="orderTypeLay" style="display: none">
@@ -55,7 +55,7 @@
                 </select></div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">NextStation:</label>
             <div class="layui-inline">
                 <select lay-filter="nextStationCodeLay" name="nextStationCode">
@@ -71,7 +71,7 @@
 
 
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">isPackage:</label>
             <div class="layui-input-inline">
                 <select name="isPackage" lay-filter="isPackage" lay-search="">
@@ -84,7 +84,7 @@
 
 
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
         <label class="layui-form-label">Status:</label>
         <div class="layui-input-inline">
             <select name="status" lay-filter="status" lay-search="">

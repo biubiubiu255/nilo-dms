@@ -210,6 +210,28 @@
             and d.status = #{status}
         </if>
 
+        <if test="networks!=null and networks.size()>0">
+            and (
+            (first_arrive_network_id in
+            <foreach collection="networks" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            )
+            or
+            (last_deliver_network_id in
+            <foreach collection="networks" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            )
+            or
+            (sign_network_id in
+            <foreach collection="networks" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            )
+            )
+        </if>
+
         order by d.created_time desc
 
         <if test="limit !=null ">
@@ -327,7 +349,27 @@
         <if test="status != null">
             and d.status = #{status}
         </if>
-
+        <if test="networks!=null and networks.size()>0">
+            and (
+            (first_arrive_network_id in
+            <foreach collection="networks" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            )
+            or
+            (last_deliver_network_id in
+            <foreach collection="networks" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            )
+            or
+            (sign_network_id in
+            <foreach collection="networks" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            )
+            )
+        </if>
 
     </select>
 

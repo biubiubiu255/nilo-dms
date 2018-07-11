@@ -79,6 +79,7 @@ public class ReportWaybillController extends BaseController {
 
         Pagination page = getPage();
 
+
         //
         //获取merchantId
         Long merchantId = Long.parseLong(me.getMerchantId());
@@ -104,8 +105,9 @@ public class ReportWaybillController extends BaseController {
         reportWaybillQO.setLimit(page.getLimit());
 
 
+        reportWaybillQO.setNetworks(me.getNetworks());
         List<ReportWaybillDO> list = reportWaybillDao.queryWaybillReport(reportWaybillQO);
-
+        page.setTotalCount(reportWaybillDao.queryCountBy(reportWaybillQO));
         if (fileType.equals("json")) {
             request.setAttribute("toDate", toPaginationLayUIData(page, list));
             return "common/toResponseBody";
