@@ -2,6 +2,8 @@ package com.nilo.dms.dao.dataobject.QO;
 
 import com.nilo.dms.dao.dataobject.ReportWaybillDO;
 
+import java.util.List;
+
 public class ReportWaybillQO extends ReportWaybillDO {
 
     private Integer offset;
@@ -25,6 +27,7 @@ public class ReportWaybillQO extends ReportWaybillDO {
     private Integer fromCreatedTime;
     private Integer toCreatedTime;
     private Integer exportType;
+    private List<Integer> networks;
 
     public Integer getOffset() {
         return offset;
@@ -152,5 +155,13 @@ public class ReportWaybillQO extends ReportWaybillDO {
 
     public void setExportType(Integer exportType) {
         this.exportType = exportType;
+    }
+
+    public List<Integer> getNetworks() {
+        return networks;
+    }
+
+    public void setNetworks(List<Integer> networks) {
+        this.networks = networks;
     }
 }

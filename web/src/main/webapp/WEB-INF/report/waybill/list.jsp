@@ -12,21 +12,21 @@
     <button class="layui-btn btn-search">Search</button>
     <div class="layui-colla-content ">
     <div class="layui-form layui-row">
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">Waybill No:</label>
             <div class="layui-input-inline">
                 <input type="text" name="orderNo" autocomplete="off" class="layui-input">
             </div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">ReferenceNo:</label>
             <div class="layui-form-item layui-inline">
                 <input type="text" name="referenceNo" autocomplete="off" class="layui-input">
             </div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">OrderType:</label>
             <div class="layui-inline">
                 <select name="orderType" lay-verify="required" lay-filter="orderTypeLay" style="display: none">
@@ -40,9 +40,9 @@
 
     </div>
     <div class="layui-form layui-row">
+6
 
-
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4 layui-col-sm6">
             <label class="layui-form-label">Status:</label>
             <div class="layui-input-inline">
                 <select name="orderStatus" lay-filter="orderStatus" lay-search="">
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md5 layui-col-lg5">
             <label class="layui-form-label">ArrivedNetWork:</label>
             <div class="layui-inline">
                 <select lay-filter="firstArriveNetworkId" name="firstArriveNetworkId">
@@ -68,8 +68,11 @@
                 </select>
             </div>
         </div>
+<%--
+    </div>
+    <div class="layui-form layui-row">--%>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">DeliverNetWork:</label>
             <div class="layui-inline">
                 <select lay-filter="lastDeliverNetworkId" name="lastDeliverNetworkId">
@@ -83,7 +86,7 @@
 
     <div class="layui-form layui-row">
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">SignNetWork:</label>
             <div class="layui-inline">
                 <select lay-filter="signNetworkId" name="signNetworkId">
@@ -95,14 +98,14 @@
             </div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">SignName:</label>
             <div class="layui-input-inline">
                 <input type="text" name="signHandleByName" autocomplete="off" class="layui-input">
             </div>
         </div>
 
-        <div class="layui-col-md4 layui-col-lg3">
+        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label" style="width:120px">Outsource：</label>
             <div class="layui-input-inline">
                 <select name="signOutsourceCode" lay-filter="signOutsourceCode" lay-search=""
@@ -119,7 +122,7 @@
 
     <div class="layui-form layui-row">
 
-            <div class="layui-col-md4 layui-col-lg3">
+            <div class="layui-col-md4 layui-col-lg4">
                 <label class="layui-form-label">ExpressName:</label>
                 <div class="layui-inline">
                     <select name="lastDeliverExpressCode" lay-verify="required" lay-filter="lastDeliverExpressCode">
@@ -131,7 +134,7 @@
                 </div>
             </div>
 
-            <div class="layui-col-md4 layui-col-lg3">
+            <div class="layui-col-md4 layui-col-lg4">
                 <label class="layui-form-label">Rider:</label>
                 <div class="layui-inline">
                     <select name="lastDeliverRiderId" lay-verify="required" lay-filter="lastDeliverRiderId">
@@ -160,7 +163,7 @@
 
 
         <div class="layui-form layui-row">
-            <div class="layui-col-md4 layui-col-lg4">
+            <div class="layui-col-md4 layui-col-lg6">
                 <label class="layui-form-label">OrderCreateTime:</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input" id="fromOrderCreatedTime" placeholder="From" lay-type="date_a" lay-key="3" lay-layd-init="1">
@@ -171,7 +174,7 @@
                 </div>
             </div>
 
-            <div class="layui-col-md4 layui-col-lg4">
+            <div class="layui-col-md4 layui-col-lg6">
                 <label class="layui-form-label">ArriveTime:</label>
                 <div class="layui-inline">
                     <input type="text" class="layui-input" id="fromFirstArriveTime" placeholder="From" lay-type="date_a" lay-key="5">
@@ -188,7 +191,7 @@
         <div class="layui-form layui-row">
 
 
-            <div class="layui-col-md4 layui-col-lg4">
+            <div class="layui-col-md4 layui-col-lg6">
                 <label class="layui-form-label">DeliverTime:</label>
                 <div class="layui-inline">
                     <input type="text" class="layui-input" id="fromLastDeliverTime" placeholder="From"  lay-type="date_a" lay-key="7">
@@ -199,7 +202,7 @@
                 </div>
             </div>
 
-            <div class="layui-col-md4 layui-col-lg5">
+            <div class="layui-col-md4 layui-col-lg6">
                 <label class="layui-form-label">SignTime:</label>
                 <div class="layui-inline">
                     <input type="text" class="layui-input" id="fromSignTime" placeholder="From" lay-type="date_a" lay-key="9">
