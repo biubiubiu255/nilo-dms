@@ -83,7 +83,7 @@ public class ReportArriveController extends BaseController {
         }
 */
 
-
+        reportArriveQO.setNetworks(me.getNetworks());
         List<ReportArriveDO> list = waybillArriveDao.queryReportArrive(reportArriveQO);
         page.setTotalCount(waybillArriveDao.queryReportArriveCount(reportArriveQO));
         //page.setTotalCount(commonDao.lastFoundRows());
