@@ -37,9 +37,6 @@ public class ReportServiceImpl implements ReportService {
 	@Autowired
 	private WaybillDao waybillDao;
 
-	@Autowired
-	private WaybillArriveDao waybillArriveDao;
-
 	@Override
 	public List<ReportCodDO> qeueryCodList(ReportCodQuery reportCodQuery, Pagination page) {
 

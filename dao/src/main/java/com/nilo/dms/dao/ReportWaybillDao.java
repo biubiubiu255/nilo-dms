@@ -42,4 +42,6 @@ public interface ReportWaybillDao extends BaseDao<Long, ReportWaybillDO> {
 	ReportWaybillDO queryWaybillDeliverStationLog(String parentNo);
 	
 	ReportWaybillDO queryWaybillArriveLog(String orderNo);
+	
+	ReportWaybillDO queryWaybillSignLog(String orderNo);
 }

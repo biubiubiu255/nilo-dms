@@ -30,6 +30,7 @@
         <result column="last_deliver_rider_id" jdbcType="BIGINT" property="lastDeliverRiderId" />
         <result column="last_deliver_rider_name" jdbcType="VARCHAR" property="lastDeliverRiderName" />
         <result column="updated_time" jdbcType="INTEGER" property="updatedTime" />
+        <result column="last_deliver_outsource_name" jdbcType="VARCHAR" property="lastDeliverOutsourceName" />
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -102,7 +103,7 @@
     
     <select id="queryWaybillReportFormWaybill" resultMap="waybillMap">
         SELECT 
-        order_no,order_type,reference_no,order_time ,order_status, created_time order_created_time ,updated_time
+        order_no,order_type,reference_no,order_time ,status order_status, created_time order_created_time ,updated_time
         FROM
         t_waybill
         WHERE order_no = #{order_no} 
@@ -128,13 +129,13 @@
     </select>
     
     <select id="queryWaybillReportMaxUpdatedTime" resultType="java.lang.Long">
-        SELECT  ifnull(max(updated_time),1526743852) from t_report_waybill 
+        SELECT  ifnull(max(updated_time),1527928279) from t_report_waybill 
     </select>
     <select id="queryWaybillReportMaxCreatTime" resultType="java.lang.Long">
-        SELECT  ifnull(max(created_time),1526743852) from t_report_waybill 
+        SELECT  ifnull(max(created_time),1527928279) from t_report_waybill 
     </select>
     <select id="queryWaybillArriveLog" resultMap="waybillMap">
-        SELECT t.opt_time first_arrive_time ,t.order_no order_no first_arrive_network_id,t.network_id first_arrive_network_name from t_waybill_log_arrive t WHERE id = (SELECT min(id) from t_waybill_log_arrive where order_no = #{orderNo})
+        SELECT t.opt_time first_arrive_time ,t.order_no order_no ,t.network_id first_arrive_network_id   from t_waybill_log_arrive t WHERE id = (SELECT min(id) from t_waybill_log_arrive where order_no = #{orderNo})
     </select>
     <select id="queryWaybillDeliverExpressLog" resultMap="waybillMap">
         SELECT updated_time last_deliver_time,network_code last_deliver_network_id,third_express_code last_deliver_express_code from t_handle_third_express t2 where id = (SELECT max(t1.id) from t_handle_third_express_details t,t_handle_third_express t1 where t.third_handle_no = t1.handle_no and t.`status` =1 AND t.order_no = #{orderNo})
@@ -144,6 +145,9 @@
     </select>
     <select id="queryWaybillDeliverStationLog" resultMap="waybillMap">
         SELECT updated_time last_deliver_time,network_code last_deliver_network_id,third_express_code last_deliver_express_code from t_handle_third_express t2 where id = (SELECT max(t1.id) from t_handle_third_express_details t,t_handle_third_express t1 where t.third_handle_no = t1.handle_no and t.`status` =1 AND t.order_no = #{parentNo})
+    </select>
+    <select id="queryWaybillSignLog" resultMap="waybillMap">
+        SELECT order_no ,handle_by sign_handle_by_id, created_time sign_time,network_code sign_network_id from t_handle_sign t where t.order_no = #{orderNo}
     </select>
     
     <!-- 动态更新语句 -->
@@ -201,7 +205,10 @@
             <if test="lastDeliverRiderName != null">
                 last_deliver_rider_name = #{lastDeliverRiderName},
             </if>
-        updated_time=UNIX_TIMESTAMP(NOW()),version=UUID()
+            <if test="lastDeliverOutsourceCode != null">
+                last_deliver_outsource_name = #{lastDeliverOutsourceCode},
+            </if>
+        updated_time = #{updatedTime}
     </trim>
     </update>
     
@@ -209,10 +216,10 @@
     <insert id="insertReportWaybill" parameterType="com.nilo.dms.dao.dataobject.ReportWaybillDO" statementType="PREPARED"
             useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO t_reprot_waybill
-        ( order_no,order_type,reference_no,order_time ,order_status, order_created_time,first_arrive_time,first_arrive_network_id, first_arrive_network_name,last_deliver_time,last_deliver_network_id, last_deliver_network_name,last_deliver_express_code,sign_time, sign_handle_by_id ,sign_handle_by_name,sign_network_id,sign_network_name,sign_outsource_name,sign_outsource_code,last_deliver_rider_id,last_deliver_rider_name,created_time,updated_time)
+        INSERT INTO t_report_waybill
+        ( order_no,order_type,reference_no,order_time ,order_status, order_created_time,first_arrive_time,first_arrive_network_id, first_arrive_network_name,last_deliver_time,last_deliver_network_id, last_deliver_network_name,last_deliver_express_code,sign_time, sign_handle_by_id ,sign_handle_by_name,sign_network_id,sign_network_name,sign_outsource_name,sign_outsource_code,last_deliver_rider_id,last_deliver_rider_name,created_time,updated_time,last_deliver_outsource_name)
         VALUES
-        ( #{orderNo},#{orderType},#{referenceNo},#{orderTime},#{orderStatus},#{orderCreatedTime},firstArriveTime,firstArriveNetworkId, firstArriveNetworkName, lastDeliverTime,lastDeliverNetworkId,lastDeliverNetworkName, lastDeliverExpressCode,signTime,signHandleById,signHandleByName,signNetworkId,signNetworkName,signOutsourceName,signOutsourceCode,lastDeliverRiderId,lastDeliverRiderName, UNIX_TIMESTAMP(NOW()),UUID()),UNIX_TIMESTAMP(NOW()),UUID())
+        ( #{orderNo},#{orderType},#{referenceNo},#{orderTime},#{orderStatus},#{orderCreatedTime},#{firstArriveTime},#{firstArriveNetworkId}, #{firstArriveNetworkName}, #{lastDeliverTime},#{lastDeliverNetworkId},#{lastDeliverNetworkName}, #{lastDeliverExpressCode},#{signTime},#{signHandleById},#{signHandleByName},#{signNetworkId},#{signNetworkName},#{signOutsourceName},#{signOutsourceCode},#{lastDeliverRiderId},#{lastDeliverRiderName}, UNIX_TIMESTAMP(NOW()),#{updatedTime},#{lastDeliverOutsourceName})
     </insert>
 
     <select id="queryCountBy" resultType="java.lang.Long">

@@ -54,8 +54,20 @@ public class ReportWaybillDO{
     private String lastDeliverRiderName;
     
     private Integer updatedTime;
+    
+    private String lastDeliverOutsourceName;
 
-    public Integer getId() {
+    
+   
+	public String getLastDeliverOutsourceName() {
+		return lastDeliverOutsourceName;
+	}
+
+	public void setLastDeliverOutsourceName(String lastDeliverOutsourceName) {
+		this.lastDeliverOutsourceName = lastDeliverOutsourceName;
+	}
+
+	public Integer getId() {
         return id;
     }
 

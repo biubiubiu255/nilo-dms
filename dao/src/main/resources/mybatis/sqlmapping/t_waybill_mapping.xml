@@ -143,8 +143,9 @@
     <select id="queryByUpdateTime" resultMap="orderDO" statementType="PREPARED">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_waybill
-        WHERE <![CDATA[ updated_time <= #{updatedTime} ]]>
+        FROM t_waybill 
+        WHERE <![CDATA[ updated_time > #{updatedTime} ]]>
+        order by updated_time limit 0,3000
     </select>
     
 
