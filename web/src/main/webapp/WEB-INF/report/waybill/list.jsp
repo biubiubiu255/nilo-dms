@@ -385,11 +385,11 @@
 
                 //var fromCreatedTime = $("#fromCreatedTime").val()=="" ? "" : new Date($("#fromCreatedTime").val()+' 00:00:00').getTime()/1000;
                 //var toCreatedTime   = $("#toCreatedTime").val()==""   ? "" : new Date($("#toCreatedTime").val()+' 00:00:00').getTime()/1000;
-                if(fromOrderTime==toOrderTime) toOrderTime += 86400;
-                if(fromOrderCreatedTime==toOrderCreatedTime) toOrderCreatedTime += 86400;
-                if(fromFirstArriveTime==toFirstArriveTime) toFirstArriveTime += 86400;
-                if(fromLastDeliverTime==toLastDeliverTime) toLastDeliverTime += 86400;
-                if(fromSignTime==toSignTime) toSignTime += 86400;
+                if(fromOrderTime==toOrderTime && toOrderTime!=0) toOrderTime += 86400;
+                if(fromOrderCreatedTime==toOrderCreatedTime && toOrderCreatedTime!=0) toOrderCreatedTime += 86400;
+                if(fromFirstArriveTime==toFirstArriveTime && toFirstArriveTime!=0) toFirstArriveTime += 86400;
+                if(fromLastDeliverTime==toLastDeliverTime && toLastDeliverTime!=0) toLastDeliverTime += 86400;
+                if(fromSignTime==toSignTime && toSignTime!=0) toSignTime += 86400;
 
                 var param = {
                     orderNo: $("input[name='orderNo']").val(),
