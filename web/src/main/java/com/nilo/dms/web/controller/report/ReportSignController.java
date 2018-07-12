@@ -117,13 +117,13 @@ public class ReportSignController extends BaseController {
                 page = getPage();
         }
 
-
-        parameter.setNetworks(SessionLocal.getPrincipal().getNetworks());
+        if(SessionLocal.getPrincipal().getJob()!=null&&SessionLocal.getPrincipal().getJob().equals("SelfCollectOperate")) {
+        	parameter.setNetworks(SessionLocal.getPrincipal().getNetworks());	
+        }
         List<SignReport> list = signReportService.querySignReport(parameter, page);
         //page.setTotalCount(commonDao.lastFoundRows());
 
         JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
-        System.out.println(" = " + list.size());
 
         if (fileType.equals("json")) {
             request.setAttribute("toDate", toPaginationLayUIData(page, list));
