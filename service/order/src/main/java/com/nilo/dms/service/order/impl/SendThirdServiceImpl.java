@@ -1,28 +1,31 @@
 package com.nilo.dms.service.order.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
-import com.nilo.dms.common.enums.HandleRiderStatusEnum;
-import com.nilo.dms.common.enums.OptTypeEnum;
-import com.nilo.dms.common.enums.SerialTypeEnum;
+import com.nilo.dms.common.enums.*;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.AssertUtil;
+import com.nilo.dms.common.utils.HttpUtil;
+import com.nilo.dms.common.utils.IdWorker;
 import com.nilo.dms.common.utils.StringUtil;
-import com.nilo.dms.dao.DeliveryOrderReceiverDao;
-import com.nilo.dms.dao.HandleRiderDao;
-import com.nilo.dms.dao.HandleThirdDao;
-import com.nilo.dms.dao.WaybillDao;
+import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.DeliveryOrderReceiverDO;
+import com.nilo.dms.dao.dataobject.ThirdPushDo;
 import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.handle.SendThirdDetail;
 import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.order.OrderOptRequest;
 import com.nilo.dms.dto.order.Waybill;
+import com.nilo.dms.dto.system.InterfaceConfig;
+import com.nilo.dms.dto.system.MerchantConfig;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.DeliveryRouteService;
 import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
+import com.nilo.dms.service.system.RedisUtil;
 import com.nilo.dms.service.system.SendMessageService;
 import com.nilo.dms.service.system.SystemConfig;
 import org.springframework.beans.BeanUtils;
@@ -48,13 +51,13 @@ public class SendThirdServiceImpl implements SendThirdService {
     @Autowired
     private SendMessageService sendMessageService;
     @Autowired
-    private HandleRiderDao handleRiderDao;
-    @Autowired
     private WaybillDao waybillDao;
     @Autowired
     private DeliveryOrderReceiverDao deliveryOrderReceiverDao;
     @Autowired
     private DeliveryRouteService deliveryRouteService;
+    @Autowired
+    private ThirdPushDao thirdPushDao;
 
     @Override
     public void insertSmallAll(Long merchantId, String handleNo, String[] smallOrders) {
@@ -223,6 +226,23 @@ public class SendThirdServiceImpl implements SendThirdService {
         handleThirdDao.editAllSmallbyHandleNo(sendThirdDetail);
 
         for (SendThirdDetail d : detailsList) {
+            //第三方推送
+
+            ThirdPushDo thirdPushDo = new ThirdPushDo();
+            thirdPushDo.setOrderNo(d.getOrderNo());
+            thirdPushDo.setOrderId(IdWorker.getInstance().nextId());
+            thirdPushDo.setStatus(ThirdPushOrderStatusEnum.CREATE.getCode());
+            thirdPushDao.insert(thirdPushDo);
+            MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + principal.getMerchantId()), MerchantConfig.class);
+            InterfaceConfig interfaceConfig = JSON.parseObject(RedisUtil.hget(Constant.INTERFACE_CONF + principal.getMerchantId(), "update_status"), InterfaceConfig.class);
+            if (interfaceConfig == null) {
+                return;
+            }
+            //HttpUtil.post();
+        }
+
+        for (SendThirdDetail d : detailsList) {
+
             //发送短信
             WaybillDO w = waybillDao.queryByOrderNo(Long.parseLong(principal.getMerchantId()), d.getOrderNo());
             DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(w.getMerchantId(), w.getOrderNo());

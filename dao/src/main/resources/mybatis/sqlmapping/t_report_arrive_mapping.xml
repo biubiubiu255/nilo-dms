@@ -64,6 +64,21 @@
             AND
             c.status = #{status}
         </if>
+        <if test="networks!=null and networks.size()>0">
+            and (
+            (a.network_id in
+            <foreach collection="networks" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            )
+            or
+            (a.last_network_id in
+            <foreach collection="networks" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            )
+            )
+        </if>
 
         order by a.created_time desc
 
@@ -112,6 +127,21 @@
         <if test="status != null">
             AND
             c.status = #{status}
+        </if>
+        <if test="networks!=null and networks.size()>0">
+            and (
+            (a.network_id in
+            <foreach collection="networks" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            )
+            or
+            (a.last_network_id in
+            <foreach collection="networks" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            )
+            )
         </if>
 
     </select>

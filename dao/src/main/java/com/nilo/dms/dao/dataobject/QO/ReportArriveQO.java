@@ -2,6 +2,8 @@ package com.nilo.dms.dao.dataobject.QO;
 
 import com.nilo.dms.common.enums.DeliveryOrderStatusEnum;
 
+import java.util.List;
+
 public class ReportArriveQO {
     private Long merchantId;
     private String orderNo;
@@ -13,6 +15,7 @@ public class ReportArriveQO {
     private Long toCreatedTime;
     private Integer exportType;
     private Integer status;
+    private List<Integer> networks;
 
     public Long getMerchantId() {
         return merchantId;
@@ -92,5 +95,13 @@ public class ReportArriveQO {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public List<Integer> getNetworks() {
+        return networks;
+    }
+
+    public void setNetworks(List<Integer> networks) {
+        this.networks = networks;
     }
 }

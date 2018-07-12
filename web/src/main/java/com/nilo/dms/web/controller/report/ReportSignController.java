@@ -118,7 +118,7 @@ public class ReportSignController extends BaseController {
         }
 
 
-        parameter.setStatus(SessionLocal.getPrincipal().getNetworks());
+        parameter.setNetworks(SessionLocal.getPrincipal().getNetworks());
         List<SignReport> list = signReportService.querySignReport(parameter, page);
         //page.setTotalCount(commonDao.lastFoundRows());
 
