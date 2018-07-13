@@ -111,6 +111,7 @@ public class AccountController extends BaseController {
             Staff staff = staffService.findByStaffId(company.getCompanyId(), user.getLoginInfo().getUserName());
             if (staff != null) {
                 principal.setRider(staff.isRider());
+                principal.setJob(staff.getJob());
             }
             WebUtil.setHttpSessionValue("session_user", principal);
 

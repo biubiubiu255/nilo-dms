@@ -7,11 +7,11 @@
     <!-- 定义trigger 触发器 -->
     <bean id="cronTriggerPlus" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="quartzTaskDetail"></property>
-        <property name="cronExpression" value="0 /5 * * * ?"></property>
+        <property name="cronExpression" value="0 0/10 2 * * ?"></property>
         <!--<property name="cronExpression" value="0 /5 * * * ? "></property>-->
     </bean>
 
-    <bean id="schedulerPlus" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <bean id="schedulerPlus" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" >
         <property name="triggers">
             <list>
                 <ref bean="cronTriggerPlus"/>
@@ -21,11 +21,12 @@
 
 
     <!-- 定义一个定时任务类 -->
-    <bean id="quartzTaskPlus" class="com.nilo.dms.service.system.schedule.ScheduleMsn"></bean>
-
+    <!-- <bean id="quartzTaskPlus" class="com.nilo.dms.service.system.schedule.ScheduleMsn"></bean> -->
+	<bean id="quartzTaskReportWaybill" class="com.nilo.dms.service.system.schedule.ReportWaybill"></bean>
     <!-- jobDetail -->
     <bean id="quartzTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="quartzTaskPlus"></property>
+        <!-- <property name="targetObject" ref="quartzTaskPlus"></property> -->
+        <property name="targetObject" ref="quartzTaskReportWaybill"></property>
         <property name="targetMethod" value="run"></property>
         <property name="concurrent" value="false" /><!-- 作业不并发调度  -->
     </bean>

@@ -99,8 +99,9 @@ public class ReportSendStationController extends BaseController {
             default:
                 fileType = "pdf";
         }
-
-        sendReportQO.setNetworks(me.getNetworks());
+        if(SessionLocal.getPrincipal().getJob()!=null&&SessionLocal.getPrincipal().getJob().equals("SelfCollectOperate")) {
+        	sendReportQO.setNetworks(me.getNetworks());
+        }
         List<SendReportDO> list = sendReportService.querySendStationReport(sendReportQO, page);
 
         if (fileType.equals("json")) {

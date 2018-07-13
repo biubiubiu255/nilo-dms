@@ -104,8 +104,10 @@ public class ReportWaybillController extends BaseController {
         reportWaybillQO.setOffset(page.getOffset());
         reportWaybillQO.setLimit(page.getLimit());
 
-
-        reportWaybillQO.setNetworks(me.getNetworks());
+        if(SessionLocal.getPrincipal().getJob()!=null&&SessionLocal.getPrincipal().getJob().equals("SelfCollectOperate")) {
+        	reportWaybillQO.setNetworks(me.getNetworks());
+        }
+        
         List<ReportWaybillDO> list = reportWaybillDao.queryWaybillReport(reportWaybillQO);
         page.setTotalCount(reportWaybillDao.queryCountBy(reportWaybillQO));
         if (fileType.equals("json")) {
