@@ -60,7 +60,7 @@ public class ProducerStartup {
         Iterator iterator = producers.iterator();
         while (iterator.hasNext()) {
 
-            AbstractMQProducer producer = (AbstractMQProducer) iterator.next();
+                     AbstractMQProducer producer = (AbstractMQProducer) iterator.next();
             ProducerDesc producerDesc = BeanUtils.findAnnotation(producer.getClass(), ProducerDesc.class, true);
             String group = producerDesc.group();
             String topic = producerDesc.topic();

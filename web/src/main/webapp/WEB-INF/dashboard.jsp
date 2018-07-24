@@ -105,9 +105,9 @@
         */
         addTabs({
             id: '999999',
-            title: 'Waybill List',
+            title: 'DMS Panel',
             close: false,
-            url: '/waybill/listPage.html',
+            url: '/waybill/nav.html',
             urlType: "relative"
         });
         App.fixIframeCotent();

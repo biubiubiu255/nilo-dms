@@ -38,4 +38,8 @@ public interface WaybillService {
 
     String savePackage(PackageRequest packageRequest,String packageNo);
 
+    void handleThirdWaybill(String orderId, String thirdWaybillNo, String errorMsg);
+
+    void updateThirdWaybillStatus(String orderId, String status);
+
 }

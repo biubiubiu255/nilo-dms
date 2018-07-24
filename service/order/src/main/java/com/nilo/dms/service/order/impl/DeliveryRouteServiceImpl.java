@@ -44,9 +44,14 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
     private UserService userService;
     @Autowired
     private DeliveryOrderRouteDao deliveryOrderRouteDao;
+
+
     @Autowired
     @Qualifier("routeProducer")
     private AbstractMQProducer routeProducer;
+
+
+
     @Value("#{configProperties['logisticUrl']}")
     private String logisticUrl;
     @Value("#{configProperties['logisticToken']}")

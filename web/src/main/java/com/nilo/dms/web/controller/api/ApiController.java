@@ -137,6 +137,22 @@ public class ApiController extends BaseController {
                 waybillService.subWaybill(sub_waybill_number, waybill_number);
                 break;
             }
+            case THIRD_WAYBILL: {
+                JSONObject jsonObject = JSON.parseObject(data);
+                String orderId = jsonObject.getString("order_no");
+                String thirdWaybillNo = jsonObject.getString("third_waybill_num");
+                String errorMsg = jsonObject.getString("error");
+                waybillService.handleThirdWaybill(orderId, thirdWaybillNo, errorMsg);
+                break;
+            }
+            case THIRD_STATUS: {
+                JSONObject jsonObject = JSON.parseObject(data);
+                String status  = jsonObject.getString("status");
+                String orderId = jsonObject.getString("order_no");
+                waybillService.updateThirdWaybillStatus(orderId, status);
+                break;
+            }
+
             default:
                 break;
         }

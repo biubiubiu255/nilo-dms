@@ -1,17 +1,16 @@
 package com.nilo.dms.service.order.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.nilo.dms.common.Constant;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.*;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
-import com.nilo.dms.common.utils.AssertUtil;
-import com.nilo.dms.common.utils.HttpUtil;
-import com.nilo.dms.common.utils.IdWorker;
-import com.nilo.dms.common.utils.StringUtil;
+import com.nilo.dms.common.utils.*;
 import com.nilo.dms.dao.*;
+import com.nilo.dms.dao.dataobject.DeliveryOrderGoodsDO;
 import com.nilo.dms.dao.dataobject.DeliveryOrderReceiverDO;
 import com.nilo.dms.dao.dataobject.ThirdPushDo;
 import com.nilo.dms.dao.dataobject.WaybillDO;
@@ -22,6 +21,7 @@ import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.dto.system.InterfaceConfig;
 import com.nilo.dms.dto.system.MerchantConfig;
 import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.DeliveryRouteService;
 import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
@@ -30,12 +30,12 @@ import com.nilo.dms.service.system.SendMessageService;
 import com.nilo.dms.service.system.SystemConfig;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.net.URLEncoder;
+import java.util.*;
 
 /**
  * Created by admin on 2017/10/31.
@@ -56,8 +56,13 @@ public class SendThirdServiceImpl implements SendThirdService {
     private DeliveryOrderReceiverDao deliveryOrderReceiverDao;
     @Autowired
     private DeliveryRouteService deliveryRouteService;
+
     @Autowired
-    private ThirdPushDao thirdPushDao;
+    private DeliveryOrderGoodsDao deliveryOrderGoodsDao;
+
+    @Autowired
+    @Qualifier("sendThirdPushProducer")
+    private AbstractMQProducer sendThirdPushProducer;
 
     @Override
     public void insertSmallAll(Long merchantId, String handleNo, String[] smallOrders) {
@@ -195,6 +200,7 @@ public class SendThirdServiceImpl implements SendThirdService {
     public void ship(String handleNo) {
         Principal principal = SessionLocal.getPrincipal();
         SendThirdHead head = handleThirdDao.queryBigByHandleNo(Long.parseLong(principal.getMerchantId()), handleNo);
+
         if (head == null || head.getStatus() == 1) {
             throw new IllegalArgumentException("Loading No." + handleNo + " Ship Failed.");
         }
@@ -225,21 +231,21 @@ public class SendThirdServiceImpl implements SendThirdService {
         sendThirdDetail.setStatus(HandleRiderStatusEnum.SHIP.getCode());
         handleThirdDao.editAllSmallbyHandleNo(sendThirdDetail);
 
-        for (SendThirdDetail d : detailsList) {
-            //第三方推送
+        //第三方对接
+/*        if(head.getType().equals("waybill")){
 
-            ThirdPushDo thirdPushDo = new ThirdPushDo();
-            thirdPushDo.setOrderNo(d.getOrderNo());
-            thirdPushDo.setOrderId(IdWorker.getInstance().nextId());
-            thirdPushDo.setStatus(ThirdPushOrderStatusEnum.CREATE.getCode());
-            thirdPushDao.insert(thirdPushDo);
-            MerchantConfig merchantConfig = JSON.parseObject(RedisUtil.get(Constant.MERCHANT_CONF + principal.getMerchantId()), MerchantConfig.class);
-            InterfaceConfig interfaceConfig = JSON.parseObject(RedisUtil.hget(Constant.INTERFACE_CONF + principal.getMerchantId(), "update_status"), InterfaceConfig.class);
-            if (interfaceConfig == null) {
-                return;
+            List<String> orders = PickUtil.recombineList(detailsList, "orderNo", String.class);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("orders", orderNos);
+            map.put("expressCode", head.getThirdExpressCode());
+            map.put("merchantId", principal.getMerchantId());
+            try {
+                sendThirdPushProducer.sendMessage(map);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            //HttpUtil.post();
-        }
+        }*/
+
 
         for (SendThirdDetail d : detailsList) {
 

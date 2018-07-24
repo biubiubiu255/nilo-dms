@@ -5,16 +5,19 @@
 
 	<resultMap id="BaseResultMap" type="com.nilo.dms.dao.dataobject.ThirdPushDo">
 		<id column="id" jdbcType="INTEGER" property="id" />
-		<result column="order_id" jdbcType="BIGINT" property="orderId" />
+		<result column="order_id" jdbcType="VARCHAR" property="orderId" />
 		<result column="order_no" jdbcType="VARCHAR" property="orderNo" />
 		<result column="reference_no" jdbcType="VARCHAR" property="referenceNo" />
+		<result column="express_code" jdbcType="VARCHAR" property="expressCode" />
+		<result column="express_no" jdbcType="VARCHAR" property="expressNo" />
+		<result column="msg" jdbcType="VARCHAR" property="msg" />
 		<result column="created_time" jdbcType="BIGINT" property="createdTime" />
 		<result column="status" jdbcType="INTEGER" property="status" />
 	</resultMap>
 
 
 	<sql id="Base_Column_List">
-		id, order_id, order_no, reference_no, created_time, status
+		order_id, order_no, reference_no, express_code, express_no, msg, created_time, status
 	</sql>
 
 	<select id="queryBy" parameterType="com.nilo.dms.dao.dataobject.ThirdPushDo" resultMap="BaseResultMap">
@@ -23,8 +26,10 @@
 		from t_waybill_third_push
 		where 1
 		<if test="orderId != null">and order_id = #{orderId}</if>
-		<if test="orderNo != null">and order_no = #{orderNo}</if>
-		<if test="referenceNo != null">and reference_no = #{referenceNo}</if>
+		<if test="orderNo != null and orderNo!=''">and order_no = #{orderNo}</if>
+		<if test="referenceNo != null and referenceNo!=''">and reference_no = #{referenceNo}</if>
+		<if test="expressCode != null and expressCode!=''">and express_code = #{expressCode}</if>
+		<if test="expressNo != null and expressNo!=''">and express_no = #{expressNo}</if>
 		<if test="status != null">and status = #{status}</if>
 	</select>
 
@@ -42,12 +47,25 @@
 	</delete>
 
 	<insert id="insert" parameterType="com.nilo.dms.dao.dataobject.ThirdPushDo">
-		insert into t_waybill_third_push (id, order_id, order_no,
-		reference_no, created_time, status
+		insert into t_waybill_third_push (order_id, order_no,
+		reference_no, express_code, express_no, msg, created_time, status
 		)
-		values (#{id,jdbcType=INTEGER}, #{orderId,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR},
-		#{referenceNo,jdbcType=VARCHAR}, UNIX_TIMESTAMP(NOW()), #{status,jdbcType=INTEGER}
+		values (#{orderId,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR},
+		#{referenceNo,jdbcType=VARCHAR}, #{expressCode,jdbcType=VARCHAR}, #{expressNo,jdbcType=VARCHAR}, #{msg,jdbcType=VARCHAR}, UNIX_TIMESTAMP(NOW()), #{status,jdbcType=INTEGER}
 		)
 	</insert>
+
+	<update id="updateByOrderId"  statementType="PREPARED">
+		update t_waybill_third_push
+		<trim prefix="set" suffixOverrides="," suffix="where order_id=#{orderId}">
+			<if test="ThirdPushDo.status != null">
+				status = #{ThirdPushDo.status},
+			</if>
+			<if test="ThirdPushDo.expressCode != null and ThirdPushDo.expressCode != ''">
+				express_code = #{ThirdPushDo.expressCode},
+			</if>
+			<if test="ThirdPushDo.expressNo != null and ThirdPushDo.expressNo!=''">express_no = #{ThirdPushDo.expressNo}</if>
+		</trim>
+	</update>
 
 </mapper>

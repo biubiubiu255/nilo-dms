@@ -6,11 +6,17 @@ public class ThirdPushDo {
 
     private Integer id;
 
-    private Long orderId;
+    private String orderId;
 
     private String orderNo;
 
     private String referenceNo;
+
+    private String expressCode;
+
+    private String expressNo;
+
+    private String msg;
 
     private Long createdTime;
 
@@ -24,11 +30,11 @@ public class ThirdPushDo {
         this.id = id;
     }
 
-    public Long getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Long orderId) {
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
 
@@ -48,6 +54,14 @@ public class ThirdPushDo {
         this.referenceNo = referenceNo == null ? null : referenceNo.trim();
     }
 
+    public String getExpressNo() {
+        return expressNo;
+    }
+
+    public void setExpressNo(String expressNo) {
+        this.expressNo = expressNo;
+    }
+
     public Long getCreatedTime() {
         return createdTime;
     }
@@ -62,5 +76,21 @@ public class ThirdPushDo {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getExpressCode() {
+        return expressCode;
+    }
+
+    public void setExpressCode(String expressCode) {
+        this.expressCode = expressCode;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }

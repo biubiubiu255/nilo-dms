@@ -68,6 +68,10 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
     private DistributionNetworkDao distributionNetworkDao;
     @Autowired
     private DeliveryOrderRequestDao deliveryOrderRequestDao;
+    @Autowired
+    private ThirdPushDao thirdPushDao;
+    @Autowired
+    private WaybillOptService waybillOptService;
 
     @Autowired
     @Qualifier("createDeliveryOrderProducer")
@@ -380,6 +384,39 @@ public class WaybillServiceImpl extends AbstractOrderOpt implements WaybillServi
         optRequest.setOptType(OptTypeEnum.PACKAGE);
         waybillLogService.addOptLog(optRequest);
         return packageNo;
+    }
+
+    @Override
+    public void handleThirdWaybill(String orderId, String thirdWaybillNo, String errorMsg) {
+        ThirdPushDo thirdPushDo = new ThirdPushDo();
+        if (StringUtil.isEmpty(thirdWaybillNo)){
+            thirdPushDo.setStatus(ThirdPushOrderStatusEnum.CALL_BACK_FAIL.getCode());
+            thirdPushDao.updateByOrderId(thirdPushDo, orderId);
+        }else {
+            thirdPushDo.setStatus(ThirdPushOrderStatusEnum.CALL_BACK_SUCC.getCode());
+            thirdPushDo.setExpressNo(thirdWaybillNo);
+            thirdPushDao.updateByOrderId(thirdPushDo, orderId);
+        }
+    }
+
+    @Override
+    public void updateThirdWaybillStatus(String orderId, String status) {
+        ThirdPushDo thirdPushDo = new ThirdPushDo();
+        thirdPushDo.setOrderId(orderId);
+        switch (status){
+            case "190":
+                thirdPushDo.setStatus(ThirdPushOrderStatusEnum.SIGN_COMPLATED.getCode());
+                ThirdPushDo thirdPushQO = new ThirdPushDo();
+                thirdPushQO.setOrderId(orderId);
+                List<ThirdPushDo> thirdPushDos = thirdPushDao.queryBy(thirdPushQO);
+                if(!thirdPushDos.isEmpty()){
+                    waybillOptService.sign(thirdPushDos.get(0).getOrderNo(), thirdPushDos.get(0).getExpressCode(), "");
+                }
+                break;
+            default:
+                return;
+        }
+        thirdPushDao.updateByOrderId(thirdPushDo, orderId);
     }
 
     @Override

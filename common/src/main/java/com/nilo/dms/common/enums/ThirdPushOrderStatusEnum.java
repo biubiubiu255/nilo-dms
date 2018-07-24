@@ -8,9 +8,12 @@ import java.util.Map;
  */
 public enum ThirdPushOrderStatusEnum implements EnumMessage{
 
-    CREATE(0, "创建订单中"),
-    PUSHING(1, "推送中"),
-    COMPLATED(2, "已完成");
+    CREATE(0, "创建订单"),
+    PUSH_SUCC(1, "推送完成"),
+    CALL_BACK_SUCC(2, "回调成功"),
+    PUSH_FAIL(-1, "推送失败"),
+    CALL_BACK_FAIL(-2, "回调失败"),
+    SIGN_COMPLATED(-3, "签收成功");
 
     private Integer code;
     private String desc;

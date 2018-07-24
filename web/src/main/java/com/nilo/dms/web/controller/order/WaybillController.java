@@ -60,6 +60,11 @@ public class WaybillController extends BaseController {
         return "delivery_order/list";
     }
 
+    @RequestMapping(value = "/nav.html", method = RequestMethod.GET)
+    public String nav(Model model) {
+        return "waybill/nav";
+    }
+
     @ResponseBody
     @RequestMapping(value = "/list.html")
     public String getOrderList(WaybillParameter parameter, @RequestParam(value = "orderTypes[]", required = false) String[] orderTypes, @RequestParam(value = "orderStatus[]", required = false) Integer[] orderStatus) {

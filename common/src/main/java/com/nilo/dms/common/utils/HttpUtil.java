@@ -65,7 +65,7 @@ public class HttpUtil {
         if (params != null && params.size() > 0) {
             Set<Map.Entry<String, String>> entrySet = params.entrySet();
             for (Map.Entry<String, String> entry : entrySet) {
-                formBodyBuilder.add(entry.getKey(), entry.getValue());
+                formBodyBuilder.add(entry.getKey(), PickUtil.coalesce(entry.getValue(), "").toString());
             }
         }
         Request request = new Request.Builder().url(url).post(formBodyBuilder.build()).build();
