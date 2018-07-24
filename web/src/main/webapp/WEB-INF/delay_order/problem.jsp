@@ -4,7 +4,7 @@
 <%@ page import="com.nilo.dms.service.system.SystemCodeUtil" %>
 <%@ page import="com.nilo.dms.common.Constant" %>
 <%
-    request.setAttribute(Constant.PRBOLEM_REASON, SystemCodeUtil.getSystemCodeList((String)session.getAttribute("merchantId"),Constant.PRBOLEM_REASON));
+    request.setAttribute(Constant.PROBLEM_REASON, SystemCodeUtil.getSystemCodeList((String)session.getAttribute("merchantId"),Constant.PROBLEM_REASON));
 %>
 <div class="box-body">
     <form id="myForm" class="layui-form" action="">

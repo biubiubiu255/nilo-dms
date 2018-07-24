@@ -30,7 +30,7 @@ public class Constant {
     
     public static final String REFUSE_REASON = "refuse_reason";
 
-    public static final String PRBOLEM_REASON = "problem_reason";
+    public static final String PROBLEM_REASON = "problem_reason";
 
     public static final String REPORT_CARRIER_NAME = "report_carrier_name";
 

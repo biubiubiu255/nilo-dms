@@ -66,7 +66,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         List<String> orderNoList = new ArrayList<>();
         orderNoList.add(abnormalOrder.getOrderNo());
         optRequest.setOrderNo(orderNoList);
-        optRequest.setRemark(abnormalOrder.getRemark());
+        optRequest.setRemark(abnormalOrder.getReason());
         waybillService.handleOpt(optRequest);
 
         String abnormalNo = SystemConfig.getNextSerialNo(abnormalOrder.getMerchantId(), SerialTypeEnum.ABNORMAL_DELIVERY_ORDER_NO.getCode());
@@ -194,7 +194,7 @@ public class AbnormalOrderServiceImpl implements AbnormalOrderService {
         abnormalOrder.setAbnormalType(type);
         String reasonDesc = "";
         if (type == PROBLEM) {
-            reasonDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.PRBOLEM_REASON, abnormalOrderDO.getReason());
+            reasonDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.PROBLEM_REASON, abnormalOrderDO.getReason());
         } else {
             reasonDesc = SystemCodeUtil.getCodeVal("" + abnormalOrderDO.getMerchantId(), Constant.REFUSE_REASON, abnormalOrderDO.getReason());
         }
