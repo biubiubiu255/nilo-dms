@@ -18,10 +18,12 @@ import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.handle.SendThirdDetail;
 import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.order.OrderOptRequest;
+import com.nilo.dms.dto.order.PhoneMessage;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.dto.system.InterfaceConfig;
 import com.nilo.dms.dto.system.MerchantConfig;
 import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.DeliveryRouteService;
 import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
@@ -30,6 +32,7 @@ import com.nilo.dms.service.system.SendMessageService;
 import com.nilo.dms.service.system.SystemConfig;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -211,6 +214,7 @@ public class SendThirdServiceImpl implements SendThirdService {
         OrderOptRequest request = new OrderOptRequest();
         request.setOptType(OptTypeEnum.SEND);
         request.setOrderNo(orderNos);
+        request.setRemark(head.getThirdExpressCode());
         waybillService.handleOpt(request);
         SendThirdHead update = new SendThirdHead();
         update.setHandleNo(handleNo);
@@ -254,8 +258,6 @@ public class SendThirdServiceImpl implements SendThirdService {
                 }
             }
         }
-
-        deliveryRouteService.addKiliRoute(orderNos, "P30", head.getThirdExpressCode());
     }
 
     @Override

@@ -104,38 +104,6 @@ public class DeliveryRouteServiceImpl implements DeliveryRouteService {
         }
     }
 
-    @Override
-    public void addKiliRoute(List<String> orderNos, String statusId,String remark) {
-        //写入物流轨迹
-        Principal principal = SessionLocal.getPrincipal();
-        List<String> transList = new ArrayList<String>();
-        for (String orderNo : orderNos) {
-            WaybillDO w = waybillDao.queryByOrderNo(Long.parseLong(principal.getMerchantId()), orderNo);
-            if (w != null && StringUtil.isNotBlank(w.getReferenceNo())) {
-                transList.add("KE" + w.getReferenceNo());
-            }
-        }
-        String operateTime = "" + System.currentTimeMillis() / 1000L;
-        String transNo = JSONObject.toJSONString(transList);
-        String sign = DigestUtils.md5Hex(logisticToken + "&transtsNo=" + transNo + "&operateTime=" + operateTime);
-
-        Map<String, String> param = new HashMap<String, String>();
-        param.put("transtsNo", URLEncoder.encode(transNo));
-        param.put("operateTime", operateTime);
-        param.put("statusID", statusId);
-        param.put("station", "Nairobi");
-        param.put("remark", remark);
-        param.put("sign", sign);
-        try {
-            NotifyRequest notify = new NotifyRequest();
-            notify.setUrl(logisticUrl);
-            notify.setParam(param);
-            notifyDataBusProducer.sendMessage(notify);
-        } catch (Exception e) {
-        }
-    }
-
-    @Deprecated
     private DeliveryRoute convert(DeliveryOrderRouteDO routeDO) {
 
         DeliveryRoute route = new DeliveryRoute();

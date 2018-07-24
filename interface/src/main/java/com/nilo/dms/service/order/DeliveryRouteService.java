@@ -17,6 +17,4 @@ public interface DeliveryRouteService {
 
     void addRoute(OrderOptRequest request);
 
-    void addKiliRoute(List<String> orderNos,String statusId,String remark);
-
 }

@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.common.enums.EnumMessage;
+import com.nilo.dms.common.utils.BeanUtils;
 import com.nilo.dms.common.utils.WebUtil;
 import com.nilo.dms.dao.StaffDao;
 import com.nilo.dms.dao.dataobject.StaffDO;
@@ -74,6 +75,7 @@ public class BaseController {
         map.put("status", "fail");
         map.put("result", false);
         map.put("msg", msg);
+        map.put("error", msg);
         return JSON.toJSONString(map);
     }
 
@@ -188,5 +190,17 @@ public class BaseController {
         }
 
         return (String) value;
+    }
+
+    public static void main(String[] args) {
+
+        Object obj = new BaseController();
+        Map<Object, Object> map = new HashMap<>();
+        map.put("status", "succ");
+        map.put("result", true);
+        Object o = obj;
+        map.put("response", o);
+        map.put("data", obj);
+        System.out.println(JSON.toJSONString(map));
     }
 }

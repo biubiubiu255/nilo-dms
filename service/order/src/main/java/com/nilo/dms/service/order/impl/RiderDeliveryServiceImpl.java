@@ -227,7 +227,6 @@ public class RiderDeliveryServiceImpl implements RiderDeliveryService {
             DeliveryOrderReceiverDO r = deliveryOrderReceiverDao.queryByOrderNo(merchantId, d.getOrderNo());
             sendMessageService.sendMessage(w.getOrderNo(),SendMessageService.RIDER_DELIVERY,r.getContactNumber(),w.getReferenceNo(),userInfo.getName(),userInfo.getPhone());
         }
-        deliveryRouteService.addKiliRoute(orderNos, "P30", userInfo.getName() + "-" + userInfo.getPhone());
     }
 
     @Override
