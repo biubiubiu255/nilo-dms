@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.SendReportDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="resultMap" type="com.nilo.dms.dao.dataobject.SummarizeExpressDO">
+        <result property="monthDate" column="month_date" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="city" column="city" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="express" column="express_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="signedNum" column="count" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+
+    <!-- 查询下一个站点 -->
+
+    <select id="querySummarizeExpress" resultMap="resultMap">
+
+        SELECT
+        count(c.third_express_code) AS count,
+        c.third_express_code AS express_code,
+        d.city,
+        FROM_UNIXTIME(#{fromCreatedTime},'%Y-%m') AS month_date
+        FROM
+        t_handle_sign AS a
+        INNER JOIN t_handle_third_express_details AS b ON <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        AND a.created_time > #{fromCreatedTime}
+        AND a.order_no = b.order_no
+        INNER JOIN t_handle_third_express AS c ON c.type = 'waybill'
+        AND b.third_handle_no = c.handle_no
+        <if test="express!=null and express!=''">AND c.express_code = #{express} </if>
+        INNER JOIN t_waybill_receiver AS d ON a.order_no = d.order_no
+        <if test="city!=null and city!=''">AND d.city = #{city} </if>
+        AND IF(IFNULL(d.city,'')='',0,1)
+        GROUP BY
+        c.third_express_code,
+        d.city
+
+        <if test="limit !=null ">
+            limit
+            <if test="offset !=null ">
+                #{offset} ,
+            </if>
+            #{limit}
+        </if>
+
+    </select>
+
+
+    <select id="querySummarizeExpressCount" resultType="java.lang.Integer">
+
+        SELECT count(1)
+        FROM
+        (
+            SELECT
+            count(1)
+            FROM
+            t_handle_sign AS a
+            INNER JOIN t_handle_third_express_details AS b ON <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+            AND a.created_time > #{fromCreatedTime}
+            AND a.order_no = b.order_no
+            INNER JOIN t_handle_third_express AS c ON c.type = 'waybill'
+            AND b.third_handle_no = c.handle_no
+            <if test="express!=null and express!=''">AND c.express_code = #{express} </if>
+            INNER JOIN t_waybill_receiver AS d ON a.order_no = d.order_no
+            <if test="city!=null and city!=''">AND d.city = #{city} </if>
+            AND IF(IFNULL(d.city,'')='',0,1)
+            GROUP BY
+            c.third_express_code,
+            d.city
+        ) AS dd
+
+    </select>
+
+
+    <select id="querySummarizeExpressHeader" resultMap="resultMap">
+        SELECT
+        count(c.third_express_code) AS count,
+        c.third_express_code AS express_code,
+
+        FROM_UNIXTIME(#{fromCreatedTime}, '%Y-%m') AS month_date
+        FROM
+        t_handle_sign AS a
+        INNER JOIN t_handle_third_express_details AS b ON <![CDATA[ a.created_time <= #{toCreatedTime} ]]>
+        AND a.created_time > #{fromCreatedTime}
+        AND a.order_no = b.order_no
+        INNER JOIN t_handle_third_express AS c ON c.type = 'waybill'
+        AND b.third_handle_no = c.handle_no
+        INNER JOIN t_waybill_receiver AS d ON a.order_no = d.order_no
+        AND
+        IF (IFNULL(d.city, '') = '', 0, 1)
+        GROUP BY
+        c.third_express_code
+    </select>
+
+</mapper>

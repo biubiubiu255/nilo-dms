@@ -53,7 +53,7 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
     @Autowired
     private DeliveryRouteService deliveryRouteService;
 
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     @Override
     public void sign(String orderNo, String signer, String remark) {
         //写入 t_handler_sign

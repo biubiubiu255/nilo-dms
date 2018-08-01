@@ -107,6 +107,8 @@
     <script type="text/javascript">
         $(function () {
 
+            //console.log($("select[name='orderType'] option"));
+
             var showPattern = 0;
             var tableMe = null;
 
@@ -153,6 +155,18 @@
             });
 
             //reloadTable();
+            if(typeof (window.top.document.custServlet)!='undefined' && window.top.document.custServlet.data!=null){
+                var param = window.top.document.custServlet.data;
+                $("select[name='expressCode']").val(param.express);
+                setTimeout(function () {
+                    $("#fromCreatedTime").val(new Date(param.fromCreatedTime*1000).toLocaleDateString());
+                    $("#toCreatedTime").val(new Date(param.toCreatedTime*1000).toLocaleDateString());
+                    reloadTable();
+                    window.top.document.custServlet.data=null;
+                }, 500);
+                //console.log(param);
+                //alert("sdfs");
+            }
 
             $(".search").on("click", function () {
                 reloadTable();

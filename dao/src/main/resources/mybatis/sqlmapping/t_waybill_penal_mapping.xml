@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nilo.dms.dao.WaybillPenalDao">
+
+	<!-- TODO 测试返回 HashMap-->
+	<resultMap id="resultMap" type="java.lang.Integer">
+		<id column="day"   property="day"   jdbcType="VARCHAR"  />
+		<result column="count" property="count" jdbcType="INTEGER"  />
+	</resultMap>
+
+
+
+	<select id="querySignMonthCount" resultType="java.lang.Integer">
+		select count(1) from t_handle_sign where network_code=#{network} and FROM_UNIXTIME(created_time, '%Y%m')=#{dataFormat}
+	</select>
+
+
+	<select id="queryTimeOutSignCount" resultType="java.lang.Integer">
+		SELECT
+		count(1)
+		FROM
+		t_handle_third_express_details AS a
+		INNER JOIN t_handle_third_express AS b ON FROM_UNIXTIME(a.created_time, '%Y%m') = #{dataFormat}
+		AND a.third_handle_no = b.handle_no
+		AND a.created_time <![CDATA[<]]> UNIX_TIMESTAMP() - 86400 * #{dayNum}
+		INNER JOIN t_waybill AS c ON c.order_no = a.order_no
+		WHERE
+		COALESCE (
+		c.next_network_id,
+		b.network_code
+		) = #{network}
+		AND (
+		SELECT
+		count(1)
+		FROM
+		t_handle_sign AS e
+		WHERE
+		e.order_no = a.order_no
+		) = 0
+	</select>
+
+	<select id="queryGroupSignMonthCount" resultType="java.util.HashMap">
+		SELECT
+			FROM_UNIXTIME(created_time, '%d') as day,
+			count(1) as count
+		FROM
+			t_handle_sign
+		WHERE
+			network_code = #{network}
+		AND created_time <![CDATA[<]]> #{toTime} and created_time > #{fromTime}
+		GROUP BY
+			FROM_UNIXTIME(created_time, '%d')
+	</select>
+
+
+
+</mapper>

@@ -21,16 +21,16 @@
 	<body>
 		<div class="wrap-container welcome-container">
 			<div class="row">
-				<div class="welcome-left-container col-lg-9">
+				<div class="welcome-left-container col-lg-12">
 					<div class="data-show">
 						<ul class="clearfix">
 							<li class="col-sm-12 col-md-4 col-xs-12">
 								<a href="javascript:;" class="clearfix">
 									<div class="icon-bg bg-org f-l">
-										<span class="iconfont">&#xe606;</span>
+										<span class="iconfont">&#xe602;</span>
 									</div>
 									<div class="right-text-con">
-										<p class="name">Delivered Today</p>
+										<p class="name">Arrived Month</p>
 										<p><span class="color-org">89</span>数据<span class="iconfont">&#xe628;</span></p>
 									</div>
 								</a>
@@ -38,25 +38,15 @@
 							<li class="col-sm-12 col-md-4 col-xs-12">
 								<a href="javascript:;" class="clearfix">
 									<div class="icon-bg bg-blue f-l">
-										<span class="iconfont">&#xe602;</span>
+										<span class="iconfont">&#xe639;</span>
 									</div>
 									<div class="right-text-con">
-										<p class="name">文章数</p>
+										<p class="name">Signed Month</p>
 										<p><span class="color-blue">189</span>数据<span class="iconfont">&#xe628;</span></p>
 									</div>
 								</a>
 							</li>
-							<li class="col-sm-12 col-md-4 col-xs-12">
-								<a href="javascript:;" class="clearfix">
-									<div class="icon-bg bg-green f-l">
-										<span class="iconfont">&#xe605;</span>
-									</div>
-									<div class="right-text-con">
-										<p class="name">评论数</p>
-										<p><span class="color-green">221</span>数据<span class="iconfont">&#xe60f;</span></p>
-									</div>
-								</a>
-							</li>
+
 						</ul>
 					</div>
 					<!--图表-->
@@ -65,239 +55,311 @@
 						</div>
 					</div>
 					<!--服务器信息-->
-					<div class="server-panel panel panel-default">
-						<div class="panel-header">服务器信息</div>
-						<div class="panel-body clearfix">
-							<div class="col-md-2">
-								<p class="title">服务器环境</p>
-								<span class="info">Apache/2.4.4 (Win32) PHP/5.4.16</span>
-							</div>
-							<div class="col-md-2">
-								<p class="title">服务器IP地址</p>
-								<span class="info">127.0.0.1   </span>
-							</div>
-							<div class="col-md-2">
-								<p class="title">服务器域名</p>
-								<span class="info">localhost </span>
-							</div>
-							<div class="col-md-2">
-								<p class="title"> PHP版本</p>
-								<span class="info">5.4.16</span>
-							</div>
-							<div class="col-md-2">
-								<p class="title">数据库信息</p>
-								<span class="info">5.6.12-log </span>
-							</div>
-							<div class="col-md-2">
-								<p class="title">服务器当前时间</p>
-								<span class="info">2016-06-22 11:37:35</span>
-							</div>
-						</div>
-					</div>
+
 				</div>
-				<div class="welcome-edge col-lg-3">
-					<!--最新留言-->
-					<div class="panel panel-default comment-panel">
-						<div class="panel-header">最新留言</div>
-						<div class="panel-body">
-							<div class="commentbox">
-								<ul class="commentList">
-								  <li class="item cl"> <a href="#"><i class="avatar size-L radius"><img alt="" src=""></i></a>
-								    <div class="comment-main">
-								      <header class="comment-header">
-								        <div class="comment-meta"><a class="comment-author" href="#">慕枫</a> 评论于
-								          <time title="2014年8月31日 下午3:20" datetime="2014-08-31T03:54:20">2014-8-31 15:20</time>
-								        </div>
-								      </header>
-								      <div class="comment-body">
-								        <p><a href="#">@某人</a> ！！！</p>
-								      </div>
-								    </div>
-								  </li>
-								  <li class="item cl"> <a href="#"><i class="avatar size-L radius"><img alt="" src=""></i></a>
-								    <div class="comment-main">
-								      <header class="comment-header">
-								        <div class="comment-meta"><a class="comment-author" href="#">慕枫</a> 评论于
-								          <time title="2014年8月31日 下午3:20" datetime="2014-08-31T03:54:20">2014-8-31 15:20</time>
-								        </div>
-								      </header>
-								      <div class="comment-body">
-								        <p><a href="#">@某人</a> 系统真不错！！！</p>
-								      </div>
-								    </div>
-								  </li>
-								   <li class="item cl"> <a href="#"><i class="avatar size-L radius"><img alt="" src=""></i></a>
-								    <div class="comment-main">
-								      <header class="comment-header">
-								        <div class="comment-meta"><a class="comment-author" href="#">慕枫</a> 评论于
-								          <time title="2014年8月31日 下午3:20" datetime="2014-08-31T03:54:20">2014-8-31 15:20</time>
-								        </div>
-								      </header>
-								      <div class="comment-body">
-								        <p><a href="#">@某人</a> 系统真不错！！！</p>
-								      </div>
-								    </div>
-								  </li>
-								  <li class="item cl"> <a href="#"><i class="avatar size-L radius"><img alt="" src=""></i></a>
-								    <div class="comment-main">
-								      <header class="comment-header">
-								        <div class="comment-meta"><a class="comment-author" href="#">慕枫</a> 评论于
-								          <time title="2014年8月31日 下午3:20" datetime="2014-08-31T03:54:20">2014-8-31 15:20</time>
-								        </div>
-								      </header>
-								      <div class="comment-body">
-								        <p><a href="#">@某人</a> 系统真不错！！！</p>
-								      </div>
-								    </div>
-								  </li>
-								</ul>
-							</div>
-							<div id="pagesbox" style="text-align: center;padding-top: 5px;">
-								
-							</div>
-						</div>
-					</div>
-					<!--联系-->
-					<div class="panel panel-default contact-panel">
-						<div class="panel-header">联系我们</div>
-						<div class="panel-body">
-							<p>QQ：1465465646</p>
-							<p>E-mail:4565564@qq.com</p>
-						</div>
-					</div>
-				</div>
+
 			</div>
 		</div>
 		<script src="../../layui/layui.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../../plugins/echarts/echarts.js"></script>
+		<%--<script src="../../plugins/echarts/echarts.js"></script>--%>
+		<script src="../../plugins/echarts/echarts.common.min.js"></script>
 		<script type="text/javascript">
-/*			layui.use(['layer','jquery'], function(){
+
+            function haveMonthTail(month){with(new Date()){setMonth(month-1);setDate(31);return getDate()>30;}}
+
+			layui.use(['layer','jquery','util'], function(){
 				var layer 	= layui.layer;
 				var $=layui.jquery;
-				//图表
-				var myChart;
-				require.config({
-				    paths: {
-				        echarts: '../../plugins/echarts/echarts'
-				    }
-				});
-				require(
-				    [
-				        'echarts',
-				        'echarts/chart/bar',
-				        'echarts/chart/line',
-				        'echarts/chart/map'
-				    ],
-				    function (ec) {
-				        //--- 折柱 ---
-				        myChart = ec.init(document.getElementById('chart'));
-				        myChart.setOption(
-				        	{
-						     title: {
-						        text: "数据统计",
-						        textStyle: {
-						            color: "rgb(85, 85, 85)",
-						            fontSize: 18,
-						            fontStyle: "normal",
-						            fontWeight: "normal"
-						        }
-						    },
-						    tooltip: {
-						        trigger: "axis"
-						    },
-						    legend: {
-						        data: ["会员", "文章", "评论"],
-						        selectedMode: false,
-						    },
-						    toolbox: {
-						        show: true,
-						        feature: {
-						            dataView: {
-						                show: false,
-						                readOnly: true
-						            },
-						            magicType: {
-						                show: false,
-						                type: ["line", "bar", "stack", "tiled"]
-						            },
-						            restore: {
-						                show: true
-						            },
-						            saveAsImage: {
-						                show: true
-						            },
-						            mark: {
-						                show: false
-						            }
-						        }
-						    },
-						    calculable: false,
-						    xAxis: [
-						        {
-						            type: "category",
-						            boundaryGap: false,
-						            data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
-						        }
-						    ],
-						    yAxis: [
-						        {
-						            type: "value"
-						        }
-						    ],
-						     grid: {
-						        x2: 30,
-						        x: 50
-						    },
-						    series: [
-						        {
-						            name: "会员",
-						            type: "line",
-						            smooth: true,
-						            itemStyle: {
-						                normal: {
-						                    areaStyle: {
-						                        type: "default"
-						                    }
-						                }
-						            },
-						            data: [10, 12, 21, 54, 260, 830, 710]
-						        },
-						        {
-						            name: "文章",
-						            type: "line",
-						            smooth: true,
-						            itemStyle: {
-						                normal: {
-						                    areaStyle: {
-						                        type: "default"
-						                    }
-						                }
-						            },
-						            data: [30, 182, 434, 791, 390, 30, 10]
-						        },
-						        {
-						            name: "评论",
-						            type: "line",
-						            smooth: true,
-						            itemStyle: {
-						                normal: {
-						                    areaStyle: {
-						                        type: "default"
-						                    },
-						                    color: "rgb(110, 211, 199)"
-						                }
-						            },
-						            data: [1320, 1132, 601, 234, 120, 90, 20]
-						        }
-						    ]
-						}
-				        );
+				var u=layui.util;
+
+                var myChart = echarts.init(document.getElementById('chart'));
+                var colors = ['#5793f3', '#d14a61', '#675bba'];
+
+                $.post('/penal_data/signedMonth.html', {}, function (data) {
+                    //console.log("月签收数");
+                    //console.log(data);
+                }, "json");
+                $.post('/penal_data/outTimeSigned.html', {timeOutNumber: 3}, function (data) {
+                    //console.log("超时数量");
+                    //console.log(data);
+                }, "json");
+                var toTime  = parseInt(new Date().getTime()/1000);
+                var fromTime= toTime-86400*30;
+                $.post('/penal_data/signedMonthGroup.html', {toTime:toTime,fromTime:fromTime}, function (data) {
+                    console.log("分组数据");
+                    console.log(data);
+                    var n  = 30;  		 //份数
+                    var portion = 30/n;  //份额大小
+                    var fillArr = new Array();
+                    var xAxisArr= new Array();
+
+					var startDate = new Date(toTime*1000).getDate();
+					var endMonth = haveMonthTail(new Date(toTime*1000).getMonth()) ? 31 : 30;
+
+                    for (var i=0;i<endMonth;i++){
+                        var d = startDate+i<=endMonth ? startDate+i : i+startDate-endMonth;
+                        xAxisArr.push(d);
 					}
-				);
+
+                    for (var i=0;i<xAxisArr.length;i++){
+                        var mk = xAxisArr[i]>9 ? xAxisArr[i]+"" : "0"+xAxisArr[i];
+                        console.log(mk, i%portion);
+                        fillArr.push(typeof(data.data[mk])=='undefined' ? 0 : data.data[mk].count);
+						/*
+						if(i%portion==0 || i==1){
+                            //xAxisArr.push(i);
+                            fillArr.push(typeof(data.data[mk])=='undefined' ? 0 : data.data[mk].count);
+                        }*/
+                    }
+
+
+                    console.log(fillArr, endMonth, xAxisArr.length);
+
+
+                    var option = {
+                        color: colors,
+                        title: {text:'Sign chart',
+                            x:'center',
+                            y:'top',
+                            textAlign:'left'
+                        },
+                        //悬浮位置提示
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross'
+                            }
+                        },
+                        grid: {
+                            right: '20%'
+                        },
+                        toolbox: {
+                            feature: {
+                                dataView: {show: true, readOnly: false},
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+
+                        xAxis: [
+                            {
+                                type: 'category',
+                                axisTick: {
+                                    alignWithLabel: true
+                                },
+                                data: xAxisArr
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value',
+                                name: 'Sign Number',
+                                position: 'left',
+                                axisLine: {
+                                    lineStyle: {
+                                        color: colors[0]
+                                    }
+                                },
+                                axisLabel: {
+                                    formatter: '{value} pieces'
+                                }
+                            }
+                        ],
+                        series: [
+                            {
+                                name:'Sign Number',
+                                type:'bar',
+                                data:fillArr
+                            }
+                        ]
+                    };
+
+                    myChart.setOption(option);
+
+                    //myChart.resize();
+
+                }, "json");
+
+
+
+                /*
+
+                                //图表
+                                var myChart = echarts.init(document.getElementById('chart'));
+                                //蓝色  红色  紫色
+                                var colors = ['#5793f3', '#d14a61', '#675bba'];
+
+
+
+
+
+
+                               var option = {
+                                    color: colors,
+                                    title: {text:'Sign chart',
+                                            x:'center',
+                                            y:'top',
+                                            textAlign:'left'
+                                            },
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        axisPointer: {
+                                            type: 'cross'
+                                        }
+                                    },
+                                    grid: {
+                                        right: '20%'
+                                    },
+                                    toolbox: {
+                                        feature: {
+                                            dataView: {show: true, readOnly: false},
+                                            restore: {show: true},
+                                            saveAsImage: {show: true}
+                                        }
+                                    },
+                                    xAxis: [
+                                        {
+                                            type: 'category',
+                                            axisTick: {
+                                                alignWithLabel: true
+                                            },
+                                            data: ['1号','5号','10号','15号','20号','25号','30号']
+                                        }
+                                    ],
+                                    yAxis: [
+                                        {
+                                            type: 'value',
+                                            name: 'Sign Number',
+                                            position: 'right',
+                                            axisLine: {
+                                                lineStyle: {
+                                                    color: colors[0]
+                                                }
+                                            },
+                                            axisLabel: {
+                                                formatter: '{value} number'
+                                            }
+                                        },
+                                        {
+                                            type: 'value',
+                                            name: 'Sign',
+                                            position: 'left',
+                                            axisLine: {
+                                                lineStyle: {
+                                                    color: colors[1]
+                                                }
+                                            },
+                                            axisLabel: {
+                                                formatter: '{value} number'
+                                            }
+                                        }
+
+
+
+
+                                    ],
+                                    series: [
+                                        {
+                                            name:'Sign Number',
+                                            type:'bar',
+                                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6]
+                                        },
+                                        {
+                                            name:'Sign',
+                                            type:'line',
+                                            //yAxisIndex: 1,
+                                            data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6]
+                                        }
+                                    ]
+                                };
+
+               var option = {
+                   color: colors,
+                   title: {text:'Sign chart',
+                       x:'center',
+                       y:'top',
+                       textAlign:'left'
+                   },
+				    //悬浮位置提示
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross'
+                        }
+                    },
+                    grid: {
+                        right: '20%'
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            restore: {show: true},
+                            saveAsImage: {show: true}
+                        }
+                    },
+
+                    xAxis: [
+                        {
+                            type: 'category',
+                            axisTick: {
+                                alignWithLabel: true
+                            },
+                            data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '蒸发量',
+                            position: 'right',
+                            axisLine: {
+                                lineStyle: {
+                                    color: colors[0]
+                                }
+                            },
+                            axisLabel: {
+                                formatter: '{value} ml'
+                            }
+                        },
+
+                        {
+                            type: 'value',
+                            name: '温度',
+                            position: 'left',
+                            axisLine: {
+                                lineStyle: {
+                                    color: colors[2]
+                                }
+                            },
+                            axisLabel: {
+                                formatter: '{value} °C'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name:'蒸发量23',
+                            type:'bar',
+                            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+                        },
+                        {
+                            name:'降水量123',
+                            type:'line',
+                            yAxisIndex: 1,  //作用是按照哪个Y轴
+                            data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+                        }
+                    ]
+                };*/
+
+
+                // 使用刚指定的配置项和数据显示图表。
+                //myChart.setOption(option);
+                addTabs({id:'601',title: 'Pickup Report',close: true,url: 'report/pick_up/listPage.html'});
 				$(window).resize(function(){
-					myChart.resize();
+					//myChart.resize();
+
 				})
-			});*/
+			});
 		</script>
 	</body>
 </html>

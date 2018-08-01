@@ -3,11 +3,10 @@ package com.nilo.dms.web.controller.report;
 import com.nilo.dms.common.Pagination;
 import com.nilo.dms.common.Principal;
 import com.nilo.dms.dao.DistributionNetworkDao;
+import com.nilo.dms.dao.SendReportDao;
 import com.nilo.dms.dao.ThirdExpressDao;
-import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
+import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.dao.dataobject.QO.SendReportQO;
-import com.nilo.dms.dao.dataobject.SendReportDO;
-import com.nilo.dms.dao.dataobject.ThirdExpressDO;
 import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SendReportService;
@@ -22,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +39,9 @@ public class ReportSendExpressController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SendReportDao sendReportDao;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
@@ -115,4 +115,124 @@ public class ReportSendExpressController extends BaseController {
         model.addAttribute("jrMainDataSource", jrDataSource);
         return "iReportView"; // 对应jasper-defs.xml中的bean id
     }
+
+    @RequestMapping(value = "/summarizePage.html", method = RequestMethod.GET)
+    public String summarize(Model model) {
+
+        Pagination page = getPage();
+        List<ThirdExpressDO> expressList = userService.findExpressesAll(page);
+        model.addAttribute("expressList", expressList);
+        return "report/sendExpress/summarize";
+    }
+
+    @RequestMapping(value = "/summarizeList.html")
+    public String summarizeList(Model model, SummarizeExpressDO summarizeExpressDO, Integer exportType, HttpServletRequest request) {
+
+        Long merchantId = Long.parseLong(SessionLocal.getPrincipal().getMerchantId());
+
+        Principal me = SessionLocal.getPrincipal();
+        Pagination page = getPage();
+
+        String fileType;
+        switch (exportType) {
+            case 0:
+                fileType = "pdf";
+                page = new Pagination(0, 1000);
+                break;
+            case 1:
+                fileType = "xls";
+                page = new Pagination(0, 1000);
+                break;
+            case 2:
+                fileType = "json";
+                page = getPage();
+                break;
+            default:
+                fileType = "pdf";
+                page = getPage();
+        }
+
+/*        if(SessionLocal.getPrincipal().getJob()!=null&&SessionLocal.getPrincipal().getJob().equals("SelfCollectOperate")) {
+            parameter.setNetworks(SessionLocal.getPrincipal().getNetworks());
+        }*/
+        summarizeExpressDO.setOffset(page.getOffset());
+        summarizeExpressDO.setLimit(page.getLimit());
+        List<SummarizeExpressDO> list = sendReportDao.querySummarizeExpressHeader(summarizeExpressDO);
+
+        page.setTotalCount(list.size());
+
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
+
+        if (fileType.equals("json")) {
+            request.setAttribute("toDate", toPaginationLayUIData(page, list));
+            return "common/toResponseBody";
+        }
+
+        // 动态指定报表模板url
+        model.addAttribute("url", "/WEB-INF/jasper/report/expressSummarize.jasper");
+        model.addAttribute("format", fileType); // 报表格式
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView"; // 对应jasper-defs.xml中的bean id
+    }
+
+
+    @RequestMapping(value = "/summarizeDetailPage.html", method = RequestMethod.GET)
+    public String summarizeDetailPage(Model model) {
+
+        Pagination page = getPage();
+        List<ThirdExpressDO> expressList = userService.findExpressesAll(page);
+        model.addAttribute("expressList", expressList);
+        return "report/sendExpress/summarizeDetail";
+    }
+
+    @RequestMapping(value = "/summarizeDetailList.html")
+    public String summarizeDetailList(Model model, SummarizeExpressDO summarizeExpressDO, Integer exportType, HttpServletRequest request) {
+
+        Long merchantId = Long.parseLong(SessionLocal.getPrincipal().getMerchantId());
+
+        Principal me = SessionLocal.getPrincipal();
+        Pagination page = getPage();
+
+        String fileType;
+        switch (exportType) {
+            case 0:
+                fileType = "pdf";
+                page = new Pagination(0, 1000);
+                break;
+            case 1:
+                fileType = "xls";
+                page = new Pagination(0, 1000);
+                break;
+            case 2:
+                fileType = "json";
+                page = getPage();
+                break;
+            default:
+                fileType = "pdf";
+                page = getPage();
+        }
+
+/*        if(SessionLocal.getPrincipal().getJob()!=null&&SessionLocal.getPrincipal().getJob().equals("SelfCollectOperate")) {
+            parameter.setNetworks(SessionLocal.getPrincipal().getNetworks());
+        }*/
+        summarizeExpressDO.setOffset(page.getOffset());
+        summarizeExpressDO.setLimit(page.getLimit());
+        List<SummarizeExpressDO> list = sendReportDao.querySummarizeExpress(summarizeExpressDO);
+
+        page.setTotalCount(sendReportDao.querySummarizeExpressCount(summarizeExpressDO));
+
+        JRDataSource jrDataSource = new JRBeanCollectionDataSource(list);
+
+        if (fileType.equals("json")) {
+            request.setAttribute("toDate", toPaginationLayUIData(page, list));
+            return "common/toResponseBody";
+        }
+
+        // 动态指定报表模板url
+        model.addAttribute("url", "/WEB-INF/jasper/report/expressSummarize.jasper");
+        model.addAttribute("format", fileType); // 报表格式
+        model.addAttribute("jrMainDataSource", jrDataSource);
+        return "iReportView"; // 对应jasper-defs.xml中的bean id
+    }
+
 }

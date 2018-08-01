@@ -5,6 +5,7 @@ import com.nilo.dms.dao.dataobject.QO.ReportRepeatQO;
 import com.nilo.dms.dao.dataobject.QO.SendReportQO;
 import com.nilo.dms.dao.dataobject.ReportRepeatDO;
 import com.nilo.dms.dao.dataobject.SendReportDO;
+import com.nilo.dms.dao.dataobject.SummarizeExpressDO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,4 +28,13 @@ public interface SendReportDao extends BaseDao<Long,SendReportDO> {
     List<ReportRepeatDO>queryRepeatDispatch(ReportRepeatQO reportRepeatQO);
 
     Long queryRepeatDispatchCount(ReportRepeatQO reportRepeatQO);
+
+    //查询按月和城市等条件
+    List<SummarizeExpressDO>querySummarizeExpress(SummarizeExpressDO summarizeExpressDO);
+
+    Integer querySummarizeExpressCount(SummarizeExpressDO summarizeExpressDO);
+
+    //查询按月汇总头信息
+    List<SummarizeExpressDO>querySummarizeExpressHeader(SummarizeExpressDO summarizeExpressDO);
+
 }

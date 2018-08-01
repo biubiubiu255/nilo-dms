@@ -107,7 +107,7 @@
             id: '999999',
             title: 'DMS Panel',
             close: false,
-            url: '/waybill/listPage.html',
+            url: '/waybill/nav.html',
             urlType: "relative"
         });
         App.fixIframeCotent();
