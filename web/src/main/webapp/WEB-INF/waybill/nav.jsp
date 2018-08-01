@@ -31,7 +31,7 @@
 									</div>
 									<div class="right-text-con">
 										<p class="name">Arrived Month</p>
-										<p><span class="color-org">89</span>数据<span class="iconfont">&#xe628;</span></p>
+										<p><span class="color-org" id="arrivedMonth"></span></p>
 									</div>
 								</a>
 							</li>
@@ -42,7 +42,7 @@
 									</div>
 									<div class="right-text-con">
 										<p class="name">Signed Month</p>
-										<p><span class="color-blue">189</span>数据<span class="iconfont">&#xe628;</span></p>
+										<p><span class="color-blue" id="signedMonth"></span></p>
 									</div>
 								</a>
 							</li>
@@ -76,18 +76,20 @@
                 var colors = ['#5793f3', '#d14a61', '#675bba'];
 
                 $.post('/penal_data/signedMonth.html', {}, function (data) {
+                    $("#arrivedMonth").html(data.data.count);
                     //console.log("月签收数");
                     //console.log(data);
                 }, "json");
                 $.post('/penal_data/outTimeSigned.html', {timeOutNumber: 3}, function (data) {
+                    $("#signedMonth").html(data.data.count);
                     //console.log("超时数量");
                     //console.log(data);
                 }, "json");
                 var toTime  = parseInt(new Date().getTime()/1000);
                 var fromTime= toTime-86400*30;
                 $.post('/penal_data/signedMonthGroup.html', {toTime:toTime,fromTime:fromTime}, function (data) {
-                    console.log("分组数据");
-                    console.log(data);
+                    //console.log("分组数据");
+                    //console.log(data);
                     var n  = 30;  		 //份数
                     var portion = 30/n;  //份额大小
                     var fillArr = new Array();
@@ -103,7 +105,7 @@
 
                     for (var i=0;i<xAxisArr.length;i++){
                         var mk = xAxisArr[i]>9 ? xAxisArr[i]+"" : "0"+xAxisArr[i];
-                        console.log(mk, i%portion);
+                        //console.log(mk, i%portion);
                         fillArr.push(typeof(data.data[mk])=='undefined' ? 0 : data.data[mk].count);
 						/*
 						if(i%portion==0 || i==1){
@@ -135,9 +137,9 @@
                         },
                         toolbox: {
                             feature: {
-                                dataView: {show: true, readOnly: false},
-                                restore: {show: true},
-                                saveAsImage: {show: true}
+                                dataView: {show: true, readOnly: false, title:'dataView'},
+                                restore: {show: true, title:'restore'},
+                                saveAsImage: {show: true, title:'saveAsImage'}
                             }
                         },
 
@@ -354,7 +356,7 @@
 
                 // 使用刚指定的配置项和数据显示图表。
                 //myChart.setOption(option);
-                addTabs({id:'601',title: 'Pickup Report',close: true,url: 'report/pick_up/listPage.html'});
+                //addTabs({id:'601',title: 'Pickup Report',close: true,url: 'report/pick_up/listPage.html'});
 				$(window).resize(function(){
 					//myChart.resize();
 
