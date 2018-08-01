@@ -42,7 +42,6 @@ public class SignReportServiceImpl implements SignReportService {
     }
 
     private List<SignReport> batchQuery(List<SignReportDO> SignReportDOs, Long merchantId) {
-
         List<SignReport> list = new ArrayList<>();
         // 构建订单号集合
         List<String> orderNos = new ArrayList<>();
