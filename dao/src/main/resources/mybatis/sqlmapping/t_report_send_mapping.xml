@@ -130,7 +130,8 @@
         d. NAME AS receive_name,
         f.parent_no,
         e.name next_station_name,
-        f.is_package
+        f.is_package,
+        c.next_network_id
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no AND b.status=1
@@ -164,7 +165,8 @@
         d. NAME AS receive_name,
         c.parent_no,
         e.name next_station_name,
-        c.is_package
+        c.is_package,
+        c.next_network_id
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no AND b.status=1
@@ -212,7 +214,7 @@
 
         <if test="networks!=null and networks.size()>0">
             and (
-            c.next_network_id in
+            d.next_network_id in
             <foreach collection="networks" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>
@@ -257,7 +259,7 @@
         d. NAME AS receive_name,
         f.parent_no,
         e.name next_station_name,
-        f.is_package
+        f.is_package,c.next_network_id
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no AND b.status=1
@@ -290,7 +292,7 @@
         d. NAME AS receive_name,
         c.parent_no,
         e.name next_station_name,
-        c.is_package
+        c.is_package,c.next_network_id
         FROM
         t_handle_third_express_details a
         INNER JOIN t_handle_third_express b ON a.third_handle_no = b.handle_no
@@ -338,7 +340,7 @@
         </if>
         <if test="networks!=null and networks.size()>0">
             and (
-            c.next_network_id in
+            d.next_network_id in
             <foreach collection="networks" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>
