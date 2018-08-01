@@ -71,9 +71,9 @@ public class AccountController extends BaseController {
             }
             session.setAttribute("login_number", login_number);
             User user = userService.findByUsername(username);
-            logger.warn("login cust username", username+" ---- " + password + " ---- " + DigestUtils.sha1Hex(password));
-            logger.warn("login cust password", user.getLoginInfo().getPassword());
-            logger.warn("login cust", user);
+            logger.warn("login cust username" + username+" ---- " + password + " ---- " + DigestUtils.sha1Hex(password));
+            logger.warn("login cust password" + user.getLoginInfo().getPassword());
+            logger.warn("login cust{}" + user.toString(), user);
             if (user == null) {
                 throw new RuntimeException("username not exist.");
             } else if (!StringUtil.equals(DigestUtils.sha1Hex(password), user.getLoginInfo().getPassword())) {
