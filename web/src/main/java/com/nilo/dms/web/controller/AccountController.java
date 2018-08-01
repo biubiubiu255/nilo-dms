@@ -71,9 +71,6 @@ public class AccountController extends BaseController {
             }
             session.setAttribute("login_number", login_number);
             User user = userService.findByUsername(username);
-            logger.warn("login cust username" + username+" ---- " + password + " ---- " + DigestUtils.sha1Hex(password));
-            logger.warn("login cust password" + user.getLoginInfo().getPassword());
-            logger.warn("login cust{}" + user.toString(), user);
             if (user == null) {
                 throw new RuntimeException("username not exist.");
             } else if (!StringUtil.equals(DigestUtils.sha1Hex(password), user.getLoginInfo().getPassword())) {
@@ -108,16 +105,17 @@ public class AccountController extends BaseController {
             principal.setMerchantId(user.getMerchantId());
             principal.setRoles(roles);
             principal.setAuthorities(authorities);
-            principal.setCompanyId(company.getCompanyId());
             principal.setUrlAuthorities(urlAuthorities);
             principal.setNetworks(getUserNetwork(userNetworkDOList));
-            Staff staff = staffService.findByStaffId(company.getCompanyId(), user.getLoginInfo().getUserName());
-            if (staff != null) {
-                principal.setRider(staff.isRider());
-                principal.setJob(staff.getJob());
+            if(company!=null){
+                principal.setCompanyId(company.getCompanyId());
+                Staff staff = staffService.findByStaffId(company.getCompanyId(), user.getLoginInfo().getUserName());
+                if (staff != null) {
+                    principal.setRider(staff.isRider());
+                    principal.setJob(staff.getJob());
+                }
             }
             WebUtil.setHttpSessionValue("session_user", principal);
-
             // 登陆成功,保存用户信息到Session
             session.setAttribute("userId", principal.getUserId());
             session.setAttribute("userName", principal.getUserName());
@@ -126,6 +124,7 @@ public class AccountController extends BaseController {
         } catch (DMSException e1) {
             return toJsonErrorMsg(e1.getMessage());
         } catch (Exception e) {
+            logger.warn("login fail" + e.getMessage());
             return toJsonErrorMsg(BizErrorCode.LOGIN_FAILED.getDescription());
         }
 
