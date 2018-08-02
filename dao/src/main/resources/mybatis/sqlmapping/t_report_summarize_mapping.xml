@@ -29,7 +29,7 @@
         AND a.order_no = b.order_no
         INNER JOIN t_handle_third_express AS c ON c.type = 'waybill'
         AND b.third_handle_no = c.handle_no
-        <if test="express!=null and express!=''">AND c.express_code = #{express} </if>
+        <if test="express!=null and express!=''">AND c.third_express_code = #{express} </if>
         INNER JOIN t_waybill_receiver AS d ON a.order_no = d.order_no
         <if test="city!=null and city!=''">AND d.city = #{city} </if>
         AND IF(IFNULL(d.city,'')='',0,1)
@@ -62,7 +62,7 @@
             AND a.order_no = b.order_no
             INNER JOIN t_handle_third_express AS c ON c.type = 'waybill'
             AND b.third_handle_no = c.handle_no
-            <if test="express!=null and express!=''">AND c.express_code = #{express} </if>
+            <if test="express!=null and express!=''">AND c.third_express_code = #{express} </if>
             INNER JOIN t_waybill_receiver AS d ON a.order_no = d.order_no
             <if test="city!=null and city!=''">AND d.city = #{city} </if>
             AND IF(IFNULL(d.city,'')='',0,1)
@@ -77,9 +77,7 @@
     <select id="querySummarizeExpressHeader" resultMap="resultMap">
         SELECT
         count(c.third_express_code) AS count,
-        c.third_express_code AS express_code,
-
-        FROM_UNIXTIME(#{fromCreatedTime}, '%Y-%m') AS month_date
+        c.third_express_code AS express_code
         FROM
         t_handle_sign AS a
         INNER JOIN t_handle_third_express_details AS b ON <![CDATA[ a.created_time <= #{toCreatedTime} ]]>

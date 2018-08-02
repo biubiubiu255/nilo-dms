@@ -158,6 +158,7 @@
             if(typeof (window.top.document.custServlet)!='undefined' && window.top.document.custServlet.data!=null){
                 var param = window.top.document.custServlet.data;
                 $("select[name='expressCode']").val(param.express);
+                $("select[name='status']").val(50);
                 setTimeout(function () {
                     $("#fromCreatedTime").val(new Date(param.fromCreatedTime*1000).toLocaleDateString());
                     $("#toCreatedTime").val(new Date(param.toCreatedTime*1000).toLocaleDateString());

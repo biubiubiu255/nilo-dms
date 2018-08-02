@@ -41,18 +41,33 @@
 	</select>
 
 	<select id="queryGroupSignMonthCount" resultType="java.util.HashMap">
-		SELECT
-			FROM_UNIXTIME(created_time, '%d') as day,
-			count(1) as count
-		FROM
-			t_handle_sign
-		WHERE
-			network_code = #{network}
-		AND created_time <![CDATA[<]]> #{toTime} and created_time > #{fromTime}
-		GROUP BY
-			FROM_UNIXTIME(created_time, '%d')
-	</select>
+		<!--
+                SELECT
+                    FROM_UNIXTIME(created_time, '%d') as day,
+                    count(1) as count
+                FROM
+                    t_handle_sign
+                WHERE
+                    network_code = #{network}
+                AND created_time <![CDATA[<]]> #{toTime} and created_time > #{fromTime}
+                GROUP BY
+                    FROM_UNIXTIME(created_time, '%d')-->
 
 
 
-</mapper>
+                SELECT
+                FROM_UNIXTIME(a.created_time, '%d') AS day,
+                COUNT(1) AS count
+                FROM
+                t_handle_sign AS a
+                INNER JOIN t_waybill b ON a.order_no = b.order_no
+                WHERE
+                a.network_code = #{network}
+                AND a.created_time <![CDATA[<]]> #{toTime} and a.created_time > #{fromTime}
+                GROUP BY
+                FROM_UNIXTIME(a.created_time, '%d')
+            </select>
+
+
+
+        </mapper>
