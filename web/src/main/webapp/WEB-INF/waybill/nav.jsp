@@ -30,8 +30,8 @@
 										<span class="iconfont">&#xe602;</span>
 									</div>
 									<div class="right-text-con">
-										<p class="name">Arrived Month</p>
-										<p><span class="color-org" id="arrivedMonth"></span></p>
+										<p class="name">Signed Month</p>
+										<p><span class="color-org" id="signedMonth"></span></p>
 									</div>
 								</a>
 							</li>
@@ -41,8 +41,8 @@
 										<span class="iconfont">&#xe639;</span>
 									</div>
 									<div class="right-text-con">
-										<p class="name">Signed Month</p>
-										<p><span class="color-blue" id="signedMonth"></span></p>
+										<p class="name">Timeout Signed Month</p>
+										<p><span class="color-blue" id="timeoutSignedMonth"></span></p>
 									</div>
 								</a>
 							</li>
@@ -76,12 +76,12 @@
                 var colors = ['#5793f3', '#d14a61', '#675bba'];
 
                 $.post('/penal_data/signedMonth.html', {}, function (data) {
-                    $("#arrivedMonth").html(data.data.count);
+                    $("#signedMonth").html(data.data.count);
                     //console.log("月签收数");
                     //console.log(data);
                 }, "json");
                 $.post('/penal_data/outTimeSigned.html', {timeOutNumber: 3}, function (data) {
-                    $("#signedMonth").html(data.data.count);
+                    $("#timeoutSignedMonth").html(data.data.count);
                     //console.log("超时数量");
                     //console.log(data);
                 }, "json");
