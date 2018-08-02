@@ -94,11 +94,11 @@
                 tab.on('tool(demo)', function (obj) {
                     var data = obj.data;
                     if (obj.event === 'tool-tar') {
-                        var choseTime  = new Date(data.monthDate+'-01 00:00:00');
+                        var choseTime  = new Date($("#fromCreatedTime").val()+'-01 00:00:00');
                         var start_time = choseTime.getTime()/1000;
                         choseTime.setMonth(choseTime.getMonth()+1);
                         var end_time   = choseTime.getTime()/1000;
-
+                        console.log(obj.data);
                         window.top.document.custServlet = {};
                         window.top.document.custServlet['data'] = data;
                         window.top.document.custServlet.data['fromCreatedTime'] = start_time;
