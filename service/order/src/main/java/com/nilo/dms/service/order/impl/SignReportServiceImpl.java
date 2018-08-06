@@ -35,9 +35,9 @@ public class SignReportServiceImpl implements SignReportService {
         parameter.setLimit(pagination.getLimit());
 
         // 查询记录
-        List<SignReportDO> queryList = signReportDao.querySignReport(parameter);
-        Long count = signReportDao.queryCountBy(parameter);
-        pagination.setTotalCount(count == null ? 0 : count);
+        List<SignReportDO> queryList = signReportDao.querySignReportPlus(parameter);
+        Integer count = signReportDao.querySignReportPlusCount(parameter);
+        pagination.setTotalCount(count == null ? 0 : count.longValue());
         return batchQuery(queryList, Long.parseLong(parameter.getMerchantId()));
     }
 

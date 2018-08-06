@@ -6,6 +6,8 @@ import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.OutsourceDao;
 import com.nilo.dms.dao.dataobject.DistributionNetworkDO;
 import com.nilo.dms.dao.dataobject.OutsourceDO;
+import com.nilo.dms.dao.dataobject.ThirdExpressDO;
+import com.nilo.dms.service.UserService;
 import com.nilo.dms.service.impl.SessionLocal;
 import com.nilo.dms.service.order.SignReportService;
 import com.nilo.dms.dto.order.SignOrderParameter;
@@ -40,6 +42,9 @@ public class ReportSignController extends BaseController {
     @Autowired
     private OutsourceDao outsourceDao;
 
+    @Autowired
+    private UserService userService;
+
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String listPage(Model model) {
@@ -56,6 +61,9 @@ public class ReportSignController extends BaseController {
         }
         List<OutsourceDO> outsourceList = outsourceDao.findAll(SessionLocal.getPrincipal().getMerchantId());
 
+        List<ThirdExpressDO> expressList = userService.findExpressesAll(getPage());
+
+        model.addAttribute("expressList", expressList);
         model.addAttribute("outsourceList", outsourceList);
         model.addAttribute("nextStations", list);
         model.addAttribute("riderList", getRiderList(null));

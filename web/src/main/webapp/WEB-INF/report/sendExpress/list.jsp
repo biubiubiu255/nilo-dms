@@ -151,22 +151,6 @@
                         ,{field: 'address', title: 'Address', width:200}
                     ]]
                     ,where: getParam(2, true)
-                    ,done:function (data) {
-                       if(typeof (window.top.document.custServlet)!='undefined' && window.top.document.custServlet.data!=null){
-                           var param = window.top.document.custServlet.data;
-                           $("select[name='expressCode']").val(param.express);
-                           $("select[name='status']").val(50);
-                           setTimeout(function () {
-                               //console.log(param);
-                               $("#fromCreatedTime").val(new Date(param.fromCreatedTime*1000).toLocaleDateString());
-                               $("#toCreatedTime").val(new Date(param.toCreatedTime*1000).toLocaleDateString());
-                               window.top.document.custServlet.data=null;
-                               reloadTable();
-                           }, 500);
-                           //console.log(param);
-                           //alert("sdfs");
-                       }
-                   }
                 });
             });
 

@@ -104,8 +104,8 @@
                         window.top.document.custServlet.data['fromCreatedTime'] = start_time;
                         window.top.document.custServlet.data['toCreatedTime'] = end_time;
                         //console.log(window.top.document.custServlet['data']);
-                        var tag = $("span:contains(Send Express Report)", window.parent.document).parent();
-                        var expressTags = $("span:contains(Send Express Report)", window.parent.document).parent().get(1);
+                        var tag = $("span:contains(SignReport)", window.parent.document).parent();
+                        var expressTags = $("span:contains(SignReport)", window.parent.document).parent().get(1);
                         console.log($(expressTags).find("i"));
                         $(expressTags).find("i").first().click();
                         tag.first().click();

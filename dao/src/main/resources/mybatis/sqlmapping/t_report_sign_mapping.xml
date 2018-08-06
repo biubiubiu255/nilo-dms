@@ -31,7 +31,7 @@
 
 
 
-        <result property="handleBy" column="rider" javaType="java.lang.String"
+        <result property="handleBy" column="handle_by_name" javaType="java.lang.String"
                 jdbcType="VARCHAR"/>
         <result property="handleTime" column="handle_time" javaType="java.lang.Long"
                 jdbcType="INTEGER"/>
@@ -53,6 +53,125 @@
         <result property="status" column="status" javaType="java.lang.Integer"
                 jdbcType="VARCHAR"/>
     </resultMap>
+
+    <select id="querySignReportPlus" resultMap="signDO">
+        SELECT
+        b.STATUS,
+        a.order_no,
+        b.reference_no,
+        b.weight,
+        d.name AS sign_name,
+        a.sign_time as handle_time,
+        a.sign_handle_by_name as handle_by_name,
+        a.sign_handle_by_id,
+        a.sign_time,
+        a.sign_network_id as network_code,
+        a.sign_network_name as network_name,
+        a.last_deliver_express_code,
+        a.sign_outsource_name as outsource,
+        a.last_deliver_network_name as rider,
+        a.last_deliver_express_code as express_code,
+        c.`name` sname,
+        d.`name` rname,
+        d.contact_number,
+        d.address
+        FROM
+        t_report_waybill a
+        INNER JOIN t_waybill b ON a.order_no = b.order_no and a.sign_time is not null
+        INNER JOIN t_waybill_sender c ON a.order_no = c.order_no
+        INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
+        <!--LEFT JOIN t_bas_staff e ON b.handle_by = e.user_id
+        INNER JOIN t_bas_network f ON f.id = b.network_code-->
+                WHERE b.merchant_id=#{merchantId}
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="fromHandledTime !=null ">
+            and a.sign_time >= #{fromHandledTime}
+        </if>
+        <if test="toHandledTime !=null ">
+            and  <![CDATA[ a.sign_time <= #{toHandledTime} ]]>
+        </if>
+        <if test="riderId !=null and riderId != '' ">
+            and  a.last_deliver_rider_id = #{riderId}
+        </if>
+        <if test="outsource !=null and outsource !='' ">
+            and  a.sign_outsource_code = #{outsource}
+        </if>
+        <if test="networkCode !=null and networkCode !='' ">
+            and  a.last_deliver_express_code = #{networkCode}
+        </if>
+        <!--
+        <if test="networkCode !=null ">
+            and  a.sign_network_id = #{networkCode}
+        </if>-->
+        <if test="expressName !=null ">
+            and  a.last_deliver_express_code = #{expressName}
+        </if>
+        <if test="networks!=null and networks.size()>0">
+            and (
+            a.network_code in
+            <foreach collection="networks" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+
+        <!--<if test="status !=null and status.size() > 0 ">-->
+        <!--<foreach collection="status" item="item" index="index" open="and (" separator="or" close=")">-->
+        <!--b.status=#{item}-->
+        <!--</foreach>-->
+        <!--</if>-->
+        order by a.sign_time desc
+        limit #{offset} , #{limit}
+    </select>
+
+    <select id="querySignReportPlusCount" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        t_report_waybill a
+        INNER JOIN t_waybill b ON a.order_no = b.order_no and a.sign_time is not null
+        INNER JOIN t_waybill_sender c ON a.order_no = c.order_no
+        INNER JOIN t_waybill_receiver d ON a.order_no = d.order_no
+        <!--LEFT JOIN t_bas_staff e ON b.handle_by = e.user_id
+        INNER JOIN t_bas_network f ON f.id = b.network_code-->
+        WHERE b.merchant_id=#{merchantId}
+        <if test="orderNo !=null and orderNo !='' ">
+            and a.order_no LIKE CONCAT( CONCAT('%',#{orderNo}),'%')
+        </if>
+        <if test="fromHandledTime !=null ">
+            and a.sign_time >= #{fromHandledTime}
+        </if>
+        <if test="toHandledTime !=null ">
+            and  <![CDATA[ a.sign_time <= #{toHandledTime} ]]>
+        </if>
+        <if test="riderId !=null and riderId != '' ">
+            and  a.last_deliver_rider_id = #{riderId}
+        </if>
+        <if test="outsource !=null and outsource !='' ">
+            and  a.sign_outsource_code = #{outsource}
+        </if>
+        <if test="networkCode !=null and networkCode !='' ">
+            and  a.last_deliver_express_code = #{networkCode}
+        </if>
+        <!--
+        <if test="networkCode !=null ">
+            and  a.sign_network_id = #{networkCode}
+        </if>-->
+        <if test="expressName !=null ">
+            and  a.last_deliver_express_code = #{expressName}
+        </if>
+        <if test="networks!=null and networks.size()>0">
+            and (
+            a.network_code in
+            <foreach collection="networks" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            )
+        </if>
+    </select>
+
 
     <select id="querySignReport" resultMap="signDO">
         SELECT
