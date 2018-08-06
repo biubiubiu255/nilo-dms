@@ -9,11 +9,9 @@ import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.BeanUtils;
 import com.nilo.dms.common.utils.DateUtil;
-import com.nilo.dms.dao.HandleAllocateDao;
-import com.nilo.dms.dao.HandleDelayDao;
-import com.nilo.dms.dao.HandleRefuseDao;
-import com.nilo.dms.dao.HandleSignDao;
+import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.HandleSignDO;
+import com.nilo.dms.dao.dataobject.WaybillDO;
 import com.nilo.dms.dto.common.UserInfo;
 import com.nilo.dms.dto.handle.HandleAllocate;
 import com.nilo.dms.dto.handle.HandleDelay;
@@ -52,12 +50,19 @@ public class WaybillOptServiceImpl extends AbstractOrderOpt implements WaybillOp
     private HandleSignDao handleSignDao;
     @Autowired
     private DeliveryRouteService deliveryRouteService;
+    @Autowired
+    private WaybillDao waybillDao;
 
     @Transactional(rollbackFor=Exception.class)
     @Override
     public void sign(String orderNo, String signer, String remark) {
         //写入 t_handler_sign
         Principal principal = SessionLocal.getPrincipal();
+
+        WaybillDO orderDO = waybillDao.queryByOrderNo(Long.parseLong(principal.getMerchantId()), orderNo);
+        if (orderDO == null) {
+            throw new DMSException(BizErrorCode.ORDER_NOT_EXIST, orderNo);
+        }
 
         HandleSignDO signDO = new HandleSignDO();
         signDO.setMerchantId(Long.parseLong(principal.getMerchantId()));

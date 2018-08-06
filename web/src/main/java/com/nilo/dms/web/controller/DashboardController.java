@@ -72,8 +72,8 @@ public class DashboardController extends BaseController {
         String firstNetwork = SessionLocal.getPrincipal().getFirstNetwork();
         Calendar c = Calendar.getInstance();
         String dateFormat = new SimpleDateFormat("yyyyMM").format(c.getTime());
-        Map<String, Integer> list = waybillPenalDao.queryGroupSignMonthCount(firstNetwork, fromTime, toTime);
-        return toJsonTrueData(list);
+        Map<String, Integer> map = waybillPenalDao.queryGroupSignMonthCount(firstNetwork, fromTime, toTime);
+        return toJsonTrueData(map);
     }
 
 }

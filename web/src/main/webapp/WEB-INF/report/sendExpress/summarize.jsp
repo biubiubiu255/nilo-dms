@@ -21,9 +21,9 @@
             <div class="layui-inline">
                 <input type="text" class="layui-input" id="fromCreatedTime" placeholder="From" name="createdTime_s">
             </div>
-        </div>
+    </div>
 
-        <div class="layui-col-md4 layui-col-lg4">
+<%--        <div class="layui-col-md4 layui-col-lg4">
             <label class="layui-form-label">ExpressName:</label>
             <div class="layui-inline">
                 <select name="expressCode" lay-verify="required" lay-filter="expressCodeLay" style="display: none">
@@ -32,7 +32,7 @@
                         <option value=${r.expressCode}>${r.expressName}</option>
                     </c:forEach>
                 </select></div>
-        </div>
+        </div>--%>
 
         <!-- 搜索按钮 -->
         <div class="layui-col-md4 layui-col-lg4" style="margin-left: 2.4rem;">
@@ -81,9 +81,9 @@
                     ,limit:10
                     ,method: 'post'
                     ,cols: [[ //表头
-                         {field: 'monthDate', title: 'Sign Month', width:200, fixed: 'left', align: 'center'}
+                         //{title: 'Sign Month', width:200, fixed: 'left', align: 'center', templet:'<div>{{ sereachDate }}</div>'}
                         //,{field: 'city', title: 'City', width:170, align: 'center'}
-                        ,{field: 'express', title: 'Express', width:150, align: 'center'}
+                        {field: 'express', title: 'Express', width:150, align: 'center'}
                         ,{field: 'signedNum', title: 'SignedNum', width:150, align: 'center'}
                         ,{title: 'Opt', width:150, align: 'center', toolbar: '#barDemo'}
                     ]]
@@ -94,18 +94,18 @@
                 tab.on('tool(demo)', function (obj) {
                     var data = obj.data;
                     if (obj.event === 'tool-tar') {
-                        var choseTime  = new Date(data.monthDate+'-01 00:00:00');
+                        var choseTime  = new Date($("#fromCreatedTime").val()+'-01 00:00:00');
                         var start_time = choseTime.getTime()/1000;
                         choseTime.setMonth(choseTime.getMonth()+1);
                         var end_time   = choseTime.getTime()/1000;
-
+                        console.log(obj.data);
                         window.top.document.custServlet = {};
                         window.top.document.custServlet['data'] = data;
                         window.top.document.custServlet.data['fromCreatedTime'] = start_time;
                         window.top.document.custServlet.data['toCreatedTime'] = end_time;
                         //console.log(window.top.document.custServlet['data']);
-                        var tag = $("span:contains(Send Express Report)", window.parent.document).parent();
-                        var expressTags = $("span:contains(Send Express Report)", window.parent.document).parent().get(1);
+                        var tag = $("span:contains(SignReport)", window.parent.document).parent();
+                        var expressTags = $("span:contains(SignReport)", window.parent.document).parent().get(1);
                         console.log($(expressTags).find("i"));
                         $(expressTags).find("i").first().click();
                         tag.first().click();

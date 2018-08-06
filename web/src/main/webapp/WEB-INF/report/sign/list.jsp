@@ -77,6 +77,18 @@
         </div>
 
 
+        <div class="layui-col-md4 layui-col-lg4">
+            <label class="layui-form-label">ExpressName:</label>
+            <div class="layui-inline">
+                <select name="expressName" lay-verify="required" lay-filter="expressCodeLay" style="display: none">
+                    <option value="">choose or search....</option>
+                    <c:forEach items="${expressList}" var="r">
+                        <option value=${r.expressCode}>${r.expressName}</option>
+                    </c:forEach>
+                </select></div>
+        </div>
+
+
 
 
         <!-- 搜索按钮 -->
@@ -103,7 +115,7 @@
             showPattern = 0;
             var tableMe = null;
 
-            layui.use(['laydate','table'], function () {
+            layui.use(['laydate','table', 'form'], function () {
                 var layDate = layui.laydate;
                 layDate.render({
                     elem: '#fromCreatedTime'
@@ -135,12 +147,30 @@
                         ,{field: 'rName', title: 'Signer', width:150}
                         ,{field: 'address', title: 'Address', width:300}
                         ,{field: 'handleBy', title: 'HandleName', width:150}
+                        ,{field: 'expressName', title: 'ExpressName', width:100}
                         ,{field: 'rider', title: 'Rider', width:100}
                         ,{field: 'outsource', title: 'Outsource', width:130}
                         ,{field: 'sName', title: 'Sender', width:150}
                         ,{field: 'remark', title: 'Remark', width:170}
                     ]]
                     ,where: getParam(2, true)
+                    ,done:function (data) {
+                        if(typeof (window.top.document.custServlet)!='undefined' && window.top.document.custServlet.data!=null){
+                            var param = window.top.document.custServlet.data;
+                            //$("select[name='status']").val(50);
+                            setTimeout(function () {
+                                //console.log(param);
+                                $("select[name='expressName']").val(param.express);
+                                layui.form.render('select');
+                                $("#fromCreatedTime").val(new Date(param.fromCreatedTime*1000).toLocaleDateString());
+                                $("#toCreatedTime").val(new Date(param.toCreatedTime*1000).toLocaleDateString());
+                                window.top.document.custServlet.data=null;
+                                reloadTable();
+                            }, 500);
+                            //console.log(param);
+                            //alert("sdfs");
+                        }
+                    }
 
                 });
 
@@ -198,6 +228,7 @@
                     toHandledTime: eTime_creat,
                     exportType: dateType,
                     riderId: $("select[name='rider']").val(),
+                    expressName: $("select[name='expressName']").val(),
                     networkCode: $("select[name='nextStationCode']").val(),
                     outsource: outsource
                 };

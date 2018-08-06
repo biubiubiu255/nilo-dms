@@ -14,6 +14,13 @@ import java.util.Map;
  */
 @Repository
 public interface SignReportDao extends BaseDao<Long,SignReportDO> {
+
+    List<SignReportDO> querySignReportPlus(SignOrderParameter parameter);
+
+    Integer querySignReportPlusCount(SignOrderParameter parameter);
+
     List<SignReportDO> querySignReport(SignOrderParameter parameter);
+
     Long queryCountBy(SignOrderParameter parameter);
+
 }

@@ -46,4 +46,14 @@ public class User implements Serializable {
     public void setLoginInfo(LoginInfo loginInfo) {
         this.loginInfo = loginInfo;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "merchantId='" + merchantId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", userInfo=" + userInfo +
+                ", loginInfo=" + loginInfo +
+                '}';
+    }
 }

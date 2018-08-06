@@ -49,82 +49,78 @@ public class AccountController extends BaseController {
     @ResponseBody
     public String index(String username, String password, String randomCode, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        try {
 
-            AssertUtil.isNotBlank(username, BizErrorCode.USER_NAME_EMPTY);
-            AssertUtil.isNotBlank(password, BizErrorCode.PASSWORD_EMPTY);
 
-            Object sessionUser = WebUtil.getHttpSessionValue("session_user");
-            if (sessionUser != null) {
-                return toJsonTrueMsg();
-            }
+        AssertUtil.isNotBlank(username, BizErrorCode.USER_NAME_EMPTY);
+        AssertUtil.isNotBlank(password, BizErrorCode.PASSWORD_EMPTY);
 
-            //登录次数超过3次，即开始验证码
-            if (session.getAttribute("login_number") == null) session.setAttribute("login_number", 1);
-            int login_number = (int) session.getAttribute("login_number");
-            if (login_number++ > 3) {
-                // 校验验证码
-                String codeValidate = CaptchaUtil.getCode(request);
-                if (!StringUtil.equalsIgnoreCase(randomCode, codeValidate)) {
-                    throw new DMSException(BizErrorCode.VERIFY_CODE_ERROR);
-                }
-            }
-            session.setAttribute("login_number", login_number);
-            User user = userService.findByUsername(username);
-            if (user == null) {
-                throw new RuntimeException("username not exist.");
-            } else if (!StringUtil.equals(DigestUtils.sha1Hex(password), user.getLoginInfo().getPassword())) {
-                throw new DMSException(BizErrorCode.PASSWORD_ERROR);
-            }
-            // check user.status
-            switch (user.getLoginInfo().getStatus()) {
-                case DISABLED:
-                case FROZEN:
-                    throw new RuntimeException("Account status not allowed");
-            }
-            List<String> urlAuthorities = roleService.findUrlPermissionsByUserId(user.getUserId());
-            List<String> authorities = roleService.findPermissionsByUserId(user.getUserId());
-            List<String> roles = new ArrayList<>();
-            List<Role> roleList = roleService.findRolesByUserId(user.getUserId());
-            if (roleList != null) {
-                for (Role role : roleList) {
-                    roles.add(role.getRoleName());
-                }
-            }
-            Company company = companyService.findByMerchantId(user.getMerchantId());
+        Object sessionUser = WebUtil.getHttpSessionValue("session_user");
+        if (sessionUser != null) {
+            return toJsonTrueMsg();
+        }
 
-            List<UserNetworkDO> userNetworkDOList = userNetworkDao.queryByUserId(Long.parseLong(user.getUserId()));
-
-            if(userNetworkDOList==null || userNetworkDOList.size()==0){
-                throw new DMSException(BizErrorCode.NOT_FOUND_NEXTWORK);
+        //登录次数超过3次，即开始验证码
+        if (session.getAttribute("login_number") == null) session.setAttribute("login_number", 1);
+        int login_number = (int) session.getAttribute("login_number");
+        if (login_number++ > 3) {
+            // 校验验证码
+            String codeValidate = CaptchaUtil.getCode(request);
+            if (!StringUtil.equalsIgnoreCase(randomCode, codeValidate)) {
+                throw new DMSException(BizErrorCode.VERIFY_CODE_ERROR);
             }
+        }
+        session.setAttribute("login_number", login_number);
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("username not exist.");
+        } else if (!StringUtil.equals(DigestUtils.sha1Hex(password), user.getLoginInfo().getPassword())) {
+            throw new DMSException(BizErrorCode.PASSWORD_ERROR);
+        }
+        // check user.status
+        switch (user.getLoginInfo().getStatus()) {
+            case DISABLED:
+            case FROZEN:
+                throw new RuntimeException("Account status not allowed");
+        }
+        List<String> urlAuthorities = roleService.findUrlPermissionsByUserId(user.getUserId());
+        List<String> authorities = roleService.findPermissionsByUserId(user.getUserId());
+        List<String> roles = new ArrayList<>();
+        List<Role> roleList = roleService.findRolesByUserId(user.getUserId());
+        if (roleList != null) {
+            for (Role role : roleList) {
+                roles.add(role.getRoleName());
+            }
+        }
+        Company company = companyService.findByMerchantId(user.getMerchantId());
 
-            Principal principal = new Principal();
-            principal.setUserId(user.getUserId());
-            principal.setUserName(user.getLoginInfo().getUserName());
-            principal.setMerchantId(user.getMerchantId());
-            principal.setRoles(roles);
-            principal.setAuthorities(authorities);
+        List<UserNetworkDO> userNetworkDOList = userNetworkDao.queryByUserId(Long.parseLong(user.getUserId()));
+
+        if (userNetworkDOList == null || userNetworkDOList.size() == 0) {
+            throw new DMSException(BizErrorCode.NOT_FOUND_NEXTWORK);
+        }
+
+        Principal principal = new Principal();
+        principal.setUserId(user.getUserId());
+        principal.setUserName(user.getLoginInfo().getUserName());
+        principal.setMerchantId(user.getMerchantId());
+        principal.setRoles(roles);
+        principal.setAuthorities(authorities);
+        principal.setUrlAuthorities(urlAuthorities);
+        principal.setNetworks(getUserNetwork(userNetworkDOList));
+        if (company != null) {
             principal.setCompanyId(company.getCompanyId());
-            principal.setUrlAuthorities(urlAuthorities);
-            principal.setNetworks(getUserNetwork(userNetworkDOList));
             Staff staff = staffService.findByStaffId(company.getCompanyId(), user.getLoginInfo().getUserName());
             if (staff != null) {
                 principal.setRider(staff.isRider());
                 principal.setJob(staff.getJob());
             }
-            WebUtil.setHttpSessionValue("session_user", principal);
-
-            // 登陆成功,保存用户信息到Session
-            session.setAttribute("userId", principal.getUserId());
-            session.setAttribute("userName", principal.getUserName());
-            session.setAttribute("name", principal.getUserName());
-            session.setAttribute("merchantId", principal.getMerchantId());
-        } catch (DMSException e1) {
-            return toJsonErrorMsg(e1.getMessage());
-        } catch (Exception e) {
-            return toJsonErrorMsg(BizErrorCode.LOGIN_FAILED.getDescription());
         }
+        WebUtil.setHttpSessionValue("session_user", principal);
+        // 登陆成功,保存用户信息到Session
+        session.setAttribute("userId", principal.getUserId());
+        session.setAttribute("userName", principal.getUserName());
+        session.setAttribute("name", principal.getUserName());
+        session.setAttribute("merchantId", principal.getMerchantId());
 
         return toJsonTrueMsg();
 
