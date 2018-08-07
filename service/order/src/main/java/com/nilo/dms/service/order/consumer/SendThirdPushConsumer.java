@@ -99,6 +99,7 @@ public class SendThirdPushConsumer extends AbstractMQConsumer {
             postMap.put("reference_no", waybillDO.getReferenceNo());
             postMap.put("country",PickUtil.coalesce(receiver.getCountry(), "ke").toString());
             postMap.put("request_id", DateUtil.getSysTimeStamp().toString());
+            //postMap.put("third_waybill_num", (String) map.get("expressNo"));
             Map<String, String> postMapOut = new HashMap<String, String>();
             postMapOut.put("data", JSON.toJSONString(postMap));
             postMapOut.put("method", interfaceConfig.getOp());

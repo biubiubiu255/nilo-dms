@@ -6,15 +6,14 @@ import com.nilo.dms.common.enums.HandleRiderStatusEnum;
 import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
-import com.nilo.dms.dao.HandleRiderDao;
-import com.nilo.dms.dao.ThirdDriverDao;
-import com.nilo.dms.dao.ThirdExpressDao;
-import com.nilo.dms.dao.WaybillDao;
+import com.nilo.dms.common.utils.PickUtil;
+import com.nilo.dms.dao.*;
 import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.dto.handle.SendThirdDetail;
 import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.order.Waybill;
 import com.nilo.dms.service.impl.SessionLocal;
+import com.nilo.dms.service.mq.producer.AbstractMQProducer;
 import com.nilo.dms.service.order.SendThirdService;
 import com.nilo.dms.service.order.WaybillService;
 import com.nilo.dms.service.system.SystemConfig;
@@ -22,6 +21,7 @@ import com.nilo.dms.web.controller.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +50,13 @@ public class ThirdExpressDeliveryController extends BaseController {
     private ThirdDriverDao thirdDriverDao;
     @Autowired
     private ThirdExpressDao thirdExpressDao;
+
+    @Autowired
+    private ThirdPushDao thirdPushDao;
+
+    @Autowired
+    @Qualifier("sendThirdPushProducer")
+    private AbstractMQProducer sendThirdPushProducer;
 
     @RequestMapping(value = "/listPage.html", method = RequestMethod.GET)
     public String list(Model model, HttpServletRequest request) {

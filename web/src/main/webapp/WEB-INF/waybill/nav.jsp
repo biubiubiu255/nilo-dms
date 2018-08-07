@@ -20,17 +20,31 @@
 	</head>
 	<body>
 		<div class="wrap-container welcome-container">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+				<legend id="monthDesc"></legend>
+			</fieldset>
 			<div class="row">
 				<div class="welcome-left-container col-lg-12">
 					<div class="data-show">
 						<ul class="clearfix">
 							<li class="col-sm-12 col-md-4 col-xs-12">
 								<a href="javascript:;" class="clearfix">
+									<div class="icon-bg bg-blue f-l">
+										<span class="iconfont">&#xe639;</span>
+									</div>
+									<div class="right-text-con">
+										<p class="name">Aug total arrived</p>
+										<p><span class="color-blue" id="arrivedMonth"></span></p>
+									</div>
+								</a>
+							</li>
+							<li class="col-sm-12 col-md-4 col-xs-12">
+								<a href="javascript:;" class="clearfix">
 									<div class="icon-bg bg-org f-l">
 										<span class="iconfont">&#xe602;</span>
 									</div>
 									<div class="right-text-con">
-										<p class="name">Signed Month</p>
+										<p class="name">Aug total signed</p>
 										<p><span class="color-org" id="signedMonth"></span></p>
 									</div>
 								</a>
@@ -41,11 +55,12 @@
 										<span class="iconfont">&#xe639;</span>
 									</div>
 									<div class="right-text-con">
-										<p class="name">Timeout Signed Month</p>
+										<p class="name">Aug total delayed(arrived more than 3 days but not been signed)</p>
 										<p><span class="color-blue" id="timeoutSignedMonth"></span></p>
 									</div>
 								</a>
 							</li>
+
 
 						</ul>
 					</div>
@@ -71,19 +86,19 @@
 				var layer 	= layui.layer;
 				var $=layui.jquery;
 				var u=layui.util;
+				$("#monthDesc").html(new Date().toDateString().split(" ")[1]);
 
                 var myChart = echarts.init(document.getElementById('chart'));
                 var colors = ['#5793f3', '#d14a61', '#675bba'];
 
                 $.post('/penal_data/signedMonth.html', {}, function (data) {
                     $("#signedMonth").html(data.data.count);
-                    //console.log("月签收数");
-                    //console.log(data);
                 }, "json");
                 $.post('/penal_data/outTimeSigned.html', {timeOutNumber: 3}, function (data) {
                     $("#timeoutSignedMonth").html(data.data.count);
-                    //console.log("超时数量");
-                    //console.log(data);
+                }, "json");
+                $.post('/penal_data/arrivedMonth.html', {}, function (data) {
+                    $("#arrivedMonth").html(data.data.count);
                 }, "json");
                 var toTime  = parseInt(new Date().getTime()/1000);
                 var fromTime= toTime-86400*30;

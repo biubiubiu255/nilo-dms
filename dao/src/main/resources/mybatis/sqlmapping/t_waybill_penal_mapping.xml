@@ -66,8 +66,18 @@
                 AND a.created_time <![CDATA[<]]> #{toTime} and a.created_time > #{fromTime}
                 GROUP BY
                 FROM_UNIXTIME(a.created_time, '%d')
-            </select>
+    </select>
 
 
+	<select id="queryArrivedCount" resultType="java.lang.Integer">
 
-        </mapper>
+		SELECT
+			count(DISTINCT order_no)
+		FROM
+			t_waybill_log_arrive
+		WHERE
+			network_id = #{network} and FROM_UNIXTIME(created_time, '%Y%m')=#{dataFormat}
+	</select>
+
+
+    </mapper>

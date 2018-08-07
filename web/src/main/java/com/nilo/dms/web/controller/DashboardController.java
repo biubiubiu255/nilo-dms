@@ -76,4 +76,15 @@ public class DashboardController extends BaseController {
         return toJsonTrueData(map);
     }
 
+    @ResponseBody
+    @RequestMapping("/penal_data/arrivedMonth.html")
+    public String arrivedMonth(){
+        String firstNetwork = SessionLocal.getPrincipal().getFirstNetwork();
+        Calendar c = Calendar.getInstance();
+        String dateFormat = new SimpleDateFormat("yyyyMM").format(c.getTime());
+        Integer count = waybillPenalDao.queryArrivedCount(firstNetwork, dateFormat);
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        map.put("count", count);
+        return toJsonTrueData(map);
+    }
 }
