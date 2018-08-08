@@ -16,6 +16,10 @@ public interface WaybillPenalDao {
 
     Integer queryTimeOutSignCount(@Param("network") String network, @Param("dataFormat") String monthFormat, @Param("dayNum") Integer dayNum);
 
+    Integer queryArrivedCount(@Param("network") String network, @Param("dataFormat") String monthFormat);
+
     @MapKey("day")
     Map<String, Integer> queryGroupSignMonthCount(@Param("network") String network, @Param("fromTime") Integer fromTime, @Param("toTime") Integer toTime);
+
+
 }

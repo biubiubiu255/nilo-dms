@@ -10,10 +10,7 @@ import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.utils.*;
 import com.nilo.dms.dao.*;
-import com.nilo.dms.dao.dataobject.DeliveryOrderGoodsDO;
-import com.nilo.dms.dao.dataobject.DeliveryOrderReceiverDO;
-import com.nilo.dms.dao.dataobject.ThirdPushDo;
-import com.nilo.dms.dao.dataobject.WaybillDO;
+import com.nilo.dms.dao.dataobject.*;
 import com.nilo.dms.dto.handle.SendThirdDetail;
 import com.nilo.dms.dto.handle.SendThirdHead;
 import com.nilo.dms.dto.order.OrderOptRequest;
@@ -64,6 +61,9 @@ public class SendThirdServiceImpl implements SendThirdService {
     @Autowired
     @Qualifier("sendThirdPushProducer")
     private AbstractMQProducer sendThirdPushProducer;
+
+    @Autowired
+    private ThirdPushDao thirdPushDao;
 
     @Override
     public void insertSmallAll(Long merchantId, String handleNo, String[] smallOrders) {
@@ -233,9 +233,7 @@ public class SendThirdServiceImpl implements SendThirdService {
         sendThirdDetail.setStatus(HandleRiderStatusEnum.SHIP.getCode());
         handleThirdDao.editAllSmallbyHandleNo(sendThirdDetail);
 
-        //第三方对接
-/*        if(head.getType().equals("waybill")){
-
+        if(head.getType().equals("waybill")){
             List<String> orders = PickUtil.recombineList(detailsList, "orderNo", String.class);
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("orders", orderNos);
@@ -246,8 +244,7 @@ public class SendThirdServiceImpl implements SendThirdService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }*/
-
+        }
 
         for (SendThirdDetail d : detailsList) {
 
