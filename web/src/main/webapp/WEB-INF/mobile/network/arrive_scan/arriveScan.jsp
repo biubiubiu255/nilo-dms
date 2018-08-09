@@ -117,7 +117,7 @@
 	<div class="formula_modify">
 		<div class="wap_top">
 			<a href="/mobile/home.html" title="Back" class="wap_top_back"></a>
-			<h2 data-locale="arrive_scan_title">Arrive Scan</h2>
+			<h2 data-locale="arrive_scan">Arrive Scan</h2>
 		</div>
 
 		<div class="banner_content">
@@ -125,7 +125,7 @@
 				<div class="banner_content">
 					 <input type="hidden" name="scanedCodes" />
 					 <ul class="scanner_banner">
-						<img src="/mobile/images/scannner.png" class="scanner"><input type='text'  placeholder="Logistics No" property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input' id="logisticsNo" name='logisticsNo' /><span >ok</span>
+						<img src="/mobile/images/scannner.png" class="scanner"><input type='text'  placeholder="Logistics No" property_name="all_logistics_no" set_attr="placeholder" class='input_value i18n-input' id="logisticsNo" name='logisticsNo' /><span >OK</span>
 					</ul>  
 					<!-- <div class="scanner"><img src="/mobile/images/scannner.png" id="scan"><input type="text" placeholder="Input code or scan code"><span>OK</span></div> -->
 				</div>

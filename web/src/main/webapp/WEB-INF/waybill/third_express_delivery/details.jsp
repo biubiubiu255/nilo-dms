@@ -28,7 +28,7 @@
                     </c:forEach>
                 </select>
             </div>
-            <label class="layui-form-label" style="width:120px">Drider</label>
+            <label class="layui-form-label" style="width:120px">Driver</label>
             <div class="layui-input-inline">
                 <select name="rider" id="rider" lay-search="">
                     <option value="">choose or search....</option>

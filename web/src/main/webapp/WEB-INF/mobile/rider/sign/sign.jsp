@@ -36,7 +36,7 @@
 
 		<div class="wap_top">
 			<a href="/mobile/home.html" title="Back" class="wap_top_back"></a>
-			<h2 data-locale="sign_scan_title">Sign Scan</h2>
+			<h2 data-locale="sign_scan">Sign Scan</h2>
 		</div>
 
 		<div class="formula_modify">

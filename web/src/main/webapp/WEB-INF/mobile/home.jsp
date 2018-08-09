@@ -38,7 +38,7 @@
     <div class="j_sy_n1">
         <div class="model_banner_title">
             <i class="model_banner_title"></i>
-            <div>Handle function</div>
+            <div>Package handling</div>
         </div>
         <ul class="model_banner_ul"
             style="width: 100%; overflow: hidden; margin: 0px;">
@@ -180,9 +180,9 @@
             var bfYesterday = new Date().toDateString().split(" ")[1];
             //var bfYesterday = " month"
 
-            $("#day").html('<font size="3" color="red">'+today+'</font> pending task:' + data.data.day.taskDayNum + ",delay:" + data.data.day.delayDayNum + ",singed:" + data.data.day.deliveredDayNum);
-            $("#yesterday").html('<font size="3" color="red">'+yesterday+'</font> pending task:' + data.data.yesterday.taskDayNum + ",delay:" + data.data.yesterday.delayDayNum + ",singed:" + data.data.yesterday.deliveredDayNum);
-            $("#beforeYesterday").html('<font size="3" color="red">'+bfYesterday+'</font> total singed:' + data.data.month.deliveredMonthNum);
+            $("#day").html('<font size="3" color="red">'+today+'</font> pending task:' + data.data.day.taskDayNum + ",delayed:" + data.data.day.delayDayNum + ",signed:" + data.data.day.deliveredDayNum);
+            $("#yesterday").html('<font size="3" color="red">'+yesterday+'</font> pending task:' + data.data.yesterday.taskDayNum + ",delayed:" + data.data.yesterday.delayDayNum + ",signed:" + data.data.yesterday.deliveredDayNum);
+            $("#beforeYesterday").html('<font size="3" color="red">'+bfYesterday+'</font> total signed:' + data.data.month.deliveredMonthNum);
         }, "json")
     }
 
