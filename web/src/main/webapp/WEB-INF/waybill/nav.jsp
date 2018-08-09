@@ -33,8 +33,8 @@
 										<span class="iconfont">&#xe639;</span>
 									</div>
 									<div class="right-text-con">
-										<p class="name">Aug total arrived</p>
-										<p><span class="color-blue" id="arrivedMonth"></span></p>
+										<p class="name"><b>Aug total arrived</b></p>
+										<p><span class="color-blue" id="arrivedMonth"></span></p><br/>
 									</div>
 								</a>
 							</li>
@@ -44,8 +44,8 @@
 										<span class="iconfont">&#xe602;</span>
 									</div>
 									<div class="right-text-con">
-										<p class="name">Aug total signed</p>
-										<p><span class="color-org" id="signedMonth"></span></p>
+										<p class="name"><b>Aug total signed</b></p>
+										<p><span class="color-org" id="signedMonth"></span></p><br/>
 									</div>
 								</a>
 							</li>
@@ -55,7 +55,8 @@
 										<span class="iconfont">&#xe639;</span>
 									</div>
 									<div class="right-text-con">
-										<p class="name">Aug total delayed(arrived more than 3 days but not been signed)</p>
+										<p class="name"><b>Aug total delayed</b></p>
+										<span>Aug total delayed(arrived more than 3 days but not been signed)</span>
 										<p><span class="color-blue" id="timeoutSignedMonth"></span></p>
 									</div>
 								</a>
