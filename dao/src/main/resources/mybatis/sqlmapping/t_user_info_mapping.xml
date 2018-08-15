@@ -42,7 +42,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_sys_user_info
-        WHERE merchant_id=#{merchantId} and id = #{userId}
+        WHERE id = #{userId}
     </select>
 
     <select id="queryByUserIds" resultMap="userInfoDO" statementType="PREPARED"

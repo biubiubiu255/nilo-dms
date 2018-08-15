@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     public void updateUserInfo(UserInfo userInfo) {
 
         AssertUtil.isNotBlank(userInfo.getUserId(), BizErrorCode.USER_ID_ILLEGAL);
-        UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(userInfo.getMerchantId()), Long.parseLong(userInfo.getUserId()));
+        UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(userInfo.getUserId()));
         if (userInfoDO == null) {
             throw new DMSException(BizErrorCode.USER_ID_ILLEGAL);
         }
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateLoginInfo(LoginInfo loginInfo) {
         AssertUtil.isNotBlank(loginInfo.getUserId(), BizErrorCode.USER_ID_ILLEGAL);
-        UserLoginDO loginDO = userLoginDao.findByUserId(Long.parseLong(loginInfo.getMerchantId()), Long.parseLong(loginInfo.getUserId()));
+        UserLoginDO loginDO = userLoginDao.findByUserId(Long.parseLong(loginInfo.getUserId()));
         AssertUtil.isNotNull(loginDO, BizErrorCode.USER_ID_ILLEGAL);
 
         UserLoginDO update = convert(loginInfo);
@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
 
         AssertUtil.isNotBlank(userId, BizErrorCode.USER_ID_ILLEGAL);
         Long userIdLong = Long.parseLong(userId);
-        UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(merchantId), Long.parseLong(userId));
+        UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(userId));
         AssertUtil.isNotNull(userInfoDO, BizErrorCode.USER_ID_ILLEGAL);
 
         // 先删后增
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
     public void updateUserNetwork(String merchantId, String userId, Long[] networks) {
         AssertUtil.isNotBlank(userId, BizErrorCode.USER_ID_ILLEGAL);
         Long userIdLong = Long.parseLong(userId);
-        UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(merchantId), Long.parseLong(userId));
+        UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(userId));
         AssertUtil.isNotNull(userInfoDO, BizErrorCode.USER_ID_ILLEGAL);
         userNetworkDao.deleteAll(userIdLong);
         if (networks != null && networks.length > 0) {
@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService {
         if (userLoginDO == null) {
             return null;
         }
-        UserInfoDO userInfoDO = userInfoDao.queryByUserId(userLoginDO.getMerchantId(), userLoginDO.getUserId());
+        UserInfoDO userInfoDO = userInfoDao.queryByUserId(userLoginDO.getUserId());
         User user = new User();
         user.setMerchantId("" + userInfoDO.getMerchantId());
         user.setUserId("" + userInfoDO.getId());
@@ -206,10 +206,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUserId(String merchantId, String userId) {
 
-        UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(merchantId), Long.parseLong(userId));
+        UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(userId));
         if (userInfoDO == null) return null;
 
-        UserLoginDO loginDO = userLoginDao.findByUserId(Long.parseLong(merchantId), Long.parseLong(userId));
+        UserLoginDO loginDO = userLoginDao.findByUserId(Long.parseLong(userId));
 
         User user = new User();
         user.setMerchantId("" + userInfoDO.getMerchantId());
@@ -223,7 +223,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfo findUserInfoByUserId(String merchantId, String userId) {
-        UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(merchantId), Long.parseLong(userId));
+        UserInfoDO userInfoDO = userInfoDao.queryByUserId(Long.parseLong(userId));
 
         if (userInfoDO == null) return null;
 

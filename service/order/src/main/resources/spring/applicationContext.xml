@@ -20,6 +20,7 @@
                 <ref bean="createDeliveryOrderProducer"/>
                 <ref bean="phoneSMSProducer"/>
                 <ref bean="sendThirdPushProducer"/>
+                <ref bean="arrivePushProducer"/>
             </list>
         </property>
     </bean>
@@ -29,6 +30,7 @@
     <bean id="createDeliveryOrderProducer" class="com.nilo.dms.service.order.producer.CreateDeliveryOrderProducer"/>
     <bean id="phoneSMSProducer" class="com.nilo.dms.service.system.PhoneMessageProducer"/>
     <bean id="sendThirdPushProducer" class="com.nilo.dms.service.order.producer.SendThirdPushProducer"/>
+    <bean id="arrivePushProducer" class="com.nilo.dms.service.order.producer.ArrivePushProducer"/>
 
 
     <bean class="com.nilo.dms.service.mq.consumer.ConsumerStartup" init-method="initial"
@@ -41,6 +43,7 @@
                 <ref bean="createDeliveryOrderConsumer"/>
                 <ref bean="phoneSMSConsumer"/>
                 <ref bean="sendThirdPushConsumer"/>
+                <ref bean="arriveConsumer"/>
             </list>
         </property>
     </bean>
@@ -50,6 +53,7 @@
     <bean id="createDeliveryOrderConsumer" class="com.nilo.dms.service.order.consumer.CreateDeliveryOrderConsumer"/>
     <bean id="phoneSMSConsumer" class="com.nilo.dms.service.system.PhoneMessageConsumer"/>
     <bean id="sendThirdPushConsumer" class="com.nilo.dms.service.order.consumer.SendThirdPushConsumer"/>
+    <bean id="arriveConsumer" class="com.nilo.dms.service.order.consumer.ArriveConsumer"/>
 
 
 

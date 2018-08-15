@@ -116,6 +116,7 @@ public class SendThirdPushConsumer extends AbstractMQConsumer {
                 }else {
                     thirdPushDo.setStatus(ThirdPushOrderStatusEnum.PUSH_FAIL.getCode());
                     thirdPushDo.setMsg(jsonObject.getString("msg"));
+                    thirdPushDo.setOrderId("");
                 }
             } catch (Exception e) {
                 logger.error("send third interface fail, order：{},result:{}", order,e);

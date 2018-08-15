@@ -10,9 +10,9 @@ import java.util.List;
 @Repository
 public interface UserInfoDao extends BaseDao<Long, UserInfoDO> {
 
-    List<UserInfoDO> findAll(String merchantId);
+    //List<UserInfoDO> findAll(String merchantId);
 
-    UserInfoDO queryByUserId(@Param("merchantId") Long merchantId, @Param("userId")Long userId);
+    UserInfoDO queryByUserId(Long userId);
 
     List<UserInfoDO> queryByUserIds(@Param("merchantId") Long merchantId, @Param("userIds")List<Long> userIds);
 

@@ -11,6 +11,12 @@
         <result property="signedNum" column="count" javaType="java.lang.Integer" jdbcType="INTEGER"/>
     </resultMap>
 
+    <resultMap id="efficiencyMap" type="com.nilo.dms.dao.dataobject.DeliveryEfficiencyDO">
+        <result property="dateFormat" column="date_format" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="deliveryCount" column="delivery_count" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="durationDays" column="duration_days" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="noSign" column="no_sign" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+    </resultMap>
 
 
     <select id="querySummarizeExpress" resultMap="resultMap">
@@ -28,7 +34,7 @@
         INNER JOIN t_handle_third_express AS c ON c.type = 'waybill'
         AND b.third_handle_no = c.handle_no
         <if test="express!=null and express!=''">AND c.third_express_code = #{express} </if>
-        INNER JOIN t_waybill_receiver AS d ON a.order_no = d.order_no
+        INNER JOIN t_   waybill_receiver AS d ON a.order_no = d.order_no
         <if test="city!=null and city!=''">AND d.city = #{city} </if>
         AND IF(IFNULL(d.city,'')='',0,1)
         GROUP BY
@@ -104,5 +110,53 @@
         GROUP BY
         a.last_deliver_express_code
     </select>
+
+
+    <select id="queryExpressDeliveryEfficiency" resultMap="efficiencyMap">
+        SELECT
+        a.date_format,
+        a.duration_days,
+        a.delivery_count,
+        b.no_sign
+        FROM
+        (
+        SELECT
+        FROM_UNIXTIME(last_deliver_time, '%Y%m%d') AS date_format,
+        count(*) AS delivery_count,
+        datediff(
+        str_to_date(
+        FROM_UNIXTIME(last_deliver_time, '%Y%m%d'),
+        '%Y%m%d'
+        ),
+        CURDATE()
+        ) AS duration_days
+        FROM
+        t_report_waybill
+        WHERE
+        last_deliver_express_code IS NOT NULL
+        <if test="expressCode!=null and expressCode!=''">AND last_deliver_express_code = #{expressCode} </if>
+        AND last_deliver_time > #{fromTime}
+        AND last_deliver_time <![CDATA[ <= ]]> #{toTime}
+        GROUP BY
+        FROM_UNIXTIME(last_deliver_time, '%Y%m%d')
+        ) AS a
+        INNER JOIN (
+        SELECT
+        FROM_UNIXTIME(last_deliver_time, '%Y%m%d') AS date_format,
+        count(*) AS no_sign
+        FROM
+        t_report_waybill
+        WHERE
+        last_deliver_express_code IS NOT NULL
+        <if test="expressCode!=null and expressCode!=''">AND last_deliver_express_code = #{expressCode} </if>
+        AND sign_time IS NULL
+        AND last_deliver_time > #{fromTime}
+        AND last_deliver_time <![CDATA[ <= ]]> #{toTime}
+        GROUP BY
+        FROM_UNIXTIME(last_deliver_time, '%Y%m%d')
+        ) AS b ON a.date_format = b.date_format
+    </select>
+
+
 
 </mapper>

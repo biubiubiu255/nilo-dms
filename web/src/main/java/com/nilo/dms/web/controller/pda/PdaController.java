@@ -1,16 +1,25 @@
 package com.nilo.dms.web.controller.pda;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.nilo.dms.common.Constant;
+import com.nilo.dms.common.utils.*;
+import com.nilo.dms.dto.order.CreateDeliverOrderMessage;
+import com.nilo.dms.dto.system.InterfaceConfig;
+import com.nilo.dms.dto.system.MerchantConfig;
+import com.nilo.dms.service.mq.producer.AbstractMQProducer;
+import com.nilo.dms.service.order.producer.ArrivePushProducer;
+import com.nilo.dms.service.system.RedisUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +33,6 @@ import com.nilo.dms.common.enums.SerialTypeEnum;
 import com.nilo.dms.common.exception.BizErrorCode;
 import com.nilo.dms.common.exception.DMSException;
 import com.nilo.dms.common.exception.SysErrorCode;
-import com.nilo.dms.common.utils.AssertUtil;
-import com.nilo.dms.common.utils.StringUtil;
 import com.nilo.dms.dao.DistributionNetworkDao;
 import com.nilo.dms.dao.HandleRiderDao;
 import com.nilo.dms.dao.HandleThirdDao;
@@ -96,6 +103,11 @@ public class PdaController extends BaseController {
     private HandleRiderDao handleRiderDao;
     @Autowired
     private HandleThirdDao handleThirdDao;
+
+    @Autowired
+    @Qualifier("arrivePushProducer")
+    private ArrivePushProducer arrivePushProducer;
+
 	@RequestMapping(value = "/scan.html")
 	public String toPage() {
 		return "mobile/network/arrive_scan/arriveScan";
@@ -139,14 +151,27 @@ public class PdaController extends BaseController {
 	@RequestMapping(value = "/arrive.html")
 	public String arrive(String waybillNo) {
 
-		List<String> waybillNos = new ArrayList<String>();
+        Principal principal = SessionLocal.getPrincipal();
+
+        List<String> waybillNos = new ArrayList<String>();
 
 		String[] scaned_codes = waybillNo.split(",");
 		for (String code : scaned_codes) {
 			waybillNos.add(code);
+
 		}
 
 		waybillService.arrive(waybillNos);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("merchantId", principal.getMerchantId());
+        map.put("orderList" , waybillNos);
+        try {
+            arrivePushProducer.sendMessage(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DMSException(BizErrorCode.MQ_SEND_FAIL);
+        }
 
 		// PdaWaybill pdaWaybill = this.queryByOrderNo(waybillNo);
 
@@ -334,7 +359,7 @@ public class PdaController extends BaseController {
 		 * Loading loading = new Loading(); loading.setNextStation(nextStation);
 		 * loading.setRider(sendDriver); loading.setCarrier(carrier);
 		 * loading.setTruckNo(plateNo);
-		 * 
+		 *
 		 * Principal me = SessionLocal.getPrincipal(); // 获取merchantId String merchantId
 		 * = me.getMerchantId(); String loadingNo = ""; try { if
 		 * (StringUtil.isEmpty(sendDriver)) { throw new
@@ -344,15 +369,15 @@ public class PdaController extends BaseController {
 		 * loadingNo = loadingService.addLoading(loading); } catch (Exception e) {
 		 * log.error("addLoading failed. loading:{}", loading, e); return
 		 * toJsonErrorMsg(e.getMessage()); }
-		 * 
+		 *
 		 * Waybill order = null; for (int i = 0; i < scaned_codes.length; i++) { try {
 		 * loadingService.loadingScan(merchantId, loadingNo, scaned_codes[i],
 		 * me.getUserId()); } catch (Exception e) {
 		 * log.error("loadingScan failed. orderNo:{}", scaned_codes[i], e); return
 		 * toJsonErrorMsg(e.getMessage()); }
-		 * 
+		 *
 		 * }
-		 * 
+		 *
 		 * ShipParameter parameter = new ShipParameter();
 		 * parameter.setMerchantId(merchantId); parameter.setOptBy(me.getUserId());
 		 * parameter.setLoadingNo(loadingNo); parameter.setNetworkId("" +
@@ -453,12 +478,12 @@ public class PdaController extends BaseController {
 		}
 		return toJsonTrueMsg();
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/getPackages.html")
 	public String getPackages(String netWork) {
 
-		
+
 		// 获取merchantId
 		List<String> thirdDriver = waybillDao.findCreatePackageByNetWork(netWork);
 		List<SendScanController.Driver> list = new ArrayList<>();
@@ -476,7 +501,7 @@ public class PdaController extends BaseController {
 		}
 		return toJsonTrueData(list);
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/createPackages.html")
 	public String createPackages(String netWork) {
@@ -522,7 +547,7 @@ public class PdaController extends BaseController {
 					if(!address.equals("")&&!address.equals(order.getReceiverInfo().getReceiverAddress())) {
 						throw new DMSException(BizErrorCode.ADDRSS_NOT_RIGHT,waybillNo);
 					}
-					
+
 					address = order.getReceiverInfo().getReceiverAddress();
 				} catch (Exception e) {
 					log.error("loadingScan failed. orderNo:{}", waybillNo, e);
@@ -577,7 +602,7 @@ public class PdaController extends BaseController {
 		String[] smallPack = smallPacks.split(",");
 		Principal me = SessionLocal.getPrincipal();
 		Long merchantId = Long.valueOf(me.getMerchantId());
-		
+
 		//校验
 		for (String waybillno : smallPack) {
 			WaybillDO waybillDO = waybillDao.queryByOrderNo(Long.valueOf(merchantId), waybillno);
@@ -624,7 +649,7 @@ public class PdaController extends BaseController {
 
 		return toJsonTrueMsg();
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/getWaybillsByloadingNo.html")
 	public String getWaybillsByloadingNo(String loadingNo) {
@@ -643,8 +668,8 @@ public class PdaController extends BaseController {
 		for (SendThirdDetail sendThirdDetail : sendList) {
 			waybillNos.add(sendThirdDetail.getOrderNo());
 		}
-		
+
 		return toJsonTrueData(waybillNos);
 	}
-	
+
 }

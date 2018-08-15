@@ -88,6 +88,8 @@ public class ReportWaybill {
 					newReportWaybill.setLastDeliverTime(updateDeliverStationWaybill.getLastDeliverTime());
 				}
 
+
+
 				// 取最后一次派给快递员的信息
 				ReportWaybillDO updateDeliverRiderWaybill = reportWaybillDao
 						.queryWaybillDeliverRiderLog(waybillDO.getOrderNo());
@@ -148,6 +150,15 @@ public class ReportWaybill {
 						newReportWaybill.setSignOutsourceName(outsourceMap.get(newReportWaybill.getSignHandleById()));
 					}
 				}
+
+				//判断最新的waybill状态是否已经变更
+				if (newFlag){
+                    ReportWaybillDO newWaybill = reportWaybillDao.queryWaybillReportFormWaybill(waybillDO.getOrderNo());
+                    if (!newWaybill.getOrderStatus().equals(newReportWaybill.getOrderStatus())){
+                        newReportWaybill.setOrderStatus(newWaybill.getOrderStatus());
+                    }
+                }
+
 
 				if (newFlag) {
 					// 插入到结果表中

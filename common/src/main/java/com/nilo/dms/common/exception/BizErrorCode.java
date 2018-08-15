@@ -117,6 +117,11 @@ public enum BizErrorCode implements ErrorCode {
     NOT_BECAME_DELAY("The order does not exist or has been signed, and no further delay is allowed", "100081"),
 
     ADDRSS_NOT_RIGHT("Waybill Number {0} address is not the same others", "100082"),
+
+    TOKEN_EMPTY("app api token is empty", "100083"),
+    TOKEN_ERROR("app api token is error", "100084"),
+    WMS_QUERY_FAIL("WMS Interface query failed, order:{0}", "100085"),
+    MQ_SEND_FAIL("mq send error", "100086"),
     ;
 
     private final String description;

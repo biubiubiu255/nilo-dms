@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class AbstractMQProducer implements MQProducer {
 
+
     private static final int MAX_BYTES = 131072;
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
     protected DefaultMQProducer producer;

@@ -70,8 +70,9 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_sys_user_login
-        WHERE merchant_Id=#{merchantId} and user_id=#{userId}
+        WHERE user_id=#{userId}
     </select>
+
     <select id="findByUserIds" resultMap="userDO" statementType="PREPARED"
             parameterType="java.lang.Long">
         SELECT

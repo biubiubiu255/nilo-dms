@@ -1,5 +1,7 @@
 package com.nilo.dms.common.enums;
 
+import com.nilo.dms.common.utils.StringUtil;
+
 import java.util.HashMap;
 import java.util.Map;
 

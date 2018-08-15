@@ -18,7 +18,7 @@ public interface UserLoginDao extends BaseDao<Long, UserLoginDO> {
 
     UserLoginDO findByUserName(String username);
 
-    UserLoginDO findByUserId(@Param(value = "merchantId") Long merchantId, @Param(value = "userId")Long userId);
+    UserLoginDO findByUserId(Long userId);
 
     List<UserLoginDO> findByUserIds(@Param(value = "merchantId") Long merchantId, @Param(value = "userIds")List<Long> userIds);
 

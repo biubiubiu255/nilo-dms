@@ -1,6 +1,7 @@
 package com.nilo.dms.dao;
 
 import com.nilo.dms.common.BaseDao;
+import com.nilo.dms.dao.dataobject.DeliveryEfficiencyDO;
 import com.nilo.dms.dao.dataobject.QO.ReportRepeatQO;
 import com.nilo.dms.dao.dataobject.QO.SendReportQO;
 import com.nilo.dms.dao.dataobject.ReportRepeatDO;
@@ -36,5 +37,8 @@ public interface SendReportDao extends BaseDao<Long,SendReportDO> {
 
     //查询按月汇总头信息
     List<SummarizeExpressDO>querySummarizeExpressHeader(SummarizeExpressDO summarizeExpressDO);
+
+    // 查询每月的派件时效
+    List<DeliveryEfficiencyDO>queryExpressDeliveryEfficiency(DeliveryEfficiencyDO deliveryEfficiencyDO);
 
 }

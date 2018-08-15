@@ -51,4 +51,6 @@ public class MobileArriveScanController extends BaseController {
 
         return toJsonTrueMsg();
     }
+
+
 }
